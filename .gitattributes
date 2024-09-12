@@ -3,6 +3,13 @@
 
 * text=auto
 
+# Automatically Collapse Generated Files in GitHub Diffs
+*.asset linguist-generated
+*.mat linguist-generated
+*.meta linguist-generated
+*.prefab linguist-generated
+*.unity linguist-generated
+
 # Unity files
 *.meta -text merge=unityyamlmerge diff
 *.unity -text merge=unityyamlmerge diff
