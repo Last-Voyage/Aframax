@@ -9,6 +9,8 @@ public class GameplayManagers : CoreManagersFramework
     [SerializeField] private GameStateManager _gameStateManager;
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private EnemyManager _enemyManager;
+    [SerializeField] private EnvironmentManager _environmentManager;
+    [SerializeField] private CameraManager _cameraManager;
 
     [Space]
     [SerializeField] private List<MainGameplayManagerFramework> _allMainManagers;
@@ -31,5 +33,7 @@ public class GameplayManagers : CoreManagersFramework
     public GameStateManager GetGameStateManager() => _gameStateManager;
     public PlayerManager GetPlayerManager() => _playerManager;
     public EnemyManager GetEnemyManager() => _enemyManager;
+    public EnvironmentManager GetEnvironmentManager() => _environmentManager;
+    public CameraManager GetCameraManager() => _cameraManager;
     #endregion
 }

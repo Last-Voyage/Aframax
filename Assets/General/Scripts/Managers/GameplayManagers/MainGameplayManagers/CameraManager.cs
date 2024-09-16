@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class SceneLoadingManager : MainUniversalManagerFramework
+public class CameraManager : MainGameplayManagerFramework
 {
     #region Base Manager
     public override void SetupMainManager()
@@ -16,9 +15,3 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     #endregion
 }
-
-
-public enum SceneTransitions
-{
-    tempState
-};
