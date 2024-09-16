@@ -19,6 +19,7 @@ public class UniversalManagers : CoreManagersFramework
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
             return true;
         }
         return false;

@@ -8,6 +8,7 @@ public class GameplayManagers : CoreManagersFramework
 
     [SerializeField] private GameStateManager _gameStateManager;
     [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private EnemyManager _enemyManager;
 
     [Space]
     [SerializeField] private List<MainGameplayManagerFramework> _allMainManagers;
@@ -28,5 +29,7 @@ public class GameplayManagers : CoreManagersFramework
 
     #region Getters
     public GameStateManager GetGameStateManager() => _gameStateManager;
+    public PlayerManager GetPlayerManager() => _playerManager;
+    public EnemyManager GetEnemyManager() => _enemyManager;
     #endregion
 }
