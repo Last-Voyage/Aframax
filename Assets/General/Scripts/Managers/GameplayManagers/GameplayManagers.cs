@@ -7,7 +7,9 @@ public class GameplayManagers : CoreManagersFramework
     public static GameplayManagers Instance;
 
     [SerializeField] private GameStateManager _gameStateManager;
+    [SerializeField] private PlayerManager _playerManager;
 
+    [Space]
     [SerializeField] private List<MainGameplayManagerFramework> _allMainManagers;
 
     protected override bool EstablishInstance()
