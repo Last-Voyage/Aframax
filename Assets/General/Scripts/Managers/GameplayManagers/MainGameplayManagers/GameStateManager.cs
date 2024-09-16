@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Holds and moves through the states of gameplay
+/// Manager to be developed as I know specifics
+/// </summary>
 public class GameStateManager : MainGameplayManagerFramework
 {
     private GameplayState _currentGameplayState;

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Provides the functionality behind all audio
+/// Manager to be developed as I know specifics
+/// </summary>
 public class AudioManager : MainUniversalManagerFramework
 {
     #region Base Manager

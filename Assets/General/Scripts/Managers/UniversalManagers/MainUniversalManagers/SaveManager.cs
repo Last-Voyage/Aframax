@@ -11,18 +11,6 @@ public class SaveManager : MainUniversalManagerFramework
     private string _path;
 
     /// <summary>
-    /// TESTING PURPOSES ONLY
-    /// </summary>
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            _gameSaveData.SetTempBool(!_gameSaveData.GetTempBool());
-            SaveText();
-        }
-    }
-
-    /// <summary>
     /// Sets the path to create the save file
     /// </summary>
     private void EstablishPath()

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Instanced to allow for anything to use the manager
+/// Provides access to all gameplay managers
+/// </summary>
 public class GameplayManagers : CoreManagersFramework
 {
     public static GameplayManagers Instance;
@@ -15,12 +19,25 @@ public class GameplayManagers : CoreManagersFramework
     [Space]
     [SerializeField] private List<MainGameplayManagerFramework> _allMainManagers;
 
+    /// <summary>
+    /// Sets up the singleton
+    /// </summary>
+    /// <returns></returns>
     protected override bool EstablishInstance()
     {
-        Instance = this;
-        return true;
+        //If no other version exists
+        if (Instance == null)
+        {
+            //This is the new singleton
+            Instance = this;
+            return true;
+        }
+        return false;
     }
 
+    /// <summary>
+    /// Tells all main gameplay managers to setup in the order of the main managers list
+    /// </summary>
     protected override void SetupMainManagers()
     {
         foreach (MainGameplayManagerFramework mainManager in _allMainManagers)
