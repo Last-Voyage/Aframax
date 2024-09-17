@@ -25,6 +25,8 @@ public class EnvironmentMovement : MonoBehaviour
     private static Vector3 BackLeftDirection = Vector3.back + Vector3.left;
     private static Vector3 BackRightDirection = Vector3.back + Vector3.right;
 
+    //private Vector3 
+
     [Tooltip("Named pointers for the background direction")]
     public enum EDirectionalInserts
     {
@@ -46,23 +48,28 @@ public class EnvironmentMovement : MonoBehaviour
 
     [Tooltip("The pointer for the background direction")] private int _currentDirectional = 
         (int)EDirectionalInserts.Backward;
-    [NonSerialized][Tooltip("The speed multiplier for the background")] public float VelocityMultiplier = 2f;
+    [Tooltip("The speed multiplier for the background")] public float VelocityMultiplier { get; private set; }
 
-
-    // Uses a test coroutine to change the speed
+    /// <summary>
+    /// At the start of the script, TestSpeedChange coroutine is started
+    /// </summary>
     private void Start()
     {
         StartCoroutine(TestSpeedChange());
     }
 
-    // Updates the movement of the background
+    /// <summary>
+    /// Moves the environment
+    /// </summary>
     void FixedUpdate()
     {
         gameObject.transform.position += _directionalMovements[_currentDirectional] *
                 VelocityMultiplier * Time.deltaTime;
     }
 
-    // This is a test coroutine to change the speed
+    /// <summary>
+    /// This is a test coroutine to change the speed of the environment
+    /// </summary>
     private IEnumerator TestSpeedChange()
     {
         yield return new WaitForSeconds(5f);
