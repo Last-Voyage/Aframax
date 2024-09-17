@@ -1,3 +1,12 @@
+/******************************************************************************
+// File Name:       PlayerMovementController.cs
+// Author:          Andrew Stapay
+// Creation Date:   September 15, 2024
+//
+// Description:     Implementation of the basic movement for a player character.
+//                  This script takes input designated for movement from the
+                    user and allows the player GameObject to move in the scene.
+******************************************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,36 +18,49 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
-    // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
-    [SerializeField] private Transform _playerCamera;
-    private float _cameraXRotation;
-
-    // Horizontal Movement
+    /// <summary>
+    /// Variables that relate to the horizontal movement of the player
+    /// </summary>
     [SerializeField] private float _playerMovementSpeed;
 
-    // Vertical Movement
+    /// <summary>
+    /// Variables that relate to the vertical movement of the player
+    /// </summary>
     [SerializeField] private float _gravity;
     [SerializeField] private LayerMask _groundMask;
+    private const float _GROUND_CHECK_RADIUS = 0.1f;
     private float _currentVerticalVelo;
     private bool _isGrounded;
 
-    // Mouse Controls (ALSO USED FOR CAMERA)
+    // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
+    // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
+    /// <summary>
+    /// Variables that relate to the rotation of the camera
+    /// </summary>
+    [SerializeField] private Transform _playerCamera;
+    private float _cameraXRotation;
     [SerializeField] private float _mouseSensitivityX;
     [SerializeField] private float _mouseSensitivityY;
     private float _cameraClamp;
 
-    // Input
+    /// <summary>
+    /// Variables that capture user input
+    /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
     // THE BELOW INPUT ACTIONS ARE USED FOR THE CAMERA
     private InputAction _mouseXInput;
     private InputAction _mouseYInput;
 
-    // Character Controller
-    private CharacterController _controller;
+    /// <summary>
+    /// A variable to hold the Character Controller
+    /// </summary>
+    private CharacterController _characterController;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// This function is called before the first frame update.
+    /// Used to initialize any variables that are not serialized.
+    /// </summary>
     void Start()
     {
         // Initialize non-serialized variables, input variables, and
@@ -48,10 +70,12 @@ public class PlayerMovementController : MonoBehaviour
         InitializeCharacter();
 
         // Run the movement coroutine
-        StartCoroutine("StartMovement");
+        StartCoroutine("ResolveMovement");
     }
 
-    // Initializes all non-serialized private variables
+    /// <summary>
+    /// Initializes all non-serialized private variables.
+    /// </summary>
     private void InitializeNonSerialized()
     {
         _cameraXRotation = 0;
@@ -60,7 +84,9 @@ public class PlayerMovementController : MonoBehaviour
         _cameraClamp = 90;
     }
 
-    // Initialize all input variables
+    /// <summary>
+    /// Initializes all input variables
+    /// </summary>
     private void InitializeInput()
     {
         _playerInput = GetComponent<PlayerInput>();
@@ -70,15 +96,19 @@ public class PlayerMovementController : MonoBehaviour
         _mouseYInput = _playerInput.currentActionMap.FindAction("MouseY");
     }
 
-    // Get our Character Controller for movement
+    /// <summary>
+    /// Initializes our Character Controller for movement
+    /// </summary>
     private void InitializeCharacter()
     {
-        _controller = GetComponent<CharacterController>();
+        _characterController = GetComponent<CharacterController>();
     }
 
-    // Movement coroutine
-    // This will perpetually call the movement handling methods until disabled
-    private IEnumerator StartMovement()
+    /// <summary>
+    /// Movement coroutine
+    /// This will perpetually call the movement handling methods until disabled
+    /// </summary>
+    private IEnumerator ResolveMovement()
     {
         while(true)
         {
@@ -89,7 +119,9 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
 
-    // Handler for horizontal movement based on input key presses
+    /// <summary>
+    /// Handler for horizontal movement based on input key presses
+    /// </summary>
     private void HandleHorizontalMovement()
     {
         // Read the movement input
@@ -98,18 +130,21 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y) * _playerMovementSpeed;
+        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y)
+            * _playerMovementSpeed;
 
         // Move the player
-        _controller.Move(newMovement * Time.deltaTime);
+        _characterController.Move(newMovement * Time.deltaTime);
     }
 
-    // For now, handles gravity
-    // This may be expanded to include jumping as well
+    /// <summary>
+    /// Handles the force of gravity
+    /// Can be expanded to include jumping later on
+    /// </summary>
     private void HandleVerticalMovement()
     {
         // Check to see if the player is on the ground
-        _isGrounded = Physics.CheckSphere(transform.position, 0.1f, _groundMask);
+        _isGrounded = CheckGrounded();
 
         // If the player is on the ground, reset the downward velocity
         if (_isGrounded)
@@ -119,11 +154,13 @@ public class PlayerMovementController : MonoBehaviour
 
         // Make the player fall
         _currentVerticalVelo -= _gravity * Time.deltaTime;
-        _controller.Move(new Vector3(0, _currentVerticalVelo, 0) * Time.deltaTime);
+        _characterController.Move(new Vector3(0, _currentVerticalVelo, 0) * Time.deltaTime);
     }
 
-    // THIS METHOD IS TEMPORARY UNTIL A CAMERA CONTROLLER IS CREATED
-    // Handles the rotation of the camera based on mouse movement
+    /// <summary>
+    /// THIS METHOD IS TEMPORARY UNTIL A CAMERA CONTROLLER IS CREATED
+    /// Handles the rotation of the camera based on mouse movement
+    /// </summary>
     private void HandleCameraRotation()
     {
         // First, rotate the player character based on
@@ -142,5 +179,16 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 targetRotation = transform.eulerAngles;
         targetRotation.x = _cameraXRotation;
         _playerCamera.eulerAngles = targetRotation;
+    }
+
+    /// <summary>
+    /// Checks to see if the player is on the ground
+    /// </summary>
+    /// <returns>
+    /// True if the player is on the ground or false otherwise
+    /// </returns>
+    private bool CheckGrounded()
+    {
+        return Physics.CheckSphere(transform.position, _GROUND_CHECK_RADIUS, _groundMask);
     }
 }
