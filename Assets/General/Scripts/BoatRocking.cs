@@ -18,17 +18,25 @@ public class BoatRocking : MonoBehaviour
     public List<GameObject>
         BoatPassengers = new List<GameObject>();
 
-    [Tooltip("The speed multiplier for the boat")] public float VelocityMultiplier = 1f;
+    [NonSerialized][Tooltip("The speed multiplier for the boat")] public float DistanceVariance = .5f;
+
+    private float _moveSpeed = 5f;
+
+    private Vector3 _currentPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _currentPosition = transform.position;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        _currentPosition += new Vector3(Mathf.Sin(Time.time * Mathf.Pow(_moveSpeed, .5f)) * DistanceVariance * Time.deltaTime, 0, 0);
+
+        transform.position = _currentPosition;
+
         if (BoatPassengers.Count > 0 && BoatPassengers != null)
         {
             foreach (GameObject passenger in BoatPassengers)

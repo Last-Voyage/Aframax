@@ -911,6 +911,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165075479}
+  - component: {fileID: 1165075480}
   m_Layer: 0
   m_Name: BoatContainer
   m_TagString: Untagged
@@ -934,6 +935,19 @@ Transform:
   - {fileID: 821786277}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1165075480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165075478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b55e97b877aa51b4eb8a0a3d0b09f78f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VelocityMultiplier: 1
 --- !u!1 &1879823799
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,7 +996,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f63acadbd50ac424585fe93ddf593329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VelocityMultiplier: 1
 --- !u!1 &2032434577
 GameObject:
   m_ObjectHideFlags: 0
