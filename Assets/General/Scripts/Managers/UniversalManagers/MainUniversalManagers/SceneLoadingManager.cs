@@ -38,18 +38,22 @@ public class SceneLoadingManager : MainUniversalManagerFramework
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneID);
 
         //Can start the starting scene transition animation here
+        //Will be implemented when scene transition work occurs
 
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
 
-        // Wait until the asynchronous scene fully loads
+        //Wait until the asynchronous scene fully loads
+        //This exists to hide any screen freeze from loading an intense scene
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
 
         //Can start the ending scene transition animation here
+        //Will be implemented when scene transition work occurs
 
+        //Sets the coroutine to null to allow for new scene loading to occur
         _sceneLoadingCoroutine = null;
     }
 
@@ -91,6 +95,10 @@ public class SceneTransition
 {
     [SerializeField] private string _sceneTransitionName;
     [SerializeField] private float _minimumScreenTransitionTime;
+
+    [Space]
+    [SerializeField] private string _sceneTransitionIntroAnimTrigger;
+    [SerializeField] private string _sceneTransitionExitAnimTrigger;
 
     #region Getters
     public string GetSceneTransitionName() => _sceneTransitionName;
