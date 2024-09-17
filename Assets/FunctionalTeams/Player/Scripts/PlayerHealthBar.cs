@@ -13,21 +13,25 @@ using UnityEngine.UI;
 
 public class PlayerHealthBar : MonoBehaviour
 {
-    public Image HealthBar;
+    [SerializeField] private Image HealthBar;
 
     private void Awake()
     {
-        HealthBar = GameObject.FindObjectOfType<Image>();
+        //this way it doesn't waste time doing find if it's already connected
         if (HealthBar == null)
         {
-            Debug.Log("Couldn't find health bar. Make sure there's one in the scene!");
+            HealthBar = GameObject.FindObjectOfType<Image>();
+            if (HealthBar == null)
+            {
+                Debug.Log("Couldn't find health bar. Make sure there's one in the scene!");
+            }
         }
     }
-    public void UpdateHealthBar(float CurrentHealth, float MaxHealth)
+    public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
         if (HealthBar != null)
         {
-            HealthBar.fillAmount = CurrentHealth / MaxHealth;
+            HealthBar.fillAmount = currentHealth / maxHealth;
         }
     }
 }

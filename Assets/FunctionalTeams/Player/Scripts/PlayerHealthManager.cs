@@ -15,21 +15,27 @@ using UnityEngine.SceneManagement;
 public class PlayerHealthManager : MonoBehaviour
 {
     //this is the health for the player and when it hits 0 you die
-    [SerializeField] private float PlayerHealth;
+    [SerializeField] private float _playerHealth;
 
     //used for calculating the health bar size
-    [SerializeField] private float MaxPlayerHealth;
+    [SerializeField] private float _maxPlayerHealth;
 
     //this is a game object in the scene that runs the health bar
     private GameObject HealthBarManager;
 
     public void Awake()
     {
-        HealthBarManager = GameObject.Find("HealthBarManager");
+        //this way it doesn't waste time doing find if it's already connected
         if (HealthBarManager == null)
         {
-            Debug.Log("Couldn't find health bar manager.");
+            HealthBarManager = GameObject.Find("HealthBarManager");
+            if (HealthBarManager == null)
+            {
+                Debug.Log("Couldn't find health bar manager.");
+            }
         }
+
+        _playerHealth = _maxPlayerHealth;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -45,15 +51,15 @@ public class PlayerHealthManager : MonoBehaviour
 
     public void TakeDamage(float AttackPower)
     {
-        PlayerHealth = PlayerHealth - AttackPower;
+        _playerHealth = _playerHealth - AttackPower;
 
         //calls update health bar function from healthbar manager
         if (HealthBarManager != null)
         {
-            HealthBarManager.GetComponent<PlayerHealthBar>().UpdateHealthBar(PlayerHealth, MaxPlayerHealth);
+            HealthBarManager.GetComponent<PlayerHealthBar>().UpdateHealthBar(_playerHealth, _maxPlayerHealth);
         }
 
-        if (PlayerHealth <= 0)
+        if (_playerHealth <= 0)
         {
             //Debug.Log("man im dead");
 
