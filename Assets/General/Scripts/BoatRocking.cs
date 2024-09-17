@@ -1,3 +1,11 @@
+/**********************************************************************************************************************
+//
+// File Name :         BoatRocking
+// Author :            Nick Rice
+// Creation Date :     9/16/24
+// 
+// Brief Description : This script will make the boat rock back and forth
+ *********************************************************************************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
