@@ -21,12 +21,15 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
+    [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
     /// <summary>
     /// Variables that relate to the vertical movement of the player
     /// </summary>
+    [Header("Adjustable Gravity")]
     [SerializeField] private float _gravity;
+    [Header("Set Layer Mask for Ground Here")]
     [SerializeField] private LayerMask _groundMask;
     private const float _GROUND_CHECK_RADIUS = 0.1f;
     private float _currentVerticalVelo;
@@ -37,8 +40,11 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Variables that relate to the rotation of the camera
     /// </summary>
+    [Header("Set Player Camera Here")]
     [SerializeField] private Transform _playerCamera;
     private float _cameraXRotation;
+    [Header("Adjustable Mouse Sensitivities")]
+    [Tooltip("X controls Left/Right\nY controls Up/Down")]
     [SerializeField] private float _mouseSensitivityX;
     [SerializeField] private float _mouseSensitivityY;
     private float _cameraClamp;
@@ -58,6 +64,11 @@ public class PlayerMovementController : MonoBehaviour
     private CharacterController _characterController;
 
     /// <summary>
+    /// Coroutine variable to hold our movement coroutine
+    /// </summary>
+    private Coroutine _movementCoroutine;
+
+    /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized.
     /// </summary>
@@ -70,7 +81,7 @@ public class PlayerMovementController : MonoBehaviour
         InitializeCharacter();
 
         // Run the movement coroutine
-        StartCoroutine("ResolveMovement");
+        _movementCoroutine = StartCoroutine("ResolveMovement");
     }
 
     /// <summary>
@@ -190,5 +201,21 @@ public class PlayerMovementController : MonoBehaviour
     private bool CheckGrounded()
     {
         return Physics.CheckSphere(transform.position, _GROUND_CHECK_RADIUS, _groundMask);
+    }
+
+    /// <summary>
+    /// Temporarily stops the movement coroutine
+    /// </summary>
+    public void PauseMovement()
+    {
+        StopCoroutine(_movementCoroutine);
+    }
+
+    /// <summary>
+    /// Restarts the movement coroutine after pausing it
+    /// </summary>
+    public void RestartMovement()
+    {
+        _movementCoroutine = StartCoroutine("ResolveMovement");
     }
 }
