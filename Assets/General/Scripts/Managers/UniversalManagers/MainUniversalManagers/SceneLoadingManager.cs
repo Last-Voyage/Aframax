@@ -1,3 +1,11 @@
+/******************************************************************************
+// File Name:       SceneLoadingManager.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 15, 2024
+//
+// Description:     Provides the framework to be used by the core managers
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
