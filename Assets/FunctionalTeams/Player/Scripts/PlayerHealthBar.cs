@@ -20,9 +20,9 @@ public class PlayerHealthBar : MonoBehaviour
         //this way it doesn't waste time doing find if it's already connected
         if (HealthBar == null)
         {
-            //this is gonna need to be some other way to find things in the future
-            //find by tag maybe?
-            HealthBar = GameObject.FindObjectOfType<Image>();
+            //this used to only find object of type image but i reworked it so it should be less terrible
+            //now it won't break if there's other images in the scene
+            HealthBar = GameObject.Find("Health").GetComponent<Image>();
             if (HealthBar == null)
             {
                 Debug.Log("Couldn't find health bar. Make sure there's one in the scene!");
