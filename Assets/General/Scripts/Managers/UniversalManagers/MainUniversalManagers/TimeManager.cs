@@ -1,3 +1,12 @@
+/******************************************************************************
+// File Name:       TimeManager.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 14, 2024
+//
+// Description:     Controls the rate at which time moves
+                    Manager to be developed as I know specifics
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

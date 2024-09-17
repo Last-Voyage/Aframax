@@ -1,9 +1,20 @@
+/******************************************************************************
+// File Name:       SaveManager.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 14, 2024
+//
+// Description:     Contains the functionality to setup and get access to save data
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 
+/// <summary>
+/// Provides the system by which the saving is setup and
+/// </summary>
 public class SaveManager : MainUniversalManagerFramework
 {
     //Game Save Data variable MUST viewable in editor for Json, so either public or serialized
@@ -104,6 +115,10 @@ public class SaveManager : MainUniversalManagerFramework
 
 }
 
+/// <summary>
+/// Holds the data which is being saved
+/// Save data is read from text file and stored into Game Save Data
+/// </summary>
 [System.Serializable]
 public class GameSaveData
 {

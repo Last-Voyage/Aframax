@@ -1,3 +1,12 @@
+/******************************************************************************
+// File Name:       EnvironmentManager.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 15, 2024
+//
+// Description:     Provides the functionality behind the way the environment interects with other elements
+                    Manager to be developed as I know specifics
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

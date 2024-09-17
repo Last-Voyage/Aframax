@@ -1,3 +1,11 @@
+/******************************************************************************
+// File Name:       MainGameplayManagerFramework.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 14, 2024
+//
+// Description:     Provides the framework to be used by all main gameplay managers
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

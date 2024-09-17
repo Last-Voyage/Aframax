@@ -1,3 +1,12 @@
+/******************************************************************************
+// File Name:       UniversalManagers.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 14, 2024
+//
+// Description:     Instanced to allow for anything to use the manager
+                    Provides access to all universal managers
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

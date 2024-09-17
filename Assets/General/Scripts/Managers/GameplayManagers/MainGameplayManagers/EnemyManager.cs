@@ -1,3 +1,12 @@
+/******************************************************************************
+// File Name:       EnemyManager.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 15, 2024
+//
+// Description:     Provides other scripts with access to the boss.
+                    Manager to be developed as I know specifics
+******************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
