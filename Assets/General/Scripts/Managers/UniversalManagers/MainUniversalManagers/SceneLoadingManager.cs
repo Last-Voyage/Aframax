@@ -96,6 +96,9 @@ public class SceneTransition
     [SerializeField] private string _sceneTransitionName;
     [SerializeField] private float _minimumScreenTransitionTime;
 
+    /// <summary>
+    /// Strings for animation triggers
+    /// </summary>
     [Space]
     [SerializeField] private string _sceneTransitionIntroAnimTrigger;
     [SerializeField] private string _sceneTransitionExitAnimTrigger;
