@@ -32,12 +32,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     [Header("Set Player Camera Here")]
     [SerializeField] private Transform _playerCamera;
-    private float _cameraXRotation;
     [Header("Adjustable Mouse Sensitivities")]
     [Tooltip("X controls Left/Right\nY controls Up/Down")]
     [SerializeField] private float _mouseSensitivityX;
     [SerializeField] private float _mouseSensitivityY;
-    private float _cameraClamp;
+    /// <summary>
+    /// _cameraXRotation is used to keep track of the current rotation
+    /// of the camera. This is used while moving the mouse up and down
+    /// </summary>
+    private float _cameraXRotation;
+    /// <summary>
+    /// _CAMERA_CLAMP is a constant used to prevent the camera from starting
+    /// to point behind the player while looking up and down. Set to 90 so that
+    /// the camera may still look straight up or down
+    /// </summary>
+    private const float _CAMERA_CLAMP = 90;
 
     /// <summary>
     /// Variables that capture user input
@@ -80,7 +89,6 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeNonSerialized()
     {
         _cameraXRotation = 0;
-        _cameraClamp = 90;
     }
 
     /// <summary>
@@ -172,7 +180,7 @@ public class PlayerMovementController : MonoBehaviour
         // Instead of rotating the player up and down, we will rotate the camera
         // Change the camera's rotation by reading the vertical mouse movement
         _cameraXRotation -= _mouseYInput.ReadValue<float>() * _mouseSensitivityY;
-        _cameraXRotation = Mathf.Clamp(_cameraXRotation, -_cameraClamp, _cameraClamp);
+        _cameraXRotation = Mathf.Clamp(_cameraXRotation, -_CAMERA_CLAMP, _CAMERA_CLAMP);
 
         // Create a target rotation for the camera based on the player's rotation
         // and the new rotation we just found
