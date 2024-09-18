@@ -13,6 +13,13 @@ public class bulletBehavior : MonoBehaviour
 {
     //The UI component that serves as feedback of how much damage was taken
     [SerializeField] private GameObject _damCount;
+    //Adjustible number for designers outside of code (default damage is 15)
+    [SerializeField] private int _actualDamage = 15;
+
+    void Start()
+    {
+        StartCoroutine(delayDespawn());
+    }
 
     /// <summary>
     /// What causes the bullet to move
@@ -20,6 +27,12 @@ public class bulletBehavior : MonoBehaviour
     void Update()
     {
         transform.position -= new Vector3(0, 0, 0.1f);
+    }
+
+    IEnumerator delayDespawn()
+    {
+        yield return new WaitForSeconds(0.6f);
+        Destroy(gameObject);
     }
 
     void OnTriggerEnter(Collider col)
@@ -30,7 +43,7 @@ public class bulletBehavior : MonoBehaviour
             _damCount.SetActive(true);
             //Getting the script from the serialized ui component to change the number
             damageNumBehavior dc = _damCount.GetComponent<damageNumBehavior>();
-            dc._damageNumber = 15;
+            dc._damageNumber = _actualDamage;
             this.gameObject.transform.DetachChildren();
             Destroy(gameObject ,0.1f);
         }
