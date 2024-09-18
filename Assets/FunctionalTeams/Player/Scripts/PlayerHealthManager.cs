@@ -51,7 +51,7 @@ public class PlayerHealthManager : MonoBehaviour
 
     public void TakeDamage(float AttackPower)
     {
-        _playerHealth = _playerHealth - AttackPower;
+        _playerHealth -= AttackPower;
 
         //calls update health bar function from healthbar manager
         if (HealthBarManager != null)
