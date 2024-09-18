@@ -41,6 +41,7 @@ public class HarpoonGun : MonoBehaviour
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
         _harpoonAnimator.SetTrigger("shoot");
+        CinemachineShake.Instance.ShakeCamera(5f, .05f);
     }
     private RaycastHit hit;
     private void SetHarpoonActive(){
@@ -122,6 +123,7 @@ public class HarpoonGun : MonoBehaviour
             }
         }
         hit = new RaycastHit();
+        CinemachineShake.Instance.ShakeCamera(3f, .05f);
         
         Destroy(harpoonInstance);
         isShooting = false;
