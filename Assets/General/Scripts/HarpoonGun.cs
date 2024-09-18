@@ -86,20 +86,25 @@ public class HarpoonGun : MonoBehaviour
         // If max distance reached and no hit, start reeling back
         if (!_isReeling)
         {
-            StartReeling(harpoonInstance.transform.position);
+            StartReeling(hit.point);
         }
     }
-
+    private float _currentReelDur;
 
     void StartReeling(Vector3 hitPosition)
     {
         _isReeling = true;
         
-        float distanceFromPlayer = Vector3.Distance(transform.position, hitPosition);
+        float distanceFromPlayer;
+        if(hit.transform != null){
+            distanceFromPlayer = Vector3.Distance(transform.position, hitPosition);
+        }else{
+            distanceFromPlayer = _maxDistance;
+        }
         
 
         // Adjust the reeling time based on the distance
-        _reelDuration = distanceFromPlayer / _maxDistance;
+        _currentReelDur = distanceFromPlayer / _maxDistance * _reelDuration;
         StartCoroutine(ReelHarpoon());
     }
 
@@ -110,17 +115,17 @@ public class HarpoonGun : MonoBehaviour
         float elapsedTime = 0;
         // Lerp the harpoon back to the player over time
         var startPos = harpoonInstance.transform.position;
-        while(elapsedTime < _reelDuration){
+        while(elapsedTime < _currentReelDur){
             if(_holdToRetractMode){
                 if(Input.GetKey(KeyCode.Mouse0)){
                     isShooting = true;
                     harpoonInstance.transform.GetChild(0).LookAt(harpoonTip);
-                    harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _reelDuration);
+                    harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _currentReelDur);
                     elapsedTime+= Time.deltaTime;
                 }  
             }else{
                 harpoonInstance.transform.GetChild(0).LookAt(harpoonTip);
-                harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _reelDuration);
+                harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _currentReelDur);
                 elapsedTime+= Time.deltaTime; 
             }
             
