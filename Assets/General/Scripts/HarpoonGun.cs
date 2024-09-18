@@ -3,22 +3,21 @@ using UnityEngine;
 
 public class HarpoonGun : MonoBehaviour
 {
-    public GameObject harpoonPrefab; // Prefab of the harpoon
-    public float harpoonSpeed = 50f; // Speed of the harpoon
-    public float maxDistance = 100f; // Max travel distance
-    public float reelDuration = 3f; // Time to reel in at max distance
+    [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
+    [SerializeField] private float _harpoonSpeed = 50f; // Speed of the harpoon
+    [SerializeField] private float _maxDistance = 100f; // Max travel distance
+    [SerializeField] private float _reelDuration = 3f; // Time to reel in at max distance
 
     internal GameObject harpoonInstance;
-    private bool isReeling = false;
-    private Vector3 fireDirection;
-    private float currentDistance;
-    [SerializeField] LineRenderer lineRenderer;
-    [SerializeField] private Transform playerLookDir;
+    private bool _isReeling = false;
+    private Vector3 _fireDir;
+    private float _currentDist;
+    [SerializeField] private Transform _playerLookDir;
     public Transform harpoonTip;
-    [SerializeField] private GameObject harpoonOnGun;
-    [SerializeField] private LayerMask excludedLayers;
-    [SerializeField] private Animator harpoonAnimator;
-    public bool isShooting = false;
+    [SerializeField] private GameObject _harpoonOnGun;
+    [SerializeField] private LayerMask _excludeLayers;
+    [SerializeField] private Animator _harpoonAnimator;
+    internal bool isShooting = false;
 
     void Update()
     {
@@ -32,35 +31,36 @@ public class HarpoonGun : MonoBehaviour
     void FireHarpoon()
     {
         // Instantiate the harpoon and set its initial position and direction
-        harpoonInstance = Instantiate(harpoonPrefab, playerLookDir.position, Quaternion.identity);
+        harpoonInstance = Instantiate(_harpoonPrefab, _playerLookDir.position, Quaternion.identity);
         harpoonInstance.SetActive(false);
-        harpoonInstance.transform.GetChild(0).transform.rotation = playerLookDir.rotation;
+        harpoonInstance.transform.GetChild(0).transform.rotation = _playerLookDir.rotation;
         isShooting = true;
-        fireDirection = playerLookDir.forward; // In the direction the player is looking
+        _fireDir = _playerLookDir.forward; // In the direction the player is looking
 
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
-        harpoonOnGun.SetActive(false);
-        harpoonAnimator.SetTrigger("shoot");
+        _harpoonOnGun.SetActive(false);
+        _harpoonAnimator.SetTrigger("shoot");
     }
     private RaycastHit hit;
     private void SetHarpoonActive(){
+        //delays visual of harpoon appearing for better appearance
         harpoonInstance.SetActive(true);
     }
     IEnumerator MoveHarpoon()
     {
         Invoke(nameof(SetHarpoonActive), .15f);
         
-        currentDistance = 0f;
+        _currentDist = 0f;
 
-        while (currentDistance < maxDistance && !isReeling)
+        while (_currentDist < _maxDistance && !_isReeling)
         {
             // Calculate how far the harpoon should move in this frame
-            Vector3 movement = fireDirection * harpoonSpeed * Time.deltaTime;
+            Vector3 movement = _fireDir * _harpoonSpeed * Time.deltaTime;
 
             // Cast a ray from the harpoon's current position forward by the amount it moves this frame
 
-            if (Physics.Raycast(harpoonInstance.transform.position, movement, out hit, 1f, ~excludedLayers))
+            if (Physics.Raycast(harpoonInstance.transform.position, movement, out hit, 1f, ~_excludeLayers))
             {
                 if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Grabbable")){
                     hit.transform.SetParent(harpoonInstance.transform);
@@ -76,13 +76,13 @@ public class HarpoonGun : MonoBehaviour
 
             // If no collision, move the harpoon
             harpoonInstance.transform.Translate(movement);
-            currentDistance += movement.magnitude;
+            _currentDist += movement.magnitude;
 
             yield return null;
         }
 
         // If max distance reached and no hit, start reeling back
-        if (!isReeling)
+        if (!_isReeling)
         {
             StartReeling(harpoonInstance.transform.position);
         }
@@ -96,21 +96,21 @@ public class HarpoonGun : MonoBehaviour
         isShooting = false;
 
         // Adjust the reeling time based on the distance
-        reelDuration = distanceFromPlayer / maxDistance;
+        _reelDuration = distanceFromPlayer / _maxDistance;
         StartCoroutine(ReelHarpoon());
     }
 
     IEnumerator ReelHarpoon()
     {
         yield return new WaitForSeconds(.05f);
-        harpoonAnimator.SetTrigger("drawBack");
+        _harpoonAnimator.SetTrigger("drawBack");
         float elapsedTime = 0;
         // Lerp the harpoon back to the player over time
         var startPos = harpoonInstance.transform.position;
         isShooting = true;
-        while(elapsedTime < reelDuration){
+        while(elapsedTime < _reelDuration){
             harpoonInstance.transform.GetChild(0).LookAt(harpoonTip);
-            harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ reelDuration);
+            harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _reelDuration);
             elapsedTime+= Time.deltaTime;
             yield return null;
         }
@@ -125,7 +125,7 @@ public class HarpoonGun : MonoBehaviour
         
         Destroy(harpoonInstance);
         isShooting = false;
-        isReeling = false;
-        harpoonOnGun.SetActive(true);
+        _isReeling = false;
+        _harpoonOnGun.SetActive(true);
     }
 }
