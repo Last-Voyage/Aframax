@@ -13,7 +13,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerInput))]
 
 public class PlayerMovementController : MonoBehaviour
@@ -23,17 +24,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
-
-    /// <summary>
-    /// Variables that relate to the vertical movement of the player
-    /// </summary>
-    [Header("Adjustable Gravity")]
-    [SerializeField] private float _gravity;
-    [Header("Set Layer Mask for Ground Here")]
-    [SerializeField] private LayerMask _groundMask;
-    private const float _GROUND_CHECK_RADIUS = 0.1f;
-    private float _currentVerticalVelo;
-    private bool _isGrounded;
 
     // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
     // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
@@ -59,9 +49,9 @@ public class PlayerMovementController : MonoBehaviour
     private InputAction _mouseYInput;
 
     /// <summary>
-    /// A variable to hold the Character Controller
+    /// A variable to hold the Rigidbody
     /// </summary>
-    private CharacterController _characterController;
+    private Rigidbody _rigidBody;
 
     /// <summary>
     /// Coroutine variable to hold our movement coroutine
@@ -75,10 +65,10 @@ public class PlayerMovementController : MonoBehaviour
     void Start()
     {
         // Initialize non-serialized variables, input variables, and
-        // the character controller
+        // the rigibody
         InitializeNonSerialized();
         InitializeInput();
-        InitializeCharacter();
+        InitializeRigidbody();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine("ResolveMovement");
@@ -90,8 +80,6 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeNonSerialized()
     {
         _cameraXRotation = 0;
-        _currentVerticalVelo = 0;
-        _isGrounded = true;
         _cameraClamp = 90;
     }
 
@@ -108,11 +96,12 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Initializes our Character Controller for movement
+    /// Initializes our Rigidbody for gravity
     /// </summary>
-    private void InitializeCharacter()
+    private void InitializeRigidbody()
     {
-        _characterController = GetComponent<CharacterController>();
+        _rigidBody = GetComponent<Rigidbody>();
+        _rigidBody.freezeRotation = true;
     }
 
     /// <summary>
@@ -123,17 +112,28 @@ public class PlayerMovementController : MonoBehaviour
     {
         while(true)
         {
-            HandleHorizontalMovement();
-            HandleVerticalMovement();
+            HandleMovement();
             HandleCameraRotation();
             yield return null;
         }
     }
 
     /// <summary>
+    /// Handles the general movement of the player
+    /// Adds the horizontal and vertical movements to get the overall movement
+    /// </summary>
+    private void HandleMovement()
+    {
+        Vector3 horizontalMovement = HandleHorizontalMovement();
+        Vector3 verticalMovement = HandleVerticalMovement();
+
+        _rigidBody.velocity = horizontalMovement + verticalMovement;
+    }
+
+    /// <summary>
     /// Handler for horizontal movement based on input key presses
     /// </summary>
-    private void HandleHorizontalMovement()
+    private Vector3 HandleHorizontalMovement()
     {
         // Read the movement input
         Vector2 moveDir = _movementInput.ReadValue<Vector2>();
@@ -145,27 +145,16 @@ public class PlayerMovementController : MonoBehaviour
             * _playerMovementSpeed;
 
         // Move the player
-        _characterController.Move(newMovement * Time.deltaTime);
+        return newMovement;
     }
 
     /// <summary>
     /// Handles the force of gravity
     /// Can be expanded to include jumping later on
     /// </summary>
-    private void HandleVerticalMovement()
+    private Vector3 HandleVerticalMovement()
     {
-        // Check to see if the player is on the ground
-        _isGrounded = CheckGrounded();
-
-        // If the player is on the ground, reset the downward velocity
-        if (_isGrounded)
-        {
-            _currentVerticalVelo = 0;
-        }
-
-        // Make the player fall
-        _currentVerticalVelo -= _gravity * Time.deltaTime;
-        _characterController.Move(new Vector3(0, _currentVerticalVelo, 0) * Time.deltaTime);
+        return new Vector3(0, _rigidBody.velocity.y, 0);
     }
 
     /// <summary>
@@ -190,17 +179,6 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 targetRotation = transform.eulerAngles;
         targetRotation.x = _cameraXRotation;
         _playerCamera.eulerAngles = targetRotation;
-    }
-
-    /// <summary>
-    /// Checks to see if the player is on the ground
-    /// </summary>
-    /// <returns>
-    /// True if the player is on the ground or false otherwise
-    /// </returns>
-    private bool CheckGrounded()
-    {
-        return Physics.CheckSphere(transform.position, _GROUND_CHECK_RADIUS, _groundMask);
     }
 
     /// <summary>
