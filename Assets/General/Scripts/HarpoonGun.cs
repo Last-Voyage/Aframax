@@ -7,6 +7,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private float _harpoonSpeed = 50f; // Speed of the harpoon
     [SerializeField] private float _maxDistance = 100f; // Max travel distance
     [SerializeField] private float _reelDuration = 3f; // Time to reel in at max distance
+    [SerializeField] private float _gunCD = 2f;
+    [SerializeField] private bool _holdToRetractMode = true;
 
     internal GameObject harpoonInstance;
     private bool _isReeling = false;
@@ -22,7 +24,7 @@ public class HarpoonGun : MonoBehaviour
     void Update()
     {
         // Fire the harpoon when you press the left mouse button
-        if (Input.GetMouseButtonDown(0) && harpoonInstance == null)
+        if (Input.GetMouseButtonDown(0) && harpoonInstance == null && !_isReeling)
         {
             FireHarpoon();
         }
@@ -92,9 +94,10 @@ public class HarpoonGun : MonoBehaviour
 
     void StartReeling(Vector3 hitPosition)
     {
+        _isReeling = true;
         
         float distanceFromPlayer = Vector3.Distance(transform.position, hitPosition);
-        isShooting = false;
+        
 
         // Adjust the reeling time based on the distance
         _reelDuration = distanceFromPlayer / _maxDistance;
@@ -108,11 +111,21 @@ public class HarpoonGun : MonoBehaviour
         float elapsedTime = 0;
         // Lerp the harpoon back to the player over time
         var startPos = harpoonInstance.transform.position;
-        isShooting = true;
         while(elapsedTime < _reelDuration){
-            harpoonInstance.transform.GetChild(0).LookAt(harpoonTip);
-            harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _reelDuration);
-            elapsedTime+= Time.deltaTime;
+            if(_holdToRetractMode){
+                if(Input.GetKey(KeyCode.Mouse0)){
+                    isShooting = true;
+                    harpoonInstance.transform.GetChild(0).LookAt(harpoonTip);
+                    harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _reelDuration);
+                    elapsedTime+= Time.deltaTime;
+                }  
+            }else{
+                harpoonInstance.transform.GetChild(0).LookAt(harpoonTip);
+                harpoonInstance.transform.position = Vector3.Lerp(startPos, harpoonTip.position, elapsedTime/ _reelDuration);
+                elapsedTime+= Time.deltaTime; 
+            }
+            
+            
             yield return null;
         }
         // get rid of harpoon
@@ -127,6 +140,7 @@ public class HarpoonGun : MonoBehaviour
         
         Destroy(harpoonInstance);
         isShooting = false;
+        yield return new WaitForSeconds(_gunCD);
         _isReeling = false;
         _harpoonOnGun.SetActive(true);
     }
