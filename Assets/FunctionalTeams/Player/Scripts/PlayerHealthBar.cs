@@ -29,11 +29,11 @@ public class PlayerHealthBar : MonoBehaviour
             }
         }
     }
-    public void UpdateHealthBar(float currentHealth, float maxHealth)
+    public void UpdateHealthBar(float healthPercent)
     {
         if (HealthBar != null)
         {
-            HealthBar.fillAmount = currentHealth / maxHealth;
+            HealthBar.fillAmount = healthPercent;
         }
     }
 }
