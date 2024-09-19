@@ -52,6 +52,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emissive:
+        m_Texture: {fileID: 2800000, guid: a3d67a4bb16bcd544a37b53dc6b78b65, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -110,9 +114,10 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Diffuse_Contribution: 0
+    - _Diffuse_Contribution: 0.5
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _EmissiveIntensity: 1.6
     - _EnvironmentReflections: 1
     - _FresnelPower: 2
     - _Fresnel_Contrast: 2
@@ -124,15 +129,19 @@ Material:
     - _MainThreshold: 0.02
     - _MetalPerceptualRoughness: 5.06
     - _Metallic: 0
+    - _NormalMapIntensity: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _PostBrightness: 0.025
+    - _PostContrast: 1.125
+    - _PostSaturation: 1.15
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _ReflectionPower: 0.15
     - _SHADOWS_SOFT: 0
     - _SecondaryThreshold: 0.27
-    - _ShadowsIntensity: 0.357
+    - _ShadowsIntensity: 0.3
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -143,11 +152,13 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColorTint: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MetalBackground: {r: 0.43137255, g: 0.48313728, b: 0.5254902, a: 1}
-    - _MetalBaseColor: {r: 0.7497775, g: 0.7810272, b: 0.7830189, a: 1}
+    - _MetalBaseColor: {r: 0.653128, g: 0.7383476, b: 0.749, a: 1}
     - _MetalHighlightColor: {r: 0.9490197, g: 0.9490197, b: 0.9490197, a: 1}
+    - _PostTint: {r: 0.3773585, g: 0.36209092, b: 0.29013884, a: 1}
     - _RimLightColor: {r: 0.764151, g: 0.4042654, b: 0.14778388, a: 1}
     - _SecondaryColor: {r: 0.57547164, g: 0.57547164, b: 0.57547164, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
