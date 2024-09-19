@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,15 +44,18 @@ public class BoatMover : MonoBehaviour
     [Tooltip("The pointer for the background direction")]
     private int _currentDirectional =
         (int)EDirectionalInserts.Forward;
-    [Tooltip("The speed multiplier for the background")] public float VelocityMultiplier = 1;/*{ get; private set; }*/
+    [NonSerialized][Tooltip("The speed multiplier for the background")] public float 
+        VelocityMultiplier = 2;/*{ get; private set; }*/
 
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// At the start of the script, TestSpeedChange coroutine is started
+    /// </summary>
+    private void Start()
     {
-        
+        StartCoroutine(TestSpeedChange());
     }
 
-    // Update is called once per frame
+    // Moves the boat and the objects on it
     void FixedUpdate()
     {
         gameObject.transform.position += _directionalMovements[_currentDirectional] *
@@ -65,5 +69,29 @@ public class BoatMover : MonoBehaviour
                     VelocityMultiplier * Time.deltaTime;
             }
         }
+    }
+
+    /// <summary>
+    /// This is a test coroutine to change the speed of the environment
+    /// </summary>
+    private IEnumerator TestSpeedChange()
+    {
+        yield return new WaitForSeconds(5f);
+        BoatDirectionChanger(EDirectionalInserts.ForwardRight);
+        VelocityMultiplier = 3f;
+
+        yield return new WaitForSeconds(5f);
+        BoatDirectionChanger(EDirectionalInserts.Forward);
+        VelocityMultiplier = 2f;
+    }
+
+
+    /// <summary>
+    /// A function that changes the way the environment moves
+    /// </summary>
+    /// <param name="direction">The enum that will change the direction</param>
+    public void BoatDirectionChanger(EDirectionalInserts direction)
+    {
+        _currentDirectional = (int)direction;
     }
 }
