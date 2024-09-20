@@ -16,7 +16,7 @@ using UnityEngine;
 public abstract class CoreManagersFramework : MonoBehaviour
 {
     /// <summary>
-    /// Attempt
+    /// Tries to instance the manager, if it fails it destroys itself :(
     /// </summary>
     protected virtual void Awake()
     {

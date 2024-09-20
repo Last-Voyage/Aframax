@@ -95,10 +95,14 @@ public class SaveManager : MainUniversalManagerFramework
     }
 
     #region BaseManager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+        Instance = this;
+    }
     public override void SetupMainManager()
     {
         base.SetupMainManager();
-        Instance = this;
         EstablishPath();
         Load();
     }

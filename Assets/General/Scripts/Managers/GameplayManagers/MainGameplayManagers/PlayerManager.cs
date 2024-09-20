@@ -19,6 +19,10 @@ public class PlayerManager : MainGameplayManagerFramework
     public static PlayerManager Instance;
 
     #region Base Manager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+    }
     public override void SetupMainManager()
     {
         base.SetupMainManager();

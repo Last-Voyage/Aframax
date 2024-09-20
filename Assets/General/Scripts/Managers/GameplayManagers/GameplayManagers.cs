@@ -46,6 +46,15 @@ public class GameplayManagers : CoreManagersFramework
     /// </summary>
     protected override void SetupMainManagers()
     {
+        //Instances all managers
+        foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
+        {
+            mainManager.SetupInstance();
+        }
+
+        //Thens sets them up
+        //They are instanced first so that if any manager needs to access any other manager in it's setup
+        //  then the order doesn't matter
         foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
         {
             mainManager.SetupMainManager();
