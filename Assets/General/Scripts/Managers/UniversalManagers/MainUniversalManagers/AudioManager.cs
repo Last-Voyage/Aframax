@@ -17,10 +17,12 @@ using UnityEngine;
 /// </summary>
 public class AudioManager : MainUniversalManagerFramework
 {
+    public static AudioManager Instance;
     #region Base Manager
     public override void SetupMainManager()
     {
         base.SetupMainManager();
+        Instance = this;
     }
     #endregion
 

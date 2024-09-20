@@ -21,6 +21,8 @@ public class SaveManager : MainUniversalManagerFramework
     [SerializeField] private GameSaveData _gameSaveData;
     private string _path;
 
+    public static SaveManager Instance;
+
     /// <summary>
     /// Sets the path to create the save file
     /// </summary>
@@ -39,7 +41,6 @@ public class SaveManager : MainUniversalManagerFramework
             Directory.CreateDirectory(_path); 
         }
     }
-
 
     /// <summary>
     /// Fills the save data with it's initial values when the file is first created as needed
@@ -81,8 +82,6 @@ public class SaveManager : MainUniversalManagerFramework
         }
     }
 
-
-
     public void ResetSaveData()
     {
         //Fully resets all variables in the Game Save Data
@@ -99,6 +98,7 @@ public class SaveManager : MainUniversalManagerFramework
     public override void SetupMainManager()
     {
         base.SetupMainManager();
+        Instance = this;
         EstablishPath();
         Load();
     }
@@ -111,8 +111,6 @@ public class SaveManager : MainUniversalManagerFramework
     #region Setters
 
     #endregion
-
-
 }
 
 /// <summary>

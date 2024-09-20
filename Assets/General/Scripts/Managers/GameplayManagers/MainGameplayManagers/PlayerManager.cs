@@ -12,14 +12,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Provides other all other scripts with access to the player
+/// Provides all other scripts with access to the player
 /// </summary>
 public class PlayerManager : MainGameplayManagerFramework
 {
+    public static PlayerManager Instance;
+
     #region Base Manager
     public override void SetupMainManager()
     {
         base.SetupMainManager();
+        Instance = this;
     }
     #endregion
 

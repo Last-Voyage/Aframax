@@ -17,10 +17,12 @@ using UnityEngine;
 /// </summary>
 public class GameStateManager : MainGameplayManagerFramework
 {
-    private GameplayState _currentGameplayState;
+    private EGameplayState _currentGameplayState;
+
+    public static GameStateManager Instance;
 
 
-    private void ChangeCurrentGameplayState(GameplayState newState)
+    private void ChangeCurrentGameplayState(EGameplayState newState)
     {
         _currentGameplayState = newState;
     }
@@ -29,6 +31,7 @@ public class GameStateManager : MainGameplayManagerFramework
     public override void SetupMainManager()
     {
         base.SetupMainManager();
+        Instance = this;
     }
     #endregion
 
@@ -37,7 +40,7 @@ public class GameStateManager : MainGameplayManagerFramework
     #endregion
 }
 
-public enum GameplayState
+public enum EGameplayState
 {
     tempState
 };
