@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         damageNumBehavior.cs
+// File Name :         DamageNumBehavior.cs
 // Author :            Mark Hanson
 // Creation Date :     9/16/2024
 //
@@ -10,14 +10,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class damageNumBehavior : MonoBehaviour
+public class DamageNumBehavior : MonoBehaviour
 {
     //The actual text of the game object to be edited 
     [SerializeField] private TextMeshPro _damText;
     //The number which the text reflects visually
-    [SerializeField] public float _damageNumber = 0;
+    public float _damageNumber { private get; set; } = 0;
     //The number that gives the illusion of the number disappearing
     [SerializeField] private float _opacityScaler = 255;
+  
 
     // Update is called once per frame
     void Update()
@@ -33,11 +34,11 @@ public class damageNumBehavior : MonoBehaviour
         //Once text is completely clear destory object
         if (_damText.color.a <= 0)
         {
-            StartCoroutine(despawn());
+            StartCoroutine(Despawn());
         }
     }
-
-    IEnumerator despawn()
+ 
+    IEnumerator Despawn()
     {
         yield return new WaitForSeconds(0.1f);
         Debug.Log("despawned");
