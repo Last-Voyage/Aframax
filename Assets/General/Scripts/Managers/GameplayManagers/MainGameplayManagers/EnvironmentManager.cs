@@ -12,12 +12,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Provides the functionality behind the way the environment interects with other elements
+/// Provides the functionality behind the way the environment interacts with other elements
 /// Manager to be developed as I know specifics
 /// </summary>
 public class EnvironmentManager : MainGameplayManagerFramework
 {
+    public static EnvironmentManager Instance;
     #region Base Manager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+        Instance = this;
+    }
     public override void SetupMainManager()
     {
         base.SetupMainManager();

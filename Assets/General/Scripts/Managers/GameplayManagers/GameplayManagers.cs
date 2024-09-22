@@ -17,16 +17,13 @@ using UnityEngine;
 /// </summary>
 public class GameplayManagers : CoreManagersFramework
 {
+    /// <summary>
+    /// Contains all managers to setup. Order of managers is order of setup.
+    /// Order shouldn't technically matter but just in case
+    /// </summary>
+    [SerializeField] private List<MainGameplayManagerFramework> _allMainGameplayManagers;
+
     public static GameplayManagers Instance;
-
-    [SerializeField] private GameStateManager _gameStateManager;
-    [SerializeField] private PlayerManager _playerManager;
-    [SerializeField] private EnemyManager _enemyManager;
-    [SerializeField] private EnvironmentManager _environmentManager;
-    [SerializeField] private CameraManager _cameraManager;
-
-    [Space]
-    [SerializeField] private List<MainGameplayManagerFramework> _allMainManagers;
 
     /// <summary>
     /// Sets up the singleton
@@ -49,17 +46,22 @@ public class GameplayManagers : CoreManagersFramework
     /// </summary>
     protected override void SetupMainManagers()
     {
-        foreach (MainGameplayManagerFramework mainManager in _allMainManagers)
+        //Instances all managers
+        foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
+        {
+            mainManager.SetupInstance();
+        }
+
+        //Thens sets them up
+        //They are instanced first so that if any manager needs to access any other manager in it's setup
+        //  then the order doesn't matter
+        foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
         {
             mainManager.SetupMainManager();
         }
     }
 
     #region Getters
-    public GameStateManager GetGameStateManager() => _gameStateManager;
-    public PlayerManager GetPlayerManager() => _playerManager;
-    public EnemyManager GetEnemyManager() => _enemyManager;
-    public EnvironmentManager GetEnvironmentManager() => _environmentManager;
-    public CameraManager GetCameraManager() => _cameraManager;
+
     #endregion
 }

@@ -16,6 +16,11 @@ using UnityEngine;
 /// </summary>
 public class MainUniversalManagerFramework : MainManagerFramework
 {
+    public override void SetupInstance()
+    {
+
+    }
+
     public override void SetupMainManager()
     {
         

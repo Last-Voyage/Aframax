@@ -86,10 +86,16 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     }
 
     #region Base Manager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+        Instance = this;
+    }
+
     public override void SetupMainManager()
     {
         base.SetupMainManager();
-        Instance = this;
+        
     }
     #endregion
 
