@@ -31,7 +31,6 @@ public abstract class CoreManagersFramework : MonoBehaviour
             //If it fails, it destroys itself
             Destroy(gameObject);
         }
-
     }
 
     /// <summary>
