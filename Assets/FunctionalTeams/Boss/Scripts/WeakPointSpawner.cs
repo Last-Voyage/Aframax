@@ -16,6 +16,8 @@ using UnityEngine.Events;
 /// </summary>
 public class WeakPointSpawner : MonoBehaviour
 {
+    [Tooltip("The time before the first weak point spawns")]
+    [SerializeField] private float _weakPointFirstSpawnDelay;
     [Tooltip("The time between spawing weakpoints")]
     [SerializeField] private float _weakPointSpawnInterval;
     [Tooltip("The number of weak points you need to kill to destroy this object")]
@@ -63,6 +65,9 @@ public class WeakPointSpawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator WeakPointSpawnProcess()
     {
+        //The time before the first weak point spawns
+        yield return new WaitForSeconds(_weakPointFirstSpawnDelay);
+
         //Spawns weak points so long as we haven't reached the max amount allowed
         while (_weakPointSpawnCounter < _weakPointsNeededToDestroy)
         {
