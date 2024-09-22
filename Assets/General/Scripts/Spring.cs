@@ -1,3 +1,10 @@
+/*****************************************************************************
+// File Name :         Spring.cs
+// Author :            Tommy Roberts
+// Creation Date :     9/22/24
+//
+// Brief Description : holds and sets the values for the Spring object
+*****************************************************************************/
 using UnityEngine;
 
 public class Spring {
@@ -7,13 +14,23 @@ public class Spring {
     private float _velocity;
     private float _value;
 
+
+    /// <summary>
+    /// this method sets all of the values for the rope based off of the given time
+    /// </summary>
+    /// <param name="deltaTime"></param> <summary>
+    /// the time
+    /// </summary>
+    /// <param name="deltaTime"></param>
     public void Update(float deltaTime) {
         var direction = _target - _value >= 0 ? 1f : -1f;
         var force = Mathf.Abs(_target - _value) * _strength;
         _velocity += (force * direction - _velocity * _damper) * deltaTime;
         _value += _velocity * deltaTime;
     }
-
+    /// <summary>
+    /// resets the rope to be sprung again
+    /// </summary>
     public void Reset() {
         _velocity = 0f;
         _value = 0f;
