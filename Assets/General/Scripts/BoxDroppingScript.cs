@@ -1,3 +1,10 @@
+/**********************************************************************************************************************
+// File Name :         BoxDroppingScript.cs
+// Author :            Nick Rice
+// Creation Date :     
+// 
+// Brief Description : Sample script that spawns a cube to simulate objects on the boat
+**********************************************************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -8,13 +15,18 @@ public class BoxDroppingScript : MonoBehaviour
 {
     GameObject theBox;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// starts Hugo() coroutine
+    /// </summary>
     void Start()
     {
 
         StartCoroutine("Hugo");
     }
 
+    /// <summary>
+    /// Waits 2 secconds, then spawns a cube above the boat
+    /// </summary>
     private IEnumerator Hugo()
     {
         yield return new WaitForSeconds(2f);
