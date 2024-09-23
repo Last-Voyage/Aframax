@@ -102,9 +102,10 @@ public class HarpoonGun : MonoBehaviour
                 if(_hit.transform.gameObject.layer == LayerMask.NameToLayer("Grabbable"))
                 {
                     _hit.transform.SetParent(_harpoonSpear.transform);
-                    if(_hit.transform.GetComponent<Rigidbody>() != null)
+                    Rigidbody hitRB = _hit.transform.GetComponent<Rigidbody>();
+                    if(hitRB != null)
                     {
-                        _hit.transform.GetComponent<Rigidbody>().isKinematic = true;
+                        hitRB.isKinematic = true;
                     }
                 }
                 // Harpoon _hit something, stop its movement and start reeling it in
