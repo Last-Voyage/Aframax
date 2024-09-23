@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 public class HarpoonGun : MonoBehaviour
 {
     #region Inspector Variables
+    [Header("Harpoon Variables")]
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
     [Tooltip("The speed the harpoon moves in the launch direction")]
     [SerializeField] private float _harpoonSpeed = 50f; // Speed of the harpoon
@@ -23,6 +24,7 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private float _gunCD = 2f; // cd of harpoon gun after fully retracted
     [Tooltip("if true then you have to hold mouse down to retract fully. if false retracts automatically")]
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
+    [Header("Harpoon Functionality Dependencies")]
     [SerializeField] private Transform _playerLookDir;
     [SerializeField] private const string _harpoonShootTrigger = "shoot";
     [SerializeField] private const string _harpoonRetractTrigger = "drawBack";
@@ -35,11 +37,13 @@ public class HarpoonGun : MonoBehaviour
 
     #endregion
 
-    internal GameObject HarpoonInstance;
+    private GameObject _harpoonSpear;
+    public GameObject HarpoonSpear {get { return _harpoonSpear;}}
     private bool _isReeling = false;
     private Vector3 _fireDir;
     private float _currentDist;
-    internal bool IsShooting = false;
+    private bool _isShooting = false;
+    public bool IsShooting {get { return _isShooting;}}
     private RaycastHit _hit;
     private float _currentReelDur;
 
@@ -55,14 +59,15 @@ public class HarpoonGun : MonoBehaviour
     void FireHarpoon(InputAction.CallbackContext context)
     {
         //dont shoot if already shot
-        if(HarpoonInstance != null || _isReeling){
+        if(_harpoonSpear != null || _isReeling)
+        {
             return;
         }
         // Instantiate the harpoon and set its initial position and direction
-        HarpoonInstance = Instantiate(_harpoonPrefab, _playerLookDir.position, Quaternion.identity);
-        HarpoonInstance.SetActive(false);
-        HarpoonInstance.transform.GetChild(0).rotation = _playerLookDir.rotation;
-        IsShooting = true;
+        _harpoonSpear = Instantiate(_harpoonPrefab, _playerLookDir.position, Quaternion.identity);
+        _harpoonSpear.SetActive(false);
+        _harpoonSpear.transform.GetChild(0).rotation = _playerLookDir.rotation;
+        _isShooting = true;
         _fireDir = _playerLookDir.forward; // In the direction the player is looking
 
         // Start moving the harpoon
@@ -73,7 +78,7 @@ public class HarpoonGun : MonoBehaviour
     }
     private void SetHarpoonActive(){
         //delays visual of harpoon appearing for better appearance
-        HarpoonInstance.SetActive(true);
+        _harpoonSpear.SetActive(true);
     }
     /// <summary>
     /// coroutine to move the created harpoon to the target direction. starts the reel coroutine at the end
@@ -91,23 +96,25 @@ public class HarpoonGun : MonoBehaviour
 
             // Cast a ray from the harpoon's current position forward by the amount it moves this frame
 
-            if (Physics.Raycast(HarpoonInstance.transform.position, movement, out _hit, 1f, ~_excludeLayers))
+            if (Physics.Raycast(_harpoonSpear.transform.position, movement, out _hit, 1f, ~_excludeLayers))
             {
                 //if hit grabbable object then child object to harpoon to bring object back with harpoon
-                if(_hit.transform.gameObject.layer == LayerMask.NameToLayer("Grabbable")){
-                    _hit.transform.SetParent(HarpoonInstance.transform);
-                    if(_hit.transform.GetComponent<Rigidbody>() != null){
+                if(_hit.transform.gameObject.layer == LayerMask.NameToLayer("Grabbable"))
+                {
+                    _hit.transform.SetParent(_harpoonSpear.transform);
+                    if(_hit.transform.GetComponent<Rigidbody>() != null)
+                    {
                         _hit.transform.GetComponent<Rigidbody>().isKinematic = true;
                     }
                 }
                 // Harpoon _hit something, stop its movement and start reeling it in
-                HarpoonInstance.transform.position = _hit.point; // Snap the harpoon to the _hit point
+                _harpoonSpear.transform.position = _hit.point; // Snap the harpoon to the _hit point
                 StartReeling(_hit.point);
                 yield break; // Exit the coroutine, no need to keep moving the harpoon
             }
 
             // If no collision, move the harpoon
-            HarpoonInstance.transform.Translate(movement);
+            _harpoonSpear.transform.Translate(movement);
             _currentDist += movement.magnitude;
 
             yield return null;
@@ -128,9 +135,11 @@ public class HarpoonGun : MonoBehaviour
         _isReeling = true;
         
         float distanceFromPlayer;
-        if(_hit.transform != null){
+        if(_hit.transform != null)
+        {
             distanceFromPlayer = Vector3.Distance(transform.position, _hitPosition);
-        }else{
+        }else
+        {
             distanceFromPlayer = _maxDistance;
         }
         
@@ -149,18 +158,23 @@ public class HarpoonGun : MonoBehaviour
         _harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
         float elapsedTime = 0;
         // Lerp the harpoon back to the player over time
-        var startPos = HarpoonInstance.transform.position;
+        var startPos = _harpoonSpear.transform.position;
         while(elapsedTime < _currentReelDur){
-            if(_holdToRetractMode){
-                if(_harpoonShoot.action.inProgress){
-                    IsShooting = true;
-                    HarpoonInstance.transform.GetChild(0).LookAt(HarpoonTip);
-                    HarpoonInstance.transform.position = Vector3.Lerp(startPos, HarpoonTip.position, elapsedTime/ _currentReelDur);
+            //if hold to retract is on, only pull in harpoon if holding down button
+            if(_holdToRetractMode)
+            {
+                if(_harpoonShoot.action.inProgress)
+                {
+                    _isShooting = true;
+                    _harpoonSpear.transform.GetChild(0).LookAt(HarpoonTip);
+                    _harpoonSpear.transform.position = Vector3.Lerp(startPos, HarpoonTip.position, elapsedTime/ _currentReelDur);
                     elapsedTime+= Time.deltaTime;
-                }  
-            }else{
-                HarpoonInstance.transform.GetChild(0).LookAt(HarpoonTip);
-                HarpoonInstance.transform.position = Vector3.Lerp(startPos, HarpoonTip.position, elapsedTime/ _currentReelDur);
+                } 
+                //otherwise automatically pull in 
+            }else
+            {
+                _harpoonSpear.transform.GetChild(0).LookAt(HarpoonTip);
+                _harpoonSpear.transform.position = Vector3.Lerp(startPos, HarpoonTip.position, elapsedTime/ _currentReelDur);
                 elapsedTime+= Time.deltaTime; 
             }
             
@@ -168,9 +182,11 @@ public class HarpoonGun : MonoBehaviour
             yield return null;
         }
         // get rid of harpoon
-        if(_hit.transform != null){
+        if(_hit.transform != null)
+        {
             _hit.transform.SetParent(null);
-            if(_hit.transform.GetComponent<Rigidbody>() != null){
+            if(_hit.transform.GetComponent<Rigidbody>() != null)
+            {
                 _hit.transform.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
@@ -183,8 +199,8 @@ public class HarpoonGun : MonoBehaviour
     IEnumerator ResetHarpoon(){
         _hit = new RaycastHit();
         
-        Destroy(HarpoonInstance);
-        IsShooting = false;
+        Destroy(_harpoonSpear);
+        _isShooting = false;
         yield return new WaitForSeconds(_gunCD);
         _isReeling = false;
         _harpoonOnGun.SetActive(true);

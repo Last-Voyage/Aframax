@@ -62,7 +62,7 @@ public class HarpoonRope : MonoBehaviour {
         _spring.SetStrength(_strength);
         _spring.Update(Time.deltaTime);
 
-        var grapplePoint = harpoonGun.HarpoonInstance.transform.position;
+        var grapplePoint = harpoonGun.HarpoonSpear.transform.position;
         var gunTipPosition = harpoonGun.HarpoonTip.position;
         var up = Quaternion.LookRotation((grapplePoint - gunTipPosition).normalized) * Vector3.up;
 

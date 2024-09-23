@@ -23,7 +23,7 @@ public class CinemachineShake : MonoBehaviour
         _cinemachineVirtualCam = GetComponent<CinemachineVirtualCamera>();
     }
     /// <summary>
-    /// times the shake
+    /// times the shake after its is called from where ever it is called. When time is up stop the shake
     /// </summary>
     /// <param name="intensity"></param>
     /// <param name="time"></param>
@@ -43,7 +43,7 @@ public class CinemachineShake : MonoBehaviour
             if(_shakeTimer <= 0f){
                 CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
                     _cinemachineVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-                
+                //turns off the shake
                 cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
             }
         }
