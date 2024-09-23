@@ -9,7 +9,6 @@
 ******************************************************************************/
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +16,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerInput))]
 
+/// <summary>
+/// A class that handless the movement of the player character.
+/// Follow the steps outlined in the documentation to set this up in the editor.
+/// When attached to the player, use the WASD keys to move around.
+/// </summary>
 public class PlayerMovementController : MonoBehaviour
 {
     /// <summary>
@@ -36,11 +40,13 @@ public class PlayerMovementController : MonoBehaviour
     [Tooltip("X controls Left/Right\nY controls Up/Down")]
     [SerializeField] private float _mouseSensitivityX;
     [SerializeField] private float _mouseSensitivityY;
+
     /// <summary>
     /// _cameraXRotation is used to keep track of the current rotation
     /// of the camera. This is used while moving the mouse up and down
     /// </summary>
     private float _cameraXRotation;
+
     /// <summary>
     /// _CAMERA_CLAMP is a constant used to prevent the camera from starting
     /// to point behind the player while looking up and down. Set to 90 so that
@@ -56,6 +62,9 @@ public class PlayerMovementController : MonoBehaviour
     // THE BELOW INPUT ACTIONS ARE USED FOR THE CAMERA
     private InputAction _mouseXInput;
     private InputAction _mouseYInput;
+    private const string _MOVEMENT_INPUT_NAME = "Movement";
+    private const string _MOUSE_X_INPUT_NAME = "MouseX";
+    private const string _MOUSE_Y_INPUT_NAME = "MouseY";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -63,8 +72,9 @@ public class PlayerMovementController : MonoBehaviour
     private Rigidbody _rigidBody;
 
     /// <summary>
-    /// Coroutine variable to hold our movement coroutine
+    /// Movement coroutine related variables
     /// </summary>
+    public static event Action<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
@@ -74,7 +84,7 @@ public class PlayerMovementController : MonoBehaviour
     void Start()
     {
         // Initialize non-serialized variables, input variables, and
-        // the rigibody
+        // the Rigidbody
         InitializeNonSerialized();
         InitializeInput();
         InitializeRigidbody();
@@ -98,9 +108,9 @@ public class PlayerMovementController : MonoBehaviour
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
-        _movementInput = _playerInput.currentActionMap.FindAction("Movement");
-        _mouseXInput = _playerInput.currentActionMap.FindAction("MouseX");
-        _mouseYInput = _playerInput.currentActionMap.FindAction("MouseY");
+        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
+        _mouseXInput = _playerInput.currentActionMap.FindAction(_MOUSE_X_INPUT_NAME);
+        _mouseYInput = _playerInput.currentActionMap.FindAction(_MOUSE_Y_INPUT_NAME);
     }
 
     /// <summary>
@@ -190,18 +200,38 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Temporarily stops the movement coroutine
+    /// Activates or deactivates the movement coroutine based on the input boolean
+    /// Used when the OnMovementToggled Action is invoked
     /// </summary>
-    public void PauseMovement()
+    /// <param name="change"> Determines if the movement should be turned on or off </param>
+    private void ToggleMovement(bool change)
     {
-        StopCoroutine(_movementCoroutine);
+        if (change)
+        {
+            _movementCoroutine = StartCoroutine("ResolveMovement");
+        }
+        else
+        {
+            StopCoroutine(_movementCoroutine);
+            _rigidBody.velocity = Vector3.zero;
+        }
     }
 
     /// <summary>
-    /// Restarts the movement coroutine after pausing it
+    /// Called when this component is enabled.
+    /// Used to assign the OnMovementToggled Action to a listener
     /// </summary>
-    public void RestartMovement()
+    private void OnEnable()
     {
-        _movementCoroutine = StartCoroutine("ResolveMovement");
+        OnMovementToggled += ToggleMovement;
+    }
+
+    /// <summary>
+    /// Called when this component is disnabled.
+    /// Used to unassign the OnMovementToggled Action to a listener
+    /// </summary>
+    private void OnDisable()
+    {
+        OnMovementToggled -= ToggleMovement;
     }
 }
