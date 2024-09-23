@@ -68,12 +68,8 @@ public class HarpoonGun : MonoBehaviour
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
-<<<<<<< Updated upstream
-        _harpoonAnimator.SetTrigger("shoot");
-=======
         _harpoonAnimator.SetTrigger(_harpoonShootTrigger);
-        CinemachineShake.Instance.ShakeCamera(5f, .05f);
->>>>>>> Stashed changes
+        //CinemachineShake.Instance.ShakeCamera(5f, .05f);
     }
     private void SetHarpoonActive(){
         //delays visual of harpoon appearing for better appearance
@@ -178,16 +174,13 @@ public class HarpoonGun : MonoBehaviour
                 _hit.transform.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
-<<<<<<< Updated upstream
-=======
-        CinemachineShake.Instance.ShakeCamera(3f, .05f);
+        //CinemachineShake.Instance.ShakeCamera(3f, .05f);
         StartCoroutine(ResetHarpoon());
     }
     /// <summary>
     /// Resets the harpoon and "reloads" it
     /// </summary>
     IEnumerator ResetHarpoon(){
->>>>>>> Stashed changes
         _hit = new RaycastHit();
         
         Destroy(HarpoonInstance);
