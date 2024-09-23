@@ -7,6 +7,7 @@
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BulletBehavior : MonoBehaviour
@@ -42,17 +43,19 @@ public class BulletBehavior : MonoBehaviour
         Instantiate(_damageCount, this.transform);
         _exactCounter = this.transform.GetChild(0).gameObject;
         DamageNumBehavior dc = _exactCounter.GetComponent<DamageNumBehavior>();
+        TextMeshPro _damageText = _exactCounter.GetComponent<TextMeshPro>();
         //If it touches the weak spot the bullet sets the UI count awake and then detaches from it once the correct number is applied to the specific number while despawning
         if (col.gameObject.tag == "Weak Spot")
         {
-            dc._damageNumber = _actualDamage;
+            dc.GetDamageNumber = _actualDamage;
+            _damageText.text = _actualDamage.ToString();
             this.gameObject.transform.DetachChildren();
             Destroy(gameObject);
         }
         //If it touches the invulnerable spot the bullet sets the UI count awake and then detaches from it once it applies the correct number while despawning
         else if (col.gameObject.tag == "Invulnerable Spot")
         {
-            dc._damageNumber = 0;
+            dc.GetDamageNumber = 0;
             this.gameObject.transform.DetachChildren();
             Destroy(gameObject);
         }
