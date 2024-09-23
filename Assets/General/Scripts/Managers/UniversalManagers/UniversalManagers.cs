@@ -17,15 +17,13 @@ using UnityEngine;
 /// </summary>
 public class UniversalManagers : CoreManagersFramework
 {
-    public static UniversalManagers Instance;
-
-    [SerializeField] private SceneLoadingManager _sceneLoadingManager;
-    [SerializeField] private SaveManager _saveManager;
-    [SerializeField] private AudioManager _audioManager;
-    [SerializeField] private TimeManager _timeManager;
-
-    [Space]
+    /// <summary>
+    /// Contains all managers to setup. Order of managers is order of setup.
+    /// Order shouldn't technically matter but just in case
+    /// </summary>
     [SerializeField] private List<MainUniversalManagerFramework> _allMainManagers;
+
+    public static UniversalManagers Instance;
 
     /// <summary>
     /// Sets up the singleton
@@ -50,20 +48,22 @@ public class UniversalManagers : CoreManagersFramework
     /// </summary>
     protected override void SetupMainManagers()
     {
+        //Instances all managers
+        foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
+        {
+            mainManager.SetupInstance();
+        }
+
+        //Thens sets them up
+        //They are instanced first so that if any manager needs to access any other manager in it's setup
+        //  then the order doesn't matter
         foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
         {
             mainManager.SetupMainManager();
         }
     }
 
-
     #region Getters
-    public SceneLoadingManager GetSceneLoadingManager() => _sceneLoadingManager;
-    public SaveManager GetSaveManager() => _saveManager;
-    public AudioManager GetAudioManager() => _audioManager;
-    public TimeManager GetTimeManager() => _timeManager;
-
-
     public List<MainUniversalManagerFramework> GetAllUniversalManagers() => _allMainManagers;
     #endregion
 }

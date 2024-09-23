@@ -16,7 +16,14 @@ using UnityEngine;
 /// </summary>
 public class CameraManager : MainGameplayManagerFramework
 {
+    public static CameraManager Instance;
     #region Base Manager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+        Instance = this;
+    }
+
     public override void SetupMainManager()
     {
         base.SetupMainManager();

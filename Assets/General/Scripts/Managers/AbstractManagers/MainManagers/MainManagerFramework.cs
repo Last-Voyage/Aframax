@@ -17,5 +17,6 @@ using UnityEngine.Events;
 /// </summary>
 public abstract class MainManagerFramework : MonoBehaviour
 {
+    public abstract void SetupInstance();
     public abstract void SetupMainManager();
 }

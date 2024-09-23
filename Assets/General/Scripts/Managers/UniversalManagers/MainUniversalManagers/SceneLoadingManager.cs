@@ -20,6 +20,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     [SerializeField] private List<SceneTransition> _sceneTransitions;
     private Coroutine _sceneLoadingCoroutine;
 
+    public static SceneLoadingManager Instance;
+
     /// <summary>
     /// Starts loading the specified scene id using the specified scene transition
     /// </summary>
@@ -84,9 +86,16 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     }
 
     #region Base Manager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+        Instance = this;
+    }
+
     public override void SetupMainManager()
     {
         base.SetupMainManager();
+        
     }
     #endregion
 
@@ -99,7 +108,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 /// Provides the data unique to each scene transition
 /// </summary>
 [System.Serializable]
-public class SceneTransition
+public struct SceneTransition
 {
     [SerializeField] private string _sceneTransitionName;
     [SerializeField] private float _minimumScreenTransitionTime;

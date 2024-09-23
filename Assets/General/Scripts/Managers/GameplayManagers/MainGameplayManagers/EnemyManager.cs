@@ -17,7 +17,13 @@ using UnityEngine;
 /// </summary>
 public class EnemyManager : MainGameplayManagerFramework
 {
+    public static EnemyManager Instance;
     #region Base Manager
+    public override void SetupInstance()
+    {
+        base.SetupInstance();
+        Instance = this;
+    }
     public override void SetupMainManager()
     {
         base.SetupMainManager();
