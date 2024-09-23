@@ -2080,12 +2080,14 @@ MonoBehaviour:
   _gunCD: 2
   _holdToRetractMode: 1
   _playerLookDir: {fileID: 8338988565591873055}
-  harpoonTip: {fileID: 1762591810}
+  HarpoonTip: {fileID: 1762591810}
   _harpoonOnGun: {fileID: 620207693}
   _excludeLayers:
     serializedVersion: 2
     m_Bits: 8
   _harpoonAnimator: {fileID: 1145071703}
+  _harpoonShoot: {fileID: 5536207720810369365, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    type: 3}
 --- !u!120 &135756641613574981
 LineRenderer:
   serializedVersion: 2
@@ -2405,6 +2407,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
+        type: 3}
+      propertyPath: _playerInput
+      value: 
+      objectReference: {fileID: 2006620068}
     - target: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
       propertyPath: m_Name
@@ -2414,6 +2421,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228376, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
+        type: 3}
+      propertyPath: m_NeverAutoSwitchControlSchemes
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
