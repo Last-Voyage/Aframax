@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Proviedes the weakpoint with its needed functionality
+/// Provides the weakpoint with its needed functionality
 /// </summary>
 public class WeakPoint : MonoBehaviour
 {

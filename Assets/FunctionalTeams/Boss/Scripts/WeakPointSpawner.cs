@@ -18,7 +18,7 @@ public class WeakPointSpawner : MonoBehaviour
 {
     [Tooltip("The time before the first weak point spawns")]
     [SerializeField] private float _weakPointFirstSpawnDelay;
-    [Tooltip("The time between spawing weakpoints")]
+    [Tooltip("The time between spawning weakpoints")]
     [SerializeField] private float _weakPointSpawnInterval;
     [Tooltip("The number of weak points you need to kill to destroy this object")]
     [SerializeField] private float _weakPointsNeededToDestroy;
@@ -51,12 +51,10 @@ public class WeakPointSpawner : MonoBehaviour
     /// </summary>
     private void StartWeakPointSpawning()
     {
-        if (_weakPointSpawnProcessCoroutine != null)
+        if (_weakPointSpawnProcessCoroutine == null)
         {
-            return;
+            _weakPointSpawnProcessCoroutine = StartCoroutine(WeakPointSpawnProcess());
         }
-
-        _weakPointSpawnProcessCoroutine = StartCoroutine(WeakPointSpawnProcess());
     }
 
     /// <summary>
