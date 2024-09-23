@@ -61,6 +61,8 @@ public class HarpoonGun : MonoBehaviour
         // Instantiate the harpoon and set its initial position and direction
         HarpoonInstance = Instantiate(_harpoonPrefab, _playerLookDir.position, Quaternion.identity);
         HarpoonInstance.SetActive(false);
+        //nabil - this an unreliable way of geting a gameobject/transform, one change in heiarchy and it will break
+        //nabil - try findgameobjectwithtag or a refference to the object
         HarpoonInstance.transform.GetChild(0).rotation = _playerLookDir.rotation;
         IsShooting = true;
         _fireDir = _playerLookDir.forward; // In the direction the player is looking
