@@ -45,8 +45,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     void DrawRope() {
         //If not grappling, don't draw rope
-        if (!harpoonGun.isShooting) {
-            _currentHitPos = harpoonGun.harpoonTip.position;
+        if (!harpoonGun.IsShooting) {
+            _currentHitPos = harpoonGun.HarpoonTip.position;
             _spring.Reset();
             if (_lr.positionCount > 0)
                 _lr.positionCount = 0;
@@ -62,8 +62,8 @@ public class HarpoonRope : MonoBehaviour {
         _spring.SetStrength(_strength);
         _spring.Update(Time.deltaTime);
 
-        var grapplePoint = harpoonGun.harpoonInstance.transform.position;
-        var gunTipPosition = harpoonGun.harpoonTip.position;
+        var grapplePoint = harpoonGun.HarpoonInstance.transform.position;
+        var gunTipPosition = harpoonGun.HarpoonTip.position;
         var up = Quaternion.LookRotation((grapplePoint - gunTipPosition).normalized) * Vector3.up;
 
         _currentHitPos = Vector3.Lerp(_currentHitPos, grapplePoint, Time.deltaTime * 12f);
