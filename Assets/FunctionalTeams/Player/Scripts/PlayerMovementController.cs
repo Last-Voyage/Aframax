@@ -74,7 +74,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Movement coroutine related variables
     /// </summary>
-    public static event Action<bool> MovementOnOrOff;
+    public static event Action<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
@@ -201,10 +201,10 @@ public class PlayerMovementController : MonoBehaviour
 
     /// <summary>
     /// Activates or deactivates the movement coroutine based on the input boolean
-    /// Used when the MovementOnOrOff Action is invoked
+    /// Used when the OnMovementToggled Action is invoked
     /// </summary>
     /// <param name="change"> Determines if the movement should be turned on or off </param>
-    private void ChangeMovement(bool change)
+    private void ToggleMovement(bool change)
     {
         if (change)
         {
@@ -219,19 +219,19 @@ public class PlayerMovementController : MonoBehaviour
 
     /// <summary>
     /// Called when this component is enabled.
-    /// Used to assign the MovementOnOrOff Action to a listener
+    /// Used to assign the OnMovementToggled Action to a listener
     /// </summary>
     private void OnEnable()
     {
-        MovementOnOrOff += ChangeMovement;
+        OnMovementToggled += ToggleMovement;
     }
 
     /// <summary>
     /// Called when this component is disnabled.
-    /// Used to unassign the MovementOnOrOff Action to a listener
+    /// Used to unassign the OnMovementToggled Action to a listener
     /// </summary>
     private void OnDisable()
     {
-        MovementOnOrOff -= ChangeMovement;
+        OnMovementToggled -= ToggleMovement;
     }
 }
