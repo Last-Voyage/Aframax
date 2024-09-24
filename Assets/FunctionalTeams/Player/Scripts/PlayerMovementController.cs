@@ -5,11 +5,9 @@
 //
 // Description:     Implementation of the basic movement for a player character.
 //                  This script takes input designated for movement from the
-                    user and allows the player GameObject to move in the scene.
+//                  user and allows the player GameObject to move in the scene.
 ******************************************************************************/
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,37 +23,11 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
-    // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
-    // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
-    /// <summary>
-    /// Variables that relate to the rotation of the camera
-    /// </summary>
-    [Header("Set Player Camera Here")]
-    [SerializeField] private Transform _playerCamera;
-    [Header("Adjustable Mouse Sensitivities")]
-    [Tooltip("X controls Left/Right\nY controls Up/Down")]
-    [SerializeField] private float _mouseSensitivityX;
-    [SerializeField] private float _mouseSensitivityY;
-    /// <summary>
-    /// _cameraXRotation is used to keep track of the current rotation
-    /// of the camera. This is used while moving the mouse up and down
-    /// </summary>
-    private float _cameraXRotation;
-    /// <summary>
-    /// _CAMERA_CLAMP is a constant used to prevent the camera from starting
-    /// to point behind the player while looking up and down. Set to 90 so that
-    /// the camera may still look straight up or down
-    /// </summary>
-    private const float _CAMERA_CLAMP = 90;
-
     /// <summary>
     /// Variables that capture user input
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    // THE BELOW INPUT ACTIONS ARE USED FOR THE CAMERA
-    private InputAction _mouseXInput;
-    private InputAction _mouseYInput;
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -69,26 +41,17 @@ public class PlayerMovementController : MonoBehaviour
 
     /// <summary>
     /// This function is called before the first frame update.
-    /// Used to initialize any variables that are not serialized.
+    /// Used to initialize any variables that are not serialized
+    /// and to start the coroutine
     /// </summary>
     void Start()
     {
-        // Initialize non-serialized variables, input variables, and
-        // the rigibody
-        InitializeNonSerialized();
+        // Initialize input variables and the Rigidbody
         InitializeInput();
         InitializeRigidbody();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine("ResolveMovement");
-    }
-
-    /// <summary>
-    /// Initializes all non-serialized private variables.
-    /// </summary>
-    private void InitializeNonSerialized()
-    {
-        _cameraXRotation = 0;
     }
 
     /// <summary>
@@ -99,8 +62,6 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
         _movementInput = _playerInput.currentActionMap.FindAction("Movement");
-        _mouseXInput = _playerInput.currentActionMap.FindAction("MouseX");
-        _mouseYInput = _playerInput.currentActionMap.FindAction("MouseY");
     }
 
     /// <summary>
@@ -114,14 +75,13 @@ public class PlayerMovementController : MonoBehaviour
 
     /// <summary>
     /// Movement coroutine
-    /// This will perpetually call the movement handling methods until disabled
+    /// This will perpetually call the movement handling method until disabled
     /// </summary>
     private IEnumerator ResolveMovement()
     {
         while(true)
         {
             HandleMovement();
-            HandleCameraRotation();
             yield return null;
         }
     }
@@ -163,30 +123,6 @@ public class PlayerMovementController : MonoBehaviour
     private Vector3 HandleVerticalMovement()
     {
         return new Vector3(0, _rigidBody.velocity.y, 0);
-    }
-
-    /// <summary>
-    /// THIS METHOD IS TEMPORARY UNTIL A CAMERA CONTROLLER IS CREATED
-    /// Handles the rotation of the camera based on mouse movement
-    /// </summary>
-    private void HandleCameraRotation()
-    {
-        // First, rotate the player character based on
-        // the horizontal movement of the mouse
-        // We do this by manipulating Vector3.up, which is similar to how we
-        // handled the horizontal movement
-        transform.Rotate(Vector3.up, _mouseXInput.ReadValue<float>() * Time.deltaTime * _mouseSensitivityX);
-
-        // Instead of rotating the player up and down, we will rotate the camera
-        // Change the camera's rotation by reading the vertical mouse movement
-        _cameraXRotation -= _mouseYInput.ReadValue<float>() * _mouseSensitivityY;
-        _cameraXRotation = Mathf.Clamp(_cameraXRotation, -_CAMERA_CLAMP, _CAMERA_CLAMP);
-
-        // Create a target rotation for the camera based on the player's rotation
-        // and the new rotation we just found
-        Vector3 targetRotation = transform.eulerAngles;
-        targetRotation.x = _cameraXRotation;
-        _playerCamera.eulerAngles = targetRotation;
     }
 
     /// <summary>
