@@ -26,8 +26,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
     [Header("Harpoon Functionality Dependencies")]
     [SerializeField] private Transform _playerLookDir;
-    [SerializeField] private const string _harpoonShootTrigger = "shoot";
-    [SerializeField] private const string _harpoonRetractTrigger = "drawBack";
+    [SerializeField] private string _harpoonShootTrigger = "shoot";
+    [SerializeField] private string _harpoonRetractTrigger = "drawBack";
     public Transform HarpoonTip;
     [SerializeField] private GameObject _harpoonOnGun;
     [Tooltip("Layers the launched harpoon can not hit")]
