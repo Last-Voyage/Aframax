@@ -6,7 +6,6 @@
 // Brief Description : Controls the player's health, makes them take damage
 *****************************************************************************/
 
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +14,7 @@ using UnityEngine.SceneManagement;
 public class PlayerHealthManager : MonoBehaviour
 {
     //this is the health for the player and when it hits 0 you die
-    [SerializeField] private float _playerHealth;
+    private float _playerHealth;
 
     //used for calculating the health bar size
     [SerializeField] private float _maxPlayerHealth;
@@ -28,7 +27,8 @@ public class PlayerHealthManager : MonoBehaviour
         //this way it doesn't waste time doing find if it's already connected
         if (_healthBarManager == null)
         {
-            _healthBarManager = GameObject.Find("HealthBarManager").GetComponent<PlayerHealthBar>();
+            _healthBarManager = Object.FindObjectOfType<PlayerHealthBar>();
+
             if (_healthBarManager == null)
             {
                 Debug.Log("Couldn't find health bar manager.");
@@ -37,14 +37,13 @@ public class PlayerHealthManager : MonoBehaviour
 
         _playerHealth = _maxPlayerHealth;
     }
+
     private void OnTriggerEnter(Collider other)
     {
         //checks to see if the collider is the thing that kills you via tag
         //idk if this is a good way to check for that, but it's the first thing that came to mind
         if (other.gameObject.CompareTag("Hitbox"))
         {
-            //Debug.Log(other.gameObject.GetComponent<EnemyDamageTemp>().AttackPower);
-
             TakeDamage(other.gameObject.GetComponent<EnemyDamageTemp>().AttackPower);
         }
     }
@@ -61,11 +60,8 @@ public class PlayerHealthManager : MonoBehaviour
 
         if (_playerHealth <= 0)
         {
-            //Debug.Log("man im dead");
-
             //when you die it reloads the current scene
-            //this is what i was told to do on the trello so i did it
-            //trello also mentions hooking it up with ryan's scene loader system, which probably wouldn't be too hard
+            //this should probably be hooked up to the scene manager later
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
