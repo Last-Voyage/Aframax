@@ -14,7 +14,7 @@ using UnityEngine.Events;
 /// <summary>
 /// Spawns the weak points on the associated object
 /// </summary>
-public class WeakPointSpawner : MonoBehaviour
+public class WeakPointHandler : MonoBehaviour
 {
     [Tooltip("The time before the first weak point spawns")]
     [SerializeField] private float _weakPointFirstSpawnDelay;
@@ -34,7 +34,7 @@ public class WeakPointSpawner : MonoBehaviour
     [Tooltip("The transforms on where weak points can be spawned")]
     [SerializeField] private List<Transform> _weakPointSpawnLocations;
 
-    private UnityEvent<WeakPointSpawner> _allWeakPointsDestroyedEvent = new();
+    private UnityEvent<WeakPointHandler> _allWeakPointsDestroyedEvent = new();
 
     private Coroutine _weakPointSpawnProcessCoroutine;
 
@@ -161,6 +161,6 @@ public class WeakPointSpawner : MonoBehaviour
     #endregion
 
     #region Getters
-    public UnityEvent<WeakPointSpawner> GetAllWeakPointsDestroyedEvent() => _allWeakPointsDestroyedEvent;
+    public UnityEvent<WeakPointHandler> GetAllWeakPointsDestroyedEvent() => _allWeakPointsDestroyedEvent;
     #endregion
 }
