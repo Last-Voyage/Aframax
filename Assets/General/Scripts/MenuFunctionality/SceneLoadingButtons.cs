@@ -1,3 +1,10 @@
+/******************************************************************************
+// File Name:       SceneLoadingButtons.cs
+// Author:          Ryan Swanson
+// Creation Date:   September 23, 2024
+//
+// Description:     Placed on buttons to allow for them to load scenes with specific transitions
+******************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +20,7 @@ public class SceneLoadingButtons : MonoBehaviour
     /// <summary>
     /// The function called by the button to load the desired scene
     /// </summary>
-    public void LoadDesiredScene()
+    public void LoadDesiredSceneButton()
     {
         SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(_sceneToLoad, _sceneTransitionID);
     }
