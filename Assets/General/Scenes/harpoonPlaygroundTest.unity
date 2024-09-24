@@ -2088,6 +2088,11 @@ MonoBehaviour:
   _harpoonAnimator: {fileID: 1145071703}
   _harpoonShoot: {fileID: 5536207720810369365, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
+  _harpoonRope: {fileID: 135756641613574982}
+  _recoilCameraShakeIntensity: 5
+  _recoilCameraShakeTime: 0.05
+  _retractCameraShakeIntensity: 3
+  _retractCameraShakeTime: 0.05
 --- !u!120 &135756641613574981
 LineRenderer:
   serializedVersion: 2
@@ -2204,7 +2209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28315c5fdc012d5458737eb5ceb6e1b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  harpoonGun: {fileID: 135756641613574976}
+  _harpoonGun: {fileID: 135756641613574976}
   _quality: 500
   _damper: 14
   _strength: 800

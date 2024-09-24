@@ -34,6 +34,13 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private LayerMask _excludeLayers;
     [SerializeField] private Animator _harpoonAnimator;
     [SerializeField] private InputActionReference _harpoonShoot;
+    [SerializeField] private HarpoonRope _harpoonRope;
+    [Header("Camera Shake Values")]
+    [SerializeField] private float _recoilCameraShakeIntensity = 5f;
+    [SerializeField] private float _recoilCameraShakeTime = 0.05f;
+    [SerializeField] private float _retractCameraShakeIntensity = 3f;
+    [SerializeField] private float _retractCameraShakeTime = .05f;
+    
 
     #endregion
 
@@ -74,7 +81,8 @@ public class HarpoonGun : MonoBehaviour
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
         _harpoonAnimator.SetTrigger(_harpoonShootTrigger);
-        CinemachineShake.Instance.ShakeCamera(5f, .05f);
+        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
+        _harpoonRope.StartDrawingRope();
     }
     private void SetHarpoonActive(){
         //delays visual of harpoon appearing for better appearance
@@ -156,16 +164,30 @@ public class HarpoonGun : MonoBehaviour
     IEnumerator ReelHarpoon()
     {
         yield return new WaitForSeconds(.05f);
-        _harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
         float elapsedTime = 0;
+        if(!_holdToRetractMode)
+        {
+            _harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
+            //cause the wave action again when reeling
+            _harpoonRope.StopDrawingRope();
+            _harpoonRope.StartDrawingRope();
+        }
         // Lerp the harpoon back to the player over time
         var startPos = _harpoonSpear.transform.position;
+        bool startedRetracting = false;
         while(elapsedTime < _currentReelDur){
             //if hold to retract is on, only pull in harpoon if holding down button
             if(_holdToRetractMode)
             {
                 if(_harpoonShoot.action.inProgress)
                 {
+                    if(!startedRetracting){
+                        startedRetracting = true;
+                        _harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
+                        //cause the wave action again when reeling
+                        _harpoonRope.StopDrawingRope();
+                        _harpoonRope.StartDrawingRope();
+                    }
                     _isShooting = true;
                     _harpoonSpear.transform.GetChild(0).LookAt(HarpoonTip);
                     _harpoonSpear.transform.position = Vector3.Lerp(startPos, HarpoonTip.position, elapsedTime/ _currentReelDur);
@@ -191,8 +213,10 @@ public class HarpoonGun : MonoBehaviour
                 _hit.transform.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
-        CinemachineShake.Instance.ShakeCamera(3f, .05f);
+        CinemachineShake.Instance.ShakeCamera(_retractCameraShakeIntensity, _retractCameraShakeTime);
+        
         StartCoroutine(ResetHarpoon());
+        _harpoonRope.StopDrawingRope();
     }
     /// <summary>
     /// Resets the harpoon and "reloads" it
