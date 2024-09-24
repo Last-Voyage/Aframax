@@ -27,13 +27,23 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="sceneID"></param>
     /// <param name="sceneTransition"></param>
-    private void StartAsyncSceneLoad(int sceneID, SceneTransition sceneTransition)
+    public void StartAsyncSceneLoad(int sceneID, SceneTransition sceneTransition)
     {
         //Only starts loading a scene if no other scene is being loaded already
         if (_sceneLoadingCoroutine == null)
         {
             _sceneLoadingCoroutine = StartCoroutine(AsyncSceneLoadingProcess(sceneID,sceneTransition));
         }
+    }
+
+    /// <summary>
+    /// Starts loading the specified scene using the id of the scene and id of the transition
+    /// </summary>
+    /// <param name="sceneID"></param>
+    /// <param name="sceneTransitionID"></param>
+    public void StartAsyncSceneLoadViaID(int sceneID, int sceneTransitionID)
+    {
+        StartAsyncSceneLoad(sceneID, _sceneTransitions[sceneTransitionID]);
     }
 
     /// <summary>
@@ -71,7 +81,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// Additively loads a specific scene
     /// </summary>
     /// <param name="sceneID"></param>
-    private void AdditiveLoadScene(int sceneID)
+    public void AdditiveLoadScene(int sceneID)
     {
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
     }
@@ -80,7 +90,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// Removes a specific scene from being additively loaded
     /// </summary>
     /// <param name="sceneID"></param>
-    private void RemoveAdditiveLoadedScene(int sceneID)
+    public void RemoveAdditiveLoadedScene(int sceneID)
     {
         SceneManager.UnloadSceneAsync(sceneID);
     }
@@ -125,4 +135,3 @@ public struct SceneTransition
     public float GetMinimumSceneTransitionTime() => _minimumScreenTransitionTime;
     #endregion
 }
-
