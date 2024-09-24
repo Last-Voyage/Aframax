@@ -5,8 +5,9 @@
 //
 // Description:     Implementation of the basic movement for a player character.
 //                  This script takes input designated for movement from the
-//                  user and allows the player GameObject to move in the scene.
+                    user and allows the player GameObject to move in the scene.
 ******************************************************************************/
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,6 +16,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerInput))]
 
+/// <summary>
+/// A class that handless the movement of the player character.
+/// Follow the steps outlined in the documentation to set this up in the editor.
+/// When attached to the player, use the WASD keys to move around.
+/// </summary>
 public class PlayerMovementController : MonoBehaviour
 {
     /// <summary>
@@ -28,6 +34,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
+    private const string _MOVEMENT_INPUT_NAME = "Movement";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -35,14 +42,14 @@ public class PlayerMovementController : MonoBehaviour
     private Rigidbody _rigidBody;
 
     /// <summary>
-    /// Coroutine variable to hold our movement coroutine
+    /// Movement coroutine related variables
     /// </summary>
+    public static event Action<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
     /// This function is called before the first frame update.
-    /// Used to initialize any variables that are not serialized
-    /// and to start the coroutine
+    /// Used to initialize any variables that are not serialized.
     /// </summary>
     void Start()
     {
@@ -61,7 +68,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
-        _movementInput = _playerInput.currentActionMap.FindAction("Movement");
+        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
     }
 
     /// <summary>
@@ -75,11 +82,11 @@ public class PlayerMovementController : MonoBehaviour
 
     /// <summary>
     /// Movement coroutine
-    /// This will perpetually call the movement handling method until disabled
+    /// This will perpetually call the movement handling methods until disabled
     /// </summary>
     private IEnumerator ResolveMovement()
     {
-        while(true)
+        while (true)
         {
             HandleMovement();
             yield return null;
@@ -126,18 +133,38 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Temporarily stops the movement coroutine
+    /// Activates or deactivates the movement coroutine based on the input boolean
+    /// Used when the OnMovementToggled Action is invoked
     /// </summary>
-    public void PauseMovement()
+    /// <param name="change"> Determines if the movement should be turned on or off </param>
+    private void ToggleMovement(bool change)
     {
-        StopCoroutine(_movementCoroutine);
+        if (change)
+        {
+            _movementCoroutine = StartCoroutine("ResolveMovement");
+        }
+        else
+        {
+            StopCoroutine(_movementCoroutine);
+            _rigidBody.velocity = Vector3.zero;
+        }
     }
 
     /// <summary>
-    /// Restarts the movement coroutine after pausing it
+    /// Called when this component is enabled.
+    /// Used to assign the OnMovementToggled Action to a listener
     /// </summary>
-    public void RestartMovement()
+    private void OnEnable()
     {
-        _movementCoroutine = StartCoroutine("ResolveMovement");
+        OnMovementToggled += ToggleMovement;
+    }
+
+    /// <summary>
+    /// Called when this component is disnabled.
+    /// Used to unassign the OnMovementToggled Action to a listener
+    /// </summary>
+    private void OnDisable()
+    {
+        OnMovementToggled -= ToggleMovement;
     }
 }
