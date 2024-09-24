@@ -8,18 +8,24 @@
 //                  allows the Main Camera to rotate in the scene.
 ******************************************************************************/
 using Cinemachine;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 
+/// <summary>
+/// A class that controls the camera attached to the player.
+/// Can be expanded upon to do whatever we need with the camera.
+/// </summary>
 public class PlayerCameraController : MonoBehaviour
 {
+    // Variable for the Virtual Camera
+    // Unused at the moment, but it'll be here when we eventually need it
     private CinemachineVirtualCamera _virtualCamera;
 
+    // Variables that relate to the camera's coroutine
+    public static event Action<bool> OnCameraMovementToggled;
     private Coroutine _cameraCoroutine;
 
     /// <summary>
@@ -29,11 +35,15 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
 
         _cameraCoroutine = StartCoroutine("MoveCamera");
     }
 
+    /// <summary>
+    /// Initialize the camera variable.
+    /// </summary>
     private void InitializeCamera()
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
@@ -47,7 +57,54 @@ public class PlayerCameraController : MonoBehaviour
     {
         while (true)
         {
+            AdjustPlayerRotation();
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Adjusts the player model such that it faces the same way as the camera.
+    /// Used to assist movement.
+    /// </summary>
+    private void AdjustPlayerRotation()
+    {
+        // Cinemachine actually manipulates the Main Camera itself
+        // By getting the rotation of the Main Camera, we can rotate our character
+        transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+    }
+
+    /// <summary>
+    /// Activates or deactivates the camera coroutine based on the input boolean
+    /// Used when the OnCameraMovementToggled Action is invoked
+    /// </summary>
+    /// <param name="change"> Determines if the camera movement should be turned on or off </param>
+    private void ToggleCameraMovement(bool change)
+    {
+        if (change)
+        {
+            _cameraCoroutine = StartCoroutine("ResolveMovement");
+        }
+        else
+        {
+            StopCoroutine(_cameraCoroutine);
+        }
+    }
+
+    /// <summary>
+    /// Called when this component is enabled.
+    /// Used to assign the OnCameraMovementToggled Action to a listener
+    /// </summary>
+    private void OnEnable()
+    {
+        OnCameraMovementToggled += ToggleCameraMovement;
+    }
+
+    /// <summary>
+    /// Called when this component is disnabled.
+    /// Used to unassign the OnCameraMovementToggled Action to a listener
+    /// </summary>
+    private void OnDisable()
+    {
+        OnCameraMovementToggled -= ToggleCameraMovement;
     }
 }

@@ -77,7 +77,6 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeRigidbody()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        _rigidBody.freezeRotation = true;
     }
 
     /// <summary>
@@ -116,8 +115,7 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y)
-            * _playerMovementSpeed;
+        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y) * _playerMovementSpeed;
 
         // Move the player
         return newMovement;
