@@ -39,15 +39,12 @@ public class DamageNumBehavior : MonoBehaviour
     IEnumerator Despawn()
     {
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("despawned");
         Destroy(gameObject);
     }
 
-    #region Getters
     public float GetDamageNumber
     {
         get { return _damageNumber; }
         set { _damageNumber = value; }
     }
-    #endregion
 }
