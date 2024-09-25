@@ -18,6 +18,12 @@ Shader "Custom/WaterShader"
 		_WaterFogDensity ("Water Fog Density", Range(0, 2)) = 0.1
         _RefractionIntensity("Refraction Intensity", Range(0, 1)) = 0.25
         _EdgeFoamAmount("Edge Foam Amount", Float) = 5.0
+        _TopBottomGradientColor("Top -> Bottom Gradient Color", Color) = (1, 1, 1, 1)
+        _PerlinNoise("Perlin Noise", 2D) = "white" {}
+        _PerlinNoiseTiling("Perlin Noise Tiling", Float) = 5.0
+        _FoamColor("Foam Color", Color) = (1, 1, 1, 1)
+        [Normal] _DetailNormal("Detail Normal", 2D) = "" {}
+        _DetailNormalIntensity("Detail Normal Intensity", Float) = 1
     }
     SubShader 
     {
@@ -62,7 +68,13 @@ Shader "Custom/WaterShader"
                 float _WaterFogDensity;
                 float _RefractionIntensity;
                 float _EdgeFoamAmount;
+                float3 _TopBottomGradientColor;
+                sampler2D _PerlinNoise;
                 sampler2D _CameraOpaqueTexture;
+                sampler2D _DetailNormal;
+                float _DetailNormalIntensity;
+                float _PerlinNoiseTiling;
+                float4 _FoamColor;
                 float4 _CameraDepthTexture_TexelSize;
             CBUFFER_END
 
@@ -70,6 +82,7 @@ Shader "Custom/WaterShader"
             {
                 float3 positionOS : POSITION;
                 float3 normalOS : NORMAL;
+                float2 uv : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -78,6 +91,7 @@ Shader "Custom/WaterShader"
                 float3 positionWS : INTERNALTESSPOS;
                 float4 positionCS : SV_POSITION;
                 float3 normalWS : NORMAL;
+                float2 uv : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -95,6 +109,8 @@ Shader "Custom/WaterShader"
                 output.positionCS = posInputs.positionCS;
                 
                 output.normalWS = normalInputs.normalWS;
+
+                output.uv = input.uv.xy;
 
                 return output;
             }
@@ -148,7 +164,9 @@ Shader "Custom/WaterShader"
                 bezierPoints[5] = CalculateBezierControlPoint(p0PositionWS, p0NormalWS, p2PositionWS, p2NormalWS);
                 
                 float3 avgBezier = 0;
-                [unroll] for (int i = 0; i < 6; i++) {
+
+                [unroll] for (int i = 0; i < 6; i++)
+                {
                     avgBezier += bezierPoints[i];
                 }
                 
@@ -217,6 +235,11 @@ Shader "Custom/WaterShader"
 
             // Barycentric interpolation as a function
             float3 BarycentricInterpolate(float3 bary, float3 a, float3 b, float3 c)
+            {
+                return bary.x * a + bary.y * b + bary.z * c;
+            }
+
+            float2 BarycentricInterpolate2D(float3 bary, float2 a, float2 b, float2 c)
             {
                 return bary.x * a + bary.y * b + bary.z * c;
             }
@@ -358,12 +381,14 @@ Shader "Custom/WaterShader"
 
             struct Interpolators
             {
-                float3 normalWS : TEXCOORD0;
-                float3 normalTS : TEXCOORD4;
-                float3 positionWS : TEXCOORD1;
+                float3 normalWS : TEXCOORD1;
+                float3 normalTS : TEXCOORD5;
+                float3 positionWS : TEXCOORD2;
                 float4 positionCS : SV_POSITION;
-                float3 positionVS : TEXCOORD2;
-                float4 screenPos : TEXCOORD3;
+                float3 positionVS : TEXCOORD3;
+                float4 screenPos : TEXCOORD4;
+                float2 uv : TEXCOORD0;
+                float3 color : TEXCOORD6;
             };
 
             #define PI 3.141592654F
@@ -432,24 +457,28 @@ Shader "Custom/WaterShader"
                 float3 tangent = float3(1.0F, 0.0F, 0.0F);
                 float3 binormal = float3(0.0F, 0.0F, 1.0F);
 
-                positionWS += CalculateGerstnerWave(
+                float3 posAdd = 0.0F;
+
+                posAdd += CalculateGerstnerWave(
                     _WaveA,
                     positionWS,
                     tangent,
                     binormal
                 );
-                positionWS += CalculateGerstnerWave(
+                posAdd += CalculateGerstnerWave(
                     _WaveB,
                     positionWS,
                     tangent,
                     binormal
                 );
-                positionWS += CalculateGerstnerWave(
+                posAdd += CalculateGerstnerWave(
                     _WaveC,
                     positionWS,
                     tangent,
                     binormal
                 );
+
+                positionWS += posAdd;
 
                 float3 newNormal = normalize(cross(binormal, tangent));
                 normalWS = lerp(normalWS, newNormal, _OverallHeightAdjust + (_NormalIntensity - 1.0F));
@@ -465,6 +494,14 @@ Shader "Custom/WaterShader"
                 output.positionWS = positionWS;
                 output.positionVS = TransformWorldToView(positionWS);
                 output.screenPos = ComputeScreenPos(output.positionCS);
+                output.color = (posAdd / 3.5F) + 0.25F;
+
+                output.uv = BarycentricInterpolate2D(
+                    barycentricCoordinates,
+                    patch[0].uv,
+                    patch[1].uv,
+                    patch[2].uv
+                );
 
                 return output;   
             }
@@ -473,7 +510,7 @@ Shader "Custom/WaterShader"
             // FRAGMENT
             ////////////////
 
-            float ObjectSurroundingFoam(float4 screenPos)
+            float ObjectSurroundingFoam(float4 screenPos, float2 objUV)
             {
                 float2 uv = screenPos.xy / screenPos.w;
 
@@ -482,7 +519,9 @@ Shader "Custom/WaterShader"
                 float sceneEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
                 float depthDiff = (sceneEyeDepth - fragmentEyeDepth);
 
-                return 1.0F - saturate(depthDiff / _EdgeFoamAmount);
+                float foam = 1.0F - saturate(depthDiff / _EdgeFoamAmount);
+
+                return saturate(smoothstep(0.0F, 0.5F, foam)) * _FoamColor.a;
             }
 
             float3 ColorBelowWater(float4 screenPos, float3 normal)
@@ -494,16 +533,17 @@ Shader "Custom/WaterShader"
                 float sceneEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
                 float depthDiff = (sceneEyeDepth - fragmentEyeDepth);
 
-                if (depthDiff < 0) {
+                if (depthDiff < 0.15)
+                {
 		            uv = screenPos.xy / screenPos.w;
 		            #if UNITY_UV_STARTS_AT_TOP
-			            if (_CameraDepthTexture_TexelSize.y < 0) {
+			            if (_CameraDepthTexture_TexelSize.y < 0)
+			            {
 				            uv.y = 1 - uv.y;
 			            }
 		            #endif
                     rawDepth = SampleSceneDepth(uv);
-                    sceneEyeDepth =
-			            LinearEyeDepth(rawDepth, _ZBufferParams);
+                    sceneEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
 		            depthDiff = sceneEyeDepth - fragmentEyeDepth;
 	            }
                 
@@ -516,6 +556,12 @@ Shader "Custom/WaterShader"
             float4 Fragment(Interpolators input) : SV_Target
             {
                 Light mainLight = GetMainLight();
+
+                // Sample normal map
+                
+                float3 normalData = ((tex2D(_DetailNormal, input.uv * 3.0F - (_Time.xy * 0.05F)) * 2.0F) - 2.0F)
+                    * _DetailNormalIntensity;
+                
                 float3 L = mainLight.direction;
                 float3 N = input.normalWS;
 
@@ -533,10 +579,26 @@ Shader "Custom/WaterShader"
 
                 // Depth Fog
 
-                float3 underwaterColor = ColorBelowWater(input.screenPos, input.normalTS);
-                float edgeFoam = ObjectSurroundingFoam(input.screenPos);
+                float3 underwaterColor = ColorBelowWater(
+                    input.screenPos,
+                    (input.normalTS + normalData)
+                );
                 
-                return float4((_WaterColor * NdotL) + specular + underwaterColor + edgeFoam, 1.0F);
+                float edgeFoam = ObjectSurroundingFoam(input.screenPos, input.uv);
+
+                float3 gradient = lerp(
+                    _TopBottomGradientColor,
+                    1.0F,
+                    saturate(input.color.g)
+                );
+
+                float3 finalColor = ((_WaterColor * NdotL * gradient) + specular + underwaterColor + edgeFoam);
+                //finalColor = lerp(finalColor, 1.0F, dot(_WorldSpaceCameraPos, input.positionWS));
+                
+                return float4(
+                    finalColor,
+                    1.0F
+                );
             }
             
             ENDHLSL

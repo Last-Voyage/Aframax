@@ -1,0 +1,194 @@
+#pragma kernel CalculateConjugatedSpectrum
+
+static const float PI = 3.1415926F;
+
+RWTexture2D<float4> WavesData;
+RWTexture2D<float4> Result;
+
+Texture2D<float4> GaussianNoise;
+
+uint Size = 256;
+
+float LengthScale;
+float CutoffHigh;
+float CutoffLow;
+float GravityAcceleration;
+float Depth;
+
+struct SpectrumParameters
+{
+    float scale;
+    float angle;
+    float spreadBlend;
+    float swell;
+    float alpha;
+    float peakOmega;
+    float gamma;
+    float shortWavesFade;
+};
+
+StructuredBuffer<SpectrumParameters> Spectrums;
+
+float Frequency(
+    float k,
+    float g,
+    float depth)
+{
+    return sqrt(g * k * tanh(min(
+        k * depth, 20.0F
+    )));
+}
+
+float FreqDerivative(
+    float k,
+    float g,
+    float depth)
+{
+    float th = tanh(min(k * depth, 20));
+    float ch = cosh(k * depth);
+
+    return g * (depth * k / ch / ch / ch + th) /
+        Frequency(k, g, depth) / 2.0F;
+}
+
+float NormalisationFactor(float s)
+{
+    float s2 = pow(s, 2);
+    float s3 = s2 * s;
+    float s4 = s3 * s;
+
+    if (s < 5.0F)
+    {
+        return -0.000564F * s4 + 0.00776F *
+            s3 - 0.044F * s2 + 0.192F * s + 0.163F;
+    }
+    else
+    {
+        return -4.80e-08F * s4 + 1.07e-05F *
+            s3 - 9.53e-04F * s2 + 5.90e-02F *
+                s + 3.93e-01F;
+    }
+}
+
+float DonelanBannerBeta(float x)
+{
+    if (x < 0.95F)
+    {
+        return 2.61F * pow(abs(x), 1.3F);
+    }
+    
+    if (x < 1.6F)
+    {
+        return 2.28F * pow(abs(x), -1.3);
+    }
+
+    float p = -0.4F + 0.8393F * exp(
+        -0.567F * log(pow(x, 2))
+    );
+
+    return pow(10.0F, p);
+}
+
+float DonelanBanner(
+    float theta,
+    float omega,
+    float peakOmega)
+{
+    float beta = DonelanBannerBeta(omega / peakOmega);
+    float sech = 1.0F / cosh(beta * theta);
+    
+    return beta / 2.0F / tanh(beta * PI) * pow(sech, 2);
+}
+
+float Cos2(float theta, float s)
+{
+    return NormalisationFactor(s) *
+        pow(abs(cos(0.5F * theta)), 2.0F * s);
+}
+
+float SpreadPower(float omega, float peakOmega)
+{
+    if (omega > peakOmega)
+    {
+        return 9.77F * pow(abs(omega / peakOmega), -2.5F);
+    }
+    else
+    {
+        return 6.97F * pow(abs(omega / peakOmega), 5.0F);
+    }
+}
+
+float DirectionSpectrum(
+    float theta,
+    float omega,
+    SpectrumParameters pars)
+{
+    float s = SpreadPower(omega, pars.peakOmega) +
+        16.0F * tanh(min(omega / pars.peakOmega, 20.0F)) *
+            pow(pars.swell, 2);
+
+    return lerp(
+        2.0F / PI * cos(theta),
+        Cos2(theta - pars.angle, s),
+        pars.spreadBlend
+    );
+}
+
+float TMACorrection(float omega, float g, float depth)
+{
+    float omegaH = omega * sqrt(depth / g);
+    
+    if (omegaH <= 1.0F)
+    {
+        return 0.5F * pow(omegaH, 2);
+    }
+    
+    if (omegaH < 2.0F)
+    {
+        return 1.0F - 0.5F * pow(2.0F - omegaH, 2);
+    }
+
+    return 1.0F;
+}
+
+float JONSWAP(float evalPos)
+{
+    float u = 0.2F;
+    float fetch = 11.0F;
+    float f = 3.5F * pow((9.81F * (fetch / (u * u))), -0.33F);
+    float a = 0.076F * pow((9.81F * (fetch / (u * u))), -0.22F);
+    
+    float bc;
+
+    if (evalPos <= f)
+    {
+        bc = 0.07F;
+    }
+    else
+    {
+        bc = 0.09F;
+    }
+
+    float r = exp(-pow(evalPos - f, 2) / (2.0F * pow(bc, 2) * pow(f, 2)));
+
+    return a * pow(9.81F, 2) * pow(2.0F * PI, -4) * pow(evalPos, -5) * exp(-(5.0F / 4.0F) * pow(evalPos/f, -4)) * pow(3.3F, r);
+}
+
+float ShortWavesFade(float kLength, SpectrumParameters pars)
+{
+    return exp(-pars.shortWavesFade *
+        pars.shortWavesFade * kLength * kLength);
+}
+
+[numthreads(8,8,1)]
+void CalculateConjugatedSpectrum(uint3 id : SV_DispatchThreadID)
+{
+    float spectrumX = JONSWAP(GaussianNoise[id.xy].x);
+    float spectrumY = JONSWAP(GaussianNoise[id.xy].y);
+    
+    float2 randomValue = GaussianNoise[id.xy].xy;
+
+    float randHFVal = (1.0F / sqrt(2.0F)) * (randomValue.x + randomValue.y) * sqrt(spectrum);
+    
+    Result[id.xy] = float4(randHFVal, 0.0F, 0.0F, 1.0F);
+}
