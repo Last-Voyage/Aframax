@@ -54,6 +54,14 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// This will be changed to happening through a button later, so this function is temporary
+    /// </summary>
+    public void DeathReloadCurrentScene()
+    {
+        StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
+    }
+
+    /// <summary>
     /// The process by which a new scene is async loaded
     /// </summary>
     /// <param name="sceneID">The specific scene in the build index to load</param>
