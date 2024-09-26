@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides the functionality for scenes to be loaded
@@ -22,12 +23,18 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     public static SceneLoadingManager Instance;
 
+    //Occurs when the currently active scene is changed
+    private UnityEvent _sceneChangedEvent = new();
+
+    private UnityEvent _additiveLoadAddedEvent = new();
+    private UnityEvent _additiveLoadRemovedEvent = new();
+
     /// <summary>
     /// Starts loading the specified scene id using the specified scene transition
     /// </summary>
-    /// <param name="sceneID"></param>
-    /// <param name="sceneTransition"></param>
-    public void StartAsyncSceneLoad(int sceneID, SceneTransition sceneTransition)
+    /// <param name="sceneID">The specific scene in the build index to load</param>
+    /// <param name="sceneTransition">The scene transition being used</param>
+    private void StartAsyncSceneLoad(int sceneID, SceneTransition sceneTransition)
     {
         //Only starts loading a scene if no other scene is being loaded already
         if (_sceneLoadingCoroutine == null)
@@ -39,18 +46,26 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// <summary>
     /// Starts loading the specified scene using the id of the scene and id of the transition
     /// </summary>
-    /// <param name="sceneID"></param>
-    /// <param name="sceneTransitionID"></param>
+    /// <param name="sceneID">The specific scene in the build index to load</param>
+    /// <param name="sceneTransitionID">The id of the scene transition that is being used</param>
     public void StartAsyncSceneLoadViaID(int sceneID, int sceneTransitionID)
     {
         StartAsyncSceneLoad(sceneID, _sceneTransitions[sceneTransitionID]);
     }
 
     /// <summary>
+    /// This will be changed to happening through a button later, so this function is temporary
+    /// </summary>
+    public void DeathReloadCurrentScene()
+    {
+        StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
+    }
+
+    /// <summary>
     /// The process by which a new scene is async loaded
     /// </summary>
-    /// <param name="sceneID"></param>
-    /// <param name="sceneTransition"></param>
+    /// <param name="sceneID">The specific scene in the build index to load</param>
+    /// <param name="sceneTransition">The scene transition being used</param>
     /// <returns></returns>
     private IEnumerator AsyncSceneLoadingProcess(int sceneID, SceneTransition sceneTransition)
     {
@@ -70,6 +85,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
             yield return null;
         }
 
+        InvokeSceneChangedEvent();
+
         //Can start the ending scene transition animation here
         //Will be implemented when scene transition work occurs
 
@@ -80,19 +97,23 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// <summary>
     /// Additively loads a specific scene
     /// </summary>
-    /// <param name="sceneID"></param>
-    public void AdditiveLoadScene(int sceneID)
+    /// <param name="sceneID">The specific scene in the build index to add</param>
+    private void AdditiveLoadScene(int sceneID)
     {
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
+
+        InvokeSceneAdditiveLoadAddEvent();
     }
 
     /// <summary>
     /// Removes a specific scene from being additively loaded
     /// </summary>
-    /// <param name="sceneID"></param>
-    public void RemoveAdditiveLoadedScene(int sceneID)
+    /// <param name="sceneID">The specific scene in the build index to remove</param>
+    private void RemoveAdditiveLoadedScene(int sceneID)
     {
         SceneManager.UnloadSceneAsync(sceneID);
+
+        InvokeSceneAdditiveLoadRemoveEvent();
     }
 
     #region Base Manager
@@ -105,8 +126,25 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     public override void SetupMainManager()
     {
         base.SetupMainManager();
-        
     }
+    #endregion
+
+    #region Events
+    private void InvokeSceneChangedEvent()
+    {
+        _sceneChangedEvent?.Invoke();
+    }
+
+    private void InvokeSceneAdditiveLoadAddEvent()
+    {
+        _additiveLoadAddedEvent?.Invoke();
+    }
+
+    private void InvokeSceneAdditiveLoadRemoveEvent()
+    {
+        _additiveLoadRemovedEvent?.Invoke();
+    }
+
     #endregion
 
     #region Getters
