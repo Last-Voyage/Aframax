@@ -10,14 +10,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HarpoonRope : MonoBehaviour {
+    //private variables
     private Spring _spring;
     private LineRenderer _lr;
     private Vector3 _currentHitPos;
     private Coroutine _drawRopeCoroutine;
+    private HarpoonGun _harpoonGun;
 
     #region Inspector Variables
-    [Tooltip("reference to harpoon gun scirpt in scene")]
-    private HarpoonGun _harpoonGun;
     [Tooltip("How many points are in the line renderer total")]
     [SerializeField] private int _quality;
     [Tooltip("How many instances are created (kind of just smooths out the effect)")]
@@ -69,7 +69,7 @@ public class HarpoonRope : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator DrawRopeCoroutine() 
     {
-        while (_harpoonGun.IsShooting) 
+        while (_harpoonGun.GetIsShooting()) 
         {
             // Spring settings
             if (_lr.positionCount != _quality + 1) 
@@ -82,8 +82,8 @@ public class HarpoonRope : MonoBehaviour {
             _spring.SetStrength(_strength);
             _spring.Update(Time.deltaTime);
 
-            var grapplePoint = _harpoonGun.HarpoonSpear.transform.position;
-            var gunTipPosition = _harpoonGun.HarpoonTip.position;
+            var grapplePoint = _harpoonGun.GetHarpoonSpear().transform.position;
+            var gunTipPosition = _harpoonGun.GetHarpoonTip().position;
             var up = Quaternion.LookRotation((grapplePoint - gunTipPosition).normalized) * Vector3.up;
             _currentHitPos = Vector3.Lerp(_currentHitPos, grapplePoint, Time.deltaTime * 12f);
             // Rope wave effect and drawing
@@ -119,7 +119,7 @@ public class HarpoonRope : MonoBehaviour {
             StopCoroutine(_drawRopeCoroutine);
             _drawRopeCoroutine = null;
             // Cleanup when coroutine stops
-            _currentHitPos = _harpoonGun.HarpoonTip.position;
+            _currentHitPos = _harpoonGun.GetHarpoonTip().position;
             _spring.Reset();
             if (_lr.positionCount > 0)
                 _lr.positionCount = 0;
