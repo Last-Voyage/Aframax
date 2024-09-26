@@ -39,8 +39,10 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonOnGun;
     [Tooltip("Layers the launched harpoon can not hit")]
     [SerializeField] private LayerMask _excludeLayers;
-    [Tooltip("The input action for shooting and retracting")]
+    [Tooltip("The input action for shooting")]
     [SerializeField] private InputActionReference _harpoonShoot;
+    [Tooltip("The input action for retracting")]
+    [SerializeField] private InputActionReference _harpoonRetract;
 
     [Header("Camera Shake Values")]
     [Tooltip("Recoil Intensity Shake")]
@@ -211,7 +213,7 @@ public class HarpoonGun : MonoBehaviour
             //if hold to retract is on, only pull in harpoon if holding down button
             if(_holdToRetractMode)
             {
-                if(_harpoonShoot.action.inProgress)
+                if(_harpoonRetract.action.inProgress)
                 {
                     if(!startedRetracting)
                     {
