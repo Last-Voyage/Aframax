@@ -9,92 +9,39 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BoatMover : MonoBehaviour
 {
-    private float yOffset;
-
-    #region Directional Variables
-    private static Vector3 ForwardDirection = Vector3.forward;
-    private static Vector3 BackwardDirection = Vector3.back;
-    private static Vector3 LeftDirection = Vector3.left;
-    private static Vector3 RightDirection = Vector3.right;
-    private static Vector3 ForwardLeftDirection = Vector3.forward + Vector3.left;
-    private static Vector3 ForwardRightDirection = Vector3.forward + Vector3.right;
-    private static Vector3 BackLeftDirection = Vector3.back + Vector3.left;
-    private static Vector3 BackRightDirection = Vector3.back + Vector3.right; 
-
-    [Tooltip("Named pointers for the background direction")]
-    public enum EDirectionalInserts
-    {
-        Forward,
-        Backward,
-        Left,
-        Right,
-        ForwardLeft,
-        ForwardRight,
-        BackwardLeft,
-        BackwardRight
-    }
-
-    [Tooltip("Array that holds directions for the background")]
-    private Vector3[] _directionalMovements =
-        { ForwardDirection, BackwardDirection, LeftDirection, RightDirection,
-        ForwardLeftDirection, ForwardRightDirection, BackLeftDirection, BackRightDirection };
-    #endregion
-
-    public List<GameObject> TrainPassengers { get; set; }
-
-    [Tooltip("The pointer for the background direction")]
-    private int _currentDirectional = (int)EDirectionalInserts.Forward;
-
-    [NonSerialized][Tooltip("The speed multiplier for the background")] 
-    public float VelocityMultiplier = 2;
+    private float _yOffset;
+    private List<GameObject> _trainPassengers { get; set; }
+    [NonSerialized][Tooltip("The speed multiplier for the background")] public float VelocityMultiplier = 2;
 
     /// <summary>
-    /// At the start of the script, TestSpeedChange coroutine is started
+    /// Instantiates _trainPassengers and yOffset
+    /// </summary>
+    private void Awake()
+    {
+        _trainPassengers = new List<GameObject>();
+        _yOffset = gameObject.transform.position.y;
+    }
+
+    /// <summary>
+    /// At the start of the script, TestSpeedChange and MoveBoat coroutines are started
     /// </summary>
     private void Start()
     {
-        TrainPassengers = new List<GameObject>();
         StartCoroutine(TestSpeedChange());
-        yOffset = gameObject.transform.position.y;
     }
 
     /// <summary>
-    /// Moves the boat and the objects on it
+    /// Moves boat, all passengers, and runs the sample wave
     /// </summary>
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        //gets initial movement position
-        gameObject.transform.position += _directionalMovements[_currentDirectional] *
-            VelocityMultiplier * Time.deltaTime;
-
-        //determines y position based on (sample) sine wave
-        Vector3 wavePosition = new Vector3(
-            gameObject.transform.position.x,
-            MathF.Sin(Time.time * 2) * 20 * Time.deltaTime,
-            gameObject.transform.position.z
-        );
-        gameObject.transform.position = wavePosition;
-
-        //finds rotation based on the wave
-        gameObject.transform.rotation = new Quaternion(
-            -MathF.Cos(Time.time * 2) * Time.deltaTime,
-            gameObject.transform.rotation.y,
-            gameObject.transform.rotation.z,
-            gameObject.transform.rotation.w
-        );
-
-        //adjusts passenger postion to stay on boat
-        if (TrainPassengers.Count != 0 && TrainPassengers != null)
-        {
-            foreach (GameObject passenger in TrainPassengers)
-            {
-                passenger.transform.position += _directionalMovements[_currentDirectional] *
-                    VelocityMultiplier * Time.deltaTime;
-            }
-        }
+        MoveBoat();
+        MovePassengers();
+        SampleWave();
     }
 
     /// <summary>
@@ -105,16 +52,77 @@ public class BoatMover : MonoBehaviour
     private IEnumerator TestSpeedChange()
     {
         yield return new WaitForSeconds(5f);
-        BoatDirectionChanger(EDirectionalInserts.ForwardRight);
+        gameObject.transform.Rotate(new Vector3(0, 45, 0));
+        //_trainPassengers[0].transform.position += new Vector3(-1f, .5f, 1f);
+        RotatePassengers(new Vector3(0, 45, 0));
         VelocityMultiplier = 3f;
 
         yield return new WaitForSeconds(5f);
-        BoatDirectionChanger(EDirectionalInserts.Forward);
+        gameObject.transform.Rotate(new Vector3(0, -45, 0));
+        RotatePassengers(new Vector3(0, -45, 0));
         VelocityMultiplier = 2f;
     }
 
-    public void BoatDirectionChanger(EDirectionalInserts direction)
+    /// <summary>
+    /// Moves the boat and the objects on it
+    /// </summary>
+    private void MoveBoat()
     {
-        _currentDirectional = (int)direction;
+        //gets initial movement position
+        gameObject.transform.position += transform.forward *
+            VelocityMultiplier * Time.fixedDeltaTime;
+    }
+
+    private void MovePassengers()
+    {
+        //adjusts passenger postion to stay on boat
+        if (_trainPassengers.Count != 0 && _trainPassengers != null)
+        {
+            foreach (GameObject passenger in _trainPassengers)
+            {
+                passenger.transform.position += gameObject.transform.forward *
+                    VelocityMultiplier * Time.fixedDeltaTime;
+            }
+        }
+    }
+
+    private void RotatePassengers(Vector3 rotationVector)
+    {
+        if (_trainPassengers.Count != 0 && _trainPassengers != null)
+        {
+            foreach (GameObject passenger in _trainPassengers)
+            {
+                passenger.transform.Rotate(rotationVector);
+            }
+        }
+    }
+
+    private void SampleWave()
+    {
+        //determines y position based on (sample) sine wave
+        Vector3 wavePosition = new Vector3(
+            gameObject.transform.position.x,
+            (MathF.Sin(Time.time * 2) * 20 * Time.fixedDeltaTime) + _yOffset,
+            gameObject.transform.position.z
+        );
+        gameObject.transform.position = wavePosition;
+
+        //finds rotation based on the wave
+        gameObject.transform.rotation = new Quaternion(
+            -MathF.Cos(Time.time * 2) * Time.fixedDeltaTime,
+            gameObject.transform.rotation.y,
+            gameObject.transform.rotation.z,
+            gameObject.transform.rotation.w
+        );
+    }
+
+    public void AddTrainPassenger(Collision collision)
+    {
+        _trainPassengers.Add(collision.gameObject);
+    }
+
+    public void RemoveTrainPassenger(Collision collision)
+    {
+        _trainPassengers.Remove(collision.gameObject);
     }
 }

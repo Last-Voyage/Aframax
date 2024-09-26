@@ -11,15 +11,15 @@ using UnityEngine;
 
 public class BoatPassengerTransfer : MonoBehaviour
 {
-    private BoatMover moveVessel;
-    private List<GameObject> objOnVessel;
+    private BoatMover _moveVessel;
+    private List<GameObject> _objOnVessel;
 
     /// <summary>
     /// When enabled, moveVessel gets set to the boat itself
     /// </summary>
-    private void OnEnable()
+    private void Awake()
     {
-        moveVessel = GetComponentInParent<BoatMover>();
+        _moveVessel = GetComponentInParent<BoatMover>();
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public class BoatPassengerTransfer : MonoBehaviour
     /// <param name="collision">Collision with boat</param>
     private void OnCollisionEnter(Collision collision)
     {
-        moveVessel.TrainPassengers.Add(collision.gameObject);
+        _moveVessel.AddTrainPassenger(collision);
     }
 
     /// <summary>
@@ -37,6 +37,6 @@ public class BoatPassengerTransfer : MonoBehaviour
     /// <param name="collision">Collision with boat</param>
     private void OnCollisionExit(Collision collision)
     {
-        moveVessel.TrainPassengers.Remove(collision.gameObject);
+        _moveVessel.RemoveTrainPassenger(collision);
     }
 }
