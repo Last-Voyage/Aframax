@@ -1,0 +1,49 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel WaterRipple
+#pragma kernel Blur
+
+Texture2D<float> Camera;
+RWTexture2D<float> PreBlur;
+RWTexture2D<float> Result;
+
+#define PI2 6.28319F
+#define E 2.71828F
+
+#define BLUR_RADIUS 3
+
+#define IMG_SIZE 128
+
+groupshared float4 samples[IMG_SIZE + 2 * BLUR_RADIUS];
+
+float GaussianDist(float offset)
+{
+    float sigmaSquared = BLUR_RADIUS * BLUR_RADIUS;
+    
+    return (1.0F / sqrt(PI2 * sigmaSquared)) *
+        pow(E, -offset * offset) /
+            (2.0F * sigmaSquared);
+}
+
+[numthreads(8,8,1)]
+void Blur(uint3 id : SV_DispatchThreadID)
+{
+    float sum = 0.0F;
+
+    for (int u = -BLUR_RADIUS; u < BLUR_RADIUS; u++)
+    {
+        for (int v = -BLUR_RADIUS; v < BLUR_RADIUS; v++)
+        {
+            sum += PreBlur[id.xy + float2(u % IMG_SIZE, v % IMG_SIZE)];
+        }
+    }
+
+    float mean = sum / (BLUR_RADIUS * BLUR_RADIUS);
+
+    Result[id.xy] = saturate(mean);
+}
+
+[numthreads(8,8,1)]
+void WaterRipple (uint3 id : SV_DispatchThreadID)
+{
+    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.76F);
+}

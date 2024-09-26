@@ -46,10 +46,12 @@ Shader "Custom/WaterShader"
             #pragma hull Hull
             #pragma domain Domain
             #pragma fragment Fragment
+            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
                 float _TessellationFactor;
@@ -519,9 +521,9 @@ Shader "Custom/WaterShader"
                 float sceneEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
                 float depthDiff = (sceneEyeDepth - fragmentEyeDepth);
 
-                float foam = 1.0F - saturate(depthDiff / _EdgeFoamAmount);
+                float foamLine = 1.0F - saturate(_EdgeFoamAmount * (sceneEyeDepth - screenPos.w));
 
-                return saturate(smoothstep(0.0F, 0.5F, foam)) * _FoamColor.a;
+                return smoothstep(foamLine, 0.0F, 0.25F) * _FoamColor.a;
             }
 
             float3 ColorBelowWater(float4 screenPos, float3 normal)
@@ -533,7 +535,7 @@ Shader "Custom/WaterShader"
                 float sceneEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
                 float depthDiff = (sceneEyeDepth - fragmentEyeDepth);
 
-                if (depthDiff < 0.15)
+                if (depthDiff < 0.25F)
                 {
 		            uv = screenPos.xy / screenPos.w;
 		            #if UNITY_UV_STARTS_AT_TOP
@@ -546,6 +548,8 @@ Shader "Custom/WaterShader"
                     sceneEyeDepth = LinearEyeDepth(rawDepth, _ZBufferParams);
 		            depthDiff = sceneEyeDepth - fragmentEyeDepth;
 	            }
+
+                lerp(uv, (screenPos.xy / screenPos.w), saturate(sceneEyeDepth));
                 
                 float3 backgroundColor = tex2D(_CameraOpaqueTexture, uv).rgb;
                 float fogFactor = exp2(-_WaterFogDensity * (depthDiff / 20.0F));
@@ -565,6 +569,9 @@ Shader "Custom/WaterShader"
                 float3 L = mainLight.direction;
                 float3 N = input.normalWS;
 
+                float3 decalColor = 0.0F;
+                ApplyDecalToBaseColorAndNormal(input.positionCS, decalColor, N);
+
                 float3 NdotL = dot(N, L);
                 float3 color = lerp(
                     float3(1.0F, 0.0F, 0.0F),
@@ -579,12 +586,12 @@ Shader "Custom/WaterShader"
 
                 // Depth Fog
 
+                float edgeFoam = ObjectSurroundingFoam(input.screenPos, input.uv);
+
                 float3 underwaterColor = ColorBelowWater(
                     input.screenPos,
                     (input.normalTS + normalData)
                 );
-                
-                float edgeFoam = ObjectSurroundingFoam(input.screenPos, input.uv);
 
                 float3 gradient = lerp(
                     _TopBottomGradientColor,
