@@ -50,7 +50,9 @@ public class BulletBehavior : MonoBehaviour
             dc.GetDamageNumber = _actualDamage;
             _damageText.text = _actualDamage.ToString();
             this.gameObject.transform.DetachChildren();
-            Destroy(gameObject);
+            Destroy(col.gameObject);
+            //destroy after taking out weak spot
+            Destroy(gameObject, 0.1f);
         }
         //If it touches the invulnerable spot the bullet sets the UI count awake and then detaches from it once it applies the correct number while despawning
         else if (col.gameObject.tag == "Invulnerable Spot")
