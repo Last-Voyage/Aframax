@@ -149,6 +149,24 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
+    /// Activates or deactivates the movement coroutine based on the input boolean
+    /// Used when the OnMovementToggled Action is invoked
+    /// </summary>
+    /// <param name="change"> Determines if the movement should be turned on or off </param>
+    private void ToggleMovement(bool change)
+    {
+        if (change)
+        {
+            _movementCoroutine = StartCoroutine("ResolveMovement");
+        }
+        else
+        {
+            StopCoroutine(_movementCoroutine);
+            _rigidBody.velocity = Vector3.zero;
+        }
+    }
+
+    /// <summary>
     /// Called when this component is enabled.
     /// Used to assign the OnMovementToggled Action to a listener
     /// </summary>

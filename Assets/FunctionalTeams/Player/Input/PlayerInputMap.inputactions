@@ -2,7 +2,7 @@
     "name": "PlayerInputMap",
     "maps": [
         {
-            "name": "Player",
+            "name": "PlayerInput",
             "id": "7c47b98f-67e4-4d69-88dc-b72c584d5113",
             "actions": [
                 {
@@ -10,6 +10,15 @@
                     "type": "PassThrough",
                     "id": "dd93fe03-5451-4340-8dfb-cbeb5913bd3e",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HarpoonButton",
+                    "type": "Button",
+                    "id": "e0b8379a-2531-4ce8-8abc-56cff81cd086",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -70,6 +79,17 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "53709770-2be5-4a74-ae30-cea1862707df",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HarpoonButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
