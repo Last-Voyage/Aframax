@@ -7,9 +7,9 @@
 //                  This script takes input designated for movement from the
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
-using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -44,7 +44,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Movement coroutine related variables
     /// </summary>
-    public static event Action<bool> OnMovementToggled;
+    private static UnityEvent<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
@@ -58,7 +58,7 @@ public class PlayerMovementController : MonoBehaviour
         InitializeRigidbody();
 
         // Run the movement coroutine
-        _movementCoroutine = StartCoroutine("ResolveMovement");
+        _movementCoroutine = StartCoroutine(ResolveMovement());
     }
 
     /// <summary>
@@ -139,25 +139,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (change)
         {
-            _movementCoroutine = StartCoroutine("ResolveMovement");
-        }
-        else
-        {
-            StopCoroutine(_movementCoroutine);
-            _rigidBody.velocity = Vector3.zero;
-        }
-    }
-
-    /// <summary>
-    /// Activates or deactivates the movement coroutine based on the input boolean
-    /// Used when the OnMovementToggled Action is invoked
-    /// </summary>
-    /// <param name="change"> Determines if the movement should be turned on or off </param>
-    private void ToggleMovement(bool change)
-    {
-        if (change)
-        {
-            _movementCoroutine = StartCoroutine("ResolveMovement");
+            _movementCoroutine = StartCoroutine(ResolveMovement());
         }
         else
         {
@@ -172,15 +154,22 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        OnMovementToggled += ToggleMovement;
+        OnMovementToggled.AddListener(ToggleMovement);
     }
 
     /// <summary>
-    /// Called when this component is disnabled.
+    /// Called when this component is disabled.
     /// Used to unassign the OnMovementToggled Action to a listener
     /// </summary>
     private void OnDisable()
     {
-        OnMovementToggled -= ToggleMovement;
+        OnMovementToggled.RemoveListener(ToggleMovement);
     }
+
+    #region Getters
+    /// <summary>
+    /// Getter for the OnMovementToggle event
+    /// </summary>
+    public UnityEvent<bool> GetMovementToggle => OnMovementToggled;
+    #endregion
 }

@@ -8,9 +8,9 @@
 //                  allows the Main Camera to rotate in the scene.
 ******************************************************************************/
 using Cinemachine;
-using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 
@@ -25,7 +25,7 @@ public class PlayerCameraController : MonoBehaviour
     private CinemachineVirtualCamera _virtualCamera;
 
     // Variables that relate to the camera's coroutine
-    public static event Action<bool> OnCameraMovementToggled;
+    public static UnityEvent<bool> OnCameraMovementToggled;
     private Coroutine _cameraCoroutine;
 
     /// <summary>
@@ -38,7 +38,7 @@ public class PlayerCameraController : MonoBehaviour
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
 
-        _cameraCoroutine = StartCoroutine("MoveCamera");
+        _cameraCoroutine = StartCoroutine(MoveCamera());
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (change)
         {
-            _cameraCoroutine = StartCoroutine("ResolveMovement");
+            _cameraCoroutine = StartCoroutine(MoveCamera());
         }
         else
         {
@@ -96,7 +96,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        OnCameraMovementToggled += ToggleCameraMovement;
+        OnCameraMovementToggled.AddListener(ToggleCameraMovement);
     }
 
     /// <summary>
@@ -105,6 +105,13 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        OnCameraMovementToggled -= ToggleCameraMovement;
+        OnCameraMovementToggled.RemoveListener(ToggleCameraMovement);
     }
+
+    #region Getters
+    /// <summary>
+    /// Getter for the OnCameraMovementToggle event
+    /// </summary>
+    public UnityEvent<bool> GetCameraMovementToggle => OnCameraMovementToggled;
+    #endregion
 }
