@@ -10,7 +10,6 @@
 using Cinemachine;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 
@@ -25,7 +24,6 @@ public class PlayerCameraController : MonoBehaviour
     private CinemachineVirtualCamera _virtualCamera;
 
     // Variables that relate to the camera's coroutine
-    public static UnityEvent<bool> OnCameraMovementToggled;
     private Coroutine _cameraCoroutine;
 
     /// <summary>
@@ -96,7 +94,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        OnCameraMovementToggled.AddListener(ToggleCameraMovement);
+        CameraManager.Instance.GetCameraMovementToggleEvent().AddListener(ToggleCameraMovement);
     }
 
     /// <summary>
@@ -105,13 +103,6 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        OnCameraMovementToggled.RemoveListener(ToggleCameraMovement);
+        CameraManager.Instance.GetCameraMovementToggleEvent().RemoveListener(ToggleCameraMovement);
     }
-
-    #region Getters
-    /// <summary>
-    /// Getter for the OnCameraMovementToggle event
-    /// </summary>
-    public UnityEvent<bool> GetCameraMovementToggle => OnCameraMovementToggled;
-    #endregion
 }

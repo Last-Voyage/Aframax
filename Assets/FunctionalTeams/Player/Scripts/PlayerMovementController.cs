@@ -9,7 +9,6 @@
 ******************************************************************************/
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -44,7 +43,6 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Movement coroutine related variables
     /// </summary>
-    private static UnityEvent<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
@@ -154,7 +152,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        OnMovementToggled.AddListener(ToggleMovement);
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
     }
 
     /// <summary>
@@ -163,13 +161,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        OnMovementToggled.RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
     }
-
-    #region Getters
-    /// <summary>
-    /// Getter for the OnMovementToggle event
-    /// </summary>
-    public UnityEvent<bool> GetMovementToggle => OnMovementToggled;
-    #endregion
 }
