@@ -37,24 +37,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""MouseX"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""68314e46-a786-4d17-a30b-5ef807c3a5ad"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MouseY"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""87e1c1c0-6803-4197-82de-efe879b686f6"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""HarpoonButton"",
                     ""type"": ""Button"",
                     ""id"": ""aa80d4fd-ee8d-4409-b4fc-02c693475a30"",
@@ -122,28 +104,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""51143ace-5709-4664-ba59-6b2f7b0a6837"",
-                    ""path"": ""<Mouse>/delta/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MouseX"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""12085391-9176-43ec-beec-f36c5bd3ddcd"",
-                    ""path"": ""<Mouse>/delta/y"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MouseY"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""30b55e33-ea3f-421c-ae27-6f49bd3466ee"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -161,8 +121,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
-        m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
         m_Player_HarpoonButton = m_Player.FindAction("HarpoonButton", throwIfNotFound: true);
     }
 
@@ -226,16 +184,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_MouseX;
-    private readonly InputAction m_Player_MouseY;
     private readonly InputAction m_Player_HarpoonButton;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
         public PlayerActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
-        public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
         public InputAction @HarpoonButton => m_Wrapper.m_Player_HarpoonButton;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
