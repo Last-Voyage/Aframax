@@ -98,7 +98,6 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void FireHarpoon(InputAction.CallbackContext context)
     {
-        print("fire");
         //dont shoot if already shot
         if(_harpoonSpear != null || _isReeling)
         {

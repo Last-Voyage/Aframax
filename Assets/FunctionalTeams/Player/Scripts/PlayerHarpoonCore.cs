@@ -45,16 +45,25 @@ public class PlayerHarpoonCore : MonoBehaviour
         SubscribeToHarpoonInput();
     }
 
+    /// <summary>
+    /// Subscribes to movement input
+    /// </summary>
     private void SubscribeToMovementInput()
     {
 
     }
 
+    /// <summary>
+    /// Subscribes to camera input
+    /// </summary>
     private void SubscribeToCameraInput()
     {
 
     }
 
+    /// <summary>
+    /// Subscribes to harpoon input
+    /// </summary>
     private void SubscribeToHarpoonInput()
     {
         _harpoonGun.SubscribeInput();
@@ -72,16 +81,25 @@ public class PlayerHarpoonCore : MonoBehaviour
         _playerInputMap.Disable();
     }
 
+    /// <summary>
+    /// Unsubscribes to movement input
+    /// </summary>
     private void UnsubscribeToMovementInput()
     {
 
     }
 
+    /// <summary>
+    /// Unsubscribes to camera input
+    /// </summary>
     private void UnsubscribeToCameraInput()
     {
 
     }
 
+    /// <summary>
+    /// Unsubscribes to harpoon input
+    /// </summary>
     private void UnsubscribeToHarpoonInput()
     {
          
