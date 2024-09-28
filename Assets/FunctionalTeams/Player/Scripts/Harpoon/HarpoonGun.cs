@@ -154,6 +154,10 @@ public class HarpoonGun : MonoBehaviour
     {
         _isFocusing = true;
         _focusingCoroutine = StartCoroutine(FocusProcess());
+
+        //THIS WILL BE REMOVED LATER AND WILL USE EVENTS
+        PlayerMovementController tempMovement = GetComponentInParent<PlayerMovementController>();
+        tempMovement.StartHarpoonSpeedSlowdown();
     }
 
     /// <summary>
@@ -185,6 +189,10 @@ public class HarpoonGun : MonoBehaviour
         StopCoroutine(_focusingCoroutine);
         _currentFocus = 0;
         _isFocusing = false;
+
+        //THIS WILL BE REMOVED LATER AND WILL USE EVENTS
+        PlayerMovementController tempMovement = GetComponentInParent<PlayerMovementController>();
+        tempMovement.StopHarpoonSpeedSlowdown();
     }
 
     private void SetHarpoonActive()

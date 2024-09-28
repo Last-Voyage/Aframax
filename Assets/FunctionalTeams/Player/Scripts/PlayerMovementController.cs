@@ -29,6 +29,13 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
+    [Space]
+    [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+    private float _currentFocusMoveSpeedMultiplier = 1;
+
+    private Coroutine _focusSpeedCoroutine;
+
     // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
     // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
     /// <summary>
@@ -160,7 +167,7 @@ public class PlayerMovementController : MonoBehaviour
         // in certain directions in the world
         // By manipulating them, we can move the character
         Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y)
-            * _playerMovementSpeed;
+            * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier;
 
         // Move the player
         return newMovement;
@@ -199,6 +206,45 @@ public class PlayerMovementController : MonoBehaviour
         _playerCamera.eulerAngles = targetRotation;
     }
 
+    #region Harpoon Slowdown
+    /// <summary>
+    /// Will be reworked later to be private by using events, can't do so atm as 
+    /// the player manager has been changed elsewhere and I don't want merge conflicts
+    /// </summary>
+    public void StartHarpoonSpeedSlowdown()
+    {
+        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+    }
+
+    /// <summary>
+    /// The process of slowing down the player while focusing
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedSlowdownProcess()
+    {
+        float slowCompletion = 0;
+        while (slowCompletion < 1)
+        {
+            //Increases the progress on slowdown
+            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
+
+            //Sets the current speed based on the animation graph
+            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// Will be reworked later to be private by using events, can't do so atm as the player manager has been changed
+    /// </summary>
+    public void StopHarpoonSpeedSlowdown()
+    {
+        _currentFocusMoveSpeedMultiplier = 1;
+        StopCoroutine(_focusSpeedCoroutine);
+    }
+    #endregion
+
     /// <summary>
     /// Activates or deactivates the movement coroutine based on the input boolean
     /// Used when the OnMovementToggled Action is invoked
@@ -234,4 +280,16 @@ public class PlayerMovementController : MonoBehaviour
     {
         OnMovementToggled -= ToggleMovement;
     }
+
+    #region Getters
+
+    #endregion
+
+    #region Setters
+    //Eventually I plan to change this by involving events, but for now we will use this
+    public void SetFocusSpeedMultiplier(float newVal)
+    {
+        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(newVal);
+    }
+    #endregion
 }
