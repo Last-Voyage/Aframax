@@ -14,7 +14,7 @@ void BoxBlur_float(
             float uCoord = UV.x + (1.0F / TexSize) * u;
             float vCoord = UV.y + (1.0F / TexSize) * v;
             
-            sum += tex2D(Texture, float2(uCoord, vCoord));
+            sum += tex2Dlod(Texture, float4(uCoord, vCoord, 0.0F, 0.0F));
         }
     }
 

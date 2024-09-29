@@ -16,6 +16,7 @@ public class WaterRipple : MonoBehaviour
     private int _cameraTextureID = Shader.PropertyToID("Camera");
     private int _preBlurTextureID = Shader.PropertyToID("PreBlur");
     private int _outputTextureID = Shader.PropertyToID("Result");
+    private int _imageSizeID = Shader.PropertyToID("ImageSize");
     
     private int _kernelID = 0;
     private int _blurKernelID = 0;
@@ -33,6 +34,8 @@ public class WaterRipple : MonoBehaviour
 
         computeShader.SetTexture(_blurKernelID, _preBlurTextureID, preBlurTexture);
         computeShader.SetTexture(_blurKernelID, _outputTextureID, outputTexture);
+        
+        computeShader.SetInt(_imageSizeID, resolution);
         
         // Dispatch
         int groups = Mathf.CeilToInt(resolution / 8.0F);

@@ -3,17 +3,16 @@
 #pragma kernel Blur
 
 Texture2D<float> Camera;
+
 RWTexture2D<float> PreBlur;
 RWTexture2D<float> Result;
+
+int ImageSize = 128;
 
 #define PI2 6.28319F
 #define E 2.71828F
 
 #define BLUR_RADIUS 3
-
-#define IMG_SIZE 128
-
-groupshared float4 samples[IMG_SIZE + 2 * BLUR_RADIUS];
 
 float GaussianDist(float offset)
 {
@@ -33,7 +32,7 @@ void Blur(uint3 id : SV_DispatchThreadID)
     {
         for (int v = -BLUR_RADIUS; v < BLUR_RADIUS; v++)
         {
-            sum += PreBlur[id.xy + float2(u % IMG_SIZE, v % IMG_SIZE)];
+            sum += PreBlur[id.xy + float2(u, v)];
         }
     }
 
@@ -45,5 +44,5 @@ void Blur(uint3 id : SV_DispatchThreadID)
 [numthreads(8,8,1)]
 void WaterRipple (uint3 id : SV_DispatchThreadID)
 {
-    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.76F);
+    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.76F).r;
 }
