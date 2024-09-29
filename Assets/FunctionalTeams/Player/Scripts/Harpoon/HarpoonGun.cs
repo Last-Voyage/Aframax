@@ -112,8 +112,9 @@ public class HarpoonGun : MonoBehaviour
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
-        //_harpoonAnimator.SetTrigger(_harpoonShootTrigger);
-        //CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
+        
+        //Camera shake here when combined with Stapay
+
         OnShotEvent(this);
     }
 
@@ -197,7 +198,6 @@ public class HarpoonGun : MonoBehaviour
         float elapsedTime = 0;
         if(!_holdToRetractMode)
         {
-            //_harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
             //cause the wave action again when reeling
             OnRetractEvent(this);
             OnShotEvent(this);
@@ -215,7 +215,6 @@ public class HarpoonGun : MonoBehaviour
                     if(!startedRetracting)
                     {
                         startedRetracting = true;
-                        //_harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
                         //cause the wave action again when reeling
                         OnRetractEvent(this);
                         OnShotEvent(this);
@@ -244,7 +243,7 @@ public class HarpoonGun : MonoBehaviour
                 _hit.transform.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
-        //CinemachineShake.Instance.ShakeCamera(_retractCameraShakeIntensity, _retractCameraShakeTime);  
+        //Camera shake here when combined with Stapay
         StartCoroutine(ResetHarpoon());
         OnRetractEvent(this);
     }
