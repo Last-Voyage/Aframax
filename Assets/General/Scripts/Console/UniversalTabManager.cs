@@ -1,10 +1,13 @@
-using System;
-using System.Collections;
+/*
+// Name: UniversalTabManager.CS
+// Author: Nabil Tagba
+// Overview: Seamlessly handles and manages the creation and
+//transitions of tabs and their corresponding pages
+ */
+
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 
 

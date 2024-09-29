@@ -1,7 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+// Name: ConsoleController.CS
+// Author: Nabil Tagba
+// Overview: Handles the console being turned on and off
+// along with its hosting the methodes the quick action buttons
+// in the console will use
+ */
 using UnityEngine;
 using UnityEngine.UI;
+
+
 
 public class ConsoleController : MonoBehaviour
 {
@@ -16,6 +23,7 @@ public class ConsoleController : MonoBehaviour
 
     private void Start()
     {
+        //linking player take damage button to corresponding methode
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
     }
     private void Update()
@@ -27,25 +35,29 @@ public class ConsoleController : MonoBehaviour
             if (_content.active)
             {
                 _content.SetActive(false);
-                Time.timeScale = 0;
-
-                
+                Time.timeScale = 1;
             }
             else 
             {
-                Time.timeScale = 1;
                 _content.SetActive(true);
-                
+                Time.timeScale = 0;
             }
         }
     }
 
-
+    /// <summary>
+    /// deal damage to the player
+    /// </summary>
     private void HurtPlayer()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealthManager>().TakeDamage(1);
     }
 
+    /// <summary>
+    /// called when the object is destroyed.
+    /// removes all listener to lower chances
+    /// of memmory leaks
+    /// </summary>
     private void OnDestroy()
     {
         _playerTakeDamageButton.onClick.RemoveAllListeners();
