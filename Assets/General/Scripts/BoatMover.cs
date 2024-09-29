@@ -24,6 +24,7 @@ public class BoatMover : MonoBehaviour
     {
         _trainPassengers = new List<GameObject>();
         _yOffset = gameObject.transform.position.y;
+        Application.targetFrameRate = 144;
     }
 
     /// <summary>
@@ -32,17 +33,29 @@ public class BoatMover : MonoBehaviour
     private void Start()
     {
         StartCoroutine(TestSpeedChange());
+        StartCoroutine(MoveAll());
+
     }
 
     /// <summary>
     /// Moves boat, all passengers, and runs the sample wave
     /// </summary>
-    private void FixedUpdate()
+    private IEnumerator MoveAll()
+    {
+        for(; ; )
+        {
+            MoveBoat();
+            MovePassengers();
+            SampleWave();
+            yield return null;
+        }
+    }
+    /*private void FixedUpdate()
     {
         MoveBoat();
         MovePassengers();
         SampleWave();
-    }
+    }*/
 
     /// <summary>
     /// This is a test coroutine to change the speed of the boat
