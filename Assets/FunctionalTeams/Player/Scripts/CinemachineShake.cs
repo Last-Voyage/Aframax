@@ -15,32 +15,40 @@ public class CinemachineShake : MonoBehaviour
     public static CinemachineShake Instance { get; private set; }
     private CinemachineVirtualCamera _cinemachineVirtualCam;
     private float _shakeTimer;
+
     /// <summary>
     /// creates an instance of the CinemachineShake object so you can call a shake anywhere you wwant.
     /// </summary>
-    private void Awake() {
+    private void Awake() 
+    {
         Instance = this;
         _cinemachineVirtualCam = GetComponent<CinemachineVirtualCamera>();
     }
+    
     /// <summary>
     /// times the shake after its is called from where ever it is called. When time is up stop the shake
     /// </summary>
     /// <param name="intensity"></param>
     /// <param name="time"></param>
-    public void ShakeCamera(float intensity, float time){
+    public void ShakeCamera(float intensity, float time)
+    {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = 
             _cinemachineVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
         _shakeTimer = time;
     }
+
     /// <summary>
     /// times the shake
     /// </summary>
-    private void Update() {
-        if(_shakeTimer > 0){
+    private void Update() 
+    {
+        if(_shakeTimer > 0)
+        {
             _shakeTimer -= Time.deltaTime;
-            if(_shakeTimer <= 0f){
+            if(_shakeTimer <= 0f)
+            {
                 CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
                     _cinemachineVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
                 //turns off the shake
