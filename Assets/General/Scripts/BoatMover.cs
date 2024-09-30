@@ -9,13 +9,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BoatMover : MonoBehaviour
 {
     private float _yOffset;
     private List<GameObject> _trainPassengers { get; set; }
-    [NonSerialized][Tooltip("The speed multiplier for the background")] public float VelocityMultiplier = 2;
+    [NonSerialized][Tooltip("The speed multiplier for the background")] private float VelocityMultiplier = 2;
 
     /// <summary>
     /// Instantiates _trainPassengers and yOffset
@@ -81,11 +80,12 @@ public class BoatMover : MonoBehaviour
     /// </summary>
     private void MoveBoat()
     {
-        //gets initial movement position
-        gameObject.transform.position += transform.forward *
-            VelocityMultiplier * Time.fixedDeltaTime;
+        gameObject.transform.position += transform.forward * VelocityMultiplier * Time.deltaTime;
     }
 
+    /// <summary>
+    /// Moves passengers with the boat to keep all in sync
+    /// </summary>
     private void MovePassengers()
     {
         //adjusts passenger postion to stay on boat
@@ -94,11 +94,15 @@ public class BoatMover : MonoBehaviour
             foreach (GameObject passenger in _trainPassengers)
             {
                 passenger.transform.position += gameObject.transform.forward *
-                    VelocityMultiplier * Time.fixedDeltaTime;
+                    VelocityMultiplier * Time.deltaTime;
             }
         }
     }
 
+    /// <summary>
+    /// Rotates passengers with the boat
+    /// </summary>
+    /// <param name="rotationVector">should be the same vector that the boat is rotating on</param>
     private void RotatePassengers(Vector3 rotationVector)
     {
         if (_trainPassengers.Count != 0 && _trainPassengers != null)
@@ -110,6 +114,10 @@ public class BoatMover : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// test function to display how the boat reacts to the wave
+    ///     Will be reworked when implemented with the real waves2
+    /// </summary>
     private void SampleWave()
     {
         //determines y position based on (sample) sine wave
@@ -129,13 +137,13 @@ public class BoatMover : MonoBehaviour
         );
     }
 
-    public void AddTrainPassenger(Collision collision)
+    public void AddTrainPassenger(GameObject collider)
     {
-        _trainPassengers.Add(collision.gameObject);
+        _trainPassengers.Add(collider);
     }
 
-    public void RemoveTrainPassenger(Collision collision)
+    public void RemoveTrainPassenger(GameObject collider)
     {
-        _trainPassengers.Remove(collision.gameObject);
+        _trainPassengers.Remove(collider);
     }
 }

@@ -26,17 +26,17 @@ public class BoatPassengerTransfer : MonoBehaviour
     /// When an object collides with the boat, that object is added to the array of items on the boat
     /// </summary>
     /// <param name="collision">Collision with boat</param>
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        _moveVessel.AddTrainPassenger(collision);
+        _moveVessel.AddTrainPassenger(other.gameObject);
     }
 
     /// <summary>
     /// When an object is no longer contacting the boat, that object is removed from the array of items on the boat
     /// </summary>
     /// <param name="collision">Collision with boat</param>
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        _moveVessel.RemoveTrainPassenger(collision);
+        _moveVessel.RemoveTrainPassenger(other.gameObject);
     }
 }
