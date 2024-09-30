@@ -37,7 +37,8 @@ public class BulletBehavior : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         Destroy(gameObject);
     }
-
+    
+    /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
         Instantiate(_damageCount, this.transform);

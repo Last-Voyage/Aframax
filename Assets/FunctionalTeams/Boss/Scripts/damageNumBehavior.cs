@@ -19,21 +19,15 @@ public class DamageNumBehavior : MonoBehaviour
     //The number that gives the illusion of the number disappearing
     [SerializeField] private float _opacityScaler = 255;
 
-    private void Awake()
+    private void Start()
     {
         StartCoroutine(ColorsAndMovement());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Once text is completely clear destory object
-        if (_damageText.color.a <= 0)
-        {
-            StartCoroutine(Despawn());
-        }
-    }
- 
+    /// <summary>
+    /// The holder of changing the color and updating the movemont of the number text along with the opacity
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ColorsAndMovement()
     {
         while (true)
@@ -44,7 +38,12 @@ public class DamageNumBehavior : MonoBehaviour
             //update the color of the text to match the intesity of which it has been hit(more damage more red) along with opacity going clear
             _damageText.color = new Color(255f / 255f, ((255f - (_damageNumber * 17f))) / 255f, (255f - (_damageNumber * 17f)) / 255f, (_opacityScaler / 255));
             //move Upwards slowly
-            transform.position += new Vector3(0, 0.05f, 0);
+            transform.position += new Vector3(0, 0.06f, 0);
+            //Once text is completely clear destory object
+            if (_damageText.color.a <= 0)
+            {
+                StartCoroutine(Despawn());
+            }
         }
     }
 
