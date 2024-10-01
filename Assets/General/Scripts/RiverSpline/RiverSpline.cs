@@ -12,6 +12,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contains methods able to generate a river mesh based around a bezier curve
+/// </summary>
 [RequireComponent(typeof(BezierCurve))]
 public class RiverSpline : MonoBehaviour
 {
@@ -32,7 +35,7 @@ public class RiverSpline : MonoBehaviour
         BezierCurve activeBezier = GetComponent<BezierCurve>();
 
         // Don't create a mesh if there isn't enough information to make one
-        if (activeBezier.bezierPoints.Length < 2)
+        if (activeBezier.BezierPoints.Length < 2)
         {
             return;
         }
@@ -51,7 +54,7 @@ public class RiverSpline : MonoBehaviour
 
         // Set the size of the rectangle in vertices
         int sizeX = verticesPerPoint;
-        int sizeY = _riverSmoothness * (activeBezier.bezierPoints.Length - 1) + 1;
+        int sizeY = _riverSmoothness * (activeBezier.BezierPoints.Length - 1) + 1;
 
         // Prepare the vertex and uv arrays
         Vector3[] vertices = new Vector3[sizeX * sizeY];

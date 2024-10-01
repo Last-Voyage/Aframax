@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// Streamlines the editing of bezier curves
+/// </summary>
 [CustomEditor(typeof(BezierCurve))]
 public class BezierCurveEditor : Editor
 {
@@ -36,7 +39,7 @@ public class BezierCurveEditor : Editor
         // Deletes all current points and resets the mesh
         if (GUILayout.Button("Reset Points"))
         {
-            ActiveBezier.bezierPoints = new BezierPoint[0];
+            ActiveBezier.BezierPoints = new BezierPoint[0];
 
             // If the component is attached to a RiverSpline, reset its mesh
             if (ActiveBezier.TryGetComponent(out RiverSpline activeRiver))
@@ -49,28 +52,27 @@ public class BezierCurveEditor : Editor
         if (GUILayout.Button("Add Point"))
         {
             // Creates a new list if there no bezier points
-            if (ActiveBezier.bezierPoints == null)
+            if (ActiveBezier.BezierPoints == null)
             {
-                ActiveBezier.bezierPoints = new BezierPoint[0];
+                ActiveBezier.BezierPoints = new BezierPoint[0];
             }
 
-            // Creates a new arrow to hold all the new points
-            BezierPoint[] newPoints = new BezierPoint[ActiveBezier.bezierPoints.Length + 1];
-            for (int i = 0; i < ActiveBezier.bezierPoints.Length; i++)
+            // Creates a new array to hold all the new points
+            BezierPoint[] newPoints = new BezierPoint[ActiveBezier.BezierPoints.Length + 1];
+            for (int i = 0; i < ActiveBezier.BezierPoints.Length; i++)
             {
-                newPoints[i] = ActiveBezier.bezierPoints[i];
+                newPoints[i] = ActiveBezier.BezierPoints[i];
             }
 
-            //
             Vector2 newPoint;
             Vector2 newBackDir;
             Vector2 newForwardDir;
-            if (ActiveBezier.bezierPoints.Length > 0)
+            if (ActiveBezier.BezierPoints.Length > 0)
             {
                 // Moves the new node in front of the last one, and copies its direction
-                newPoint = ActiveBezier.bezierPoints[^1].point + ActiveBezier.bezierPoints[^1].forwardDir.normalized * 10;
-                newBackDir = ActiveBezier.bezierPoints[^1].backDir;
-                newForwardDir = ActiveBezier.bezierPoints[^1].forwardDir;
+                newPoint = ActiveBezier.BezierPoints[^1].Point + ActiveBezier.BezierPoints[^1].ForwardDir.normalized * 10;
+                newBackDir = ActiveBezier.BezierPoints[^1].BackDir;
+                newForwardDir = ActiveBezier.BezierPoints[^1].ForwardDir;
             }
             else
             {
@@ -84,7 +86,7 @@ public class BezierCurveEditor : Editor
             newPoints[^1] = new(newPoint, newBackDir, newForwardDir);
 
             // Overwrites the old array with the new one
-            ActiveBezier.bezierPoints = newPoints;
+            ActiveBezier.BezierPoints = newPoints;
         }
     }
 
@@ -94,28 +96,28 @@ public class BezierCurveEditor : Editor
     private void OnSceneGUI()
     {
         // If there is no curve to show, don't display it
-        if (ActiveBezier.bezierPoints.Length == 0)
+        if (ActiveBezier.BezierPoints.Length == 0)
         {
             return;
         }
 
         _bezierLength = 0;
-        BezierPoint previousPoint = ActiveBezier.bezierPoints[0];
+        BezierPoint previousPoint = ActiveBezier.BezierPoints[0];
 
         // Iterate through each point and draw both the handles for them and the curve they make
-        for (int i = 0; i < ActiveBezier.bezierPoints.Length; i++)
+        for (int i = 0; i < ActiveBezier.BezierPoints.Length; i++)
         {
             // Draw the handle for the bezier
-            DisplayBezierHandle(ref ActiveBezier.bezierPoints[i]);
+            DisplayBezierHandle(ref ActiveBezier.BezierPoints[i]);
 
-            BezierPoint currentPoint = ActiveBezier.bezierPoints[i];
+            BezierPoint currentPoint = ActiveBezier.BezierPoints[i];
 
             if (previousPoint != currentPoint)
             {
                 Handles.color = Color.white;
 
                 // Draw the curve between the two bezier points
-                DrawBezierLine(previousPoint, currentPoint, ActiveBezier.curveSmoothness, out float curLength);
+                DrawBezierLine(previousPoint, currentPoint, ActiveBezier.CurveSmoothness, out float curLength);
                 _bezierLength += curLength;
             }
 
@@ -154,14 +156,14 @@ public class BezierCurveEditor : Editor
     {
         // Adjust the handle size so that it's the same no matter the distance from the camera
         var view = SceneView.currentDrawingSceneView;
-        float handleSize = view.size / (50f / ActiveBezier.handleSize);
+        float handleSize = view.size / (50f / ActiveBezier.HandleSize);
 
         // Get the 3d representation of the current point's directions
-        Vector3 backDir = new(bezier.backDir.x, 0, bezier.backDir.y);
-        Vector3 forwardDir = new(bezier.forwardDir.x, 0, bezier.forwardDir.y);
+        Vector3 backDir = new(bezier.BackDir.x, 0, bezier.BackDir.y);
+        Vector3 forwardDir = new(bezier.ForwardDir.x, 0, bezier.ForwardDir.y);
 
         // Convert the points and directions into three 3d points
-        Vector3 bezier3dPoint = new(bezier.point.x, 0, bezier.point.y);
+        Vector3 bezier3dPoint = new(bezier.Point.x, 0, bezier.Point.y);
         Vector3 bezier3dBack = bezier3dPoint + backDir;
         Vector3 bezier3dForward = bezier3dPoint + forwardDir;
 
@@ -180,8 +182,8 @@ public class BezierCurveEditor : Editor
         Handles.DrawLine(bezier3dPoint, bezier3dForward);
 
         // Update the bezier's variables based on what the player moved them to
-        bezier.point = new(bezier3dPoint.x, bezier3dPoint.z);
-        bezier.backDir = new Vector2(bezier3dBack.x, bezier3dBack.z) - bezier.point;
-        bezier.forwardDir = new Vector2(bezier3dForward.x, bezier3dForward.z) - bezier.point;
+        bezier.Point = new(bezier3dPoint.x, bezier3dPoint.z);
+        bezier.BackDir = new Vector2(bezier3dBack.x, bezier3dBack.z) - bezier.Point;
+        bezier.ForwardDir = new Vector2(bezier3dForward.x, bezier3dForward.z) - bezier.Point;
     }
 }

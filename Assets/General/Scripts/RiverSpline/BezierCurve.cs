@@ -13,15 +13,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contains a list of points and the methods to generate a bezier curve between them
+/// </summary>
 public class BezierCurve : MonoBehaviour
 {
     [Header("Line Settings")]
-    public BezierPoint[] bezierPoints;
-    public float curveIntensity;
+    public BezierPoint[] BezierPoints;
+    public float CurveIntensity;
 
     [Header("Editor Settings")]
-    [Min(0)] public float handleSize;
-    [Min(1)] public int curveSmoothness;
+    [Min(0)] public float HandleSize;
+    [Min(1)] public int CurveSmoothness;
 
     /// <summary>
     /// Find the linearly interpolated position between two bezier points
@@ -33,10 +36,10 @@ public class BezierCurve : MonoBehaviour
     public Vector2 EvaluateBezierPoint(BezierPoint start, BezierPoint end, float value)
     {
         // The reasoning for these variables can be found in the provided video
-        Vector2 P0 = start.point;
-        Vector2 P1 = start.point + (start.forwardDir * curveIntensity);
-        Vector2 P2 = end.point + (end.backDir * curveIntensity);
-        Vector2 P3 = end.point;
+        Vector2 P0 = start.Point;
+        Vector2 P1 = start.Point + (start.ForwardDir * CurveIntensity);
+        Vector2 P2 = end.Point + (end.BackDir * CurveIntensity);
+        Vector2 P3 = end.Point;
 
         // The ^2 and ^3 values of the initial value, to clean up the calculation
         float value2 = Mathf.Pow(value, 2);
@@ -61,10 +64,10 @@ public class BezierCurve : MonoBehaviour
     public Vector2 EvaluateBezierDerivative(BezierPoint start, BezierPoint end, float value)
     {
         // The reasoning for these variables can be found in the provided video
-        Vector2 P0 = start.point;
-        Vector2 P1 = start.point + (start.forwardDir * curveIntensity);
-        Vector2 P2 = end.point + (end.backDir * curveIntensity);
-        Vector2 P3 = end.point;
+        Vector2 P0 = start.Point;
+        Vector2 P1 = start.Point + (start.ForwardDir * CurveIntensity);
+        Vector2 P2 = end.Point + (end.BackDir * CurveIntensity);
+        Vector2 P3 = end.Point;
 
         // The ^2 value of the initial value, to clean up the calculation
         float value2 = Mathf.Pow(value, 2);
@@ -92,7 +95,7 @@ public class BezierCurve : MonoBehaviour
         Vector2[] allPoints = new Vector2[segments + 1];
         length = 0;
 
-        Vector2 previousPoint = start.point;
+        Vector2 previousPoint = start.Point;
 
         // Iterate through all the segments of the curve and find the individual positions
         for (int i = 0; i <= segments; i++)
@@ -157,12 +160,12 @@ public class BezierCurve : MonoBehaviour
         length = 0;
 
         // Prepares the array to store all the positions
-        Vector2[] allPoints = new Vector2[segmentsPerCurve * (bezierPoints.Length - 1) + 1];
+        Vector2[] allPoints = new Vector2[segmentsPerCurve * (BezierPoints.Length - 1) + 1];
 
         // Iterate through every bezier point and combine all the points in between them
-        for (int i = 0; i < bezierPoints.Length - 1; i++)
+        for (int i = 0; i < BezierPoints.Length - 1; i++)
         {
-            Vector2[] curPoints = PointsBetweenBeziers(bezierPoints[i], bezierPoints[i + 1], segmentsPerCurve, out float curLength);
+            Vector2[] curPoints = PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve, out float curLength);
 
             // If it's the very first point, add it to the list
             if (i == 0)
@@ -231,12 +234,12 @@ public class BezierCurve : MonoBehaviour
     public Vector2[] AllDerivatives(int segmentsPerCurve)
     {
         // Prepares the array to store all the derivatives
-        Vector2[] allDerivatives = new Vector2[segmentsPerCurve * (bezierPoints.Length - 1) + 1];
+        Vector2[] allDerivatives = new Vector2[segmentsPerCurve * (BezierPoints.Length - 1) + 1];
 
         // Iterate through every bezier point and combine all the derivatives in between them
-        for (int i = 0; i < bezierPoints.Length - 1; i++)
+        for (int i = 0; i < BezierPoints.Length - 1; i++)
         {
-            Vector2[] curPoints = DerivativesBetweenBeziers(bezierPoints[i], bezierPoints[i + 1], segmentsPerCurve);
+            Vector2[] curPoints = DerivativesBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve);
 
             // If it's the very first point, add it to the list
             if (i == 0)
@@ -275,6 +278,9 @@ public class BezierCurve : MonoBehaviour
     }
 }
 
+/// <summary>
+/// A struct containing information about a point on a bezier curve
+/// </summary>
 [System.Serializable]
 public struct BezierPoint
 {
@@ -286,14 +292,14 @@ public struct BezierPoint
     /// <param name="forwardDir">The direction forward towards the next bezier point</param>
     public BezierPoint(Vector2 point, Vector2 backDir, Vector2 forwardDir)
     {
-        this.point = point;
-        this.forwardDir = forwardDir;
-        this.backDir = backDir;
+        Point = point;
+        BackDir = backDir;
+        ForwardDir = forwardDir;
     }
 
-    public Vector2 point;
-    public Vector2 backDir;
-    public Vector2 forwardDir;
+    public Vector2 Point;
+    public Vector2 BackDir;
+    public Vector2 ForwardDir;
 
     /// <summary>
     /// Determines whether the bezier points on both sides are the same
@@ -303,9 +309,9 @@ public struct BezierPoint
     /// <returns>If the two bezier points are equal</returns>
     public static bool operator ==(BezierPoint a, BezierPoint b)
     {
-        return a.point == b.point
-            && a.backDir == b.backDir
-            && a.forwardDir == b.forwardDir;
+        return a.Point == b.Point
+            && a.BackDir == b.BackDir
+            && a.ForwardDir == b.ForwardDir;
     }
 
     /// <summary>
@@ -316,9 +322,9 @@ public struct BezierPoint
     /// <returns>If the two bezier points are different</returns>
     public static bool operator !=(BezierPoint a, BezierPoint b)
     {
-        return a.point != b.point
-            || a.backDir != b.backDir
-            || a.forwardDir != b.forwardDir;
+        return a.Point != b.Point
+            || a.BackDir != b.BackDir
+            || a.ForwardDir != b.ForwardDir;
     }
 
     /// <summary>
