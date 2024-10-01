@@ -28,38 +28,6 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
-    [Space]
-    [SerializeField] private float _focusSpeedSlowTime;
-    [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
-    private float _currentFocusMoveSpeedMultiplier = 1;
-
-    private Coroutine _focusSpeedCoroutine;
-
-    // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
-    // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
-    /// <summary>
-    /// Variables that relate to the rotation of the camera
-    /// </summary>
-    [Header("Set Player Camera Here")]
-    [SerializeField] private Transform _playerCamera;
-    [Header("Adjustable Mouse Sensitivities")]
-    [Tooltip("X controls Left/Right\nY controls Up/Down")]
-    [SerializeField] private float _mouseSensitivityX;
-    [SerializeField] private float _mouseSensitivityY;
-
-    /// <summary>
-    /// _cameraXRotation is used to keep track of the current rotation
-    /// of the camera. This is used while moving the mouse up and down
-    /// </summary>
-    private float _cameraXRotation;
-
-    /// <summary>
-    /// _CAMERA_CLAMP is a constant used to prevent the camera from starting
-    /// to point behind the player while looking up and down. Set to 90 so that
-    /// the camera may still look straight up or down
-    /// </summary>
-    private const float _CAMERA_CLAMP = 90;
-
     /// <summary>
     /// Variables that capture user input
     /// </summary>
@@ -145,8 +113,8 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y)
-            * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier;
+        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y) * _playerMovementSpeed;
+
         // Move the player
         return newMovement;
     }
@@ -159,69 +127,6 @@ public class PlayerMovementController : MonoBehaviour
     {
         return new Vector3(0, _rigidBody.velocity.y, 0);
     }
-
-    /// <summary>
-    /// THIS METHOD IS TEMPORARY UNTIL A CAMERA CONTROLLER IS CREATED
-    /// Handles the rotation of the camera based on mouse movement
-    /// </summary>
-    private void HandleCameraRotation()
-    {
-        // First, rotate the player character based on
-        // the horizontal movement of the mouse
-        // We do this by manipulating Vector3.up, which is similar to how we
-        // handled the horizontal movement
-        transform.Rotate(Vector3.up, _mouseXInput.ReadValue<float>() * Time.deltaTime * _mouseSensitivityX);
-
-        // Instead of rotating the player up and down, we will rotate the camera
-        // Change the camera's rotation by reading the vertical mouse movement
-        _cameraXRotation -= _mouseYInput.ReadValue<float>() * _mouseSensitivityY;
-        _cameraXRotation = Mathf.Clamp(_cameraXRotation, -_CAMERA_CLAMP, _CAMERA_CLAMP);
-
-        // Create a target rotation for the camera based on the player's rotation
-        // and the new rotation we just found
-        Vector3 targetRotation = transform.eulerAngles;
-        targetRotation.x = _cameraXRotation;
-        _playerCamera.eulerAngles = targetRotation;
-    }
-
-    #region Harpoon Slowdown
-    /// <summary>
-    /// Will be reworked later to be private by using events, can't do so atm as 
-    /// the player manager has been changed elsewhere and I don't want merge conflicts
-    /// </summary>
-    public void StartHarpoonSpeedSlowdown()
-    {
-        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
-    }
-
-    /// <summary>
-    /// The process of slowing down the player while focusing
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator HarpoonSpeedSlowdownProcess()
-    {
-        float slowCompletion = 0;
-        while (slowCompletion < 1)
-        {
-            //Increases the progress on slowdown
-            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
-
-            //Sets the current speed based on the animation graph
-            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
-
-            yield return null;
-        }
-    }
-
-    /// <summary>
-    /// Will be reworked later to be private by using events, can't do so atm as the player manager has been changed
-    /// </summary>
-    public void StopHarpoonSpeedSlowdown()
-    {
-        _currentFocusMoveSpeedMultiplier = 1;
-        StopCoroutine(_focusSpeedCoroutine);
-    }
-    #endregion
 
     /// <summary>
     /// Activates or deactivates the movement coroutine based on the input boolean
@@ -258,16 +163,4 @@ public class PlayerMovementController : MonoBehaviour
     {
         PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
     }
-    
-    #region Getters
-
-    #endregion
-
-    #region Setters
-    //Eventually I plan to change this by involving events, but for now we will use this
-    public void SetFocusSpeedMultiplier(float newVal)
-    {
-        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(newVal);
-    }
-    #endregion
 }
