@@ -7,7 +7,6 @@
 //                  This script takes input designated for movement from the
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,12 +65,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    // THE BELOW INPUT ACTIONS ARE USED FOR THE CAMERA
-    private InputAction _mouseXInput;
-    private InputAction _mouseYInput;
     private const string _MOVEMENT_INPUT_NAME = "Movement";
-    private const string _MOUSE_X_INPUT_NAME = "MouseX";
-    private const string _MOUSE_Y_INPUT_NAME = "MouseY";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -81,7 +75,6 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Movement coroutine related variables
     /// </summary>
-    public static event Action<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
@@ -90,22 +83,12 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        // Initialize non-serialized variables, input variables, and
-        // the Rigidbody
-        InitializeNonSerialized();
+        // Initialize input variables and the Rigidbody
         InitializeInput();
         InitializeRigidbody();
 
         // Run the movement coroutine
-        _movementCoroutine = StartCoroutine("ResolveMovement");
-    }
-
-    /// <summary>
-    /// Initializes all non-serialized private variables.
-    /// </summary>
-    private void InitializeNonSerialized()
-    {
-        _cameraXRotation = 0;
+        _movementCoroutine = StartCoroutine(ResolveMovement());
     }
 
     /// <summary>
@@ -116,8 +99,6 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
         _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
-        _mouseXInput = _playerInput.currentActionMap.FindAction(_MOUSE_X_INPUT_NAME);
-        _mouseYInput = _playerInput.currentActionMap.FindAction(_MOUSE_Y_INPUT_NAME);
     }
 
     /// <summary>
@@ -126,7 +107,6 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeRigidbody()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        _rigidBody.freezeRotation = true;
     }
 
     /// <summary>
@@ -135,10 +115,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private IEnumerator ResolveMovement()
     {
-        while(true)
+        while (true)
         {
             HandleMovement();
-            HandleCameraRotation();
             yield return null;
         }
     }
@@ -168,7 +147,6 @@ public class PlayerMovementController : MonoBehaviour
         // By manipulating them, we can move the character
         Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y)
             * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier;
-
         // Move the player
         return newMovement;
     }
@@ -254,7 +232,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (change)
         {
-            _movementCoroutine = StartCoroutine("ResolveMovement");
+            _movementCoroutine = StartCoroutine(ResolveMovement());
         }
         else
         {
@@ -269,18 +247,18 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        OnMovementToggled += ToggleMovement;
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
     }
 
     /// <summary>
-    /// Called when this component is disnabled.
+    /// Called when this component is disabled.
     /// Used to unassign the OnMovementToggled Action to a listener
     /// </summary>
     private void OnDisable()
     {
-        OnMovementToggled -= ToggleMovement;
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
     }
-
+    
     #region Getters
 
     #endregion

@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides all other scripts with access to the player
@@ -17,6 +18,11 @@ using UnityEngine;
 public class PlayerManager : MainGameplayManagerFramework
 {
     public static PlayerManager Instance;
+
+    /// <summary>
+    /// Controls the player's movement
+    /// </summary>
+    private static UnityEvent<bool> _onMovementToggled;
 
     #region Base Manager
     public override void SetupInstance()
@@ -30,7 +36,21 @@ public class PlayerManager : MainGameplayManagerFramework
     }
     #endregion
 
-    #region Getters
+    #region Events
+    /// <summary>
+    /// Invokes the _onMovementToggled event with the input bool
+    /// </summary>
+    /// <param name="toggle"> the bool to input into the invoked event </param>
+    public void InvokeOnCameraMovementToggle(bool toggle)
+    {
+        _onMovementToggled?.Invoke(toggle);
+    }
+    #endregion
 
+    #region Getters
+    /// <summary>
+    /// Getter for the _onMovementToggled event
+    /// </summary>
+    public UnityEvent<bool> GetMovementToggleEvent() => _onMovementToggled;
     #endregion
 }
