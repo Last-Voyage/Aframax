@@ -37,7 +37,8 @@ public class BulletBehavior : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         Destroy(gameObject);
     }
-
+    
+    /// <param name="col"></param>
     void OnTriggerEnter(Collider col)
     {
         Instantiate(_damageCount, this.transform);
@@ -47,7 +48,7 @@ public class BulletBehavior : MonoBehaviour
         //If it touches the weak spot the bullet sets the UI count awake and then detaches from it once the correct number is applied to the specific number while despawning
         if (col.gameObject.tag == "Weak Spot")
         {
-            dc.GetDamageNumber = _actualDamage;
+            dc.DamageNumber = _actualDamage;
             _damageText.text = _actualDamage.ToString();
             this.gameObject.transform.DetachChildren();
             Destroy(col.gameObject);
@@ -57,7 +58,7 @@ public class BulletBehavior : MonoBehaviour
         //If it touches the invulnerable spot the bullet sets the UI count awake and then detaches from it once it applies the correct number while despawning
         else if (col.gameObject.tag == "Invulnerable Spot")
         {
-            dc.GetDamageNumber = 0;
+            dc.DamageNumber = 0;
             this.gameObject.transform.DetachChildren();
             Destroy(gameObject);
         }
