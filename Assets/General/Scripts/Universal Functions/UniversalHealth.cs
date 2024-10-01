@@ -21,6 +21,7 @@ public class UniversalHealth : UniversalHealthSystem
     void Start()
     {
         health = new Health(_maxHealth, _maxHealth, _isPlayer);
+        Debug.Log(health.MaxHealth);
     }
     // Update is called once per frame
     void Update()
@@ -49,6 +50,7 @@ public class UniversalHealth : UniversalHealthSystem
     public void HealthDecrease(float _damage)
     {
         health.CurrentHealth -= _damage;
+        Debug.Log(health.CurrentHealth);
     }
     /// <summary>
     /// A way for the health to be healed
