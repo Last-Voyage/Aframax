@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class RippleProjector : MonoBehaviour
 {
     [SerializeField] private MeshRenderer waterMesh;
@@ -17,6 +16,7 @@ public class RippleProjector : MonoBehaviour
     private void Start()
     {
         _camera = GetComponent<Camera>();
+        
         _waterMaterial = waterMesh.sharedMaterial;
         _lastPosition = transform.position;
         _lastScale = _camera.orthographicSize;

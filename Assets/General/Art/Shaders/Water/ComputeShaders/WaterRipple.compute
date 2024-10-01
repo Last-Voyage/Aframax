@@ -1,48 +1,87 @@
-// Each #kernel tells which function to compile; you can have many kernels
+/**************************************************************************
+// File Name :          WaterRipple.compute
+// Author :             Miles Rogers
+// Creation Date :      9/30/2024
+//
+// Brief Description :  Utilizes a progressive blurring/blending
+//                      technique to give the appearance of water
+//                      displacement/advection. 
+**************************************************************************/
+
+// Divided into two passes for
+// better parallelization
 #pragma kernel WaterRipple
 #pragma kernel Blur
 
+// The raw camera input, unprocessed
 Texture2D<float> Camera;
 
+// The output of our previous frame blending pass. We need this so we
+// don't perform our blur pass using pixels that are already blurred
 RWTexture2D<float> PreBlur;
+
+// The final output after applying our box blur effect
 RWTexture2D<float> Result;
 
+// Gets updated by RippleProjector script
 int ImageSize = 128;
 
-#define PI2 6.28319F
-#define E 2.71828F
+// Constant blur kernel of our box blur pass (sample walk)
+#define BLUR_RADIUS 16
 
-#define BLUR_RADIUS 3
+#define PI 3.141592653589F
 
-float GaussianDist(float offset)
+////////////////////////////////////////
+// STEP 1: Perform additive blending
+//         against last capture.
+////////////////////////////////////////
+
+[numthreads(8,8,1)]
+void WaterRipple(uint3 id : SV_DispatchThreadID)
 {
-    float sigmaSquared = BLUR_RADIUS * BLUR_RADIUS;
-    
-    return (1.0F / sqrt(PI2 * sigmaSquared)) *
-        pow(E, -offset * offset) /
-            (2.0F * sigmaSquared);
+    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.15F).r;
+}
+
+////////////////////////////////////////
+// STEP 2: Additive box blur
+////////////////////////////////////////
+
+float GetCoeff(float t, float sigma)
+{
+    return 1.0F / sqrt(2.0F * PI * pow(sigma, 2)) *
+        exp(-(pow(t, 2) * (2.0F * pow(sigma, 2))));
 }
 
 [numthreads(8,8,1)]
 void Blur(uint3 id : SV_DispatchThreadID)
 {
-    float sum = 0.0F;
+    float2 pixelCoord = id.xy;
+    int N = BLUR_RADIUS * 2.0F + 1;
+    float sigma = 10.0F;
 
-    for (int u = -BLUR_RADIUS; u < BLUR_RADIUS; u++)
+    if(pixelCoord.x < ImageSize
+        && pixelCoord.y < ImageSize)
     {
-        for (int v = -BLUR_RADIUS; v < BLUR_RADIUS; v++)
+        float sum = 0.0F;
+
+        for (int i = 0; i < N; i++)
         {
-            sum += PreBlur[id.xy + float2(u, v)];
+            for (int j = 0; j < N; j++)
+            {
+                float2 pc = pixelCoord + float2(
+                    i - BLUR_RADIUS,
+                    j - BLUR_RADIUS
+                );
+
+                pc.x = max(0.0F, pc.x);
+                pc.y = max(0.0F, pc.y);
+                pc.x = min(1.0F, pc.x);
+                pc.y = min(1.0F, pc.y);
+
+                sum += PreBlur[id.xy];
+            }
         }
+
+        Result[id.xy] = sum / (N * N);
     }
-
-    float mean = sum / (BLUR_RADIUS * BLUR_RADIUS);
-
-    Result[id.xy] = saturate(mean);
-}
-
-[numthreads(8,8,1)]
-void WaterRipple (uint3 id : SV_DispatchThreadID)
-{
-    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.76F).r;
 }

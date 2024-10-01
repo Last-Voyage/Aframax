@@ -1,39 +1,126 @@
+/**************************************************************************
+// File Name :          WaterShader.shader
+// Author :             Miles Rogers
+// Creation Date :      9/30/2024
+//
+// Brief Description :  The main water shader. Allows for
+//                      refraction, light interaction, customizable
+//                      wave spectra, object surrounding foam, and
+//                      reactive ripples, if used with the RippleProjector
+//                      prefab.
+//                      
+//                      Also dynamically tessellates based on camera
+//                      distance, which is a majority of this file
+//                      and the reason I didn't implement this in
+//                      ShaderGraph. Feel free to skip past anything
+//                      having to do with the Hull/Domain stages, if
+//                      you just want to tweak the water appearance.
+//                      These stages only concern how the mesh gets
+//                      tessellated.
+**************************************************************************/
+
 Shader "Custom/WaterShader" 
 {
     Properties 
     {
+        // Max allowed tessellation (smaller is higher res)
         _TessellationFactor("Tessellation", Range(0.0, 1.0)) = 1.0
+        
+        // The factor for how much to adjust the tessellation
+        // based on camera distance
         _TessellationBias("Tessellation Bias", Float) = 0.0
+        
+        // How aggressively to hide polygons when off-screen
+        // (Adjust this value if you notice gaps at the edge
+        // of the screen)
         _CullingTolerance("Culling Tolerance", Float) = 0.1
+        
+        // How much Bezier smoothing should be applied
+        // after tessellation?
         _Smoothing("Smoothing", Float) = 1.0
+        
+        // A factor to multiply the evaluated wave height by
         _OverallHeightAdjust("Overall Height Adjust", Float) = 0.5
         
-        _WaveA ("Wave A (dir, steepness, wavelength)", Vector) = (1,0,0.5,10)
-		_WaveB ("Wave B (dir, steepness, wavelength)", Vector) = (0,1,0.25,20)
-		_WaveC ("Wave C (dir, steepness, wavelength)", Vector) = (1,1,0.15,10)
+        // The three wave cascades (they are added together in the
+        // domain stage)
+        //
+        // Expressed as a Vector4: (Direction, Steepness, 
+        // Wavelength X, Wavelength Y)
+        _WaveA ("Wave A (Dir, Steepness, Wavelength)", Vector) = (1, 0, 0.5, 10)
+		_WaveB ("Wave B (Dir, Steepness, Wavelength)", Vector) = (0, 1, 0.25, 20)
+		_WaveC ("Wave C (Dir, Steepness, Wavelength)", Vector) = (1, 1, 0.15, 10)
         
+        // The base water color
         _WaterColor("Water Color", Color) = (0, 0, 1, 1)
+        
+        // The opacity of the overall specular contribution
         _SpecularIntensity("Specular Intensity", Float) = 1.0
+        
+        // The intensity of the evaluated wave normals
         _NormalIntensity("Normal Intensity", Float) = 1.0
+        
+        // The color the water depth fog is multiplied by
         _WaterFogColor ("Water Fog Color", Color) = (0, 0, 0, 0)
+        
+        // Contribution of the water depth fog
 		_WaterFogDensity ("Water Fog Density", Range(0, 2)) = 0.1
+        
+        // The amount to UV warp the water reflections by 
         _RefractionIntensity("Refraction Intensity", Range(0, 1)) = 0.25
+        
+        // The width of the foam around the edges of objects
+        // (calculated via depth-difference)
         _EdgeFoamAmount("Edge Foam Amount", Float) = 5.0
+        
+        // Top-bottom water gradient color
         _TopBottomGradientColor("Top -> Bottom Gradient Color", Color) = (1, 1, 1, 1)
+        
+        // Perlin noise texture
         _PerlinNoise("Perlin Noise", 2D) = "white" {}
+        
+        // The color of the edge foam is multiplied by
         _FoamColor("Foam Color", Color) = (1, 1, 1, 1)
+        
+        // The perlin noise normal map texture (used
+        // for water ripple distortion)
         [Normal] _DetailNormal("Detail Normal", 2D) = "" {}
+        
+        // The intensity of the water ripple
+        // distortion
         _DetailNormalIntensity("Detail Normal Intensity", Float) = 1
         
+        ////////////////////////////
+        // Ripple projection
+        ////////////////////////////
+        
+        // (These are all controlled by a
+        // script, so they are hidden in
+        // the inspector)
+        
+        // The center of the projection
         [HideInInspector] _BoxCenter ("Box Center", Vector) = (0, 0, 0, 0)
+        
+        // The extents of the projection
         [HideInInspector] _BoxSize ("Box Size", Vector) = (10, 10, 10, 0)
         
+        // Size of the render texture used for water ripples
+        // (Needed to generate sobel normal map)
+        [HideInInspector] _TextureSize("Texture Size", Int) = 128
+        
+        // The ripple render texture
         _RippleTex("Ripple Texture", 2D) = "black" {}
+        
+        // The intensity of the render texture
+        // ripples on the water surface
         _RippleIntensity("Ripple Intensity", Float) = 2
+        
+        // Frequency of the ripples
         _RippleTiling("Ripple Tiling", Float) = 2
+        
+        // Speed of the ripples from center
         _RippleSpeed("Ripple Speed", Float) = 0.1
         
-        [HideInInspector] _TextureSize("Texture Size", Int) = 128
     }
     SubShader 
     {
@@ -62,7 +149,10 @@ Shader "Custom/WaterShader"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
-            
+
+            // Unity requires a re-declaration of all
+            // ShaderLab Properties in the SubShader
+            // pass.
             CBUFFER_START(UnityPerMaterial)
                 float _TessellationFactor;
                 float _TessellationBias;
@@ -124,7 +214,10 @@ Shader "Custom/WaterShader"
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            // Vertex shader
+            ////////////////
+            // VERTEX STAGE
+            ////////////////
+
             TessellationControlPoint Vertex(Attributes input)
             {
                 TessellationControlPoint output;
@@ -144,7 +237,13 @@ Shader "Custom/WaterShader"
 
                 return output;
             }
-            
+
+            ////////////////
+            // HULL STAGE
+            ////////////////
+
+            // Determines how our triangles will get
+            // tessellated later.
             [domain("tri")]
             [outputcontrolpoints(3)]
             [outputtopology("triangle_cw")]
@@ -157,7 +256,8 @@ Shader "Custom/WaterShader"
                 return patch[id];
             }
 
-            // Linear normal interpolation
+            // For linear normal interpolation and
+            // smoothing of the tessellated surface
             #define NUM_BEZIER_CONTROL_POINTS 7
 
             // Data struct for how tessellation should be
@@ -449,8 +549,11 @@ Shader "Custom/WaterShader"
             }
 
             ////////////////
-            // DOMAIN
+            // DOMAIN STAGE
             ////////////////
+
+            // What to do with our vertices post-tessellation
+            // Everything "in the domain" of the mesh surface
 
             // Fragment shader input data struct
             struct Interpolators
@@ -610,7 +713,7 @@ Shader "Custom/WaterShader"
             }
 
             ////////////////
-            // FRAGMENT
+            // FRAGMENT STAGE
             ////////////////
 
             // Calculate foam that surrounds the object
@@ -738,9 +841,11 @@ Shader "Custom/WaterShader"
             
             float4 Fragment(Interpolators input) : SV_Target
             {
+                // For any calculation that needs the light
+                // direction vector
                 Light mainLight = GetMainLight();
 
-                // Sample normal map
+                // Sample detail normal map
                 float3 normalData = ((tex2D(
                     _DetailNormal,
                     input.uv * 3.0F -
@@ -780,6 +885,14 @@ Shader "Custom/WaterShader"
                                 uCoord,
                                 vCoord
                         )).r;
+
+                        rippleVal = RangeRemap(
+                            0.01F,
+                            1.0F,
+                            rippleVal
+                        );
+
+                        return rippleVal;
 
                         const float3 calcNormal = SobelNormal(
                             float2(uCoord, vCoord),
@@ -853,7 +966,7 @@ Shader "Custom/WaterShader"
                         underwaterColor +
                         edgeFoam;
 
-                // Pixel output
+                // Pixel color output
                 return float4(
                     finalColor,
                     1.0F
