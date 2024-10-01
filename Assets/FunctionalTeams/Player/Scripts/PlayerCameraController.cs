@@ -19,6 +19,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerCameraController : MonoBehaviour
 {
+    [SerializeField] private GameObject _playerVisuals;
+
     // Variable for the Virtual Camera
     // Unused at the moment, but it'll be here when we eventually need it
     private CinemachineVirtualCamera _virtualCamera;
@@ -68,7 +70,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+        _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
     }
 
     /// <summary>
@@ -104,5 +106,15 @@ public class PlayerCameraController : MonoBehaviour
     private void OnDisable()
     {
         CameraManager.Instance.GetCameraMovementToggleEvent().RemoveListener(ToggleCameraMovement);
+    }
+
+    public void SubscribeInput()
+    {
+        ToggleCameraMovement(true);
+    }
+
+    public void UnsubscribeInput()
+    {
+        ToggleCameraMovement(false);
     }
 }

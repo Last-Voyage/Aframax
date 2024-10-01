@@ -17,6 +17,7 @@ using UnityEngine;
 public class PlayerHarpoonCore : MonoBehaviour
 {
     [SerializeField] private PlayerMovementController _playerMovementController;
+    [SerializeField] private PlayerCameraController _playerCamera;
     [SerializeField] private HarpoonGun _harpoonGun;
 
     private PlayerInputMap _playerInputMap;
@@ -50,7 +51,7 @@ public class PlayerHarpoonCore : MonoBehaviour
     /// </summary>
     private void SubscribeToMovementInput()
     {
-
+        _playerMovementController.SubscribeInput();
     }
 
     /// <summary>
@@ -58,7 +59,7 @@ public class PlayerHarpoonCore : MonoBehaviour
     /// </summary>
     private void SubscribeToCameraInput()
     {
-
+        _playerCamera.SubscribeInput();
     }
 
     /// <summary>
@@ -86,7 +87,7 @@ public class PlayerHarpoonCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToMovementInput()
     {
-
+        _playerMovementController.UnsubscribeInput();
     }
 
     /// <summary>
@@ -94,7 +95,7 @@ public class PlayerHarpoonCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToCameraInput()
     {
-
+        _playerCamera.UnsubscribeInput();
     }
 
     /// <summary>
