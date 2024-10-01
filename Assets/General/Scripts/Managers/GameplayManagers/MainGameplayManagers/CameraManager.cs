@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides functionality to how the camera moves and interacts
@@ -17,6 +18,11 @@ using UnityEngine;
 public class CameraManager : MainGameplayManagerFramework
 {
     public static CameraManager Instance;
+
+    /// <summary>
+    /// Controls the player camera
+    /// </summary>
+    private static UnityEvent<bool> _onCameraMovementToggled;
     #region Base Manager
     public override void SetupInstance()
     {
@@ -30,7 +36,21 @@ public class CameraManager : MainGameplayManagerFramework
     }
     #endregion
 
-    #region Getters
+    #region Events
+    /// <summary>
+    /// Invokes the _onCameraMovementToggled event with the input bool
+    /// </summary>
+    /// <param name="toggle"> the bool to input into the invoked event </param>
+    public void InvokeOnCameraMovementToggle(bool toggle)
+    {
+        _onCameraMovementToggled?.Invoke(toggle);
+    }
+    #endregion
 
+    #region Getters
+    /// <summary>
+    /// Getter for the _onCameraMovementToggled event
+    /// </summary>
+    public UnityEvent<bool> GetCameraMovementToggleEvent() => _onCameraMovementToggled;
     #endregion
 }
