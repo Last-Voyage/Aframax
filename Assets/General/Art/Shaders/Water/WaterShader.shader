@@ -886,14 +886,6 @@ Shader "Custom/WaterShader"
                                 vCoord
                         )).r;
 
-                        rippleVal = RangeRemap(
-                            0.01F,
-                            1.0F,
-                            rippleVal
-                        );
-
-                        return rippleVal;
-
                         const float3 calcNormal = SobelNormal(
                             float2(uCoord, vCoord),
                             input.normalWS,

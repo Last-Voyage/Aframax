@@ -27,7 +27,7 @@ RWTexture2D<float> Result;
 int ImageSize = 128;
 
 // Constant blur kernel of our box blur pass (sample walk)
-#define BLUR_RADIUS 16
+#define BLUR_RADIUS 1
 
 #define PI 3.141592653589F
 
@@ -39,31 +39,28 @@ int ImageSize = 128;
 [numthreads(8,8,1)]
 void WaterRipple(uint3 id : SV_DispatchThreadID)
 {
-    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.15F).r;
+    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.7F).r;
 }
 
 ////////////////////////////////////////
 // STEP 2: Additive box blur
 ////////////////////////////////////////
 
-float GetCoeff(float t, float sigma)
-{
-    return 1.0F / sqrt(2.0F * PI * pow(sigma, 2)) *
-        exp(-(pow(t, 2) * (2.0F * pow(sigma, 2))));
-}
-
 [numthreads(8,8,1)]
 void Blur(uint3 id : SV_DispatchThreadID)
 {
     float2 pixelCoord = id.xy;
-    int N = BLUR_RADIUS * 2.0F + 1;
+    int N = BLUR_RADIUS * 2 + 1;
     float sigma = 10.0F;
 
+    // If out of bounds - do nothing
     if(pixelCoord.x < ImageSize
         && pixelCoord.y < ImageSize)
     {
         float sum = 0.0F;
 
+        // Walk out from current UV coord, average
+        // over all
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
@@ -73,15 +70,10 @@ void Blur(uint3 id : SV_DispatchThreadID)
                     j - BLUR_RADIUS
                 );
 
-                pc.x = max(0.0F, pc.x);
-                pc.y = max(0.0F, pc.y);
-                pc.x = min(1.0F, pc.x);
-                pc.y = min(1.0F, pc.y);
-
-                sum += PreBlur[id.xy];
+                sum += PreBlur[pc.xy];
             }
         }
 
-        Result[id.xy] = sum / (N * N);
+        Result[id.xy] = sum / N;
     }
 }
