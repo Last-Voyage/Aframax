@@ -1,33 +1,24 @@
 {
-    "name": "InputMap",
+    "name": "PlayerInputMap",
     "maps": [
         {
             "name": "Player",
-            "id": "7c47b98f-67e4-4d69-88dc-b72c584d5113",
+            "id": "3f09e6a3-51f5-4107-96d4-60e0b0ae5264",
             "actions": [
                 {
                     "name": "Movement",
                     "type": "PassThrough",
-                    "id": "dd93fe03-5451-4340-8dfb-cbeb5913bd3e",
+                    "id": "eb591c7c-0f3d-486d-acea-80804e771461",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouseX",
-                    "type": "PassThrough",
-                    "id": "4b580074-eeda-4702-961a-adbd2c2a8a17",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseY",
-                    "type": "PassThrough",
-                    "id": "4aec10ce-4e45-4946-b929-f06b3360ba03",
-                    "expectedControlType": "Axis",
+                    "name": "HarpoonButton",
+                    "type": "Button",
+                    "id": "aa80d4fd-ee8d-4409-b4fc-02c693475a30",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -36,7 +27,7 @@
             "bindings": [
                 {
                     "name": "2D Vector",
-                    "id": "6327defb-8e60-4f10-ab02-e742b8f57e70",
+                    "id": "f64c41b5-9b3b-4e56-a642-492f123a3132",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -47,7 +38,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "758a34d5-6e8a-4cb8-9252-6ac06a02ff4d",
+                    "id": "e0143a4f-8c47-49df-b7d8-17db3168c38f",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -58,7 +49,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "5e2ef477-0afc-4d46-bf81-d4aa09ac1572",
+                    "id": "602bfad8-a106-4efe-82c6-74e4287c6677",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -69,7 +60,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "a9a3ca28-ec88-4434-a0e7-451aa6576126",
+                    "id": "481922af-cde3-48ae-9dd9-a3b35782310b",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -80,7 +71,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "8922ef08-4882-484f-b955-2757ab627453",
+                    "id": "421acf00-ea3c-4cb9-9ce0-28c1e8f66230",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -91,23 +82,12 @@
                 },
                 {
                     "name": "",
-                    "id": "c123df4e-fc0c-4f0a-83a0-fe979d6643bc",
-                    "path": "<Mouse>/delta/x",
+                    "id": "30b55e33-ea3f-421c-ae27-6f49bd3466ee",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MouseX",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4c9ef6e1-a6b3-4676-baed-1174487766f0",
-                    "path": "<Mouse>/delta/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseY",
+                    "action": "HarpoonButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
