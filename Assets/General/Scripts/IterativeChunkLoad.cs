@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class IterativeChunkLoad : MonoBehaviour
 {
+    // The entire pool of chunks that can be used
     public List<GameObject> EveryChunk = new List<GameObject>();
 
+    // The current queue of in scene chunks
     private GameObject[] _usedChunks = new GameObject[4];
 
-    // This will be a reference to the object that will be used to determine if the player is far enough away
-    // from the back chunk (where they can't see it anymore), so that the chunk swapping
-    // process can begin
-    private GameObject _chunkSwapObj;
-
-
     #region Pointers
-    [Tooltip("This variable will be used as a pointer for selecting the newFront chunk")]
-    private int _whateverChunkYouWantPtr = 0;
+    [Tooltip("This pointer will select the next chunk in the queue")]
+    private int _chunkQueuePtrPtr = 0;
+
+    // I need to grab the READCHUNKQUEUE
+    [Tooltip("The pointer for the order of chunks, taken from the text document")]
+    private int[] _chunkQueuePtr;
 
     // Pointers for where the chunks are in the every chunk array
     // This is necessary to put chunks back into the unused chunk landing area
@@ -32,22 +32,31 @@ public class IterativeChunkLoad : MonoBehaviour
     }
     #endregion
 
-    [Tooltip("The starting position for placing each of the unused chunks")]
+    [Tooltip("The starting position for placing each of the unused chunks")] // Currently just 0,0,0
     private Vector3 _unusedChunkLandingArea = Vector3.zero;
 
-    [Tooltip("The size of each chunk, that will be used to calculate the midpoint to midpoint of chunks")]
-    private const float DistanceBetweenChunks = 5f;
+    [Tooltip("The size of each chunk. Used to calculate the midpoint to midpoint of chunks")]
+    private const float DistanceBetweenChunks = 10f;
 
+    private void Start()
+    {
+        // Make sure the enviro manager is in the scene for testing
+        // With gameplay manager and universal manager
+        EnvironmentManager.Instance.GetSendingOverChunks().AddListener(ReceiveChunkQueue);
+    }
+
+    private void ReceiveChunkQueue(int[] chunkqueued)
+    {
+        _chunkQueuePtr = chunkqueued;
+    }
+
+    /// <summary>
+    /// I should probably make this an event listener!
+    /// That way, I don't have to keep track of other nonsense!
+    /// </summary>
     private void ChunkChange()
     {
-        _newFrontChunkPtr = _whateverChunkYouWantPtr;
-
-        EveryChunk[_whateverChunkYouWantPtr].transform.position += 
-            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(DistanceBetweenChunks,0,0);
-
-        EveryChunk[_whateverChunkYouWantPtr].SetActive(true);
-
-        _usedChunks[(int)ChunkStates.newFront] = EveryChunk[_whateverChunkYouWantPtr];
+        AddChunk();
 
         // PLACE HOLDER LINE - Put a function here that would cleanup anything that happened in the back chunk
 
@@ -58,12 +67,31 @@ public class IterativeChunkLoad : MonoBehaviour
     }
 
     /// <summary>
+    /// This will get a new front chunk pointer and it will tick up the pointer to the next queue item
+    /// It will take the chunk in queue and move it to the front of the chunks
+    /// It will then set the frontmost chunk active
+    /// Then it will add that chunk to the array that keeps track of where the chunks are
+    /// </summary>
+    private void AddChunk()
+    {
+        _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
+
+        _chunkQueuePtrPtr++;
+
+        EveryChunk[_newFrontChunkPtr].transform.position +=
+            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(DistanceBetweenChunks, 0, 0);
+
+        EveryChunk[_newFrontChunkPtr].SetActive(true);
+
+        _usedChunks[(int)ChunkStates.newFront] = EveryChunk[_newFrontChunkPtr];
+    }
+
+    /// <summary>
     /// This will take the, about to no longer be, back chunk
     /// And teleport it to a position that is based on where it is in the array/list
     /// It takes the chunk's array/list position and multiplies it by the distance between chunks, meaning,
     /// all of them will be properly spaced out
     /// It also bases that off of the unused chunk landing area
-    /// (Will this be needed?) - idk
     /// </summary>
     private void SendChunksAway()
     {
@@ -87,12 +115,12 @@ public class IterativeChunkLoad : MonoBehaviour
         _newFrontChunkPtr = 0; // This ptr is freed until a new chunk is going to be added
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+
+    private void OnDisable()
     {
-        if(collision.gameObject == _chunkSwapObj)
-        {
-            // Get a variable from the collision.gameObjects that will say what the newest loaded chunk will be
-            ChunkChange();
-        }
+        EnvironmentManager.Instance.GetSendingOverChunks().RemoveListener(ReceiveChunkQueue);
     }
 }
+
+

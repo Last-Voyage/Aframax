@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides the functionality behind the way the environment interacts with other elements
@@ -18,6 +19,9 @@ using UnityEngine;
 public class EnvironmentManager : MainGameplayManagerFramework
 {
     public static EnvironmentManager Instance;
+
+    private UnityEvent<int[]> _sendingOverChunks = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -31,6 +35,6 @@ public class EnvironmentManager : MainGameplayManagerFramework
     #endregion
 
     #region Getters
-
+    public UnityEvent<int[]> GetSendingOverChunks() => _sendingOverChunks;
     #endregion
 }
