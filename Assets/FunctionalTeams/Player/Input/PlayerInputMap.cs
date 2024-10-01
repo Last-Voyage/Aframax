@@ -37,24 +37,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""MouseX"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""68314e46-a786-4d17-a30b-5ef807c3a5ad"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MouseY"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""87e1c1c0-6803-4197-82de-efe879b686f6"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""FireHarpoon"",
                     ""type"": ""Button"",
                     ""id"": ""aa80d4fd-ee8d-4409-b4fc-02c693475a30"",
@@ -184,7 +166,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
         m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
-        m_Player_HarpoonButton = m_Player.FindAction("HarpoonButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -252,7 +233,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FireHarpoon;
     private readonly InputAction m_Player_FocusHarpoon;
     private readonly InputAction m_Player_ReelHarpoon;
-    private readonly InputAction m_Player_HarpoonButton;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -263,7 +243,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @FireHarpoon => m_Wrapper.m_Player_FireHarpoon;
         public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
         public InputAction @ReelHarpoon => m_Wrapper.m_Player_ReelHarpoon;
-        public InputAction @HarpoonButton => m_Wrapper.m_Player_HarpoonButton;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -291,9 +270,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @ReelHarpoon.started += instance.OnReelHarpoon;
             @ReelHarpoon.performed += instance.OnReelHarpoon;
             @ReelHarpoon.canceled += instance.OnReelHarpoon;
-            @HarpoonButton.started += instance.OnHarpoonButton;
-            @HarpoonButton.performed += instance.OnHarpoonButton;
-            @HarpoonButton.canceled += instance.OnHarpoonButton;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -316,9 +292,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @ReelHarpoon.started -= instance.OnReelHarpoon;
             @ReelHarpoon.performed -= instance.OnReelHarpoon;
             @ReelHarpoon.canceled -= instance.OnReelHarpoon;
-            @HarpoonButton.started -= instance.OnHarpoonButton;
-            @HarpoonButton.performed -= instance.OnHarpoonButton;
-            @HarpoonButton.canceled -= instance.OnHarpoonButton;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -344,6 +317,5 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnFireHarpoon(InputAction.CallbackContext context);
         void OnFocusHarpoon(InputAction.CallbackContext context);
         void OnReelHarpoon(InputAction.CallbackContext context);
-        void OnHarpoonButton(InputAction.CallbackContext context);
     }
 }
