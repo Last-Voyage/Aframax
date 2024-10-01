@@ -95,8 +95,10 @@ public class BezierCurveEditor : Editor
     /// </summary>
     private void OnSceneGUI()
     {
-        // If there is no curve to show, don't display it
-        if (ActiveBezier.BezierPoints.Length == 0)
+        // Edge cases
+        if (ActiveBezier == null
+            || ActiveBezier.BezierPoints == null
+            || ActiveBezier.BezierPoints.Length == 0)
         {
             return;
         }

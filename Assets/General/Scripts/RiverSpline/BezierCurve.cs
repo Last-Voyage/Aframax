@@ -20,11 +20,14 @@ public class BezierCurve : MonoBehaviour
 {
     [Header("Line Settings")]
     public BezierPoint[] BezierPoints;
-    public float CurveIntensity;
+    [Tooltip("How intense the curve is relative to the points")]
+    public float CurveIntensity = 2;
 
     [Header("Editor Settings")]
-    [Min(0)] public float HandleSize;
-    [Min(1)] public int CurveSmoothness;
+    [Tooltip("The size of the scene handles")]
+    [Min(0)] public float HandleSize = 1;
+    [Tooltip("How many lines make up each curve (only in the scene view)")]
+    [Min(1)] public int CurveSmoothness = 15;
 
     /// <summary>
     /// Find the linearly interpolated position between two bezier points
