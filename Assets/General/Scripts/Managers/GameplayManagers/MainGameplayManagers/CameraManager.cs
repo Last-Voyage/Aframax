@@ -22,7 +22,7 @@ public class CameraManager : MainGameplayManagerFramework
     /// <summary>
     /// Controls the player camera
     /// </summary>
-    private static UnityEvent<bool> _onCameraMovementToggled;
+    private static UnityEvent<bool> _onCameraMovementToggled = new();
     #region Base Manager
     public override void SetupInstance()
     {
