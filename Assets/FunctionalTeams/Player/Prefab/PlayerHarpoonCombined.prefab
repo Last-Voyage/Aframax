@@ -211,6 +211,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovementSpeed: 10
+  _focusSpeedSlowTime: 2
+  _focusMoveSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _playerForwards: {fileID: 333117514302688926}
 --- !u!114 &5137148187237992625
 MonoBehaviour:
@@ -349,7 +374,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 60
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -819,7 +844,33 @@ MonoBehaviour:
   _reelDuration: 3
   _gunCooldown: 2
   _holdToRetractMode: 0
-  _playerLookDirection: {fileID: 8080776813772587216}
+  _focusTime: 2
+  _focusStartingInaccuracy: 0.25
+  _focusCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _playerLookDirection: {fileID: 333117514302688926}
   _harpoonShootTrigger: shoot
   _harpoonRetractTrigger: drawBack
   _harpoonTip: {fileID: 4980733117625036336}
@@ -828,6 +879,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _harpoonShoot: {fileID: -5070425021129914811, guid: a9035e5084fec0e4a81fdaa78201ec2c,
+    type: 3}
+  _harpoonFocus: {fileID: 1612608914095428297, guid: a9035e5084fec0e4a81fdaa78201ec2c,
     type: 3}
   _harpoonRetract: {fileID: 8477076220076789858, guid: a9035e5084fec0e4a81fdaa78201ec2c,
     type: 3}

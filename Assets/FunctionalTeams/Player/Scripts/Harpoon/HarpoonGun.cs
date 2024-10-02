@@ -26,6 +26,15 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("if true then you have to hold mouse down to retract fully. if false retracts automatically")]
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
 
+    [Space]
+    [Tooltip("The time it takes to reach max focus")]
+    [SerializeField] private float _focusTime;
+    [Tooltip("The accuracy that you start at when you begin focusing")]
+    [Range(0, .5f)]
+    [SerializeField] private float _focusStartingInaccuracy;
+    [Tooltip("The curve at which the accuracy increases while focusing")]
+    [SerializeField] private AnimationCurve _focusCurve;
+
     [Header("Harpoon Functionality Dependencies")]
     [Tooltip("Transform of whatever the cameras rotation is. Probably the cinemachine camera object")]
     [SerializeField] private Transform _playerLookDirection;
@@ -41,6 +50,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private LayerMask _excludeLayers;
     [Tooltip("The input action for shooting")]
     [SerializeField] private InputActionReference _harpoonShoot;
+    [Tooltip("The input action for focusing")]
+    [SerializeField] private InputActionReference _harpoonFocus;
     [Tooltip("The input action for retracting")]
     [SerializeField] private InputActionReference _harpoonRetract;
 
@@ -62,6 +73,9 @@ public class HarpoonGun : MonoBehaviour
     private Vector3 _fireDir;
     private float _currentDist;
     private bool _isShooting;
+    private bool _isFocusing = false;
+    private Coroutine _focusingCoroutine;
+    private float _currentFocus = 0;
     private RaycastHit _hit;
     private float _currentReelDur;
     private HarpoonRope _harpoonRope;
@@ -83,6 +97,9 @@ public class HarpoonGun : MonoBehaviour
     public void SubscribeInput()
     {
         _harpoonShoot.action.performed += FireHarpoon;
+
+        _harpoonFocus.action.started += FocusHarpoon;
+        _harpoonFocus.action.canceled += StopHarpoonFocusing;
     }
 
     /// <summary>
@@ -91,6 +108,9 @@ public class HarpoonGun : MonoBehaviour
     public void UnsubscribeInput()
     {
         _harpoonShoot.action.performed -= FireHarpoon;
+
+        _harpoonFocus.action.started -= FocusHarpoon;
+        _harpoonFocus.action.canceled -= StopHarpoonFocusing;
     }
 
     /// <summary>
@@ -99,7 +119,7 @@ public class HarpoonGun : MonoBehaviour
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //dont shoot if already shot
-        if(_harpoonSpear != null || _isReeling)
+        if(_harpoonSpear != null || _isReeling || !_isFocusing)
         {
             return;
         }
@@ -108,7 +128,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonSpear.SetActive(false);
         _harpoonSpear.transform.GetChild(0).rotation = _playerLookDirection.rotation;
         _isShooting = true;
-        _fireDir = _playerLookDirection.forward; // In the direction the player is looking
+        _fireDir = GetHarpoonDirectionWithFocus(); // In the direction the player is looking
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
@@ -118,6 +138,68 @@ public class HarpoonGun : MonoBehaviour
         OnShotEvent(this);
     }
 
+    /// <summary>
+    /// Adds spread to the weapon relative to focus
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 GetHarpoonDirectionWithFocus()
+    {
+        //Multiplies the direction the player is looking by a random variance scaled by current focus
+        return _playerLookDirection.forward + (UnityEngine.Random.insideUnitSphere * _currentFocus) ;
+    }
+
+    /// <summary>
+    /// Starts focusing the weapon
+    /// </summary>
+    /// <param name="context"></param>
+    private void FocusHarpoon(InputAction.CallbackContext context)
+    {
+        _isFocusing = true;
+        _focusingCoroutine = StartCoroutine(FocusProcess());
+
+        //THIS WILL BE REMOVED LATER AND WILL USE EVENTS
+        PlayerMovementController tempMovement = GetComponentInParent<PlayerMovementController>();
+        tempMovement.StartHarpoonSpeedSlowdown();
+    }
+
+    /// <summary>
+    /// The process of focusing the weapon over time
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator FocusProcess()
+    {
+        float focusCompletion = 0;
+        while(focusCompletion < 1)
+        {
+            //Increases the progress on focusing
+            focusCompletion += Time.deltaTime / _focusTime;
+
+            //Sets the current focus based on the animation graph and inaccuracy scalar
+            _currentFocus = _focusCurve.Evaluate(focusCompletion) * _focusStartingInaccuracy;
+
+            yield return null;
+        }
+        _currentFocus = 0;
+    }
+
+    /// <summary>
+    /// Stops the focusing of the weapon
+    /// </summary>
+    /// <param name="context"></param>
+    private void StopHarpoonFocusing(InputAction.CallbackContext context)
+    {
+        StopCoroutine(_focusingCoroutine);
+        _currentFocus = 0;
+        _isFocusing = false;
+
+        //THIS WILL BE REMOVED LATER AND WILL USE EVENTS
+        PlayerMovementController tempMovement = GetComponentInParent<PlayerMovementController>();
+        tempMovement.StopHarpoonSpeedSlowdown();
+    }
+
+    /// <summary>
+    /// Enables the harpoon
+    /// </summary>
     private void SetHarpoonActive()
     {
         //delays visual of harpoon appearing for better appearance

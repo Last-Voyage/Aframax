@@ -28,6 +28,13 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
+    [Space]
+    [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+    private float _currentFocusMoveSpeedMultiplier = 1;
+
+    private Coroutine _focusSpeedCoroutine;
+
     [SerializeField] private Transform _playerForwards;
 
     /// <summary>
@@ -123,7 +130,8 @@ public class PlayerMovementController : MonoBehaviour
         // in certain directions in the world
         // By manipulating them, we can move the character
         Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
-            _playerForwards.transform.forward * moveDir.y) * _playerMovementSpeed;
+            _playerForwards.transform.forward * moveDir.y) * 
+            _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
 
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
 
@@ -139,6 +147,41 @@ public class PlayerMovementController : MonoBehaviour
     {
         return new Vector3(0, _rigidBody.velocity.y, 0);
     }
+
+    #region Harpoon Slowdown
+    /// <summary>
+    /// Will be reworked later to be private by using events, can't do so atm as 
+    public void StartHarpoonSpeedSlowdown()
+    {
+        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+    }
+
+    /// <summary>
+    /// The process of slowing down the player while focusing
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedSlowdownProcess()
+    {
+        float slowCompletion = 0;
+        while (slowCompletion < 1)
+        {
+            //Increases the progress on slowdown
+            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
+
+            //Sets the current speed based on the animation graph
+            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
+
+            yield return null;
+        }
+    }
+
+    public void StopHarpoonSpeedSlowdown()
+    {
+        _currentFocusMoveSpeedMultiplier = 1;
+        StopCoroutine(_focusSpeedCoroutine);
+    }
+
+    #endregion
 
     /// <summary>
     /// Activates or deactivates the movement coroutine based on the input boolean

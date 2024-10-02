@@ -24,6 +24,10 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     private static UnityEvent<bool> _onMovementToggled = new();
 
+    private static UnityEvent _harpoonFocusStartEvent = new();
+    private static UnityEvent _harpoonFocusMaxEvent = new();
+    private static UnityEvent _harpoonFocusEndEvent = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
