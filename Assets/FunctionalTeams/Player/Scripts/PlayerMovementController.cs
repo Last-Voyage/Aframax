@@ -28,6 +28,8 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
+    [SerializeField] private Transform _playerForwards;
+
     /// <summary>
     /// Variables that capture user input
     /// </summary>
@@ -49,10 +51,10 @@ public class PlayerMovementController : MonoBehaviour
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized.
     /// </summary>
-    void Start()
+    private void Start()
     {
         // Initialize input variables and the Rigidbody
-        InitializeInput();
+        SubscribeInput();
         InitializeRigidbody();
 
         // Run the movement coroutine
@@ -62,11 +64,17 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Initializes all input variables
     /// </summary>
-    private void InitializeInput()
+    public void SubscribeInput()
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
+
         _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
+    }
+
+    public void UnsubscribeInput()
+    {
+        _movementInput = null;
     }
 
     /// <summary>
@@ -98,6 +106,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         Vector3 horizontalMovement = HandleHorizontalMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
+        verticalMovement = Vector3.zero;
 
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
@@ -113,7 +122,10 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y) * _playerMovementSpeed;
+        Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
+            _playerForwards.transform.forward * moveDir.y) * _playerMovementSpeed;
+
+        newMovement = new Vector3(newMovement.x, 0, newMovement.z);
 
         // Move the player
         return newMovement;
