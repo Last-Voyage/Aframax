@@ -39,8 +39,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void Awake()
     {
-        _harpoonGun = GetComponentInParent<HarpoonGun>();
-        _lr = GetComponentInChildren<LineRenderer>();
+        _harpoonGun = GetComponent<HarpoonGun>();
+        _lr = GetComponent<LineRenderer>();
         _spring = new Spring();
         _spring.SetTarget(0);
     }

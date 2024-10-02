@@ -22,7 +22,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Controls the player's movement
     /// </summary>
-    private static UnityEvent<bool> _onMovementToggled = new();
+    private static UnityEvent<bool> _onMovementToggled;
 
     #region Base Manager
     public override void SetupInstance()
