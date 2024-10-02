@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UniversalHealth : UniversalHealthSystem
 {
@@ -16,6 +17,11 @@ public class UniversalHealth : UniversalHealthSystem
     [SerializeField] private float _maxHealth;
     [Tooltip("Determines if player or not")]
     [SerializeField] private bool _isPlayer;
+
+    /// Events to be called outside Universal Health
+    private UnityEvent<float> _healthIncrease = new();
+    private UnityEvent<float> _healthDecrease = new();
+
     //The health assets and variables that will be used derive from here
     private Health health;
     void Start()
@@ -26,7 +32,7 @@ public class UniversalHealth : UniversalHealthSystem
     void Update()
     {
         //When a wave clears health goes back to max
-        if (health.WaveClear == true && health.IsPlayer == true)
+        if (health.WaveClear && health.IsPlayer)
         {
             health.CurrentHealth = health.MaxHealth;
             health.WaveClear = false;
@@ -42,11 +48,13 @@ public class UniversalHealth : UniversalHealthSystem
             health.CurrentHealth = health.MaxHealth;
         }
     }
+
+
     /// <summary>
     /// A way for health to be damaged
     /// </summary>
     /// <param name="_damage"></param>
-    public void HealthDecrease(float _damage)
+    private void HealthDecrease(float _damage)
     {
         health.CurrentHealth -= _damage;
     }
@@ -54,8 +62,14 @@ public class UniversalHealth : UniversalHealthSystem
     /// A way for the health to be healed
     /// </summary>
     /// <param name="_heal"></param>
-    public void HealthIncrease(float _heal)
+    private void HealthIncrease(float _heal)
     {
+        _healthIncrease?.Invoke(_heal);
         health.CurrentHealth += _heal;
     }
+
+    //#Event Getters
+   // public UnityEvent<float> GetHealthIncrease() => _healthIncrease;
+    //#endregion
+
 }
