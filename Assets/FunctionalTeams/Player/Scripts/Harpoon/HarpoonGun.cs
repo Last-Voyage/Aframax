@@ -82,11 +82,6 @@ public class HarpoonGun : MonoBehaviour
 
     private PlayerInputMap _playerInputMap;
 
-    //These events could probably be moved into the player manager later
-    //events
-    public static event Action<HarpoonGun> OnShotEvent;
-    public static event Action<HarpoonGun> OnRetractEvent;
-
     private void Awake(){
         _harpoonRope = GetComponent<HarpoonRope>();
         _harpoonAnimator = GetComponent<Animator>();
@@ -132,10 +127,10 @@ public class HarpoonGun : MonoBehaviour
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
-        
+
         //Camera shake here when combined with Stapay
 
-        OnShotEvent(this);
+        PlayerManager.Instance.InvokeHarpoonFiredEvent();
     }
 
     /// <summary>
@@ -148,6 +143,7 @@ public class HarpoonGun : MonoBehaviour
         return _playerLookDirection.forward + (UnityEngine.Random.insideUnitSphere * _currentFocus) ;
     }
 
+    #region Focusing
     /// <summary>
     /// Starts focusing the weapon
     /// </summary>
@@ -157,9 +153,7 @@ public class HarpoonGun : MonoBehaviour
         _isFocusing = true;
         _focusingCoroutine = StartCoroutine(FocusProcess());
 
-        //THIS WILL BE REMOVED LATER AND WILL USE EVENTS
-        PlayerMovementController tempMovement = GetComponentInParent<PlayerMovementController>();
-        tempMovement.StartHarpoonSpeedSlowdown();
+        PlayerManager.Instance.InvokeHarpoonFocusStartEvent();
     }
 
     /// <summary>
@@ -192,10 +186,10 @@ public class HarpoonGun : MonoBehaviour
         _currentFocus = 0;
         _isFocusing = false;
 
-        //THIS WILL BE REMOVED LATER AND WILL USE EVENTS
-        PlayerMovementController tempMovement = GetComponentInParent<PlayerMovementController>();
-        tempMovement.StopHarpoonSpeedSlowdown();
+        PlayerManager.Instance.InvokeHarpoonEndEvent();
     }
+
+    #endregion
 
     /// <summary>
     /// Enables the harpoon
@@ -281,8 +275,11 @@ public class HarpoonGun : MonoBehaviour
         if(!_holdToRetractMode)
         {
             //cause the wave action again when reeling
-            OnRetractEvent(this);
-            OnShotEvent(this);
+
+            //Not entirely sure why its set up to do both events, but I'm simply
+            //replicating the current event structure in the player manager
+            PlayerManager.Instance.InvokeHarpoonRetractEvent();
+            PlayerManager.Instance.InvokeHarpoonFiredEvent();
         }
         // Lerp the harpoon back to the player over time
         var startPos = _harpoonSpear.transform.position;
@@ -298,8 +295,10 @@ public class HarpoonGun : MonoBehaviour
                     {
                         startedRetracting = true;
                         //cause the wave action again when reeling
-                        OnRetractEvent(this);
-                        OnShotEvent(this);
+                        //Not entirely sure why its set up to do both events, but I'm simply
+                        //replicating the current event structure in the player manager
+                        PlayerManager.Instance.InvokeHarpoonRetractEvent();
+                        PlayerManager.Instance.InvokeHarpoonFiredEvent();
                     }
                     _isShooting = true;
                     _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
@@ -327,7 +326,8 @@ public class HarpoonGun : MonoBehaviour
         }
         //Camera shake here when combined with Stapay
         StartCoroutine(ResetHarpoon());
-        OnRetractEvent(this);
+
+        PlayerManager.Instance.InvokeHarpoonRetractEvent();
     }
 
     /// <summary>

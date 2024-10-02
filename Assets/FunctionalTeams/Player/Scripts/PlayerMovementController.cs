@@ -62,6 +62,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         // Initialize input variables and the Rigidbody
         SubscribeInput();
+        SubscribeToEvents();
         InitializeRigidbody();
 
         // Run the movement coroutine
@@ -79,9 +80,21 @@ public class PlayerMovementController : MonoBehaviour
         _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
     }
 
+    /// <summary>
+    /// Unsubscribes from all input
+    /// </summary>
     public void UnsubscribeInput()
     {
         _movementInput = null;
+    }
+
+    /// <summary>
+    /// Subscribes to all events not relating to input
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -150,8 +163,9 @@ public class PlayerMovementController : MonoBehaviour
 
     #region Harpoon Slowdown
     /// <summary>
-    /// Will be reworked later to be private by using events, can't do so atm as 
-    public void StartHarpoonSpeedSlowdown()
+    /// Starts the slowdown that is associated with focusing the weapon
+    /// </summary>
+    private void StartHarpoonSpeedSlowdown()
     {
         _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
     }
@@ -175,7 +189,10 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
 
-    public void StopHarpoonSpeedSlowdown()
+    /// <summary>
+    /// Stops the slowdown from focusing the harpoon
+    /// </summary>
+    private void StopHarpoonSpeedSlowdown()
     {
         _currentFocusMoveSpeedMultiplier = 1;
         StopCoroutine(_focusSpeedCoroutine);

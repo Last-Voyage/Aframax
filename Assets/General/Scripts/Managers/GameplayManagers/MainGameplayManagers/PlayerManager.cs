@@ -24,6 +24,9 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     private static UnityEvent<bool> _onMovementToggled = new();
 
+    private static UnityEvent _harpoonFiredEvent = new();
+    private static UnityEvent _harpoonRetractEvent = new();
+
     private static UnityEvent _harpoonFocusStartEvent = new();
     private static UnityEvent _harpoonFocusMaxEvent = new();
     private static UnityEvent _harpoonFocusEndEvent = new();
@@ -49,6 +52,38 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onMovementToggled?.Invoke(toggle);
     }
+
+    public void InvokeHarpoonFiredEvent()
+    {
+        _harpoonFiredEvent?.Invoke();
+    }
+
+    public void InvokeHarpoonRetractEvent()
+    {
+        _harpoonRetractEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the harpoon focus start event
+    /// </summary>
+    public void InvokeHarpoonFocusStartEvent()
+    {
+        _harpoonFocusStartEvent?.Invoke();
+    }
+    /// <summary>
+    /// Invokes the harpoon focus max event
+    /// </summary>
+    public void InvokeHarpoonFocusMaxEvent()
+    {
+        _harpoonFocusMaxEvent?.Invoke();
+    }
+    /// <summary>
+    /// Invokes the harpoon focus end event
+    /// </summary>
+    public void InvokeHarpoonEndEvent()
+    {
+        _harpoonFocusEndEvent?.Invoke();
+    }
     #endregion
 
     #region Getters
@@ -56,5 +91,10 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Getter for the _onMovementToggled event
     /// </summary>
     public UnityEvent<bool> GetMovementToggleEvent() => _onMovementToggled;
+    public UnityEvent GetHarpoonFiredEvent() => _harpoonFiredEvent;
+    public UnityEvent GetHarpoonRetractEvent() => _harpoonRetractEvent;
+    public UnityEvent GetHarpoonFocusStartEvent() => _harpoonFocusStartEvent;
+    public UnityEvent GetHarpoonFocusMaxEvent() => _harpoonFocusMaxEvent;
+    public UnityEvent GetHarpoonFocusEndEvent() => _harpoonFocusEndEvent;
     #endregion
 }
