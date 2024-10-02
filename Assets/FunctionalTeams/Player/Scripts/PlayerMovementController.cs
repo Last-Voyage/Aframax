@@ -51,7 +51,7 @@ public class PlayerMovementController : MonoBehaviour
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized.
     /// </summary>
-    void Start()
+    private void Start()
     {
         // Initialize input variables and the Rigidbody
         SubscribeInput();

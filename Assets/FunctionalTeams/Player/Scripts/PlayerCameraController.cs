@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerCameraController.cs
 // Author:          Andrew Stapay
+// Contributor      Ryan Swanson
 // Creation Date:   September 19, 2024
 //
 // Description:     Implementation of the basic camera control for a player 
@@ -108,11 +109,17 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetCameraMovementToggleEvent().RemoveListener(ToggleCameraMovement);
     }
 
+    /// <summary>
+    /// Enables all camera player input
+    /// </summary>
     public void SubscribeInput()
     {
         ToggleCameraMovement(true);
     }
 
+    /// <summary>
+    /// Disables all camera player input
+    /// </summary>
     public void UnsubscribeInput()
     {
         ToggleCameraMovement(false);
