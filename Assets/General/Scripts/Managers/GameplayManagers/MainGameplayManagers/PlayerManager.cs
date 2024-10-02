@@ -53,11 +53,17 @@ public class PlayerManager : MainGameplayManagerFramework
         _onMovementToggled?.Invoke(toggle);
     }
 
+    /// <summary>
+    /// Invokes the harpoon fired event
+    /// </summary>
     public void InvokeHarpoonFiredEvent()
     {
         _harpoonFiredEvent?.Invoke();
     }
 
+    /// <summary>
+    /// Invokes the harpoon retract event
+    /// </summary>
     public void InvokeHarpoonRetractEvent()
     {
         _harpoonRetractEvent?.Invoke();
