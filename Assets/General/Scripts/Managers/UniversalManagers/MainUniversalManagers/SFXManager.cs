@@ -45,8 +45,7 @@ public class SFXManager : MonoBehaviour
     /// <summary>
     /// Plays an audio event at a specific position
     /// </summary>
-    /// <param name="eventReference"></param>
-    /// <param name="position"></param>
+    /// <param name="eventReference">reference to the FMOD SFX event </param>
     private void PlayOneShotSFX(EventReference eventReference)
     {
         if(eventReference.IsNull)

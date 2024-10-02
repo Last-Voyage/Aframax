@@ -12,6 +12,7 @@ using FMOD.Studio;
 using UnityEngine;
 using System;
 using UnityEngine.UIElements;
+using static UnityEngine.UI.Image;
 
 /// <summary>
 /// Provides the functionality behind all audio
@@ -20,8 +21,6 @@ using UnityEngine.UIElements;
 public class AudioManager : MainUniversalManagerFramework
 {
     public static AudioManager Instance;
-
-    public static Action<EventReference, Vector3> APlaySoundAtPosition;
 
     #region Base Manager
     public override void SetupInstance()

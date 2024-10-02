@@ -7,21 +7,39 @@
                     game. e.g music, background audio, etc
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 
+/// <summary>
+/// Manages audio that persists throughout the game
+/// </summary>
 public class PersistentSoundManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private EventReference _ambientSound;
+
+    private void Start()
     {
-        
+        StartBackgroundAudio();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Starts playing an continuous background audio
+    /// </summary>
+    private void StartBackgroundAudio()
     {
-        
+        PlayPersistentAudio(_ambientSound);
+    }
+
+    /// <summary>
+    /// Starts an instance of the persistent audio to play
+    /// </summary>
+    /// <param name="eventReference"></param>
+    private void PlayPersistentAudio(EventReference eventReference)
+    {
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstance.start();
+
+        eventInstance.release();
     }
 }
