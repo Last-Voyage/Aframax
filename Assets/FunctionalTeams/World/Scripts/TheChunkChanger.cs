@@ -9,6 +9,8 @@ using UnityEngine;
 
 public class TheChunkChanger : MonoBehaviour
 {
+    private const string _TAG_CHECK_NAME = "BackOfBoat";
+
     /// <summary>
     /// When the object attached to this script touches the end of the boat object; it 
     /// Fires off the event to change chunks
@@ -16,8 +18,7 @@ public class TheChunkChanger : MonoBehaviour
     /// <param name="collision">The object that is interacting with the trigger</param>
     private void OnTriggerEnter(Collider collision)
     {
-        // The conditional should be changed
-        if (collision.gameObject.name == "TempObjForChunkLoading")
+        if (collision.gameObject.CompareTag(_TAG_CHECK_NAME))
         {
             EnvironmentManager.Instance.SendChangeTheChunk()?.Invoke();
         }
