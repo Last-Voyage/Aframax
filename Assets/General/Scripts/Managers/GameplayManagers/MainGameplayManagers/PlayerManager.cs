@@ -31,13 +31,6 @@ public class PlayerManager : MainGameplayManagerFramework
     private static UnityEvent _harpoonFocusMaxEvent = new();
     private static UnityEvent _harpoonFocusEndEvent = new();
 
-    private static UnityEvent _harpoonFiredEvent = new();
-    private static UnityEvent _harpoonRetractEvent = new();
-
-    private static UnityEvent _harpoonFocusStartEvent = new();
-    private static UnityEvent _harpoonFocusMaxEvent = new();
-    private static UnityEvent _harpoonFocusEndEvent = new();
-
     #region Base Manager
     public override void SetupInstance()
     {
