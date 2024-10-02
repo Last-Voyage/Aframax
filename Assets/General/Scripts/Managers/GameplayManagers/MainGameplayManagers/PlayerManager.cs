@@ -45,6 +45,44 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onMovementToggled?.Invoke(toggle);
     }
+
+    /// <summary>
+    /// Invokes the harpoon fired event
+    /// </summary>
+    public void InvokeHarpoonFiredEvent()
+    {
+        _harpoonFiredEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the harpoon retract event
+    /// </summary>
+    public void InvokeHarpoonRetractEvent()
+    {
+        _harpoonRetractEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the harpoon focus start event
+    /// </summary>
+    public void InvokeHarpoonFocusStartEvent()
+    {
+        _harpoonFocusStartEvent?.Invoke();
+    }
+    /// <summary>
+    /// Invokes the harpoon focus max event
+    /// </summary>
+    public void InvokeHarpoonFocusMaxEvent()
+    {
+        _harpoonFocusMaxEvent?.Invoke();
+    }
+    /// <summary>
+    /// Invokes the harpoon focus end event
+    /// </summary>
+    public void InvokeHarpoonEndEvent()
+    {
+        _harpoonFocusEndEvent?.Invoke();
+    }
     #endregion
 
     #region Getters
