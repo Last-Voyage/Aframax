@@ -9,24 +9,30 @@
 **************************************************************************/
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// Responsible for setting up the camera render textures, the compute
+/// shader, and provides coordinates to the main water shader for the
+/// ripple projection.
+/// </summary>
 public class RippleProjector : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer waterMesh;
+    [SerializeField] private MeshRenderer _waterMesh;
     
-    [SerializeField] private ComputeShader computeShader;
+    [SerializeField] private ComputeShader _computeShader;
     
     // The direct output from the camera
-    [SerializeField] private RenderTexture cameraTexture;
+    [SerializeField] private RenderTexture _cameraTexture;
     
     // The blending output before it is blurred by the compute shader
-    [SerializeField] private RenderTexture preBlurTexture;
+    [SerializeField] private RenderTexture _preBlurTexture;
     
     // The final blur output from the compute shader
-    [SerializeField] private RenderTexture outputTexture;
+    [SerializeField] private RenderTexture _outputTexture;
     
     // The resolution of the render texture
-    [SerializeField] private int resolution = 128;
+    [SerializeField] private int _resolution = 128;
     
     private int _cameraTextureID = Shader.PropertyToID("Camera");
     private int _preBlurTextureID = Shader.PropertyToID("PreBlur");
@@ -49,40 +55,40 @@ public class RippleProjector : MonoBehaviour
     {
         _camera = GetComponent<Camera>();
         
-        _waterMaterial = waterMesh.sharedMaterial;
+        _waterMaterial = _waterMesh.sharedMaterial;
         _lastPosition = transform.position;
         _lastScale = _camera.orthographicSize;
         
         // Set RT dimensions
-        cameraTexture.width = resolution;
-        cameraTexture.height = resolution;
+        _cameraTexture.width = _resolution;
+        _cameraTexture.height = _resolution;
 
-        preBlurTexture.width = resolution;
-        preBlurTexture.height = resolution;
+        _preBlurTexture.width = _resolution;
+        _preBlurTexture.height = _resolution;
 
-        outputTexture.width = resolution;
-        outputTexture.height = resolution;
+        _outputTexture.width = _resolution;
+        _outputTexture.height = _resolution;
         
         UpdateShaderData();
         
         // Find our "Main" function
-        _kernelID = computeShader.FindKernel("WaterRipple");
-        _blurKernelID = computeShader.FindKernel("Blur");
+        _kernelID = _computeShader.FindKernel("WaterRipple");
+        _blurKernelID = _computeShader.FindKernel("Blur");
         
         // Setup render textures
-        computeShader.SetTexture(_kernelID, _cameraTextureID, cameraTexture);
-        computeShader.SetTexture(_kernelID, _preBlurTextureID, preBlurTexture);
-        computeShader.SetTexture(_kernelID, _outputTextureID, outputTexture);
+        _computeShader.SetTexture(_kernelID, _cameraTextureID, _cameraTexture);
+        _computeShader.SetTexture(_kernelID, _preBlurTextureID, _preBlurTexture);
+        _computeShader.SetTexture(_kernelID, _outputTextureID, _outputTexture);
 
-        computeShader.SetTexture(_blurKernelID, _preBlurTextureID, preBlurTexture);
-        computeShader.SetTexture(_blurKernelID, _outputTextureID, outputTexture);
+        _computeShader.SetTexture(_blurKernelID, _preBlurTextureID, _preBlurTexture);
+        _computeShader.SetTexture(_blurKernelID, _outputTextureID, _outputTexture);
         
-        computeShader.SetInt(_imageSizeID, resolution);
+        _computeShader.SetInt(_imageSizeID, _resolution);
         
         // Dispatch
-        int groups = Mathf.CeilToInt(resolution / 8.0F);
-        computeShader.Dispatch(_kernelID, groups, groups, 1);
-        computeShader.Dispatch(_blurKernelID, groups, groups, 1);
+        int groups = Mathf.CeilToInt(_resolution / 8.0F);
+        _computeShader.Dispatch(_kernelID, groups, groups, 1);
+        _computeShader.Dispatch(_blurKernelID, groups, groups, 1);
     }
     
     // Used for tracking how long it has been since the last update.
@@ -107,9 +113,9 @@ public class RippleProjector : MonoBehaviour
         // Re-dispatch compute work
         if (_lastUpdateTime > _updateDuration)
         {
-            int groups = Mathf.CeilToInt(resolution / 8.0F);
-            computeShader.Dispatch(_kernelID, groups, groups, 1);
-            computeShader.Dispatch(_blurKernelID, groups, groups, 1);
+            int groups = Mathf.CeilToInt(_resolution / 8.0F);
+            _computeShader.Dispatch(_kernelID, groups, groups, 1);
+            _computeShader.Dispatch(_blurKernelID, groups, groups, 1);
 
             _lastUpdateTime = 0.0F;
         }
