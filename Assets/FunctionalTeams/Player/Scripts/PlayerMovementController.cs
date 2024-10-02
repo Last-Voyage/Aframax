@@ -28,6 +28,13 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
+    [Space]
+    [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+    private float _currentFocusMoveSpeedMultiplier = 1;
+
+    private Coroutine _focusSpeedCoroutine;
+
     [SerializeField] private Transform _playerForwards;
 
     /// <summary>
@@ -55,6 +62,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         // Initialize input variables and the Rigidbody
         SubscribeInput();
+        SubscribeToEvents();
         InitializeRigidbody();
 
         // Run the movement coroutine
@@ -72,9 +80,21 @@ public class PlayerMovementController : MonoBehaviour
         _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
     }
 
+    /// <summary>
+    /// Unsubscribes from all input
+    /// </summary>
     public void UnsubscribeInput()
     {
         _movementInput = null;
+    }
+
+    /// <summary>
+    /// Subscribes to all events not relating to input
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -123,7 +143,8 @@ public class PlayerMovementController : MonoBehaviour
         // in certain directions in the world
         // By manipulating them, we can move the character
         Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
-            _playerForwards.transform.forward * moveDir.y) * _playerMovementSpeed;
+            _playerForwards.transform.forward * moveDir.y) * 
+            _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
 
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
 
@@ -139,6 +160,45 @@ public class PlayerMovementController : MonoBehaviour
     {
         return new Vector3(0, _rigidBody.velocity.y, 0);
     }
+
+    #region Harpoon Slowdown
+    /// <summary>
+    /// Starts the slowdown that is associated with focusing the weapon
+    /// </summary>
+    private void StartHarpoonSpeedSlowdown()
+    {
+        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+    }
+
+    /// <summary>
+    /// The process of slowing down the player while focusing
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedSlowdownProcess()
+    {
+        float slowCompletion = 0;
+        while (slowCompletion < 1)
+        {
+            //Increases the progress on slowdown
+            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
+
+            //Sets the current speed based on the animation graph
+            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// Stops the slowdown from focusing the harpoon
+    /// </summary>
+    private void StopHarpoonSpeedSlowdown()
+    {
+        _currentFocusMoveSpeedMultiplier = 1;
+        StopCoroutine(_focusSpeedCoroutine);
+    }
+
+    #endregion
 
     /// <summary>
     /// Activates or deactivates the movement coroutine based on the input boolean

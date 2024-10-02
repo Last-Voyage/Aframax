@@ -24,6 +24,13 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     private static UnityEvent<bool> _onMovementToggled = new();
 
+    private static UnityEvent _harpoonFiredEvent = new();
+    private static UnityEvent _harpoonRetractEvent = new();
+
+    private static UnityEvent _harpoonFocusStartEvent = new();
+    private static UnityEvent _harpoonFocusMaxEvent = new();
+    private static UnityEvent _harpoonFocusEndEvent = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -90,5 +97,10 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Getter for the _onMovementToggled event
     /// </summary>
     public UnityEvent<bool> GetMovementToggleEvent() => _onMovementToggled;
+    public UnityEvent GetHarpoonFiredEvent() => _harpoonFiredEvent;
+    public UnityEvent GetHarpoonRetractEvent() => _harpoonRetractEvent;
+    public UnityEvent GetHarpoonFocusStartEvent() => _harpoonFocusStartEvent;
+    public UnityEvent GetHarpoonFocusMaxEvent() => _harpoonFocusMaxEvent;
+    public UnityEvent GetHarpoonFocusEndEvent() => _harpoonFocusEndEvent;
     #endregion
 }
