@@ -42,7 +42,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// Make sure the enviro manager is in the scene for testing
     /// ~ Gameplay manager and universal manager
     /// </summary>
-    private void Start()
+    private void Awake()
     {
         EnvironmentManager.Instance.GetSendingOverChunks().AddListener(ReceiveChunkQueue);
 
@@ -50,10 +50,9 @@ public class IterativeChunkLoad : MonoBehaviour
 
         EnvironmentManager.Instance.SendChangeTheChunk().AddListener(ChunkChange);
 
-        int doIt = 0;
-        _usedChunks[_chunkQueuePtrPtr] = _everyChunk[_chunkQueuePtrPtr++];
-        _usedChunks[_chunkQueuePtrPtr] = _everyChunk[_chunkQueuePtrPtr++];
-        _usedChunks[_chunkQueuePtrPtr] = _everyChunk[_chunkQueuePtrPtr++];
+        _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
+        _usedChunks[(int)ChunkStates.middle] = _everyChunk[_chunkQueuePtrPtr++];
+        _usedChunks[(int)ChunkStates.front] = _everyChunk[_chunkQueuePtrPtr++];
     }
 
     /// <summary>
@@ -63,6 +62,7 @@ public class IterativeChunkLoad : MonoBehaviour
     private void ReceiveChunkQueue(int[] chunkQueued)
     {
         _chunkQueuePtr = chunkQueued;
+        Debug.Log("queuesChunks!");
     }
 
     /// <summary>
@@ -72,6 +72,7 @@ public class IterativeChunkLoad : MonoBehaviour
     private void ReceiveEveryChunk(GameObject[] theChunks)
     {
         _everyChunk = theChunks;
+        Debug.Log("everyChunks!");
     }
 
     /// <summary>
@@ -111,10 +112,12 @@ public class IterativeChunkLoad : MonoBehaviour
     {
         _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
 
+        Debug.Log(_everyChunk[_newFrontChunkPtr]);
+
         _chunkQueuePtrPtr++;
 
-        _everyChunk[_newFrontChunkPtr].transform.position +=
-            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(DistanceBetweenChunks, 0, 0);
+        _everyChunk[_newFrontChunkPtr].transform.position =
+            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/DistanceBetweenChunks);
 
         _everyChunk[_newFrontChunkPtr].SetActive(true);
 

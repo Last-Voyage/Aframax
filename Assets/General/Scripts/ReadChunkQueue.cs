@@ -10,6 +10,12 @@ public class ReadChunkQueue : MonoBehaviour
 
     int[] _realChunks;
 
+    private void OnEnable()
+    {
+        GetChunkQueue();
+        Debug.Log("Enables chunks things");
+    }
+
     /// <summary>
     /// Need to do!
     /// Array full of strings
@@ -34,5 +40,6 @@ public class ReadChunkQueue : MonoBehaviour
         }
 
         EnvironmentManager.Instance.GetSendingOverChunks()?.Invoke(_realChunks);
+        Debug.Log("Thje psyche");
     }
 }
