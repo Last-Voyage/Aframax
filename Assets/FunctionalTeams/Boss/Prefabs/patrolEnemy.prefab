@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4132341895653824262}
   - component: {fileID: 5709694425311390011}
   - component: {fileID: 7865172664713994072}
+  - component: {fileID: 5355626928167143970}
   m_Layer: 0
   m_Name: patrolEnemy
   m_TagString: Enemy
@@ -99,9 +100,23 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5355626928167143970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8693923624853357280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978138afebabc11469261cf3b7bc4fcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerAttackTag: Player
+  _destoryAttackDelay: 0.1

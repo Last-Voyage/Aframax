@@ -1,5 +1,11 @@
+/*****************************************************************************
+// File Name :         BossAttacks.cs
+// Author :            Tommy Roberts
+// Creation Date :     10/2/2024
+//
+// Brief Description : Controls first two boss attacks for our first playable build
+*****************************************************************************/
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BossAttacks : MonoBehaviour
@@ -7,6 +13,8 @@ public class BossAttacks : MonoBehaviour
     //general
     private bool _attackInProgress = false;
     [SerializeField] private float _timeBetweenAttacks = 5f;
+    [Tooltip("this is how long before boss attacks actually begin if you want start delay")]
+    [SerializeField] private float _timeAfterStartToStartAttacks = 10f;
     //attack 1 ref
     [Header("Attack 1")]
     [Space]
@@ -21,12 +29,17 @@ public class BossAttacks : MonoBehaviour
     [Header("Attack 2")]
     [Space]
     [SerializeField] private Transform[] _roomWaypoints;
+    [Tooltip("where attack two spawns")]
     [SerializeField] private Transform _roomStartPoint;
     [SerializeField] private GameObject _patrolEnemyPrefab;
     [SerializeField] private float _patrolSpeed = 2f;
     [SerializeField] private float _seekPlayerSpeed = 5f;
+    [Tooltip("Put this set to player transform so enemy will target player when in its room")]
     [SerializeField] private Transform _playerTranform;
+    [Tooltip("Attack two will despawn and a new attack will be chosen if nothing happens in this amount of time")]
     [SerializeField] private float _timeAttackTwoLasts = 15f;
+    [SerializeField] private Transform _attackRoomTwoBorderOne;
+    [SerializeField] private Transform _attackRoomTwoBorderTwo;
     private Transform _targetPoint;
     private bool _playerInAttackRange = false;
     private int _currentTargetIndex;
@@ -45,20 +58,30 @@ public class BossAttacks : MonoBehaviour
     /// </summary>
     void Update()
     {
+        CheckPlayerInAttackRoom();
+    }
+
+    /// <summary>
+    /// checks if player is in room for attack 2
+    /// </summary>
+    private void CheckPlayerInAttackRoom()
+    {
         //check if player is in attack range for patrol enemy
-        if(_playerTranform.position.x < 10.75f && _playerTranform.position.x > 6.84f && _playerTranform.position.z < 7.48f && _playerTranform.position.z > -7.8f)
+        if(_playerTranform.position.x < _attackRoomTwoBorderOne.position.x && _playerTranform.position.x > _attackRoomTwoBorderTwo.position.x)
         {
-            _playerInAttackRange = true;
+            if(_playerTranform.position.z < _attackRoomTwoBorderOne.position.z && _playerTranform.position.z > _attackRoomTwoBorderTwo.position.z)
+            {
+                _playerInAttackRange = true;
+            }
+            else
+            {
+                _playerInAttackRange = false;
+            }
+            
         }
         else
         {
             _playerInAttackRange = false;
-        }
-
-        //testing attack purposes
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(AttackTwo());
         }
     }
 
@@ -176,6 +199,7 @@ public class BossAttacks : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ChooseAttacksRepeatedly()
     {
+        yield return new WaitForSeconds(_timeAfterStartToStartAttacks);
         while(true)
         {
             if(!_attackInProgress)
