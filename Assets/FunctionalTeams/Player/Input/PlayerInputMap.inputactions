@@ -15,9 +15,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HarpoonButton",
+                    "name": "FireHarpoon",
                     "type": "Button",
                     "id": "aa80d4fd-ee8d-4409-b4fc-02c693475a30",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FocusHarpoon",
+                    "type": "Button",
+                    "id": "b8545e07-0d14-4c11-96b3-0a45742a7a07",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ReelHarpoon",
+                    "type": "Button",
+                    "id": "46123ba1-202e-49de-a560-ebd47b8d6d5c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -87,7 +105,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HarpoonButton",
+                    "action": "FireHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a56680af-279a-4e05-80e3-21fe7f52c577",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FocusHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "952a3339-bf6f-45ea-a788-f0715d180342",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FocusHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReelHarpoon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
