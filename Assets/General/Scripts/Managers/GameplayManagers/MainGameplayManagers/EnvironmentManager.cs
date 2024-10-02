@@ -22,6 +22,10 @@ public class EnvironmentManager : MainGameplayManagerFramework
 
     private UnityEvent<int[]> _sendingOverChunks = new();
 
+    private UnityEvent<GameObject[]> _allChunkObjects = new();
+
+    private UnityEvent _changeTheChunk = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -36,5 +40,9 @@ public class EnvironmentManager : MainGameplayManagerFramework
 
     #region Getters
     public UnityEvent<int[]> GetSendingOverChunks() => _sendingOverChunks;
+
+    public UnityEvent<GameObject[]> GetAllChunkObjects() => _allChunkObjects;
+
+    public UnityEvent SendChangeTheChunk() => _changeTheChunk;
     #endregion
 }
