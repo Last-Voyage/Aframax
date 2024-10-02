@@ -1,5 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+/******************************************************************************
+// File Name:       IterativeChunkLoad.cs
+// Author:          Nick Rice
+// Creation Date:   September 27, 2024
+//
+// Description:     This script takes in the list of all of the chunks and the queue of chunks,
+//                  then goes through the queue and enables + disables the necessary and unnecessary
+//                  chunks
+******************************************************************************/
 using UnityEngine;
 
 public class IterativeChunkLoad : MonoBehaviour
@@ -35,7 +42,7 @@ public class IterativeChunkLoad : MonoBehaviour
     private Vector3 _unusedChunkLandingArea = Vector3.zero;
 
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
-    private const float DistanceBetweenChunks = 10f;
+    private const float _DISTANCE_BETWEEN_CHUNKS = 10f;
 
     #region GrabbingChunksFromOtherScripts
     /// <summary>
@@ -50,6 +57,7 @@ public class IterativeChunkLoad : MonoBehaviour
 
         EnvironmentManager.Instance.SendChangeTheChunk().AddListener(ChunkChange);
 
+        // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
         _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
         _usedChunks[(int)ChunkStates.middle] = _everyChunk[_chunkQueuePtrPtr++];
         _usedChunks[(int)ChunkStates.front] = _everyChunk[_chunkQueuePtrPtr++];
@@ -62,7 +70,6 @@ public class IterativeChunkLoad : MonoBehaviour
     private void ReceiveChunkQueue(int[] chunkQueued)
     {
         _chunkQueuePtr = chunkQueued;
-        Debug.Log("queuesChunks!");
     }
 
     /// <summary>
@@ -72,7 +79,6 @@ public class IterativeChunkLoad : MonoBehaviour
     private void ReceiveEveryChunk(GameObject[] theChunks)
     {
         _everyChunk = theChunks;
-        Debug.Log("everyChunks!");
     }
 
     /// <summary>
@@ -112,12 +118,10 @@ public class IterativeChunkLoad : MonoBehaviour
     {
         _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
 
-        Debug.Log(_everyChunk[_newFrontChunkPtr]);
-
         _chunkQueuePtrPtr++;
 
         _everyChunk[_newFrontChunkPtr].transform.position =
-            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/DistanceBetweenChunks);
+            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_DISTANCE_BETWEEN_CHUNKS);
 
         _everyChunk[_newFrontChunkPtr].SetActive(true);
 
@@ -133,7 +137,7 @@ public class IterativeChunkLoad : MonoBehaviour
         _usedChunks[(int)ChunkStates.back].SetActive(false); // If causing errors, put at the bottom of the function
 
         _usedChunks[(int)ChunkStates.back].transform.position =
-            _unusedChunkLandingArea + new Vector3(DistanceBetweenChunks * _backChunkPtr, 0, 0);
+            _unusedChunkLandingArea + new Vector3(_DISTANCE_BETWEEN_CHUNKS * _backChunkPtr, 0, 0);
     }
 
     /// <summary>
