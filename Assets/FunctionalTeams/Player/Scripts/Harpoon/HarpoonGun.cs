@@ -66,21 +66,24 @@ public class HarpoonGun : MonoBehaviour
     private float _currentReelDur;
     private HarpoonRope _harpoonRope;
 
-    private PlayerInputMap _playerInputMap;
-
-    //These events could probably be moved into the player manager later
     //events
     public static event Action<HarpoonGun> OnShotEvent;
     public static event Action<HarpoonGun> OnRetractEvent;
+
+    //exposed variables
+    public GameObject GetHarpoonSpear() => _harpoonSpear;
+    public bool GetIsShooting() => _isShooting;
+    public Transform GetHarpoonTip() => _harpoonTip;
 
     private void Awake(){
         _harpoonRope = GetComponent<HarpoonRope>();
         _harpoonAnimator = GetComponent<Animator>();
     }
 
+    /// <summary>
     /// sets up the button for shooting
     /// </summary>
-    public void SubscribeInput()
+    private void OnEnable() 
     {
         _harpoonShoot.action.performed += FireHarpoon;
     }
@@ -88,7 +91,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// disables shoot button
     /// </summary>
-    public void UnsubscribeInput()
+    private void OnDisable() 
     {
         _harpoonShoot.action.performed -= FireHarpoon;
     }
@@ -112,9 +115,8 @@ public class HarpoonGun : MonoBehaviour
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
-        
-        //Camera shake here when combined with Stapay
-
+        _harpoonAnimator.SetTrigger(_harpoonShootTrigger);
+        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
         OnShotEvent(this);
     }
 
@@ -198,6 +200,7 @@ public class HarpoonGun : MonoBehaviour
         float elapsedTime = 0;
         if(!_holdToRetractMode)
         {
+            _harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
             //cause the wave action again when reeling
             OnRetractEvent(this);
             OnShotEvent(this);
@@ -215,6 +218,7 @@ public class HarpoonGun : MonoBehaviour
                     if(!startedRetracting)
                     {
                         startedRetracting = true;
+                        _harpoonAnimator.SetTrigger(_harpoonRetractTrigger);
                         //cause the wave action again when reeling
                         OnRetractEvent(this);
                         OnShotEvent(this);
@@ -243,7 +247,7 @@ public class HarpoonGun : MonoBehaviour
                 _hit.transform.GetComponent<Rigidbody>().isKinematic = false;
             }
         }
-        //Camera shake here when combined with Stapay
+        CinemachineShake.Instance.ShakeCamera(_retractCameraShakeIntensity, _retractCameraShakeTime);  
         StartCoroutine(ResetHarpoon());
         OnRetractEvent(this);
     }
@@ -260,12 +264,4 @@ public class HarpoonGun : MonoBehaviour
         _isReeling = false;
         _harpoonOnGun.SetActive(true);
     }
-
-
-    #region Getters
-    //exposed variables
-    public GameObject GetHarpoonSpear() => _harpoonSpear;
-    public bool GetIsShooting() => _isShooting;
-    public Transform GetHarpoonTip() => _harpoonTip;
-    #endregion
 }
