@@ -463,11 +463,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3ee8fc12042c44cba44d36eeb845fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
-  waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
-  waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
-  overallHeightAdjust: 0.5
-  normalExaggeration: 5
+  _waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
+  _waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
+  _waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
+  _overallHeightAdjust: 0.5
+  _normalExaggeration: 5
 --- !u!1 &181212905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,11 +1555,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3ee8fc12042c44cba44d36eeb845fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
-  waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
-  waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
-  overallHeightAdjust: 0.5
-  normalExaggeration: 5
+  _waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
+  _waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
+  _waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
+  _overallHeightAdjust: 0.5
+  _normalExaggeration: 5
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1744,16 +1744,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac65d591ad7bf234d862b7c4877755fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bezierPoints:
-  - point: {x: -23.185637, y: -592.6138}
-    backDir: {x: 8.462173, y: -50.932617}
-    forwardDir: {x: 29.401766, y: 329.84814}
-  - point: {x: 10.583802, y: 611.3171}
-    backDir: {x: 16.830795, y: -229.14194}
-    forwardDir: {x: -58.75273, y: 139.31787}
-  curveIntensity: 1.55
-  handleSize: 0.95
-  curveSmoothness: 15
+  BezierPoints: []
+  CurveIntensity: 2
+  HandleSize: 1
+  CurveSmoothness: 15
 --- !u!4 &1163564282
 Transform:
   m_ObjectHideFlags: 0
@@ -1982,11 +1976,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3ee8fc12042c44cba44d36eeb845fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
-  waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
-  waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
-  overallHeightAdjust: 0.5
-  normalExaggeration: 5
+  _waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
+  _waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
+  _waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
+  _overallHeightAdjust: 0.5
+  _normalExaggeration: 5
 --- !u!136 &1560968828
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2645,11 +2639,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3ee8fc12042c44cba44d36eeb845fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
-  waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
-  waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
-  overallHeightAdjust: 0.5
-  normalExaggeration: 5
+  _waveA: {x: 0.75, y: 0.5, z: 0.25, w: 75}
+  _waveB: {x: -0.64, y: -0.7, z: 0.15, w: 35}
+  _waveC: {x: 0.1, y: 0.31, z: 0.15, w: 28.4}
+  _overallHeightAdjust: 0.5
+  _normalExaggeration: 5
 --- !u!1001 &1912704505725161273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2718,6 +2712,31 @@ PrefabInstance:
       propertyPath: waterMesh
       value: 
       objectReference: {fileID: 923213562}
+    - target: {fileID: 7945937116202186141, guid: 1948c1122909e734db46bf195bc756cb,
+        type: 3}
+      propertyPath: _waterMesh
+      value: 
+      objectReference: {fileID: 923213562}
+    - target: {fileID: 7945937116202186141, guid: 1948c1122909e734db46bf195bc756cb,
+        type: 3}
+      propertyPath: _cameraTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: c5db2381b1fe3a441a55789d7f292bbd, type: 2}
+    - target: {fileID: 7945937116202186141, guid: 1948c1122909e734db46bf195bc756cb,
+        type: 3}
+      propertyPath: _computeShader
+      value: 
+      objectReference: {fileID: 7200000, guid: 7d932295c409e8244a99d824b0ddf341, type: 3}
+    - target: {fileID: 7945937116202186141, guid: 1948c1122909e734db46bf195bc756cb,
+        type: 3}
+      propertyPath: _outputTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: 478fde396527450478f0c3a71f132e01, type: 2}
+    - target: {fileID: 7945937116202186141, guid: 1948c1122909e734db46bf195bc756cb,
+        type: 3}
+      propertyPath: _preBlurTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: 532e47bc43cf5ec428ec7f90ae52572f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
