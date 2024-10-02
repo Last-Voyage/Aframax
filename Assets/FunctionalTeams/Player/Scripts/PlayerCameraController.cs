@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerCameraController.cs
 // Author:          Andrew Stapay
+// Contributor      Ryan Swanson
 // Creation Date:   September 19, 2024
 //
 // Description:     Implementation of the basic camera control for a player 
@@ -19,6 +20,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerCameraController : MonoBehaviour
 {
+    [SerializeField] private GameObject _playerVisuals;
+
     // Variable for the Virtual Camera
     // Unused at the moment, but it'll be here when we eventually need it
     private CinemachineVirtualCamera _virtualCamera;
@@ -68,7 +71,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+        _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
     }
 
     /// <summary>
@@ -104,5 +107,21 @@ public class PlayerCameraController : MonoBehaviour
     private void OnDisable()
     {
         CameraManager.Instance.GetCameraMovementToggleEvent().RemoveListener(ToggleCameraMovement);
+    }
+
+    /// <summary>
+    /// Enables all camera player input
+    /// </summary>
+    public void SubscribeInput()
+    {
+        ToggleCameraMovement(true);
+    }
+
+    /// <summary>
+    /// Disables all camera player input
+    /// </summary>
+    public void UnsubscribeInput()
+    {
+        ToggleCameraMovement(false);
     }
 }
