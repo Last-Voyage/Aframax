@@ -63,5 +63,6 @@ public class ConsoleController : MonoBehaviour
         _playerTakeDamageButton.onClick.RemoveAllListeners();
     }
 
+    
 
 }

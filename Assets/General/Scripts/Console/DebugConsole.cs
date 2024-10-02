@@ -5,6 +5,7 @@
 // which handles the debug console commands
  */
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,16 +21,19 @@ public class DebugConsole : MonoBehaviour
         if (_commandInput.text.Substring(0,3) == "ZUG")
         {
             //handle system commands
-            if (_commandInput.text.Substring(4, _commandInput.text.Length-4) == "Quit()")
+            if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Quit()")
             {
-                print("Attempting to Quite Game");
+                print("Attempting to Quit Game");
                 Application.Quit();
 
             }
-
-            if (_commandInput.text.Substring(4, _commandInput.text.Length-4) == "Reload()")
+            else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Reload()")
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "DrawColliders()")
+            {
+                PhysicsVisualizationSettings.GetShowBoxColliders();
             }
         }
         // else just print the input value
