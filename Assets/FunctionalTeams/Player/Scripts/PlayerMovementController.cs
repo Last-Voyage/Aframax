@@ -30,8 +30,14 @@ public class PlayerMovementController : MonoBehaviour
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private float _unfocusSpeedSlowTime;
     [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+
     private float _currentFocusMoveSpeedMultiplier = 1;
+
+    private float _currentFocusMoveSpeedProgress = 0;
+    private EFocusState _currentSlowdownState;
+    
 
     private Coroutine _focusSpeedCoroutine;
 
@@ -86,6 +92,11 @@ public class PlayerMovementController : MonoBehaviour
     public void UnsubscribeInput()
     {
         _movementInput = null;
+    }
+
+    private void Update()
+    {
+        WeaponSlowdownUpdate();
     }
 
     /// <summary>
@@ -163,30 +174,11 @@ public class PlayerMovementController : MonoBehaviour
 
     #region Harpoon Slowdown
     /// <summary>
-    /// Starts the slowdown that is associated with focusing the weapon
+    /// Starts the harpoon speed slowdown
     /// </summary>
     private void StartHarpoonSpeedSlowdown()
     {
-        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
-    }
-
-    /// <summary>
-    /// The process of slowing down the player while focusing
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator HarpoonSpeedSlowdownProcess()
-    {
-        float slowCompletion = 0;
-        while (slowCompletion < 1)
-        {
-            //Increases the progress on slowdown
-            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
-
-            //Sets the current speed based on the animation graph
-            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
-
-            yield return null;
-        }
+        _currentSlowdownState = EFocusState.Focusing;
     }
 
     /// <summary>
@@ -194,8 +186,82 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopHarpoonSpeedSlowdown()
     {
-        _currentFocusMoveSpeedMultiplier = 1;
-        StopCoroutine(_focusSpeedCoroutine);
+        _currentSlowdownState = EFocusState.Unfocusing;
+    }
+
+    /// <summary>
+    /// Checks what focus state we are in and acts accordingly
+    /// </summary>
+    private void WeaponSlowdownUpdate()
+    {
+        switch (_currentSlowdownState)
+        {
+            case (EFocusState.None):
+                return;
+            case (EFocusState.Focusing):
+                HarpoonSpeedSlowdownProcess();
+                return;
+            case (EFocusState.Unfocusing):
+                HarpoonSpeedUpProcess();
+                return;
+            default:
+                Debug.LogError("This is impossible to get to but still good ettiquette to have a default");
+                return;
+        }
+    }
+
+    /// <summary>
+    /// The process of slowing down the player while focusing
+    /// </summary>
+    /// <returns></returns>
+    private void HarpoonSpeedSlowdownProcess()
+    {
+        if (_currentFocusMoveSpeedProgress < 1)
+        {
+            //Increases the progress on slowdown
+            _currentFocusMoveSpeedProgress += Time.deltaTime / _focusSpeedSlowTime;
+
+            CalculateCurrentFocusSpeedMultiplier();
+        }
+    }
+
+    /// <summary>
+    /// The process of speeding up the player after unfocusing
+    /// </summary>
+    /// <returns></returns>
+    private void HarpoonSpeedUpProcess()
+    {
+        if (_currentFocusMoveSpeedProgress > 0)
+        {
+            //Increases the progress on slowdown
+            _currentFocusMoveSpeedProgress -= Time.deltaTime / _unfocusSpeedSlowTime;
+
+            CalculateCurrentFocusSpeedMultiplier();
+        }
+        else
+        {
+            HarpoonSpeedUpComplete();
+        }
+    }
+
+    /// <summary>
+    /// Called when the player is at max speed after unfocusing their weapon
+    /// </summary>
+    private void HarpoonSpeedUpComplete()
+    {
+        _currentSlowdownState = EFocusState.None;
+
+        _currentFocusMoveSpeedProgress = 0;
+        CalculateCurrentFocusSpeedMultiplier();
+    }
+
+    /// <summary>
+    /// Calculates the current speed multiplier for focusing the weapon
+    /// </summary>
+    private void CalculateCurrentFocusSpeedMultiplier()
+    {
+        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
+        print(_currentFocusMoveSpeedMultiplier);
     }
 
     #endregion

@@ -29,11 +29,18 @@ public class HarpoonGun : MonoBehaviour
     [Space]
     [Tooltip("The time it takes to reach max focus")]
     [SerializeField] private float _focusTime;
+    [Tooltip("The time to unfocus the weapon")]
+    [SerializeField] private float _unfocusTime;
     [Tooltip("The accuracy that you start at when you begin focusing")]
     [Range(0, .5f)]
     [SerializeField] private float _focusStartingInaccuracy;
     [Tooltip("The curve at which the accuracy increases while focusing")]
     [SerializeField] private AnimationCurve _focusCurve;
+
+    private float _currentFocusAccuracy = 0;
+
+    private float _focusProgress;
+    private EFocusState _currentFocusState;
 
     [Header("Harpoon Functionality Dependencies")]
     [Tooltip("Transform of whatever the cameras rotation is. Probably the cinemachine camera object")]
@@ -73,9 +80,8 @@ public class HarpoonGun : MonoBehaviour
     private Vector3 _fireDir;
     private float _currentDist;
     private bool _isShooting;
-    private bool _isFocusing = false;
     private Coroutine _focusingCoroutine;
-    private float _currentFocus = 0;
+    
     private RaycastHit _hit;
     private float _currentReelDur;
     private HarpoonRope _harpoonRope;
@@ -94,7 +100,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonShoot.action.performed += FireHarpoon;
 
         _harpoonFocus.action.started += FocusHarpoon;
-        _harpoonFocus.action.canceled += StopHarpoonFocusing;
+        _harpoonFocus.action.canceled += StartUnfocusingHarpoon;
     }
 
     /// <summary>
@@ -105,7 +111,12 @@ public class HarpoonGun : MonoBehaviour
         _harpoonShoot.action.performed -= FireHarpoon;
 
         _harpoonFocus.action.started -= FocusHarpoon;
-        _harpoonFocus.action.canceled -= StopHarpoonFocusing;
+        _harpoonFocus.action.canceled -= StartUnfocusingHarpoon;
+    }
+
+    private void Update()
+    {
+        WeaponFocusingUpdate();
     }
 
     /// <summary>
@@ -114,7 +125,7 @@ public class HarpoonGun : MonoBehaviour
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //dont shoot if already shot
-        if(_harpoonSpear != null || _isReeling || !_isFocusing)
+        if(_harpoonSpear != null || _isReeling || _currentFocusState != EFocusState.Focusing)
         {
             return;
         }
@@ -140,7 +151,7 @@ public class HarpoonGun : MonoBehaviour
     private Vector3 GetHarpoonDirectionWithFocus()
     {
         //Multiplies the direction the player is looking by a random variance scaled by current focus
-        return _playerLookDirection.forward + (UnityEngine.Random.insideUnitSphere * _currentFocus) ;
+        return _playerLookDirection.forward + (UnityEngine.Random.insideUnitSphere * _currentFocusAccuracy) ;
     }
 
     #region Focusing
@@ -150,45 +161,100 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusHarpoon(InputAction.CallbackContext context)
     {
-        _isFocusing = true;
-        _focusingCoroutine = StartCoroutine(FocusProcess());
+        _currentFocusState = EFocusState.Focusing;
 
         PlayerManager.Instance.InvokeHarpoonFocusStartEvent();
-    }
-
-    /// <summary>
-    /// The process of focusing the weapon over time
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator FocusProcess()
-    {
-        float focusCompletion = 0;
-        while(focusCompletion < 1)
-        {
-            //Increases the progress on focusing
-            focusCompletion += Time.deltaTime / _focusTime;
-
-            //Sets the current focus based on the animation graph and inaccuracy scalar
-            _currentFocus = _focusCurve.Evaluate(focusCompletion) * _focusStartingInaccuracy;
-
-            yield return null;
-        }
-        _currentFocus = 0;
     }
 
     /// <summary>
     /// Stops the focusing of the weapon
     /// </summary>
     /// <param name="context"></param>
-    private void StopHarpoonFocusing(InputAction.CallbackContext context)
+    private void StartUnfocusingHarpoon(InputAction.CallbackContext context)
     {
-        StopCoroutine(_focusingCoroutine);
-        _currentFocus = 0;
-        _isFocusing = false;
+        _currentFocusAccuracy = 0;
+        _currentFocusState = EFocusState.Unfocusing;
 
         PlayerManager.Instance.InvokeHarpoonEndEvent();
     }
 
+    /// <summary>
+    /// Checks what focus state we are in and acts accordingly
+    /// </summary>
+    private void WeaponFocusingUpdate()
+    {
+        switch (_currentFocusState)
+        {
+            case (EFocusState.None):
+                return;
+            case (EFocusState.Focusing):
+                FocusProcess();
+                return;
+            case (EFocusState.Unfocusing):
+                UnfocusProcess();
+                return;
+            default:
+                Debug.LogError("This is impossible to get to but still good ettiquette to have a default");
+                return;
+        }
+    }
+
+    /// <summary>
+    /// The process of focusing the weapon over time
+    /// </summary>
+    /// <returns></returns>
+    private void FocusProcess()
+    {
+        if(_focusProgress < 1)
+        {
+            //Increases the progress on focusing
+            _focusProgress += Time.deltaTime / _focusTime;
+
+            CalculateCurrentFocus();
+        }
+        else
+        {
+            _focusProgress = 1;
+            _currentFocusAccuracy = 0;
+        }
+    }
+
+    /// <summary>
+    /// The process of unfocusing the weapon
+    /// </summary>
+    /// <returns></returns>
+    private void UnfocusProcess()
+    {
+        if(_focusProgress > 0)
+        {
+            _focusProgress -= Time.deltaTime / _unfocusTime;
+
+            CalculateCurrentFocus();
+        }
+        else
+        {
+            WeaponFullyUnfocused();
+        }
+    }
+
+    /// <summary>
+    /// Is called when the weapon is completely unfocused
+    /// </summary>
+    private void WeaponFullyUnfocused()
+    {
+        _currentFocusState = EFocusState.None;
+
+        _focusProgress = 0;
+    }
+
+    /// <summary>
+    /// Determines what the current focus accuracy is based on the focus progress
+    /// </summary>
+    private void CalculateCurrentFocus()
+    {
+        //Sets the current focus based on the animation graph and inaccuracy scalar
+        _currentFocusAccuracy = _focusCurve.Evaluate(_focusProgress) * _focusStartingInaccuracy;
+    }
     #endregion
 
     /// <summary>
@@ -351,3 +417,10 @@ public class HarpoonGun : MonoBehaviour
     public Transform GetHarpoonTip() => _harpoonTip;
     #endregion
 }
+
+public enum EFocusState
+{
+    None,
+    Focusing,
+    Unfocusing
+};
