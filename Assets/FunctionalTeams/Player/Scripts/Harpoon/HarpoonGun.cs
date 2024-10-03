@@ -39,8 +39,10 @@ public class HarpoonGun : MonoBehaviour
 
     private float _currentFocusAccuracy = 0;
 
-    private float _focusProgress;
+    private float _focusProgress = 0;
     private EFocusState _currentFocusState;
+
+    private Coroutine _focusUnfocusCoroutine;
 
     [Header("Harpoon Functionality Dependencies")]
     [Tooltip("Transform of whatever the cameras rotation is. Probably the cinemachine camera object")]
@@ -114,11 +116,6 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFocus.action.canceled -= StartUnfocusingHarpoon;
     }
 
-    private void Update()
-    {
-        WeaponFocusingUpdate();
-    }
-
     /// <summary>
     /// creates a harpoon, sets up the fire direction and everything else to begin the launch
     /// </summary>
@@ -163,6 +160,9 @@ public class HarpoonGun : MonoBehaviour
     {
         _currentFocusState = EFocusState.Focusing;
 
+        StopCurrentFocusCoroutine();
+        _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
+
         PlayerManager.Instance.InvokeHarpoonFocusStartEvent();
     }
 
@@ -175,27 +175,20 @@ public class HarpoonGun : MonoBehaviour
         _currentFocusAccuracy = 0;
         _currentFocusState = EFocusState.Unfocusing;
 
-        PlayerManager.Instance.InvokeHarpoonEndEvent();
+        StopCurrentFocusCoroutine();
+        _focusUnfocusCoroutine = StartCoroutine(UnfocusProcess());
+
+        PlayerManager.Instance.InvokeHarpoonFocusEndEvent();
     }
 
     /// <summary>
-    /// Checks what focus state we are in and acts accordingly
+    /// Stops the process of focusing or unfocusing
     /// </summary>
-    private void WeaponFocusingUpdate()
+    private void StopCurrentFocusCoroutine()
     {
-        switch (_currentFocusState)
+        if(_focusUnfocusCoroutine != null)
         {
-            case (EFocusState.None):
-                return;
-            case (EFocusState.Focusing):
-                FocusProcess();
-                return;
-            case (EFocusState.Unfocusing):
-                UnfocusProcess();
-                return;
-            default:
-                Debug.LogError("This is impossible to get to but still good ettiquette to have a default");
-                return;
+            StopCoroutine(_focusUnfocusCoroutine);
         }
     }
 
@@ -203,38 +196,38 @@ public class HarpoonGun : MonoBehaviour
     /// The process of focusing the weapon over time
     /// </summary>
     /// <returns></returns>
-    private void FocusProcess()
+    private IEnumerator FocusProcess()
     {
-        if(_focusProgress < 1)
+        while(_focusProgress < 1)
         {
             //Increases the progress on focusing
             _focusProgress += Time.deltaTime / _focusTime;
 
-            CalculateCurrentFocus();
+            CalculateCurrentFocusAccuracy();
+
+            yield return null;
         }
-        else
-        {
-            _focusProgress = 1;
-            _currentFocusAccuracy = 0;
-        }
+
+        _focusProgress = 1;
+        _currentFocusAccuracy = 0;
     }
 
     /// <summary>
     /// The process of unfocusing the weapon
     /// </summary>
     /// <returns></returns>
-    private void UnfocusProcess()
+    private IEnumerator UnfocusProcess()
     {
-        if(_focusProgress > 0)
+        while(_focusProgress > 0)
         {
             _focusProgress -= Time.deltaTime / _unfocusTime;
 
-            CalculateCurrentFocus();
+            CalculateCurrentFocusAccuracy();
+
+            yield return null;
         }
-        else
-        {
-            WeaponFullyUnfocused();
-        }
+
+        WeaponFullyUnfocused();
     }
 
     /// <summary>
@@ -250,7 +243,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Determines what the current focus accuracy is based on the focus progress
     /// </summary>
-    private void CalculateCurrentFocus()
+    private void CalculateCurrentFocusAccuracy()
     {
         //Sets the current focus based on the animation graph and inaccuracy scalar
         _currentFocusAccuracy = _focusCurve.Evaluate(_focusProgress) * _focusStartingInaccuracy;

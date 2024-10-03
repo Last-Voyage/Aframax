@@ -36,10 +36,8 @@ public class PlayerMovementController : MonoBehaviour
     private float _currentFocusMoveSpeedMultiplier = 1;
 
     private float _currentFocusMoveSpeedProgress = 0;
-    private EFocusState _currentSlowdownState;
-    
 
-    private Coroutine _focusSpeedCoroutine;
+    private Coroutine _harpoonSlowdownCoroutine;
 
     [SerializeField] private Transform _playerForwards;
 
@@ -92,11 +90,6 @@ public class PlayerMovementController : MonoBehaviour
     public void UnsubscribeInput()
     {
         _movementInput = null;
-    }
-
-    private void Update()
-    {
-        WeaponSlowdownUpdate();
     }
 
     /// <summary>
@@ -178,7 +171,8 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StartHarpoonSpeedSlowdown()
     {
-        _currentSlowdownState = EFocusState.Focusing;
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
     }
 
     /// <summary>
@@ -186,27 +180,18 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopHarpoonSpeedSlowdown()
     {
-        _currentSlowdownState = EFocusState.Unfocusing;
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
     }
 
     /// <summary>
-    /// Checks what focus state we are in and acts accordingly
+    /// Stops the process of focusing or unfocusing
     /// </summary>
-    private void WeaponSlowdownUpdate()
+    private void StopCurrentFocusCoroutine()
     {
-        switch (_currentSlowdownState)
+        if (_harpoonSlowdownCoroutine != null)
         {
-            case (EFocusState.None):
-                return;
-            case (EFocusState.Focusing):
-                HarpoonSpeedSlowdownProcess();
-                return;
-            case (EFocusState.Unfocusing):
-                HarpoonSpeedUpProcess();
-                return;
-            default:
-                Debug.LogError("This is impossible to get to but still good ettiquette to have a default");
-                return;
+            StopCoroutine(_harpoonSlowdownCoroutine);
         }
     }
 
@@ -214,14 +199,16 @@ public class PlayerMovementController : MonoBehaviour
     /// The process of slowing down the player while focusing
     /// </summary>
     /// <returns></returns>
-    private void HarpoonSpeedSlowdownProcess()
+    private IEnumerator HarpoonSpeedSlowdownProcess()
     {
-        if (_currentFocusMoveSpeedProgress < 1)
+        while (_currentFocusMoveSpeedProgress < 1)
         {
             //Increases the progress on slowdown
             _currentFocusMoveSpeedProgress += Time.deltaTime / _focusSpeedSlowTime;
 
             CalculateCurrentFocusSpeedMultiplier();
+
+            yield return null;
         }
     }
 
@@ -229,19 +216,19 @@ public class PlayerMovementController : MonoBehaviour
     /// The process of speeding up the player after unfocusing
     /// </summary>
     /// <returns></returns>
-    private void HarpoonSpeedUpProcess()
+    private IEnumerator HarpoonSpeedUpProcess()
     {
-        if (_currentFocusMoveSpeedProgress > 0)
+        while (_currentFocusMoveSpeedProgress > 0)
         {
-            //Increases the progress on slowdown
+            //Decreases the progress on slowdown
             _currentFocusMoveSpeedProgress -= Time.deltaTime / _unfocusSpeedSlowTime;
 
             CalculateCurrentFocusSpeedMultiplier();
+
+            yield return null;
         }
-        else
-        {
-            HarpoonSpeedUpComplete();
-        }
+
+        HarpoonSpeedUpComplete();
     }
 
     /// <summary>
@@ -249,8 +236,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void HarpoonSpeedUpComplete()
     {
-        _currentSlowdownState = EFocusState.None;
-
         _currentFocusMoveSpeedProgress = 0;
         CalculateCurrentFocusSpeedMultiplier();
     }
@@ -261,7 +246,6 @@ public class PlayerMovementController : MonoBehaviour
     private void CalculateCurrentFocusSpeedMultiplier()
     {
         _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
-        print(_currentFocusMoveSpeedMultiplier);
     }
 
     #endregion
