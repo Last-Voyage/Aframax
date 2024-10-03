@@ -26,6 +26,7 @@ public class WeakPoint : MonoBehaviour
     private void Start()
     {
         _currentWeakPointHealth = _weakPointMaxHealth;
+
     }
 
     /// <summary>

@@ -27,6 +27,7 @@ public class UniversalHealth : UniversalHealthSystem
     void Start()
     {
         health = new Health(_maxHealth, _maxHealth, _isPlayer);
+        StartCoroutine(DelayedDecrease());
     }
     // Update is called once per frame
     void Update()
@@ -42,34 +43,42 @@ public class UniversalHealth : UniversalHealthSystem
         {
             Destroy(gameObject);
         }
-        //If while healing the amount of health exceeds the max amount of health return it back to the max instead of leaving higher
-        if (health.CurrentHealth > health.MaxHealth)
-        {
-            health.CurrentHealth = health.MaxHealth;
-        }
+       
     }
-
+    IEnumerator DelayedDecrease()
+    {
+        yield return new WaitForSeconds(1f);
+        HealthDecrease(0);
+    }
 
     /// <summary>
     /// A way for health to be damaged
     /// </summary>
     /// <param name="_damage"></param>
-    private void HealthDecrease(float _damage)
+    private void HealthDecrease(float damage)
     {
-        health.CurrentHealth -= _damage;
+        _healthDecrease?.Invoke(damage);
+        health.CurrentHealth -= damage;
+        Debug.Log(health.CurrentHealth);
     }
     /// <summary>
     /// A way for the health to be healed
     /// </summary>
     /// <param name="_heal"></param>
-    private void HealthIncrease(float _heal)
+    private void CurrentHealthIncrease(float heal)
     {
-        _healthIncrease?.Invoke(_heal);
-        health.CurrentHealth += _heal;
+        health.CurrentHealth += heal;
+        //If while healing the amount of health exceeds the max amount of health return it back to the max instead of leaving higher
+        if (health.CurrentHealth > health.MaxHealth)
+        {
+            health.CurrentHealth = health.MaxHealth;
+        }
+        _healthIncrease?.Invoke(heal);
     }
 
-    //#Event Getters
-   // public UnityEvent<float> GetHealthIncrease() => _healthIncrease;
-    //#endregion
+    #region Getters
+    public UnityEvent<float> GetHealthIncrease() => _healthIncrease;
+    public UnityEvent<float> GetHealthDecrease() => _healthDecrease;
+    #endregion
 
 }
