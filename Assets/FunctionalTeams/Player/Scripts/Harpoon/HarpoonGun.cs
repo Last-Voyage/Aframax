@@ -25,6 +25,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private float _gunCooldown = 2f; // cd of harpoon gun after fully retracted
     [Tooltip("if true then you have to hold mouse down to retract fully. if false retracts automatically")]
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
+    [Tooltip("Specifies if the harpoon can deal damage while being reeled back")]
+    [SerializeField] private bool _dealsDamageWhenReturning = false;
 
     [Space]
     [Tooltip("The time it takes to reach max focus")]
@@ -250,6 +252,8 @@ public class HarpoonGun : MonoBehaviour
     private void StartReeling(Vector3 _hitPosition)
     {
         _isReeling = true;
+
+        _harpoonSpear.GetComponentInChildren<Collider>().enabled = _dealsDamageWhenReturning;
         
         float distanceFromPlayer;
         if(_hit.transform != null)
