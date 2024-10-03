@@ -60,6 +60,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
+        Time.timeScale = 1;
         _playerTakeDamageButton.onClick.RemoveAllListeners();
     }
 
