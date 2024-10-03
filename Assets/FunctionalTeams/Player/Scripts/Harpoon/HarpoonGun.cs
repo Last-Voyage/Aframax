@@ -48,6 +48,10 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonOnGun;
     [Tooltip("Layers the launched harpoon can not hit")]
     [SerializeField] private LayerMask _excludeLayers;
+    [Tooltip("Includes the enemy layer")]
+    [SerializeField] private LayerMask _enemyOnCrosshairLayers;
+    [Tooltip("Layers that can block the crosshair being over the boss")]
+    [SerializeField] private LayerMask _enemyCrosshairBlockers;
     [Tooltip("The input action for shooting")]
     [SerializeField] private InputActionReference _harpoonShoot;
     [Tooltip("The input action for focusing")]
@@ -74,6 +78,7 @@ public class HarpoonGun : MonoBehaviour
     private float _currentDist;
     private bool _isShooting;
     private bool _isFocusing = false;
+    private bool _aimedAtEnemy = false;
     private Coroutine _focusingCoroutine;
     private float _currentFocus = 0;
     private RaycastHit _hit;
@@ -85,6 +90,11 @@ public class HarpoonGun : MonoBehaviour
     private void Awake(){
         _harpoonRope = GetComponent<HarpoonRope>();
         _harpoonAnimator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        EnemyOnCrosshairChecks();
     }
 
     /// sets up the button for shooting
@@ -343,6 +353,52 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(true);
     }
 
+    /// <summary>
+    /// Checks for if we have changed from looking at an enemy to no longer doing so or vice versa
+    /// </summary>
+    private void EnemyOnCrosshairChecks()
+    {
+        // Performs the raycast checks for if we are over an enemy
+        if(EnemyOnCrosshairRaycast())
+        {
+            if(!_aimedAtEnemy)
+            {
+                //We are aimed at an enemy and were not the previous frame
+                _aimedAtEnemy = true;
+                PlayerManager.Instance.InvokeCrosshairOverEnemyStartEvent();
+            }
+        }
+        else if (_aimedAtEnemy)
+        {
+            //We are no longer animed at an enemy
+            _aimedAtEnemy = false;
+            PlayerManager.Instance.InvokeCrosshairOverEnemyEndEvent();
+        }
+    }
+
+    /// <summary>
+    /// Performs the raycasts to check if there is an enemy over the 
+    /// </summary>
+    /// <returns></returns>
+    private bool EnemyOnCrosshairRaycast()
+    {
+        //Checks if the enemy is over the crosshair
+        if (Physics.Raycast(transform.position, _playerLookDirection.forward,
+            _maxDistance, _enemyOnCrosshairLayers))
+        {
+            //Checks if anything is in the way such as a wall
+            if (Physics.Raycast(transform.position, _playerLookDirection.forward,
+                _maxDistance, _enemyCrosshairBlockers))
+            {
+                //Return false as the enemy is being blocked
+                return false;
+            }
+            //Return true because there is an enemy over the crosshair and it isn't blocked
+            return true;
+        }
+        //Return false as no enemy is over the crosshair
+        return false;
+    }
 
     #region Getters
     //exposed variables
