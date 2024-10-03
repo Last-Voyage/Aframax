@@ -26,6 +26,11 @@ public class EnvironmentManager : MainGameplayManagerFramework
 
     private UnityEvent _changeTheChunk = new();
 
+    public void SendOutChunks(int[] theQueue)
+    {
+        GetSendingOverChunks()?.Invoke(theQueue);
+    }
+
     #region Base Manager
     public override void SetupInstance()
     {

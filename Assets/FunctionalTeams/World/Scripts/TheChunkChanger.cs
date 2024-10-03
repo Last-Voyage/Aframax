@@ -7,6 +7,9 @@
 ******************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// This script fires off the event that changes the chunks
+/// </summary>
 public class TheChunkChanger : MonoBehaviour
 {
     private const string _TAG_CHECK_NAME = "BackOfBoat";

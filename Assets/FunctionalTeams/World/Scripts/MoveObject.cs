@@ -1,10 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+/******************************************************************************
+// File Name:       TheChunkChanger.cs
+// Author:          Nick Rice
+// Creation Date:   October 2nd, 2024
+//
+// Description:     This script moves the object it's attached to in the z direction
+******************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// Moves the object it's attached to in the z direction
+/// </summary>
 public class MoveObject : MonoBehaviour
 {
-    // Update is called once per frame
+    /// <summary>
+    /// Moves the object it's attached to in the z direction
+    /// </summary>
     void Update()
     {
         gameObject.transform.position += new Vector3(0, 0, 1f) * Time.deltaTime;

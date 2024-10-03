@@ -9,6 +9,10 @@
 ******************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// This script takes in the list of all of the chunks and the queue of chunks, 
+/// then goes through the queue and enables + disables the necessary and unnecessary chunks
+/// </summary>
 public class IterativeChunkLoad : MonoBehaviour
 {
     [Tooltip("The array with every chunk")]

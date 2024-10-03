@@ -10,6 +10,11 @@
 using UnityEngine;
 using System.IO;
 
+/// <summary>
+/// This script takes the .txt file with the order of all of the chunks, 
+/// and converts it into an array of ints, and then sends that over to
+/// the script that needs it through an event.
+/// </summary>
 public class ReadChunkQueue : MonoBehaviour
 {
     const string _THE_LINE_OF_CHUNKS = "/ChunkQueue.txt";
@@ -45,6 +50,6 @@ public class ReadChunkQueue : MonoBehaviour
             _realChunks[i] = int.Parse(CHUNKED[i]);
         }
 
-        EnvironmentManager.Instance.GetSendingOverChunks()?.Invoke(_realChunks);
+        EnvironmentManager.Instance.SendOutChunks( _realChunks );
     }
 }
