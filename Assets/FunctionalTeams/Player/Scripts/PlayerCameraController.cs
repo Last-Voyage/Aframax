@@ -84,10 +84,12 @@ public class PlayerCameraController : MonoBehaviour
         if (change)
         {
             _cameraCoroutine = StartCoroutine(MoveCamera());
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
             StopCoroutine(_cameraCoroutine);
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
