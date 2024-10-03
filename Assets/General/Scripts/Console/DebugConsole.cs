@@ -9,12 +9,19 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+/// <summary>
+/// Contains the functionality for the 
+/// Debug commands
+/// </summary>
 public class DebugConsole : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private TMP_InputField _commandInput;
-
+    
+    /// <summary>
+    /// checks the debug commands and runs the 
+    /// right code depending on the command
+    /// </summary>
     public void RunDebugCommand()
     {
         // check for system commands
@@ -29,11 +36,14 @@ public class DebugConsole : MonoBehaviour
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Reload()")
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                
+                SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "DrawColliders()")
             {
-                PhysicsVisualizationSettings.GetShowBoxColliders();
+                ///PhysicsVisualizationSettings.GetShowBoxColliders(); <<-- doesn't work, unity lied to me
+
+                print("Functionality not implemented yet");
             }
         }
         // else just print the input value

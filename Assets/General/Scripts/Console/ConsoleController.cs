@@ -9,7 +9,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-
+/// <summary>
+/// Controlls the console onn a global scope,
+/// for example the console being turned on and
+/// off. May contain funtions for quick action with 
+/// buttons
+/// </summary>
 public class ConsoleController : MonoBehaviour
 {
     [Header("Settings")]
@@ -20,6 +25,7 @@ public class ConsoleController : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject _content;
     [SerializeField] private Button _playerTakeDamageButton;
+
 
     private void Start()
     {
@@ -32,7 +38,7 @@ public class ConsoleController : MonoBehaviour
         if (_isInDeveloperMode && Input.GetKeyUp(KeyCode.C))
         {
             
-            if (_content.active)
+            if (_content.activeSelf)
             {
                 _content.SetActive(false);
                 Time.timeScale = 1;

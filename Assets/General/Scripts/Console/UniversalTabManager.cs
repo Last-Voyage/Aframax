@@ -11,7 +11,10 @@ using UnityEngine.UI;
 
 
 
-
+/// <summary>
+/// Allows for seamless transitions between
+/// tabs
+/// </summary>
 public class UniversalTabManager : MonoBehaviour
 {   
     //the list of the bachground of the tabs and the pages the tab
@@ -19,22 +22,18 @@ public class UniversalTabManager : MonoBehaviour
     [SerializeField] private List<GameObject> _tabsBackGrounds = new List<GameObject>();
     [SerializeField] private List<GameObject> _tabsPages = new List<GameObject>();
 
-    
     private Color _selectedColor;
     private Color _unSelectedColor;
-
-   
 
 
     void Start()
     {
 
-
         _selectedColor = Color.white;
         _unSelectedColor = new Color(0.4037736f, 0.383204f, 0.383204f, 1);
 
-
         ChangeTab(0);
+
     }
 
 
