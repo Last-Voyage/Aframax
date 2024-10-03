@@ -26,6 +26,12 @@ public class EnvironmentManager : MainGameplayManagerFramework
 
     private UnityEvent _changeTheChunk = new();
 
+    /// <summary>
+    /// A function that takes in the int array representing the queue, and then it 
+    /// sends out an event that sends the queue over to the script that uses it 
+    /// in game
+    /// </summary>
+    /// <param name="theQueue">The int array representing the queue of chunks</param>
     public void SendOutChunks(int[] theQueue)
     {
         GetSendingOverChunks()?.Invoke(theQueue);
