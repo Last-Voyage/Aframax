@@ -26,6 +26,15 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("if true then you have to hold mouse down to retract fully. if false retracts automatically")]
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
 
+    [Space]
+    [Tooltip("The time it takes to reach max focus")]
+    [SerializeField] private float _focusTime;
+    [Tooltip("The accuracy that you start at when you begin focusing")]
+    [Range(0, .5f)]
+    [SerializeField] private float _focusStartingInaccuracy;
+    [Tooltip("The curve at which the accuracy increases while focusing")]
+    [SerializeField] private AnimationCurve _focusCurve;
+
     [Header("Harpoon Functionality Dependencies")]
     [Tooltip("Transform of whatever the cameras rotation is. Probably the cinemachine camera object")]
     [SerializeField] private Transform _playerLookDirection;
@@ -41,6 +50,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private LayerMask _excludeLayers;
     [Tooltip("The input action for shooting")]
     [SerializeField] private InputActionReference _harpoonShoot;
+    [Tooltip("The input action for focusing")]
+    [SerializeField] private InputActionReference _harpoonFocus;
     [Tooltip("The input action for retracting")]
     [SerializeField] private InputActionReference _harpoonRetract;
 
@@ -62,16 +73,14 @@ public class HarpoonGun : MonoBehaviour
     private Vector3 _fireDir;
     private float _currentDist;
     private bool _isShooting;
+    private bool _isFocusing = false;
+    private Coroutine _focusingCoroutine;
+    private float _currentFocus = 0;
     private RaycastHit _hit;
     private float _currentReelDur;
     private HarpoonRope _harpoonRope;
 
     private PlayerInputMap _playerInputMap;
-
-    //These events could probably be moved into the player manager later
-    //events
-    public static event Action<HarpoonGun> OnShotEvent;
-    public static event Action<HarpoonGun> OnRetractEvent;
 
     private void Awake(){
         _harpoonRope = GetComponent<HarpoonRope>();
@@ -83,6 +92,9 @@ public class HarpoonGun : MonoBehaviour
     public void SubscribeInput()
     {
         _harpoonShoot.action.performed += FireHarpoon;
+
+        _harpoonFocus.action.started += FocusHarpoon;
+        _harpoonFocus.action.canceled += StopHarpoonFocusing;
     }
 
     /// <summary>
@@ -91,6 +103,9 @@ public class HarpoonGun : MonoBehaviour
     public void UnsubscribeInput()
     {
         _harpoonShoot.action.performed -= FireHarpoon;
+
+        _harpoonFocus.action.started -= FocusHarpoon;
+        _harpoonFocus.action.canceled -= StopHarpoonFocusing;
     }
 
     /// <summary>
@@ -99,7 +114,7 @@ public class HarpoonGun : MonoBehaviour
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //dont shoot if already shot
-        if(_harpoonSpear != null || _isReeling)
+        if(_harpoonSpear != null || _isReeling || !_isFocusing)
         {
             return;
         }
@@ -108,16 +123,77 @@ public class HarpoonGun : MonoBehaviour
         _harpoonSpear.SetActive(false);
         _harpoonSpear.transform.GetChild(0).rotation = _playerLookDirection.rotation;
         _isShooting = true;
-        _fireDir = _playerLookDirection.forward; // In the direction the player is looking
+        _fireDir = GetHarpoonDirectionWithFocus(); // In the direction the player is looking
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
         _harpoonOnGun.SetActive(false);
-        
+
         //Camera shake here when combined with Stapay
 
-        OnShotEvent(this);
+        PlayerManager.Instance.InvokeHarpoonFiredEvent();
     }
 
+    /// <summary>
+    /// Adds spread to the weapon relative to focus
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 GetHarpoonDirectionWithFocus()
+    {
+        //Multiplies the direction the player is looking by a random variance scaled by current focus
+        return _playerLookDirection.forward + (UnityEngine.Random.insideUnitSphere * _currentFocus) ;
+    }
+
+    #region Focusing
+    /// <summary>
+    /// Starts focusing the weapon
+    /// </summary>
+    /// <param name="context"></param>
+    private void FocusHarpoon(InputAction.CallbackContext context)
+    {
+        _isFocusing = true;
+        _focusingCoroutine = StartCoroutine(FocusProcess());
+
+        PlayerManager.Instance.InvokeHarpoonFocusStartEvent();
+    }
+
+    /// <summary>
+    /// The process of focusing the weapon over time
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator FocusProcess()
+    {
+        float focusCompletion = 0;
+        while(focusCompletion < 1)
+        {
+            //Increases the progress on focusing
+            focusCompletion += Time.deltaTime / _focusTime;
+
+            //Sets the current focus based on the animation graph and inaccuracy scalar
+            _currentFocus = _focusCurve.Evaluate(focusCompletion) * _focusStartingInaccuracy;
+
+            yield return null;
+        }
+        _currentFocus = 0;
+    }
+
+    /// <summary>
+    /// Stops the focusing of the weapon
+    /// </summary>
+    /// <param name="context"></param>
+    private void StopHarpoonFocusing(InputAction.CallbackContext context)
+    {
+        StopCoroutine(_focusingCoroutine);
+        _currentFocus = 0;
+        _isFocusing = false;
+
+        PlayerManager.Instance.InvokeHarpoonEndEvent();
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Enables the harpoon
+    /// </summary>
     private void SetHarpoonActive()
     {
         //delays visual of harpoon appearing for better appearance
@@ -199,8 +275,11 @@ public class HarpoonGun : MonoBehaviour
         if(!_holdToRetractMode)
         {
             //cause the wave action again when reeling
-            OnRetractEvent(this);
-            OnShotEvent(this);
+
+            //Not entirely sure why its set up to do both events, but I'm simply
+            //replicating the current event structure in the player manager
+            PlayerManager.Instance.InvokeHarpoonRetractEvent();
+            PlayerManager.Instance.InvokeHarpoonFiredEvent();
         }
         // Lerp the harpoon back to the player over time
         var startPos = _harpoonSpear.transform.position;
@@ -216,8 +295,10 @@ public class HarpoonGun : MonoBehaviour
                     {
                         startedRetracting = true;
                         //cause the wave action again when reeling
-                        OnRetractEvent(this);
-                        OnShotEvent(this);
+                        //Not entirely sure why its set up to do both events, but I'm simply
+                        //replicating the current event structure in the player manager
+                        PlayerManager.Instance.InvokeHarpoonRetractEvent();
+                        PlayerManager.Instance.InvokeHarpoonFiredEvent();
                     }
                     _isShooting = true;
                     _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
@@ -245,7 +326,8 @@ public class HarpoonGun : MonoBehaviour
         }
         //Camera shake here when combined with Stapay
         StartCoroutine(ResetHarpoon());
-        OnRetractEvent(this);
+
+        PlayerManager.Instance.InvokeHarpoonRetractEvent();
     }
 
     /// <summary>

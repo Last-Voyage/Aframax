@@ -134,7 +134,18 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a56680af-279a-4e05-80e3-21fe7f52c577"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FocusHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""952a3339-bf6f-45ea-a788-f0715d180342"",
+                    ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -161,8 +172,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
-        m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
         m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
         m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
@@ -228,8 +237,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_MouseX;
-    private readonly InputAction m_Player_MouseY;
     private readonly InputAction m_Player_FireHarpoon;
     private readonly InputAction m_Player_FocusHarpoon;
     private readonly InputAction m_Player_ReelHarpoon;
@@ -238,8 +245,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         private @PlayerInputMap m_Wrapper;
         public PlayerActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
-        public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
         public InputAction @FireHarpoon => m_Wrapper.m_Player_FireHarpoon;
         public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
         public InputAction @ReelHarpoon => m_Wrapper.m_Player_ReelHarpoon;
@@ -255,12 +260,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @MouseX.started += instance.OnMouseX;
-            @MouseX.performed += instance.OnMouseX;
-            @MouseX.canceled += instance.OnMouseX;
-            @MouseY.started += instance.OnMouseY;
-            @MouseY.performed += instance.OnMouseY;
-            @MouseY.canceled += instance.OnMouseY;
             @FireHarpoon.started += instance.OnFireHarpoon;
             @FireHarpoon.performed += instance.OnFireHarpoon;
             @FireHarpoon.canceled += instance.OnFireHarpoon;
@@ -277,12 +276,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @MouseX.started -= instance.OnMouseX;
-            @MouseX.performed -= instance.OnMouseX;
-            @MouseX.canceled -= instance.OnMouseX;
-            @MouseY.started -= instance.OnMouseY;
-            @MouseY.performed -= instance.OnMouseY;
-            @MouseY.canceled -= instance.OnMouseY;
             @FireHarpoon.started -= instance.OnFireHarpoon;
             @FireHarpoon.performed -= instance.OnFireHarpoon;
             @FireHarpoon.canceled -= instance.OnFireHarpoon;
@@ -312,8 +305,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnMouseX(InputAction.CallbackContext context);
-        void OnMouseY(InputAction.CallbackContext context);
         void OnFireHarpoon(InputAction.CallbackContext context);
         void OnFocusHarpoon(InputAction.CallbackContext context);
         void OnReelHarpoon(InputAction.CallbackContext context);

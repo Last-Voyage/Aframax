@@ -24,4 +24,9 @@ public class SceneLoadingButtons : MonoBehaviour
     {
         SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(_sceneToLoad, _sceneTransitionID);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
