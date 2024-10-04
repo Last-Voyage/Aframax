@@ -14,7 +14,7 @@ using UnityEngine;
 /// <summary>
 /// Manages audio that persists throughout the game
 /// </summary>
-public class PersistentSoundManager : MonoBehaviour
+public class PersistentSoundManager : AudioManager
 {
     [SerializeField] private EventReference _ambientSound;
 

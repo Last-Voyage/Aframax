@@ -7,13 +7,7 @@
 // Description:     Provides the functionality behind all audio
                     Manager to be developed as I know specifics
 ******************************************************************************/
-using FMODUnity;
-using FMOD.Studio;
 using UnityEngine;
-using System;
-using UnityEngine.UIElements;
-using static UnityEngine.UI.Image;
-
 /// <summary>
 /// Provides the functionality behind all audio
 /// Manager to be developed

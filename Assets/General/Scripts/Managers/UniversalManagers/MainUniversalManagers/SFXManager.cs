@@ -9,7 +9,7 @@ using FMODUnity;
 using System;
 using UnityEngine;
 
-public class SFXManager : MonoBehaviour
+public class SFXManager : AudioManager
 {
     public static Action<EventReference> APlayOneShotSFX;
 
