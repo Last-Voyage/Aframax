@@ -878,6 +878,12 @@ MonoBehaviour:
   _excludeLayers:
     serializedVersion: 2
     m_Bits: 8
+  _enemyOnCrosshairLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  _enemyCrosshairBlockers:
+    serializedVersion: 2
+    m_Bits: 128
   _harpoonShoot: {fileID: -5070425021129914811, guid: a9035e5084fec0e4a81fdaa78201ec2c,
     type: 3}
   _harpoonFocus: {fileID: 1612608914095428297, guid: a9035e5084fec0e4a81fdaa78201ec2c,
@@ -1081,9 +1087,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.05
@@ -1343,7 +1347,7 @@ GameObject:
   - component: {fileID: 678656984770282948}
   m_Layer: 3
   m_Name: harpoon
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
