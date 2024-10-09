@@ -79,32 +79,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeBetweenAttacks: 3
   _timeAfterStartToStartAttacks: 0
-  _bossAttack1Indicator: {fileID: 507806329043049322}
-  _lowOpacity: {fileID: 2100000, guid: 3cf942017024886408138171bf9b1754, type: 2}
-  _hitOpacity: {fileID: 2100000, guid: 9aea404ddd86d7c4e85eb5dea180f724, type: 2}
-  _startBlinkInterval: 0.5
-  _endBlinkInterval: 0.05
-  _blinkDuration: 5
-  _hitBoxAppearDuration: 1
-  _roomWaypoints:
-  - {fileID: 8426513027410978759}
-  - {fileID: 2690456660703252774}
-  - {fileID: 9106922312040854364}
-  - {fileID: 5001462445577589946}
-  - {fileID: 8742571307873955804}
-  - {fileID: 4187531234869290600}
-  - {fileID: 5523455988884152815}
-  - {fileID: 6243940870467404481}
-  - {fileID: 8600693249914818065}
-  _roomStartPoint: {fileID: 5339080029703225732}
-  _patrolEnemyPrefab: {fileID: 8693923624853357280, guid: 8ddc0c87ec7ffd242a5721f373cf2ee2,
-    type: 3}
-  _patrolSpeed: 2
-  _seekPlayerSpeed: 5
-  _playerTranform: {fileID: 0}
-  _timeAttackTwoLasts: 15
-  _attackRoomTwoBorderOne: {fileID: 1401451795126326722}
-  _attackRoomTwoBorderTwo: {fileID: 7271975233800982312}
 --- !u!1 &255851634446801666
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +169,7 @@ Transform:
   m_GameObject: {fileID: 507806329043049322}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.22, z: 0}
+  m_LocalPosition: {x: 0.09, y: -0.22, z: 0.4}
   m_LocalScale: {x: 7.35, y: 0.52, z: 5.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -281,6 +255,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1290331605500715160}
+  - component: {fileID: 6714153641314411125}
   m_Layer: 0
   m_Name: Attack2
   m_TagString: Untagged
@@ -307,6 +282,39 @@ Transform:
   - {fileID: 7271975233800982312}
   m_Father: {fileID: 1383945660514550169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6714153641314411125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781188499210789383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978138afebabc11469261cf3b7bc4fcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roomWaypoints:
+  - {fileID: 8426513027410978759}
+  - {fileID: 2690456660703252774}
+  - {fileID: 9106922312040854364}
+  - {fileID: 5001462445577589946}
+  - {fileID: 8742571307873955804}
+  - {fileID: 4187531234869290600}
+  - {fileID: 5523455988884152815}
+  - {fileID: 6243940870467404481}
+  - {fileID: 8600693249914818065}
+  _roomStartPoint: {fileID: 5339080029703225732}
+  _patrolEnemyPrefab: {fileID: 8693923624853357280, guid: 8ddc0c87ec7ffd242a5721f373cf2ee2,
+    type: 3}
+  _patrolSpeed: 2
+  _seekPlayerSpeed: 5
+  _playerTranform: {fileID: 0}
+  _attackDuration: 15
+  _attackRoomTwoBorderOne: {fileID: 1401451795126326722}
+  _attackRoomTwoBorderTwo: {fileID: 7271975233800982312}
+  _playerAttackTag: Player
+  _destroyAttackDelay: 0.1
 --- !u!1 &1987579224346807696
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,6 +386,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2319629524999122402}
+  - component: {fileID: 1471040912179078613}
   m_Layer: 0
   m_Name: Attack1
   m_TagString: Untagged
@@ -402,6 +411,25 @@ Transform:
   - {fileID: 2918506288802812480}
   m_Father: {fileID: 1383945660514550169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1471040912179078613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3153899334682102589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523066aca1dad9f4c993a49d0e0bb3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bossAttack1Indicator: {fileID: 507806329043049322}
+  _lowOpacity: {fileID: 2100000, guid: 3cf942017024886408138171bf9b1754, type: 2}
+  _hitOpacity: {fileID: 2100000, guid: 9aea404ddd86d7c4e85eb5dea180f724, type: 2}
+  _startBlinkInterval: 1
+  _endBlinkInterval: 0.1
+  _blinkDuration: 5
+  _hitBoxAppearDuration: 1
 --- !u!1 &3322687773252693575
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,7 +517,7 @@ Transform:
   m_GameObject: {fileID: 6082482219865514057}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 0.74, z: -0.4}
+  m_LocalPosition: {x: -0.22, y: 0.74, z: 0.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
