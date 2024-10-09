@@ -84,17 +84,16 @@ public class HarpoonGun : MonoBehaviour
     private RaycastHit _hit;
     private float _currentReelDur;
     private HarpoonRope _harpoonRope;
+    private Coroutine _enemyCrosshairChecksCoroutine;
 
     private PlayerInputMap _playerInputMap;
 
-    private void Awake(){
+    private void Awake()
+    {
         _harpoonRope = GetComponent<HarpoonRope>();
         _harpoonAnimator = GetComponent<Animator>();
-    }
 
-    private void Update()
-    {
-        EnemyOnCrosshairChecks();
+        _enemyCrosshairChecksCoroutine = StartCoroutine(EnemyOnCrosshairChecks());
     }
 
     /// sets up the button for shooting
@@ -356,24 +355,30 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Checks for if we have changed from looking at an enemy to no longer doing so or vice versa
     /// </summary>
-    private void EnemyOnCrosshairChecks()
+    private IEnumerator EnemyOnCrosshairChecks()
     {
-        // Performs the raycast checks for if we are over an enemy
-        if(EnemyOnCrosshairRaycast())
+        while(true)
         {
-            if(!_aimedAtEnemy)
+            // Performs the raycast checks for if we are over an enemy
+            if (EnemyOnCrosshairRaycast())
             {
-                //We are aimed at an enemy and were not the previous frame
-                _aimedAtEnemy = true;
-                PlayerManager.Instance.InvokeCrosshairOverEnemyStartEvent();
+                if (!_aimedAtEnemy)
+                {
+                    //We are aimed at an enemy and were not the previous frame
+                    _aimedAtEnemy = true;
+                    PlayerManager.Instance.InvokeCrosshairOverEnemyStartEvent();
+                }
             }
+            else if (_aimedAtEnemy)
+            {
+                //We are no longer animed at an enemy
+                _aimedAtEnemy = false;
+                PlayerManager.Instance.InvokeCrosshairOverEnemyEndEvent();
+            }
+
+            yield return null;
         }
-        else if (_aimedAtEnemy)
-        {
-            //We are no longer animed at an enemy
-            _aimedAtEnemy = false;
-            PlayerManager.Instance.InvokeCrosshairOverEnemyEndEvent();
-        }
+        
     }
 
     /// <summary>
@@ -382,21 +387,16 @@ public class HarpoonGun : MonoBehaviour
     /// <returns></returns>
     private bool EnemyOnCrosshairRaycast()
     {
-        //Checks if the enemy is over the crosshair
-        if (Physics.Raycast(transform.position, _playerLookDirection.forward,
-            _maxDistance, _enemyOnCrosshairLayers))
-        {
-            //Checks if anything is in the way such as a wall
-            if (Physics.Raycast(transform.position, _playerLookDirection.forward,
+        //Checks if anything is in the way such as a wall
+        if (!Physics.Raycast(transform.position, _playerLookDirection.forward,
                 _maxDistance, _enemyCrosshairBlockers))
-            {
-                //Return false as the enemy is being blocked
-                return false;
-            }
-            //Return true because there is an enemy over the crosshair and it isn't blocked
-            return true;
+        {
+            //Checks if the enemy is over the crosshair returns the result
+            return Physics.Raycast(transform.position, _playerLookDirection.forward,
+                _maxDistance, _enemyOnCrosshairLayers);
         }
-        //Return false as no enemy is over the crosshair
+
+        //Return false as no enemy is over the crosshair or is being blocked
         return false;
     }
 

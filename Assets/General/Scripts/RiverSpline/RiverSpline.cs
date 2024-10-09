@@ -29,8 +29,11 @@ public class RiverSpline : MonoBehaviour
     [Min(1)] [SerializeField] private float _width = 10;
     [Tooltip("The base horizontal distance between vertices")]
     [Min(0.001f)] [SerializeField] private float _idealVertexDistance = 1;
-    [Tooltip("How many lines make up each curve")]
-    [Min(1)] [SerializeField] private int _riverSmoothness = 15;
+
+    /// <summary>
+    /// Get the smoothness value from the attached bezier curve
+    /// </summary>
+    public int RiverSmoothness => GetComponent<BezierCurve>().CurveSmoothness;
 
     /// <summary>
     /// Create a mesh based on the attached bezier curve and the settings degined by the user
@@ -51,8 +54,8 @@ public class RiverSpline : MonoBehaviour
         Mesh mesh = new();
 
         // Get the position and derivatives of the attached bezier curve
-        Vector3[] curvePositions = activeBezier.All3dPoints(_riverSmoothness);
-        Vector3[] curveDerivatives = activeBezier.All3dDerivatives(_riverSmoothness);
+        Vector3[] curvePositions = activeBezier.All3dPoints(RiverSmoothness);
+        Vector3[] curveDerivatives = activeBezier.All3dDerivatives(RiverSmoothness);
 
         // Resize the desired vertex distance to match the width the best it can
         _idealVertexDistance = Mathf.Min(_idealVertexDistance, _width);
@@ -62,7 +65,7 @@ public class RiverSpline : MonoBehaviour
 
         // Set the size of the rectangle in vertices
         int sizeX = verticesPerPoint;
-        int sizeY = _riverSmoothness * (activeBezier.BezierPoints.Length - 1) + 1;
+        int sizeY = RiverSmoothness * (activeBezier.BezierPoints.Length - 1) + 1;
 
         // Prepare the vertex and uv arrays
         Vector3[] vertices = new Vector3[sizeX * sizeY];
