@@ -9,6 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// functionality for pausing the game and the pause menu buttons
+/// </summary>
 public class PauseMenu : MonoBehaviour
 {
     //for some ungodly reason, this script only works when this is serialized or public
@@ -33,6 +36,9 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// pauses the game by setting the timeScale to 0 and activates the pause menu objects
+    /// </summary>
     public void PauseGame()
     {
         //don't pause if the game is already paused
@@ -49,6 +55,9 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// unpauses the game by setting the timeScale to 1 and deactivates the pause menu objects
+    /// </summary>
     public void ResumeGame()
     {
         //this should be hooked up to the time manager, but the manager is empty rn so idk
@@ -61,6 +70,9 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// it quits the game
+    /// </summary>
     public void QuitGame()
     {
         Application.Quit();
