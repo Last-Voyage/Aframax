@@ -82,7 +82,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// <param name="theChunks">All usable chunks</param>
     private void ReceiveEveryChunk(GameObject[] theChunks)
     {
-        _everyChunk = theChunks;
+        _everyChunk = theChunks; // TO DO
     }
 
     /// <summary>
@@ -97,7 +97,6 @@ public class IterativeChunkLoad : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// I should probably make this an event listener!
     /// That way, I don't have to keep track of other nonsense!
     /// </summary>
     private void ChunkChange()
