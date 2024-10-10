@@ -279,6 +279,62 @@ public class BezierCurve : MonoBehaviour
 
         return all3dDerivatives;
     }
+
+    /// <summary>
+    /// Gets the length of the active bezier
+    /// </summary>
+    /// <returns>The total length of the bezier at the current level of detail</returns>
+    public float GetLengthOfLine()
+    {
+        AllPoints(CurveSmoothness, out float length);
+        return length;
+    }
+
+    /// <summary>
+    /// Gets the position along the line at a certain float value
+    /// </summary>
+    /// <param name="value">The percentage value along the line to be determining</param>
+    /// <param name="forward">The forward derivative along the line</param>
+    /// <returns>The position along the line at the given value</returns>
+    public Vector3 GetPositionAlongSpline(float value, out Vector3 forward)
+    {
+        // Clamp the value between 0 and 100%
+        value = Mathf.Clamp01(value);
+
+        // Get the length that the boat needs to travel along the line
+        float length = GetLengthOfLine();
+        float distanceOverLine = value * length;
+
+        // Iterate through each line segment and find the one that the point is in
+        float previousLength = 0;
+        float totalLength = 0;
+        for (int i = 0; i < BezierPoints.Length - 1; i++)
+        {
+            // Get the current length of the "active" segment and add it to the main distance
+            PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], CurveSmoothness, out float currentLength);
+            totalLength += currentLength;
+
+            // If the distance value is less than the current length, it will be in this segment
+            if (distanceOverLine <= totalLength)
+            {
+                // Find the value along and position within the line segment
+                float valueOnSegment = (distanceOverLine - previousLength) / currentLength;
+                Vector2 positionOnSegment = EvaluateBezierPoint(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+
+                // Determine the derivative at the point along the line
+                Vector2 derivativeOnSegment = EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+                forward = new(derivativeOnSegment.x, 0, derivativeOnSegment.y);
+
+                // Account for 3D space
+                return new(positionOnSegment.x, 0, positionOnSegment.y);
+            }
+            previousLength = totalLength;
+        }
+
+        // Edge case
+        forward = Vector3.zero;
+        return Vector3.zero;
+    }
 }
 
 /// <summary>
