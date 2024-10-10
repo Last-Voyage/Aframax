@@ -31,6 +31,9 @@ public class PlayerManager : MainGameplayManagerFramework
     private static UnityEvent _harpoonFocusMaxEvent = new();
     private static UnityEvent _harpoonFocusEndEvent = new();
 
+    private static UnityEvent _enemyOverCrosshairStartEvent = new();
+    private static UnityEvent _enemyOverCrosshairEndEvent = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -90,6 +93,22 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _harpoonFocusEndEvent?.Invoke();
     }
+
+    /// <summary>
+    /// Invokes the crosshair over enemy start event
+    /// </summary>
+    public void InvokeCrosshairOverEnemyStartEvent()
+    {
+        _enemyOverCrosshairStartEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the crosshair over enemy end event
+    /// </summary>
+    public void InvokeCrosshairOverEnemyEndEvent()
+    {
+        _enemyOverCrosshairEndEvent?.Invoke();
+    }
     #endregion
 
     #region Getters
@@ -102,5 +121,7 @@ public class PlayerManager : MainGameplayManagerFramework
     public UnityEvent GetHarpoonFocusStartEvent() => _harpoonFocusStartEvent;
     public UnityEvent GetHarpoonFocusMaxEvent() => _harpoonFocusMaxEvent;
     public UnityEvent GetHarpoonFocusEndEvent() => _harpoonFocusEndEvent;
+    public UnityEvent GetEnemyOverCrosshairStartEvent() => _enemyOverCrosshairStartEvent;
+    public UnityEvent GetEnemyOverCrosshairEndEvent() => _enemyOverCrosshairEndEvent;
     #endregion
 }

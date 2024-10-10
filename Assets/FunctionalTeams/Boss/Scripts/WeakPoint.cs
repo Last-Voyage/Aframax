@@ -23,6 +23,9 @@ public class WeakPoint : MonoBehaviour
     private UnityEvent<float> _weakPointDamageTakenEvent = new();
     private UnityEvent<WeakPoint> _weakPointDeathEvent = new();
 
+    [Header("Audio")]
+    [SerializeField] private FMODUnity.EventReference _destroyedSFX;
+
     private void Start()
     {
         _currentWeakPointHealth = _weakPointMaxHealth;
@@ -60,6 +63,7 @@ public class WeakPoint : MonoBehaviour
     private void WeakPointDeath()
     {
         InvokeWeakPointDeathEvent();
+        SFXManager.APlayOneShotSFX?.Invoke(_destroyedSFX);
         Destroy(gameObject);
     }
 
