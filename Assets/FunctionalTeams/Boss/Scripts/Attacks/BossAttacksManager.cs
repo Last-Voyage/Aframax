@@ -67,7 +67,6 @@ public class BossAttacksManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ChooseAttacksRepeatedly()
     {
-        Debug.Log("attack?");
         yield return new WaitForSeconds(_timeAfterStartToStartAttacks);
         while(true)
         {

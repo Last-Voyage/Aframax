@@ -59,7 +59,6 @@ public class FullRoomAttack : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DoAttack()
     {
-        Debug.Log("full");
         BossAttacksManager.Instance.AttackInProgress = true;
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();

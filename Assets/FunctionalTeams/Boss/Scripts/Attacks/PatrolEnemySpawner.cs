@@ -52,7 +52,6 @@ public class PatrolEnemySpawner : MonoBehaviour
     /// <returns></returns>
     private void SpawnEnemy()
     {
-        Debug.Log("spawn patrol");
         BossAttacksManager.Instance.AttackInProgress = true;
         //choose random start point
         _instantiatedPatrolEnemy = Instantiate(_patrolEnemyPrefab, _roomStartPoint.position, Quaternion.identity);
