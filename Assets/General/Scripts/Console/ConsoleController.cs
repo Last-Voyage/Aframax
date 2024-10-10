@@ -7,6 +7,8 @@
  */
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using System;
 
 
 /// <summary>
@@ -17,15 +19,22 @@ using UnityEngine.UI;
 /// </summary>
 public class ConsoleController : MonoBehaviour
 {
-    [Header("Settings")]//Prints a name that what the following serializes are going to be
+    [Header("Settings")]
     [SerializeField] private bool _isInDeveloperMode = false;
 
     
-    [Space] //Adds a space between the obove serialize and bellow
-    [Header("References")]//Prints a name that what the following serializes are going to be
+    [Space]
+    [Header("References")]
     [SerializeField] private GameObject _content;
     [SerializeField] private Button _playerTakeDamageButton;
 
+    private PlayerInputMap _playerInput;
+
+    private void Awake()
+    {
+       _playerInput = new PlayerInputMap();
+        _playerInput.Enable();
+    }
 
     private void Start()
     {
@@ -34,16 +43,22 @@ public class ConsoleController : MonoBehaviour
     }
     private void Update()
     {
+        _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
+    }
+
+
+    private void ToggleConsole()
+    {
         //toggle console on and off
-        if (_isInDeveloperMode && Input.GetKeyUp(KeyCode.C))
+        if (_isInDeveloperMode)
         {
-            
+
             if (_content.activeSelf)
             {
                 _content.SetActive(false);
                 Time.timeScale = 1;
             }
-            else 
+            else
             {
                 _content.SetActive(true);
                 Time.timeScale = 0;
@@ -56,7 +71,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void HurtPlayer()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealthManager>().TakeDamage(1);
+        GameObject.FindObjectOfType<PlayerHealthManager>().TakeDamage(1);
     }
 
     /// <summary>
@@ -68,6 +83,7 @@ public class ConsoleController : MonoBehaviour
     {
         Time.timeScale = 1;
         _playerTakeDamageButton.onClick.RemoveAllListeners();
+        _playerInput.Disable();
     }
 
     
