@@ -9,6 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// holder of all definitions to do with health
+/// </summary>
 public class UniversalHealthSystem : MonoBehaviour
 {
     /// <summary>
@@ -42,9 +45,5 @@ public class UniversalHealthSystem : MonoBehaviour
                 CurrentHealth = 1;
                 IsPlayer = false;
          }
-
-        
-
-
      }
 }
