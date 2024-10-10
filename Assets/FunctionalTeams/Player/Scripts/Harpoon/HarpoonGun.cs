@@ -400,6 +400,10 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(true);
     }
 
+    /// <summary>
+    /// Maintains the orientation of the harpoon relative to camera direction
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator HarpoonCameraOrientation()
     {
         while(true)
