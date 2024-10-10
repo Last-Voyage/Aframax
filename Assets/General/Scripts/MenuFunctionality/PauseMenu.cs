@@ -5,9 +5,10 @@
 //
 // Brief Description : operates pausing the game and the pause menu buttons
 *****************************************************************************/
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// functionality for pausing the game and the pause menu buttons
@@ -17,8 +18,15 @@ public class PauseMenu : MonoBehaviour
     //for some ungodly reason, this script only works when this is serialized or public
     [SerializeField] private List<GameObject> PauseMenuContents;
 
+    PlayerInputMap Controls;
+    private bool Pause = false;
+
     private void Awake()
     {
+        //initialize input
+        Controls = new PlayerInputMap();
+        Controls.Player.Pause.performed += ctx => PauseToggle();
+
         //find the pause menu objects
         foreach (Transform child in gameObject.transform)
         {
@@ -27,12 +35,19 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    private void Update()
+    /// <summary>
+    /// toggles the pause state so you can press escape again to close the pause menu
+    /// </summary>
+    private void PauseToggle()
     {
-        //this should be hooked up to the new input system
-        if (Input.GetKey(KeyCode.Escape))
+        Pause = !Pause;
+        if (Pause)
         {
             PauseGame();
+        }
+        else if (!Pause)
+        {
+            ResumeGame();
         }
     }
 
@@ -76,5 +91,15 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void OnEnable()
+    {
+        Controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        Controls.Disable();
     }
 }
