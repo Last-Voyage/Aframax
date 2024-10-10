@@ -9,6 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// holder of all definitions to do with health
+/// </summary>
 public class UniversalHealthSystem : MonoBehaviour
 {
     /// <summary>
@@ -29,7 +32,7 @@ public class UniversalHealthSystem : MonoBehaviour
         /// <param name="_iP"></param>
          public Health (float _mHP, float _cHP, bool _iP)
          {
-                MaxHealth = _mHP;
+               MaxHealth = _mHP;
                CurrentHealth = _cHP;
                IsPlayer = _iP;
           }
@@ -41,6 +44,6 @@ public class UniversalHealthSystem : MonoBehaviour
                 MaxHealth = 1;
                 CurrentHealth = 1;
                 IsPlayer = false;
-          }
+         }
      }
 }
