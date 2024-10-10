@@ -144,6 +144,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""952a3339-bf6f-45ea-a788-f0715d180342"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FocusHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
