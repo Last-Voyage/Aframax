@@ -12,11 +12,14 @@ using UnityEngine;
 /// </summary>
 public class MoveObject : MonoBehaviour
 {
+    [SerializeField] private float _xDirectionMoveSpeed = 0f;
+    [SerializeField] private float _zDirectionMoveSpeed = 1f;
+
     /// <summary>
     /// Moves the object it's attached to in the z direction
     /// </summary>
     void Update()
     {
-        gameObject.transform.position += new Vector3(0, 0, 1f) * Time.deltaTime;
+        gameObject.transform.position += new Vector3(_xDirectionMoveSpeed, 0, _zDirectionMoveSpeed) * Time.deltaTime;
     }
 }
