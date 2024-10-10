@@ -407,6 +407,9 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 }
 
+/// <summary>
+/// Contains the state in which the harpoon is currently in
+/// </summary>
 public enum EFocusState
 {
     None,
