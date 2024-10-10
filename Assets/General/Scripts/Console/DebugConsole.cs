@@ -30,7 +30,7 @@ public class DebugConsole : MonoBehaviour
             //handle system commands
             if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Quit()")
             {
-                print("Attempting to Quit Game");
+
                 Application.Quit();
 
             }

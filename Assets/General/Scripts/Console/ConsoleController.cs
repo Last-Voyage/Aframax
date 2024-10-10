@@ -17,12 +17,12 @@ using UnityEngine.UI;
 /// </summary>
 public class ConsoleController : MonoBehaviour
 {
-    [Header("Settings")]
+    [Header("Settings")]//Prints a name that what the following serializes are going to be
     [SerializeField] private bool _isInDeveloperMode = false;
 
     
-    [Space]
-    [Header("References")]
+    [Space] //Adds a space between the obove serialize and bellow
+    [Header("References")]//Prints a name that what the following serializes are going to be
     [SerializeField] private GameObject _content;
     [SerializeField] private Button _playerTakeDamageButton;
 
