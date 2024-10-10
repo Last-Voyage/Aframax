@@ -6,12 +6,14 @@
 // Brief Description :  Custom editor GUI for our Cel Shader.
 **************************************************************************/
 
+// Exclude script from build
+#if UNITY_EDITOR
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Rendering;
-using UnityEngine;
 
 public class CelShaderGUI : ShaderGUI
 {
@@ -167,3 +169,5 @@ public class CelShaderGUI : ShaderGUI
         CoreEditorUtils.DrawSplitter();
     }
 }
+
+#endif

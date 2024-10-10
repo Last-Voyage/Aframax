@@ -7,7 +7,6 @@
 //                  This script takes input designated for movement from the
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -29,42 +28,25 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
-    // IMPORTANT: THIS CLASS ALSO TEMPORARILY CONTROLS THE CAMERA
-    // REMOVE THIS WHEN WE IMPLEMENT A MORE DYNAMIC CAMERA
-    /// <summary>
-    /// Variables that relate to the rotation of the camera
-    /// </summary>
-    [Header("Set Player Camera Here")]
-    [SerializeField] private Transform _playerCamera;
-    [Header("Adjustable Mouse Sensitivities")]
-    [Tooltip("X controls Left/Right\nY controls Up/Down")]
-    [SerializeField] private float _mouseSensitivityX;
-    [SerializeField] private float _mouseSensitivityY;
+    [Space]
+    [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private float _unfocusSpeedSlowTime;
+    [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
 
-    /// <summary>
-    /// _cameraXRotation is used to keep track of the current rotation
-    /// of the camera. This is used while moving the mouse up and down
-    /// </summary>
-    private float _cameraXRotation;
+    private float _currentFocusMoveSpeedMultiplier = 1;
 
-    /// <summary>
-    /// _CAMERA_CLAMP is a constant used to prevent the camera from starting
-    /// to point behind the player while looking up and down. Set to 90 so that
-    /// the camera may still look straight up or down
-    /// </summary>
-    private const float _CAMERA_CLAMP = 90;
+    private float _currentFocusMoveSpeedProgress = 0;
+
+    private Coroutine _harpoonSlowdownCoroutine;
+
+    [SerializeField] private Transform _playerForwards;
 
     /// <summary>
     /// Variables that capture user input
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    // THE BELOW INPUT ACTIONS ARE USED FOR THE CAMERA
-    private InputAction _mouseXInput;
-    private InputAction _mouseYInput;
     private const string _MOVEMENT_INPUT_NAME = "Movement";
-    private const string _MOUSE_X_INPUT_NAME = "MouseX";
-    private const string _MOUSE_Y_INPUT_NAME = "MouseY";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -74,43 +56,49 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Movement coroutine related variables
     /// </summary>
-    public static event Action<bool> OnMovementToggled;
     private Coroutine _movementCoroutine;
 
     /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized.
     /// </summary>
-    void Start()
+    private void Start()
     {
-        // Initialize non-serialized variables, input variables, and
-        // the Rigidbody
-        InitializeNonSerialized();
-        InitializeInput();
+        // Initialize input variables and the Rigidbody
+        SubscribeInput();
+        SubscribeToEvents();
         InitializeRigidbody();
 
         // Run the movement coroutine
-        _movementCoroutine = StartCoroutine("ResolveMovement");
-    }
-
-    /// <summary>
-    /// Initializes all non-serialized private variables.
-    /// </summary>
-    private void InitializeNonSerialized()
-    {
-        _cameraXRotation = 0;
+        _movementCoroutine = StartCoroutine(ResolveMovement());
     }
 
     /// <summary>
     /// Initializes all input variables
     /// </summary>
-    private void InitializeInput()
+    public void SubscribeInput()
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
+
         _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
-        _mouseXInput = _playerInput.currentActionMap.FindAction(_MOUSE_X_INPUT_NAME);
-        _mouseYInput = _playerInput.currentActionMap.FindAction(_MOUSE_Y_INPUT_NAME);
+    }
+
+    /// <summary>
+    /// Unsubscribes from all input
+    /// </summary>
+    public void UnsubscribeInput()
+    {
+        _movementInput = null;
+    }
+
+    /// <summary>
+    /// Subscribes to all events not relating to input
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -119,7 +107,6 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeRigidbody()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        _rigidBody.freezeRotation = true;
     }
 
     /// <summary>
@@ -128,10 +115,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private IEnumerator ResolveMovement()
     {
-        while(true)
+        while (true)
         {
             HandleMovement();
-            HandleCameraRotation();
             yield return null;
         }
     }
@@ -144,6 +130,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         Vector3 horizontalMovement = HandleHorizontalMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
+        verticalMovement = Vector3.zero;
 
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
@@ -159,8 +146,11 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (transform.right * moveDir.x + transform.forward * moveDir.y)
-            * _playerMovementSpeed;
+        Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
+            _playerForwards.transform.forward * moveDir.y) * 
+            _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
+
+        newMovement = new Vector3(newMovement.x, 0, newMovement.z);
 
         // Move the player
         return newMovement;
@@ -175,29 +165,90 @@ public class PlayerMovementController : MonoBehaviour
         return new Vector3(0, _rigidBody.velocity.y, 0);
     }
 
+    #region Harpoon Slowdown
     /// <summary>
-    /// THIS METHOD IS TEMPORARY UNTIL A CAMERA CONTROLLER IS CREATED
-    /// Handles the rotation of the camera based on mouse movement
+    /// Starts the harpoon speed slowdown
     /// </summary>
-    private void HandleCameraRotation()
+    private void StartHarpoonSpeedSlowdown()
     {
-        // First, rotate the player character based on
-        // the horizontal movement of the mouse
-        // We do this by manipulating Vector3.up, which is similar to how we
-        // handled the horizontal movement
-        transform.Rotate(Vector3.up, _mouseXInput.ReadValue<float>() * Time.deltaTime * _mouseSensitivityX);
-
-        // Instead of rotating the player up and down, we will rotate the camera
-        // Change the camera's rotation by reading the vertical mouse movement
-        _cameraXRotation -= _mouseYInput.ReadValue<float>() * _mouseSensitivityY;
-        _cameraXRotation = Mathf.Clamp(_cameraXRotation, -_CAMERA_CLAMP, _CAMERA_CLAMP);
-
-        // Create a target rotation for the camera based on the player's rotation
-        // and the new rotation we just found
-        Vector3 targetRotation = transform.eulerAngles;
-        targetRotation.x = _cameraXRotation;
-        _playerCamera.eulerAngles = targetRotation;
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
     }
+
+    /// <summary>
+    /// Stops the slowdown from focusing the harpoon
+    /// </summary>
+    private void StopHarpoonSpeedSlowdown()
+    {
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
+    }
+
+    /// <summary>
+    /// Stops the process of focusing or unfocusing
+    /// </summary>
+    private void StopCurrentFocusCoroutine()
+    {
+        if (_harpoonSlowdownCoroutine != null)
+        {
+            StopCoroutine(_harpoonSlowdownCoroutine);
+        }
+    }
+
+    /// <summary>
+    /// The process of slowing down the player while focusing
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedSlowdownProcess()
+    {
+        while (_currentFocusMoveSpeedProgress < 1)
+        {
+            //Increases the progress on slowdown
+            _currentFocusMoveSpeedProgress += Time.deltaTime / _focusSpeedSlowTime;
+
+            CalculateCurrentFocusSpeedMultiplier();
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// The process of speeding up the player after unfocusing
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedUpProcess()
+    {
+        while (_currentFocusMoveSpeedProgress > 0)
+        {
+            //Decreases the progress on slowdown
+            _currentFocusMoveSpeedProgress -= Time.deltaTime / _unfocusSpeedSlowTime;
+
+            CalculateCurrentFocusSpeedMultiplier();
+
+            yield return null;
+        }
+
+        HarpoonSpeedUpComplete();
+    }
+
+    /// <summary>
+    /// Called when the player is at max speed after unfocusing their weapon
+    /// </summary>
+    private void HarpoonSpeedUpComplete()
+    {
+        _currentFocusMoveSpeedProgress = 0;
+        CalculateCurrentFocusSpeedMultiplier();
+    }
+
+    /// <summary>
+    /// Calculates the current speed multiplier for focusing the weapon
+    /// </summary>
+    private void CalculateCurrentFocusSpeedMultiplier()
+    {
+        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
+    }
+
+    #endregion
 
     /// <summary>
     /// Activates or deactivates the movement coroutine based on the input boolean
@@ -208,7 +259,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (change)
         {
-            _movementCoroutine = StartCoroutine("ResolveMovement");
+            _movementCoroutine = StartCoroutine(ResolveMovement());
         }
         else
         {
@@ -223,15 +274,15 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        OnMovementToggled += ToggleMovement;
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
     }
 
     /// <summary>
-    /// Called when this component is disnabled.
+    /// Called when this component is disabled.
     /// Used to unassign the OnMovementToggled Action to a listener
     /// </summary>
     private void OnDisable()
     {
-        OnMovementToggled -= ToggleMovement;
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
     }
 }
