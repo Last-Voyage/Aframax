@@ -24,6 +24,7 @@ public class ConsoleController : MonoBehaviour
 
     
     [Space]
+    [Tooltip("All these references are found inside of the conlole prefab")]
     [Header("References")]
     [SerializeField] private GameObject _content;
     [SerializeField] private Button _playerTakeDamageButton;

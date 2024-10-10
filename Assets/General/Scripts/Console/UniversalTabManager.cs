@@ -19,7 +19,7 @@ public class UniversalTabManager : MonoBehaviour
 {   
     //the list of the bachground of the tabs and the pages the tab
     //enables. the indexes should correlate
-    [SerializeField] private List<GameObject> _tabsBackGrounds = new List<GameObject>();
+    [SerializeField] private List<GameObject> _tabsBackgrounds = new List<GameObject>();
     [SerializeField] private List<GameObject> _tabsPages = new List<GameObject>();
 
     private Color _selectedColor;
@@ -46,17 +46,17 @@ public class UniversalTabManager : MonoBehaviour
     /// <param name="tabIndex"></param>
     public void ChangeTab(int tabIndex)
     {
-        for (int i = 0; i < _tabsBackGrounds.Count; i++)
+        for (int i = 0; i < _tabsBackgrounds.Count; i++)
         {
             if (i == tabIndex)
             {
                 //enable the tab
                 GameObject _currentSelectedTab = _tabsPages[i];
-                GameObject _currenSelectedTabBK = _tabsBackGrounds[i];
+                GameObject _currentSelectedTabBK = _tabsBackgrounds[i];
 
                 _currentSelectedTab.SetActive(true);
 
-                _currenSelectedTabBK.GetComponent<Image>().color = _selectedColor;
+                _currentSelectedTabBK.GetComponent<Image>().color = _selectedColor;
                 //turn off the other tab pages except for the select tab's page
                 foreach (GameObject tab in _tabsPages)
                 {
@@ -69,9 +69,9 @@ public class UniversalTabManager : MonoBehaviour
 
                 //change the unselected tabs backgrounds to the unselect tab bk color
 
-                foreach (GameObject tabBK in _tabsBackGrounds) 
+                foreach (GameObject tabBK in _tabsBackgrounds) 
                 {
-                    if (tabBK != _currenSelectedTabBK)
+                    if (tabBK != _currentSelectedTabBK)
                     {
                         tabBK.GetComponent<Image>().color = _unSelectedColor;
                     }
