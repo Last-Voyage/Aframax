@@ -91,6 +91,8 @@ public class HarpoonGun : MonoBehaviour
     private void Awake(){
         _harpoonRope = GetComponent<HarpoonRope>();
         _harpoonAnimator = GetComponent<Animator>();
+
+        StartCoroutine(HarpoonCameraOrientation());
     }
 
     /// sets up the button for shooting
@@ -398,6 +400,14 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(true);
     }
 
+    private IEnumerator HarpoonCameraOrientation()
+    {
+        while(true)
+        {
+            transform.rotation = _playerLookDirection.rotation;
+            yield return null;
+        }
+    }
 
     #region Getters
     //exposed variables
