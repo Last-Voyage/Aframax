@@ -12,17 +12,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contains methods able to generate a river mesh based around a bezier curve
+/// </summary>
 [RequireComponent(typeof(BezierCurve))]
 public class RiverSpline : MonoBehaviour
 {
     [Header("References")]
+    [Tooltip("The mesh rendering a river")]
     [SerializeField] private MeshFilter _mesh;
+    [Tooltip("The collider for the river")]
     [SerializeField] private MeshCollider _collider;
 
     [Header("River Settings")]
-    [Min(1)] [SerializeField] private float _width;
-    [Min(0.001f)] [SerializeField] private float _idealVertexDistance;
-    [Min(1)] [SerializeField] private int _riverSmoothness;
+    [Tooltip("The width of the river")]
+    [Min(1)] [SerializeField] private float _width = 10;
+    [Tooltip("The base horizontal distance between vertices")]
+    [Min(0.001f)] [SerializeField] private float _idealVertexDistance = 1;
+
+    /// <summary>
+    /// Get the smoothness value from the attached bezier curve
+    /// </summary>
+    public int RiverSmoothness => GetComponent<BezierCurve>().CurveSmoothness;
 
     /// <summary>
     /// Create a mesh based on the attached bezier curve and the settings degined by the user
@@ -31,8 +42,11 @@ public class RiverSpline : MonoBehaviour
     {
         BezierCurve activeBezier = GetComponent<BezierCurve>();
 
-        // Don't create a mesh if there isn't enough information to make one
-        if (activeBezier.bezierPoints.Length < 2)
+        // Edge cases
+        if (activeBezier == null
+            || activeBezier.BezierPoints == null
+            || activeBezier.BezierPoints.Length < 2
+            || _mesh == null)
         {
             return;
         }
@@ -40,8 +54,8 @@ public class RiverSpline : MonoBehaviour
         Mesh mesh = new();
 
         // Get the position and derivatives of the attached bezier curve
-        Vector3[] curvePositions = activeBezier.All3dPoints(_riverSmoothness);
-        Vector3[] curveDerivatives = activeBezier.All3dDerivatives(_riverSmoothness);
+        Vector3[] curvePositions = activeBezier.All3dPoints(RiverSmoothness);
+        Vector3[] curveDerivatives = activeBezier.All3dDerivatives(RiverSmoothness);
 
         // Resize the desired vertex distance to match the width the best it can
         _idealVertexDistance = Mathf.Min(_idealVertexDistance, _width);
@@ -51,7 +65,7 @@ public class RiverSpline : MonoBehaviour
 
         // Set the size of the rectangle in vertices
         int sizeX = verticesPerPoint;
-        int sizeY = _riverSmoothness * (activeBezier.bezierPoints.Length - 1) + 1;
+        int sizeY = RiverSmoothness * (activeBezier.BezierPoints.Length - 1) + 1;
 
         // Prepare the vertex and uv arrays
         Vector3[] vertices = new Vector3[sizeX * sizeY];
@@ -107,8 +121,16 @@ public class RiverSpline : MonoBehaviour
         mesh.triangles = triangles;
 
         // Set the actual mesh renderer and mesh collider to read from the temporary mesh
+        _mesh.gameObject.transform.position = Vector3.zero;
+        _collider.gameObject.transform.position = Vector3.zero;
         _mesh.sharedMesh = mesh;
         _mesh.sharedMesh.RecalculateNormals();
+
+        // If there's no collider, don't update it
+        if (_collider == null)
+        {
+            return;
+        }
         _collider.sharedMesh = null;
         _collider.sharedMesh = mesh;
     }
@@ -118,7 +140,20 @@ public class RiverSpline : MonoBehaviour
     /// </summary>
     public void ResetMesh()
     {
+        // Edge cases
+        if (_mesh == null
+            || _mesh.sharedMesh == null)
+        {
+            return;
+        }
         _mesh.sharedMesh = null;
+
+        // Edge cases
+        if (_collider == null
+            || _collider.sharedMesh)
+        {
+            return;
+        }
         _collider.sharedMesh = null;
     }
 }

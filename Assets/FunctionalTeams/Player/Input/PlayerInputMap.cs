@@ -37,7 +37,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""HarpoonButton"",
+                    ""name"": ""FireHarpoon"",
                     ""type"": ""Button"",
                     ""id"": ""aa80d4fd-ee8d-4409-b4fc-02c693475a30"",
                     ""expectedControlType"": ""Button"",
@@ -46,9 +46,18 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Pause"",
+                    ""name"": ""FocusHarpoon"",
                     ""type"": ""Button"",
-                    ""id"": ""bb424e9b-b008-4957-ade7-0bb4d26ce640"",
+                    ""id"": ""b8545e07-0d14-4c11-96b3-0a45742a7a07"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReelHarpoon"",
+                    ""type"": ""Button"",
+                    ""id"": ""46123ba1-202e-49de-a560-ebd47b8d6d5c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -118,18 +127,40 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HarpoonButton"",
+                    ""action"": ""FireHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9b3efe75-4d2d-44f1-867f-2b22472f1bb9"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""id"": ""a56680af-279a-4e05-80e3-21fe7f52c577"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pause"",
+                    ""action"": ""FocusHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""952a3339-bf6f-45ea-a788-f0715d180342"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FocusHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReelHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -141,8 +172,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_HarpoonButton = m_Player.FindAction("HarpoonButton", throwIfNotFound: true);
-        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
+        m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
+        m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,15 +237,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_HarpoonButton;
-    private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_FireHarpoon;
+    private readonly InputAction m_Player_FocusHarpoon;
+    private readonly InputAction m_Player_ReelHarpoon;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
         public PlayerActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @HarpoonButton => m_Wrapper.m_Player_HarpoonButton;
-        public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @FireHarpoon => m_Wrapper.m_Player_FireHarpoon;
+        public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
+        public InputAction @ReelHarpoon => m_Wrapper.m_Player_ReelHarpoon;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -226,12 +260,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @HarpoonButton.started += instance.OnHarpoonButton;
-            @HarpoonButton.performed += instance.OnHarpoonButton;
-            @HarpoonButton.canceled += instance.OnHarpoonButton;
-            @Pause.started += instance.OnPause;
-            @Pause.performed += instance.OnPause;
-            @Pause.canceled += instance.OnPause;
+            @FireHarpoon.started += instance.OnFireHarpoon;
+            @FireHarpoon.performed += instance.OnFireHarpoon;
+            @FireHarpoon.canceled += instance.OnFireHarpoon;
+            @FocusHarpoon.started += instance.OnFocusHarpoon;
+            @FocusHarpoon.performed += instance.OnFocusHarpoon;
+            @FocusHarpoon.canceled += instance.OnFocusHarpoon;
+            @ReelHarpoon.started += instance.OnReelHarpoon;
+            @ReelHarpoon.performed += instance.OnReelHarpoon;
+            @ReelHarpoon.canceled += instance.OnReelHarpoon;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -239,12 +276,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @HarpoonButton.started -= instance.OnHarpoonButton;
-            @HarpoonButton.performed -= instance.OnHarpoonButton;
-            @HarpoonButton.canceled -= instance.OnHarpoonButton;
-            @Pause.started -= instance.OnPause;
-            @Pause.performed -= instance.OnPause;
-            @Pause.canceled -= instance.OnPause;
+            @FireHarpoon.started -= instance.OnFireHarpoon;
+            @FireHarpoon.performed -= instance.OnFireHarpoon;
+            @FireHarpoon.canceled -= instance.OnFireHarpoon;
+            @FocusHarpoon.started -= instance.OnFocusHarpoon;
+            @FocusHarpoon.performed -= instance.OnFocusHarpoon;
+            @FocusHarpoon.canceled -= instance.OnFocusHarpoon;
+            @ReelHarpoon.started -= instance.OnReelHarpoon;
+            @ReelHarpoon.performed -= instance.OnReelHarpoon;
+            @ReelHarpoon.canceled -= instance.OnReelHarpoon;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -265,7 +305,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnHarpoonButton(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
+        void OnFireHarpoon(InputAction.CallbackContext context);
+        void OnFocusHarpoon(InputAction.CallbackContext context);
+        void OnReelHarpoon(InputAction.CallbackContext context);
     }
 }

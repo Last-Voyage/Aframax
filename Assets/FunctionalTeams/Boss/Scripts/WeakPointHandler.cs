@@ -1,5 +1,5 @@
 /******************************************************************************
-// File Name:       WeakPointSpawner.cs
+// File Name:       WeakPointHandler.cs
 // Author:          Ryan Swanson
 // Creation Date:   September 22, 2024
 //
@@ -113,7 +113,6 @@ public class WeakPointHandler : MonoBehaviour
         return _weakPointSpawnLocations[Random.Range(0, _weakPointSpawnLocations.Count)];
     }
     #endregion
-
 
     #region Weak Point Destruction
     /// <summary>

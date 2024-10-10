@@ -13,8 +13,7 @@ using UnityEngine.UI;
 
 public class PlayerHealthBar : MonoBehaviour
 {
-    [SerializeField] private Image HealthBar;
-
+    private Image HealthBar;
     private void Awake()
     {
         //this way it doesn't waste time doing find if it's already connected
