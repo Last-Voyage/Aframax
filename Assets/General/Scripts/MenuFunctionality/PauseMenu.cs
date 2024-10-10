@@ -16,22 +16,22 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour
 {
     //for some ungodly reason, this script only works when this is serialized or public
-    [SerializeField] private List<GameObject> PauseMenuContents;
+    [SerializeField] private List<GameObject> _pauseMenuContents;
 
-    PlayerInputMap Controls;
-    private bool Pause = false;
+    private PlayerInputMap _playerInputControls;
+    private bool _isPaused = false;
 
     private void Awake()
     {
         //initialize input
-        Controls = new PlayerInputMap();
-        Controls.Player.Pause.performed += ctx => PauseToggle();
+        _playerInputControls = new PlayerInputMap();
+        _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
 
         //find the pause menu objects
         foreach (Transform child in gameObject.transform)
         {
             //this is the thing that breaks when PauseMenuContents isn't serialized
-            PauseMenuContents.Add(child.gameObject);
+            _pauseMenuContents.Add(child.gameObject);
         }
     }
 
@@ -40,12 +40,12 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void PauseToggle()
     {
-        Pause = !Pause;
-        if (Pause)
+        _isPaused = !_isPaused;
+        if (_isPaused)
         {
             PauseGame();
         }
-        else if (!Pause)
+        else if (!_isPaused)
         {
             ResumeGame();
         }
@@ -63,7 +63,7 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 0;
 
             //turn on the pause menu stuff
-            foreach (GameObject menuContents in PauseMenuContents)
+            foreach (GameObject menuContents in _pauseMenuContents)
             {
                 menuContents.SetActive(true);
             }
@@ -71,7 +71,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// unpauses the game by setting the timeScale to 1 and deactivates the pause menu objects
+    /// un-pauses the game by setting the timeScale to 1 and deactivates the pause menu objects
     /// </summary>
     public void ResumeGame()
     {
@@ -79,7 +79,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
 
         //turn off the pause menu stuff
-        foreach (GameObject menuContents in PauseMenuContents)
+        foreach (GameObject menuContents in _pauseMenuContents)
         {
             menuContents.SetActive(false);
         }
@@ -95,11 +95,11 @@ public class PauseMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        Controls.Enable();
+        _playerInputControls.Enable();
     }
 
     private void OnDisable()
     {
-        Controls.Disable();
+        _playerInputControls.Disable();
     }
 }
