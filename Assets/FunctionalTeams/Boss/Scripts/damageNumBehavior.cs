@@ -19,30 +19,41 @@ public class DamageNumBehavior : MonoBehaviour
     //The number that gives the illusion of the number disappearing
     [SerializeField] private float _opacityScaler = 255;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        //disappears quickly
-        _opacityScaler -= ((255f * 6f) * Time.deltaTime);
-        //update the color of the text to match the intesity of which it has been hit(more damage more red) along with opacity going clear
-        _damageText.color = new Color(255f/255f, ((255f - (_damageNumber *17f)))/255f, (255f - (_damageNumber * 17f))/255f, (_opacityScaler/255));
-        //move Upwards slowly
-        transform.position += new Vector3(0, 0.05f, 0);
+        StartCoroutine(ColorsAndMovement());
+    }
 
-        //Once text is completely clear destory object
-        if (_damageText.color.a <= 0)
+    /// <summary>
+    /// The holder of changing the color and updating the movemont of the number text along with the opacity
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ColorsAndMovement()
+    {
+        while (true)
         {
-            StartCoroutine(Despawn());
+            yield return new WaitForSeconds(0.01f);
+            //disappears quickly
+            _opacityScaler -= ((255f * 6f) * Time.deltaTime);
+            //update the color of the text to match the intesity of which it has been hit(more damage more red) along with opacity going clear
+            _damageText.color = new Color(255f / 255f, ((255f - (_damageNumber * 17f))) / 255f, (255f - (_damageNumber * 17f)) / 255f, (_opacityScaler / 255));
+            //move Upwards slowly
+            transform.position += new Vector3(0, 0.06f, 0);
+            //Once text is completely clear destory object
+            if (_damageText.color.a <= 0)
+            {
+                StartCoroutine(Despawn());
+            }
         }
     }
- 
-    IEnumerator Despawn()
+
+    private IEnumerator Despawn()
     {
         yield return new WaitForSeconds(0.1f);
         Destroy(gameObject);
     }
 
-    public float GetDamageNumber
+    public float DamageNumber
     {
         get { return _damageNumber; }
         set { _damageNumber = value; }

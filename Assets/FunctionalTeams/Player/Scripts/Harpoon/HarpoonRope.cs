@@ -39,8 +39,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void Awake()
     {
-        _harpoonGun = GetComponent<HarpoonGun>();
-        _lr = GetComponent<LineRenderer>();
+        _harpoonGun = GetComponentInParent<HarpoonGun>();
+        _lr = GetComponentInChildren<LineRenderer>();
         _spring = new Spring();
         _spring.SetTarget(0);
     }
@@ -50,8 +50,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void OnEnable()
     {
-        HarpoonGun.OnShotEvent += StartDrawingRope;
-        HarpoonGun.OnRetractEvent += StopDrawingRope;
+        PlayerManager.Instance.GetHarpoonFiredEvent().AddListener(StartDrawingRope);
+        PlayerManager.Instance.GetHarpoonRetractEvent().AddListener(StopDrawingRope);
     }
 
     /// <summary>
@@ -59,8 +59,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void OnDisable()
     {
-        HarpoonGun.OnShotEvent -= StartDrawingRope;
-        HarpoonGun.OnRetractEvent -= StopDrawingRope;
+        PlayerManager.Instance.GetHarpoonFiredEvent().RemoveListener(StartDrawingRope);
+        PlayerManager.Instance.GetHarpoonRetractEvent().RemoveListener(StopDrawingRope);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public class HarpoonRope : MonoBehaviour {
     /// <summary>
     /// starts the draw rope coroutine
     /// </summary>
-    private void StartDrawingRope(HarpoonGun harpoonGun)
+    private void StartDrawingRope()
     {
         if (_drawRopeCoroutine == null) {
             _drawRopeCoroutine = StartCoroutine(DrawRopeCoroutine());
@@ -112,7 +112,7 @@ public class HarpoonRope : MonoBehaviour {
     /// <summary>
     /// stops the draw rope coroutine and resets the rope for next spring
     /// </summary>
-    private void StopDrawingRope(HarpoonGun harpoonGun) 
+    private void StopDrawingRope() 
     {
         if (_drawRopeCoroutine != null) 
         {
