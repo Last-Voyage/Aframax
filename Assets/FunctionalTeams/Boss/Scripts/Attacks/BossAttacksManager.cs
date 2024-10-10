@@ -9,14 +9,18 @@ using System.Collections;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// manager for the boss attacks currently, will be restructured for future builds
+/// </summary>
 public class BossAttacksManager : MonoBehaviour
 {
     //general
-    internal bool AttackInProgress = false;
+    private bool _attackInProgress = false;
     [Tooltip("After an attack is finished how long to wait before starting next one")]
     [SerializeField] private float _timeBetweenAttacks = 5f;
     [Tooltip("this is how long before boss attacks actually begin if you want start delay")]
     [SerializeField] private float _timeAfterStartToStartAttacks;
+    private Coroutine _chooseAttacksRepeatedlyCoroutine;
 
     public static BossAttacksManager Instance;
 
@@ -38,14 +42,14 @@ public class BossAttacksManager : MonoBehaviour
             Destroy(this);
         }
     }
- 
+    
     /// <summary>
     /// Starts random attacks at the set interval
     /// </summary>
     void Start()
     {
         InitializeBossAttackList();
-        StartCoroutine(ChooseAttacksRepeatedly());
+        _chooseAttacksRepeatedlyCoroutine = StartCoroutine(ChooseAttacksRepeatedly());
     }
 
     /// <summary>
@@ -63,12 +67,13 @@ public class BossAttacksManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ChooseAttacksRepeatedly()
     {
+        Debug.Log("attack?");
         yield return new WaitForSeconds(_timeAfterStartToStartAttacks);
         while(true)
         {
-            if(!AttackInProgress)
+            if(!_attackInProgress)
             {
-                AttackInProgress = true;
+                _attackInProgress = true;
                 yield return new WaitForSeconds(_timeBetweenAttacks);
                 //call random attack to start from the list of attacks
                 _bossAttacks[UnityEngine.Random.Range(0, _bossAttacks.Length)]?.Invoke();
@@ -76,4 +81,11 @@ public class BossAttacksManager : MonoBehaviour
             yield return null;
         }
     }
+
+    public bool AttackInProgress
+    {
+        get { return _attackInProgress; }
+        set { _attackInProgress = value; }
+    }
+
 }

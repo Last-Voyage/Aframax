@@ -8,6 +8,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// contains functionality for full room attack
+/// </summary>
 public class FullRoomAttack : MonoBehaviour
 {
     //attack 1 ref
@@ -31,7 +34,7 @@ public class FullRoomAttack : MonoBehaviour
     /// </summary>
     private void OnEnable() 
     {
-        BossAttacksManager.FullRoomAttack += CallAttackOne;
+        BossAttacksManager.FullRoomAttack += ActivateThisAttack;
     }
 
     /// <summary>
@@ -39,23 +42,24 @@ public class FullRoomAttack : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        BossAttacksManager.FullRoomAttack -= CallAttackOne;
+        BossAttacksManager.FullRoomAttack -= ActivateThisAttack;
     }
 
     /// <summary>
     /// pretty self explanitory
     /// </summary>
-    private void CallAttackOne()
+    private void ActivateThisAttack()
     {
-        StartCoroutine(AttackOne());
+        StartCoroutine(DoAttack());
     }
 
     /// <summary>
     /// creates an indicator that the room is about to be attacked, and then attacks everything in room
     /// </summary>
     /// <returns></returns>
-    private IEnumerator AttackOne()
+    private IEnumerator DoAttack()
     {
+        Debug.Log("full");
         BossAttacksManager.Instance.AttackInProgress = true;
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
