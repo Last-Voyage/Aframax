@@ -59,8 +59,8 @@ public class PauseMenu : MonoBehaviour
         //don't pause if the game is already paused
         if (Time.timeScale > 0)
         {
-            //this should be hooked up to the time manager, but the manager is empty rn so idk
-            Time.timeScale = 0;
+            TimeManager.Instance.InvokeOnGamePause(true);
+            CameraManager.Instance.InvokeOnCameraMovementToggle(false);
 
             //turn on the pause menu stuff
             foreach (GameObject menuContents in _pauseMenuContents)
@@ -75,8 +75,8 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void ResumeGame()
     {
-        //this should be hooked up to the time manager, but the manager is empty rn so idk
-        Time.timeScale = 1;
+        TimeManager.Instance.InvokeOnGamePause(false);
+        CameraManager.Instance.InvokeOnCameraMovementToggle(true);
 
         //turn off the pause menu stuff
         foreach (GameObject menuContents in _pauseMenuContents)
@@ -93,13 +93,29 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
+    private void SetTimeScale(bool paused)
+    {
+        if (paused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
     private void OnEnable()
     {
         _playerInputControls.Enable();
+
+        TimeManager.Instance.GetGamePauseEvent().AddListener(SetTimeScale);
     }
 
     private void OnDisable()
     {
         _playerInputControls.Disable();
+
+        TimeManager.Instance.GetGamePauseEvent().RemoveListener(SetTimeScale);
     }
 }
