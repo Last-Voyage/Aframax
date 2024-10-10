@@ -17,15 +17,14 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
     [Tooltip("The speed the harpoon moves in the launch direction")]
     [SerializeField] private float _harpoonSpeed = 50f; // Speed of the harpoon
+    [Tooltip("The speed the harpoon projectile moves back towards the player")]
+    [SerializeField] private float _reelSpeed;
     [Tooltip("max distance the harpoon can launch")]
     [SerializeField] private float _maxDistance = 100f; // Max travel distance
-    [Tooltip("the max duration the harpoon can take to reel in(at max distance)")]
-    [SerializeField] private float _reelDuration = 3f; // Time to reel in at max distance
     [Tooltip("cooldown of the gun after fully reeled in")]
     [SerializeField] private float _gunCooldown = 2f; // cd of harpoon gun after fully retracted
     [Tooltip("if true then you have to hold mouse down to retract fully. if false retracts automatically")]
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
-
     [Space]
     [Tooltip("The time it takes to reach max focus")]
     [SerializeField] private float _focusTime;
@@ -85,7 +84,7 @@ public class HarpoonGun : MonoBehaviour
     private Coroutine _focusingCoroutine;
     
     private RaycastHit _hit;
-    private float _currentReelDur;
+    //private float _currentReelDur;
     private HarpoonRope _harpoonRope;
 
     private PlayerInputMap _playerInputMap;
@@ -309,17 +308,6 @@ public class HarpoonGun : MonoBehaviour
     private void StartReeling(Vector3 _hitPosition)
     {
         _isReeling = true;
-        
-        float distanceFromPlayer;
-        if(_hit.transform != null)
-        {
-            distanceFromPlayer = Vector3.Distance(transform.position, _hitPosition);
-        }else
-        {
-            distanceFromPlayer = _maxDistance;
-        }
-        // Adjust the reeling time based on the distance
-        _currentReelDur = distanceFromPlayer / _maxDistance * _reelDuration;
         StartCoroutine(ReelHarpoon());
     }
 
@@ -343,7 +331,7 @@ public class HarpoonGun : MonoBehaviour
         // Lerp the harpoon back to the player over time
         var startPos = _harpoonSpear.transform.position;
         bool startedRetracting = false;
-        while(elapsedTime < _currentReelDur)
+        while (Vector3.Distance(transform.position, _harpoonSpear.transform.position) > .1f)
         {
             //if hold to retract is on, only pull in harpoon if holding down button
             if(_holdToRetractMode)
@@ -361,7 +349,8 @@ public class HarpoonGun : MonoBehaviour
                     }
                     _isShooting = true;
                     _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
-                    _harpoonSpear.transform.position = Vector3.Lerp(startPos, _harpoonTip.position, elapsedTime/ _currentReelDur);
+                    HarpoonReelProjectileMovement();
+                    //_harpoonSpear.transform.position = Vector3.Lerp(startPos, _harpoonTip.position, elapsedTime/ _currentReelDur);
                     elapsedTime+= Time.deltaTime;
                 } 
                 //otherwise automatically pull in 
@@ -369,7 +358,8 @@ public class HarpoonGun : MonoBehaviour
             else
             {
                 _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
-                _harpoonSpear.transform.position = Vector3.Lerp(startPos, _harpoonTip.position, elapsedTime/ _currentReelDur);
+                HarpoonReelProjectileMovement();
+                //_harpoonSpear.transform.position = Vector3.Lerp(startPos, _harpoonTip.position, elapsedTime/ _currentReelDur);
                 elapsedTime+= Time.deltaTime; 
             }
             yield return null;
@@ -387,6 +377,15 @@ public class HarpoonGun : MonoBehaviour
         StartCoroutine(ResetHarpoon());
 
         PlayerManager.Instance.InvokeHarpoonRetractEvent();
+    }
+
+    /// <summary>
+    /// Moves the harpoon projectile back to the player
+    /// </summary>
+    private void HarpoonReelProjectileMovement()
+    {
+        Vector3 direction = (transform.position - _harpoonSpear.transform.position).normalized;
+        _harpoonSpear.transform.position += direction * Time.deltaTime*_reelSpeed;
     }
 
     /// <summary>
