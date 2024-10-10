@@ -3,7 +3,7 @@
 // Author :            Mark Hanson
 // Creation Date :     9/27/2024
 //
-// Brief Description : A storage for health usagable by players and enemies alike
+// Brief Description : A storage for health usable by players and enemies alike
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
