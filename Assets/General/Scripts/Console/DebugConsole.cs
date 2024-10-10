@@ -5,7 +5,6 @@
 // which handles the debug console commands
  */
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,8 +40,6 @@ public class DebugConsole : MonoBehaviour
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "DrawColliders()")
             {
-                ///PhysicsVisualizationSettings.GetShowBoxColliders(); <<-- doesn't work, unity lied to me
-
                 print("Functionality not implemented yet");
             }
         }
