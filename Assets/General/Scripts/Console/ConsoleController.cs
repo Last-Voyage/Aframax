@@ -7,8 +7,7 @@
  */
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
-using System;
+
 
 
 /// <summary>
@@ -24,9 +23,10 @@ public class ConsoleController : MonoBehaviour
 
     
     [Space]
-    [Tooltip("All these references are found inside of the conlole prefab")]
+    [Tooltip("Can be found inside of the console prefab")]
     [Header("References")]
     [SerializeField] private GameObject _content;
+    [Tooltip("Can be found inside of the console prefab")]
     [SerializeField] private Button _playerTakeDamageButton;
 
     private PlayerInputMap _playerInput;
