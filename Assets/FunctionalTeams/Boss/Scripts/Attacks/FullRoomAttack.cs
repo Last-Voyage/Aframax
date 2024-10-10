@@ -7,6 +7,7 @@
 *****************************************************************************/
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// contains functionality for full room attack
@@ -43,6 +44,16 @@ public class FullRoomAttack : MonoBehaviour
     private void OnDisable()
     {
         BossAttacksManager.FullRoomAttack -= ActivateThisAttack;
+    }
+    
+    /// <summary>
+    /// just for testing
+    /// </summary>
+    private void Update() {
+        #if UNITY_EDITOR
+        if(Keyboard.current.spaceKey.wasPressedThisFrame)
+            ActivateThisAttack();
+        #endif
     }
 
     /// <summary>

@@ -7,6 +7,7 @@
 *****************************************************************************/
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// contains functionality for the patrol enemy spawning
@@ -44,6 +45,16 @@ public class PatrolEnemySpawner : MonoBehaviour
     private void OnDisable()
     {
         BossAttacksManager.PatrolRoomAttack -= SpawnEnemy;
+    }
+
+    /// <summary>
+    /// just for testing
+    /// </summary>
+    private void Update() {
+        #if UNITY_EDITOR
+        if(Keyboard.current.spaceKey.wasPressedThisFrame)
+            SpawnEnemy();
+        #endif
     }
 
     /// <summary>
