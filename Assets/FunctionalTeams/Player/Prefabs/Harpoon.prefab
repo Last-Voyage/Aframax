@@ -560,13 +560,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d60e22217d6a04bbde921e451cff6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _harpoonPrefab: {fileID: 8430130115990038482, guid: 84f2eb355931fc747b5e9353cbff9bbb,
-    type: 3}
   _harpoonSpeed: 30
   _reelSpeed: 30
+  _reelStartDelay: 0.2
   _maxDistance: 100
   _gunCooldown: 2
   _holdToRetractMode: 0
+  _harpoonPrefab: {fileID: 8430130115990038482, guid: 84f2eb355931fc747b5e9353cbff9bbb,
+    type: 3}
   _focusTime: 2
   _unfocusTime: 0.5
   _focusStartingInaccuracy: 0.25
@@ -595,8 +596,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _playerLookDirection: {fileID: 0}
-  _harpoonShootTrigger: shoot
-  _harpoonRetractTrigger: drawBack
   _harpoonTip: {fileID: 2320849589018435248}
   _harpoonOnGun: {fileID: 2178814002120738897}
   _excludeLayers:
@@ -612,6 +611,8 @@ MonoBehaviour:
   _recoilCameraShakeTime: 0.05
   _retractCameraShakeIntensity: 3
   _retractCameraShakeTime: 0.05
+  _harpoonShootTrigger: shoot
+  _harpoonRetractTrigger: drawBack
 --- !u!1 &3877201842297547352
 GameObject:
   m_ObjectHideFlags: 0
