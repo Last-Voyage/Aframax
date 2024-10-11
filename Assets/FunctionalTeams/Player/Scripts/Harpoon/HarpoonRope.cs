@@ -105,9 +105,11 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void StartDrawingRope()
     {
-        if (_drawRopeCoroutine == null) {
-            _drawRopeCoroutine = StartCoroutine(DrawRopeCoroutine());
+        if (_drawRopeCoroutine != null) 
+        {
+            StopCoroutine(_drawRopeCoroutine);
         }
+        _drawRopeCoroutine = StartCoroutine(DrawRopeCoroutine());
     }
 
     /// <summary>

@@ -263,14 +263,11 @@ public class HarpoonGun : MonoBehaviour
     {
         yield return new WaitForSeconds(_reelStartDelay);
 
+        //Eventually I imagine the _holdToRetractMode will be removed
+
         if (!_holdToRetractMode)
         {
-            //cause the wave action again when reeling
-
-            //Not entirely sure why its set up to do both events, but I'm simply
-            //replicating the current event structure in the player manager
             PlayerManager.Instance.InvokeHarpoonRetractStartEvent();
-            PlayerManager.Instance.InvokeHarpoonFiredStartEvent();
         }
 
         while (Vector3.Distance(_harpoonTip.transform.position, _harpoonSpear.transform.position) > .1f)
@@ -282,18 +279,6 @@ public class HarpoonGun : MonoBehaviour
                 {
                     SetHarpoonProjectileLookAt(_harpoonTip.transform.position);
                     HarpoonReelProjectileMovement();
-                    /*if (!startedRetracting)
-                    {
-                        startedRetracting = true;
-                        //cause the wave action again when reeling
-                        //Not entirely sure why its set up to do both events, but I'm simply
-                        //replicating the current event structure in the player manager
-                        PlayerManager.Instance.InvokeHarpoonRetractEvent();
-                        PlayerManager.Instance.InvokeHarpoonFiredEvent();
-                    }
-
-                    SetHarpoonProjectileLookAt(_harpoonTip.transform.position);
-                    HarpoonReelProjectileMovement();*/
                 }
                 //otherwise automatically pull in 
             }
