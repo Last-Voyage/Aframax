@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
+//                     Ryan Swanson
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -18,7 +19,7 @@ public class HarpoonGun : MonoBehaviour
     #region Variables
     [Header("Harpoon Variables")]
     [Tooltip("The speed the harpoon moves in the launch direction")]
-    [SerializeField] private float _harpoonSpeed = 50f; // Speed of the harpoon
+    [SerializeField] private float _fireSpeed = 50f; // Speed of the harpoon
     [Tooltip("The speed the harpoon projectile moves back towards the player")]
     [SerializeField] private float _reelSpeed;
     [Tooltip("The time between when the harpoon hits its target or distance limit to when you can start reeling")]
@@ -26,7 +27,7 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Max distance the harpoon can launch")]
     [SerializeField] private float _maxDistance = 100f; // Max travel distance
     [Tooltip("Cooldown of the gun after fully reeled in")]
-    [SerializeField] private float _gunCooldown = 2f; // cd of harpoon gun after fully retracted
+    [SerializeField] private float _reloadTime = 2f; // cd of harpoon gun after fully retracted
     [Tooltip("If true then you have to hold mouse down to retract fully. if false retracts automatically")]
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
     [Tooltip("The projectile being fired")]
@@ -199,7 +200,7 @@ public class HarpoonGun : MonoBehaviour
         while (travelDistance < _maxDistance)
         {
             // Calculate how far the harpoon should move in this frame
-            Vector3 movement = _fireDir * _harpoonSpeed * Time.deltaTime;
+            Vector3 movement = _fireDir * _fireSpeed * Time.deltaTime;
 
             // Cast a ray from the harpoon's current position forward by the amount it moves this frame
             if (Physics.Raycast(_harpoonSpear.transform.position, 
@@ -322,7 +323,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonSpear.SetActive(false);
         _harpoonFiringState = EHarpoonFiringState.Reloading;
 
-        yield return new WaitForSeconds(_gunCooldown);
+        yield return new WaitForSeconds(_reloadTime);
 
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
