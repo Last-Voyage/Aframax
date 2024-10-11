@@ -89,7 +89,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes the harpoon focus end event
     /// </summary>
-    public void InvokeHarpoonEndEvent()
+    public void InvokeHarpoonFocusEndEvent()
     {
         _harpoonFocusEndEvent?.Invoke();
     }
