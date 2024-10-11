@@ -5,6 +5,7 @@
 // along with its hosting the methodes the quick action buttons
 // in the console will use
  */
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +29,7 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private GameObject _content;
     [Tooltip("Can be found inside of the console prefab")]
     [SerializeField] private Button _playerTakeDamageButton;
-
+    [SerializeField] private TMP_InputField _dmgAmountInputField;
     private PlayerInputMap _playerInput;
 
     private void Awake()
@@ -41,12 +42,9 @@ public class ConsoleController : MonoBehaviour
     {
         //linking player take damage button to corresponding methode
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
-    }
-    private void Update()
-    {
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
     }
-
+ 
 
     private void ToggleConsole()
     {
@@ -72,7 +70,12 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void HurtPlayer()
     {
-        GameObject.FindObjectOfType<PlayerHealthManager>().TakeDamage(1);
+        int _amount;
+        if (_dmgAmountInputField.text.Length > 0 && int.TryParse(_dmgAmountInputField.text, out _amount))
+        {
+            GameObject.FindObjectOfType<PlayerHealthManager>().TakeDamage(_amount);
+        }
+        
     }
 
     /// <summary>
