@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class testScript : UniversalHealthSystem
 {
     //The health assets and variables that will be used derive from here
-    private Health health;
+    /*private Health health;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,5 +18,5 @@ public class testScript : UniversalHealthSystem
     void DamageScaler(float damage)
     {
         damage = 1f;
-    }
+    }*/
 }

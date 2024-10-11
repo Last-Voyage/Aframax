@@ -55,6 +55,7 @@ public class UniversalHealth : UniversalHealthSystem
     {
         _healthDecrease?.Invoke(damage);
         _health.CurrentHealth -= damage;
+        Debug.Log(_health.CurrentHealth);
         // If the health goes all the way down to 0 the game object dies
         if (_health.CurrentHealth <= 0)
         {
