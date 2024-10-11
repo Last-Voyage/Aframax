@@ -223,13 +223,10 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
         m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
-
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
-
-        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
-
     }
 
     public void Dispose()
