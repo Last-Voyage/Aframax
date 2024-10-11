@@ -32,6 +32,8 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The projectile being fired")]
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
 
+    private bool _reelingButtonHeld;
+
     private GameObject _harpoonSpear;
 
     private EHarpoonFiringState _harpoonFiringState;
@@ -129,6 +131,9 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFocus.action.started += FocusHarpoon;
         _harpoonFocus.action.canceled += StartUnfocusingHarpoon;
+
+        _harpoonRetract.action.started += ReelButtonHeld;
+        _harpoonRetract.action.canceled += ReelButtonReleased;
     }
 
     /// <summary>
@@ -140,6 +145,9 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFocus.action.started -= FocusHarpoon;
         _harpoonFocus.action.canceled -= StartUnfocusingHarpoon;
+
+        _harpoonRetract.action.started -= ReelButtonHeld;
+        _harpoonRetract.action.canceled -= ReelButtonReleased;
     }
     #endregion
 
@@ -179,7 +187,7 @@ public class HarpoonGun : MonoBehaviour
 
         //Camera shake here when combined with Stapay
 
-        PlayerManager.Instance.InvokeHarpoonFiredEvent();
+        PlayerManager.Instance.InvokeHarpoonFiredStartEvent();
     }
 
     /// <summary>
@@ -209,7 +217,9 @@ public class HarpoonGun : MonoBehaviour
             yield return null;
         }
         //Either reached here because we hit something or because we have exceeded the max distance
-        StartReeling();
+        PlayerManager.Instance.InvokeHarpoonFiredEndEvent();
+
+        StartReelingProcess();
     }
 
     /// <summary>
@@ -223,21 +233,33 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 
     #region Harpoon Reeling
+    private void ReelButtonHeld(InputAction.CallbackContext context)
+    {
+        _reelingButtonHeld = true;
+        PlayerManager.Instance.InvokeHarpoonRetractStartEvent();
+    }
+
+    private void ReelButtonReleased(InputAction.CallbackContext context)
+    {
+        _reelingButtonHeld = false;
+        PlayerManager.Instance.InvokeHarpoonRetractStoppedEvent();
+    }
+
     /// <summary>
     /// sets up the reel positions and time. if the target hit is grabbable child it to the harpoon so it comes back
     /// </summary>
     /// <param name="_hitPosition"></param>
-    private void StartReeling()
+    private void StartReelingProcess()
     {
         _harpoonFiringState = EHarpoonFiringState.Reeling;
-        StartCoroutine(ReelHarpoon());
+        StartCoroutine(ReelHarpoonProcess());
     }
 
     /// <summary>
     /// actually reels in the harpoon and destorys the instaniated harpoon. Begins reload timer at the end.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator ReelHarpoon()
+    private IEnumerator ReelHarpoonProcess()
     {
         yield return new WaitForSeconds(_reelStartDelay);
 
@@ -247,19 +269,20 @@ public class HarpoonGun : MonoBehaviour
 
             //Not entirely sure why its set up to do both events, but I'm simply
             //replicating the current event structure in the player manager
-            PlayerManager.Instance.InvokeHarpoonRetractEvent();
-            PlayerManager.Instance.InvokeHarpoonFiredEvent();
+            PlayerManager.Instance.InvokeHarpoonRetractStartEvent();
+            PlayerManager.Instance.InvokeHarpoonFiredStartEvent();
         }
 
-        bool startedRetracting = false;
         while (Vector3.Distance(_harpoonTip.transform.position, _harpoonSpear.transform.position) > .1f)
         {
             //if hold to retract is on, only pull in harpoon if holding down button
             if (_holdToRetractMode)
             {
-                if (_harpoonRetract.action.inProgress)
+                if (_reelingButtonHeld)
                 {
-                    if (!startedRetracting)
+                    SetHarpoonProjectileLookAt(_harpoonTip.transform.position);
+                    HarpoonReelProjectileMovement();
+                    /*if (!startedRetracting)
                     {
                         startedRetracting = true;
                         //cause the wave action again when reeling
@@ -270,7 +293,7 @@ public class HarpoonGun : MonoBehaviour
                     }
 
                     SetHarpoonProjectileLookAt(_harpoonTip.transform.position);
-                    HarpoonReelProjectileMovement();
+                    HarpoonReelProjectileMovement();*/
                 }
                 //otherwise automatically pull in 
             }
@@ -281,11 +304,18 @@ public class HarpoonGun : MonoBehaviour
             }
             yield return null;
         }
-        
+
+        HarpoonFullyReeled();
+    }
+
+    /// <summary>
+    /// Called when the harpoon projectile has retracted fully back to the player
+    /// </summary>
+    private void HarpoonFullyReeled()
+    {
+        PlayerManager.Instance.InvokeHarpoonFullyReeledEvent();
         //Camera shake here when combined with Stapay
         StartCoroutine(ResetHarpoon());
-
-        PlayerManager.Instance.InvokeHarpoonRetractEvent();
     }
 
     /// <summary>
@@ -369,6 +399,13 @@ public class HarpoonGun : MonoBehaviour
 
             yield return null;
         }
+
+        FocusMax();
+    }
+
+    private void FocusMax()
+    {
+        PlayerManager.Instance.InvokeHarpoonFocusMaxEvent();
 
         _focusProgress = 1;
         _currentFocusAccuracy = 0;

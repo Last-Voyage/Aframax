@@ -24,11 +24,24 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     private static UnityEvent<bool> _onMovementToggled = new();
 
-    private static UnityEvent _harpoonFiredEvent = new();
-    private static UnityEvent _harpoonRetractEvent = new();
+    //When the projectile is fired
+    private static UnityEvent _harpoonFiredStartEvent = new();
+    //When the projectile hits something or reaches its max distance
+    private static UnityEvent _harpoonFiredEndEvent = new();
+    //When the player presses the reel button while actively reeling
+    private static UnityEvent _harpoonRetractStartEvent = new();
+    //When the player releases the reel button while actively reeling
+    private static UnityEvent _harpoonRetractStoppedEvent = new();
+    //When the harpoon is fully reeled in
+    private static UnityEvent _harpoonFullyReeledEvent = new();
+    //When the harpoon is reloaded
+    private static UnityEvent _harpoonReloadedEvent = new();
 
+    //When the player starts focusing
     private static UnityEvent _harpoonFocusStartEvent = new();
+    //When the player is at max focus
     private static UnityEvent _harpoonFocusMaxEvent = new();
+    //When the player is no longer focused
     private static UnityEvent _harpoonFocusEndEvent = new();
 
     private static UnityEvent _enemyOverCrosshairStartEvent = new();
@@ -57,19 +70,40 @@ public class PlayerManager : MainGameplayManagerFramework
     }
 
     /// <summary>
-    /// Invokes the harpoon fired event
+    /// Invokes event for when the harpoon projectile is fired
     /// </summary>
-    public void InvokeHarpoonFiredEvent()
+    public void InvokeHarpoonFiredStartEvent()
     {
-        _harpoonFiredEvent?.Invoke();
+        _harpoonFiredStartEvent?.Invoke();
     }
 
     /// <summary>
-    /// Invokes the harpoon retract event
+    /// Invokes event for when the harpoon has collided with an object or reached max range
     /// </summary>
-    public void InvokeHarpoonRetractEvent()
+    public void InvokeHarpoonFiredEndEvent()
     {
-        _harpoonRetractEvent?.Invoke();
+        _harpoonFiredEndEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes event for when the player starts retracting the harpoon projectile
+    /// </summary>
+    public void InvokeHarpoonRetractStartEvent()
+    {
+        _harpoonRetractStartEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes event for when the player releases the retract button while reeling
+    /// </summary>
+    public void InvokeHarpoonRetractStoppedEvent()
+    {
+        _harpoonRetractStoppedEvent?.Invoke();
+    }
+
+    public void InvokeHarpoonFullyReeledEvent()
+    {
+        _harpoonFullyReeledEvent?.Invoke();
     }
 
     /// <summary>
@@ -116,11 +150,18 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Getter for the _onMovementToggled event
     /// </summary>
     public UnityEvent<bool> GetMovementToggleEvent() => _onMovementToggled;
-    public UnityEvent GetHarpoonFiredEvent() => _harpoonFiredEvent;
-    public UnityEvent GetHarpoonRetractEvent() => _harpoonRetractEvent;
+
+    public UnityEvent GetHarpoonFiredStartEvent() => _harpoonFiredStartEvent;
+    public UnityEvent GetHarpoonFiredEndEvent() => _harpoonFiredEndEvent;
+    public UnityEvent GetHarpoonRetractStartEvent() => _harpoonRetractStartEvent;
+    public UnityEvent GetHarpoonRetractStoppedEvent() => _harpoonRetractStoppedEvent;
+    public UnityEvent GetHarpoonFullyReeledEvent() => _harpoonFullyReeledEvent;
+    public UnityEvent GetHarpoonReloadedEvent() => _harpoonReloadedEvent;
+
     public UnityEvent GetHarpoonFocusStartEvent() => _harpoonFocusStartEvent;
     public UnityEvent GetHarpoonFocusMaxEvent() => _harpoonFocusMaxEvent;
     public UnityEvent GetHarpoonFocusEndEvent() => _harpoonFocusEndEvent;
+
     public UnityEvent GetEnemyOverCrosshairStartEvent() => _enemyOverCrosshairStartEvent;
     public UnityEvent GetEnemyOverCrosshairEndEvent() => _enemyOverCrosshairEndEvent;
     #endregion

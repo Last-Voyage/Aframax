@@ -50,8 +50,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetHarpoonFiredEvent().AddListener(StartDrawingRope);
-        PlayerManager.Instance.GetHarpoonRetractEvent().AddListener(StopDrawingRope);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StartDrawingRope);
+        PlayerManager.Instance.GetHarpoonFullyReeledEvent().AddListener(StopDrawingRope);
     }
 
     /// <summary>
@@ -59,8 +59,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetHarpoonFiredEvent().RemoveListener(StartDrawingRope);
-        PlayerManager.Instance.GetHarpoonRetractEvent().RemoveListener(StopDrawingRope);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StartDrawingRope);
+        PlayerManager.Instance.GetHarpoonFullyReeledEvent().RemoveListener(StopDrawingRope);
     }
 
     /// <summary>
