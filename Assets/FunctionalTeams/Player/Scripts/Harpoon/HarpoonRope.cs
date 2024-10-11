@@ -69,7 +69,8 @@ public class HarpoonRope : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator DrawRopeCoroutine() 
     {
-        while (_harpoonGun.GetIsShooting()) 
+        while (_harpoonGun.GetHarpoonFiringState() == EHarpoonFiringState.Firing||
+            _harpoonGun.GetHarpoonFiringState() == EHarpoonFiringState.Reeling) 
         {
             // Spring settings
             if (_lr.positionCount != _quality + 1) 

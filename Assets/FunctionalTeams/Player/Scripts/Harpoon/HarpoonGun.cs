@@ -29,8 +29,12 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
     [Tooltip("The projectile being fired")]
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
-    [Space]
 
+    private GameObject _harpoonSpear;
+
+    private EHarpoonFiringState _harpoonFiringState;
+
+    [Space]
     [Header("Focus")]
     [Tooltip("The time it takes to reach max focus")]
     [SerializeField] private float _focusTime;
@@ -84,13 +88,9 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("name of retract animation")]
     [SerializeField] private string _harpoonRetractTrigger = "drawBack";
     private Animator _harpoonAnimator;
-
-    private GameObject _harpoonSpear;
     
-    private bool _isReeling = false;
     private Vector3 _fireDir;
     private float _currentDist;
-    private bool _isShooting;
 
     private RaycastHit _hit;
 
@@ -150,7 +150,7 @@ public class HarpoonGun : MonoBehaviour
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //dont shoot if already shot
-        if (_isShooting || _isReeling || _currentFocusState != EFocusState.Focusing)
+        if (_harpoonFiringState != EHarpoonFiringState.Ready || _currentFocusState != EFocusState.Focusing)
         {
             return;
         }
@@ -158,9 +158,12 @@ public class HarpoonGun : MonoBehaviour
         //Sets the spears initial location
         _harpoonSpear.transform.position = _playerLookDirection.position;
 
-        _harpoonSpear.SetActive(false);
+        _harpoonSpear.SetActive(true);
+
         _harpoonSpear.transform.GetChild(0).rotation = _playerLookDirection.rotation;
-        _isShooting = true;
+
+        _harpoonFiringState = EHarpoonFiringState.Firing;
+
         _fireDir = GetHarpoonDirectionWithFocus(); // In the direction the player is looking
         // Start moving the harpoon
         StartCoroutine(MoveHarpoon());
@@ -172,43 +175,22 @@ public class HarpoonGun : MonoBehaviour
     }
 
     /// <summary>
-    /// Enables the harpoon
-    /// </summary>
-    private void SetHarpoonActive()
-    {
-        //delays visual of harpoon appearing for better appearance
-        _harpoonSpear.SetActive(true);
-        Debug.Log("Setactive");
-    }
-
-    /// <summary>
     /// coroutine to move the created harpoon to the target direction. starts the reel coroutine at the end
     /// </summary>
     private IEnumerator MoveHarpoon()
     {
-        Invoke(nameof(SetHarpoonActive), .15f);
         _currentDist = 0f;
-        while (_currentDist < _maxDistance && !_isReeling)
+        while (_currentDist < _maxDistance)
         {
             // Calculate how far the harpoon should move in this frame
             Vector3 movement = _fireDir * _harpoonSpeed * Time.deltaTime;
+
             // Cast a ray from the harpoon's current position forward by the amount it moves this frame
             if (Physics.Raycast(_harpoonSpear.transform.position, movement, out _hit, 1f, ~_excludeLayers))
             {
-                //if hit grabbable object then child object to harpoon to bring object back with harpoon
-                if (_hit.transform.gameObject.layer == LayerMask.NameToLayer("Grabbable"))
-                {
-                    _hit.transform.SetParent(_harpoonSpear.transform);
-                    Rigidbody hitRB = _hit.transform.GetComponent<Rigidbody>();
-                    if (hitRB != null)
-                    {
-                        hitRB.isKinematic = true;
-                    }
-                }
                 // Harpoon _hit something, stop its movement and start reeling it in
                 _harpoonSpear.transform.position = _hit.point; // Snap the harpoon to the _hit point
-                StartReeling(_hit.point);
-                yield break; // Exit the coroutine, no need to keep moving the harpoon
+                break;
             }
 
             // If no collision, move the harpoon
@@ -217,11 +199,9 @@ public class HarpoonGun : MonoBehaviour
 
             yield return null;
         }
-        // If max distance reached and no _hit, start reeling back
-        if (!_isReeling)
-        {
-            StartReeling(_hit.point);
-        }
+
+        //Either reached here because we hit something or because we have exceeded the max distance
+        StartReeling();
     }
     #endregion
 
@@ -230,9 +210,9 @@ public class HarpoonGun : MonoBehaviour
     /// sets up the reel positions and time. if the target hit is grabbable child it to the harpoon so it comes back
     /// </summary>
     /// <param name="_hitPosition"></param>
-    private void StartReeling(Vector3 _hitPosition)
+    private void StartReeling()
     {
-        _isReeling = true;
+        _harpoonFiringState = EHarpoonFiringState.Reeling;
         StartCoroutine(ReelHarpoon());
     }
 
@@ -272,7 +252,7 @@ public class HarpoonGun : MonoBehaviour
                         PlayerManager.Instance.InvokeHarpoonRetractEvent();
                         PlayerManager.Instance.InvokeHarpoonFiredEvent();
                     }
-                    _isShooting = true;
+                    
                     _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
                     HarpoonReelProjectileMovement();
                     elapsedTime += Time.deltaTime;
@@ -320,9 +300,9 @@ public class HarpoonGun : MonoBehaviour
     {
         _hit = new RaycastHit();
         _harpoonSpear.SetActive(false);
-        _isShooting = false;
+        _harpoonFiringState = EHarpoonFiringState.Reloading;
         yield return new WaitForSeconds(_gunCooldown);
-        _isReeling = false;
+        _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
     }
     #endregion
@@ -452,7 +432,7 @@ public class HarpoonGun : MonoBehaviour
     #region Getters
     //Getters for private variables
     public GameObject GetHarpoonSpear() => _harpoonSpear;
-    public bool GetIsShooting() => _isShooting;
+    public EHarpoonFiringState GetHarpoonFiringState() => _harpoonFiringState;
     public Transform GetHarpoonTip() => _harpoonTip;
     #endregion
 }
