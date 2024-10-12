@@ -817,26 +817,18 @@ Shader "Custom/WaterShader"
             {
                 float texelStride = 1.0F / _TextureSize;
                 
-                float up = RippleSample(tex2D(
-                    _RippleTex, uv + float2(0.0F, texelStride))
-                );
-                float down = RippleSample(tex2D(
-                    _RippleTex, uv + float2(0.0F, -texelStride))
-                );
-                float left = RippleSample(tex2D(
-                    _RippleTex, uv + float2(-texelStride, 0.0F))
-                );
-                float right = RippleSample(tex2D(
+                float p = RippleSample(tex2D(_RippleTex, uv).r);
+                float h1 = RippleSample(tex2D(
                     _RippleTex, uv + float2(texelStride, 0.0F))
                 );
+                float v1 = RippleSample(tex2D(
+                    _RippleTex, uv + float2(0.0F, texelStride))
+                );
 
-                float3 n;
-                
-                n.x = (right - left) * 0.5F * _RippleIntensity;
-                n.y = 1.0F; 
-                n.z = (down - up) * 0.5F * _RippleIntensity;
+                float2 t = p - float2(h1, v1);
+                float3 n = float3(t.x, t.y, 1.0F);
 
-                return normalize(n);
+                return n * _RippleIntensity;
             }
             
             float4 Fragment(Interpolators input) : SV_Target

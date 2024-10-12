@@ -27,7 +27,8 @@ RWTexture2D<float> Result;
 int ImageSize = 128;
 
 // Constant blur kernel of our box blur pass (sample walk)
-#define BLUR_RADIUS 1
+#define BLUR_RADIUS 3
+#define BLUR_INTENSITY 1.0F
 
 #define PI 3.141592653589F
 
@@ -39,12 +40,32 @@ int ImageSize = 128;
 [numthreads(8,8,1)]
 void WaterRipple(uint3 id : SV_DispatchThreadID)
 {
-    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.7F).r;
+    PreBlur[id.xy] = lerp(PreBlur[id.xy], Camera[id.xy], 0.1F).r;
 }
 
 ////////////////////////////////////////
 // STEP 2: Additive box blur
 ////////////////////////////////////////
+
+float CalculateGaussianWeight(float2 xy)
+{
+    return exp(-(xy.x * xy.x + xy.y * xy.y) / 
+        (2.0F * BLUR_INTENSITY * BLUR_INTENSITY) /
+        (2.0F * BLUR_INTENSITY * BLUR_INTENSITY)
+    );
+}
+
+float Remap(
+    float origFrom,
+    float origTo,
+    float targetFrom,
+    float targetTo,
+    float value)
+{
+    return targetFrom + (value - origFrom) *
+        (targetTo - targetFrom) /
+        (origTo - origFrom);
+}
 
 [numthreads(8,8,1)]
 void Blur(uint3 id : SV_DispatchThreadID)
@@ -58,6 +79,7 @@ void Blur(uint3 id : SV_DispatchThreadID)
         && pixelCoord.y < ImageSize)
     {
         float sum = 0.0F;
+        float weightSum = 0.0F;
 
         // Walk out from current UV coord, average
         // over all
@@ -65,15 +87,25 @@ void Blur(uint3 id : SV_DispatchThreadID)
         {
             for (int j = 0; j < N; j++)
             {
-                float2 pc = pixelCoord + float2(
-                    i - BLUR_RADIUS,
-                    j - BLUR_RADIUS
+                float2 offset = float2(
+                    BLUR_RADIUS - i,
+                    BLUR_RADIUS - j
                 );
 
-                sum += PreBlur[pc.xy];
+                float2 pc = pixelCoord + offset;
+
+                float weight = CalculateGaussianWeight(
+                    offset
+                );
+
+                sum += PreBlur[pc.xy] * weight;
+                weightSum += weight;
             }
         }
+        
+        float result = sum / weightSum;
+        result = Remap(0.005F, 0.75F, 0.0F, 1.0F, result);
 
-        Result[id.xy] = sum / N;
+        Result[id.xy] = saturate(result);
     }
 }

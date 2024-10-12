@@ -48,6 +48,7 @@ public class RippleProjector : MonoBehaviour
     private Vector3 _lastPosition;
     private float _lastScale;
 
+    private int _textureSizeID = Shader.PropertyToID("_TextureSize");
     private int _positionID = Shader.PropertyToID("_BoxCenter");
     private int _scaleID = Shader.PropertyToID("_BoxSize");
 
@@ -59,16 +60,9 @@ public class RippleProjector : MonoBehaviour
         _lastPosition = transform.position;
         _lastScale = _camera.orthographicSize;
         
-        // Set RT dimensions
-        _cameraTexture.width = _resolution;
-        _cameraTexture.height = _resolution;
-
-        _preBlurTexture.width = _resolution;
-        _preBlurTexture.height = _resolution;
-
-        _outputTexture.width = _resolution;
-        _outputTexture.height = _resolution;
+        // Send data to water shader
         
+        _waterMaterial.SetInt(_textureSizeID, _resolution);
         UpdateShaderData();
         
         // Find our "Main" function
