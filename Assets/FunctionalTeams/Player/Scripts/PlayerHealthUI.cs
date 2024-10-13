@@ -1,6 +1,7 @@
 /*****************************************************************************
-// File Name :         PlayerHealthBar.cs
+// File Name :         PlayerHealthUI.cs
 // Author :            Jeremiah Peters
+//                     Ryan Swanson
 // Creation Date :     9/16/24
 //
 // Brief Description : operates the health bar for the player
@@ -11,6 +12,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Contains the functionality for all health UI
+/// </summary>
 public class PlayerHealthUI : MonoBehaviour
 {
     [Header("Health Bar")]

@@ -48,19 +48,10 @@ public class PlayerHealthManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            TakeDamage(2);
-        }
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            _playerHealth = 10;
-            _maxPlayerHealth = 10;
-        }
-    }
-
+    /// <summary>
+    /// Contains functionality for the player to take damage on the old health system
+    /// </summary>
+    /// <param name="attackPower"></param>
     public void TakeDamage(float attackPower)
     {
         _playerHealth -= attackPower;
