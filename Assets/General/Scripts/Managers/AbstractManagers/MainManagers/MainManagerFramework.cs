@@ -19,4 +19,10 @@ public abstract class MainManagerFramework : MonoBehaviour
 {
     public abstract void SetupInstance();
     public abstract void SetupMainManager();
+    protected abstract void SubscribeToEvents();
+    protected abstract void UnsubscribeToEvents();
+    protected virtual void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
 }

@@ -34,6 +34,18 @@ public class CameraManager : MainGameplayManagerFramework
     {
         base.SetupMainManager();
     }
+
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        TimeManager.Instance.GetGamePauseToggleEvent().AddListener(InvokeOnCameraMovementToggle);
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        TimeManager.Instance.GetGamePauseToggleEvent().RemoveListener(InvokeOnCameraMovementToggle);
+    }
     #endregion
 
     #region Events

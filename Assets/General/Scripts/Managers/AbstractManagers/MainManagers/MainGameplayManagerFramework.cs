@@ -25,4 +25,14 @@ public class MainGameplayManagerFramework : MainManagerFramework
     {
 
     }
+
+    protected override void SubscribeToEvents()
+    {
+        
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+
+    }
 }
