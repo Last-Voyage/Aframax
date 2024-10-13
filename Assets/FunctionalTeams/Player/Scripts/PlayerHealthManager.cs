@@ -22,7 +22,7 @@ public class PlayerHealthManager : MonoBehaviour
     //this is a game object in the scene that runs the health bar
     private PlayerHealthUI _healthUI;
 
-    public void Awake()
+    private void Awake()
     {
         //this way it doesn't waste time doing find if it's already connected
         if (_healthUI == null)
