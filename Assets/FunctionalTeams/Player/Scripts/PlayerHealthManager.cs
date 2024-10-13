@@ -20,16 +20,16 @@ public class PlayerHealthManager : MonoBehaviour
     [SerializeField] private float _maxPlayerHealth;
 
     //this is a game object in the scene that runs the health bar
-    private PlayerHealthBar _healthBarManager;
+    private PlayerHealthUI _healthUI;
 
-    public void Awake()
+    private void Awake()
     {
         //this way it doesn't waste time doing find if it's already connected
-        if (_healthBarManager == null)
+        if (_healthUI == null)
         {
-            _healthBarManager = Object.FindObjectOfType<PlayerHealthBar>();
+            _healthUI = Object.FindObjectOfType<PlayerHealthUI>();
 
-            if (_healthBarManager == null)
+            if (_healthUI == null)
             {
                 Debug.Log("Couldn't find health bar manager.");
             }
@@ -48,14 +48,19 @@ public class PlayerHealthManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Contains functionality for the player to take damage on the old health system
+    /// </summary>
+    /// <param name="attackPower"></param>
     public void TakeDamage(float attackPower)
     {
         _playerHealth -= attackPower;
 
         //calls update health bar function from healthbar manager
-        if (_healthBarManager != null)
+        if (_healthUI != null)
         {
-            _healthBarManager.UpdateHealthBar(_playerHealth/_maxPlayerHealth);
+            _healthUI.UpdateHealthBar(_playerHealth/_maxPlayerHealth);
+            _healthUI.PlayerDamagedUI();
         }
 
         if (_playerHealth <= 0)
