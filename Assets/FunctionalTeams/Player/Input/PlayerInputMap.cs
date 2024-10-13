@@ -185,6 +185,34 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""DebugConsole"",
+            ""id"": ""69791357-35db-4132-b6c4-8c6db36b037f"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenCloseConsole"",
+                    ""type"": ""Button"",
+                    ""id"": ""a91450ca-3443-4b7a-a599-0592de3ef96e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6cebaaa5-26f6-4213-880a-9af44203fd38"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenCloseConsole"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -196,6 +224,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
         m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        // DebugConsole
+        m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
+        m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -331,6 +362,52 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // DebugConsole
+    private readonly InputActionMap m_DebugConsole;
+    private List<IDebugConsoleActions> m_DebugConsoleActionsCallbackInterfaces = new List<IDebugConsoleActions>();
+    private readonly InputAction m_DebugConsole_OpenCloseConsole;
+    public struct DebugConsoleActions
+    {
+        private @PlayerInputMap m_Wrapper;
+        public DebugConsoleActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenCloseConsole => m_Wrapper.m_DebugConsole_OpenCloseConsole;
+        public InputActionMap Get() { return m_Wrapper.m_DebugConsole; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugConsoleActions set) { return set.Get(); }
+        public void AddCallbacks(IDebugConsoleActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DebugConsoleActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DebugConsoleActionsCallbackInterfaces.Add(instance);
+            @OpenCloseConsole.started += instance.OnOpenCloseConsole;
+            @OpenCloseConsole.performed += instance.OnOpenCloseConsole;
+            @OpenCloseConsole.canceled += instance.OnOpenCloseConsole;
+        }
+
+        private void UnregisterCallbacks(IDebugConsoleActions instance)
+        {
+            @OpenCloseConsole.started -= instance.OnOpenCloseConsole;
+            @OpenCloseConsole.performed -= instance.OnOpenCloseConsole;
+            @OpenCloseConsole.canceled -= instance.OnOpenCloseConsole;
+        }
+
+        public void RemoveCallbacks(IDebugConsoleActions instance)
+        {
+            if (m_Wrapper.m_DebugConsoleActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IDebugConsoleActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DebugConsoleActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DebugConsoleActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public DebugConsoleActions @DebugConsole => new DebugConsoleActions(this);
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -338,5 +415,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnFocusHarpoon(InputAction.CallbackContext context);
         void OnReelHarpoon(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IDebugConsoleActions
+    {
+        void OnOpenCloseConsole(InputAction.CallbackContext context);
     }
 }

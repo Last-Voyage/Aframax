@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides the functionality behind the speed at which time moves
@@ -18,6 +19,10 @@ using UnityEngine;
 public class TimeManager : MainUniversalManagerFramework
 {
     public static TimeManager Instance;
+
+    // Listens for whenever the game pauses
+    private static UnityEvent<bool> _onGamePauseToggle = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -30,7 +35,14 @@ public class TimeManager : MainUniversalManagerFramework
     }
     #endregion
 
-    #region Getters
+    #region Events
+    public void InvokeOnGamePause(bool paused)
+    {
+        _onGamePauseToggle?.Invoke(paused);
+    }
+    #endregion
 
+    #region Getters
+    public UnityEvent<bool> GetGamePauseEvent() => _onGamePauseToggle;
     #endregion
 }
