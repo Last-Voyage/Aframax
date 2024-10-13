@@ -84,7 +84,6 @@ public class HarpoonGun : MonoBehaviour
     private Coroutine _focusingCoroutine;
     
     private RaycastHit _hit;
-    //private float _currentReelDur;
     private HarpoonRope _harpoonRope;
 
     private PlayerInputMap _playerInputMap;
@@ -350,7 +349,6 @@ public class HarpoonGun : MonoBehaviour
                     _isShooting = true;
                     _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
                     HarpoonReelProjectileMovement();
-                    //_harpoonSpear.transform.position = Vector3.Lerp(startPos, _harpoonTip.position, elapsedTime/ _currentReelDur);
                     elapsedTime+= Time.deltaTime;
                 } 
                 //otherwise automatically pull in 
@@ -359,7 +357,6 @@ public class HarpoonGun : MonoBehaviour
             {
                 _harpoonSpear.transform.GetChild(0).LookAt(_harpoonTip);
                 HarpoonReelProjectileMovement();
-                //_harpoonSpear.transform.position = Vector3.Lerp(startPos, _harpoonTip.position, elapsedTime/ _currentReelDur);
                 elapsedTime+= Time.deltaTime; 
             }
             yield return null;
@@ -410,6 +407,9 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 }
 
+/// <summary>
+/// Contains the state in which the harpoon is currently in
+/// </summary>
 public enum EFocusState
 {
     None,
