@@ -6,6 +6,7 @@
 // in the console will use
  */
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,11 +56,13 @@ public class ConsoleController : MonoBehaviour
             if (_content.activeSelf)
             {
                 _content.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
                 Time.timeScale = 1;
             }
             else
             {
                 _content.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
                 Time.timeScale = 0;
             }
         }
@@ -70,8 +73,8 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void HurtPlayer()
     {
-        int _amount;
-        if (_dmgAmountInputField.text.Length > 0 && int.TryParse(_dmgAmountInputField.text, out _amount))
+        float _amount;
+        if (_dmgAmountInputField.text.Length > 0 && float.TryParse(_dmgAmountInputField.text, out _amount))
         {
             GameObject.FindObjectOfType<PlayerHealthManager>().TakeDamage(_amount);
         }
