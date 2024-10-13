@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 5709694425311390011}
   - component: {fileID: 7865172664713994072}
   - component: {fileID: 1541384961245508710}
+  - component: {fileID: 2620127338154925155}
   m_Layer: 0
   m_Name: patrolEnemy
-  m_TagString: Enemy
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,8 +121,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _patrolSpeed: 2
   _seekPlayerSpeed: 5
-  _playerTranform: {fileID: 0}
   _attackDuration: 15
   _playerAttackTag: Player
   _destroyAttackDelay: 0.1
   _timeToWaitBeforePatroling: 0.5
+--- !u!65 &2620127338154925155
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8693923624853357280}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
