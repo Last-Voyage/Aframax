@@ -27,8 +27,8 @@ RWTexture2D<float> Result;
 int ImageSize = 128;
 
 // Constant blur kernel of our box blur pass (sample walk)
-#define BLUR_RADIUS 3
-#define BLUR_INTENSITY 1.0F
+#define BLUR_RADIUS 2
+#define BLUR_INTENSITY 0.75F
 
 #define PI 3.141592653589F
 
@@ -40,7 +40,7 @@ int ImageSize = 128;
 [numthreads(8,8,1)]
 void WaterRipple(uint3 id : SV_DispatchThreadID)
 {
-    PreBlur[id.xy] = lerp(PreBlur[id.xy], Camera[id.xy], 0.1F).r;
+    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.11F).r;
 }
 
 ////////////////////////////////////////
@@ -104,7 +104,7 @@ void Blur(uint3 id : SV_DispatchThreadID)
         }
         
         float result = sum / weightSum;
-        result = Remap(0.005F, 0.75F, 0.0F, 1.0F, result);
+        //result = Remap(0.005F, 0.75F, 0.0F, 1.0F, result);
 
         Result[id.xy] = saturate(result);
     }
