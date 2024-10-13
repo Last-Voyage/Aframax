@@ -884,7 +884,7 @@ Shader "Custom/WaterShader"
                             input.normalTS
                         );
 
-                        wsNormal += calcNormal;
+                        wsNormal += float3(calcNormal.xy, 0.0F);
                         normalData += calcNormal;
                     }
                 }
