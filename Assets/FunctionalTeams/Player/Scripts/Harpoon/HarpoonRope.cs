@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonRope.cs
 // Author :            Tommy Roberts
+//                     Ryan Swanson
 // Creation Date :     9/22/24
 //
 // Brief Description : holds the bouncy harpoon line renderer funtionality
