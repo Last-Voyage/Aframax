@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject _pauseMenuContents;
+    private List<GameObject> _pauseMenuContents = new();
 
     private PlayerInputMap _playerInputControls;
 
@@ -25,6 +25,12 @@ public class PauseMenu : MonoBehaviour
         //initialize input
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
+
+        //find the pause menu objects
+        foreach (Transform child in gameObject.transform)
+        {
+            _pauseMenuContents.Add(child.gameObject);
+        }
     }
 
     /// <summary>
@@ -41,7 +47,11 @@ public class PauseMenu : MonoBehaviour
     /// <param name="visible"></param>
     private void PauseUIVisibility(bool visible)
     {
-        _pauseMenuContents.SetActive(false);
+        //Debug.Log(menuContents.gameObject.activeSelf);
+        foreach (GameObject menuContents in _pauseMenuContents)
+        {
+            menuContents.SetActive(!menuContents.gameObject.activeSelf);
+        }
     }
 
     /// <summary>
