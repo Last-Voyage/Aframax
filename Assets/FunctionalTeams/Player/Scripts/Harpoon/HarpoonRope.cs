@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonRope.cs
 // Author :            Tommy Roberts
+//                     Ryan Swanson
 // Creation Date :     9/22/24
 //
 // Brief Description : holds the bouncy harpoon line renderer funtionality
@@ -50,8 +51,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetHarpoonFiredEvent().AddListener(StartDrawingRope);
-        PlayerManager.Instance.GetHarpoonRetractEvent().AddListener(StopDrawingRope);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StartDrawingRope);
+        PlayerManager.Instance.GetHarpoonFullyReeledEvent().AddListener(StopDrawingRope);
     }
 
     /// <summary>
@@ -59,8 +60,8 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetHarpoonFiredEvent().RemoveListener(StartDrawingRope);
-        PlayerManager.Instance.GetHarpoonRetractEvent().RemoveListener(StopDrawingRope);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StartDrawingRope);
+        PlayerManager.Instance.GetHarpoonFullyReeledEvent().RemoveListener(StopDrawingRope);
     }
 
     /// <summary>
@@ -69,7 +70,8 @@ public class HarpoonRope : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator DrawRopeCoroutine() 
     {
-        while (_harpoonGun.GetIsShooting()) 
+        while (_harpoonGun.GetHarpoonFiringState() == EHarpoonFiringState.Firing||
+            _harpoonGun.GetHarpoonFiringState() == EHarpoonFiringState.Reeling) 
         {
             // Spring settings
             if (_lr.positionCount != _quality + 1) 
@@ -104,9 +106,11 @@ public class HarpoonRope : MonoBehaviour {
     /// </summary>
     private void StartDrawingRope()
     {
-        if (_drawRopeCoroutine == null) {
-            _drawRopeCoroutine = StartCoroutine(DrawRopeCoroutine());
+        if (_drawRopeCoroutine != null) 
+        {
+            StopCoroutine(_drawRopeCoroutine);
         }
+        _drawRopeCoroutine = StartCoroutine(DrawRopeCoroutine());
     }
 
     /// <summary>

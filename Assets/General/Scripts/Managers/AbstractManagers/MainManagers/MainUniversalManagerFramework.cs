@@ -25,4 +25,13 @@ public class MainUniversalManagerFramework : MainManagerFramework
     {
         
     }
+    protected override void SubscribeToEvents()
+    {
+
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+
+    }
 }
