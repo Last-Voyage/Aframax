@@ -17,6 +17,24 @@ using UnityEngine.Events;
 /// </summary>
 public abstract class MainManagerFramework : MonoBehaviour
 {
+    /// <summary>
+    /// Establishes the instance relating to the manager
+    /// </summary>
     public abstract void SetupInstance();
+    /// <summary>
+    /// Performs any needed setup specific to the manager
+    /// </summary>
     public abstract void SetupMainManager();
+    /// <summary>
+    /// Used to subscribe to all events required for functionality
+    /// </summary>
+    protected abstract void SubscribeToEvents();
+    /// <summary>
+    /// Unsubscribes from all events on destruction
+    /// </summary>
+    protected abstract void UnsubscribeToEvents();
+    protected virtual void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
 }
