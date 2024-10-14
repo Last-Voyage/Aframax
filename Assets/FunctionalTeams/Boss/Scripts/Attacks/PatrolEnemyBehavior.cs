@@ -120,7 +120,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             }
             
             // Check if the GameObject has reached the target point
-            if (Vector3.Distance(gameObject.transform.position, _targetPoint.position) < 0.1f)
+            if (_targetPoint != null && Vector3.Distance(gameObject.transform.position, _targetPoint.position) < 0.1f)
             {
                 // Choose the next random target point when the current one is reached
                 ChooseNextRandomPatrolPoint();
