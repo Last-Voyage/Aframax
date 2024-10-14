@@ -16,7 +16,10 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    private List<GameObject> _pauseMenuContents = new();
+    //Contains all ui to toggle on and off
+    //Personally I prefer to make this serialized rather than getting the child in awake
+    //You can get children by order, but that order can change if messed with
+    [SerializeField] private GameObject _pauseMenuContent;
 
     private PlayerInputMap _playerInputControls;
 
@@ -25,12 +28,6 @@ public class PauseMenu : MonoBehaviour
         //initialize input
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
-
-        //find the pause menu objects
-        foreach (Transform child in gameObject.transform)
-        {
-            _pauseMenuContents.Add(child.gameObject);
-        }
     }
 
     /// <summary>
@@ -48,11 +45,7 @@ public class PauseMenu : MonoBehaviour
     /// <param name="visible"></param>
     private void PauseUIVisibility(bool visible)
     {
-        //Debug.Log(menuContents.gameObject.activeSelf);
-        foreach (GameObject menuContents in _pauseMenuContents)
-        {
-            menuContents.SetActive(!menuContents.gameObject.activeSelf);
-        }
+        _pauseMenuContent.SetActive(visible);
     }
 
     /// <summary>
