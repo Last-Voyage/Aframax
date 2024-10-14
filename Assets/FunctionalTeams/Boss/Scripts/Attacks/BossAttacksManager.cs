@@ -49,7 +49,7 @@ public class BossAttacksManager : MonoBehaviour
     void Start()
     {
         InitializeBossAttackList();
-        _chooseAttacksRepeatedlyCoroutine = StartCoroutine(ChooseAttacksRepeatedly());
+        //_chooseAttacksRepeatedlyCoroutine = StartCoroutine(ChooseAttacksRepeatedly());
     }
 
     /// <summary>
