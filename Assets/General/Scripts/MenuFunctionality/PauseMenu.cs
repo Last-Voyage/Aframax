@@ -35,8 +35,9 @@ public class PauseMenu : MonoBehaviour
 
     /// <summary>
     /// toggles the pause state so you can press escape again to close the pause menu
+    /// Public so that it can be accessed by button
     /// </summary>
-    private void PauseToggle()
+    public void PauseToggle()
     {
         TimeManager.Instance.PauseGameToggle();
     }
