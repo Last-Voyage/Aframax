@@ -34,13 +34,22 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private Transform _attackRoomBorderTwo;
     private Transform[] _roomWaypoints;
     private Transform _playerTransform;
+    private Coroutine _patrolCoroutine;
 
     /// <summary>
     /// starts the patrol
     /// </summary>
     private void Start() 
     {
-        StartCoroutine(PatrolRoom());
+        _patrolCoroutine = StartCoroutine(PatrolRoom());
+    }
+
+    /// <summary>
+    /// stops the errors from happening
+    /// </summary>
+    private void OnDestroy()
+    {
+        StopCoroutine(_patrolCoroutine);
     }
 
     /// <summary>
@@ -65,7 +74,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void CheckPlayerInAttackRoom()
     {
         //check if gameobject is null
-        if(gameObject) return;
+        if(gameObject == null) return;
         //check if player is in attack range for patrol enemy
         if(_playerTransform.position.x < _attackRoomBorderOne.position.x && _playerTransform.position.x > _attackRoomBorderTwo.position.x)
         {
