@@ -77,6 +77,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
         if(_attackRoomBorderOne == null || _attackRoomBorderTwo == null)
         {
             Destroy(gameObject);
+            return;
         }
         //check if player is in attack range for patrol enemy
         if(_playerTransform.position.x < _attackRoomBorderOne.position.x && _playerTransform.position.x > _attackRoomBorderTwo.position.x)
@@ -144,7 +145,10 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void MoveToTarget()
     {
         // Move the GameObject towards the target point at a constant speed
-        transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+        if(_targetPoint != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+        }
     }
 
     /// <summary>
