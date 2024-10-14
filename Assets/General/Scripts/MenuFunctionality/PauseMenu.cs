@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         PauseMenu.cs
 // Author :            Jeremiah Peters
+//                     Ryan Swanson
 // Creation Date :     9/28/24
 //
 // Brief Description : operates pausing the game and the pause menu buttons

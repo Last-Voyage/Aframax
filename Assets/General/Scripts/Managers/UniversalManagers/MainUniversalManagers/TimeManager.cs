@@ -76,6 +76,10 @@ public class TimeManager : MainUniversalManagerFramework
     #endregion
 
     #region Events
+    /// <summary>
+    /// Toggles the game being paused or unpaused
+    /// </summary>
+    /// <param name="toggle"></param>
     private void InvokeGamePauseToggle(bool toggle)
     {
         _gamePauseToggleEvent?.Invoke(toggle);

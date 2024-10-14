@@ -35,12 +35,19 @@ public class CameraManager : MainGameplayManagerFramework
         base.SetupMainManager();
     }
 
+    /// <summary>
+    /// Subscribes to all required events
+    /// </summary>
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
+        //Disables camera movement on game pause
         TimeManager.Instance.GetGamePauseToggleEvent().AddListener(InvokeOnCameraMovementToggle);
     }
 
+    /// <summary>
+    /// Unsubscribes from all events on destruction
+    /// </summary>
     protected override void UnsubscribeToEvents()
     {
         base.UnsubscribeToEvents();
