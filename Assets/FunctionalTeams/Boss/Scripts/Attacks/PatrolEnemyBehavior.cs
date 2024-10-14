@@ -51,7 +51,11 @@ public class PatrolEnemyBehavior : MonoBehaviour
     {
         if(other.gameObject.CompareTag(_playerAttackTag))
         {
-            Destroy(gameObject, _destroyAttackDelay);
+            if(gameObject != null)
+            {
+                //add destory attack delay here in future if needed but for now it could cause bugs
+                Destroy(gameObject);
+            }  
         }
     }
 
@@ -60,6 +64,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void CheckPlayerInAttackRoom()
     {
+        //check if gameobject is null
+        if(gameObject) return;
         //check if player is in attack range for patrol enemy
         if(_playerTransform.position.x < _attackRoomBorderOne.position.x && _playerTransform.position.x > _attackRoomBorderTwo.position.x)
         {
@@ -110,14 +116,14 @@ public class PatrolEnemyBehavior : MonoBehaviour
             yield return null;
         }
 
+        //if enemy is killed or destroyed then move on to next attack
+        BossAttacksManager.Instance.AttackInProgress = false;
+
         //if timer for attack runs out destory attack and start a new one
         if(gameObject != null)
         {
             Destroy(gameObject);
         }
-
-        //if enemy is killed or destroyed then move on to next attack
-        BossAttacksManager.Instance.AttackInProgress = false;
     }
 
     /// <summary>
