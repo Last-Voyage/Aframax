@@ -20,8 +20,48 @@ public class TimeManager : MainUniversalManagerFramework
 {
     public static TimeManager Instance;
 
+    private bool _isGamePaused;
+
     // Listens for whenever the game pauses
-    private static UnityEvent<bool> _onGamePauseToggle = new();
+    private static UnityEvent _gamePausedEvent = new();
+    private static UnityEvent _gameUnpausedEvent = new();
+
+    private static UnityEvent<bool> _gamePauseToggleEvent = new();
+
+    #region General Time Management
+    /// <summary>
+    /// Toggles if the game is paused or unpaused
+    /// </summary>
+    public void PauseGameToggle()
+    {
+        if(_isGamePaused)
+        {
+            PauseGame();
+        }
+        else
+        {
+            UnpauseGame();
+        }
+    }
+
+    /// <summary>
+    /// Pauses the game and invokes needed events
+    /// </summary>
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        InvokeOnGamePause();
+    }
+
+    /// <summary>
+    /// Unpauses the game and invokes needed events
+    /// </summary>
+    private void UnpauseGame()
+    {
+        Time.timeScale = 1;
+        InvokeGameUnpaused();
+    }
+    #endregion
 
     #region Base Manager
     public override void SetupInstance()
@@ -36,13 +76,32 @@ public class TimeManager : MainUniversalManagerFramework
     #endregion
 
     #region Events
-    public void InvokeOnGamePause(bool paused)
+    /// <summary>
+    /// Toggles the game being paused or unpaused
+    /// </summary>
+    /// <param name="toggle"></param>
+    private void InvokeGamePauseToggle(bool toggle)
     {
-        _onGamePauseToggle?.Invoke(paused);
+        _gamePauseToggleEvent?.Invoke(toggle);
+    }
+    private void InvokeOnGamePause()
+    {
+        _gamePausedEvent?.Invoke();
+        InvokeGamePauseToggle(true);
+    }
+    private void InvokeGameUnpaused()
+    {
+        _gameUnpausedEvent?.Invoke();
+        InvokeGamePauseToggle(false);
     }
     #endregion
 
     #region Getters
-    public UnityEvent<bool> GetGamePauseEvent() => _onGamePauseToggle;
+    public bool GetIsGamePaused() => _isGamePaused;
+
+    public UnityEvent<bool> GetGamePauseToggleEvent() => _gamePauseToggleEvent;
+
+    public UnityEvent GetGamePauseEvent() => _gamePausedEvent;
+    public UnityEvent GetGameUnpauseEvent() => _gameUnpausedEvent;
     #endregion
 }
