@@ -73,8 +73,11 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void CheckPlayerInAttackRoom()
     {
-        //check if gameobject is null
-        if(gameObject == null) return;
+        //check if attack is null
+        if(_attackRoomBorderOne == null || _attackRoomBorderTwo == null)
+        {
+            Destroy(gameObject);
+        }
         //check if player is in attack range for patrol enemy
         if(_playerTransform.position.x < _attackRoomBorderOne.position.x && _playerTransform.position.x > _attackRoomBorderTwo.position.x)
         {
