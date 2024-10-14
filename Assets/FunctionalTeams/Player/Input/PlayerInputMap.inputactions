@@ -15,27 +15,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouseX",
-                    "type": "PassThrough",
-                    "id": "68314e46-a786-4d17-a30b-5ef807c3a5ad",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseY",
-                    "type": "PassThrough",
-                    "id": "87e1c1c0-6803-4197-82de-efe879b686f6",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "HarpoonButton",
+                    "name": "FireHarpoon",
                     "type": "Button",
                     "id": "aa80d4fd-ee8d-4409-b4fc-02c693475a30",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FocusHarpoon",
+                    "type": "Button",
+                    "id": "b8545e07-0d14-4c11-96b3-0a45742a7a07",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ReelHarpoon",
+                    "type": "Button",
+                    "id": "46123ba1-202e-49de-a560-ebd47b8d6d5c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "fe01f416-f239-4edd-b4bf-89803f8eebdd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -100,34 +109,84 @@
                 },
                 {
                     "name": "",
-                    "id": "51143ace-5709-4664-ba59-6b2f7b0a6837",
-                    "path": "<Mouse>/delta/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseX",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "12085391-9176-43ec-beec-f36c5bd3ddcd",
-                    "path": "<Mouse>/delta/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseY",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "30b55e33-ea3f-421c-ae27-6f49bd3466ee",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HarpoonButton",
+                    "action": "FireHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a56680af-279a-4e05-80e3-21fe7f52c577",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FocusHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "952a3339-bf6f-45ea-a788-f0715d180342",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FocusHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReelHarpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc9785c1-07f6-46e5-8895-7ab3d10af51c",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "DebugConsole",
+            "id": "69791357-35db-4132-b6c4-8c6db36b037f",
+            "actions": [
+                {
+                    "name": "OpenCloseConsole",
+                    "type": "Button",
+                    "id": "a91450ca-3443-4b7a-a599-0592de3ef96e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6cebaaa5-26f6-4213-880a-9af44203fd38",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenCloseConsole",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
