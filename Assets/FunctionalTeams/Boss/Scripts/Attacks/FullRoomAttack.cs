@@ -49,15 +49,16 @@ public class FullRoomAttack : MonoBehaviour
     /// <summary>
     /// just for testing
     /// </summary>
-    private void Update() {
-        #if UNITY_EDITOR
-        if(Keyboard.current.spaceKey.wasPressedThisFrame)
+    private void Update() 
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
             ActivateThisAttack();
-        #endif
+        }
     }
 
     /// <summary>
-    /// pretty self explanitory
+    /// pretty self explanatory
     /// </summary>
     private void ActivateThisAttack()
     {

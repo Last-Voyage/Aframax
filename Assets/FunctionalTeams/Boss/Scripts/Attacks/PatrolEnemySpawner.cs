@@ -50,11 +50,12 @@ public class PatrolEnemySpawner : MonoBehaviour
     /// <summary>
     /// just for testing
     /// </summary>
-    private void Update() {
-        #if UNITY_EDITOR
-        if(Keyboard.current.spaceKey.wasPressedThisFrame)
+    private void Update() 
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
             SpawnEnemy();
-        #endif
+        }
     }
 
     /// <summary>
