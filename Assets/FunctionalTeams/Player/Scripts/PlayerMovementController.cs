@@ -28,6 +28,9 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
 
+    private bool _isGrounded = false;
+    private const float GRAVITY = 0.05f;
+
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
     [SerializeField] private float _unfocusSpeedSlowTime;
@@ -46,7 +49,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    private const string _MOVEMENT_INPUT_NAME = "Movement";
+    private const string MOVEMENT_INPUT_NAME = "Movement";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -81,7 +84,7 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
-        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
+        _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
     }
 
     /// <summary>
@@ -161,7 +164,12 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Vector3 HandleVerticalMovement()
     {
-        return new Vector3(0, _rigidBody.velocity.y, 0);
+        if (_isGrounded)
+        {
+            return Vector3.zero;
+        }
+        
+        return new Vector3(0, _rigidBody.velocity.y - GRAVITY, 0);
     }
 
     #region Harpoon Slowdown
@@ -283,5 +291,15 @@ public class PlayerMovementController : MonoBehaviour
     private void OnDisable()
     {
         PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        _isGrounded = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        _isGrounded = false;
     }
 }
