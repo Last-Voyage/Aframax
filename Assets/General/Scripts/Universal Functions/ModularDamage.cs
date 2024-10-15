@@ -18,7 +18,7 @@ public class ModularDamage : MonoBehaviour
 
     [Tooltip("Put the health script here")]
     [SerializeField] private GameObject _health;
-    private UniversalHealth _healthScript;
+    private BaseHealth _healthScript;
 
     [Tooltip("Base damage value")]
     [SerializeField] private float _damageAmount;
@@ -31,24 +31,21 @@ public class ModularDamage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _healthScript = _health.GetComponent<UniversalHealth>();
-        //_healthScript.GetHealthDecrease().AddListener(TakeDamage);
+        _healthScript = _health.GetComponent<BaseHealth>();
         TakeDamage(_damageAmount);
     }
 
     void TakeDamage(float damage)
     {
-        damage = _damageAmount;
-        _healthScript.GetHealthDecrease()?.Invoke(damage);
-        Debug.Log(_healthScript.GetHealthDecrease());
+        _healthScript.HealthDecrease(damage);
+        Debug.Log(_healthScript.currentHealth);
     }
 
     void OnTriggerEnter(Collider col)
     {
-        _healthScript = col.gameObject.GetComponent<UniversalHealth>();
         if (_attackMode) 
         {
-            
+            TakeDamage(_damageAmount);
         }
     }
 
