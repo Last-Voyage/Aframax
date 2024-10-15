@@ -386,6 +386,29 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 091d0b4ab40643e4a8879a7eac10a32c, type: 3}
+--- !u!1 &348388523 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8058276572565719395, guid: c50443a3218375d45bf77fa466cc0864,
+    type: 3}
+  m_PrefabInstance: {fileID: 157630887165412654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &348388527
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348388523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  m_PivotOffset: {x: 0, y: 0, z: 0}
+  m_AmplitudeGain: 0
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &349007251
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +515,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &438737419 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4239720136941732868, guid: c50443a3218375d45bf77fa466cc0864,
+    type: 3}
+  m_PrefabInstance: {fileID: 157630887165412654}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &438737423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438737419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 343dc56b5628ad7418c196d4006c3170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &474401122
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,7 +2076,15 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4239720136941732868, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 438737423}
+    - targetCorrespondingSourceObject: {fileID: 8058276572565719395, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 348388527}
   m_SourcePrefab: {fileID: 100100000, guid: c50443a3218375d45bf77fa466cc0864, type: 3}
 --- !u!4 &157630887165412655 stripped
 Transform:
