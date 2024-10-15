@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// Streamlines the making of river meshes
+/// </summary>
 [CustomEditor(typeof(RiverSpline))]
 public class RiverSplineEditor : Editor
 {
