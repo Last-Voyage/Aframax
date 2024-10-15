@@ -30,10 +30,14 @@ public class PlayerMovementController : MonoBehaviour
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private float _unfocusSpeedSlowTime;
     [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+
     private float _currentFocusMoveSpeedMultiplier = 1;
 
-    private Coroutine _focusSpeedCoroutine;
+    private float _currentFocusMoveSpeedProgress = 0;
+
+    private Coroutine _harpoonSlowdownCoroutine;
 
     [SerializeField] private Transform _playerForwards;
 
@@ -126,7 +130,6 @@ public class PlayerMovementController : MonoBehaviour
     {
         Vector3 horizontalMovement = HandleHorizontalMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
-        verticalMovement = Vector3.zero;
 
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
@@ -163,11 +166,32 @@ public class PlayerMovementController : MonoBehaviour
 
     #region Harpoon Slowdown
     /// <summary>
-    /// Starts the slowdown that is associated with focusing the weapon
+    /// Starts the harpoon speed slowdown
     /// </summary>
     private void StartHarpoonSpeedSlowdown()
     {
-        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+    }
+
+    /// <summary>
+    /// Stops the slowdown from focusing the harpoon
+    /// </summary>
+    private void StopHarpoonSpeedSlowdown()
+    {
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
+    }
+
+    /// <summary>
+    /// Stops the process of focusing or unfocusing
+    /// </summary>
+    private void StopCurrentFocusCoroutine()
+    {
+        if (_harpoonSlowdownCoroutine != null)
+        {
+            StopCoroutine(_harpoonSlowdownCoroutine);
+        }
     }
 
     /// <summary>
@@ -176,26 +200,51 @@ public class PlayerMovementController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator HarpoonSpeedSlowdownProcess()
     {
-        float slowCompletion = 0;
-        while (slowCompletion < 1)
+        while (_currentFocusMoveSpeedProgress < 1)
         {
             //Increases the progress on slowdown
-            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
+            _currentFocusMoveSpeedProgress += Time.deltaTime / _focusSpeedSlowTime;
 
-            //Sets the current speed based on the animation graph
-            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
+            CalculateCurrentFocusSpeedMultiplier();
 
             yield return null;
         }
     }
 
     /// <summary>
-    /// Stops the slowdown from focusing the harpoon
+    /// The process of speeding up the player after unfocusing
     /// </summary>
-    private void StopHarpoonSpeedSlowdown()
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedUpProcess()
     {
-        _currentFocusMoveSpeedMultiplier = 1;
-        StopCoroutine(_focusSpeedCoroutine);
+        while (_currentFocusMoveSpeedProgress > 0)
+        {
+            //Decreases the progress on slowdown
+            _currentFocusMoveSpeedProgress -= Time.deltaTime / _unfocusSpeedSlowTime;
+
+            CalculateCurrentFocusSpeedMultiplier();
+
+            yield return null;
+        }
+
+        HarpoonSpeedUpComplete();
+    }
+
+    /// <summary>
+    /// Called when the player is at max speed after unfocusing their weapon
+    /// </summary>
+    private void HarpoonSpeedUpComplete()
+    {
+        _currentFocusMoveSpeedProgress = 0;
+        CalculateCurrentFocusSpeedMultiplier();
+    }
+
+    /// <summary>
+    /// Calculates the current speed multiplier for focusing the weapon
+    /// </summary>
+    private void CalculateCurrentFocusSpeedMultiplier()
+    {
+        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
     }
 
     #endregion

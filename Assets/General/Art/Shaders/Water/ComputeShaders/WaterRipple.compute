@@ -1,0 +1,111 @@
+/**************************************************************************
+// File Name :          WaterRipple.compute
+// Author :             Miles Rogers
+// Creation Date :      9/30/2024
+//
+// Brief Description :  Utilizes a progressive blurring/blending
+//                      technique to give the appearance of water
+//                      displacement/advection. 
+**************************************************************************/
+
+// Divided into two passes for
+// better parallelization
+#pragma kernel WaterRipple
+#pragma kernel Blur
+
+// The raw camera input, unprocessed
+Texture2D<float> Camera;
+
+// The output of our previous frame blending pass. We need this so we
+// don't perform our blur pass using pixels that are already blurred
+RWTexture2D<float> PreBlur;
+
+// The final output after applying our box blur effect
+RWTexture2D<float> Result;
+
+// Gets updated by RippleProjector script
+int ImageSize = 128;
+
+// Constant blur kernel of our box blur pass (sample walk)
+#define BLUR_RADIUS 2
+#define BLUR_INTENSITY 0.75F
+
+#define PI 3.141592653589F
+
+////////////////////////////////////////
+// STEP 1: Perform additive blending
+//         against last capture.
+////////////////////////////////////////
+
+[numthreads(8,8,1)]
+void WaterRipple(uint3 id : SV_DispatchThreadID)
+{
+    PreBlur[id.xy] = lerp(Result[id.xy], Camera[id.xy], 0.11F).r;
+}
+
+////////////////////////////////////////
+// STEP 2: Additive box blur
+////////////////////////////////////////
+
+float CalculateGaussianWeight(float2 xy)
+{
+    return exp(-(xy.x * xy.x + xy.y * xy.y) / 
+        (2.0F * BLUR_INTENSITY * BLUR_INTENSITY) /
+        (2.0F * BLUR_INTENSITY * BLUR_INTENSITY)
+    );
+}
+
+float Remap(
+    float origFrom,
+    float origTo,
+    float targetFrom,
+    float targetTo,
+    float value)
+{
+    return targetFrom + (value - origFrom) *
+        (targetTo - targetFrom) /
+        (origTo - origFrom);
+}
+
+[numthreads(8,8,1)]
+void Blur(uint3 id : SV_DispatchThreadID)
+{
+    float2 pixelCoord = id.xy;
+    int N = BLUR_RADIUS * 2 + 1;
+    float sigma = 10.0F;
+
+    // If out of bounds - do nothing
+    if(pixelCoord.x < ImageSize
+        && pixelCoord.y < ImageSize)
+    {
+        float sum = 0.0F;
+        float weightSum = 0.0F;
+
+        // Walk out from current UV coord, average
+        // over all
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                float2 offset = float2(
+                    BLUR_RADIUS - i,
+                    BLUR_RADIUS - j
+                );
+
+                float2 pc = pixelCoord + offset;
+
+                float weight = CalculateGaussianWeight(
+                    offset
+                );
+
+                sum += PreBlur[pc.xy] * weight;
+                weightSum += weight;
+            }
+        }
+        
+        float result = sum / weightSum;
+        //result = Remap(0.005F, 0.75F, 0.0F, 1.0F, result);
+
+        Result[id.xy] = saturate(result);
+    }
+}
