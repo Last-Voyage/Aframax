@@ -24,29 +24,16 @@ public class ModularDamage : MonoBehaviour
     [SerializeField] private float _damageAmount;
     private bool _attackMode = false;
 
+
+
     //These are here if design ever wants critical hits in the future so right now they are unused
     //private int _criticalDamage;
     //private bool _critMode = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        _healthScript = _health.GetComponent<BaseHealth>();
-        TakeDamage(_damageAmount);
-    }
 
-    void TakeDamage(float damage)
-    {
-        _healthScript.HealthDecrease(damage);
-        Debug.Log(_healthScript.currentHealth);
-    }
 
-    void OnTriggerEnter(Collider col)
+    private void GiveDamage(float damage)
     {
-        if (_attackMode) 
-        {
-            TakeDamage(_damageAmount);
-        }
+        
     }
-
 }
