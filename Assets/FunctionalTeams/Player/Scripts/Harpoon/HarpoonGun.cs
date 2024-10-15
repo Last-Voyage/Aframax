@@ -187,6 +187,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(false);
 
         //Camera shake here when combined with Stapay
+        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
 
         PlayerManager.Instance.InvokeHarpoonFiredStartEvent();
     }
@@ -301,6 +302,7 @@ public class HarpoonGun : MonoBehaviour
     {
         PlayerManager.Instance.InvokeHarpoonFullyReeledEvent();
         //Camera shake here when combined with Stapay
+        CinemachineShake.Instance.ShakeCamera(_retractCameraShakeIntensity, _retractCameraShakeTime);
         StartCoroutine(ResetHarpoon());
     }
 
