@@ -131,7 +131,6 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 horizontalMovement = HandleHorizontalMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
 
-        print(horizontalMovement);
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
 
