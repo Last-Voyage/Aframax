@@ -30,6 +30,7 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Adjustable Gravity")]
     [SerializeField] private float _gravity;
 
+    private Transform _playerVisuals;
     private bool _isGrounded = false;
 
     [Space]
@@ -42,8 +43,6 @@ public class PlayerMovementController : MonoBehaviour
     private float _currentFocusMoveSpeedProgress = 0;
 
     private Coroutine _harpoonSlowdownCoroutine;
-
-    [SerializeField] private Transform _playerForwards;
 
     /// <summary>
     /// Variables that capture user input
@@ -72,6 +71,7 @@ public class PlayerMovementController : MonoBehaviour
         SubscribeInput();
         SubscribeToEvents();
         InitializeRigidbody();
+        GetPlayerVisuals();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
@@ -113,6 +113,11 @@ public class PlayerMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
     }
 
+    private void GetPlayerVisuals()
+    {
+        _playerVisuals = transform.GetChild(0);
+    }
+
     /// <summary>
     /// Movement coroutine
     /// This will perpetually call the movement handling methods until disabled
@@ -149,8 +154,8 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
-            _playerForwards.transform.forward * moveDir.y) * 
+        Vector3 newMovement = (_playerVisuals.right * moveDir.x +
+            _playerVisuals.forward * moveDir.y) * 
             _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
 
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
