@@ -39,7 +39,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private Coroutine _harpoonSlowdownCoroutine;
 
-    [SerializeField] private Transform _playerForwards;
+    [SerializeField] private GameObject _playerVisuals;
 
     /// <summary>
     /// Variables that capture user input
@@ -131,6 +131,7 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 horizontalMovement = HandleHorizontalMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
 
+        print(horizontalMovement);
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
 
@@ -145,8 +146,8 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
-            _playerForwards.transform.forward * moveDir.y) * 
+        Vector3 newMovement = (_playerVisuals.transform.right * moveDir.x +
+            _playerVisuals.transform.forward * moveDir.y) * 
             _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
 
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
