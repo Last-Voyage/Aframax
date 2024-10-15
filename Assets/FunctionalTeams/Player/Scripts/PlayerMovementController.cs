@@ -27,9 +27,10 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
+    [Header("Adjustable Gravity")]
+    [SerializeField] private float _gravity;
 
     private bool _isGrounded = false;
-    private const float GRAVITY = 0.05f;
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
@@ -169,7 +170,7 @@ public class PlayerMovementController : MonoBehaviour
             return Vector3.zero;
         }
         
-        return new Vector3(0, _rigidBody.velocity.y - GRAVITY, 0);
+        return new Vector3(0, _rigidBody.velocity.y - _gravity, 0);
     }
 
     #region Harpoon Slowdown
