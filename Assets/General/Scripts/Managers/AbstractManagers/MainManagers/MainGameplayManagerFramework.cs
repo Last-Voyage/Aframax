@@ -23,7 +23,7 @@ public class MainGameplayManagerFramework : MainManagerFramework
 
     public override void SetupMainManager()
     {
-
+        SubscribeToEvents();
     }
 
     /// <summary>

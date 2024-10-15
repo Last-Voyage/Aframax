@@ -16,7 +16,10 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject _pauseMenuContents;
+    //Contains all ui to toggle on and off
+    //Personally I prefer to make this serialized rather than getting the child in awake
+    //You can get children by order, but that order can change if messed with
+    [SerializeField] private GameObject _pauseMenuContent;
 
     private PlayerInputMap _playerInputControls;
 
@@ -29,8 +32,9 @@ public class PauseMenu : MonoBehaviour
 
     /// <summary>
     /// toggles the pause state so you can press escape again to close the pause menu
+    /// Public so that it can be accessed by button
     /// </summary>
-    private void PauseToggle()
+    public void PauseToggle()
     {
         TimeManager.Instance.PauseGameToggle();
     }
@@ -41,7 +45,7 @@ public class PauseMenu : MonoBehaviour
     /// <param name="visible"></param>
     private void PauseUIVisibility(bool visible)
     {
-        _pauseMenuContents.SetActive(false);
+        _pauseMenuContent.SetActive(visible);
     }
 
     /// <summary>

@@ -84,12 +84,15 @@ public class PlayerCameraController : MonoBehaviour
         if (change)
         {
             _cameraCoroutine = StartCoroutine(MoveCamera());
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
-            StopCoroutine(_cameraCoroutine);
-            Cursor.lockState = CursorLockMode.None;
+            if (_cameraCoroutine != null)
+            {
+                StopCoroutine(_cameraCoroutine);
+            }
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -116,7 +119,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
-        ToggleCameraMovement(true);
+        ToggleCameraMovement(false);
     }
 
     /// <summary>
