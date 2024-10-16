@@ -43,9 +43,10 @@ GameObject:
   - component: {fileID: 2078411133734381883}
   - component: {fileID: 3683248977638793141}
   - component: {fileID: 4834231082540087026}
+  - component: {fileID: 4001221314925219048}
   m_Layer: 0
   m_Name: Attack1IndicatorBlinker
-  m_TagString: Enemy
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,6 +137,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 4.4093213, z: 1}
   m_Center: {x: 0, y: 1.7046615, z: 0}
+--- !u!114 &4001221314925219048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5070173258191180023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20d68e39cb7628f448f98ee6fd836924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackPower: 20
 --- !u!1 &7679813985057931424
 GameObject:
   m_ObjectHideFlags: 0

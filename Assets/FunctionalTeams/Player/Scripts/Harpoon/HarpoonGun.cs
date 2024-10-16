@@ -36,6 +36,7 @@ public class HarpoonGun : MonoBehaviour
     private bool _reelingButtonHeld;
 
     private GameObject _harpoonSpear;
+    private Collider _harpoonCollider;
 
     private EHarpoonFiringState _harpoonFiringState;
 
@@ -119,6 +120,7 @@ public class HarpoonGun : MonoBehaviour
     private void CreateInitialHarpoonProjectile()
     {
         _harpoonSpear = Instantiate(_harpoonPrefab, _playerLookDirection.position, Quaternion.identity);
+        _harpoonCollider = _harpoonSpear.GetComponentInChildren<Collider>();
         _harpoonSpear.SetActive(false);
     }
     #endregion
@@ -169,6 +171,8 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonSpear.SetActive(true);
 
+        _harpoonCollider.enabled = true;
+
         // Get the direction the harpoon is fired
         _fireDir = GetHarpoonDirectionWithFocus(); 
 
@@ -187,6 +191,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(false);
 
         //Camera shake here when combined with Stapay
+        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
 
         PlayerManager.Instance.InvokeHarpoonFiredStartEvent();
     }
@@ -253,6 +258,7 @@ public class HarpoonGun : MonoBehaviour
     private void StartReelingProcess()
     {
         _harpoonFiringState = EHarpoonFiringState.Reeling;
+
         StartCoroutine(ReelHarpoonProcess());
     }
 
@@ -264,6 +270,7 @@ public class HarpoonGun : MonoBehaviour
     {
         yield return new WaitForSeconds(_reelStartDelay);
 
+        _harpoonCollider.enabled = false;
         //Eventually I imagine the _holdToRetractMode will be removed
 
         if (!_holdToRetractMode)
@@ -301,6 +308,8 @@ public class HarpoonGun : MonoBehaviour
     {
         PlayerManager.Instance.InvokeHarpoonFullyReeledEvent();
         //Camera shake here when combined with Stapay
+        CinemachineShake.Instance.ShakeCamera(_retractCameraShakeIntensity, _retractCameraShakeTime);
+
         StartCoroutine(ResetHarpoon());
     }
 
