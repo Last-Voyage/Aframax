@@ -174,7 +174,7 @@ public class PlayerMovementController : MonoBehaviour
         {
             return Vector3.zero;
         }
-        
+
         return new Vector3(0, _rigidBody.velocity.y - _gravity, 0);
     }
 
@@ -300,6 +300,11 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
+    {
+        _isGrounded = true;
+    }
+
+    private void OnCollisionStay(Collision collision)
     {
         _isGrounded = true;
     }
