@@ -24,6 +24,7 @@ public class CelShaderGUI : ShaderGUI
     private bool _showMetallicFoldout = false;
     private bool _showEmissionFoldout = false;
     private bool _showPomFoldout = false;
+    private bool _showVertexPaintFoldout = false;
     private bool _showPostFoldout = false;
     
     // When the ShaderGUI is drawn (immediate-mode)
@@ -139,6 +140,26 @@ public class CelShaderGUI : ShaderGUI
             new Dictionary<string, string> {
                 { "_Heightmap", "Height Map (Texture)"},
                 { "_HeightAmplitude", "Amplitude" }
+            },
+            properties,
+            materialEditor
+        );
+        
+        // Render the Vertex Paint Foldout
+        _showVertexPaintFoldout = CoreEditorUtils.DrawHeaderFoldout(
+            "Vertex Paint",
+            _showVertexPaintFoldout,
+            false,
+            (Func<bool>)null,
+            null
+        );
+        DrawProperties(
+            _showVertexPaintFoldout,
+            new Dictionary<string, string> {
+                { "_MaskMapColor", "Color"},
+                { "_MaskMapTexture", "Mask Map (Texture)" },
+                { "_MaskMapIntensity", "Intensity" },
+                { "_MaskMapContrast", "Contrast" }
             },
             properties,
             materialEditor
