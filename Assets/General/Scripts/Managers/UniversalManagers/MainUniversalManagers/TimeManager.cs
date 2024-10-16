@@ -34,6 +34,7 @@ public class TimeManager : MainUniversalManagerFramework
     /// </summary>
     public void PauseGameToggle()
     {
+        _isGamePaused = !_isGamePaused;
         if(_isGamePaused)
         {
             PauseGame();
