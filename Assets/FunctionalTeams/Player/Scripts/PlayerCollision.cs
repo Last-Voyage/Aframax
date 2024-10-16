@@ -23,7 +23,9 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        CheckForKillboxContact(other);
+        CheckForKillboxContact(other.gameObject);
+
+        CheckForEnemyContact(other.gameObject);
     }
 
     /// <summary>
@@ -52,7 +54,7 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
-        CheckForEnemyContact(collision);
+        CheckForEnemyContact(collision.gameObject);
     }
 
     /// <summary>
@@ -79,12 +81,10 @@ public class PlayerCollision : MonoBehaviour
     /// Checks if hte player hit a killbox
     /// </summary>
     /// <param name="other"></param>
-    private void CheckForKillboxContact(Collider other)
+    private void CheckForKillboxContact(GameObject contact)
     {
-        print("Check");
-        if(other.CompareTag(KILLBOX_TAG))
+        if(contact.CompareTag(KILLBOX_TAG))
         {
-            print("Killbox");
             PlayerManager.Instance.InvokeOnPlayerDeath();
         }
     }
@@ -93,15 +93,14 @@ public class PlayerCollision : MonoBehaviour
     /// Checks for if the player makes contact with an enemy
     /// </summary>
     /// <param name="collision"></param>
-    private void CheckForEnemyContact(Collision collision)
+    private void CheckForEnemyContact(GameObject contact)
     {
         //Currently using this until Mark is done with his universal damage system
         //TEMPORARY!
-        EnemyDamageTemp enemyDamageTemp = collision.gameObject.GetComponent<EnemyDamageTemp>();
+        EnemyDamageTemp enemyDamageTemp = contact.gameObject.GetComponentInChildren<EnemyDamageTemp>();
         if(enemyDamageTemp!=null)
         {
             //Yeah I know this is inefficient, but its temporary. Let me have this
-            print(enemyDamageTemp.AttackPower);
             GetComponentInParent<PlayerHealth>().TempEnemyDamage(enemyDamageTemp.AttackPower);
         }
         
