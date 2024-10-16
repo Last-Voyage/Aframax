@@ -8,6 +8,8 @@
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
 using System.Collections;
+using System.Linq.Expressions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,6 +34,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private Transform _playerVisuals;
     private bool _isGrounded = false;
+    private const float RAYCAST_LENGTH = 1;
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
@@ -175,7 +178,7 @@ public class PlayerMovementController : MonoBehaviour
             return Vector3.zero;
         }
 
-        return new Vector3(0, _rigidBody.velocity.y - _gravity, 0);
+        return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
     }
 
     #region Harpoon Slowdown
@@ -299,14 +302,10 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        _isGrounded = true;
-    }
-
     private void OnCollisionStay(Collision collision)
     {
-        _isGrounded = true;
+        _isGrounded = Physics.Raycast(transform.position - Vector3.up, Vector3.down, RAYCAST_LENGTH) && 
+            collision.contactCount == 1;
     }
 
     private void OnCollisionExit(Collision collision)
