@@ -128,7 +128,7 @@ Shader "Custom/WaterShader"
         { 
             "RenderType"="Transparent"
             "Queue"="Transparent"
-            "RenderPipeline"="UniversalRenderPipeline"
+            "RenderPipeline"="UniversalPipeline"
         }
         
         Pass
