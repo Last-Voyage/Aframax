@@ -97,8 +97,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
         PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all events not relating to input
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -278,7 +291,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
+        SubscribeToEvents();
     }
 
     /// <summary>
@@ -287,6 +300,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        UnsubscribeToEvents();
     }
 }
