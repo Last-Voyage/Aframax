@@ -14,28 +14,38 @@ using UnityEngine.Events;
 /// </summary>
 public class BaseHealth : MonoBehaviour
 {
-    protected int _currentHealth;
-    protected int _maxHealth;
+    [SerializeField] protected float _maxHealth;
+    protected float _currentHealth;
+    
     //Event system used to be called outside of script
     private UnityEvent<BaseHealth> _deathEvent = new ();
+
+    /// <summary>
+    /// Sets initial values
+    /// </summary>
+    protected virtual void Awake()
+    {
+        _currentHealth = _maxHealth;
+    }
+
     /// <summary>
     /// Function for decreasing health 
     /// </summary>
     /// <param name="damage"></param>
-    protected virtual void HealthDecrease(int damage)
+    protected virtual void HealthDecrease(float damage)
     {
         _currentHealth -= damage;
         //Check if health is lower than 0 then destroys the gameObject attached
         if ( _currentHealth <= 0)
         {
-            InvokeDeathEvent();
+            Death();
         }
     }
     /// <summary>
     /// function of health increasing
     /// </summary>
     /// <param name="heal"></param>
-    protected virtual void HealthIncrease(int heal)
+    protected virtual void HealthIncrease(float heal)
     {
         _currentHealth += heal;
         //Check if health is higher than max health then return back down to max heal
@@ -43,6 +53,11 @@ public class BaseHealth : MonoBehaviour
         {
             _currentHealth = _maxHealth;
         }
+    }
+
+    protected virtual void Death()
+    {
+        InvokeDeathEvent();
     }
     #region Events
     /// <summary>
@@ -54,6 +69,7 @@ public class BaseHealth : MonoBehaviour
     }
     #endregion
     #region Getters
+    public float GetHealthPercent() => _currentHealth / _maxHealth;
     public UnityEvent<BaseHealth> GetDeathEvent() => _deathEvent;
     #endregion
 

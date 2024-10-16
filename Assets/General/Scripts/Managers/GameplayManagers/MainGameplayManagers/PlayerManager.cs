@@ -47,6 +47,15 @@ public class PlayerManager : MainGameplayManagerFramework
     private static UnityEvent _enemyOverCrosshairStartEvent = new();
     private static UnityEvent _enemyOverCrosshairEndEvent = new();
 
+    //When the player takes damage
+    private static UnityEvent<float> _onPlayerDamageEvent = new();
+    //When the player receives healing
+    private static UnityEvent<float> _onPlayerHealEvent = new();
+    //When the player health changes for any reason
+    private static UnityEvent<float, float> _onHealthChange = new();
+    //When the player dies
+    private static UnityEvent _onPlayerDeath = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -143,6 +152,30 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _enemyOverCrosshairEndEvent?.Invoke();
     }
+
+    public void InvokePlayerDamagedEvent(float damageTaken)
+    {
+        _onPlayerDamageEvent?.Invoke(damageTaken);
+    }
+
+    public void InvokePlayerHealEvent(float healTaken)
+    {
+        _onPlayerHealEvent?.Invoke(healTaken);
+    }
+
+    public void InvokePlayerHealthChangeEvent(float percentHealth, float currentHealth)
+    {
+        _onHealthChange?.Invoke(percentHealth, currentHealth);
+    }
+
+    public void InvokeOnPlayerDeath()
+    {
+        _onPlayerDeath?.Invoke();
+
+        //when you die it reloads the current scene through the scene loading manager
+        //Will be changed later to have ui pop up button to do this I would imagine
+        SceneLoadingManager.Instance.DeathReloadCurrentScene();
+    }
     #endregion
 
     #region Getters
@@ -164,5 +197,10 @@ public class PlayerManager : MainGameplayManagerFramework
 
     public UnityEvent GetEnemyOverCrosshairStartEvent() => _enemyOverCrosshairStartEvent;
     public UnityEvent GetEnemyOverCrosshairEndEvent() => _enemyOverCrosshairEndEvent;
+
+    public UnityEvent<float> GetOnPlayerDamageEvent() => _onPlayerDamageEvent;
+    public UnityEvent<float> GetOnPlayerHealEvent() => _onPlayerHealEvent;
+    public UnityEvent<float, float> GetOnPlayerHealthChangeEvent() => _onHealthChange;
+    public UnityEvent GetOnPlayerDeath() => _onPlayerDeath;
     #endregion
 }

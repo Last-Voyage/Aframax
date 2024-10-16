@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 307651977208941308}
   - component: {fileID: 2827958547727462404}
-  - component: {fileID: 2275719215793297427}
+  - component: {fileID: 720098298782356602}
+  - component: {fileID: 8347455764338625178}
   - component: {fileID: 5137148187237992625}
   - component: {fileID: 3051451356196284552}
-  - component: {fileID: 5054659229493756156}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -79,8 +79,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _playerVisuals: {fileID: 3991142726110527397}
---- !u!114 &2275719215793297427
+--- !u!114 &720098298782356602
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,10 +88,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1822883443245373252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 840c39ba92e4bf94a9635e4e94cebb9a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e5a48990f80ba0449563067b64521db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPlayerHealth: 0
+  _maxHealth: 10
+--- !u!114 &8347455764338625178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822883443245373252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0a2c06f1a99d2488c41637d7437ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5137148187237992625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,29 +162,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &5054659229493756156
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822883443245373252}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2581785293803075771
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,6 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovementController: {fileID: 2827958547727462404}
+  _playerHealth: {fileID: 720098298782356602}
   _playerCamera: {fileID: 3697781239049282484}
   _harpoonGun: {fileID: 1154209733901946177}
 --- !u!1001 &7289724734657163392

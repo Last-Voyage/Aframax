@@ -59,8 +59,8 @@ public class PlayerHealthManager : MonoBehaviour
         //calls update health bar function from healthbar manager
         if (_healthUI != null)
         {
-            _healthUI.UpdateHealthBar(_playerHealth/_maxPlayerHealth);
-            _healthUI.PlayerDamagedUI();
+            //_healthUI.UpdateHealthBar(_playerHealth/_maxPlayerHealth);
+            //_healthUI.PlayerDamagedUI();
         }
 
         if (_playerHealth <= 0)

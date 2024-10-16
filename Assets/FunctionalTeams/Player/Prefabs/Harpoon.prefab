@@ -419,7 +419,6 @@ GameObject:
   - component: {fileID: 6586546145975843394}
   - component: {fileID: 3574717454458598244}
   - component: {fileID: 263656960614271445}
-  - component: {fileID: 7800618183534867780}
   m_Layer: 3
   m_Name: harpoon
   m_TagString: bullet
@@ -493,27 +492,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7800618183534867780
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2178814002120738897}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3245540113063888829
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,11 +538,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d60e22217d6a04bbde921e451cff6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _harpoonSpeed: 30
+  _fireSpeed: 50
   _reelSpeed: 30
   _reelStartDelay: 0.2
   _maxDistance: 100
-  _gunCooldown: 2
+  _reloadTime: 2
   _holdToRetractMode: 0
   _harpoonPrefab: {fileID: 8430130115990038482, guid: 84f2eb355931fc747b5e9353cbff9bbb,
     type: 3}

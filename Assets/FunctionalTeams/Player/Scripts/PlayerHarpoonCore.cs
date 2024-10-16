@@ -17,6 +17,7 @@ using UnityEngine;
 public class PlayerHarpoonCore : MonoBehaviour
 {
     [SerializeField] private PlayerMovementController _playerMovementController;
+    [SerializeField] private PlayerHealth _playerHealth;
     [SerializeField] private PlayerCameraController _playerCamera;
     [SerializeField] private HarpoonGun _harpoonGun;
 
@@ -105,5 +106,12 @@ public class PlayerHarpoonCore : MonoBehaviour
     {
          
     }
+    #endregion
+
+    #region Getters
+    public PlayerMovementController GetPlayerMovementController() => _playerMovementController;
+    public PlayerHealth GetPlayerHealth() => _playerHealth;
+    public PlayerCameraController GetPlayerCameraController() => _playerCamera;
+    public HarpoonGun GetHarpoonGun() => _harpoonGun;
     #endregion
 }
