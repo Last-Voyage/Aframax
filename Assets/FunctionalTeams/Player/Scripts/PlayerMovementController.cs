@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -178,7 +179,16 @@ public class PlayerMovementController : MonoBehaviour
             return Vector3.zero;
         }
 
-        return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
+        Vector2 movement = _movementInput.ReadValue<Vector2>();
+
+        if (movement != Vector2.zero)
+        {
+            return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
 
     #region Harpoon Slowdown
