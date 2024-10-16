@@ -103,7 +103,7 @@ public class PlayerHarpoonCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToHarpoonInput()
     {
-         
+        _harpoonGun.UnsubscribeInput();
     }
     #endregion
 }
