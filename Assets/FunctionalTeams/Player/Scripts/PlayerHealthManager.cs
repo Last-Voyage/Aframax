@@ -65,9 +65,18 @@ public class PlayerHealthManager : MonoBehaviour
 
         if (_playerHealth <= 0)
         {
-            //when you die it reloads the current scene through the scene loading manager
-            //Will be changed later to have ui pop up to do this
-            SceneLoadingManager.Instance.DeathReloadCurrentScene();
+            PlayerDied();
         }
+    }
+
+    /// <summary>
+    /// Called to kill the player
+    /// Public to allow for the player to be forcibly killed from external sources
+    /// </summary>
+    public void PlayerDied()
+    {
+        //when you die it reloads the current scene through the scene loading manager
+        //Will be changed later to have ui pop up to do this
+        SceneLoadingManager.Instance.DeathReloadCurrentScene();
     }
 }
