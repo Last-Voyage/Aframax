@@ -125,6 +125,12 @@ public class RippleProjector : MonoBehaviour
     /// </summary>
     private void UpdateShaderData()
     {
+        // Ensure rotation is a multiple of 90
+        Vector3 rot = transform.eulerAngles;
+        rot.y = Mathf.Floor(rot.y / 90.0F) * 90.0F;
+        transform.eulerAngles = rot;
+        
+        // Set projector position in shader
         _waterMaterial.SetVector(
             _positionID, 
             new Vector4(
@@ -134,6 +140,7 @@ public class RippleProjector : MonoBehaviour
                 0.0F
         ));
         
+        // Set projector scale in shader
         _waterMaterial.SetVector(
             _scaleID, 
             new Vector4(
