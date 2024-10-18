@@ -57,18 +57,22 @@ public class PlayerManager : MainGameplayManagerFramework
     private static UnityEvent _onPlayerDeath = new();
 
     #region Base Manager
+    
     public override void SetupInstance()
     {
         base.SetupInstance();
     }
+    
     public override void SetupMainManager()
     {
         base.SetupMainManager();
         Instance = this;
     }
+    
     #endregion
 
     #region Events
+    
     /// <summary>
     /// Invokes the _onMovementToggled event with the input bool
     /// </summary>
@@ -122,6 +126,7 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _harpoonFocusStartEvent?.Invoke();
     }
+    
     /// <summary>
     /// Invokes the harpoon focus max event
     /// </summary>
@@ -129,6 +134,7 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _harpoonFocusMaxEvent?.Invoke();
     }
+    
     /// <summary>
     /// Invokes the harpoon focus end event
     /// </summary>
@@ -176,9 +182,11 @@ public class PlayerManager : MainGameplayManagerFramework
         //Will be changed later to have ui pop up button to do this I would imagine
         SceneLoadingManager.Instance.DeathReloadCurrentScene();
     }
+    
     #endregion
 
     #region Getters
+    
     /// <summary>
     /// Getter for the _onMovementToggled event
     /// </summary>
@@ -202,5 +210,6 @@ public class PlayerManager : MainGameplayManagerFramework
     public UnityEvent<float> GetOnPlayerHealEvent() => _onPlayerHealEvent;
     public UnityEvent<float, float> GetOnPlayerHealthChangeEvent() => _onHealthChange;
     public UnityEvent GetOnPlayerDeath() => _onPlayerDeath;
+    
     #endregion
 }
