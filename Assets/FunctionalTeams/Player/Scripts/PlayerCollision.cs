@@ -16,7 +16,9 @@ using UnityEngine;
 public class PlayerCollision : MonoBehaviour
 {
     private const string KILLBOX_TAG = "Killbox";
+
     #region Trigger Contact
+
     /// <summary>
     /// Checks for the start of trigger contact
     /// </summary>
@@ -45,6 +47,7 @@ public class PlayerCollision : MonoBehaviour
     {
         
     }
+    
     #endregion
 
     #region Collision Contact
@@ -74,9 +77,11 @@ public class PlayerCollision : MonoBehaviour
     {
         
     }
+    
     #endregion
 
     #region Contact Checks
+    
     /// <summary>
     /// Checks if hte player hit a killbox
     /// </summary>
@@ -105,5 +110,6 @@ public class PlayerCollision : MonoBehaviour
         }
         
     }
+    
     #endregion
 }
