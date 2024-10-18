@@ -16,6 +16,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class HarpoonGun : MonoBehaviour
 {
+    public static HarpoonGun Instance;
+
     #region Variables
     [Header("Harpoon Variables")]
     [Tooltip("The speed the harpoon moves in the launch direction")]
@@ -104,6 +106,9 @@ public class HarpoonGun : MonoBehaviour
     #region Setup
     private void Awake()
     {
+        //Establishes the instance
+        Instance = this;
+
         _harpoonAnimator = GetComponent<Animator>();
 
         CreateInitialHarpoonProjectile();

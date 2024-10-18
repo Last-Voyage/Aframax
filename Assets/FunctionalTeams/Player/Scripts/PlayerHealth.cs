@@ -14,7 +14,16 @@ using UnityEngine;
 /// </summary>
 public class PlayerHealth : BaseHealth
 {
+    public static PlayerHealth Instance;
+
     #region Base Class
+    //Performs the base starting functionality and sets the instance
+    protected override void Awake()
+    {
+        Instance = this;
+        base.Awake();
+    }
+
     /// <summary>
     /// Inherits from BaseHealth
     /// Performs the base functionality then calls player related event

@@ -114,25 +114,6 @@ public class PlayerFunctionalityCore : MonoBehaviour
     #endregion
 
     #region Getters
-    /// <summary>
-    /// Gets the script containing player movement functionality
-    /// </summary>
-    /// <returns></returns>
-    public PlayerMovementController GetPlayerMovementController() => _playerMovementController;
-    /// <summary>
-    /// Gets the script containing player health functionality
-    /// </summary>
-    /// <returns></returns>
-    public PlayerHealth GetPlayerHealthController() => _playerHealthController;
-    /// <summary>
-    /// Gets the script containing player camera control functionality
-    /// </summary>
-    /// <returns></returns>
-    public PlayerCameraController GetPlayerCameraController() => _playerCamera;
-    /// <summary>
-    /// Gets the script containing the player harpoon weapon functionality
-    /// </summary>
-    /// <returns></returns>
-    public HarpoonGun GetHarpoonGun() => _harpoonGun;
+    //TODO as needed
     #endregion
 }

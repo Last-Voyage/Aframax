@@ -21,6 +21,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerMovementController : MonoBehaviour
 {
+    public static PlayerMovementController Instance;
     /// <summary>
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
@@ -62,6 +63,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        //Establishes the instance
+        Instance = this;
+
         // Initialize input variables and the Rigidbody
         SubscribeInput();
         SubscribeToEvents();
