@@ -17,32 +17,22 @@ public class ModularDamage : MonoBehaviour
 {
     [Tooltip("Base damage value")]
     protected float _damageAmount;
-    protected bool _attackMode;
+    protected bool _canApplyDamage = false;
     //event will mostly be used to listen to the universal health variables
     private UnityEvent<float> _damageEvent = new ();
-    //These are here if design ever wants critical hits in the future so right now they are unused
-    //private int _criticalDamage;
-    //private bool _critMode = false;
 
     /// <summary>
     /// The ending damage value used to be passed on to health
     /// </summary>
     /// <param name="damage"></param>
-    protected virtual void GiveDamage(float damage)
+    protected virtual void ApplyDamage()
     {
         //When in attack mode it will give actual damage
         //attack mode would be when a move like the tongue is visually swinging or agressing but for the player
         //it is when your harpon would just be shot out ideally not used when reeling back harpoon
-        if (_attackMode)
+        if (_canApplyDamage)
         {
-            damage = _damageAmount;
-            _damageEvent?.Invoke(damage);
-        }
-        //If not in attack mode but still colliding with an object that has a hitbox just give 0 damage
-        else
-        {
-            damage = 0;
-            _damageEvent?.Invoke(damage);
+            _damageEvent?.Invoke(_damageAmount);
         }
     }
     #region Getters
