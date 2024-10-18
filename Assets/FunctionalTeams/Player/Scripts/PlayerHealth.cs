@@ -9,18 +9,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the player health functionality
+/// </summary>
 public class PlayerHealth : BaseHealth
 {
-    private void Update()
-    {
-        //This is for testing only.
-        //If I forget to remove this after code reviews then you have my permission to be mildly annoyed
-        if (Input.GetKeyDown(KeyCode.U)) HealthDecrease(2);
-        if (Input.GetKeyDown(KeyCode.I)) HealthIncrease(1);
-    }
-
     #region Base Class
-    
+    /// <summary>
+    /// Inherits from BaseHealth
+    /// Performs the base functionality then calls player related event
+    /// </summary>
+    /// <param name="damage">The amount of damage received</param>
     protected override void HealthDecrease(float damage)
     {
         base.HealthDecrease(damage);
@@ -28,6 +27,11 @@ public class PlayerHealth : BaseHealth
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
     }
 
+    /// <summary>
+    /// Inherits from BaseHealth
+    /// Performs the base functionality then calls player related event
+    /// </summary>
+    /// <param name="heal">The amount of healing received</param>
     protected override void HealthIncrease(float heal)
     {
         base.HealthIncrease(heal);
@@ -35,6 +39,10 @@ public class PlayerHealth : BaseHealth
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
     }
 
+    /// <summary>
+    /// Inherits from BaseHealth
+    /// Performs the base functionality then calls player related event
+    /// </summary>
     protected override void Death()
     {
         base.Death();
@@ -51,26 +59,5 @@ public class PlayerHealth : BaseHealth
     public void TempEnemyDamage(float damage)
     {
         HealthDecrease(damage);
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-        SubscribeToEvents();
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeToEvents();
-    }
-
-    private void SubscribeToEvents()
-    {
-
-    }
-
-    private void UnsubscribeToEvents()
-    {
-
     }
 }

@@ -30,24 +30,6 @@ public class PlayerCollision : MonoBehaviour
         CheckForEnemyContact(other.gameObject);
     }
 
-    /// <summary>
-    /// Checks for if you are staying in trigger contact
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerStay(Collider other)
-    {
-        
-    }
-
-    /// <summary>
-    /// Checks for the end of trigger contact
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerExit(Collider other)
-    {
-        
-    }
-    
     #endregion
 
     #region Collision Contact
@@ -60,24 +42,6 @@ public class PlayerCollision : MonoBehaviour
         CheckForEnemyContact(collision.gameObject);
     }
 
-    /// <summary>
-    /// Checks for if you are staying in collision contact
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionStay(Collision collision)
-    {
-        
-    }
-
-    /// <summary>
-    /// Check for the end of collision contact
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionExit(Collision collision)
-    {
-        
-    }
-    
     #endregion
 
     #region Contact Checks
@@ -105,7 +69,9 @@ public class PlayerCollision : MonoBehaviour
         EnemyDamageTemp enemyDamageTemp = contact.gameObject.GetComponentInChildren<EnemyDamageTemp>();
         if(enemyDamageTemp!=null)
         {
-            //Yeah I know this is inefficient, but its temporary. Let me have this
+            //THIS IS TEMPORARY - Waiting for Marks Damage system which I imagine
+            //will complete the needed functionality to connect damage to health
+            //Delete this immediately after the universal damage system is implemented
             GetComponentInParent<PlayerHealth>().TempEnemyDamage(enemyDamageTemp.AttackPower);
         }
         

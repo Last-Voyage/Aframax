@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         PlayerHarpoonCore.cs
+// File Name :         PlayerFunctionalityCore.cs
 // Author :            Ryan Swanson
 // Creation Date :     9/28/2024
 //
@@ -14,11 +14,16 @@ using UnityEngine;
 /// Holds functionality for managing the relationship of player scripts 
 /// and centralizing certain functionality
 /// </summary>
-public class PlayerHarpoonCore : MonoBehaviour
+public class PlayerFunctionalityCore : MonoBehaviour
 {
+    //Contains all the associated player functionality
+    //Controls player movement functionality
     [SerializeField] private PlayerMovementController _playerMovementController;
-    [SerializeField] private PlayerHealth _playerHealth;
+    //Controls player health functionality
+    [SerializeField] private PlayerHealth _playerHealthController;
+    //Controls camera movement
     [SerializeField] private PlayerCameraController _playerCamera;
+    //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
 
     private PlayerInputMap _playerInputMap;
@@ -109,9 +114,25 @@ public class PlayerHarpoonCore : MonoBehaviour
     #endregion
 
     #region Getters
+    /// <summary>
+    /// Gets the script containing player movement functionality
+    /// </summary>
+    /// <returns></returns>
     public PlayerMovementController GetPlayerMovementController() => _playerMovementController;
-    public PlayerHealth GetPlayerHealth() => _playerHealth;
+    /// <summary>
+    /// Gets the script containing player health functionality
+    /// </summary>
+    /// <returns></returns>
+    public PlayerHealth GetPlayerHealthController() => _playerHealthController;
+    /// <summary>
+    /// Gets the script containing player camera control functionality
+    /// </summary>
+    /// <returns></returns>
     public PlayerCameraController GetPlayerCameraController() => _playerCamera;
+    /// <summary>
+    /// Gets the script containing the player harpoon weapon functionality
+    /// </summary>
+    /// <returns></returns>
     public HarpoonGun GetHarpoonGun() => _harpoonGun;
     #endregion
 }

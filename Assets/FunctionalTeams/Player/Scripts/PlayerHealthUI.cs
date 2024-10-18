@@ -65,8 +65,6 @@ public class PlayerHealthUI : MonoBehaviour
     /// </summary>
     private void PlayerDamagedUI(float damage)
     {
-        //This is attached to the old health system for now as new damage system is later on
-        //This can probably be swapped to private when we have the new damage system since we will have events then
         if(_damagedUICoroutine != null)
         {
             StopCoroutine(_damagedUICoroutine);

@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         BaseHealth.cs
 // Author :            Mark Hanson
+//                     Ryan Swanson
 // Creation Date :     10/11/2024
 //
 // Brief Description : The universal health system used to be derived from
@@ -55,6 +56,10 @@ public class BaseHealth : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Function called when the current health reaches 0
+    /// Invokes death event
+    /// </summary>
     protected virtual void Death()
     {
         InvokeDeathEvent();
