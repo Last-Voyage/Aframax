@@ -20,6 +20,7 @@ public class PlayerHealth : BaseHealth
     }
 
     #region Base Class
+    
     protected override void HealthDecrease(float damage)
     {
         base.HealthDecrease(damage);
@@ -39,6 +40,7 @@ public class PlayerHealth : BaseHealth
         base.Death();
         PlayerManager.Instance.InvokeOnPlayerDeath();
     }
+    
     #endregion
 
     /// <summary>
