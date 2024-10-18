@@ -5,15 +5,19 @@
 //
 // Description:     Manages one shot sound effects.
 ******************************************************************************/
+
 using FMODUnity;
 using System;
 using UnityEngine;
 
 public class SFXManager : AudioManager
 {
-    public static Action<EventReference> APlayOneShotSFX;
+    public static Action<EventReference, Vector3> APlayOneShotSFX;
+
+    [SerializeField] public FmodSfxEvents FmodSfxEvents;
 
     #region Enable and Action Subscriptions
+
     private void OnEnable()
     {
         SubscribeToActions(true);
@@ -27,7 +31,7 @@ public class SFXManager : AudioManager
     /// <summary>
     /// Subscribes and unsubscribes from actions
     /// </summary>
-    /// <param name="val">if true, subscribes</param>
+    /// <param name="val"> if true, subscribes </param>
     private void SubscribeToActions(bool val)
     {
         if(val)
@@ -38,6 +42,7 @@ public class SFXManager : AudioManager
 
         APlayOneShotSFX -= PlayOneShotSFX;
     }
+
     #endregion Enable and Action Subscriptions
 
     #region FMOD Audio Functionality
@@ -46,14 +51,16 @@ public class SFXManager : AudioManager
     /// Plays an audio event at a specific position
     /// </summary>
     /// <param name="eventReference">reference to the FMOD SFX event </param>
-    private void PlayOneShotSFX(EventReference eventReference)
+    private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
         if(eventReference.IsNull)
         {
+            Debug.LogWarning(eventReference + " is null.");
             return;
         }
 
-        FMODUnity.RuntimeManager.PlayOneShot(eventReference);
+        RuntimeManager.PlayOneShot(eventReference, worldPosition);
     }
+
     #endregion
 }
