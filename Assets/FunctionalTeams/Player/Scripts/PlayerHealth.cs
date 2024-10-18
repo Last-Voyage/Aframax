@@ -20,7 +20,7 @@ public class PlayerHealth : BaseHealth
     //Performs the base starting functionality and sets the instance
     protected override void Awake()
     {
-        Instance = this;
+        EstablishInstance();
         base.Awake();
     }
 
@@ -57,8 +57,23 @@ public class PlayerHealth : BaseHealth
         base.Death();
         PlayerManager.Instance.InvokeOnPlayerDeath();
     }
-    
+
     #endregion
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     /// <summary>
     /// This is TEMPORARY

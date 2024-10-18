@@ -106,14 +106,28 @@ public class HarpoonGun : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        //Establishes the instance
-        Instance = this;
+        EstablishInstance();
 
         _harpoonAnimator = GetComponent<Animator>();
 
         CreateInitialHarpoonProjectile();
 
         StartCoroutine(HarpoonCameraOrientation());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

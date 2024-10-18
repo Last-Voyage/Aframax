@@ -47,7 +47,7 @@ public class PlayerCollision : MonoBehaviour
     #region Contact Checks
     
     /// <summary>
-    /// Checks if hte player hit a killbox
+    /// Checks if the player hit a killbox
     /// </summary>
     /// <param name="other"></param>
     private void CheckForKillboxContact(GameObject contact)

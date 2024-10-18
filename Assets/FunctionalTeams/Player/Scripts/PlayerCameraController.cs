@@ -38,13 +38,27 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     void Start()
     {
-        //Establishes the instance
-        Instance = this;
+        EstablishInstance();
 
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
 
         _cameraCoroutine = StartCoroutine(MoveCamera());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

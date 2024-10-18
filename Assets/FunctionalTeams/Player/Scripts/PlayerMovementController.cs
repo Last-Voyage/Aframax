@@ -63,8 +63,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        //Establishes the instance
-        Instance = this;
+        EstablishInstance();
 
         // Initialize input variables and the Rigidbody
         SubscribeInput();
@@ -74,6 +73,21 @@ public class PlayerMovementController : MonoBehaviour
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
