@@ -56,7 +56,7 @@ public class HarpoonGun : MonoBehaviour
 
     private float _focusProgress = 0;
     private EFocusState _currentFocusState;
-    private bool _focusButtonHeld;
+    private bool _holdingFocusButton;
 
     private Coroutine _focusUnfocusCoroutine;
 
@@ -340,7 +340,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
 
-        if (_focusButtonHeld)
+        if (_holdingFocusButton)
         {
             StartHarpoonFocus();
         }  
@@ -354,13 +354,18 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusHarpoonInput(InputAction.CallbackContext context)
     {
-        _focusButtonHeld = true;
+        _holdingFocusButton = true;
         if(_harpoonFiringState == EHarpoonFiringState.Ready)
         {
             StartHarpoonFocus();
         }
     }
 
+    /// <summary>
+    /// Starts the process of focusing the harpoon
+    /// Called either when the button is pressed (if possible)
+    /// Or buffered to be called when you can fire again
+    /// </summary>
     private void StartHarpoonFocus()
     {
         _currentFocusState = EFocusState.Focusing;
@@ -377,7 +382,7 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void UnfocusHarpoonInput(InputAction.CallbackContext context)
     {
-        _focusButtonHeld = false;
+        _holdingFocusButton = false;
         StartHarpoonUnfocus();
     }
 
