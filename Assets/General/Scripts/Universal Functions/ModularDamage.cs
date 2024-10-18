@@ -5,6 +5,7 @@
 //
 // Brief Description : The functational application of the damage system that is used to interact with a health system
 *****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,7 +46,10 @@ public class ModularDamage : MonoBehaviour
             _damageEvent?.Invoke(damage);
         }
     }
+    
     #region Getters
+    
     public UnityEvent<float> GetDamageEvent() => _damageEvent;
+    
     #endregion
 }
