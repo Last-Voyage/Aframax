@@ -15,7 +15,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder.MeshOperations;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerInput))]
 
 /// <summary>
@@ -25,6 +24,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 /// </summary>
 public class PlayerMovementController : MonoBehaviour
 {
+    public static PlayerMovementController Instance;
     /// <summary>
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
@@ -71,6 +71,8 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        EstablishInstance();
+
         // Initialize input variables and the Rigidbody
         SubscribeInput();
         SubscribeToEvents();
@@ -79,6 +81,21 @@ public class PlayerMovementController : MonoBehaviour
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
