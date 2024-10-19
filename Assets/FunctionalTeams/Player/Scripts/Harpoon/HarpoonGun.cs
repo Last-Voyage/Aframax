@@ -20,23 +20,17 @@ public class HarpoonGun : MonoBehaviour
     [Header("Harpoon Variables")]
     [Tooltip("The speed the harpoon moves in the launch direction")]
     [SerializeField] private float _fireSpeed = 50f; // Speed of the harpoon
-    [Tooltip("The speed the harpoon projectile moves back towards the player")]
-    [SerializeField] private float _reelSpeed;
-    [Tooltip("The time between when the harpoon hits its target or distance limit to when you can start reeling")]
-    [SerializeField] private float _reelStartDelay;
     [Tooltip("Max distance the harpoon can launch")]
     [SerializeField] private float _maxDistance = 100f; // Max travel distance
     [Tooltip("Cooldown of the gun after fully reeled in")]
     [SerializeField] private float _reloadTime = 2f; // cd of harpoon gun after fully retracted
-    [Tooltip("If true then you have to hold mouse down to retract fully. if false retracts automatically")]
-    [SerializeField] private bool _holdToRetractMode = true; // turns on or off having to hold mouse down to retract
+    [Tooltip("Toggle for if the harpoon remains stuck in a hit object")]
+    [SerializeField] private bool _harpoonRemainsInHitObject;
     [Tooltip("The projectile being fired")]
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
 
-    private bool _reelingButtonHeld;
-
-    private GameObject _harpoonSpear;
-    private Collider _harpoonCollider;
+    private GameObject[] _harpoonSpearPool;
+    private int _harpoonPoolCounter;
 
     private EHarpoonFiringState _harpoonFiringState;
 
@@ -61,6 +55,8 @@ public class HarpoonGun : MonoBehaviour
 
     [Space]
     [Header("Harpoon Functionality Dependencies")]
+    [Tooltip("The amount of harpoons in the object pool")]
+    [SerializeField] private int _harpoonPoolingAmount;
     [Tooltip("Transform of whatever the cameras rotation is. Probably the cinemachine camera object")]
     [SerializeField] private Transform _playerLookDirection;
     [Tooltip("Transform on the end of the harpoon gun (whereever the harpoon comes out of)")]
@@ -73,8 +69,6 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private InputActionReference _harpoonShoot;
     [Tooltip("The input action for focusing")]
     [SerializeField] private InputActionReference _harpoonFocus;
-    [Tooltip("The input action for retracting")]
-    [SerializeField] private InputActionReference _harpoonRetract;
 
     [Space]
     [Header("Camera Shake Values")]
@@ -82,10 +76,6 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private float _recoilCameraShakeIntensity = 5f;
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
-    [Tooltip("Retract Intensity Shake")]
-    [SerializeField] private float _retractCameraShakeIntensity = 3f;
-    [Tooltip("Retract time Shake")]
-    [SerializeField] private float _retractCameraShakeTime = .05f;
 
     [Space]
     [Header("Animation")]
@@ -106,22 +96,9 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonAnimator = GetComponent<Animator>();
 
-        CreateInitialHarpoonProjectile();
+        CreateInitialHarpoonPool();
 
         StartCoroutine(HarpoonCameraOrientation());
-    }
-
-    /// <summary>
-    /// Creates the harpoon projectile
-    /// Rather than recreating it everytime you fire
-    /// I am literally object pooling a single object
-    /// This is more efficient ever so slightly
-    /// </summary>
-    private void CreateInitialHarpoonProjectile()
-    {
-        _harpoonSpear = Instantiate(_harpoonPrefab, _playerLookDirection.position, Quaternion.identity);
-        _harpoonCollider = _harpoonSpear.GetComponentInChildren<Collider>();
-        _harpoonSpear.SetActive(false);
     }
     #endregion
 
@@ -134,9 +111,6 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFocus.action.started += FocusHarpoon;
         _harpoonFocus.action.canceled += StartUnfocusingHarpoon;
-
-        _harpoonRetract.action.started += ReelButtonHeld;
-        _harpoonRetract.action.canceled += ReelButtonReleased;
     }
 
     /// <summary>
@@ -148,9 +122,6 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFocus.action.started -= FocusHarpoon;
         _harpoonFocus.action.canceled -= StartUnfocusingHarpoon;
-
-        _harpoonRetract.action.started -= ReelButtonHeld;
-        _harpoonRetract.action.canceled -= ReelButtonReleased;
     }
     #endregion
 
@@ -165,13 +136,13 @@ public class HarpoonGun : MonoBehaviour
         {
             return;
         }
-        
+
+        GameObject currentHarpoon = GetNextHarpoonInObjectPool();
+
         //Sets the spears initial location
-        _harpoonSpear.transform.position = _harpoonTip.transform.position;
+        currentHarpoon.transform.position = _harpoonTip.transform.position;
 
-        _harpoonSpear.SetActive(true);
-
-        _harpoonCollider.enabled = true;
+        currentHarpoon.SetActive(true);
 
         // Get the direction the harpoon is fired
         _fireDir = GetHarpoonDirectionWithFocus(); 
@@ -179,12 +150,12 @@ public class HarpoonGun : MonoBehaviour
         //Rotates the harpoon projectile to look in the fire direction
         //harpoonSpear.transform.LookAt(_harpoonSpear.transform.position + _fireDir);
 
-        SetHarpoonProjectileLookAt(_harpoonSpear.transform.position + _fireDir);
+        SetHarpoonProjectileLookAt(currentHarpoon.transform.position + _fireDir, currentHarpoon);
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
         // Start moving the harpoon
-        StartCoroutine(HarpoonFireProcess());
+        StartCoroutine(HarpoonFireProcess(currentHarpoon));
 
         // Personally I think the projectile should be the same as the object on the visual as the gun itself, 
         // but that's a discussion for a later day
@@ -193,14 +164,20 @@ public class HarpoonGun : MonoBehaviour
         //Camera shake here when combined with Stapay
         CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
 
-        PlayerManager.Instance.InvokeHarpoonFiredStartEvent();
+        PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
+
+        StartReloadProcess();
     }
 
     /// <summary>
     /// coroutine to move the created harpoon to the target direction. starts the reel coroutine at the end
     /// </summary>
-    private IEnumerator HarpoonFireProcess()
+    private IEnumerator HarpoonFireProcess(GameObject currentHarpoon)
     {
+        //I would argue this functionality could be moved to the bulletBehavior
+        //Would probably need to rename it to HarpoonProjectileBehavior to do so
+        //I think that might fall outside the scope of this task
+
         travelDistance = 0f;
         while (travelDistance < _maxDistance)
         {
@@ -208,134 +185,70 @@ public class HarpoonGun : MonoBehaviour
             Vector3 movement = _fireDir * _fireSpeed * Time.deltaTime;
 
             // Cast a ray from the harpoon's current position forward by the amount it moves this frame
-            if (Physics.Raycast(_harpoonSpear.transform.position, 
+            if (Physics.Raycast(currentHarpoon.transform.position, 
                 movement, out RaycastHit hit, movement.magnitude, ~_excludeLayers))
             {
                 // Harpoon _hit something, stop its movement and start reeling it in
-                _harpoonSpear.transform.position = hit.point; // Snap the harpoon to the _hit point
+                currentHarpoon.transform.position = hit.point; // Snap the harpoon to the _hit point
                 break;
             }
 
             // If no collision, move the harpoon
-            HarpoonFiredProjectileMovement(movement);
+            HarpoonFiredProjectileMovement(movement, currentHarpoon);
             travelDistance += movement.magnitude;
 
             yield return null;
         }
         //Either reached here because we hit something or because we have exceeded the max distance
-        PlayerManager.Instance.InvokeHarpoonFiredEndEvent();
 
-        StartReelingProcess();
+        currentHarpoon.SetActive(_harpoonRemainsInHitObject);
     }
 
     /// <summary>
     /// Moves the harpoon when its being fired out
     /// </summary>
     /// <param name="movement"></param>
-    private void HarpoonFiredProjectileMovement(Vector3 movement)
+    private void HarpoonFiredProjectileMovement(Vector3 movement, GameObject currentHarpoon)
     {
-        _harpoonSpear.transform.position += movement;
-    }
-    #endregion
-
-    #region Harpoon Reeling
-    private void ReelButtonHeld(InputAction.CallbackContext context)
-    {
-        _reelingButtonHeld = true;
-        PlayerManager.Instance.InvokeHarpoonRetractStartEvent();
-    }
-
-    private void ReelButtonReleased(InputAction.CallbackContext context)
-    {
-        _reelingButtonHeld = false;
-        PlayerManager.Instance.InvokeHarpoonRetractStoppedEvent();
-    }
-
-    /// <summary>
-    /// sets up the reel positions and time. if the target hit is grabbable child it to the harpoon so it comes back
-    /// </summary>
-    /// <param name="_hitPosition"></param>
-    private void StartReelingProcess()
-    {
-        _harpoonFiringState = EHarpoonFiringState.Reeling;
-
-        StartCoroutine(ReelHarpoonProcess());
-    }
-
-    /// <summary>
-    /// actually reels in the harpoon and destorys the instaniated harpoon. Begins reload timer at the end.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ReelHarpoonProcess()
-    {
-        yield return new WaitForSeconds(_reelStartDelay);
-
-        _harpoonCollider.enabled = false;
-        //Eventually I imagine the _holdToRetractMode will be removed
-
-        if (!_holdToRetractMode)
-        {
-            PlayerManager.Instance.InvokeHarpoonRetractStartEvent();
-        }
-
-        while (Vector3.Distance(_harpoonTip.transform.position, _harpoonSpear.transform.position) > .1f)
-        {
-            //if hold to retract is on, only pull in harpoon if holding down button
-            if (_holdToRetractMode)
-            {
-                if (_reelingButtonHeld)
-                {
-                    SetHarpoonProjectileLookAt(_harpoonTip.transform.position);
-                    HarpoonReelProjectileMovement();
-                }
-                //otherwise automatically pull in 
-            }
-            else
-            {
-                SetHarpoonProjectileLookAt(_harpoonTip.transform.position);
-                HarpoonReelProjectileMovement();
-            }
-            yield return null;
-        }
-
-        HarpoonFullyReeled();
-    }
-
-    /// <summary>
-    /// Called when the harpoon projectile has retracted fully back to the player
-    /// </summary>
-    private void HarpoonFullyReeled()
-    {
-        PlayerManager.Instance.InvokeHarpoonFullyReeledEvent();
-        //Camera shake here when combined with Stapay
-        CinemachineShake.Instance.ShakeCamera(_retractCameraShakeIntensity, _retractCameraShakeTime);
-
-        StartCoroutine(ResetHarpoon());
-    }
-
-    /// <summary>
-    /// Moves the harpoon projectile back to the player
-    /// </summary>
-    private void HarpoonReelProjectileMovement()
-    {
-        Vector3 direction = (_harpoonTip.transform.position - _harpoonSpear.transform.position).normalized;
-        _harpoonSpear.transform.position += direction * Time.deltaTime * _reelSpeed;
+        currentHarpoon.transform.position += movement;
     }
     #endregion
 
     #region Reloading
     /// <summary>
-    /// Resets the harpoon and "reloads" it
+    /// Start the process of reloading
     /// </summary>
-    private IEnumerator ResetHarpoon()
+    private void StartReloadProcess()
     {
-        _harpoonSpear.SetActive(false);
         _harpoonFiringState = EHarpoonFiringState.Reloading;
 
-        yield return new WaitForSeconds(_reloadTime);
+        StartCoroutine(ReloadHarpoon());
+    }
 
+    /// <summary>
+    /// The process in which the harpoon is reloaded
+    /// </summary>
+    private IEnumerator ReloadHarpoon()
+    {
+        float reloadTimeRemaining = _reloadTime;
+        while(reloadTimeRemaining > 0)
+        {
+            reloadTimeRemaining -= Time.deltaTime;
+            yield return null;
+        }
+        HarpoonFullyReloaded();
+    }
+
+    /// <summary>
+    /// Called when the weapon is completely reloaded
+    /// Resets the harpoon to be fired again
+    /// </summary>
+    private void HarpoonFullyReloaded()
+    {
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
+
+        PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
     }
     #endregion
 
@@ -351,7 +264,7 @@ public class HarpoonGun : MonoBehaviour
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
 
-        PlayerManager.Instance.InvokeHarpoonFocusStartEvent();
+        PlayerManager.Instance.InvokeOnHarpoonFocusStartEvent();
     }
 
     /// <summary>
@@ -365,7 +278,7 @@ public class HarpoonGun : MonoBehaviour
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(UnfocusProcess());
 
-        PlayerManager.Instance.InvokeHarpoonFocusEndEvent();
+        PlayerManager.Instance.InvokeOnHarpoonFocusEndEvent();
     }
 
     /// <summary>
@@ -400,7 +313,7 @@ public class HarpoonGun : MonoBehaviour
 
     private void FocusMax()
     {
-        PlayerManager.Instance.InvokeHarpoonFocusMaxEvent();
+        PlayerManager.Instance.InvokeOnHarpoonFocusMaxEvent();
 
         _focusProgress = 1;
         _currentFocusAccuracy = 0;
@@ -463,14 +376,51 @@ public class HarpoonGun : MonoBehaviour
     }
     #endregion
 
+    #region Harpoon Object Pool
+    /// <summary>
+    /// Creates all harpoon projectiles in the object pool to avoid needing to spawn more later
+    /// </summary>
+    private void CreateInitialHarpoonPool()
+    {
+        //Sets the size of the object to pool to be determined based on the _harpoonPoolingAmount
+        _harpoonSpearPool = new GameObject[_harpoonPoolingAmount];
+        //Iterate for each space in the harpoon pool
+        for(int i = 0; i < _harpoonPoolingAmount; i++)
+        {
+            //Spawn the new harpoon
+            GameObject newestHarpoon = Instantiate(_harpoonPrefab, _playerLookDirection.position, Quaternion.identity);
+            //Adds the new harpoon to the pool
+            _harpoonSpearPool[i] = newestHarpoon;
+            newestHarpoon.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Gets the next object in the harpoon object pool
+    /// </summary>
+    /// <returns></returns>
+    private GameObject GetNextHarpoonInObjectPool()
+    {
+        int previousPoolValue = _harpoonPoolCounter;
+        _harpoonPoolCounter++;
+        if(_harpoonPoolCounter >= _harpoonPoolingAmount)
+        {
+            _harpoonPoolCounter = 0;
+        }
+
+        return _harpoonSpearPool[previousPoolValue];
+    }
+    #endregion
+
     #region General
     /// <summary>
     /// Sets the harpoon projectile to look at something
     /// </summary>
-    /// <param name="target"></param>
-    private void SetHarpoonProjectileLookAt(Vector3 target)
+    /// <param name="target">The target ot look at</param>
+    /// <param name="currentHarpoon">The harpoon this is being applied to</param>
+    private void SetHarpoonProjectileLookAt(Vector3 target, GameObject currentHarpoon)
     {
-        _harpoonSpear.transform.LookAt(target);
+        currentHarpoon.transform.LookAt(target);
     }
 
     /// <summary>
@@ -489,7 +439,6 @@ public class HarpoonGun : MonoBehaviour
 
     #region Getters
     //Getters for private variables
-    public GameObject GetHarpoonSpear() => _harpoonSpear;
     public EHarpoonFiringState GetHarpoonFiringState() => _harpoonFiringState;
     public Transform GetHarpoonTip() => _harpoonTip;
     #endregion
@@ -502,7 +451,6 @@ public enum EHarpoonFiringState
 {
     Ready,
     Firing,
-    Reeling,
     Reloading
 };
 

@@ -25,27 +25,19 @@ public class PlayerManager : MainGameplayManagerFramework
     private static UnityEvent<bool> _onMovementToggled = new();
 
     //When the projectile is fired
-    private static UnityEvent _harpoonFiredStartEvent = new();
-    //When the projectile hits something or reaches its max distance
-    private static UnityEvent _harpoonFiredEndEvent = new();
-    //When the player presses the reel button while actively reeling
-    private static UnityEvent _harpoonRetractStartEvent = new();
-    //When the player releases the reel button while actively reeling
-    private static UnityEvent _harpoonRetractStoppedEvent = new();
-    //When the harpoon is fully reeled in
-    private static UnityEvent _harpoonFullyReeledEvent = new();
+    private static UnityEvent _onHarpoonFiredEvent = new();
     //When the harpoon is reloaded
-    private static UnityEvent _harpoonReloadedEvent = new();
+    private static UnityEvent _onHarpoonReloadedEvent = new();
 
     //When the player starts focusing
-    private static UnityEvent _harpoonFocusStartEvent = new();
+    private static UnityEvent _onHarpoonFocusStartEvent = new();
     //When the player is at max focus
-    private static UnityEvent _harpoonFocusMaxEvent = new();
+    private static UnityEvent _onHarpoonFocusMaxEvent = new();
     //When the player is no longer focused
-    private static UnityEvent _harpoonFocusEndEvent = new();
+    private static UnityEvent _onHarpoonFocusEndEvent = new();
 
-    private static UnityEvent _enemyOverCrosshairStartEvent = new();
-    private static UnityEvent _enemyOverCrosshairEndEvent = new();
+    private static UnityEvent _onEnemyOverCrosshairStartEvent = new();
+    private static UnityEvent _onEnemyOverCrosshairEndEvent = new();
 
     #region Base Manager
     public override void SetupInstance()
@@ -72,76 +64,52 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes event for when the harpoon projectile is fired
     /// </summary>
-    public void InvokeHarpoonFiredStartEvent()
+    public void InvokeOnHarpoonFiredEvent()
     {
-        _harpoonFiredStartEvent?.Invoke();
+        _onHarpoonFiredEvent?.Invoke();
     }
 
-    /// <summary>
-    /// Invokes event for when the harpoon has collided with an object or reached max range
-    /// </summary>
-    public void InvokeHarpoonFiredEndEvent()
+    public void InvokeOnHarpoonReloadedEvent()
     {
-        _harpoonFiredEndEvent?.Invoke();
-    }
-
-    /// <summary>
-    /// Invokes event for when the player starts retracting the harpoon projectile
-    /// </summary>
-    public void InvokeHarpoonRetractStartEvent()
-    {
-        _harpoonRetractStartEvent?.Invoke();
-    }
-
-    /// <summary>
-    /// Invokes event for when the player releases the retract button while reeling
-    /// </summary>
-    public void InvokeHarpoonRetractStoppedEvent()
-    {
-        _harpoonRetractStoppedEvent?.Invoke();
-    }
-
-    public void InvokeHarpoonFullyReeledEvent()
-    {
-        _harpoonFullyReeledEvent?.Invoke();
+        _onHarpoonReloadedEvent?.Invoke();
     }
 
     /// <summary>
     /// Invokes the harpoon focus start event
     /// </summary>
-    public void InvokeHarpoonFocusStartEvent()
+    public void InvokeOnHarpoonFocusStartEvent()
     {
-        _harpoonFocusStartEvent?.Invoke();
+        _onHarpoonFocusStartEvent?.Invoke();
     }
     /// <summary>
     /// Invokes the harpoon focus max event
     /// </summary>
-    public void InvokeHarpoonFocusMaxEvent()
+    public void InvokeOnHarpoonFocusMaxEvent()
     {
-        _harpoonFocusMaxEvent?.Invoke();
+        _onHarpoonFocusMaxEvent?.Invoke();
     }
     /// <summary>
     /// Invokes the harpoon focus end event
     /// </summary>
-    public void InvokeHarpoonFocusEndEvent()
+    public void InvokeOnHarpoonFocusEndEvent()
     {
-        _harpoonFocusEndEvent?.Invoke();
+        _onHarpoonFocusEndEvent?.Invoke();
     }
 
     /// <summary>
     /// Invokes the crosshair over enemy start event
     /// </summary>
-    public void InvokeCrosshairOverEnemyStartEvent()
+    public void InvokeOnCrosshairOverEnemyStartEvent()
     {
-        _enemyOverCrosshairStartEvent?.Invoke();
+        _onEnemyOverCrosshairStartEvent?.Invoke();
     }
 
     /// <summary>
     /// Invokes the crosshair over enemy end event
     /// </summary>
-    public void InvokeCrosshairOverEnemyEndEvent()
+    public void InvokeOnCrosshairOverEnemyEndEvent()
     {
-        _enemyOverCrosshairEndEvent?.Invoke();
+        _onEnemyOverCrosshairEndEvent?.Invoke();
     }
     #endregion
 
@@ -149,20 +117,16 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Getter for the _onMovementToggled event
     /// </summary>
-    public UnityEvent<bool> GetMovementToggleEvent() => _onMovementToggled;
+    public UnityEvent<bool> GetOnMovementToggleEvent() => _onMovementToggled;
 
-    public UnityEvent GetHarpoonFiredStartEvent() => _harpoonFiredStartEvent;
-    public UnityEvent GetHarpoonFiredEndEvent() => _harpoonFiredEndEvent;
-    public UnityEvent GetHarpoonRetractStartEvent() => _harpoonRetractStartEvent;
-    public UnityEvent GetHarpoonRetractStoppedEvent() => _harpoonRetractStoppedEvent;
-    public UnityEvent GetHarpoonFullyReeledEvent() => _harpoonFullyReeledEvent;
-    public UnityEvent GetHarpoonReloadedEvent() => _harpoonReloadedEvent;
+    public UnityEvent GetOnHarpoonFiredEvent() => _onHarpoonFiredEvent;
+    public UnityEvent GetOnHarpoonReloadedEvent() => _onHarpoonReloadedEvent;
 
-    public UnityEvent GetHarpoonFocusStartEvent() => _harpoonFocusStartEvent;
-    public UnityEvent GetHarpoonFocusMaxEvent() => _harpoonFocusMaxEvent;
-    public UnityEvent GetHarpoonFocusEndEvent() => _harpoonFocusEndEvent;
+    public UnityEvent GetOnHarpoonFocusStartEvent() => _onHarpoonFocusStartEvent;
+    public UnityEvent GetOnHarpoonFocusMaxEvent() => _onHarpoonFocusMaxEvent;
+    public UnityEvent GetOnHarpoonFocusEndEvent() => _onHarpoonFocusEndEvent;
 
-    public UnityEvent GetEnemyOverCrosshairStartEvent() => _enemyOverCrosshairStartEvent;
-    public UnityEvent GetEnemyOverCrosshairEndEvent() => _enemyOverCrosshairEndEvent;
+    public UnityEvent GetOnEnemyOverCrosshairStartEvent() => _onEnemyOverCrosshairStartEvent;
+    public UnityEvent GetOnEnemyOverCrosshairEndEvent() => _onEnemyOverCrosshairEndEvent;
     #endregion
 }
