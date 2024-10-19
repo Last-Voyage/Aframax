@@ -105,8 +105,8 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
-        PlayerManager.Instance.GetOnHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -300,7 +300,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetOnMovementToggleEvent().AddListener(ToggleMovement);
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
     }
 
     /// <summary>
@@ -309,7 +309,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetOnMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
     }
 
     private void OnCollisionStay(Collision collision)
