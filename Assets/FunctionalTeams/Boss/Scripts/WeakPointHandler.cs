@@ -89,10 +89,7 @@ public class WeakPointHandler : MonoBehaviour
         //Spawns the weak point childed to the spawn location.
         //If we need to make the weak point not be childed swap out weakPointSpawnLoc with
         //  weakPointSpawnLoc.transform , weakPointSpawnLoc.rotation
-        //GameObject newestWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc.position, weakPointSpawnLoc.rotation);
-
-        /*//Converts the weak point object into its associated script
-        WeakPoint weakPointInstance = newestWeakPoint.GetComponent<WeakPoint>();
+        GameObject newestWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc);
 
         //Converts the weak point object into its associated script
         WeakPoint weakPointFunc = newestWeakPoint.GetComponent<WeakPoint>();
@@ -100,12 +97,8 @@ public class WeakPointHandler : MonoBehaviour
         //Tells this script to listen for the weak point dying
         weakPointFunc.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
 
-        //Tells this script to listen for the weak point dying
-        weakPointInstance.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);*/
-
         //Adds the weakpoint to the list of spawned weak points
-        _spawnedWeakpoints.Add(GameObject.Instantiate(_weakPointPrefab, weakPointSpawnLoc.position, weakPointSpawnLoc.rotation).GetComponent<WeakPoint>());
-        _spawnedWeakpoints[_spawnedWeakpoints.Count - 1].GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
+        _spawnedWeakpoints.Add(weakPointFunc);
 
         //Removes the option to spawn a weak point at the location
         _weakPointSpawnLocations.Remove(weakPointSpawnLoc);
@@ -126,7 +119,8 @@ public class WeakPointHandler : MonoBehaviour
     /// Called when a weak point has been destroyed
     /// Listens to the weak point event for destruction
     /// </summary>
-    private void WeakPointDestroyed()
+    /// <param name="weakPointDestroyed"></param>
+    private void WeakPointDestroyed(WeakPoint weakPointDestroyed)
     {
         //Adds to the counter of weak points destroyed
         _weakPointDestructionCounter++;
@@ -139,7 +133,7 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private void CheckForMaxWeakPointsDestroyed()
     {
-        //Checks if destruction counter is or exceeds needed amount destroyed
+        //Checks if destruction counter is or exceeds needed amount destoyed
         if(_weakPointDestructionCounter >= _weakPointsNeededToDestroy)
         {
             MaxWeakPointsDestroyed();
@@ -147,11 +141,11 @@ public class WeakPointHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// Destroys the object when the max amount of weak points have been destroyed
+    /// Destroys the object when the max amount of weak points have been destoyed
     /// </summary>
     private void MaxWeakPointsDestroyed()
     {
-        InvokeAllWeakPointsDestroyedEvent();
+        InvokeAllWeakPointsDestoyedEvent();
         //At some point we will probably swap this out with playing an animation
         Destroy(gameObject);
     }
@@ -159,7 +153,7 @@ public class WeakPointHandler : MonoBehaviour
     #endregion
 
     #region Events
-    private void InvokeAllWeakPointsDestroyedEvent()
+    private void InvokeAllWeakPointsDestoyedEvent()
     {
         _allWeakPointsDestroyedEvent?.Invoke(this);
     }

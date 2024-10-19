@@ -56,7 +56,7 @@ public class BulletBehavior : MonoBehaviour
         }
         
         //If it touches the weak spot the bullet sets the UI count awake and then detaches from it once the correct number is applied to the specific number while despawning
-        if (col.gameObject.TryGetComponent<WeakPoint>(out WeakPoint weakPoint))
+        if (col.gameObject.tag == "Weak Spot")
         {
             if(_damageNumberToggle)
             {
@@ -65,9 +65,7 @@ public class BulletBehavior : MonoBehaviour
             }
             
             this.gameObject.transform.DetachChildren();
-
-            col.GetComponent<WeakPoint>().DamageWeakPoint(_actualDamage);
-
+            Destroy(col.gameObject);
             //destroy after taking out weak spot
             //Destroy(gameObject, 0.1f);
         }
