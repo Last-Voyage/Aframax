@@ -104,7 +104,8 @@ public class WeakPointHandler : MonoBehaviour
         weakPointInstance.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);*/
 
         //Adds the weakpoint to the list of spawned weak points
-        _spawnedWeakpoints.Add(GameObject.Instantiate(_weakPointPrefab, weakPointSpawnLoc.position, weakPointSpawnLoc.rotation).GetComponent<WeakPoint>());
+        _spawnedWeakpoints.Add(GameObject.Instantiate(_weakPointPrefab, 
+            weakPointSpawnLoc.position, weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>());
         _spawnedWeakpoints[_spawnedWeakpoints.Count - 1].GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
 
         //Removes the option to spawn a weak point at the location
