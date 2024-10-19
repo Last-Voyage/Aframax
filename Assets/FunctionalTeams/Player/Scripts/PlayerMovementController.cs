@@ -8,8 +8,11 @@
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
 using System.Collections;
+using System.Linq.Expressions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
@@ -27,7 +30,12 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
+    [Header("Adjustable Gravity")]
+    [SerializeField] private float _gravity;
+
     private Transform _playerVisuals;
+    private bool _isGrounded = false;
+    private const float RAYCAST_LENGTH = 1;
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
@@ -45,7 +53,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    private const string _MOVEMENT_INPUT_NAME = "Movement";
+    private const string MOVEMENT_INPUT_NAME = "Movement";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -98,7 +106,7 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
-        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
+        _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
     }
 
     /// <summary>
@@ -114,8 +122,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
         PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all events not relating to input
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -183,7 +204,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Vector3 HandleVerticalMovement()
     {
-        return new Vector3(0, _rigidBody.velocity.y, 0);
+        if (_isGrounded)
+        {
+            return Vector3.zero;
+        }
+
+        Vector2 movement = _movementInput.ReadValue<Vector2>();
+
+        if (movement != Vector2.zero)
+        {
+            return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
 
     #region Harpoon Slowdown
@@ -295,7 +330,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
+        SubscribeToEvents();
     }
 
     /// <summary>
@@ -304,6 +339,17 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        UnsubscribeToEvents();
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        _isGrounded = Physics.Raycast(transform.position - Vector3.up, Vector3.down, RAYCAST_LENGTH) && 
+            collision.contactCount == 1;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        _isGrounded = false;
     }
 }
