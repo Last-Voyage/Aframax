@@ -74,7 +74,6 @@ public class PlayerCollision : MonoBehaviour
             //Delete this immediately after the universal damage system is implemented
             GetComponentInParent<PlayerHealth>().TempEnemyDamage(enemyDamageTemp.AttackPower);
         }
-        
     }
     
     #endregion
