@@ -9,6 +9,9 @@
 using FMODUnity;
 using UnityEngine;
 
+/// <summary>
+/// Stores all the FMOD SFX as properties.
+/// </summary>
 public class FmodSfxEvents : MonoBehaviour
 {
     public static FmodSfxEvents Instance;

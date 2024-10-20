@@ -10,6 +10,9 @@ using FMODUnity;
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Handles all SFX and how / where they play.
+/// </summary>
 public class SFXManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSFX;
