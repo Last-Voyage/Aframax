@@ -8,6 +8,7 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 using UnityEngine;
+
 /// <summary>
 /// Provides the functionality behind all audio
 /// Manager to be developed
@@ -17,6 +18,7 @@ public class AudioManager : MainUniversalManagerFramework
     public static AudioManager Instance;
 
     #region Base Manager
+
     public override void SetupInstance()
     {
         base.SetupInstance();
@@ -26,6 +28,7 @@ public class AudioManager : MainUniversalManagerFramework
     {
         base.SetupMainManager();
     }
+
     #endregion
 
     #region Getters
