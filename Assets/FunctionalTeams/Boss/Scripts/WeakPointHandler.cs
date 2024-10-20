@@ -33,6 +33,8 @@ public class WeakPointHandler : MonoBehaviour
     private List<WeakPoint> _spawnedWeakpoints = new List<WeakPoint>();
     private GameObject _spawnedWeakPointsParent;
 
+    private GameObject _parentGameObject;
+
     private float _weakPointSpawnCounter = 0;
     private float _weakPointDestructionCounter = 0;
 
@@ -42,6 +44,7 @@ public class WeakPointHandler : MonoBehaviour
 
     private void Awake()
     {
+        _parentGameObject = transform.parent.gameObject;
         InitializeSpawnLocations();
     }
 
@@ -164,8 +167,8 @@ public class WeakPointHandler : MonoBehaviour
     private void MaxWeakPointsDestroyed()
     {
         InvokeAllWeakPointsDestroyedEvent();
-        //At some point we will probably swap this out with playing an animation
-        Destroy(gameObject);
+
+        Destroy(_parentGameObject);
     }
 
     #endregion
