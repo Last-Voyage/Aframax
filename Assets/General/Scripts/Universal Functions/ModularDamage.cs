@@ -12,34 +12,19 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// A manipulator of Universal health that allows specific damage numbers to go through
+/// A list of variables and functions that can be attached to other scripts
 /// </summary>
-public class ModularDamage : MonoBehaviour
+public interface ModularDamage
 {
+    //The ending damage value used to be passed on to health
+    void ApplyDamage();
+    //These variables even though currently private will be public hence why they are PascalCase
     [Tooltip("Base damage value")]
-    protected float _damageAmount;
-    protected bool _canApplyDamage = false;
+    float DamageAmount { get;}
+    //When in attack mode it will give actual damage
+    //attack mode would be when a move like the tongue is visually swinging or agressing but for the player
+    //it is when your harpon would just be shot out ideally not used when reeling back harpoon
+    bool CanApplyDamage { get;}
     //event will mostly be used to listen to the universal health variables
-    private UnityEvent<float> _damageEvent = new ();
-
-    /// <summary>
-    /// The ending damage value used to be passed on to health
-    /// </summary>
-    /// <param name="damage"></param>
-    protected virtual void ApplyDamage()
-    {
-        //When in attack mode it will give actual damage
-        //attack mode would be when a move like the tongue is visually swinging or agressing but for the player
-        //it is when your harpon would just be shot out ideally not used when reeling back harpoon
-        if (_canApplyDamage)
-        {
-            _damageEvent?.Invoke(_damageAmount);
-        }
-    }
-    
-    #region Getters
-    
-    public UnityEvent<float> GetDamageEvent() => _damageEvent;
-    
-    #endregion
+    UnityEvent<float> DamageEvent { get; }
 }
