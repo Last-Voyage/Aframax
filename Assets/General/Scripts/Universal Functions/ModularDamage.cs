@@ -5,12 +5,10 @@
 //
 // Brief Description : The functational application of the damage system that is used to interact with a health system
 *****************************************************************************/
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
 /// <summary>
 /// A list of variables and functions that can be attached to other scripts
 /// </summary>
