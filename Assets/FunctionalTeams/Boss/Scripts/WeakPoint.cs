@@ -63,7 +63,10 @@ public class WeakPoint : MonoBehaviour
     private void WeakPointDeath()
     {
         InvokeWeakPointDeathEvent();
-        SFXManager.APlayOneShotSFX?.Invoke(_destroyedSFX);
+
+        //TODO - Update this to use the proper SFX system when merged
+        // SFXManager.APlayOneShotSFX?.Invoke(_destroyedSFX);
+
         Destroy(gameObject);
     }
 
