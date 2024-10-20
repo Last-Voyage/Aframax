@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 307651977208941308}
   - component: {fileID: 2827958547727462404}
   - component: {fileID: 2275719215793297427}
+  - component: {fileID: 3256320120288923392}
   - component: {fileID: 5137148187237992625}
   - component: {fileID: 3051451356196284552}
   - component: {fileID: 5054659229493756156}
@@ -89,10 +90,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1822883443245373252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 840c39ba92e4bf94a9635e4e94cebb9a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e5a48990f80ba0449563067b64521db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPlayerHealth: 0
+  _maxHealth: 10
+--- !u!114 &3256320120288923392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822883443245373252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0a2c06f1a99d2488c41637d7437ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5137148187237992625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,6 +699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovementController: {fileID: 2827958547727462404}
+  _playerHealthController: {fileID: 2275719215793297427}
   _playerCamera: {fileID: 3697781239049282484}
   _harpoonGun: {fileID: 1154209733901946177}
 --- !u!1001 &7289724734657163392
