@@ -76,7 +76,7 @@ public class ConsoleController : MonoBehaviour
         float _amount;
         if (_dmgAmountInputField.text.Length > 0 && float.TryParse(_dmgAmountInputField.text, out _amount))
         {
-            GameObject.FindObjectOfType<PlayerHealthManager>().TakeDamage(_amount);
+            GameObject.FindObjectOfType<PlayerHealth>().TempEnemyDamage(_amount);
         }
         
     }

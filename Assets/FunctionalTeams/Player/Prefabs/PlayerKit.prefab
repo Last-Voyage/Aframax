@@ -52,7 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbffff5d8a3ade9498bf32487b59d444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMovementSpeed: 10
+  _playerMovementSpeed: 7
+  _gravity: 0.5
   _focusSpeedSlowTime: 2
   _unfocusSpeedSlowTime: 1
   _focusMoveSpeedCurve:
@@ -79,7 +80,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _playerForwards: {fileID: 333117514302688926}
 --- !u!114 &2275719215793297427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,7 +146,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 8080776813772587216}
   - component: {fileID: 6591845243418425275}
   - component: {fileID: 3697781239049282484}
+  - component: {fileID: 7573169614060137600}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -261,6 +262,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerVisuals: {fileID: 3991142726110527397}
+--- !u!114 &7573169614060137600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 343dc56b5628ad7418c196d4006c3170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3991142726110527397
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,7 +379,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 503
+    m_Bits: 1015
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -683,6 +696,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 307651977208941308}
     m_Modifications:
+    - target: {fileID: 3127624576787642536, guid: 244fb0e576bfedc43aaf54ff18534b2f,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3245540113063888829, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: m_Name

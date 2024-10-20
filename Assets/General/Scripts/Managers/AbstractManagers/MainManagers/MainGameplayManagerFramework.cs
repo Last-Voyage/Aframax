@@ -23,6 +23,22 @@ public class MainGameplayManagerFramework : MainManagerFramework
 
     public override void SetupMainManager()
     {
+        SubscribeToEvents();
+    }
+
+    /// <summary>
+    /// Used to subscribe to all events required for functionality
+    /// </summary>
+    protected override void SubscribeToEvents()
+    {
+        
+    }
+
+    /// <summary>
+    /// Unsubscribes from all events on destruction
+    /// </summary>
+    protected override void UnsubscribeToEvents()
+    {
 
     }
 }

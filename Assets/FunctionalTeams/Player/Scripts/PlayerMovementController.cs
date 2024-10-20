@@ -8,11 +8,13 @@
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
 using System.Collections;
+using System.Linq.Expressions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerInput))]
 
 /// <summary>
@@ -22,11 +24,18 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerMovementController : MonoBehaviour
 {
+    public static PlayerMovementController Instance;
     /// <summary>
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
+    [Header("Adjustable Gravity")]
+    [SerializeField] private float _gravity;
+
+    private Transform _playerVisuals;
+    private bool _isGrounded = false;
+    private const float RAYCAST_LENGTH = 1;
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
@@ -39,14 +48,12 @@ public class PlayerMovementController : MonoBehaviour
 
     private Coroutine _harpoonSlowdownCoroutine;
 
-    [SerializeField] private Transform _playerForwards;
-
     /// <summary>
     /// Variables that capture user input
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    private const string _MOVEMENT_INPUT_NAME = "Movement";
+    private const string MOVEMENT_INPUT_NAME = "Movement";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -64,13 +71,31 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        EstablishInstance();
+
         // Initialize input variables and the Rigidbody
         SubscribeInput();
         SubscribeToEvents();
         InitializeRigidbody();
+        GetPlayerVisuals();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
@@ -81,7 +106,7 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
-        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
+        _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
     }
 
     /// <summary>
@@ -97,8 +122,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
         PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all events not relating to input
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -107,6 +145,11 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeRigidbody()
     {
         _rigidBody = GetComponent<Rigidbody>();
+    }
+
+    private void GetPlayerVisuals()
+    {
+        _playerVisuals = transform.GetChild(0);
     }
 
     /// <summary>
@@ -145,8 +188,8 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
-            _playerForwards.transform.forward * moveDir.y) * 
+        Vector3 newMovement = (_playerVisuals.right * moveDir.x +
+            _playerVisuals.forward * moveDir.y) * 
             _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
 
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
@@ -161,7 +204,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Vector3 HandleVerticalMovement()
     {
-        return new Vector3(0, _rigidBody.velocity.y, 0);
+        if (_isGrounded)
+        {
+            return Vector3.zero;
+        }
+
+        Vector2 movement = _movementInput.ReadValue<Vector2>();
+
+        if (movement != Vector2.zero)
+        {
+            return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
 
     #region Harpoon Slowdown
@@ -273,7 +330,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
+        SubscribeToEvents();
     }
 
     /// <summary>
@@ -282,6 +339,17 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        UnsubscribeToEvents();
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        _isGrounded = Physics.Raycast(transform.position - Vector3.up, Vector3.down, RAYCAST_LENGTH) && 
+            collision.contactCount == 1;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        _isGrounded = false;
     }
 }

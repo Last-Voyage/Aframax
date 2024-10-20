@@ -34,13 +34,22 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private Transform _attackRoomBorderTwo;
     private Transform[] _roomWaypoints;
     private Transform _playerTransform;
+    private Coroutine _patrolCoroutine;
 
     /// <summary>
     /// starts the patrol
     /// </summary>
     private void Start() 
     {
-        StartCoroutine(PatrolRoom());
+        _patrolCoroutine = StartCoroutine(PatrolRoom());
+    }
+
+    /// <summary>
+    /// stops the errors from happening
+    /// </summary>
+    private void OnDestroy()
+    {
+        StopCoroutine(_patrolCoroutine);
     }
 
     /// <summary>
@@ -51,7 +60,11 @@ public class PatrolEnemyBehavior : MonoBehaviour
     {
         if(other.gameObject.CompareTag(_playerAttackTag))
         {
-            Destroy(gameObject, _destroyAttackDelay);
+            if(gameObject != null)
+            {
+                //add destory attack delay here in future if needed but for now it could cause bugs
+                Destroy(gameObject);
+            }  
         }
     }
 
@@ -60,6 +73,12 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void CheckPlayerInAttackRoom()
     {
+        //check if attack is null
+        if(_attackRoomBorderOne == null || _attackRoomBorderTwo == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         //check if player is in attack range for patrol enemy
         if(_playerTransform.position.x < _attackRoomBorderOne.position.x && _playerTransform.position.x > _attackRoomBorderTwo.position.x)
         {
@@ -101,7 +120,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             }
             
             // Check if the GameObject has reached the target point
-            if (Vector3.Distance(gameObject.transform.position, _targetPoint.position) < 0.1f)
+            if (_targetPoint != null && Vector3.Distance(gameObject.transform.position, _targetPoint.position) < 0.1f)
             {
                 // Choose the next random target point when the current one is reached
                 ChooseNextRandomPatrolPoint();
@@ -110,14 +129,14 @@ public class PatrolEnemyBehavior : MonoBehaviour
             yield return null;
         }
 
+        //if enemy is killed or destroyed then move on to next attack
+        BossAttacksManager.Instance.AttackInProgress = false;
+
         //if timer for attack runs out destory attack and start a new one
         if(gameObject != null)
         {
             Destroy(gameObject);
         }
-
-        //if enemy is killed or destroyed then move on to next attack
-        BossAttacksManager.Instance.AttackInProgress = false;
     }
 
     /// <summary>
@@ -126,7 +145,10 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void MoveToTarget()
     {
         // Move the GameObject towards the target point at a constant speed
-        transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+        if(_targetPoint != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+        }
     }
 
     /// <summary>
