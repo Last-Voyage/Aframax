@@ -11,13 +11,11 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Handles all SFX and how / where they play.
+/// Handles all SFX during runtime and how / where they play.
 /// </summary>
-public class SfxManager : AudioManager
+public class RuntimeSfxManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSFX;
-
-    [SerializeField] public FmodSfxEvents FmodSfxEvents;
 
     #region Enable and Action Subscriptions
 
