@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       WeakPointHandler.cs
 // Author:          Ryan Swanson
+// Contributors:    Andrea Swihart-DeCoster
 // Creation Date:   September 22, 2024
 //
 // Description:     Spawns the weakpoints on some part of the boss (tentacles,etc)
@@ -16,36 +17,58 @@ using UnityEngine.Events;
 /// </summary>
 public class WeakPointHandler : MonoBehaviour
 {
+    [Header("Spawning Options")]
     [Tooltip("The time before the first weak point spawns")]
-    [SerializeField] private float _weakPointFirstSpawnDelay;
+    [SerializeField] private float _delayFirstSpawn;
     [Tooltip("The time between spawning weakpoints")]
-    [SerializeField] private float _weakPointSpawnInterval;
+    [SerializeField] private float _spawnInterval;
+
+    [Header("Weak Point Options")]
+    [SerializeField] private GameObject _weakPointPrefab;
+
     [Tooltip("The number of weak points you need to kill to destroy this object")]
-    [SerializeField] private float _weakPointsNeededToDestroy;
+    [SerializeField] private float _numNeededToDestroy;
+
+    private List<Transform> _possibleSpawnLocations;
+    private List<WeakPoint> _spawnedWeakpoints = new List<WeakPoint>();
+    private GameObject _spawnedWeakPointsParent;
 
     private float _weakPointSpawnCounter = 0;
     private float _weakPointDestructionCounter = 0;
 
-    [Space]
-    [SerializeField] private GameObject _weakPointPrefab;
-    private List<WeakPoint> _spawnedWeakpoints = new List<WeakPoint>();
-
-    [Space]
-    [Tooltip("The transforms on where weak points can be spawned")]
-    [SerializeField] private List<Transform> _weakPointSpawnLocations;
+    private Coroutine _weakPointSpawnProcessCoroutine;
 
     private UnityEvent<WeakPointHandler> _allWeakPointsDestroyedEvent = new();
 
-    private Coroutine _weakPointSpawnProcessCoroutine;
+    private void Awake()
+    {
+        InitializeSpawnLocations();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        //Currently being handled in start but can be moved as needed
-        StartWeakPointSpawning();
+        StartWeakPointSpawning(); 
+    }
+
+    /// <summary>
+    /// Initializes the list of spawn locations.
+    /// </summary>
+    private void InitializeSpawnLocations()
+    {
+        GameObject spawnLocationsObject = transform.GetChild(0).gameObject;
+
+        _possibleSpawnLocations = new List<Transform>();
+        spawnLocationsObject.GetComponentsInChildren(_possibleSpawnLocations);
+        _possibleSpawnLocations.RemoveAt(0);
+
+        // Creates a parent object for the spawned prefabs to nest under at runtime
+        _spawnedWeakPointsParent = new GameObject("Spawned Weak Points");
+        _spawnedWeakPointsParent.transform.parent = transform;
     }
 
     #region WeakPointSpawning
+
     /// <summary>
     /// Starts the process of spawning weak points
     /// </summary>
@@ -64,65 +87,53 @@ public class WeakPointHandler : MonoBehaviour
     private IEnumerator WeakPointSpawnProcess()
     {
         //The time before the first weak point spawns
-        yield return new WaitForSeconds(_weakPointFirstSpawnDelay);
+        yield return new WaitForSeconds(_delayFirstSpawn);
 
         //Spawns weak points so long as we haven't reached the max amount allowed
-        while (_weakPointSpawnCounter < _weakPointsNeededToDestroy)
+        while (_weakPointSpawnCounter < _numNeededToDestroy)
         {
             SpawnWeakPoint();
             //Waits for the delay between spawning weak points
-            yield return new WaitForSeconds(_weakPointSpawnInterval);
+            yield return new WaitForSeconds(_spawnInterval);
         }
     }
 
     /// <summary>
-    /// Creates the weak point
+    /// Spawns a weak point at one of the possible spawn locations
     /// </summary>
     private void SpawnWeakPoint()
     {
-        //Adds to the counter of weak points spawned
+        Transform weakPointSpawnLoc = DetermineWeakPointSpawnLocation();
+
+        /* The weak point destroyed function is added as a listener to the spawns  weak points death event so the 
+         * Handler can properly track its lifespan.
+        */
+        WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc.position,
+            weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>();
+        _spawnedWeakpoints.Add(spawnedWeakPoint);
+
+        spawnedWeakPoint.transform.parent = _spawnedWeakPointsParent.transform;
+           
         _weakPointSpawnCounter++;
+        spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
 
-        //Determines the position
-        Transform weakPointSpawnLoc = DeterminesWeakPointSpawnLocation();
-
-        //Spawns the weak point childed to the spawn location.
-        //If we need to make the weak point not be childed swap out weakPointSpawnLoc with
-        //  weakPointSpawnLoc.transform , weakPointSpawnLoc.rotation
-        //GameObject newestWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc.position, weakPointSpawnLoc.rotation);
-
-        /*//Converts the weak point object into its associated script
-        WeakPoint weakPointInstance = newestWeakPoint.GetComponent<WeakPoint>();
-
-        //Converts the weak point object into its associated script
-        WeakPoint weakPointFunc = newestWeakPoint.GetComponent<WeakPoint>();
-
-        //Tells this script to listen for the weak point dying
-        weakPointFunc.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
-
-        //Tells this script to listen for the weak point dying
-        weakPointInstance.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);*/
-
-        //Adds the weakpoint to the list of spawned weak points
-        _spawnedWeakpoints.Add(GameObject.Instantiate(_weakPointPrefab, 
-            weakPointSpawnLoc.position, weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>());
-        _spawnedWeakpoints[_spawnedWeakpoints.Count - 1].GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
-
-        //Removes the option to spawn a weak point at the location
-        _weakPointSpawnLocations.Remove(weakPointSpawnLoc);
+        //Removes the option to spawn successive weak points at the same location.
+        _possibleSpawnLocations.Remove(weakPointSpawnLoc);
     }
 
     /// <summary>
     /// Determines the transform to spawn the weak point at
     /// </summary>
     /// <returns></returns>
-    private Transform DeterminesWeakPointSpawnLocation()
+    private Transform DetermineWeakPointSpawnLocation()
     {
-        return _weakPointSpawnLocations[Random.Range(0, _weakPointSpawnLocations.Count)];
+        return _possibleSpawnLocations[Random.Range(0, _possibleSpawnLocations.Count)];
     }
+
     #endregion
 
     #region Weak Point Destruction
+
     /// <summary>
     /// Called when a weak point has been destroyed
     /// Listens to the weak point event for destruction
@@ -141,7 +152,7 @@ public class WeakPointHandler : MonoBehaviour
     private void CheckForMaxWeakPointsDestroyed()
     {
         //Checks if destruction counter is or exceeds needed amount destroyed
-        if(_weakPointDestructionCounter >= _weakPointsNeededToDestroy)
+        if(_weakPointDestructionCounter >= _numNeededToDestroy)
         {
             MaxWeakPointsDestroyed();
         }    
@@ -167,6 +178,8 @@ public class WeakPointHandler : MonoBehaviour
     #endregion
 
     #region Getters
+
     public UnityEvent<WeakPointHandler> GetAllWeakPointsDestroyedEvent() => _allWeakPointsDestroyedEvent;
+
     #endregion
 }

@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         BulletBehavior.cs
 // Author :            Mark Hanson
+// Contributors:       Andrea Swihart-DeCoster
 // Creation Date :     9/16/2024
 //
 // Brief Description : THIS IS A PLACEHOLDER THIS IS NOTHING BUT A PLACEHOLDER AND IS TO BE DELETED WHEN THE REAL GUN AND BULLET IS IN (CERTAIN ASPECTS ARE TO BE TAKEN FROM IT THOUGH)

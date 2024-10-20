@@ -1,13 +1,12 @@
 /******************************************************************************
 // File Name:       WeakPointSpawner.cs
 // Author:          Ryan Swanson
+// Contributors:    Andrea Swihart-DeCoster
 // Creation Date:   September 22, 2024
 //
-// Description:     Provides the weakpoint with its needed functionality
+// Description:     Provides the weak point with its needed functionality
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -55,7 +54,7 @@ public class WeakPoint : MonoBehaviour
     }
 
     /// <summary>
-    /// Kills the weakpoint
+    /// Kills the weak point
     /// </summary>
     private void WeakPointDeath()
     {
