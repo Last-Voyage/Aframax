@@ -13,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// Handles all SFX and how / where they play.
 /// </summary>
-public class SFXManager : AudioManager
+public class SfxManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSFX;
 
