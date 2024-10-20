@@ -40,13 +40,19 @@ public class PlayerHealthUI : MonoBehaviour
                 Debug.Log("Couldn't find health bar. Make sure there's one in the scene!");
             }
         }
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
     }
 
     /// <summary>
     /// Updates the visual health bar
     /// </summary>
     /// <param name="healthPercent"></param>
-    public void UpdateHealthBar(float healthPercent)
+    private void UpdateHealthBar(float healthPercent,float currentHealth)
     {
         if (_healthBar != null)
         {
@@ -57,10 +63,8 @@ public class PlayerHealthUI : MonoBehaviour
     /// <summary>
     /// Starts the process of showing the player damaged ui
     /// </summary>
-    public void PlayerDamagedUI()
+    private void PlayerDamagedUI(float damage)
     {
-        //This is attached to the old health system for now as new damage system is later on
-        //This can probably be swapped to private when we have the new damage system since we will have events then
         if(_damagedUICoroutine != null)
         {
             StopCoroutine(_damagedUICoroutine);
@@ -80,5 +84,17 @@ public class PlayerHealthUI : MonoBehaviour
         yield return new WaitForSeconds(_damageUIDisplayTime);
 
         _damagedUI.enabled = false;
+    }
+
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateHealthBar);
+        PlayerManager.Instance.GetOnPlayerDamageEvent().AddListener(PlayerDamagedUI);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateHealthBar);
+        PlayerManager.Instance.GetOnPlayerDamageEvent().RemoveListener(PlayerDamagedUI);
     }
 }
