@@ -3,7 +3,7 @@
 // Author :            Mark Hanson
 // Creation Date :     10/1/2024
 //
-// Brief Description : The functational application of the damage system that is used to interact with a health system
+// Brief Description : The collective index of the damage system that is used to interact with a health system
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -11,22 +11,24 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// A list of variables and functions that can be attached to other scripts
+/// A list of variables and functions that can be attached to other scripts. When attached to another script next to monobehaviour
+/// all variables must be taken from below which should allow the damage number for editing, The switching bool of when damage is able to be done
+/// , a damage event for listening to other scripts, and a function for all the variables.
+/// NOTHING SHOULD BE CALLED HERE THIS AREA ONLY SERVES AS A HOLDER OF FUNCTIONS AND VARIABLE
 /// </summary>
-public interface ModularDamage
+public interface IModularDamage
 {
-    //The ending damage value used to be passed on to health
-    void ApplyDamage();
-    
     //These variables even though currently private will be public hence why they are PascalCase
     [Tooltip("Base damage value")]
-    float DamageAmount { get;}
-    
-    //When in attack mode it will give actual damage
-    //attack mode would be when a move like the tongue is visually swinging or agressing but for the player
-    //it is when your harpon would just be shot out ideally not used when reeling back harpoon
-    bool CanApplyDamage { get;}
-    
+    float IDamageAmount { get; }
+
+   //Ensures damage is only applied when true
+    bool ICanApplyDamage { get; }
+
     //event will mostly be used to listen to the universal health variables
-    UnityEvent<float> DamageEvent { get; }
+    UnityEvent<float> IDamageEvent { get; }
+    /// <summary>
+    /// The ending damage value used to be passed on to health
+    /// </summary>
+    void IApplyDamage();
 }
