@@ -1,6 +1,6 @@
 /******************************************************************************
 // File Name:       IterativeChunkLoad.cs
-// Author:          Nick Rice
+// Author:          Nick Rice, Alex Kalscheur
 // Creation Date:   September 27, 2024
 //
 // Description:     This script takes in the list of all of the chunks and the queue of chunks,
@@ -48,6 +48,8 @@ public class IterativeChunkLoad : MonoBehaviour
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
     private const float _DISTANCE_BETWEEN_CHUNKS = 10f;
 
+    [SerializeField] private BoatMover _boat;
+
     #region GrabbingChunksFromOtherScripts
     /// <summary>
     /// Make sure the enviro manager is in the scene for testing
@@ -64,7 +66,9 @@ public class IterativeChunkLoad : MonoBehaviour
         // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
         _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
         _usedChunks[(int)ChunkStates.middle] = _everyChunk[_chunkQueuePtrPtr++];
+        _boat.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
         _usedChunks[(int)ChunkStates.front] = _everyChunk[_chunkQueuePtrPtr++];
+        _boat.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
     }
 
     /// <summary>
@@ -152,8 +156,10 @@ public class IterativeChunkLoad : MonoBehaviour
         _usedChunks[(int)ChunkStates.back] = _usedChunks[(int)ChunkStates.middle];
         _backChunkPtr = _middleChunkPtr;
         _usedChunks[(int)ChunkStates.middle] = _usedChunks[(int)ChunkStates.front];
+        _boat.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
         _middleChunkPtr = _frontChunkPtr;
         _usedChunks[(int)ChunkStates.front] = _usedChunks[(int)ChunkStates.newFront];
+        _boat.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
         _frontChunkPtr = _newFrontChunkPtr;
         _newFrontChunkPtr = 0; // This ptr is freed until a new chunk is going to be added
     }

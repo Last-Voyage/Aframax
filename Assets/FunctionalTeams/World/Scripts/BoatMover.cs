@@ -20,7 +20,7 @@ public class BoatMover : MonoBehaviour
 
     private void Start()
     {
-        _currentSpline = FindObjectOfType<RiverSpline>();
+        //_currentSpline = FindObjectOfType<RiverSpline>();
         _percentOfSpline = 0;
     }
 
@@ -41,5 +41,16 @@ public class BoatMover : MonoBehaviour
         Debug.Log("Calculated: " + position.x + ", " + position.y + ", " + position.z);
         gameObject.transform.position = position;
         Debug.Log("Actual: " + gameObject.transform.position.x + ", " + gameObject.transform.position.y + ", " + gameObject.transform.position.z);
+    }
+
+    public void SetCurrentSpline(RiverSpline spline)
+    {
+        _currentSpline = spline;
+        Debug.Log("Current Spline: " + _currentSpline.gameObject.name);
+    }
+
+    public void SetNextSpline (RiverSpline spline)
+    {
+        _nextSpline = spline;
     }
 }
