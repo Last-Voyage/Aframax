@@ -174,6 +174,9 @@ public class WeakPointHandler : MonoBehaviour
     #endregion
 
     #region Events
+    /// <summary>
+    /// Calls the weak destroyed event
+    /// </summary>
     private void InvokeAllWeakPointsDestroyedEvent()
     {
         _allWeakPointsDestroyedEvent?.Invoke(this);

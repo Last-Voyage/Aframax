@@ -65,11 +65,19 @@ public class WeakPoint : MonoBehaviour
     }
 
     #region Events
+
+    /// <summary>
+    /// Calls the weak point damage taken event
+    /// </summary>
+    /// <param name="damage"></param>
     private void InvokeWeakPointDamageTakenEvent(float damage)
     {
         _weakPointDamageTakenEvent?.Invoke(damage);
     }
 
+    /// <summary>
+    /// Calls the weak point death event
+    /// </summary>
     private void InvokeWeakPointDeathEvent()
     {
         _weakPointDeathEvent?.Invoke();
