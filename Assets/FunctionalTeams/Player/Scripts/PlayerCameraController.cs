@@ -20,6 +20,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerCameraController : MonoBehaviour
 {
+    public static PlayerCameraController Instance;
+
     [SerializeField] private GameObject _playerVisuals;
 
     // Variable for the Virtual Camera
@@ -36,10 +38,27 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        EstablishInstance();
+
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
 
         _cameraCoroutine = StartCoroutine(MoveCamera());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
@@ -84,10 +103,15 @@ public class PlayerCameraController : MonoBehaviour
         if (change)
         {
             _cameraCoroutine = StartCoroutine(MoveCamera());
+            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
-            StopCoroutine(_cameraCoroutine);
+            if (_cameraCoroutine != null)
+            {
+                StopCoroutine(_cameraCoroutine);
+            }
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -114,7 +138,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
-        ToggleCameraMovement(true);
+        ToggleCameraMovement(false);
     }
 
     /// <summary>

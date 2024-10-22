@@ -8,11 +8,13 @@
                     user and allows the player GameObject to move in the scene.
 ******************************************************************************/
 using System.Collections;
+using System.Linq.Expressions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerInput))]
 
 /// <summary>
@@ -22,27 +24,36 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerMovementController : MonoBehaviour
 {
+    public static PlayerMovementController Instance;
     /// <summary>
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
+    [Header("Adjustable Gravity")]
+    [SerializeField] private float _gravity;
+
+    private Transform _playerVisuals;
+    private bool _isGrounded = false;
+    private const float RAYCAST_LENGTH = 1;
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
+    [SerializeField] private float _unfocusSpeedSlowTime;
     [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+
     private float _currentFocusMoveSpeedMultiplier = 1;
 
-    private Coroutine _focusSpeedCoroutine;
+    private float _currentFocusMoveSpeedProgress = 0;
 
-    [SerializeField] private Transform _playerForwards;
+    private Coroutine _harpoonSlowdownCoroutine;
 
     /// <summary>
     /// Variables that capture user input
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    private const string _MOVEMENT_INPUT_NAME = "Movement";
+    private const string MOVEMENT_INPUT_NAME = "Movement";
 
     /// <summary>
     /// A variable to hold the Rigidbody
@@ -60,13 +71,31 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        EstablishInstance();
+
         // Initialize input variables and the Rigidbody
         SubscribeInput();
         SubscribeToEvents();
         InitializeRigidbody();
+        GetPlayerVisuals();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
+    }
+
+    /// <summary>
+    /// Establishes the instance and removes
+    /// </summary>
+    private void EstablishInstance()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
@@ -77,7 +106,7 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
-        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
+        _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
     }
 
     /// <summary>
@@ -93,8 +122,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
+        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
         PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all events not relating to input
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -103,6 +145,11 @@ public class PlayerMovementController : MonoBehaviour
     private void InitializeRigidbody()
     {
         _rigidBody = GetComponent<Rigidbody>();
+    }
+
+    private void GetPlayerVisuals()
+    {
+        _playerVisuals = transform.GetChild(0);
     }
 
     /// <summary>
@@ -126,7 +173,6 @@ public class PlayerMovementController : MonoBehaviour
     {
         Vector3 horizontalMovement = HandleHorizontalMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
-        verticalMovement = Vector3.zero;
 
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
@@ -142,8 +188,8 @@ public class PlayerMovementController : MonoBehaviour
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (_playerForwards.transform.right * moveDir.x +
-            _playerForwards.transform.forward * moveDir.y) * 
+        Vector3 newMovement = (_playerVisuals.right * moveDir.x +
+            _playerVisuals.forward * moveDir.y) * 
             _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
 
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
@@ -158,16 +204,51 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Vector3 HandleVerticalMovement()
     {
-        return new Vector3(0, _rigidBody.velocity.y, 0);
+        if (_isGrounded)
+        {
+            return Vector3.zero;
+        }
+
+        Vector2 movement = _movementInput.ReadValue<Vector2>();
+
+        if (movement != Vector2.zero)
+        {
+            return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
 
     #region Harpoon Slowdown
     /// <summary>
-    /// Starts the slowdown that is associated with focusing the weapon
+    /// Starts the harpoon speed slowdown
     /// </summary>
     private void StartHarpoonSpeedSlowdown()
     {
-        _focusSpeedCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+    }
+
+    /// <summary>
+    /// Stops the slowdown from focusing the harpoon
+    /// </summary>
+    private void StopHarpoonSpeedSlowdown()
+    {
+        StopCurrentFocusCoroutine();
+        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
+    }
+
+    /// <summary>
+    /// Stops the process of focusing or unfocusing
+    /// </summary>
+    private void StopCurrentFocusCoroutine()
+    {
+        if (_harpoonSlowdownCoroutine != null)
+        {
+            StopCoroutine(_harpoonSlowdownCoroutine);
+        }
     }
 
     /// <summary>
@@ -176,26 +257,51 @@ public class PlayerMovementController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator HarpoonSpeedSlowdownProcess()
     {
-        float slowCompletion = 0;
-        while (slowCompletion < 1)
+        while (_currentFocusMoveSpeedProgress < 1)
         {
             //Increases the progress on slowdown
-            slowCompletion += Time.deltaTime / _focusSpeedSlowTime;
+            _currentFocusMoveSpeedProgress += Time.deltaTime / _focusSpeedSlowTime;
 
-            //Sets the current speed based on the animation graph
-            _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(slowCompletion);
+            CalculateCurrentFocusSpeedMultiplier();
 
             yield return null;
         }
     }
 
     /// <summary>
-    /// Stops the slowdown from focusing the harpoon
+    /// The process of speeding up the player after unfocusing
     /// </summary>
-    private void StopHarpoonSpeedSlowdown()
+    /// <returns></returns>
+    private IEnumerator HarpoonSpeedUpProcess()
     {
-        _currentFocusMoveSpeedMultiplier = 1;
-        StopCoroutine(_focusSpeedCoroutine);
+        while (_currentFocusMoveSpeedProgress > 0)
+        {
+            //Decreases the progress on slowdown
+            _currentFocusMoveSpeedProgress -= Time.deltaTime / _unfocusSpeedSlowTime;
+
+            CalculateCurrentFocusSpeedMultiplier();
+
+            yield return null;
+        }
+
+        HarpoonSpeedUpComplete();
+    }
+
+    /// <summary>
+    /// Called when the player is at max speed after unfocusing their weapon
+    /// </summary>
+    private void HarpoonSpeedUpComplete()
+    {
+        _currentFocusMoveSpeedProgress = 0;
+        CalculateCurrentFocusSpeedMultiplier();
+    }
+
+    /// <summary>
+    /// Calculates the current speed multiplier for focusing the weapon
+    /// </summary>
+    private void CalculateCurrentFocusSpeedMultiplier()
+    {
+        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
     }
 
     #endregion
@@ -224,7 +330,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
+        SubscribeToEvents();
     }
 
     /// <summary>
@@ -233,6 +339,17 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
+        UnsubscribeToEvents();
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        _isGrounded = Physics.Raycast(transform.position - Vector3.up, Vector3.down, RAYCAST_LENGTH) && 
+            collision.contactCount == 1;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        _isGrounded = false;
     }
 }
