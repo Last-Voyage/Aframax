@@ -78,6 +78,9 @@ public class PlayerManager : MainGameplayManagerFramework
         _onHarpoonFiredEvent?.Invoke();
     }
 
+    /// <summary>
+    /// Invokes event for when the harpoon is reloaded
+    /// </summary>
     public void InvokeOnHarpoonReloadedEvent()
     {
         _onHarpoonReloadedEvent?.Invoke();
