@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BaseBossAttackSystem : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class BaseBossAttackSystem : MonoBehaviour
     protected bool _isAttacking = false;
     protected int _randomInt;
 
-    IEnumerator attackCalled()
+    private IEnumerator attackCalled()
     {
         _randomInt = Random.Range(0, _attackList.Length);
         _isAttacking = true;
