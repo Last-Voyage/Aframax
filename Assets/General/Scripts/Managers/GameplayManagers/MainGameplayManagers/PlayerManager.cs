@@ -39,6 +39,15 @@ public class PlayerManager : MainGameplayManagerFramework
     private static UnityEvent _onEnemyOverCrosshairStartEvent = new();
     private static UnityEvent _onEnemyOverCrosshairEndEvent = new();
 
+    //When the player takes damage
+    private static UnityEvent<float> _onPlayerDamageEvent = new();
+    //When the player receives healing
+    private static UnityEvent<float> _onPlayerHealEvent = new();
+    //When the player health changes for any reason
+    private static UnityEvent<float, float> _onHealthChange = new();
+    //When the player dies
+    private static UnityEvent _onPlayerDeath = new();
+
     #region Base Manager
     public override void SetupInstance()
     {
@@ -111,6 +120,42 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onEnemyOverCrosshairEndEvent?.Invoke();
     }
+
+    /// <summary>
+    /// Invokes when the player receives damage
+    /// </summary>
+    /// <param name="damageTaken">The damage received</param>
+    public void InvokePlayerDamagedEvent(float damageTaken)
+    {
+        _onPlayerDamageEvent?.Invoke(damageTaken);
+    }
+
+    /// <summary>
+    /// Invokes when the player receives healing
+    /// </summary>
+    /// <param name="healTaken">The healing received</param>
+    public void InvokePlayerHealEvent(float healTaken)
+    {
+        _onPlayerHealEvent?.Invoke(healTaken);
+    }
+
+    /// <summary>
+    /// Invokes when the player health changes by any means
+    /// </summary>
+    /// <param name="percentHealth">The current percent health</param>
+    /// <param name="currentHealth">The current health amount</param>
+    public void InvokePlayerHealthChangeEvent(float percentHealth, float currentHealth)
+    {
+        _onHealthChange?.Invoke(percentHealth, currentHealth);
+    }
+
+    /// <summary>
+    /// Invokes when the player dies
+    /// </summary>
+    public void InvokeOnPlayerDeath()
+    {
+        _onPlayerDeath?.Invoke();
+    }
     #endregion
 
     #region Getters
@@ -128,5 +173,10 @@ public class PlayerManager : MainGameplayManagerFramework
 
     public UnityEvent GetOnEnemyOverCrosshairStartEvent() => _onEnemyOverCrosshairStartEvent;
     public UnityEvent GetOnEnemyOverCrosshairEndEvent() => _onEnemyOverCrosshairEndEvent;
+
+    public UnityEvent<float> GetOnPlayerDamageEvent() => _onPlayerDamageEvent;
+    public UnityEvent<float> GetOnPlayerHealEvent() => _onPlayerHealEvent;
+    public UnityEvent<float, float> GetOnPlayerHealthChangeEvent() => _onHealthChange;
+    public UnityEvent GetOnPlayerDeath() => _onPlayerDeath;
     #endregion
 }
