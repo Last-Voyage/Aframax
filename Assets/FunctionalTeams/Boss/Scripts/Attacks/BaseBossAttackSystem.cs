@@ -37,6 +37,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     protected virtual void Awake()
     {
         DamageAmount = _damageAmount;
+        RandomLocationPick();
     }
     protected virtual void RandomLocationPick()
     {
