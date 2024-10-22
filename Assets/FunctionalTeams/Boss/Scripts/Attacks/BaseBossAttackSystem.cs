@@ -5,26 +5,33 @@ using UnityEngine.Events;
 
 public class BaseBossAttackSystem : MonoBehaviour
 {
-    [SerializeField] protected GameObject[] _attackList;
-    protected bool _isAttacking = false;
-    protected int _randomInt;
+    [SerializeField] protected GameObject _attackObject;
+    private UnityEvent<BaseBossAttackSystem> _attackBegin = new();
+    private UnityEvent<BaseBossAttackSystem> _attackEnd = new();
 
-    private IEnumerator attackCalled()
+
+
+
+    protected virtual void AttackBegin()
     {
-        _randomInt = Random.Range(0, _attackList.Length);
-        _isAttacking = true;
-        yield return new WaitForSeconds(1f);
-        _isAttacking = false;
+        InvokeAttackBegin();
     }
-  private IEnumerator attackStatement()
+    protected virtual void AttackEnd()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(0.1f);
-            if (_isAttacking)
-            {
-                _attackList[_randomInt] = Instantiate(_attackList[_randomInt], this.transform.position, Quaternion.identity);
-            }
-        }
+        InvokeAttackEnd();
     }
+    #region Events
+    private void InvokeAttackBegin()
+    {
+        _attackBegin?.Invoke();
+    }
+    private void InvokeAttackEnd()
+    {
+        _attackEnd?.Invoke();
+    }
+    #endregion
+    #region Getters
+    public UnityEvent<BaseBossAttackSystem> GetAttackBegin() => _attackBegin;
+    public UnityEvent<BaseBossAttackSystem> GetAttackEnd() => _attackEnd;
+    #endregion
 }
