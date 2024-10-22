@@ -194,9 +194,8 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onPlayerDeath?.Invoke();
 
-        //when you die it reloads the current scene through the scene loading manager
-        //Will be changed later to have ui pop up button to do this I would imagine
-        SceneLoadingManager.Instance.DeathReloadCurrentScene();
+        //when you die it loads the death scene
+        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(2, 0);
     }
     
     #endregion
