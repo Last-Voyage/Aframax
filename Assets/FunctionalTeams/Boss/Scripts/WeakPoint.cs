@@ -1,13 +1,12 @@
 /******************************************************************************
 // File Name:       WeakPointSpawner.cs
 // Author:          Ryan Swanson
+// Contributors:    Andrea Swihart-DeCoster
 // Creation Date:   September 22, 2024
 //
-// Description:     Provides the weakpoint with its needed functionality
+// Description:     Provides the weak point with its needed functionality
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,10 +20,7 @@ public class WeakPoint : MonoBehaviour
     private float _currentWeakPointHealth;
 
     private UnityEvent<float> _weakPointDamageTakenEvent = new();
-    private UnityEvent<WeakPoint> _weakPointDeathEvent = new();
-
-    [Header("Audio")]
-    [SerializeField] private FMODUnity.EventReference _destroyedSFX;
+    private UnityEvent _weakPointDeathEvent = new();
 
     private void Start()
     {
@@ -58,32 +54,38 @@ public class WeakPoint : MonoBehaviour
     }
 
     /// <summary>
-    /// Kills the weakpoint
+    /// Kills the weak point
     /// </summary>
     private void WeakPointDeath()
     {
         InvokeWeakPointDeathEvent();
-
-        //TODO - Update this to use the proper SFX system when merged
-        // SFXManager.APlayOneShotSFX?.Invoke(_destroyedSFX);
-
+        //TODO: Uncomment when merged with SFX Manager
+        //SFXManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.weakPointDestroyed, transform.position);
         Destroy(gameObject);
     }
 
     #region Events
+
+    /// <summary>
+    /// Calls the weak point damage taken event
+    /// </summary>
+    /// <param name="damage"></param>
     private void InvokeWeakPointDamageTakenEvent(float damage)
     {
         _weakPointDamageTakenEvent?.Invoke(damage);
     }
 
+    /// <summary>
+    /// Calls the weak point death event
+    /// </summary>
     private void InvokeWeakPointDeathEvent()
     {
-        _weakPointDeathEvent?.Invoke(this);
+        _weakPointDeathEvent?.Invoke();
     }
     #endregion
 
     #region Getters
     public UnityEvent<float> GetWeakPointDamageTakenEvent() => _weakPointDamageTakenEvent;
-    public UnityEvent<WeakPoint> GetWeakPointDeathEvent() => _weakPointDeathEvent;
+    public UnityEvent GetWeakPointDeathEvent() => _weakPointDeathEvent;
     #endregion
 }
