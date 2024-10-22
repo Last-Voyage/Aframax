@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class BossAttackPhaseSystem : MonoBehaviour
 {
-    [ToolTip("Put all of the phases in here to be activated when needed")]
+    [Tooltip("Put all of the phases in here to be activated when needed")]
     [SerializeField] private GameObject[] _phaseCollection;
     //The current phase it is on
     protected private int _phaseCounter = 0;
