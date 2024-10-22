@@ -8,6 +8,7 @@
 *****************************************************************************/
 
 using UnityEngine.Events;
+using UnityEngine;
 
 /// <summary>
 /// The class the will be referred from to call for certain functions
