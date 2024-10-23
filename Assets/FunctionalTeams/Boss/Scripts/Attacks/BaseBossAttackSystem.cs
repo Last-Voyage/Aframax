@@ -39,6 +39,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
         DamageAmount = _damageAmount;
         DetermineRandomAttackLocation();
     }
+    
     /// <summary>
     /// Randomizer for the starting position
     /// </summary>
@@ -49,6 +50,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
             Attack.transform.position = _spawnLocation[Random.Range(0, _spawnLocation.Length)].position;
         }
     }
+    
     /// <summary>
     /// Use this as the damage that will go into the player health
     /// </summary>
@@ -59,6 +61,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
             DamageEvent?.Invoke(DamageAmount);
         }
     }
+    
     /// <summary>
     /// Attack beginning event for boss phase
     /// </summary>
@@ -66,6 +69,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     {
         InvokeAttackBegin();
     }
+    
     /// <summary>
     /// Attack ending event for boss phase
     /// </summary>
@@ -73,7 +77,9 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     {
         InvokeAttackEnd();
     }
+    
     #region Events
+    
     private void InvokeAttackBegin()
     {
         _attackBegin?.Invoke(this);
@@ -85,9 +91,12 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     }
 
     #endregion
+    
     #region Getters
+    
     public UnityEvent<BaseBossAttackSystem> GetAttackBegin() => _attackBegin;
     public UnityEvent<BaseBossAttackSystem> GetAttackEnd() => _attackEnd;
     public UnityEvent<float> GetDamageEvent() => DamageEvent;
+    
     #endregion
 }
