@@ -12,6 +12,26 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
+/// Contains the state in which the harpoon shooting functionality is in
+/// </summary>
+public enum EHarpoonFiringState
+{
+    Ready,
+    Firing,
+    Reloading
+};
+
+/// <summary>
+/// Contains the state in which the harpoon focusing is currently in
+/// </summary>
+public enum EFocusState
+{
+    None,
+    Focusing,
+    Unfocusing
+};
+
+/// <summary>
 /// Provides the functionality for the harpoon weapon
 /// </summary>
 public class HarpoonGun : MonoBehaviour
@@ -55,8 +75,6 @@ public class HarpoonGun : MonoBehaviour
 
     [Space]
     [Header("Harpoon Functionality Dependencies")]
-    [Tooltip("The amount of harpoons in the object pool")]
-    [SerializeField] private int _harpoonPoolingAmount;
     [Tooltip("Transform of whatever the cameras rotation is. Probably the cinemachine camera object")]
     [SerializeField] private Transform _playerLookDirection;
     [Tooltip("Transform on the end of the harpoon gun (whereever the harpoon comes out of)")]
@@ -69,6 +87,9 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private InputActionReference _harpoonShoot;
     [Tooltip("The input action for focusing")]
     [SerializeField] private InputActionReference _harpoonFocus;
+
+    [Tooltip("The amount of harpoons in the object pool")]
+    private static int _harpoonPoolingAmount = 5;
 
     [Space]
     [Header("Camera Shake Values")]
@@ -184,23 +205,22 @@ public class HarpoonGun : MonoBehaviour
             // Calculate how far the harpoon should move in this frame
             Vector3 movement = _fireDir * _fireSpeed * Time.deltaTime;
 
+            // If no collision, move the harpoon
+            HarpoonFiredProjectileMovement(movement, currentHarpoon);
+            travelDistance += movement.magnitude;
+
+            yield return null;
+
             // Cast a ray from the harpoon's current position forward by the amount it moves this frame
-            if (Physics.Raycast(currentHarpoon.transform.position, 
+            if (Physics.Raycast(currentHarpoon.transform.position,
                 movement, out RaycastHit hit, movement.magnitude, ~_excludeLayers))
             {
                 // Harpoon _hit something, stop its movement and start reeling it in
                 currentHarpoon.transform.position = hit.point; // Snap the harpoon to the _hit point
                 break;
             }
-
-            // If no collision, move the harpoon
-            HarpoonFiredProjectileMovement(movement, currentHarpoon);
-            travelDistance += movement.magnitude;
-
-            yield return null;
         }
         //Either reached here because we hit something or because we have exceeded the max distance
-
         currentHarpoon.SetActive(_harpoonRemainsInHitObject);
     }
 
@@ -311,6 +331,10 @@ public class HarpoonGun : MonoBehaviour
         FocusMax();
     }
 
+    /// <summary>
+    /// Called when the weapon focus is at 100%
+    /// Invokes needed events and makes sure values are correct
+    /// </summary>
     private void FocusMax()
     {
         PlayerManager.Instance.InvokeOnHarpoonFocusMaxEvent();
@@ -443,23 +467,3 @@ public class HarpoonGun : MonoBehaviour
     public Transform GetHarpoonTip() => _harpoonTip;
     #endregion
 }
-
-/// <summary>
-/// Contains the state in which the harpoon shooting functionality is in
-/// </summary>
-public enum EHarpoonFiringState
-{
-    Ready,
-    Firing,
-    Reloading
-};
-
-/// <summary>
-/// Contains the state in which the harpoon focusing is currently in
-/// </summary>
-public enum EFocusState
-{
-    None,
-    Focusing,
-    Unfocusing
-};
