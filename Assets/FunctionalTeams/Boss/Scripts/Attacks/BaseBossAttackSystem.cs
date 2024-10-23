@@ -5,10 +5,12 @@
 //
 // Brief Description : The base of each attack the boss does to make each attack easier to set up
 *****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
 /// <summary>
 /// The abstract class of holding all the functions of the attack
 /// literally from beginning to end
