@@ -36,6 +36,13 @@ public class DeathScreenFadeIn : MonoBehaviour
         StartCoroutine(UiFadeIn(_deathScreenUiElements));
     }
 
+    /// <summary>
+    /// Handles increasing the alpha of a canvas group from 0 to 1 gradually.
+    /// with some tweaking this could be used by other things but for now it is private
+    /// could maybe be repurposed as a manager or something later if need be
+    /// </summary>
+    /// <param name="thingsToFadeIn"></param>
+    /// <returns></returns>
     private IEnumerator UiFadeIn(CanvasGroup thingsToFadeIn)
     {
         yield return new WaitForSeconds(FadeDelay);
