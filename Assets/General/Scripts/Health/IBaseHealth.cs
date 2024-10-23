@@ -50,10 +50,15 @@ public interface IBaseHealth
     #region Getters
 
     /// <summary>
-    /// Returns health percentage
+    /// Access the current health percentage
     /// </summary>
-    /// <returns></returns>
+    /// <returns> Current health percentage </returns>
     abstract float GetHealthPercent();
+
+    /// <summary>
+    /// Access death event
+    /// </summary>
+    /// <returns> Health the class death event </returns>
     abstract UnityEvent<IBaseHealth> GetDeathEvent();
 
     #endregion

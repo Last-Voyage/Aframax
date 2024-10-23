@@ -33,6 +33,9 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
         InitializeHealth();
     }
 
+    /// <summary>
+    /// Initializes any starter health values such as starting at max health.
+    /// </summary>
     public void InitializeHealth()
     {
         _currentHealth = _maxHealth;
