@@ -16,7 +16,7 @@ using UnityEngine.Events;
 public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
 {
     [Tooltip("Throw tangible Game Object of Attack in here")]
-    [SerializeField] protected GameObject _attackObject;
+    [SerializeField] protected GameObject[] _attackObject;
     private UnityEvent<BaseBossAttackSystem> _attackBegin = new();
     private UnityEvent<BaseBossAttackSystem> _attackEnd = new();
     //For spawning in at one or more locations
@@ -37,15 +37,17 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     protected virtual void Awake()
     {
         DamageAmount = _damageAmount;
-        RandomLocationPick();
+        DetermineRandomAttackLocation();
     }
     /// <summary>
     /// Randomizer for the starting position
     /// </summary>
-    protected virtual void RandomLocationPick()
+    protected virtual void DetermineRandomAttackLocation()
     {
-        int RandomInteger = Random.Range(0, _spawnLocation.Length);
-        _attackObject.transform.position = _spawnLocation[RandomInteger].position;
+        foreach( GameObject Attack in _attackObject)
+        {
+            Attack.transform.position = _spawnLocation[Random.Range(0, _spawnLocation.Length)].position;
+        }
     }
     /// <summary>
     /// Use this as the damage that will go into the player health
@@ -76,10 +78,12 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     {
         _attackBegin?.Invoke(this);
     }
+
     private void InvokeAttackEnd()
     {
         _attackEnd?.Invoke(this);
     }
+
     #endregion
     #region Getters
     public UnityEvent<BaseBossAttackSystem> GetAttackBegin() => _attackBegin;
