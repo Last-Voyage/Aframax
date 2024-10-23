@@ -12,30 +12,32 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Contains the state in which the harpoon shooting functionality is in
-/// </summary>
-public enum EHarpoonFiringState
-{
-    Ready,
-    Firing,
-    Reloading
-};
-
-/// <summary>
-/// Contains the state in which the harpoon focusing is currently in
-/// </summary>
-public enum EFocusState
-{
-    None,
-    Focusing,
-    Unfocusing
-};
-
-/// <summary>
 /// Provides the functionality for the harpoon weapon
 /// </summary>
 public class HarpoonGun : MonoBehaviour
 {
+    #region Enums
+    /// <summary>
+    /// Contains the state in which the harpoon shooting functionality is in
+    /// </summary>
+    private enum EHarpoonFiringState
+    {
+        Ready,
+        Firing,
+        Reloading
+    };
+
+    /// <summary>
+    /// Contains the state in which the harpoon focusing is currently in
+    /// </summary>
+    private enum EFocusState
+    {
+        None,
+        Focusing,
+        Unfocusing
+    };
+    #endregion
+
     #region Variables
     [Header("Harpoon Variables")]
     [Tooltip("The speed the harpoon moves in the launch direction")]
@@ -464,7 +466,6 @@ public class HarpoonGun : MonoBehaviour
 
     #region Getters
     //Getters for private variables
-    public EHarpoonFiringState GetHarpoonFiringState() => _harpoonFiringState;
     public Transform GetHarpoonTip() => _harpoonTip;
     #endregion
 }
