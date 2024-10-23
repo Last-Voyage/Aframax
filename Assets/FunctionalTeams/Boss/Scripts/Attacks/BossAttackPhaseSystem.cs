@@ -5,13 +5,22 @@ using UnityEngine.Events;
 
 public class BossAttackPhaseSystem : MonoBehaviour
 {
-    [Tooltip("Put all of the phases in here to be activated when needed")]
-    [SerializeField] private GameObject[] _phaseCollection;
     //The current phase it is on
     protected private int _phaseCounter = 0;
     //A switch bool that works in tandem with the phase counter
-    private bool _isPhaseOver;
+    protected private bool _isPhaseOver;
+    //Ideally have a empty hold 2 or more attacks in the one empty and match it up with the phase number
+    [Tooltip("Through in attack empty holder that aligns with phase")]
+    [SerializeField] private GameObject[] _attackCollection;
+    private UnityEvent<BossAttackPhaseSystem> _phaseBegin;
+    private UnityEvent<BossAttackPhaseSystem> _phaseEnd;
 
+    private void Awake()
+    {
+        _isPhaseOver = false;
+        _attackCollection[_phaseCounter].SetActive(true);
+        InvokePhaseBegin();
+    }
 
     /// <summary>
     /// Phase Management works as a way to listen to attack events and elaborate on what phase it should be on
@@ -25,16 +34,30 @@ public class BossAttackPhaseSystem : MonoBehaviour
             yield return new WaitForSeconds(1f);
             if(_isPhaseOver)
             {
-                _phaseCollection[_phaseCounter].SetActive(false);
+                _attackCollection[_phaseCounter].SetActive(false);
                 _phaseCounter++;
-                _phaseCollection[_phaseCounter].SetActive(true);
+                _attackCollection[_phaseCounter].SetActive(true);
                 _isPhaseOver = false;
             }
-            if(_phaseCounter > _phaseCollection.Length)
+            if(_phaseCounter > _attackCollection.Length)
             {
                 //Does game end here??
             }
         }
     }
 
+    #region Events
+    private void InvokePhaseBegin()
+    {
+        _phaseBegin?.Invoke();
+    }
+    private void InvokePhaseEnd()
+    {
+        _phaseEnd?.Invoke();
+    }
+    #endregion
+    #region Getters
+    public UnityEvent<BossAttackPhaseSystem> GetPhaseBegin() => _phaseBegin;
+    public UnityEvent<BossAttackPhaseSystem> GetPhaseEnd() => _phaseEnd;
+    #endregion
 }
