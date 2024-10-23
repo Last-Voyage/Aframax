@@ -15,20 +15,22 @@ public class BoatMover : MonoBehaviour
 {
     private RiverSpline _currentSpline;
     private RiverSpline _nextSpline;
-    private float _percentOfSpline;
+    private float _percentOfSpline = 0;
     [SerializeField] private float _speedModifier;
 
-    private void Start()
-    {
-        //_currentSpline = FindObjectOfType<RiverSpline>();
-        _percentOfSpline = 0;
-    }
-
+    /// <summary>
+    /// Every frame, the boat will be moved
+    /// </summary>
     private void Update()
     {
         moveBoat();
     }
 
+    /// <summary>
+    /// Takes the current spline and moves the boat along it
+    ///     Takes into account the length of the spline, time, and a speed modifier to determine the boat's position
+    ///     Will eventually also rotate the boat using the derivative of the curve
+    /// </summary>
     private void moveBoat()
     {
         BezierCurve curve = _currentSpline.GetComponent<BezierCurve>();
@@ -36,17 +38,15 @@ public class BoatMover : MonoBehaviour
         Vector3 rotation;
 
         _percentOfSpline += Time.deltaTime * _speedModifier * length / 100;
-        Debug.Log(_percentOfSpline);
+        //Debug.Log(_percentOfSpline);
         Vector3 position = curve.GetPositionAlongSpline(_percentOfSpline, out rotation);
-        Debug.Log("Calculated: " + position.x + ", " + position.y + ", " + position.z);
         gameObject.transform.position = position;
-        Debug.Log("Actual: " + gameObject.transform.position.x + ", " + gameObject.transform.position.y + ", " + gameObject.transform.position.z);
+        //gameObject.transform.Rotate(rotation);
     }
 
     public void SetCurrentSpline(RiverSpline spline)
     {
         _currentSpline = spline;
-        Debug.Log("Current Spline: " + _currentSpline.gameObject.name);
     }
 
     public void SetNextSpline (RiverSpline spline)

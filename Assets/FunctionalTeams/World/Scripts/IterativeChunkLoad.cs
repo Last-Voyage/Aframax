@@ -48,7 +48,7 @@ public class IterativeChunkLoad : MonoBehaviour
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
     private const float _DISTANCE_BETWEEN_CHUNKS = 10f;
 
-    [SerializeField] private BoatMover _boat;
+    private BoatMover _boat;
 
     #region GrabbingChunksFromOtherScripts
     /// <summary>
@@ -57,11 +57,16 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        
         EnvironmentManager.Instance.GetSendingOverChunks().AddListener(ReceiveChunkQueue);
+
+        Debug.Log("ReceiveChunkQueue");
 
         EnvironmentManager.Instance.GetAllChunkObjects().AddListener(ReceiveEveryChunk); // STILL NEEDS TO BE IMPLEMENTED
 
         EnvironmentManager.Instance.SendChangeTheChunk().AddListener(ChunkChange);
+
+        _boat = gameObject.GetComponent<BoatMover>();
 
         // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
         _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
@@ -77,6 +82,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// <param name="chunkQueued">The queue of chunks</param>
     private void ReceiveChunkQueue(int[] chunkQueued)
     {
+        Debug.Log("ReceiveChunkQueue firing");
         _chunkQueuePtr = chunkQueued;
     }
 
@@ -123,6 +129,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void AddChunk()
     {
+        Debug.Log(_chunkQueuePtrPtr);
         _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
 
         _chunkQueuePtrPtr++;
