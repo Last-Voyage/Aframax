@@ -39,6 +39,9 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
         DamageAmount = _damageAmount;
         RandomLocationPick();
     }
+    /// <summary>
+    /// Randomizer for the starting position
+    /// </summary>
     protected virtual void RandomLocationPick()
     {
         int RandomInteger = Random.Range(0, _spawnLocation.Length);
