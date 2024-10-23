@@ -30,12 +30,18 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     [Header("Adjustable Speed")]
     [SerializeField] private float _playerMovementSpeed;
+    [Header("SlantedSurfaceLeniancy")]
+    [SerializeField] private float _slantLeniancy;
     [Header("Adjustable Gravity")]
     [SerializeField] private float _gravity;
 
     private Transform _playerVisuals;
     private bool _isGrounded = false;
-    private const float RAYCAST_LENGTH = 1;
+    private const float GROUNDED_CHECK_LENGTH = .2f;
+    private Vector3 _groundedExtents = new Vector3(.05f, .05f, .05f);
+    private Quaternion _groundNormal;
+    RaycastHit groundHit;
+    private Vector3 _slopeDirection;
 
     [Space]
     [SerializeField] private float _focusSpeedSlowTime;
@@ -47,6 +53,10 @@ public class PlayerMovementController : MonoBehaviour
     private float _currentFocusMoveSpeedProgress = 0;
 
     private Coroutine _harpoonSlowdownCoroutine;
+
+    [Space]
+    [SerializeField] private LayerMask _walkableLayers;
+    [SerializeField] private Transform _groundedCheckOrigin;
 
     /// <summary>
     /// Variables that capture user input
@@ -65,6 +75,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Coroutine _movementCoroutine;
 
+    #region Setup
     /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized.
@@ -77,7 +88,7 @@ public class PlayerMovementController : MonoBehaviour
         SubscribeInput();
         SubscribeToEvents();
         InitializeRigidbody();
-        GetPlayerVisuals();
+        SetupPlayerVisuals();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
@@ -98,6 +109,7 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
 
+    #region Input Subscription
     /// <summary>
     /// Initializes all input variables
     /// </summary>
@@ -116,7 +128,9 @@ public class PlayerMovementController : MonoBehaviour
     {
         _movementInput = null;
     }
+    #endregion
 
+    #region Event Subscription
     /// <summary>
     /// Subscribes to all events not relating to input
     /// </summary>
@@ -138,6 +152,8 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
     }
+    #endregion
+    
 
     /// <summary>
     /// Initializes our Rigidbody for gravity
@@ -147,11 +163,34 @@ public class PlayerMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
     }
 
-    private void GetPlayerVisuals()
+    /// <summary>
+    /// Finds the object associated with player visuals
+    /// </summary>
+    private void SetupPlayerVisuals()
     {
         _playerVisuals = transform.GetChild(0);
     }
 
+    /// <summary>
+    /// Called when this component is enabled.
+    /// Used to assign the OnMovementToggled Action to a listener
+    /// </summary>
+    private void OnEnable()
+    {
+        SubscribeToEvents();
+    }
+
+    /// <summary>
+    /// Called when this component is disabled.
+    /// Used to unassign the OnMovementToggled Action to a listener
+    /// </summary>
+    private void OnDisable()
+    {
+        UnsubscribeToEvents();
+    }
+    #endregion
+
+    #region Movement
     /// <summary>
     /// Movement coroutine
     /// This will perpetually call the movement handling methods until disabled
@@ -160,6 +199,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         while (true)
         {
+            GroundedCheck();
             HandleMovement();
             yield return null;
         }
@@ -177,6 +217,36 @@ public class PlayerMovementController : MonoBehaviour
         _rigidBody.velocity = horizontalMovement + verticalMovement;
     }
 
+    private void GroundedCheck()
+    {
+        
+        _isGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
+            transform.up*-1, out groundHit, Quaternion.identity,GROUNDED_CHECK_LENGTH,_walkableLayers);
+
+
+        if(_isGrounded)
+        {
+            /*_groundNormal = Quaternion.FromToRotation(Vector3.up, groundHit.normal);
+            float storedY = _playerVisuals.transform.eulerAngles.y;
+            _playerVisuals.rotation = Quaternion.FromToRotation(Vector3.up, groundHit.normal);
+            _playerVisuals.transform.eulerAngles = 
+                new Vector3(_playerVisuals.transform.eulerAngles.x, storedY, _playerVisuals.transform.eulerAngles.z);*/
+            
+        }
+        else
+        {
+            //_groundNormal = Quaternion.identity;
+        }
+
+        
+
+        print(_isGrounded);
+        if (_isGrounded)
+            print(groundHit.collider.gameObject.name);
+
+
+    }
+
     /// <summary>
     /// Handler for horizontal movement based on input key presses
     /// </summary>
@@ -191,11 +261,29 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 newMovement = (_playerVisuals.right * moveDir.x +
             _playerVisuals.forward * moveDir.y) * 
             _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
+        
+        if(_isGrounded)
+        {
+            _slopeDirection = Vector3.ProjectOnPlane(newMovement, groundHit.normal).normalized;
+        }
+        else
+        {
+            _slopeDirection = newMovement;
+        }
 
+        Debug.DrawRay(transform.position, _slopeDirection, Color.blue, 1);
         newMovement = new Vector3(newMovement.x, 0, newMovement.z);
 
+        print(_slopeDirection);
+        //_slopeDirection = new Vector3(_slopeDirection.x, 0, _slopeDirection.z);
+        return _slopeDirection *_playerMovementSpeed;
         // Move the player
         return newMovement;
+    }
+
+    private Vector3 HandleSlopeMovement()
+    {
+        return Vector3.zero;
     }
 
     /// <summary>
@@ -211,14 +299,9 @@ public class PlayerMovementController : MonoBehaviour
 
         Vector2 movement = _movementInput.ReadValue<Vector2>();
 
-        if (movement != Vector2.zero)
-        {
-            return new Vector3(0, (_rigidBody.velocity.y - _gravity) * Time.timeScale, 0);
-        }
-        else
-        {
-            return Vector3.zero;
-        }
+        print(_groundNormal);
+
+        return new Vector3(0, _rigidBody.velocity.y, 0);
     }
 
     #region Harpoon Slowdown
@@ -323,29 +406,11 @@ public class PlayerMovementController : MonoBehaviour
             _rigidBody.velocity = Vector3.zero;
         }
     }
-
-    /// <summary>
-    /// Called when this component is enabled.
-    /// Used to assign the OnMovementToggled Action to a listener
-    /// </summary>
-    private void OnEnable()
-    {
-        SubscribeToEvents();
-    }
-
-    /// <summary>
-    /// Called when this component is disabled.
-    /// Used to unassign the OnMovementToggled Action to a listener
-    /// </summary>
-    private void OnDisable()
-    {
-        UnsubscribeToEvents();
-    }
+    #endregion
 
     private void OnCollisionStay(Collision collision)
     {
-        _isGrounded = Physics.Raycast(transform.position - Vector3.up, Vector3.down, RAYCAST_LENGTH) && 
-            collision.contactCount == 1;
+        
     }
 
     private void OnCollisionExit(Collision collision)
