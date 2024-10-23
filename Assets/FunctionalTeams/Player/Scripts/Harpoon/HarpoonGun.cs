@@ -415,6 +415,7 @@ public class HarpoonGun : MonoBehaviour
             GameObject newestHarpoon = Instantiate(_harpoonPrefab, _playerLookDirection.position, Quaternion.identity);
             //Adds the new harpoon to the pool
             _harpoonSpearPool[i] = newestHarpoon;
+            ObjectPoolingParent.Instance.AddObjectAsChild(newestHarpoon);
             newestHarpoon.SetActive(false);
         }
     }
