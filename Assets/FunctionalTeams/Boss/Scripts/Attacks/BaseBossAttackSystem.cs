@@ -47,7 +47,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     /// </summary>
     protected virtual void DetermineRandomAttackLocation()
     {
-        foreach( GameObject Attack in _attackObject)
+        foreach (GameObject Attack in _attackObject)
         {
             Attack.transform.position = _spawnLocation[Random.Range(0, _spawnLocation.Length)].position;
         }
