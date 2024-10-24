@@ -49,9 +49,13 @@ public class BezierCurveEditor : Editor
         }
         else
         {
+            // Display general editor settings
             GUILayout.Label("Editor Settings", EditorStyles.boldLabel);
             ActiveBezier.HandleSize = Mathf.Max(EditorGUILayout.FloatField("Handle Size", ActiveBezier.HandleSize), 0);
+            
             GUILayout.Space(10);
+            
+            // Display curve settings
             GUILayout.Label("Curve Settings", EditorStyles.boldLabel);
             GUILayout.BeginHorizontal();
             ActiveBezier.CurveIntensity = EditorGUILayout.FloatField("Intensity", ActiveBezier.CurveIntensity);
@@ -179,8 +183,8 @@ public class BezierCurveEditor : Editor
                 DisplayBezierHandle(ref ActiveBezier.BezierPoints[i]);
             }
 
+            // Run through each bezier point and draw the curve between them
             BezierPoint currentPoint = ActiveBezier.BezierPoints[i];
-
             if (previousPoint != currentPoint)
             {
                 Handles.color = Color.white;
