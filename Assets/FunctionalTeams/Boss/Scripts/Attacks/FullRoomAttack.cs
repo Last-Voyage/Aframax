@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         FullRoomAttack.cs
 // Author :            Tommy Roberts
+// Contributor :       Andrew Stapay
 // Creation Date :     10/9/2024
 //
 // Brief Description : controls the full room attack for the boss
@@ -12,7 +13,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// contains functionality for full room attack
 /// </summary>
-public class FullRoomAttack : MonoBehaviour
+public class FullRoomAttack : MonoBehaviour //BaseBossAttackSystem
 {
     //attack 1 ref
     [Header("Attack 1")]

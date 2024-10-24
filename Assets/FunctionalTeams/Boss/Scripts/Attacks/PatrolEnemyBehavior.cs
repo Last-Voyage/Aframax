@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         PatrolEnemyBehavior.cs
 // Author :            Tommy Roberts
+// Contributor :       Andrew Stapay
 // Creation Date :     10/10/2024
 //
 // Brief Description : controls functionality for the spawned patrol enemy
@@ -12,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// contains behavior for the spawned patrol enemy
 /// </summary>
-public class PatrolEnemyBehavior : MonoBehaviour
+public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
 {
     [Tooltip("Speed at which enemy patrols around room")]
     [SerializeField] private float _patrolSpeed = 2f;
@@ -32,7 +33,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private int _currentTargetIndex;
     private Transform _attackRoomBorderOne;
     private Transform _attackRoomBorderTwo;
-    private Transform[] _roomWaypoints;
+    private List<Transform> _roomWaypoints;
     private Transform _playerTransform;
     private Coroutine _patrolCoroutine;
 
@@ -45,27 +46,54 @@ public class PatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// stops the errors from happening
+    /// starts patroling room going to set waypoints until detecting a player or time runs out
     /// </summary>
-    private void OnDestroy()
+    /// <returns></returns>
+    private IEnumerator PatrolRoom()
     {
-        StopCoroutine(_patrolCoroutine);
+        yield return new WaitForSeconds(_timeToWaitBeforePatroling);
+        ChooseNextRandomPatrolPoint();
+        float elapsedTime = 0f;
+        while (gameObject != null && elapsedTime < _attackDuration)
+        {
+            CheckPlayerInAttackRoom();
+            if (!_playerInAttackRange)
+            {
+                MoveToTarget();
+            }
+            else
+            {
+                MoveToPlayer();
+            }
+
+            // Check if the GameObject has reached the target point
+            if (_targetPoint != null && Vector3.Distance(gameObject.transform.position, _targetPoint.position) < 0.1f)
+            {
+                // Choose the next random target point when the current one is reached
+                ChooseNextRandomPatrolPoint();
+            }
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        //if enemy is killed or destroyed then move on to next attack
+        BossAttacksManager.Instance.AttackInProgress = false;
+
+        //if timer for attack runs out destory attack and start a new one
+        if (gameObject != null)
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
-    /// when player collides with this attack destory the attack
+    /// choosees next random point for patroling enemy
     /// </summary>
-    /// <param name="other"></param>
-    private void OnCollisionEnter(Collision other) 
+    private void ChooseNextRandomPatrolPoint()
     {
-        if(other.gameObject.CompareTag(_playerAttackTag))
-        {
-            if(gameObject != null)
-            {
-                //add destory attack delay here in future if needed but for now it could cause bugs
-                Destroy(gameObject);
-            }  
-        }
+        // Pick a random point from the array
+        _currentTargetIndex = Random.Range(0, _roomWaypoints.Count);
+        _targetPoint = _roomWaypoints[_currentTargetIndex];
     }
 
     /// <summary>
@@ -99,47 +127,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// starts patroling room going to set waypoints until detecting a player or time runs out
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator PatrolRoom()
-    {
-        yield return new WaitForSeconds(_timeToWaitBeforePatroling);
-        ChooseNextRandomPatrolPoint();
-        float elapsedTime = 0f;
-        while(gameObject != null && elapsedTime < _attackDuration)
-        {
-            CheckPlayerInAttackRoom();
-            if(!_playerInAttackRange)
-            {
-                MoveToTarget();
-            }
-            else
-            {
-                MoveToPlayer();
-            }
-            
-            // Check if the GameObject has reached the target point
-            if (_targetPoint != null && Vector3.Distance(gameObject.transform.position, _targetPoint.position) < 0.1f)
-            {
-                // Choose the next random target point when the current one is reached
-                ChooseNextRandomPatrolPoint();
-            }
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        //if enemy is killed or destroyed then move on to next attack
-        BossAttacksManager.Instance.AttackInProgress = false;
-
-        //if timer for attack runs out destory attack and start a new one
-        if(gameObject != null)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    /// <summary>
     /// moves patrol enemy to specified target
     /// </summary>
     private void MoveToTarget()
@@ -161,13 +148,27 @@ public class PatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// choosees next random point for patroling enemy
+    /// when player collides with this attack destory the attack
     /// </summary>
-    private void ChooseNextRandomPatrolPoint()
+    /// <param name="other"></param>
+    private void OnCollisionEnter(Collision other)
     {
-        // Pick a random point from the array
-        _currentTargetIndex = Random.Range(0, _roomWaypoints.Length);
-        _targetPoint = _roomWaypoints[_currentTargetIndex];
+        if (other.gameObject.CompareTag(_playerAttackTag))
+        {
+            if (gameObject != null)
+            {
+                //add destory attack delay here in future if needed but for now it could cause bugs
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    /// stops the errors from happening
+    /// </summary>
+    private void OnDestroy()
+    {
+        StopCoroutine(_patrolCoroutine);
     }
 
     public Transform AttackRoomBorderOne
@@ -182,7 +183,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
         set { _attackRoomBorderTwo = value;}
     }
 
-    public Transform[] RoomWaypoints
+    public List<Transform> RoomWaypoints
     {
         get { return _roomWaypoints;}
         set { _roomWaypoints = value;}
