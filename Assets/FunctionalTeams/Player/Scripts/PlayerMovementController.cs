@@ -12,7 +12,6 @@ using System.Linq.Expressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder.MeshOperations;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
@@ -28,35 +27,40 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
-    [Header("Adjustable Speed")]
+    [Header("Movement")]
     [SerializeField] private float _playerMovementSpeed;
-    [Header("SlantedSurfaceLeniancy")]
-    [SerializeField] private float _slantLeniancy;
-    [Header("Adjustable Gravity")]
-    [SerializeField] private float _gravity;
 
-    private Transform _playerVisuals;
-    private bool _isGrounded = false;
-    private const float GROUNDED_CHECK_LENGTH = .2f;
-    private Vector3 _groundedExtents = new Vector3(.05f, .05f, .05f);
-    private Quaternion _groundNormal;
-    RaycastHit groundHit;
-    private Vector3 _slopeDirection;
+    [SerializeField] private float _accelerationTime;
+    [SerializeField] private float _deccelerationTime;
+    [SerializeField] private AnimationCurve _accelerationCurve;
+
+    private float _currentAcceleration = 0;
+    private float _accelerationProgress = 0;
+    private Coroutine _accelerationCoroutine;
+    private Coroutine _deccelerationCoroutine;
 
     [Space]
+    [Header("Focusing Movement")]
     [SerializeField] private float _focusSpeedSlowTime;
     [SerializeField] private float _unfocusSpeedSlowTime;
     [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
 
     private float _currentFocusMoveSpeedMultiplier = 1;
-
     private float _currentFocusMoveSpeedProgress = 0;
-
     private Coroutine _harpoonSlowdownCoroutine;
 
     [Space]
+    [Header("General")]
     [SerializeField] private LayerMask _walkableLayers;
     [SerializeField] private Transform _groundedCheckOrigin;
+
+    private bool _directionalInputLastCheck = false;
+    private Transform _playerVisuals;
+    private bool _isGrounded = false;
+    private const float GROUNDED_CHECK_LENGTH = .2f;
+    [Tooltip("Size of boxcast for the grounded check")]
+    private Vector3 _groundedExtents = new Vector3(.05f, .05f, .05f);
+    RaycastHit _groundHit;
 
     /// <summary>
     /// Variables that capture user input
@@ -65,10 +69,7 @@ public class PlayerMovementController : MonoBehaviour
     private InputAction _movementInput;
     private const string MOVEMENT_INPUT_NAME = "Movement";
 
-    /// <summary>
-    /// A variable to hold the Rigidbody
-    /// </summary>
-    private Rigidbody _rigidBody;
+    private Rigidbody _playerRigidBody;
 
     /// <summary>
     /// Movement coroutine related variables
@@ -85,7 +86,6 @@ public class PlayerMovementController : MonoBehaviour
         EstablishInstance();
 
         // Initialize input variables and the Rigidbody
-        SubscribeInput();
         SubscribeToEvents();
         InitializeRigidbody();
         SetupPlayerVisuals();
@@ -154,13 +154,12 @@ public class PlayerMovementController : MonoBehaviour
     }
     #endregion
     
-
     /// <summary>
     /// Initializes our Rigidbody for gravity
     /// </summary>
     private void InitializeRigidbody()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        _playerRigidBody = GetComponent<Rigidbody>();
     }
 
     /// <summary>
@@ -199,6 +198,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         while (true)
         {
+            DetermineInputState();
             GroundedCheck();
             HandleMovement();
             yield return null;
@@ -211,46 +211,27 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void HandleMovement()
     {
-        Vector3 horizontalMovement = HandleHorizontalMovement();
+        Vector3 horizontalMovement = DirectionalInputMovement();
         Vector3 verticalMovement = HandleVerticalMovement();
 
-        _rigidBody.velocity = horizontalMovement + verticalMovement;
-    }
-
-    private void GroundedCheck()
-    {
-        
-        _isGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
-            transform.up*-1, out groundHit, Quaternion.identity,GROUNDED_CHECK_LENGTH,_walkableLayers);
-
-
-        if(_isGrounded)
-        {
-            /*_groundNormal = Quaternion.FromToRotation(Vector3.up, groundHit.normal);
-            float storedY = _playerVisuals.transform.eulerAngles.y;
-            _playerVisuals.rotation = Quaternion.FromToRotation(Vector3.up, groundHit.normal);
-            _playerVisuals.transform.eulerAngles = 
-                new Vector3(_playerVisuals.transform.eulerAngles.x, storedY, _playerVisuals.transform.eulerAngles.z);*/
-            
-        }
-        else
-        {
-            //_groundNormal = Quaternion.identity;
-        }
-
-        
-
-        print(_isGrounded);
-        if (_isGrounded)
-            print(groundHit.collider.gameObject.name);
-
-
+        _playerRigidBody.velocity = horizontalMovement + verticalMovement;
     }
 
     /// <summary>
-    /// Handler for horizontal movement based on input key presses
+    /// Determines if the player is grounded and takes the Raycasthit as an out variable
     /// </summary>
-    private Vector3 HandleHorizontalMovement()
+    private void GroundedCheck()
+    {
+        _isGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
+            transform.up*-1, out _groundHit, Quaternion.identity,GROUNDED_CHECK_LENGTH,_walkableLayers);
+
+        _playerRigidBody.useGravity = !_isGrounded;
+    }
+
+    /// <summary>
+    /// Handler for movement based on input key presses
+    /// </summary>
+    private Vector3 DirectionalInputMovement()
     {
         // Read the movement input
         Vector2 moveDir = _movementInput.ReadValue<Vector2>();
@@ -259,36 +240,24 @@ public class PlayerMovementController : MonoBehaviour
         // in certain directions in the world
         // By manipulating them, we can move the character
         Vector3 newMovement = (_playerVisuals.right * moveDir.x +
-            _playerVisuals.forward * moveDir.y) * 
-            _playerMovementSpeed* _currentFocusMoveSpeedMultiplier;
+            _playerVisuals.forward * moveDir.y) * _currentFocusMoveSpeedMultiplier;
         
         if(_isGrounded)
         {
-            _slopeDirection = Vector3.ProjectOnPlane(newMovement, groundHit.normal).normalized;
-        }
-        else
-        {
-            _slopeDirection = newMovement;
+            //Projects the movement onto the surface that is being stood on
+            newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
+            //This movement will be vertical when on a sloped surface
         }
 
-        Debug.DrawRay(transform.position, _slopeDirection, Color.blue, 1);
-        newMovement = new Vector3(newMovement.x, 0, newMovement.z);
-
-        print(_slopeDirection);
-        //_slopeDirection = new Vector3(_slopeDirection.x, 0, _slopeDirection.z);
-        return _slopeDirection *_playerMovementSpeed;
-        // Move the player
-        return newMovement;
-    }
-
-    private Vector3 HandleSlopeMovement()
-    {
-        return Vector3.zero;
+        //Leaving this here for the code review if you want to check the orientation
+        Debug.DrawRay(transform.position, newMovement, Color.blue, 1);
+        
+        // Returns the movement direction times the speed and acceleration
+        return newMovement * _playerMovementSpeed * _currentAcceleration;
     }
 
     /// <summary>
-    /// Handles the force of gravity
-    /// Can be expanded to include jumping later on
+    /// Handles any needed vertical force
     /// </summary>
     private Vector3 HandleVerticalMovement()
     {
@@ -297,12 +266,111 @@ public class PlayerMovementController : MonoBehaviour
             return Vector3.zero;
         }
 
-        Vector2 movement = _movementInput.ReadValue<Vector2>();
-
-        print(_groundNormal);
-
-        return new Vector3(0, _rigidBody.velocity.y, 0);
+        return new Vector3(0, _playerRigidBody.velocity.y, 0);
     }
+
+    #region Acceleration
+    /// <summary>
+    /// Determines if the movement was started or stopped this frame
+    /// </summary>
+    private void DetermineInputState()
+    {
+        if(_movementInput.WasPressedThisFrame())
+        {
+            DirectionalInputStarted();
+        }
+        else if (_movementInput.WasReleasedThisFrame())
+        {
+            DirectionalInputStopped();
+        }
+    }
+
+    /// <summary>
+    /// Called when the player begins an input
+    /// </summary>
+    private void DirectionalInputStarted()
+    {
+        StopAccelerationDeccelerationCoroutines();
+
+        StartInitialMovementAcceleration();
+    }
+
+    /// <summary>
+    /// Called when the player ends an input
+    /// </summary>
+    private void DirectionalInputStopped()
+    {
+        StopAccelerationDeccelerationCoroutines();
+
+        StartMovementDecceleration();
+    }
+
+    /// <summary>
+    /// Starts the acceleration for when the player begins walking
+    /// </summary>
+    private void StartInitialMovementAcceleration()
+    {
+        _accelerationCoroutine = StartCoroutine(InitialMovementAcceleration());
+    }
+
+    /// <summary>
+    /// The process of accelerating
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator InitialMovementAcceleration()
+    {
+        while(_accelerationProgress < 1)
+        {
+            _accelerationProgress += Time.deltaTime / _accelerationTime;
+            EvaluateCurrentAcceleration();
+            yield return null;
+        }
+        _accelerationProgress = 1;
+        EvaluateCurrentAcceleration();
+    }
+
+    /// <summary>
+    /// Starts the decceleration
+    /// </summary>
+    private void StartMovementDecceleration()
+    {
+        _deccelerationCoroutine = StartCoroutine(MovementDecceleration());
+    }
+
+    /// <summary>
+    /// Resets the acceleration after staying stationary for a short time
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator MovementDecceleration()
+    {
+        yield return new WaitForSeconds(_deccelerationTime);
+        _accelerationProgress = 0;
+        EvaluateCurrentAcceleration();
+    }
+
+    /// <summary>
+    /// Calculates the current acceleration based on the acceleration progress
+    /// </summary>
+    private void EvaluateCurrentAcceleration()
+    {
+        _currentAcceleration = _accelerationCurve.Evaluate(_accelerationProgress);
+    }
+
+    /// <summary>
+    /// Stops both the acceleration and decceleration
+    /// </summary>
+    private void StopAccelerationDeccelerationCoroutines()
+    {
+        if (_accelerationCoroutine != null)
+        {
+            StopCoroutine(_accelerationCoroutine);
+        }
+        if(_deccelerationCoroutine != null)
+        {
+            StopCoroutine(_deccelerationCoroutine);
+        }
+    }
+    #endregion
 
     #region Harpoon Slowdown
     /// <summary>
@@ -346,7 +414,6 @@ public class PlayerMovementController : MonoBehaviour
             _currentFocusMoveSpeedProgress += Time.deltaTime / _focusSpeedSlowTime;
 
             CalculateCurrentFocusSpeedMultiplier();
-
             yield return null;
         }
     }
@@ -403,18 +470,8 @@ public class PlayerMovementController : MonoBehaviour
         else
         {
             StopCoroutine(_movementCoroutine);
-            _rigidBody.velocity = Vector3.zero;
+            _playerRigidBody.velocity = Vector3.zero;
         }
     }
     #endregion
-
-    private void OnCollisionStay(Collision collision)
-    {
-        
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        _isGrounded = false;
-    }
 }
