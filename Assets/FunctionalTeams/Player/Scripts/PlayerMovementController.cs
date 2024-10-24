@@ -54,7 +54,6 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private LayerMask _walkableLayers;
     [SerializeField] private Transform _groundedCheckOrigin;
 
-    private bool _directionalInputLastCheck = false;
     private Transform _playerVisuals;
     private bool _isGrounded = false;
     private const float GROUNDED_CHECK_LENGTH = .2f;
@@ -222,6 +221,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void GroundedCheck()
     {
+        //Checks for if the player is grounded based on a boxcast
         _isGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
             transform.up*-1, out _groundHit, Quaternion.identity,GROUNDED_CHECK_LENGTH,_walkableLayers);
 
@@ -245,12 +245,9 @@ public class PlayerMovementController : MonoBehaviour
         if(_isGrounded)
         {
             //Projects the movement onto the surface that is being stood on
-            newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
             //This movement will be vertical when on a sloped surface
+            newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
         }
-
-        //Leaving this here for the code review if you want to check the orientation
-        Debug.DrawRay(transform.position, newMovement, Color.blue, 1);
         
         // Returns the movement direction times the speed and acceleration
         return newMovement * _playerMovementSpeed * _currentAcceleration;
