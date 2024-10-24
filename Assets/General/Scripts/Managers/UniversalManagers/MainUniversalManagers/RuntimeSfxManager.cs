@@ -3,7 +3,7 @@
 // Author:          Andrea Swihart-DeCoster
 // Creation Date:   October 1st, 2024
 //
-// Description:     Manages one shot sound effects.
+// Description:     Manages sound effects during runtime.
 ******************************************************************************/
 
 using FMOD.Studio;
