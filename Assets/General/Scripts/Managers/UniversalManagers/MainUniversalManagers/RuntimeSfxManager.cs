@@ -6,6 +6,7 @@
 // Description:     Manages one shot sound effects.
 ******************************************************************************/
 
+using FMOD.Studio;
 using FMODUnity;
 using System;
 using UnityEngine;
@@ -54,7 +55,7 @@ public class RuntimeSfxManager : AudioManager
     /// <param name="eventReference">reference to the FMOD SFX event </param>
     private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
-        if(eventReference.IsNull)
+        if (eventReference.IsNull)
         {
             Debug.LogWarning(eventReference + " is null.");
             return;
