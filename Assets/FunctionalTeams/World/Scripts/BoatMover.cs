@@ -13,9 +13,25 @@ using UnityEngine.UIElements;
 
 public class BoatMover : MonoBehaviour
 {
+    [Tooltip("The current spline that the boat is moving along")]
     private RiverSpline _currentSpline;
+    
+    [Tooltip("After the current spline is completed, this will become the current spline")]
     private RiverSpline _nextSpline;
+    
+    [Tooltip("Length of the spline")] 
+    private float _splineLength;
+    
+    [Tooltip("Shorthand way to represent the BezierCurve for the current spline")] 
+    private BezierCurve curve;
+    
+    [Tooltip("Used to determine the orientation of the boat")] 
+    private Vector3 forward;
+    
+    [Tooltip("How much of the current spline has been completed")] 
     private float _percentOfSpline = 0;
+
+    [Tooltip("Arbitrary float for adjusting the speed of the boat")]
     [SerializeField] private float _speedModifier;
 
     /// <summary>
@@ -33,24 +49,42 @@ public class BoatMover : MonoBehaviour
     /// </summary>
     private void moveBoat()
     {
-        BezierCurve curve = _currentSpline.GetComponent<BezierCurve>();
-        float length = curve.GetLengthOfLine();
-        Vector3 rotation;
-
-        _percentOfSpline += Time.deltaTime * _speedModifier * length / 100;
-        //Debug.Log(_percentOfSpline);
-        Vector3 position = curve.GetPositionAlongSpline(_percentOfSpline, out rotation);
+        _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength / 100;
+        CheckSplineChange();
+        Vector3 position = curve.GetPositionAlongSpline(_percentOfSpline, out forward);
         gameObject.transform.position = position;
-        //gameObject.transform.Rotate(rotation);
+        gameObject.transform.forward = forward;
     }
 
+    /// <summary>
+    /// Sets the current spline, its length and the curve component for shorthand
+    /// </summary>
+    /// <param name="spline">the spline</param>
     public void SetCurrentSpline(RiverSpline spline)
     {
         _currentSpline = spline;
+        curve = _currentSpline.GetComponent<BezierCurve>();
+        _splineLength = curve.GetLengthOfLine();
     }
 
+    /// <summary>
+    /// Sets the spline that will be used after the current spline is completed
+    /// </summary>
+    /// <param name="spline">the spline</param>
     public void SetNextSpline (RiverSpline spline)
     {
         _nextSpline = spline;
+    }
+
+    /// <summary>
+    /// Checks to see if the boat has completed the current spline
+    /// If the current spline has been completed, the chunks will update and the boat will continue to the next chunk
+    /// </summary>
+    private void CheckSplineChange()
+    {
+        if (_percentOfSpline >= 1) {
+            _percentOfSpline -= 1;
+            EnvironmentManager.Instance.SendChangeTheChunk()?.Invoke();
+        }
     }
 }
