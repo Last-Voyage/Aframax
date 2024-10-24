@@ -18,7 +18,7 @@ using UnityEngine.Events;
 public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
 {
     [Tooltip("Throw tangible Game Object of Attack in here")]
-    [SerializeField] protected GameObject[] _attackObject;
+    [SerializeField] protected GameObject[] _attackObjects;
     private UnityEvent<BaseBossAttackSystem> _attackBegin = new();
     private UnityEvent<BaseBossAttackSystem> _attackEnd = new();
     //For spawning in at one or more locations
@@ -29,9 +29,9 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     [SerializeField] protected float _damageAmount;
 
     //Variables that are from modular damage interface
-    public float DamageAmount { get; set;}
-    public bool CanApplyDamage { get; set; }
-    public UnityEvent<float> DamageEvent { get; set; }
+    public float DamageAmount { get; protected set; }
+    public bool CanApplyDamage { get; protected set; }
+    public UnityEvent<float> DamageEvent { get;protected set; }
 
     /// <summary>
     /// Sets initial values
@@ -47,7 +47,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     /// </summary>
     protected virtual void DetermineRandomAttackLocation()
     {
-        foreach (GameObject Attack in _attackObject)
+        foreach (GameObject Attack in _attackObjects)
         {
             Attack.transform.position = _spawnLocation[Random.Range(0, _spawnLocation.Length)].position;
         }
@@ -82,12 +82,12 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     
     #region Events
     
-    private void InvokeAttackBegin()
+    protected void InvokeAttackBegin()
     {
         _attackBegin?.Invoke(this);
     }
 
-    private void InvokeAttackEnd()
+    protected void InvokeAttackEnd()
     {
         _attackEnd?.Invoke(this);
     }
