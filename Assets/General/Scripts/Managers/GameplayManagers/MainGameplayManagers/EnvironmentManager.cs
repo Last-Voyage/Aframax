@@ -26,6 +26,8 @@ public class EnvironmentManager : MainGameplayManagerFramework
 
     private UnityEvent _changeTheChunk = new();
 
+    private UnityEvent _completedTutorial = new();
+
     /// <summary>
     /// A function that takes in the int array representing the queue, and then it 
     /// sends out an event that sends the queue over to the script that uses it 
@@ -55,5 +57,7 @@ public class EnvironmentManager : MainGameplayManagerFramework
     public UnityEvent<GameObject[]> GetAllChunkObjects() => _allChunkObjects;
 
     public UnityEvent SendChangeTheChunk() => _changeTheChunk;
+
+    public UnityEvent CompletedTutorial() => _completedTutorial;
     #endregion
 }
