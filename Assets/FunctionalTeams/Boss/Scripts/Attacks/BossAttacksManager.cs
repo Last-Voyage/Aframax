@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttacksManager.cs
 // Author :            Tommy Roberts
+// Contributor :       Andrew Stapay
 // Creation Date :     10/2/2024
 //
 // Brief Description : Controls first two boss attacks for our first playable build
@@ -32,7 +33,8 @@ public class BossAttacksManager : MonoBehaviour
     /// <summary>
     /// creates instance of BossManager
     /// </summary>
-    private void Awake() {
+    private void Awake()
+    {
         if(Instance == null) 
         {
             Instance = this;
@@ -49,7 +51,7 @@ public class BossAttacksManager : MonoBehaviour
     void Start()
     {
         InitializeBossAttackList();
-        //_chooseAttacksRepeatedlyCoroutine = StartCoroutine(ChooseAttacksRepeatedly());
+        _chooseAttacksRepeatedlyCoroutine = StartCoroutine(ChooseAttacksRepeatedly());
     }
 
     /// <summary>
@@ -75,7 +77,8 @@ public class BossAttacksManager : MonoBehaviour
                 _attackInProgress = true;
                 yield return new WaitForSeconds(_timeBetweenAttacks);
                 //call random attack to start from the list of attacks
-                _bossAttacks[UnityEngine.Random.Range(0, _bossAttacks.Length)]?.Invoke();
+                //_bossAttacks[UnityEngine.Random.Range(0, _bossAttacks.Length)]?.Invoke();
+                _bossAttacks[0]?.Invoke();
             }
             yield return null;
         }

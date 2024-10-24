@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         FullRoomAttack.cs
 // Author :            Tommy Roberts
+// Contributor :       Andrew Stapay
 // Creation Date :     10/9/2024
 //
 // Brief Description : controls the full room attack for the boss
@@ -12,7 +13,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// contains functionality for full room attack
 /// </summary>
-public class FullRoomAttack : MonoBehaviour
+public class FullRoomAttack : BaseBossAttackSystem
 {
     //attack 1 ref
     [Header("Attack 1")]
@@ -21,12 +22,14 @@ public class FullRoomAttack : MonoBehaviour
     [SerializeField] private GameObject _bossAttack1Indicator;
     [SerializeField] private Material _lowOpacity;
     [SerializeField] private Material _hitOpacity;
+    [Tooltip("the scale of the attack (on a per room basis)")]
+    [SerializeField] private Vector3[] _attackScale;
     [Tooltip("how fast the indicator blinks when it begins blinking")]
     [SerializeField] private float _startBlinkInterval = 1f;
     [Tooltip("How fast the indicator blinks right before it actually attacks")]
     [SerializeField] private float _endBlinkInterval = .1f;
     [Tooltip("How long the indicator will blink for")]
-    [SerializeField] private float _blinkDuration = 5f;
+    [SerializeField] private float _blinkDuration = 3f;
     [Tooltip("how long the actual attack will stay covering the room")]
     [SerializeField] private float _hitBoxAppearDuration = 1f;
 
@@ -35,6 +38,8 @@ public class FullRoomAttack : MonoBehaviour
     /// </summary>
     private void OnEnable() 
     {
+        this.GetAttackBegin().AddListener(ActivateThisAttack);
+        // Remove this once ActSystem is merged
         BossAttacksManager.FullRoomAttack += ActivateThisAttack;
     }
 
@@ -43,18 +48,9 @@ public class FullRoomAttack : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
+        this.GetAttackBegin().RemoveListener(ActivateThisAttack);
+        // Remove this once ActSystem is merged
         BossAttacksManager.FullRoomAttack -= ActivateThisAttack;
-    }
-    
-    /// <summary>
-    /// just for testing
-    /// </summary>
-    private void Update() 
-    {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            ActivateThisAttack();
-        }
     }
 
     /// <summary>
@@ -71,6 +67,8 @@ public class FullRoomAttack : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DoAttack()
     {
+        transform.localScale = _attackScale[0];
+
         BossAttacksManager.Instance.AttackInProgress = true;
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
