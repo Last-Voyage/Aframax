@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         PlayerHarpoonCore.cs
+// File Name :         PlayerFunctionalityCore.cs
 // Author :            Ryan Swanson
 // Creation Date :     9/28/2024
 //
@@ -14,10 +14,16 @@ using UnityEngine;
 /// Holds functionality for managing the relationship of player scripts 
 /// and centralizing certain functionality
 /// </summary>
-public class PlayerHarpoonCore : MonoBehaviour
+public class PlayerFunctionalityCore : MonoBehaviour
 {
+    //Contains all the associated player functionality
+    //Controls player movement functionality
     [SerializeField] private PlayerMovementController _playerMovementController;
+    //Controls player health functionality
+    [SerializeField] private PlayerHealth _playerHealthController;
+    //Controls camera movement
     [SerializeField] private PlayerCameraController _playerCamera;
+    //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
 
     private PlayerInputMap _playerInputMap;
@@ -103,7 +109,11 @@ public class PlayerHarpoonCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToHarpoonInput()
     {
-         
+        _harpoonGun.UnsubscribeInput();
     }
+    #endregion
+
+    #region Getters
+    //TODO as needed
     #endregion
 }
