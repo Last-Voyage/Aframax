@@ -72,7 +72,7 @@ public class PlayerCollision : MonoBehaviour
             //THIS IS TEMPORARY - Waiting for Marks Damage system which I imagine
             //will complete the needed functionality to connect damage to health
             //Delete this immediately after the universal damage system is implemented
-            GetComponentInParent<PlayerHealth>().TempEnemyDamage(enemyDamageTemp.AttackPower);
+            GetComponentInParent<IBaseHealth>().TakeDamage(enemyDamageTemp.AttackPower);
         }
     }
     
