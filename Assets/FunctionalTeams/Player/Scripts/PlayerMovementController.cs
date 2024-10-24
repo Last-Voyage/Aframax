@@ -28,10 +28,14 @@ public class PlayerMovementController : MonoBehaviour
     /// Variables that relate to the horizontal movement of the player
     /// </summary>
     [Header("Movement")]
+    [Tooltip("The base movement speed of the player")]
     [SerializeField] private float _playerMovementSpeed;
 
+    [Tooltip("The time it takes to reach max speed after initally pressing a directional input")]
     [SerializeField] private float _accelerationTime;
+    [Tooltip("The time it takes to reset down the base speed")]
     [SerializeField] private float _deccelerationTime;
+    [Tooltip("The curve showing how the player accelerates after pressing a directional input")]
     [SerializeField] private AnimationCurve _accelerationCurve;
 
     private float _currentAcceleration = 0;
@@ -51,12 +55,13 @@ public class PlayerMovementController : MonoBehaviour
 
     [Space]
     [Header("General")]
+    [SerializeField] private float _groundedCheckLength = .2f;
     [SerializeField] private LayerMask _walkableLayers;
-    [SerializeField] private Transform _groundedCheckOrigin;
 
     private Transform _playerVisuals;
     private bool _isGrounded = false;
-    private const float GROUNDED_CHECK_LENGTH = .2f;
+    private Transform _groundedCheckOrigin;
+
     [Tooltip("Size of boxcast for the grounded check")]
     private Vector3 _groundedExtents = new Vector3(.05f, .05f, .05f);
     RaycastHit _groundHit;
@@ -88,6 +93,7 @@ public class PlayerMovementController : MonoBehaviour
         SubscribeToEvents();
         InitializeRigidbody();
         SetupPlayerVisuals();
+        SetupPlayerGroundedCheckTransform();
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
@@ -170,6 +176,14 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
+    /// Finds the object that the grounded check starts from
+    /// </summary>
+    private void SetupPlayerGroundedCheckTransform()
+    {
+        _groundedCheckOrigin = transform.GetChild(0).GetChild(0).transform;
+    }
+
+    /// <summary>
     /// Called when this component is enabled.
     /// Used to assign the OnMovementToggled Action to a listener
     /// </summary>
@@ -223,7 +237,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         //Checks for if the player is grounded based on a boxcast
         _isGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
-            transform.up*-1, out _groundHit, Quaternion.identity,GROUNDED_CHECK_LENGTH,_walkableLayers);
+            transform.up*-1, out _groundHit, Quaternion.identity,_groundedCheckLength,_walkableLayers);
 
         _playerRigidBody.useGravity = !_isGrounded;
     }
@@ -272,10 +286,12 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void DetermineInputState()
     {
+        //Check for if the input was started
         if(_movementInput.WasPressedThisFrame())
         {
             DirectionalInputStarted();
         }
+        //Check for if the input has ended
         else if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
@@ -316,12 +332,16 @@ public class PlayerMovementController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator InitialMovementAcceleration()
     {
+        //While for when the acceleration isn't at max
         while(_accelerationProgress < 1)
         {
+            //Increase the acceleration progress by time divided by the time it takes to accelerate
             _accelerationProgress += Time.deltaTime / _accelerationTime;
+            //Calculates the current acceleration
             EvaluateCurrentAcceleration();
             yield return null;
         }
+        //Makes certain the acceleration is set to 1 and wasn't overshot
         _accelerationProgress = 1;
         EvaluateCurrentAcceleration();
     }
@@ -340,6 +360,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator MovementDecceleration()
     {
+        //Wait for a short period before reseting the acceleration
         yield return new WaitForSeconds(_deccelerationTime);
         _accelerationProgress = 0;
         EvaluateCurrentAcceleration();
