@@ -48,6 +48,7 @@ public class UniversalManagers : CoreManagersFramework
     /// </summary>
     protected override void SetupMainManagers()
     {
+        SetupObjectPoolingParent();
         //Instances all managers
         foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
         {
@@ -61,6 +62,15 @@ public class UniversalManagers : CoreManagersFramework
         {
             mainManager.SetupMainManager();
         }
+    }
+
+    /// <summary>
+    /// Sets up the object pooling parent by establishing it's instance
+    /// This is done here to make certain it happens before anything else
+    /// </summary>
+    private void SetupObjectPoolingParent()
+    {
+        FindObjectOfType<ObjectPoolingParent>().SetupInstance();
     }
 
     #region Getters
