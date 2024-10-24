@@ -14,27 +14,9 @@ using UnityEngine;
 /// <summary>
 /// Manages audio that persists throughout the game
 /// </summary>
-public class AmbienceManager : AudioManager
+public class PersistentSoundManager : AudioManager
 {
-    public static new AmbienceManager Instance;
-
-    private void Awake()
-    {
-        // Parent needs to be removed at runtime in order for DontDestroyOnLoad to work
-        transform.parent = null;
-
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(this);
-        }
-
-        
-    }
+    [SerializeField] private EventReference _ambientSound;
 
     private void Start()
     {
@@ -46,20 +28,18 @@ public class AmbienceManager : AudioManager
     /// </summary>
     private void StartBackgroundAudio()
     {
-        foreach(var sound in FmodAmbienceEvents.Instance.AmbientBackgroundSounds)
-        {
-            StartAmbience(sound);
-        }
+        PlayPersistentAudio(_ambientSound);
     }
 
     /// <summary>
     /// Starts an instance of the persistent audio to play
     /// </summary>
     /// <param name="eventReference"></param>
-    private void StartAmbience(EventReference eventReference)
+    private void PlayPersistentAudio(EventReference eventReference)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         eventInstance.start();
+
         eventInstance.release();
     }
 }
