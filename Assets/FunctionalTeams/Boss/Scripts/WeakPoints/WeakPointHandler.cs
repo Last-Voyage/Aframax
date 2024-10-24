@@ -25,6 +25,8 @@ public class WeakPointHandler : MonoBehaviour
 
     [Header("Weak Point Options")]
     [SerializeField] private GameObject _weakPointPrefab;
+    [Tooltip("Amount of health each weak point spawns with")]
+    [SerializeField] private float _weakPointHealth;
 
     [Tooltip("The number of weak points you need to kill to destroy this object")]
     [SerializeField] private float _numNeededToDestroy;
@@ -115,8 +117,9 @@ public class WeakPointHandler : MonoBehaviour
             weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>();
         _spawnedWeakpoints.Add(spawnedWeakPoint);
 
+        spawnedWeakPoint.HealthComponent.InitializeHealth(_weakPointHealth);
         spawnedWeakPoint.transform.parent = _spawnedWeakPointsParent.transform;
-           
+
         _weakPointSpawnCounter++;
         spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
 

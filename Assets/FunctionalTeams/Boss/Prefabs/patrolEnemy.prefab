@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: 5709694425311390011}
   - component: {fileID: 7865172664713994072}
   - component: {fileID: 1541384961245508710}
-  - component: {fileID: 2620127338154925155}
-  - component: {fileID: 3190571835581039325}
+  - component: {fileID: 4448160349404172523}
   m_Layer: 0
   m_Name: patrolEnemy
   m_TagString: Hitbox
@@ -126,28 +125,7 @@ MonoBehaviour:
   _playerAttackTag: Player
   _destroyAttackDelay: 0.1
   _timeToWaitBeforePatroling: 0.5
---- !u!65 &2620127338154925155
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8693923624853357280}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3190571835581039325
+--- !u!114 &4448160349404172523
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,7 +134,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8693923624853357280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20d68e39cb7628f448f98ee6fd836924, type: 3}
+  m_Script: {fileID: 11500000, guid: fa3ad6fee0f386e4aa3d8fe6960ef2ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackPower: 20
+  <Damage>k__BackingField: 20
