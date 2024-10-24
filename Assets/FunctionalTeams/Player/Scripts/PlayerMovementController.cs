@@ -141,10 +141,10 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().AddListener(ToggleMovement);
-        PlayerManager.Instance.GetHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
-        PlayerManager.Instance.GetHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
-        PlayerManager.Instance.GetHarpoonFiredStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnMovementToggleEvent().AddListener(ToggleMovement);
+        PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StopHarpoonSpeedSlowdown);
     }
 
     /// <summary>
@@ -152,10 +152,10 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        PlayerManager.Instance.GetMovementToggleEvent().RemoveListener(ToggleMovement);
-        PlayerManager.Instance.GetHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
-        PlayerManager.Instance.GetHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
-        PlayerManager.Instance.GetHarpoonFiredStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StopHarpoonSpeedSlowdown);
     }
     #endregion
     
