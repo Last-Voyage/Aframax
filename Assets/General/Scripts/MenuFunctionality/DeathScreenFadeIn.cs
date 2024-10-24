@@ -15,16 +15,16 @@ public class DeathScreenFadeIn : MonoBehaviour
     private CanvasGroup _deathScreenUiElements;
 
     //rough time it takes for things to fade all the way in
-    public float FadeTime;
+    [SerializeField] private float FadeTime;
 
     //time before the fade in starts
-    public float FadeDelay;
+    [SerializeField] private float FadeDelay;
 
     //threshold for the speed up to start (should be between 0 and 1)
-    public float FadeSpeedUpThreshold;
+    [SerializeField] private float FadeSpeedUpThreshold;
 
     //how much faster it gets when the threshold is reached (very small number like 1.25)
-    public float FadeSpeedUpMultiplier;
+    [SerializeField] private float FadeSpeedUpMultiplier;
 
     private void Awake()
     {
