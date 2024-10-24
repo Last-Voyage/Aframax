@@ -22,6 +22,8 @@ public class BossAttackPhaseSystem : MonoBehaviour
         InvokePhaseBegin();
     }
 
+
+
     /// <summary>
     /// Phase Management works as a way to listen to attack events and elaborate on what phase it should be on
     /// And when it is over.
@@ -34,9 +36,11 @@ public class BossAttackPhaseSystem : MonoBehaviour
             yield return new WaitForSeconds(1f);
             if(_isPhaseOver)
             {
+                InvokePhaseEnd();
                 _attackCollection[_phaseCounter].SetActive(false);
                 _phaseCounter++;
                 _attackCollection[_phaseCounter].SetActive(true);
+                InvokePhaseBegin();
                 _isPhaseOver = false;
             }
             if(_phaseCounter > _attackCollection.Length)
@@ -49,11 +53,11 @@ public class BossAttackPhaseSystem : MonoBehaviour
     #region Events
     private void InvokePhaseBegin()
     {
-        _phaseBegin?.Invoke();
+        _phaseBegin?.Invoke(this);
     }
     private void InvokePhaseEnd()
     {
-        _phaseEnd?.Invoke();
+        _phaseEnd?.Invoke(this);
     }
     #endregion
     #region Getters
