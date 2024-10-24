@@ -11,6 +11,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
+/// How the vfx duration is set
+/// ParticleSystemDuration is the longest duration of the attached particle systems
+/// FixedDuration is a duration set in editor
+/// Infinite means it last forever
+/// </summary>
+public enum EVfxDurationType
+{
+    ParticleSystemDuration,
+    FixedDuration,
+    Infinite
+};
+
+/// <summary>
 /// Allows for external scripts to spawn vfx
 /// </summary>
 public class VfxManager : MainUniversalManagerFramework
@@ -27,7 +40,7 @@ public class VfxManager : MainUniversalManagerFramework
         //Iterates through all vfx in game
         foreach(SpecificVisualEffect specificVisualEffect in tempList)
         {
-            specificVisualEffect.InitializeObjectPool();
+            specificVisualEffect.SetupSpecificVisualEffect();
         }
     }
 
@@ -56,7 +69,7 @@ public class VfxManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="specificVisualEffect">The specific visual effect the object belongs to</param>
     /// <param name="vfxObj">The object to be added back to the pool</param>
-    public void VfxObjectSpawned(SpecificVisualEffect specificVisualEffect, GeneralVfxFunctionality vfxObj)
+    public void StartVFXDuration(SpecificVisualEffect specificVisualEffect, GeneralVfxFunctionality vfxObj)
     {
         StartCoroutine(specificVisualEffect.MoveObjectBackToPool(vfxObj.gameObject));
     }
@@ -121,18 +134,35 @@ public class VfxManager : MainUniversalManagerFramework
 [System.Serializable]
 public class SpecificVisualEffect
 {
+    [Tooltip("The vfx that is created")]
     [SerializeField] private GameObject _vfxObject;
-    [SerializeField] private float _spawnDuration;
+    [Tooltip("How large the object pool is for the object")]
     [SerializeField] private int _poolingAmount;
+
+    [Space]
+    [Tooltip("The type of duration that the vfx has")]
+    [SerializeField] private EVfxDurationType _vfxDurationType;
+    [Tooltip("The fixed duration of the vfx if set to that duration type")]
+    [SerializeField] private float _fixedDuration;
+    private float _particleDuration;
 
     private int _poolingCounter =0;
 
-    public GeneralVfxFunctionality[] _vfxPool;
+    private GeneralVfxFunctionality[] _vfxPool;
+
+    /// <summary>
+    /// Performs all needed setup for the specific vfx
+    /// </summary>
+    public void SetupSpecificVisualEffect()
+    {
+        CalculateParticleDuration();
+        InitializeObjectPool();
+    }
 
     /// <summary>
     /// Sets up the object pool by spawning all needed objects
     /// </summary>
-    public void InitializeObjectPool()
+    private void InitializeObjectPool()
     {
         //Initializes the array
         _vfxPool = new GeneralVfxFunctionality[_poolingAmount];
@@ -143,6 +173,25 @@ public class SpecificVisualEffect
             _poolingCounter++;
         }
         _poolingCounter = 0;
+    }
+
+    /// <summary>
+    /// Determines how long the duration of the particle system should last before being reclaimed by the pool
+    /// </summary>
+    private void CalculateParticleDuration()
+    {
+        switch(_vfxDurationType)
+        {
+            case (EVfxDurationType.ParticleSystemDuration):
+                _particleDuration = _vfxObject.GetComponent<GeneralVfxFunctionality>().
+                    GetLongestParticleSystemDuration();
+                return;
+            case (EVfxDurationType.FixedDuration):
+                _particleDuration = _fixedDuration;
+                return;
+            case (EVfxDurationType.Infinite):
+                return;
+        }
     }
 
     /// <summary>
@@ -167,7 +216,12 @@ public class SpecificVisualEffect
         _vfxPool[_poolingCounter].transform.position = location;
         _vfxPool[_poolingCounter].StartAllVfx();
 
-        VfxManager.Instance.VfxObjectSpawned(this, _vfxPool[_poolingCounter]);
+        //Starts the duration if the vfx has one
+        if(_vfxDurationType != EVfxDurationType.Infinite)
+        {
+            VfxManager.Instance.StartVFXDuration(this, _vfxPool[_poolingCounter]);
+        }
+
         IterateVFXPool();
 
         return _vfxPool[previousCounterValue];
@@ -194,9 +248,10 @@ public class SpecificVisualEffect
     /// <returns></returns>
     public IEnumerator MoveObjectBackToPool(GameObject vfxObject)
     {
-        yield return new WaitForSeconds(_spawnDuration);
+        yield return new WaitForSeconds(_particleDuration);
         HideVfx(vfxObject);
         //TO DO, REMOVE OBJECT PARENT AND SET IT TO BE THE OBJECT POOLING PARENT
+        //vfxObject.transform.parent 
     }
 
     /// <summary>
