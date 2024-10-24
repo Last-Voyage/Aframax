@@ -54,6 +54,7 @@ public class VfxManager : MainUniversalManagerFramework
         //Spawn the vfx
         GameObject newVfx = Instantiate(specificVisualEffect.GetVFXObject());
         newVfx.SetActive(false);
+        ObjectPoolingParent.Instance.AddObjectAsChild(newVfx);
 
         //Gets the GeneralVfxFunctionality which acts as a mini manager of that set of vfx
         GeneralVfxFunctionality generalVfxFunctionality = newVfx.GetComponent<GeneralVfxFunctionality>();
@@ -250,8 +251,7 @@ public class SpecificVisualEffect
     {
         yield return new WaitForSeconds(_particleDuration);
         HideVfx(vfxObject);
-        //TO DO, REMOVE OBJECT PARENT AND SET IT TO BE THE OBJECT POOLING PARENT
-        //vfxObject.transform.parent 
+        ObjectPoolingParent.Instance.AddObjectAsChild(vfxObject);
     }
 
     /// <summary>
