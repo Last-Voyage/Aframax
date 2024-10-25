@@ -6,8 +6,6 @@
 // Description:     Handles any general functionality related to an object with particle systems
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -15,25 +13,14 @@ using UnityEngine;
 /// </summary>
 public class GeneralVfxFunctionality : MonoBehaviour
 {
-    private List<ParticleSystem> _particleSystems = new();
-
-    /// <summary>
-    /// Performs all needed setup
-    /// </summary>
-    public void Setup()
-    {
-        SetupChildParticleSystems();
-    }
+    private ParticleSystem[] _particleSystems;
 
     /// <summary>
     /// Adds all particle systems attached to this to a list
     /// </summary>
-    private void SetupChildParticleSystems()
+    public void SetupChildParticleSystems()
     {
-        foreach (ParticleSystem particleSystem in GetComponentsInChildren<ParticleSystem>())
-        {
-            _particleSystems.Add(particleSystem);
-        }
+        _particleSystems = GetComponentsInChildren<ParticleSystem>();
     }
 
     /// <summary>
@@ -56,7 +43,7 @@ public class GeneralVfxFunctionality : MonoBehaviour
         float currentLongestDuration = 0;
 
         //Iterate through all particle systems
-        foreach (ParticleSystem particleSystem in GetComponentsInChildren<ParticleSystem>())
+        foreach (ParticleSystem particleSystem in _particleSystems)
         {
             //Get the combined duration and lifetime
             float tempDuration = particleSystem.main.duration + particleSystem.main.startLifetime.constant;

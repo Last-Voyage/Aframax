@@ -7,7 +7,6 @@
 ******************************************************************************/
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -28,21 +27,7 @@ public enum EVfxDurationType
 /// </summary>
 public class VfxManager : MainUniversalManagerFramework
 {
-    [SerializeField] private List<SpecificVisualEffect> tempList;
-
     public static VfxManager Instance;
-
-    /// <summary>
-    /// Goes through the list of all vfx in game and spawns all needed vfx. Sets up object pooling on each
-    /// </summary>
-    private void SetupAllVFX()
-    {
-        //Iterates through all vfx in game
-        foreach(SpecificVisualEffect specificVisualEffect in tempList)
-        {
-            specificVisualEffect.SetupSpecificVisualEffect();
-        }
-    }
 
     /// <summary>
     /// Spawns the vfx to be added to the pool
@@ -59,7 +44,7 @@ public class VfxManager : MainUniversalManagerFramework
         //Gets the GeneralVfxFunctionality which acts as a mini manager of that set of vfx
         GeneralVfxFunctionality generalVfxFunctionality = newVfx.GetComponent<GeneralVfxFunctionality>();
         //Performs needed setup on the vfx
-        generalVfxFunctionality.Setup();
+        generalVfxFunctionality.SetupChildParticleSystems();
         //Adds the created object to the pool
         specificVisualEffect.AddNewObjectToPool(generalVfxFunctionality);
     }
@@ -76,25 +61,23 @@ public class VfxManager : MainUniversalManagerFramework
     }
 
     /// <summary>
-    /// THIS IS JUST FOR TESTING!!!!!
+    /// Plays a vfx at a location
     /// </summary>
-    private void Update()
+    /// <param name="visualEffect">The visual effect to play</param>
+    /// <param name="location">The location to play it at</param>
+    public void PlayVFXAtPoint(SpecificVisualEffect visualEffect, Vector3 location)
     {
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            //I don't like how its currently done through index, will change later
-            PlayVFXAtPoint(tempList[0], Vector3.zero);
-        }
+        visualEffect.PlayNextVfxInPool(location, Quaternion.identity);
     }
 
     /// <summary>
-    /// Plays a vfx at a location
+    /// Plays a vfx at a location with rotation
     /// </summary>
-    /// <param name="visualEffect"></param>
+    /// <param name="visualEffect">The visual effect to play</param>
     /// <param name="location"></param>
-    public void PlayVFXAtPoint(SpecificVisualEffect visualEffect, Vector3 location)
+    public void PlayVFXAtPoint(SpecificVisualEffect visualEffect, Vector3 location, Quaternion rotation)
     {
-        visualEffect.PlayNextVfxInPool(location);
+        visualEffect.PlayNextVfxInPool(location,rotation);
     }
 
     /// <summary>
@@ -104,7 +87,18 @@ public class VfxManager : MainUniversalManagerFramework
     /// <param name="parent"></param>
     public void PlayVFXChilded(SpecificVisualEffect visualEffect, Transform parent)
     {
-        visualEffect.PlayNextVfxInPool(parent);
+        visualEffect.PlayNextVfxInPool(parent, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// plays a vfx as a child of a specific object with rotation
+    /// </summary>
+    /// <param name="visualEffect"></param>
+    /// <param name="parent"></param>
+    /// <param name="Rotation"></param>
+    public void PlayVFXChilded(SpecificVisualEffect visualEffect, Transform parent, Quaternion rotation)
+    {
+        visualEffect.PlayNextVfxInPool(parent, rotation);
     }
 
     #region Base Manager
@@ -123,7 +117,6 @@ public class VfxManager : MainUniversalManagerFramework
     public override void SetupMainManager()
     {
         base.SetupMainManager();
-        SetupAllVFX();
     }
     #endregion
 }
@@ -156,8 +149,8 @@ public class SpecificVisualEffect
     /// </summary>
     public void SetupSpecificVisualEffect()
     {
-        CalculateParticleDuration();
         InitializeObjectPool();
+        CalculateParticleDuration();
     }
 
     /// <summary>
@@ -184,8 +177,10 @@ public class SpecificVisualEffect
         switch(_vfxDurationType)
         {
             case (EVfxDurationType.ParticleSystemDuration):
-                _particleDuration = _vfxObject.GetComponent<GeneralVfxFunctionality>().
-                    GetLongestParticleSystemDuration();
+                if (_vfxPool.Length != 0)
+                {
+                    _particleDuration = _vfxPool[0].GetLongestParticleSystemDuration();
+                }
                 return;
             case (EVfxDurationType.FixedDuration):
                 _particleDuration = _fixedDuration;
@@ -209,12 +204,13 @@ public class SpecificVisualEffect
     /// </summary>
     /// <param name="location">Where to place the object</param>
     /// <returns></returns>
-    public GeneralVfxFunctionality PlayNextVfxInPool(Vector3 location)
+    public GeneralVfxFunctionality PlayNextVfxInPool(Vector3 location, Quaternion rotation)
     {
         int previousCounterValue = _poolingCounter;
 
         _vfxPool[_poolingCounter].gameObject.SetActive(true);
         _vfxPool[_poolingCounter].transform.position = location;
+        _vfxPool[_poolingCounter].transform.rotation = rotation;
         _vfxPool[_poolingCounter].StartAllVfx();
 
         //Starts the duration if the vfx has one
@@ -234,9 +230,9 @@ public class SpecificVisualEffect
     /// </summary>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public GeneralVfxFunctionality PlayNextVfxInPool(Transform parent)
+    public GeneralVfxFunctionality PlayNextVfxInPool(Transform parent, Quaternion rotation)
     {
-        GeneralVfxFunctionality currentVfx = PlayNextVfxInPool(parent.position);
+        GeneralVfxFunctionality currentVfx = PlayNextVfxInPool(parent.position,rotation);
         currentVfx.gameObject.transform.SetParent(parent);
         
         return currentVfx;
