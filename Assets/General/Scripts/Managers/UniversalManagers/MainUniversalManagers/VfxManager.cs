@@ -30,6 +30,14 @@ public class VfxManager : MainUniversalManagerFramework
     public static VfxManager Instance;
 
     /// <summary>
+    /// Sets up the object pool of all vfx
+    /// </summary>
+    private void SetUpAllVfxInGame()
+    {
+
+    }
+
+    /// <summary>
     /// Spawns the vfx to be added to the pool
     /// SpecificVisualEffects cannot do this as it isn't a monobehavior
     /// </summary>
@@ -117,6 +125,7 @@ public class VfxManager : MainUniversalManagerFramework
     public override void SetupMainManager()
     {
         base.SetupMainManager();
+        SetUpAllVfxInGame();
     }
     #endregion
 }
