@@ -15,7 +15,7 @@ using UnityEngine.Events;
 /// The abstract class of holding all the functions of the attack
 /// literally from beginning to end
 /// </summary>
-public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
+public abstract class BaseBossAttackSystem : MonoBehaviour
 {
     [Tooltip("Throw tangible Game Object of Attack in here")]
     [SerializeField] protected GameObject[] _attackObjects;
