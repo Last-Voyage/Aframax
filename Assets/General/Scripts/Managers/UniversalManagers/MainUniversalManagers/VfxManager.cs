@@ -29,12 +29,17 @@ public class VfxManager : MainUniversalManagerFramework
 {
     public static VfxManager Instance;
 
+    [SerializeField] private SpecificVisualEffect[] _allVfxInGame;
+
     /// <summary>
     /// Sets up the object pool of all vfx
     /// </summary>
     private void SetUpAllVfxInGame()
     {
-
+        foreach (SpecificVisualEffect vfx in _allVfxInGame)
+        {
+            vfx.SetupSpecificVisualEffect();
+        }
     }
 
     /// <summary>
