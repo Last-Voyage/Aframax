@@ -11,6 +11,9 @@ using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Stores all FMOD ambient / background audio events
+/// </summary>
 public class FmodAmbienceEvents : MonoBehaviour
 {
     public static FmodAmbienceEvents Instance;
