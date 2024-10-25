@@ -13,6 +13,10 @@ using UnityEngine;
 /// </summary>
 public class HarpoonDamage : BaseDamage
 {
+    /// <summary>
+    //Applies damage to the recipient as long as it is not the player
+    /// </summary>
+    /// <param name="damageRecipient"></param>
     public override void ApplyDamage(GameObject damageRecipient)
     {
         // Avoids damaging the player

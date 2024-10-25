@@ -66,7 +66,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// </summary>
     public virtual void OnDeath() 
     { 
-        // TODO: Implement generic death behavior as design requests
+        _deathEvent.Invoke();
     }
 
     #endregion
