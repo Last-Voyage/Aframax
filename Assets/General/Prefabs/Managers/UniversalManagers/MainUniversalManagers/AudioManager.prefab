@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3786870146230784565}
   - component: {fileID: 2279586950690668366}
+  - component: {fileID: 5853790819556739120}
   m_Layer: 0
-  m_Name: PersistentAudioManager
+  m_Name: AmbienceManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,8 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a1022dd26a2a343b54f5dddf62b684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ambientSound:
-    Guid:
+--- !u!114 &5853790819556739120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616263624655896557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25300d6117e68a4291efb2eb20a4524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <AmbientBackgroundSounds>k__BackingField:
+  - Guid:
       Data1: -1855679205
       Data2: 1226079920
       Data3: 840459650
@@ -96,7 +109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14b1129206b53446b2ce056d5bf4bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FmodSfxEvents: {fileID: 1934635801513810261}
 --- !u!114 &1934635801513810261
 MonoBehaviour:
   m_ObjectHideFlags: 0
