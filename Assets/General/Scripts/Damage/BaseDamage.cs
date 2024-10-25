@@ -11,7 +11,7 @@ using UnityEngine;
 /// <summary>
 /// Controls the default damage functionality
 /// </summary>
-public class BaseDamage : MonoBehaviour, IModularDamage
+public class BaseDamage : MonoBehaviour, IBaseDamage
 {
     [Tooltip("Damage to be applied")]
     [field: SerializeField] public float Damage { get; private set; }

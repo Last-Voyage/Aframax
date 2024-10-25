@@ -12,7 +12,7 @@ using UnityEngine;
 /// <summary>
 /// The interface the will be referred defining all damage functionality.
 /// </summary>
-public interface IModularDamage
+public interface IBaseDamage
 {
     /// <summary>
     /// The ending damage value used to be passed on to health
