@@ -63,6 +63,9 @@ public class PlayerHealth : BaseHealth
 
         PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+
+        RuntimeSfxManager.APlayOneShotSFX?
+            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
     }
 
     /// <summary>

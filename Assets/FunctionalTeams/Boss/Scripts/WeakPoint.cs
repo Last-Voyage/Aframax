@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Provides the weakpoint with its needed functionality
+/// Provides the weak point with its needed functionality
 /// </summary>
 public class WeakPoint : MonoBehaviour
 {
@@ -59,8 +59,9 @@ public class WeakPoint : MonoBehaviour
     private void WeakPointDeath()
     {
         InvokeWeakPointDeathEvent();
-        //TODO: Uncomment when merged with SFX Manager
-        //SFXManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.weakPointDestroyed, transform.position);
+
+        RuntimeSfxManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.WeakPointDestroyed, transform.position);
+
         Destroy(gameObject);
     }
 
