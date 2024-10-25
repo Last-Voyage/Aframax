@@ -13,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// contains behavior for the spawned patrol enemy
 /// </summary>
-public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
+public class PatrolEnemyBehavior : BaseBossAttackSystem
 {
     [Tooltip("Speed at which enemy patrols around room")]
     [SerializeField] private float _patrolSpeed = 2f;
@@ -30,7 +30,6 @@ public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
 
     private Transform _targetPoint; // current waypoint target of patrol enemy
     private bool _playerInAttackRange = false;
-    private int _currentTargetIndex;
     private Transform _attackRoomBorderOne;
     private Transform _attackRoomBorderTwo;
     private List<Transform> _roomWaypoints;
@@ -79,7 +78,7 @@ public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
         //if enemy is killed or destroyed then move on to next attack
         BossAttacksManager.Instance.AttackInProgress = false;
 
-        //if timer for attack runs out destory attack and start a new one
+        //if timer for attack runs out destroy attack and start a new one
         if (gameObject != null)
         {
             Destroy(gameObject);
@@ -87,13 +86,12 @@ public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
     }
 
     /// <summary>
-    /// choosees next random point for patroling enemy
+    /// Chooses next random point for patroling enemy
     /// </summary>
     private void ChooseNextRandomPatrolPoint()
     {
         // Pick a random point from the array
-        _currentTargetIndex = Random.Range(0, _roomWaypoints.Count);
-        _targetPoint = _roomWaypoints[_currentTargetIndex];
+        _targetPoint = _roomWaypoints[Random.Range(0, _roomWaypoints.Count)];
     }
 
     /// <summary>
@@ -107,23 +105,12 @@ public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
             Destroy(gameObject);
             return;
         }
+
         //check if player is in attack range for patrol enemy
-        if(_playerTransform.position.x < _attackRoomBorderOne.position.x && _playerTransform.position.x > _attackRoomBorderTwo.position.x)
-        {
-            if(_playerTransform.position.z < _attackRoomBorderOne.position.z && _playerTransform.position.z > _attackRoomBorderTwo.position.z)
-            {
-                _playerInAttackRange = true;
-            }
-            else
-            {
-                _playerInAttackRange = false;
-            }
-            
-        }
-        else
-        {
-            _playerInAttackRange = false;
-        }
+        _playerInAttackRange = (_playerTransform.position.x < _attackRoomBorderOne.position.x &&
+            _playerTransform.position.x > _attackRoomBorderTwo.position.x) &&
+            (_playerTransform.position.z < _attackRoomBorderOne.position.z &&
+            _playerTransform.position.z > _attackRoomBorderTwo.position.z);
     }
 
     /// <summary>
@@ -153,13 +140,9 @@ public class PatrolEnemyBehavior : MonoBehaviour //BaseBossAttackSystem
     /// <param name="other"></param>
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag(_playerAttackTag))
+        if (other.gameObject.GetComponent<PlayerCollision>() != null)
         {
-            if (gameObject != null)
-            {
-                //add destory attack delay here in future if needed but for now it could cause bugs
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 

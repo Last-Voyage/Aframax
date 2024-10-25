@@ -32,8 +32,6 @@ public class PatrolEnemySpawner : MonoBehaviour, ISerializationCallbackReceiver
     [Tooltip("tranform to target attached to player")]
     [SerializeField] private Transform _playerTransform;
 
-    private GameObject _instantiatedPatrolEnemy;
-
     /// <summary>
     /// We want the waypoints for the movement of the enemy to be a 2D array, but Unity doesn't allow
     /// serialization of 2D arrays. To solve this, we'll make a serializable wrapper class to store the info and
@@ -42,15 +40,15 @@ public class PatrolEnemySpawner : MonoBehaviour, ISerializationCallbackReceiver
     [System.Serializable]
     private struct RoomWaypointPackage
     {
-        public int roomNumber;
-        public int waypointNumber;
-        public Transform waypoint;
+        public int RoomNumber;
+        public int WaypointNumber;
+        public Transform Waypoint;
 
         public RoomWaypointPackage(int i1, int i2, Transform t)
         {
-            roomNumber = i1;
-            waypointNumber = i2;
-            waypoint = t;
+            RoomNumber = i1;
+            WaypointNumber = i2;
+            Waypoint = t;
         }
     }
 
@@ -82,17 +80,17 @@ public class PatrolEnemySpawner : MonoBehaviour, ISerializationCallbackReceiver
 
         while (i <  _roomWaypoints.Count)
         {
-            List<Transform> temp = new List<Transform>();
+            List<Transform> newRow = new List<Transform>();
 
-            int thisRow = _roomWaypoints[i].roomNumber;
+            int thisRow = _roomWaypoints[i].RoomNumber;
 
-            while (i < _roomWaypoints.Count && thisRow == _roomWaypoints[i].roomNumber)
+            while (i < _roomWaypoints.Count && thisRow == _roomWaypoints[i].RoomNumber)
             {
-                temp.Add(_roomWaypoints[i].waypoint);
+                newRow.Add(_roomWaypoints[i].Waypoint);
                 i++;
             }
 
-            _roomWaypointsProcessed.Add(temp);
+            _roomWaypointsProcessed.Add(newRow);
         }
     }
 
@@ -113,17 +111,6 @@ public class PatrolEnemySpawner : MonoBehaviour, ISerializationCallbackReceiver
     }
 
     /// <summary>
-    /// just for testing
-    /// </summary>
-    private void Update() 
-    {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            SpawnEnemy();
-        }
-    }
-
-    /// <summary>
     /// spawns enemy that will begin to patrol the room
     /// </summary>
     /// <returns></returns>
@@ -133,12 +120,7 @@ public class PatrolEnemySpawner : MonoBehaviour, ISerializationCallbackReceiver
         //choose random start point
         int randomRoom = Random.Range(0, _roomStartPoints.Length);
 
-        for (int i = 0; i < _roomWaypointsProcessed[randomRoom].Count; i++)
-        {
-            print(_roomWaypointsProcessed[randomRoom][i]);
-        }
-
-        _instantiatedPatrolEnemy = Instantiate(_patrolEnemyPrefab, _roomStartPoints[randomRoom].position, Quaternion.identity);
+        GameObject _instantiatedPatrolEnemy = Instantiate(_patrolEnemyPrefab, _roomStartPoints[randomRoom].position, Quaternion.identity);
         var patrolEnemyBehavior = _instantiatedPatrolEnemy.GetComponent<PatrolEnemyBehavior>();
         patrolEnemyBehavior.AttackRoomBorderOne = _attackRoomBorders1[randomRoom];
         patrolEnemyBehavior.AttackRoomBorderTwo = _attackRoomBorders2[randomRoom];
