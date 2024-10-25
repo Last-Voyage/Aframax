@@ -1,0 +1,143 @@
+/*****************************************************************************
+// File Name :         BossAttackActSystem.cs
+// Author :            Mark Hanson
+// Creation Date :     10/22/2024
+//
+// Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
+*****************************************************************************/
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class BossAttackActSystem : MonoBehaviour
+{
+    //Should hold a list of numbers which are being swapped into the current max attacks
+    [Tooltip("How many attacks do you want per act")]
+    protected private int[] _attacksPerAct;
+    //The max attacks for the current act we are on
+    protected private int _currentMaxAttacks;
+    //Keeps the attacks going through the attack collection and not back tracking through previosly used attacks
+    protected private int _attackCounter = 0;
+    //Keeps tracked of attack that are over then matches with attack counter to determine if an act is over
+    protected int _attackOverCounter = 0;
+
+    public BaseBossAttackSystem AttackComponent { get; private set; }
+
+    //The current act it is on
+    protected private int _actCounter = 0;
+    //A switch bool that works in tandem with the act counter
+    protected private bool _isActOver;
+    //Ideally have a empty hold 2 or more attacks in the one empty and match it up with the act number
+    [Tooltip("Through in attack empty holder that aligns with act")]
+    [SerializeField] private GameObject[] _attackCollection;
+    //Events for the atacks to listen for
+    private UnityEvent _actBegin = new();
+    private UnityEvent _actEnd = new();
+    /// <summary>
+    /// Beginning method to start phase at the beginning
+    /// </summary>
+    private void Awake()
+    {
+        _isActOver = true;
+        _currentMaxAttacks = _attacksPerAct[_actCounter];
+        InvokeActBegin();
+        AttackListentoActs();
+    }
+    /// <summary>
+    /// A way for attacks that are dropped in to listen for when an act ends
+    /// </summary>
+    private void AttackListentoActs()
+    {
+        if (TryGetComponent<BaseBossAttackSystem>(out BaseBossAttackSystem baseBossAttackSystem))
+        {
+            AttackComponent = baseBossAttackSystem;
+            AttackComponent.GetAttackEnd().AddListener(AttackEnd);
+        }
+    }
+    /// <summary>
+    /// Method for GetAttackEnd so the act system 
+    /// </summary>
+    protected void AttackEnd()
+    {
+        ++_attackOverCounter;
+    }
+    /// <summary>
+    /// A way of being able to cycle through as many attack as the acts need
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator AttackManagement()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            if(_isActOver )
+            {
+                for (int i = 0; i <= _currentMaxAttacks; ++i)
+                {
+                    _attackCollection[_attackCounter].SetActive(true);
+                    _attackCounter++;
+                }
+                _isActOver = false;
+            }
+        }
+    }
+    /// <summary>
+    /// Act beginning for attack
+    /// </summary>
+    protected virtual void ActBegin()
+    {
+        InvokeActBegin();
+    }
+    /// <summary>
+    /// Act end for attack
+    /// </summary>
+    protected virtual void ActEnd()
+    {
+        InvokeActEnd();
+    }
+
+    /// <summary>
+    /// Phase Management works as a way to listen to attack events and elaborate on what phase it should be on
+    /// And when it is over.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ActManagement()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(1f);
+            //When the act is over move to the next one while notifying event system
+            if(_isActOver)
+            {
+                InvokeActEnd();
+                _actCounter++;
+                _currentMaxAttacks = _attacksPerAct[_actCounter];
+                InvokeActBegin();
+            }
+            if(_actCounter > _attackCollection.Length)
+            {
+                //Does game end here??
+            }
+            if (_attackCounter == _attackOverCounter)
+            {
+                _isActOver = true;
+            }
+        }
+    }
+
+    #region Events
+    private void InvokeActBegin()
+    {
+        _actBegin?.Invoke();
+    }
+    private void InvokeActEnd()
+    {
+        _actEnd?.Invoke();
+    }
+    #endregion
+    #region Getters
+    public UnityEvent GetActBegin() => _actBegin;
+    public UnityEvent GetActEnd() => _actEnd;
+    #endregion
+}

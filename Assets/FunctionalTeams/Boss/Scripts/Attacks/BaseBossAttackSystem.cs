@@ -19,8 +19,8 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
 {
     [Tooltip("Throw tangible Game Object of Attack in here")]
     [SerializeField] protected GameObject[] _attackObjects;
-    private UnityEvent<BaseBossAttackSystem> _attackBegin = new();
-    private UnityEvent<BaseBossAttackSystem> _attackEnd = new();
+    private UnityEvent _attackBegin = new();
+    private UnityEvent _attackEnd = new();
     //For spawning in at one or more locations
     [Tooltip("Add all locations of where attack should be")]
     [SerializeField] protected Transform[] _spawnLocation;
@@ -65,7 +65,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     }
     
     /// <summary>
-    /// Attack beginning event for boss phase
+    /// Attack beginning event for boss act
     /// </summary>
     protected virtual void AttackBegin()
     {
@@ -73,7 +73,7 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     }
     
     /// <summary>
-    /// Attack ending event for boss phase
+    /// Attack ending event for boss act
     /// </summary>
     protected virtual void AttackEnd()
     {
@@ -84,20 +84,20 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     
     protected void InvokeAttackBegin()
     {
-        _attackBegin?.Invoke(this);
+        _attackBegin?.Invoke();
     }
 
     protected void InvokeAttackEnd()
     {
-        _attackEnd?.Invoke(this);
+        _attackEnd?.Invoke();
     }
 
     #endregion
     
     #region Getters
     
-    public UnityEvent<BaseBossAttackSystem> GetAttackBegin() => _attackBegin;
-    public UnityEvent<BaseBossAttackSystem> GetAttackEnd() => _attackEnd;
+    public UnityEvent GetAttackBegin() => _attackBegin;
+    public UnityEvent GetAttackEnd() => _attackEnd;
     public UnityEvent<float> GetDamageEvent() => DamageEvent;
     
     #endregion
