@@ -48,7 +48,7 @@ public class IterativeChunkLoad : MonoBehaviour
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
     private const float _DISTANCE_BETWEEN_CHUNKS = 10f;
 
-    private BoatMover _boat;
+    private BoatMover _boatMover;
 
     #region GrabbingChunksFromOtherScripts
     /// <summary>
@@ -60,20 +60,18 @@ public class IterativeChunkLoad : MonoBehaviour
         
         EnvironmentManager.Instance.GetSendingOverChunks().AddListener(ReceiveChunkQueue);
 
-        Debug.Log("ReceiveChunkQueue");
-
         EnvironmentManager.Instance.GetAllChunkObjects().AddListener(ReceiveEveryChunk); // STILL NEEDS TO BE IMPLEMENTED
 
         EnvironmentManager.Instance.SendChangeTheChunk().AddListener(ChunkChange);
 
-        _boat = gameObject.GetComponent<BoatMover>();
+        _boatMover = GetComponent<BoatMover>();
 
         // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
         _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
         _usedChunks[(int)ChunkStates.middle] = _everyChunk[_chunkQueuePtrPtr++];
-        _boat.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
         _usedChunks[(int)ChunkStates.front] = _everyChunk[_chunkQueuePtrPtr++];
-        _boat.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
     }
 
     /// <summary>
@@ -82,7 +80,6 @@ public class IterativeChunkLoad : MonoBehaviour
     /// <param name="chunkQueued">The queue of chunks</param>
     private void ReceiveChunkQueue(int[] chunkQueued)
     {
-        Debug.Log("ReceiveChunkQueue firing");
         _chunkQueuePtr = chunkQueued;
     }
 
@@ -129,7 +126,6 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void AddChunk()
     {
-        Debug.Log(_chunkQueuePtrPtr);
         _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
 
         _chunkQueuePtrPtr++;
@@ -163,10 +159,10 @@ public class IterativeChunkLoad : MonoBehaviour
         _usedChunks[(int)ChunkStates.back] = _usedChunks[(int)ChunkStates.middle];
         _backChunkPtr = _middleChunkPtr;
         _usedChunks[(int)ChunkStates.middle] = _usedChunks[(int)ChunkStates.front];
-        _boat.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
         _middleChunkPtr = _frontChunkPtr;
         _usedChunks[(int)ChunkStates.front] = _usedChunks[(int)ChunkStates.newFront];
-        _boat.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
         _frontChunkPtr = _newFrontChunkPtr;
         _newFrontChunkPtr = 0; // This ptr is freed until a new chunk is going to be added
     }

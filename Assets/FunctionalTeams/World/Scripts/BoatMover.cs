@@ -9,8 +9,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+/// <summary>
+/// Moves the boat along and between river splines
+/// </summary>
 public class BoatMover : MonoBehaviour
 {
     [Tooltip("The current spline that the boat is moving along")]
@@ -23,10 +25,13 @@ public class BoatMover : MonoBehaviour
     private float _splineLength;
     
     [Tooltip("Shorthand way to represent the BezierCurve for the current spline")] 
-    private BezierCurve curve;
+    private BezierCurve _curve;
     
     [Tooltip("Used to determine the orientation of the boat")] 
-    private Vector3 forward;
+    private Vector3 _newForwardVector;
+
+    [Tooltip("Determines if the boat is moving")]
+    [SerializeField] private bool _isMoving = false;
     
     [Tooltip("How much of the current spline has been completed")] 
     private float _percentOfSpline = 0;
@@ -39,7 +44,10 @@ public class BoatMover : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        moveBoat();
+        if (_isMoving)
+        {
+            MoveBoat();
+        }
     }
 
     /// <summary>
@@ -47,13 +55,13 @@ public class BoatMover : MonoBehaviour
     ///     Takes into account the length of the spline, time, and a speed modifier to determine the boat's position
     ///     Will eventually also rotate the boat using the derivative of the curve
     /// </summary>
-    private void moveBoat()
+    private void MoveBoat()
     {
         _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength / 100;
         CheckSplineChange();
-        Vector3 position = curve.GetPositionAlongSpline(_percentOfSpline, out forward);
-        gameObject.transform.position = position;
-        gameObject.transform.forward = forward;
+        Vector3 newPositionOnSpline = _curve.GetPositionAlongSpline(_percentOfSpline, out _newForwardVector);
+        gameObject.transform.position = newPositionOnSpline;
+        gameObject.transform.forward = _newForwardVector;
     }
 
     /// <summary>
@@ -63,8 +71,8 @@ public class BoatMover : MonoBehaviour
     public void SetCurrentSpline(RiverSpline spline)
     {
         _currentSpline = spline;
-        curve = _currentSpline.GetComponent<BezierCurve>();
-        _splineLength = curve.GetLengthOfLine();
+        _curve = _currentSpline.GetComponent<BezierCurve>();
+        _splineLength = _curve.GetLengthOfLine();
     }
 
     /// <summary>
