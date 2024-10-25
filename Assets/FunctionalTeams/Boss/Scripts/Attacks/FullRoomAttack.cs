@@ -58,21 +58,27 @@ public class FullRoomAttack : BaseBossAttackSystem
     /// </summary>
     private void ActivateThisAttack()
     {
-        StartCoroutine(DoAttack());
+        StartCoroutine(PerformAttack());
     }
 
     /// <summary>
     /// creates an indicator that the room is about to be attacked, and then attacks everything in room
     /// </summary>
     /// <returns></returns>
-    private IEnumerator DoAttack()
+    private IEnumerator PerformAttack()
     {
+        // set the scale of the attack to a specified value for this room
+        // for now, we only have this affecting one room, so let's just take index 0
         transform.localScale = _attackScale[0];
 
+        // tell the attack manager that we are attacking
         BossAttacksManager.Instance.AttackInProgress = true;
+
+        // setting attack indicator
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
         var attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
+
         //start blinking indicating attack will happen soon
         float elapsedTime = 0f;
         while(elapsedTime < _blinkDuration)

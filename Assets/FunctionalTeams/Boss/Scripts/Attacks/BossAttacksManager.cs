@@ -77,8 +77,7 @@ public class BossAttacksManager : MonoBehaviour
                 _attackInProgress = true;
                 yield return new WaitForSeconds(_timeBetweenAttacks);
                 //call random attack to start from the list of attacks
-                //_bossAttacks[UnityEngine.Random.Range(0, _bossAttacks.Length)]?.Invoke();
-                _bossAttacks[0]?.Invoke();
+                _bossAttacks[UnityEngine.Random.Range(0, _bossAttacks.Length)]?.Invoke();
             }
             yield return null;
         }

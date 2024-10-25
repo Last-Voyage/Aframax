@@ -82,11 +82,17 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IModularDamage
     
     #region Events
     
+    /// <summary>
+    /// Invokes this attack's _attackBegin event
+    /// </summary>
     protected void InvokeAttackBegin()
     {
         _attackBegin?.Invoke();
     }
 
+    /// <summary>
+    /// Invokes this attack's _attackEnd event
+    /// </summary>
     protected void InvokeAttackEnd()
     {
         _attackEnd?.Invoke();
