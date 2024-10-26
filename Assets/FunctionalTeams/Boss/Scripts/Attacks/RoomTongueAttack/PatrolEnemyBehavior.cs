@@ -99,7 +99,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     public void InitializeAttackInformation(PatrolLocation patrolLocation)
     {
         _patrolLocationData = patrolLocation;
-        _patrolLocationData.InitializeWaypointTransforms();
     }
 
     /// <summary>
@@ -108,7 +107,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void CheckPlayerInAttackRoom()
     {
         // Attack is invalid if there is not proper room data
-        if(_patrolLocationData.AttackBorder1 == null || _patrolLocationData.AttackBorder2 == null)
+        if(_patrolLocationData.RoomBorder1 == null || _patrolLocationData.RoomBorder2 == null)
         {
             Destroy(gameObject);
             return;
@@ -123,10 +122,10 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// <returns> T if player is within attack range </returns>
     private bool IsPlayerInAttackRange()
     {
-        return (_playerTransform.position.x < _patrolLocationData.AttackBorder1.position.x)
-            && (_playerTransform.position.x > _patrolLocationData.AttackBorder2.position.x)
-            && (_playerTransform.position.z < _patrolLocationData.AttackBorder1.position.z)
-            && (_playerTransform.position.z > _patrolLocationData.AttackBorder2.position.z);
+        return (_playerTransform.position.x > _patrolLocationData.RoomBorder1.position.x)
+            && (_playerTransform.position.x < _patrolLocationData.RoomBorder2.position.x)
+            && (_playerTransform.position.z > _patrolLocationData.RoomBorder1.position.z)
+            && (_playerTransform.position.z < _patrolLocationData.RoomBorder2.position.z);
     }
 
     /// <summary>
@@ -211,7 +210,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void ChooseNextRandomPatrolPoint()
     {
         // Pick a random point from the list of possible transforms
-        _currentTargetIndex = Random.Range(0, _patrolLocationData.WaypointTransforms.Count);
+        _currentTargetIndex = Random.Range(0, _patrolLocationData.WaypointTransforms.Length);
         _targetPoint = _patrolLocationData.WaypointTransforms.ElementAt(_currentTargetIndex);
     }
 

@@ -52,14 +52,6 @@ public class BossAttackManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Starts random attacks at the set interval
-    /// </summary>
-    void Start()
-    {
-
-    }
-
-    /// <summary>
     /// just for testing
     /// </summary>
     private void Update()

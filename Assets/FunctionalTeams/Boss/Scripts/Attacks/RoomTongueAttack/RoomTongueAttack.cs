@@ -21,24 +21,19 @@ public struct PatrolLocation
     public Transform EnemySpawnPoint { get; private set; }
 
     [Tooltip("Needs to be set to top right corner of room")]
-    public Transform AttackBorder1 { get; private set; }
+    public Transform RoomBorder1 { get; private set; }
 
     [Tooltip("Needs to be set to bottom left corner of room")]
-    public Transform AttackBorder2 { get; private set; }
-
-    [Tooltip("Game Object with children defining where the enemy can move to in the room")]
-    private GameObject _waypoints;
+    public Transform RoomBorder2 { get; private set; }
     
-    public List<Transform> WaypointTransforms { get; private set;}
+    public Transform[] WaypointTransforms { get; private set;}
 
-    /// <summary>
-    /// Collects all transforms from Waypoints and stores it in a list
-    /// </summary>
-    public void InitializeWaypointTransforms()
+    public PatrolLocation(Transform spawnPoint, Transform roomBorder1, Transform roomBorder2, Transform[] waypoints)
     {
-        WaypointTransforms = new List<Transform>();
-        WaypointTransforms = _waypoints.GetComponentsInChildren<Transform>().ToList();
-        WaypointTransforms.RemoveAt(0); // Remove parent transform
+        EnemySpawnPoint = spawnPoint;
+        RoomBorder1 = roomBorder1;
+        RoomBorder2 = roomBorder2;
+        WaypointTransforms = waypoints;
     }
 }
 
@@ -69,8 +64,7 @@ public class RoomTongueAttack : BaseBossAttack
     [Tooltip("Maximum numbers of enemies that can be alive at a time")]
     [SerializeField] int _maxEnemiesSpawned;
 
-    [Header("Attack Locations")]
-    [SerializeField] PatrolLocation[] _patrolLocations;
+    private PatrolLocation[] _patrolLocations;
 
     #endregion
 
@@ -107,6 +101,49 @@ public class RoomTongueAttack : BaseBossAttack
     private void Start()
     {
         _isAttackActive = false;
+        InitializePatrolLocations();
+    }
+
+    /// <summary>
+    /// Loops through children and initializes patrol locations
+    /// </summary>
+    private void InitializePatrolLocations()
+    {
+        // Parent game object with the childed rooms
+        GameObject roomsParent = transform.GetChild(0).gameObject;
+
+        // all parent room objects
+        List<Transform> allRooms = new List<Transform>();
+        // Loop through roomsParent root children to populate allRooms
+        for (int i = 0; i < roomsParent.transform.childCount; i++)
+        {
+            allRooms.Add(roomsParent.transform.GetChild(i));
+        }
+        
+        // initialize _patrolLocations with the size of all possible attack rooms
+        _patrolLocations = new PatrolLocation[allRooms.Count];
+        
+        // Loop through allRooms to populate _patrolLocations with room data
+        for(int i = 0; i < allRooms.Count; i++)
+        {
+            Transform roomBorder1 = allRooms.ElementAt(i).GetChild(0);
+            Transform roomBorder2 = allRooms.ElementAt(i).GetChild(1);
+            Transform spawnLocation = allRooms.ElementAt(i).GetChild(2);
+
+            // Parent Waypoint Object
+            Transform waypointsParent = allRooms.ElementAt(i).GetChild(3);
+
+            // Remove first element of waypoints (parent obj)
+            List<Transform> waypointsList = waypointsParent.GetComponentsInChildren<Transform>().ToList();
+            waypointsList.RemoveAt(0);
+
+            // Create array from the waypoints list to pass into the new patrol location
+            Transform[] waypoints = waypointsList.ToArray();
+
+            // Create new Patrol Location with the cached data and add it to _patrolLocations
+            PatrolLocation patrolLocation = new PatrolLocation(roomBorder1, roomBorder2, spawnLocation, waypoints);
+            _patrolLocations[i] = patrolLocation;
+        }
     }
 
     #region Enemy Spawning
