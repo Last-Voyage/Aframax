@@ -15,7 +15,6 @@ using UnityEngine.Events;
 /// </summary>
 public class BaseHealth : MonoBehaviour, IBaseHealth
 {
-    [Header("Maximum Health On Start")]
     [SerializeField] protected float _maxHealth;
 
     /// <summary>
@@ -24,21 +23,25 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     protected float _currentHealth;
 
     //Event system used to be called outside of script
-    protected UnityEvent<IBaseHealth> _deathEvent = new();
+    protected UnityEvent _deathEvent = new();
 
     #region Base Class
 
-    private void Awake()
+    protected void Awake()
     {
-        InitializeHealth();
+        InitializeHealth(_maxHealth);
     }
 
     /// <summary>
-    /// Initializes any starter health values such as starting at max health.
+    /// Initializes any starter health values
     /// </summary>
-    public void InitializeHealth()
+    public void InitializeHealth(float healthValue)
     {
-        _currentHealth = _maxHealth;
+        if(healthValue > _maxHealth)
+        {
+            healthValue = Mathf.Clamp(healthValue, healthValue, _maxHealth);
+        }
+        _currentHealth = healthValue;
     }
 
     /// <summary>
@@ -59,20 +62,15 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
 
     /// <summary>
     /// Inherits from BaseHealth
-    /// Performs the base functionality then calls player related event
+    /// Performs the base functionality then the general death event
     /// </summary>
-    public virtual void OnDeath()
-    {
-        InvokeDeathEvent();
+    public virtual void OnDeath() 
+    { 
+        _deathEvent.Invoke();
     }
 
     #endregion
 
-    /// <summary>
-    /// This is TEMPORARY
-    /// Waiting for Marks damage system
-    /// Base function for taking damage is protected. Could use an event, but that falls out of my task scope
-    /// </summary>
     public virtual void TakeDamage(float damage)
     {
         _currentHealth -= damage;
@@ -90,7 +88,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// </summary>
     public void InvokeDeathEvent()
     {
-        _deathEvent?.Invoke(this);
+        _deathEvent?.Invoke();
     }
 
     #endregion
@@ -98,7 +96,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     #region Getters
 
     public float GetHealthPercent() => _currentHealth / _maxHealth;
-    public UnityEvent<IBaseHealth> GetDeathEvent() => _deathEvent;
+    public UnityEvent GetDeathEvent() => _deathEvent;
 
     #endregion Getters
 }
