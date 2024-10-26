@@ -1,13 +1,12 @@
 /*****************************************************************************
 // File Name :         BaseBossAttackSystem.cs
 // Author :            Mark Hanson
+// Contributors:       Andrew Stapay, Andrea Swihart-DeCoster
 // Creation Date :     10/21/2024
 //
 // Brief Description : The base of each attack the boss does to make each attack easier to set up
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,12 +14,11 @@ using UnityEngine.Events;
 /// The abstract class of holding all the functions of the attack
 /// literally from beginning to end
 /// </summary>
-public abstract class BaseBossAttackSystem : MonoBehaviour
+public class BaseBossAttack : MonoBehaviour
 {
-    [Tooltip("Throw tangible Game Object of Attack in here")]
+    /*[Tooltip("Throw tangible Game Object of Attack in here")]
     [SerializeField] protected GameObject[] _attackObjects;
-    private UnityEvent _attackBegin = new();
-    private UnityEvent _attackEnd = new();
+
     //For spawning in at one or more locations
     [Tooltip("Add all locations of where attack should be")]
     [SerializeField] protected Transform[] _spawnLocation;
@@ -29,21 +27,14 @@ public abstract class BaseBossAttackSystem : MonoBehaviour
     [Tooltip("Enter Damage of this attack here")]
     [SerializeField] protected float _damageAmount;
 
-    //Variables that are from modular damage interface
-    public float DamageAmount { get; protected set; }
+    private UnityEvent _attackBegin = new();
+    private UnityEvent  _attackEnd = new();
 
-    private UnityEvent<BaseBossAttackSystem> _attackBegin = new();
-    private UnityEvent<BaseBossAttackSystem> _attackEnd = new();
-
-    /// <summary>
-    /// Sets initial values
-    /// </summary>
-    protected virtual void Awake()
+    private void Start()
     {
-        DamageAmount = _damageAmount;
         DetermineRandomAttackLocation();
     }
-    
+
     /// <summary>
     /// Randomizer for the starting position
     /// </summary>
@@ -95,7 +86,6 @@ public abstract class BaseBossAttackSystem : MonoBehaviour
     
     public UnityEvent GetAttackBegin() => _attackBegin;
     public UnityEvent GetAttackEnd() => _attackEnd;
-    public UnityEvent<float> GetDamageEvent() => DamageEvent;
     
-    #endregion
+    #endregion*/
 }

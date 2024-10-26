@@ -9,26 +9,32 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// manager for the boss attacks currently, will be restructured for future builds
 /// </summary>
-public class BossAttacksManager : MonoBehaviour
+public class BossAttackManager : MonoBehaviour
 {
-    //general
+    public static BossAttackManager Instance;
+
     private bool _attackInProgress = false;
+
     [Tooltip("After an attack is finished how long to wait before starting next one")]
     [SerializeField] private float _timeBetweenAttacks = 5f;
+
     [Tooltip("this is how long before boss attacks actually begin if you want start delay")]
     [SerializeField] private float _timeAfterStartToStartAttacks;
+
     private Coroutine _chooseAttacksRepeatedlyCoroutine;
 
-    public static BossAttacksManager Instance;
+    #region Attack Events
 
-    //the attack events, add more as more attacks are made
     private Action[] _bossAttacks;
-    public static event Action FullRoomAttack;
-    public static event Action PatrolRoomAttack;
+    public static event Action BeginRoomLockdownAttack;
+    public static event Action BeginInteriorTongueAttack;
+
+    #endregion
 
     /// <summary>
     /// creates instance of BossManager
@@ -50,8 +56,28 @@ public class BossAttacksManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        InitializeBossAttackList();
-        _chooseAttacksRepeatedlyCoroutine = StartCoroutine(ChooseAttacksRepeatedly());
+
+    }
+
+    /// <summary>
+    /// just for testing
+    /// </summary>
+    private void Update()
+    {
+        // Test the begin interior attack until attack system is setup
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            BeginAttackAct1();
+        }
+    }
+
+    /// <summary>
+    /// Begins attacks in the first act
+    /// </summary>
+    private void BeginAttackAct1()
+    {
+        BeginInteriorTongueAttack?.Invoke();
+        BeginRoomLockdownAttack?.Invoke();
     }
 
     /// <summary>
@@ -60,16 +86,17 @@ public class BossAttacksManager : MonoBehaviour
     private void InitializeBossAttackList()
     {
         //add more attacks here
-        _bossAttacks = new Action[]{FullRoomAttack, PatrolRoomAttack};
+        _bossAttacks = new Action[]{BeginRoomLockdownAttack, BeginInteriorTongueAttack};
     }
 
     /// <summary>
-    /// Chooses attakcs randomly when there is not a current attack in progress
+    /// Chooses attacks randomly when there is not a current attack in progress
     /// </summary>
     /// <returns></returns>
     private IEnumerator ChooseAttacksRepeatedly()
     {
         yield return new WaitForSeconds(_timeAfterStartToStartAttacks);
+
         while(true)
         {
             if(!_attackInProgress)
@@ -88,5 +115,4 @@ public class BossAttacksManager : MonoBehaviour
         get { return _attackInProgress; }
         set { _attackInProgress = value; }
     }
-
 }

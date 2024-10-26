@@ -13,7 +13,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// contains functionality for full room attack
 /// </summary>
-public class FullRoomAttack : BaseBossAttackSystem
+public class RoomLockdownAttack : BaseBossAttack
 {
     //attack 1 ref
     [Header("Attack 1")]
@@ -38,9 +38,9 @@ public class FullRoomAttack : BaseBossAttackSystem
     /// </summary>
     private void OnEnable() 
     {
-        this.GetAttackBegin().AddListener(ActivateThisAttack);
+        //this.GetAttackBegin().AddListener(ActivateThisAttack);
         // Remove this once ActSystem is merged
-        BossAttacksManager.FullRoomAttack += ActivateThisAttack;
+        BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
     }
 
     /// <summary>
@@ -48,9 +48,9 @@ public class FullRoomAttack : BaseBossAttackSystem
     /// </summary>
     private void OnDisable()
     {
-        this.GetAttackBegin().RemoveListener(ActivateThisAttack);
+        //this.GetAttackBegin().RemoveListener(ActivateThisAttack);
         // Remove this once ActSystem is merged
-        BossAttacksManager.FullRoomAttack -= ActivateThisAttack;
+        BossAttackManager.BeginRoomLockdownAttack -= ActivateThisAttack;
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class FullRoomAttack : BaseBossAttackSystem
         transform.localScale = _attackScale[0];
 
         // tell the attack manager that we are attacking
-        BossAttacksManager.Instance.AttackInProgress = true;
+        BossAttackManager.Instance.AttackInProgress = true;
 
         // setting attack indicator
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
@@ -104,6 +104,6 @@ public class FullRoomAttack : BaseBossAttackSystem
         attackCollider.enabled = false;
         
         //end attack and cycle to another
-        BossAttacksManager.Instance.AttackInProgress = false;
+        BossAttackManager.Instance.AttackInProgress = false;
     }
 }
