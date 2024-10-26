@@ -28,6 +28,8 @@ public class BezierCurve : MonoBehaviour
     [Min(0)] public float HandleSize = 1;
     [Tooltip("How many lines make up each curve (only in the scene view)")]
     [Min(1)] public int CurveSmoothness = 15;
+    [Tooltip("Whether or not to be editing the spline")]
+    public bool Tweening = true;
 
     /// <summary>
     /// Find the linearly interpolated position between two bezier points
@@ -36,25 +38,53 @@ public class BezierCurve : MonoBehaviour
     /// <param name="end">The bezier point to move towards</param>
     /// <param name="value">The linearly interpolated value to check</param>
     /// <returns>The position at the specified point</returns>
-    public Vector2 EvaluateBezierPoint(BezierPoint start, BezierPoint end, float value)
+    public Vector3 EvaluateBezierPoint(BezierPoint start, BezierPoint end, float value)
     {
         // The reasoning for these variables can be found in the provided video
-        Vector2 P0 = start.Point;
-        Vector2 P1 = start.Point + (start.ForwardDir * CurveIntensity);
-        Vector2 P2 = end.Point + (end.BackDir * CurveIntensity);
-        Vector2 P3 = end.Point;
+        Vector3 P0 = start.Point;
+        Vector3 P1 = start.Point + (start.ForwardDir * CurveIntensity);
+        Vector3 P2 = end.Point + (end.BackDir * CurveIntensity);
+        Vector3 P3 = end.Point;
 
         // The ^2 and ^3 values of the initial value, to clean up the calculation
         float value2 = Mathf.Pow(value, 2);
         float value3 = Mathf.Pow(value, 3);
 
         // Linearly interpolate between the four positions to get the final position
-        Vector2 P = P0 * (-value3 + 3 * value2 - 3 * value + 1)
+        Vector3 P = P0 * (-value3 + 3 * value2 - 3 * value + 1)
             + P1 * (3 * value3 - 6 * value2 + 3 * value)
             + P2 * (-3 * value3 + 3 * value2)
             + P3 * value3;
 
         return P;
+    }
+
+    [System.Obsolete]
+    /// <summary>
+    /// Calculates the distance along the line at a certain point
+    /// </summary>
+    /// <param name="start">The starting bezier point</param>
+    /// <param name="end">The ending bezier point</param>
+    /// <param name="pointIndex">The point to be checking up until</param>
+    /// <returns>The distance along the line</returns>
+    public float DistanceAlongLine(BezierPoint start, BezierPoint end, int pointIndex)
+    {
+        if (pointIndex == 0)
+        {
+            return 0;
+        }
+
+        float totalDistance = 0;
+        Vector3 previousPoint = EvaluateBezierPoint(start, end, 0);
+        for (int i = 1; i < pointIndex; i++)
+        {
+            Vector3 currentPoint = EvaluateBezierPoint(start, end, i / (float)CurveSmoothness);
+
+            totalDistance += Vector3.Distance(previousPoint, currentPoint);
+            previousPoint = currentPoint;
+        }
+
+        return totalDistance;
     }
 
     /// <summary>
@@ -64,19 +94,19 @@ public class BezierCurve : MonoBehaviour
     /// <param name="end">The bezier point to move towards</param>
     /// <param name="value">The linearly interpolated value to check</param>
     /// <returns>The derivative at the specified point</returns>
-    public Vector2 EvaluateBezierDerivative(BezierPoint start, BezierPoint end, float value)
+    public Vector3 EvaluateBezierDerivative(BezierPoint start, BezierPoint end, float value)
     {
         // The reasoning for these variables can be found in the provided video
-        Vector2 P0 = start.Point;
-        Vector2 P1 = start.Point + (start.ForwardDir * CurveIntensity);
-        Vector2 P2 = end.Point + (end.BackDir * CurveIntensity);
-        Vector2 P3 = end.Point;
+        Vector3 P0 = start.Point;
+        Vector3 P1 = start.Point + (start.ForwardDir * CurveIntensity);
+        Vector3 P2 = end.Point + (end.BackDir * CurveIntensity);
+        Vector3 P3 = end.Point;
 
         // The ^2 value of the initial value, to clean up the calculation
         float value2 = Mathf.Pow(value, 2);
 
         // Linearly interpolate between the four positions to get the final derivative
-        Vector2 D = P0 * ((-3 * value2) + (6 * value) - 3)
+        Vector3 D = P0 * ((-3 * value2) + (6 * value) - 3)
             + P1 * ((9 * value2) - (12 * value) + 3)
             + P2 * ((-9 * value2) + (6 * value))
             + P3 * (3 * value2);
@@ -92,24 +122,24 @@ public class BezierCurve : MonoBehaviour
     /// <param name="segments">How many segments make up the curve between the two bezier points</param>
     /// <param name="length">The total of all the line segments</param>
     /// <returns>An array of all the positions between the bezier points</returns>
-    public Vector2[] PointsBetweenBeziers(BezierPoint start, BezierPoint end, int segments, out float length)
+    public Vector3[] PointsBetweenBeziers(BezierPoint start, BezierPoint end, int segments, out float length)
     {
         // Prepare the array to store all the positions
-        Vector2[] allPoints = new Vector2[segments + 1];
+        Vector3[] allPoints = new Vector3[segments + 1];
         length = 0;
 
-        Vector2 previousPoint = start.Point;
+        Vector3 previousPoint = start.Point;
 
         // Iterate through all the segments of the curve and find the individual positions
         for (int i = 0; i <= segments; i++)
         {
             float lineRatio = i / (float)segments;
 
-            Vector2 currentPoint = EvaluateBezierPoint(start, end, lineRatio);
+            Vector3 currentPoint = EvaluateBezierPoint(start, end, lineRatio);
 
             // Get the distance between the last line segment, and add it to the total length
             allPoints[i] = currentPoint;
-            length += Vector2.Distance(previousPoint, currentPoint);
+            length += Vector3.Distance(previousPoint, currentPoint);
 
             previousPoint = currentPoint;
         }
@@ -123,7 +153,7 @@ public class BezierCurve : MonoBehaviour
     /// <param name="end">The bezier to move towards</param>
     /// <param name="segments">How many segments make up the curve between the two bezier points</param>
     /// <returns>An array of all the positions between the bezier points</returns>
-    public Vector2[] PointsBetweenBeziers(BezierPoint start, BezierPoint end, int segments)
+    public Vector3[] PointsBetweenBeziers(BezierPoint start, BezierPoint end, int segments)
     {
         return PointsBetweenBeziers(start, end, segments, out _);
     }
@@ -135,17 +165,17 @@ public class BezierCurve : MonoBehaviour
     /// <param name="end">The bezier to move towards</param>
     /// <param name="segments">How many segments make up the curve between the two bezier points</param>
     /// <returns>An array of all the derivatives between the bezier points</returns>
-    public Vector2[] DerivativesBetweenBeziers(BezierPoint start, BezierPoint end, int segments)
+    public Vector3[] DerivativesBetweenBeziers(BezierPoint start, BezierPoint end, int segments)
     {
         // Prepare the array to store all the derivatives
-        Vector2[] allDerivatives = new Vector2[segments + 1];
+        Vector3[] allDerivatives = new Vector3[segments + 1];
 
         // Iterate through all the segments of the curve and find the individual positions
         for (int i = 0; i <= segments; i++)
         {
             float lineRatio = i / (float)segments;
 
-            Vector2 currentPoint = EvaluateBezierDerivative(start, end, lineRatio);
+            Vector3 currentPoint = EvaluateBezierDerivative(start, end, lineRatio);
 
             allDerivatives[i] = currentPoint;
         }
@@ -158,17 +188,17 @@ public class BezierCurve : MonoBehaviour
     /// <param name="segmentsPerCurve">How many segments each curve is split into</param>
     /// <param name="length">The total length of all the lines between bezier points</param>
     /// <returns>An array of all the points across all the bezier points</returns>
-    public Vector2[] AllPoints(int segmentsPerCurve, out float length)
+    public Vector3[] AllPoints(int segmentsPerCurve, out float length)
     {
         length = 0;
 
         // Prepares the array to store all the positions
-        Vector2[] allPoints = new Vector2[segmentsPerCurve * (BezierPoints.Length - 1) + 1];
+        Vector3[] allPoints = new Vector3[segmentsPerCurve * (BezierPoints.Length - 1) + 1];
 
         // Iterate through every bezier point and combine all the points in between them
         for (int i = 0; i < BezierPoints.Length - 1; i++)
         {
-            Vector2[] curPoints = PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve, out float curLength);
+            Vector3[] curPoints = PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve, out float curLength);
 
             // If it's the very first point, add it to the list
             if (i == 0)
@@ -193,40 +223,9 @@ public class BezierCurve : MonoBehaviour
     /// </summary>
     /// <param name="segmentsPerCurve">How many segments each curve is split into</param>
     /// <returns>An array of all the points across all the bezier points</returns>
-    public Vector2[] AllPoints(int segmentsPerCurve)
+    public Vector3[] AllPoints(int segmentsPerCurve)
     {
         return AllPoints(segmentsPerCurve, out _);
-    }
-
-    /// <summary>
-    /// Get all the points throughout the entire set of bezier points at a specfied level of detail in 3D space
-    /// </summary>
-    /// <param name="segmentsPerCurve">How many segments each curve is split into</param>
-    /// <param name="length">The total length of all the lines between bezier points</param>
-    /// <returns>An array of all the points across all the bezier points across the X and Z axis</returns>
-    public Vector3[] All3dPoints(int segmentsPerCurve, out float length)
-    {
-        // Gets the 2d positions and prepares the arrays for the 3d positions
-        Vector2[] all2dPoints = AllPoints(segmentsPerCurve, out length);
-        Vector3[] all3dPoints = new Vector3[all2dPoints.Length];
-
-        // Converts all the 2d positions to 3d ones
-        for (int i = 0; i < all2dPoints.Length; i++)
-        {
-            all3dPoints[i] = new(all2dPoints[i].x, 0, all2dPoints[i].y);
-        }
-
-        return all3dPoints;
-    }
-
-    /// <summary>
-    /// Get all the points throughout the entire set of bezier points at a specfied level of detail in 3D space
-    /// </summary>
-    /// <param name="segmentsPerCurve">How many segments each curve is split into</param>
-    /// <returns>An array of all the points across all the bezier points across the X and Z axis</returns>
-    public Vector3[] All3dPoints(int segmentsPerCurve)
-    {
-        return All3dPoints(segmentsPerCurve, out _);
     }
 
     /// <summary>
@@ -234,15 +233,15 @@ public class BezierCurve : MonoBehaviour
     /// </summary>
     /// <param name="segmentsPerCurve">How many segments each curve is split into</param>
     /// <returns>An array of all the derivatives across all the bezier points</returns>
-    public Vector2[] AllDerivatives(int segmentsPerCurve)
+    public Vector3[] AllDerivatives(int segmentsPerCurve)
     {
         // Prepares the array to store all the derivatives
-        Vector2[] allDerivatives = new Vector2[segmentsPerCurve * (BezierPoints.Length - 1) + 1];
+        Vector3[] allDerivatives = new Vector3[segmentsPerCurve * (BezierPoints.Length - 1) + 1];
 
         // Iterate through every bezier point and combine all the derivatives in between them
         for (int i = 0; i < BezierPoints.Length - 1; i++)
         {
-            Vector2[] curPoints = DerivativesBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve);
+            Vector3[] curPoints = DerivativesBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve);
 
             // If it's the very first point, add it to the list
             if (i == 0)
@@ -261,26 +260,6 @@ public class BezierCurve : MonoBehaviour
     }
 
     /// <summary>
-    /// Get all the derivatives throughout the entire set of bezier points at a specfied level of detail in 3D space
-    /// </summary>
-    /// <param name="segmentsPerCurve">How many segments each curve is split into</param>
-    /// <returns>An array of all the derivatives across all the bezier points across the X and Z axis</returns>
-    public Vector3[] All3dDerivatives(int segmentsPerCurve)
-    {
-        // Gets the 2d derivatives and prepares the arrays for the 3d positions
-        Vector2[] all2dDerivatives = AllDerivatives(segmentsPerCurve);
-        Vector3[] all3dDerivatives = new Vector3[all2dDerivatives.Length];
-
-        // Converts all the 2d derivatives to 3d ones
-        for (int i = 0; i < all2dDerivatives.Length; i++)
-        {
-            all3dDerivatives[i] = new(all2dDerivatives[i].x, 0, all2dDerivatives[i].y);
-        }
-
-        return all3dDerivatives;
-    }
-
-    /// <summary>
     /// Gets the length of the active bezier
     /// </summary>
     /// <returns>The total length of the bezier at the current level of detail</returns>
@@ -295,8 +274,9 @@ public class BezierCurve : MonoBehaviour
     /// </summary>
     /// <param name="value">The percentage value along the line to be determining</param>
     /// <param name="forward">The forward derivative along the line</param>
+    /// <param name="worldPosition">Whether or not the returned position should be in world position</param>
     /// <returns>The position along the line at the given value</returns>
-    public Vector3 GetPositionAlongSpline(float value, out Vector3 forward)
+    public Vector3 GetPositionAlongSpline(float value, out Vector3 forward, bool worldPosition = false)
     {
         // Clamp the value between 0 and 100%
         value = Mathf.Clamp01(value);
@@ -319,21 +299,21 @@ public class BezierCurve : MonoBehaviour
             {
                 // Find the value along and position within the line segment
                 float valueOnSegment = (distanceOverLine - previousLength) / currentLength;
-                Vector2 positionOnSegment = EvaluateBezierPoint(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+                Vector3 positionOnSegment = EvaluateBezierPoint(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
 
                 // Determine the derivative at the point along the line
-                Vector2 derivativeOnSegment = EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
-                forward = new(derivativeOnSegment.x, 0, derivativeOnSegment.y);
+                Vector3 derivativeOnSegment = EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+                forward = derivativeOnSegment;
 
                 // Account for 3D space
-                return new(positionOnSegment.x, 0, positionOnSegment.y);
+                return positionOnSegment + (worldPosition ? transform.position : Vector3.zero);
             }
             previousLength = totalLength;
         }
 
         // Edge case
         forward = Vector3.zero;
-        return Vector3.zero;
+        return worldPosition ? transform.position : Vector3.zero;
     }
 }
 
@@ -349,16 +329,16 @@ public struct BezierPoint
     /// <param name="point">The position the actual point is at</param>
     /// <param name="backDir">The direction backward towards the previous bezier point</param>
     /// <param name="forwardDir">The direction forward towards the next bezier point</param>
-    public BezierPoint(Vector2 point, Vector2 backDir, Vector2 forwardDir)
+    public BezierPoint(Vector3 point, Vector3 backDir, Vector3 forwardDir)
     {
         Point = point;
         BackDir = backDir;
         ForwardDir = forwardDir;
     }
 
-    public Vector2 Point;
-    public Vector2 BackDir;
-    public Vector2 ForwardDir;
+    public Vector3 Point;
+    public Vector3 BackDir;
+    public Vector3 ForwardDir;
 
     /// <summary>
     /// Determines whether the bezier points on both sides are the same
