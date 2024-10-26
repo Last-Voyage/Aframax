@@ -201,6 +201,8 @@ public class SpecificVisualEffect
                 return;
             case (EVfxDurationType.Infinite):
                 return;
+            default:
+                return;
         }
     }
 
