@@ -23,6 +23,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
 
+    [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
+
     public static SceneLoadingManager Instance;
 
     //Occurs when the currently active scene is changed
