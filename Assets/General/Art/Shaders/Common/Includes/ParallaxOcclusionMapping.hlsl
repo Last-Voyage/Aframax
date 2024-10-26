@@ -47,6 +47,7 @@ void ParallaxOcclusionMapping_float(
     float currentDepthMapValue = 1.0F - tex2D(HeightmapTexture, uvs).r;
     
     // Loop until we find an intersection on the height map
+    UNITY_LOOP
     while(currentLayerDepth < currentDepthMapValue)
     {
         uvs -= deltaUvs;
