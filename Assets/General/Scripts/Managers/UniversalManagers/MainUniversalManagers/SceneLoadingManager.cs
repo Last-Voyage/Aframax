@@ -21,6 +21,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     [SerializeField] private List<SceneTransition> _sceneTransitions;
     private Coroutine _sceneLoadingCoroutine;
 
+    [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
+
     public static SceneLoadingManager Instance;
 
     //Occurs when the currently active scene is changed
@@ -28,6 +30,11 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     private UnityEvent _additiveLoadAddedEvent = new();
     private UnityEvent _additiveLoadRemovedEvent = new();
+
+    private void Awake()
+    {
+        SetupInstance();
+    }
 
     /// <summary>
     /// Starts loading the specified scene id using the specified scene transition
@@ -148,6 +155,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     #endregion
 
     #region Getters
+
+    public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
 
     #endregion
 }
