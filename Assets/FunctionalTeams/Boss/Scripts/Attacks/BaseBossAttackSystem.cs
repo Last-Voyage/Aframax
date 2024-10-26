@@ -15,23 +15,24 @@ using UnityEngine.Events;
 /// The abstract class of holding all the functions of the attack
 /// literally from beginning to end
 /// </summary>
-public abstract class BaseBossAttackSystem : MonoBehaviour, IBaseDamage
+public abstract class BaseBossAttackSystem : MonoBehaviour
 {
     [Tooltip("Throw tangible Game Object of Attack in here")]
     [SerializeField] protected GameObject[] _attackObjects;
-    private UnityEvent _attackBegin = new();
-    private UnityEvent _attackEnd = new();
+
     //For spawning in at one or more locations
     [Tooltip("Add all locations of where attack should be")]
     [SerializeField] protected Transform[] _spawnLocation;
+
     //For adjusting variable from modular damage interface outside of code
     [Tooltip("Enter Damage of this attack here")]
     [SerializeField] protected float _damageAmount;
 
     //Variables that are from modular damage interface
     public float DamageAmount { get; protected set; }
-    public bool CanApplyDamage { get; protected set; }
-    public UnityEvent<float> DamageEvent { get;protected set; }
+
+    private UnityEvent _attackBegin = new();
+    private UnityEvent _attackEnd = new();
 
     /// <summary>
     /// Sets initial values
@@ -50,17 +51,6 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IBaseDamage
         foreach (GameObject Attack in _attackObjects)
         {
             Attack.transform.position = _spawnLocation[Random.Range(0, _spawnLocation.Length)].position;
-        }
-    }
-    
-    /// <summary>
-    /// Use this as the damage that will go into the player health
-    /// </summary>
-    public virtual void ApplyDamage()
-    {
-        if (CanApplyDamage)
-        {
-            DamageEvent?.Invoke(DamageAmount);
         }
     }
     
@@ -98,7 +88,6 @@ public abstract class BaseBossAttackSystem : MonoBehaviour, IBaseDamage
     
     public UnityEvent GetAttackBegin() => _attackBegin;
     public UnityEvent GetAttackEnd() => _attackEnd;
-    public UnityEvent<float> GetDamageEvent() => DamageEvent;
     
     #endregion
 }
