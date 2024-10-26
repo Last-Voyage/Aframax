@@ -54,8 +54,8 @@ public class RiverSpline : MonoBehaviour
         Mesh mesh = new();
 
         // Get the position and derivatives of the attached bezier curve
-        Vector3[] curvePositions = activeBezier.All3dPoints(RiverSmoothness);
-        Vector3[] curveDerivatives = activeBezier.All3dDerivatives(RiverSmoothness);
+        Vector3[] curvePositions = activeBezier.AllPoints(RiverSmoothness);
+        Vector3[] curveDerivatives = activeBezier.AllDerivatives(RiverSmoothness);
 
         // Resize the desired vertex distance to match the width the best it can
         _idealVertexDistance = Mathf.Min(_idealVertexDistance, _width);
