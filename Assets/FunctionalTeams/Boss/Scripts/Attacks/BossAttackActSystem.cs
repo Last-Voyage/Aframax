@@ -5,23 +5,27 @@
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
 *****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// A class that contains multiple functions for the act system that are updated within a coroutine
+/// </summary>
 public class BossAttackActSystem : MonoBehaviour
 {
     //Should hold a list of numbers which are being swapped into the current max attacks
     [Tooltip("How many attacks do you want per act")]
-    protected private int[] _attacksPerAct;
+    [SerializeField] private int[] _attacksPerAct;
     //The max attacks for the current act we are on
     protected private int _currentMaxAttacks;
     //Keeps the attacks going through the attack collection and not back tracking through previosly used attacks
     protected private int _attackCounter = 0;
     //Keeps tracked of attack that are over then matches with attack counter to determine if an act is over
     protected int _attackOverCounter = 0;
-
+    //The base boss attack system to listen out for attacks
     public BaseBossAttackSystem AttackComponent { get; private set; }
 
     //The current act it is on
@@ -29,7 +33,7 @@ public class BossAttackActSystem : MonoBehaviour
     //A switch bool that works in tandem with the act counter
     protected private bool _isActOver;
     //Ideally have a empty hold 2 or more attacks in the one empty and match it up with the act number
-    [Tooltip("Through in attack empty holder that aligns with act")]
+    [Tooltip("Throw in attack empty holders that aligns with act")]
     [SerializeField] private GameObject[] _attackCollection;
     //Events for the atacks to listen for
     private UnityEvent _actBegin = new();
@@ -43,6 +47,8 @@ public class BossAttackActSystem : MonoBehaviour
         _currentMaxAttacks = _attacksPerAct[_actCounter];
         InvokeActBegin();
         AttackListentoActs();
+        StartCoroutine(AttackManagement());
+        StartCoroutine(ActManagement());
     }
     /// <summary>
     /// A way for attacks that are dropped in to listen for when an act ends
@@ -98,7 +104,7 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Phase Management works as a way to listen to attack events and elaborate on what phase it should be on
+    /// Act Management works as a way to listen to attack events and elaborate on what act it should be on
     /// And when it is over.
     /// </summary>
     /// <returns></returns>
