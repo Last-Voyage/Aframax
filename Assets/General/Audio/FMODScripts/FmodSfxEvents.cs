@@ -32,8 +32,6 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference HardSurfaceWalking { get; private set; }
     [field: SerializeField] public EventReference PlayerTookDamage { get; private set; }
 
-    #endregion Player
-
     #region Harpoon
 
     [field: Header("Harpoon")]
@@ -43,6 +41,7 @@ public class FmodSfxEvents : MonoBehaviour
 
     #endregion Harpoon
 
+    #endregion Player
 
     private void Awake()
     {
