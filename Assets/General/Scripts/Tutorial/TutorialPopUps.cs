@@ -1,5 +1,12 @@
+/*****************************************************************************
+// File Name :         ScriptableUI.cs
+// Author :            Nick Rice
+//                     
+// Creation Date :     10/22/24
+//
+// Brief Description : This script handles the tutorial process, it's words, and objects
+*****************************************************************************/
 using System.Collections;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -24,27 +31,15 @@ public class TutorialPopUps : MonoBehaviour
     [Tooltip("The pointer for which ui data is currently being used")]
     private int _dataPointer;
 
-    [Tooltip("Characters per second being shown on screen")]
-    private const float _CHARACTERS_PER_SECOND = 3.5f;
-
     [Tooltip("The message shown after completing a tutorial")]
     private const string _CONGRATULATION_MESSAGE = "Great Job!";
-
-    private Coroutine _waitingForText;
-    private Coroutine _displayingText;
-    private IEnumerator _startWaitingForText;
-    private IEnumerator _startDisplayingText;
 
     // Start's the tutorial process
     void Start()
     {
-        _startWaitingForText = TimeBeforeText();
-        _startDisplayingText = DisplayingTheText();
-        //_waitingForText = TimeBeforeText();
         _walkTutorialObject.SetActive(false);
         _shootTutorialObject.SetActive(false);
-        StartCoroutine(_startWaitingForText);
-        _waitingForText = StartCoroutine(_startWaitingForText);
+        StartCoroutine(TimeBeforeText());
     }
 
 
@@ -76,14 +71,14 @@ public class TutorialPopUps : MonoBehaviour
         while(_textContainer.maxVisibleCharacters < totalLength)
         {
             _textContainer.maxVisibleCharacters++;
-            yield return new WaitForSeconds(1f/typeSpeed/*1f/_CHARACTERS_PER_SECOND*/);
+            yield return new WaitForSeconds(1f/typeSpeed);
         }
         StartTutorialCheck();
     }
 
 
     /// <summary>
-    /// This will choose which tutorial check is happening based on
+    /// This will choose which tutorial check is happening based on how many tutorials have been completed
     /// </summary>
     private void StartTutorialCheck()
     {
@@ -99,6 +94,7 @@ public class TutorialPopUps : MonoBehaviour
                 _shootTutorialObject.SetActive(true);
                 break;
             default:
+                StartCoroutine(WaitForEnd());
                 break;
         }
     }
@@ -121,6 +117,16 @@ public class TutorialPopUps : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    /// <summary>
+    /// Adds time before finishing the tutorial to allow the final message to be read
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator WaitForEnd()
+    {
+        yield return new WaitForSeconds(2f);
+        NextTutorial();
     }
 
     /// <summary>

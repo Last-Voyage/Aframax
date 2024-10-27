@@ -1,11 +1,22 @@
-// created 10/23/24
+/*****************************************************************************
+// File Name :         ScriptableUI.cs
+// Author :            Nick Rice
+//                     
+// Creation Date :     10/23/24
+//
+// Brief Description : The data class for text and time
+*****************************************************************************/
 using System;
 using UnityEngine;
 
+/// <summary>
+/// The data class for text and time
+/// </summary>
 [Serializable]
 public class TextAndTimerData
 {
     #region Constructor
+    [Tooltip("Object for on screen text and timing until the words are displayed")]
     public TextAndTimerData(string onScreenText, int timeUntilNextWords)
     {
         _displayedText = onScreenText;

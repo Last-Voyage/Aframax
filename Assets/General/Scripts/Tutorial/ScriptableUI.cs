@@ -9,8 +9,9 @@
 
 using UnityEngine;
 
-// Going to need to rename the menu name, but this is the base level version
-// Using slashes will let it be divisible to higher levels
+/// <summary>
+/// The scriptable object for tutorial dialogue and time
+/// </summary>
 [CreateAssetMenu(menuName = "UI Data Object/TextAndTimeData")]
 public class ScriptableUI : ScriptableObject
 {

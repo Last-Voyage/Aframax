@@ -1,7 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+/*****************************************************************************
+// File Name :         ScriptableUI.cs
+// Author :            Nick Rice
+//                     
+// Creation Date :     10/23/24
+//
+// Brief Description : This script sends a tutorial step completion event, and disables the object
+*****************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// Sends a tutorial step completion event, and disables the object
+/// </summary>
 public class TutorialObjectInteract : MonoBehaviour
 {
     [SerializeField]
@@ -9,7 +18,6 @@ public class TutorialObjectInteract : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("triggered");
         if(other.gameObject.CompareTag(_objectTag))
         {
             EnvironmentManager.Instance.CompletedTutorial()?.Invoke();
