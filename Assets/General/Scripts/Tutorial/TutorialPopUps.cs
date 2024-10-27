@@ -1,8 +1,7 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 public class TutorialPopUps : MonoBehaviour
 {
@@ -31,12 +30,21 @@ public class TutorialPopUps : MonoBehaviour
     [Tooltip("The message shown after completing a tutorial")]
     private const string _CONGRATULATION_MESSAGE = "Great Job!";
 
+    private Coroutine _waitingForText;
+    private Coroutine _displayingText;
+    private IEnumerator _startWaitingForText;
+    private IEnumerator _startDisplayingText;
+
     // Start's the tutorial process
     void Start()
     {
+        _startWaitingForText = TimeBeforeText();
+        _startDisplayingText = DisplayingTheText();
+        //_waitingForText = TimeBeforeText();
         _walkTutorialObject.SetActive(false);
         _shootTutorialObject.SetActive(false);
-        StartCoroutine(TimeBeforeText());
+        StartCoroutine(_startWaitingForText);
+        _waitingForText = StartCoroutine(_startWaitingForText);
     }
 
 
@@ -50,40 +58,44 @@ public class TutorialPopUps : MonoBehaviour
         StartCoroutine(DisplayingTheText());
     }
 
+    /// <summary>
+    /// This takes the text, makes it invisible, then slowly makes it visible by x characters a second
+    /// Finally starting tutorial check when done
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator DisplayingTheText()
     {
-        _textContainer.text = "";
+        _textContainer.text = _uIData[_dataPointer].GetTextAndTimer().Text;
 
-        int counter = 0;
-        while(counter < _uIData[_dataPointer].GetTextAndTimer().Text.Length)
+        _textContainer.maxVisibleCharacters = 0;
+
+        int totalLength = _uIData[_dataPointer].GetTextAndTimer().Text.Length;
+
+        float typeSpeed = totalLength / 3;
+
+        while(_textContainer.maxVisibleCharacters < totalLength)
         {
-            _textContainer.text += _uIData[_dataPointer].GetTextAndTimer().Text[counter++];
-            yield return new WaitForSeconds(1f/_CHARACTERS_PER_SECOND);
+            _textContainer.maxVisibleCharacters++;
+            yield return new WaitForSeconds(1f/typeSpeed/*1f/_CHARACTERS_PER_SECOND*/);
         }
         StartTutorialCheck();
     }
 
 
+    /// <summary>
+    /// This will choose which tutorial check is happening based on
+    /// </summary>
     private void StartTutorialCheck()
     {
-        Debug.Log("Yeah it started, tutorial checking");
         switch(_dataPointer)
         {
             case 0:
-                // This needs to have stuff in script instead of being based off of the actual tutorial stuff
-                // Starts the movement check; It would be better for the player to act in these scenarios
-                // So, just have the player hit or walk into a trigger.
-                Debug.Log(PlayerManager.Instance);
-                Debug.Log("Listener checked off");
                 _walkTutorialObject.SetActive(true);
                 break;
             case 1:
                 PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(NextTutorial);
                 break;
             case 2:
-                PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(NextTutorial);
-                break;
-            case 3:
                 _shootTutorialObject.SetActive(true);
                 break;
             default:
@@ -91,6 +103,9 @@ public class TutorialPopUps : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This ends the tutorial completion conditional check
+    /// </summary>
     private void EndTutorialCheck()
     {
         switch (_dataPointer)
@@ -108,9 +123,13 @@ public class TutorialPopUps : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This stops the tutorial condition checking, stops displaying text, 
+    /// displays the congrats message, increases the pointer
+    /// And starts the next line of text if there are enough UI data types
+    /// </summary>
     private void NextTutorial()
     {
-        Debug.Log("tried to leave it");
         EndTutorialCheck();
         StopCoroutine(DisplayingTheText());
         _textContainer.text = _CONGRATULATION_MESSAGE;
@@ -126,6 +145,9 @@ public class TutorialPopUps : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This enables the event listener for getting the next tutorial
+    /// </summary>
     private void OnEnable()
     {
         EnvironmentManager.Instance.CompletedTutorial().AddListener(NextTutorial);

@@ -7,10 +7,6 @@
 // Brief Description : This is a data container for UI elements that are to be included in the game
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Unity.VisualScripting;
 using UnityEngine;
 
 // Going to need to rename the menu name, but this is the base level version
