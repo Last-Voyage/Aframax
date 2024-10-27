@@ -43,10 +43,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     protected override void SubscribeToEvents()
     {
-        //help this doesn't work aaaaaaaaaa
-        //PlayerManager.Instance._onPlayerDeath.AddListener(StartAsyncSceneLoadViaID(1, 1));
-        //StartAsyncSceneLoadViaID(DeathScreenSceneIndex, 0)
-        //SceneLoadingManager.Instance.GetSceneChangedEvent.AddListener(StartBackgroundAudio);
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
 
     /// <summary>
@@ -76,9 +73,9 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// <summary>
     /// This will be changed to happening through a button later, so this function is temporary
     /// </summary>
-    public void DeathReloadCurrentScene()
+    public void LoadDeathScreen()
     {
-        StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
+        // Jeremiah TODO: Implement the code to load death screen
     }
 
     /// <summary>
