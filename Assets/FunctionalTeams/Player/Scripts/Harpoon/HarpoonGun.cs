@@ -180,6 +180,8 @@ public class HarpoonGun : MonoBehaviour
         // Start moving the harpoon
         StartCoroutine(HarpoonFireProcess(currentHarpoon));
 
+        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+
         // Personally I think the projectile should be the same as the object on the visual as the gun itself, 
         // but that's a discussion for a later day
         _harpoonOnGun.SetActive(false);

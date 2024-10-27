@@ -25,6 +25,7 @@ public class WeakPointHealth : BaseHealth
         if(damage > 0)
         {
             _weakPointDamageTakenEvent?.Invoke();
+            VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
             base.TakeDamage(damage);
         }
     }
