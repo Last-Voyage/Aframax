@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttacksManager.cs
 // Author :            Tommy Roberts
-// Contributor :       Andrew Stapay
+// Contributor :       Andrew Stapay, Andrea Swihart-DeCoster
 // Creation Date :     10/2/2024
 //
 // Brief Description : Controls first two boss attacks for our first playable build

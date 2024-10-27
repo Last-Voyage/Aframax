@@ -68,21 +68,13 @@ public class RoomTongueAttack : BaseBossAttack
 
     #endregion
 
-    private bool _isAttackActive;
-
     private List<PatrolEnemyBehavior> _activePatrolEnemies;
 
     #region Enable & Action/Event Subscriptions
 
-    /// <summary>
-    /// links attack to manager
-    /// </summary>
     private void OnEnable()
     {
-        BossAttackManager.BeginInteriorTongueAttack += StartAttack;
-        PatrolEnemySpawner.EnemySpawned += PatrolEnemySpawned;
-
-        PatrolEnemyDied.AddListener(PatrolEnemyDespawned);
+        SubscribeToEvents();   
     }
 
     /// <summary>
@@ -90,7 +82,20 @@ public class RoomTongueAttack : BaseBossAttack
     /// </summary>
     private void OnDisable()
     {
-        BossAttackManager.BeginInteriorTongueAttack -= StartAttack;
+        UnsubscribeToEvents();
+    }
+
+    protected override void SubscribeToEvents()
+    {
+        BossAttackManager.BeginInteriorTongueAttack += BeginAttack;
+        PatrolEnemySpawner.EnemySpawned += PatrolEnemySpawned;
+
+        PatrolEnemyDied.AddListener(PatrolEnemyDespawned);
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+        BossAttackManager.BeginInteriorTongueAttack -= BeginAttack;
         PatrolEnemySpawner.EnemySpawned -= PatrolEnemySpawned;
 
         PatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
@@ -146,14 +151,27 @@ public class RoomTongueAttack : BaseBossAttack
         }
     }
 
+    /// <summary>
+    /// Destroys all outstanding enemies and calls the endAttack event
+    /// </summary>
+    protected override void EndAttack()
+    {
+        foreach(PatrolEnemyBehavior patrolEnemyBehavior in _activePatrolEnemies)
+        {
+            _activePatrolEnemies.Remove(patrolEnemyBehavior);
+            Destroy(patrolEnemyBehavior.gameObject);
+        }
+        base.EndAttack();
+    }
+
     #region Enemy Spawning
 
     /// <summary>
     /// Begins the enemy spawning
     /// </summary>
-    private void StartAttack()
+    protected override void BeginAttack()
     {
-        _isAttackActive = true;
+        base.BeginAttack();
         StartCoroutine(EnemySpawning());
     }
 
@@ -202,12 +220,4 @@ public class RoomTongueAttack : BaseBossAttack
     }
 
     #endregion Enemy Spawning
-
-    /// <summary>
-    /// Stops the attack from playing
-    /// </summary>
-    private void EndAttack()
-    {
-        _isAttackActive = false;
-    }
 }

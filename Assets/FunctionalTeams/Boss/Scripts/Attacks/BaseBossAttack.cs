@@ -16,54 +16,51 @@ using UnityEngine.Events;
 /// </summary>
 public class BaseBossAttack : MonoBehaviour
 {
-    /*[Tooltip("Throw tangible Game Object of Attack in here")]
-    [SerializeField] protected GameObject[] _attackObjects;
-
-    //For spawning in at one or more locations
-    [Tooltip("Add all locations of where attack should be")]
-    [SerializeField] protected Transform[] _spawnLocation;
-
-    //For adjusting variable from modular damage interface outside of code
-    [Tooltip("Enter Damage of this attack here")]
-    [SerializeField] protected float _damageAmount;
+    /// <summary>
+    /// If the attack is currently active and playing
+    /// </summary>
+    protected bool _isAttackActive;
 
     private UnityEvent _attackBegin = new();
     private UnityEvent  _attackEnd = new();
 
-    private void Start()
+    /// <summary>
+    /// Subscribe to any necessary events
+    /// </summary>
+    protected virtual void SubscribeToEvents()
     {
-        DetermineRandomAttackLocation();
+        //TODO : Implement any universal events here
     }
 
     /// <summary>
-    /// Randomizer for the starting position
+    /// Unsubscribe from any necessary events
     /// </summary>
-    protected virtual void DetermineRandomAttackLocation()
+    protected virtual void UnsubscribeToEvents()
     {
-        foreach (GameObject Attack in _attackObjects)
-        {
-            Attack.transform.position = _spawnLocation[Random.Range(0, _spawnLocation.Length)].position;
-        }
+        //TODO : Implement any universal events here
     }
-    
+
     /// <summary>
     /// Attack beginning event for boss phase
     /// </summary>
-    protected virtual void AttackBegin()
+    protected virtual void BeginAttack()
     {
+        _isAttackActive = true;
         InvokeAttackBegin();
     }
-    
+
     /// <summary>
-    /// Attack ending event for boss phase
+    /// Stops the attack from playing
     /// </summary>
-    protected virtual void AttackEnd()
+    protected virtual void EndAttack()
     {
+        _isAttackActive = false;
         InvokeAttackEnd();
+        gameObject.SetActive(false);
     }
-    
+
     #region Events
-    
+
     /// <summary>
     /// Invokes this attack's _attackBegin event
     /// </summary>
@@ -87,5 +84,5 @@ public class BaseBossAttack : MonoBehaviour
     public UnityEvent GetAttackBegin() => _attackBegin;
     public UnityEvent GetAttackEnd() => _attackEnd;
     
-    #endregion*/
+    #endregion
 }
