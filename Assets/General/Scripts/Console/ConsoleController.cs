@@ -95,6 +95,7 @@ public class ConsoleController : MonoBehaviour
             
         }
 
+
     }
     #endregion
 
@@ -145,7 +146,7 @@ public class ConsoleController : MonoBehaviour
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
-    /// of memmory leaks
+    /// of memory leaks
     /// </summary>
     private void OnDestroy()
     {
@@ -154,9 +155,6 @@ public class ConsoleController : MonoBehaviour
         _toggleGodMode.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
     }
-
-
-
 
 }
 
