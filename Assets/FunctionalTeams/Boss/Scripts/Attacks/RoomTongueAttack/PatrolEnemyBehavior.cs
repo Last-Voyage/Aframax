@@ -28,8 +28,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     [Tooltip("How long the enemy patrols before despawning")]
     [SerializeField] private float _attackDuration = 15f;
 
-    [Tooltip("How long to destroy patrol enemy after it collides with player")]
-    [SerializeField] private float _destroyAttackDelay = .1f;
     [Tooltip("Adds a delay before starting to patrol the room")]
     [SerializeField] private float _timeToWaitBeforePatroling = .5f;
 
