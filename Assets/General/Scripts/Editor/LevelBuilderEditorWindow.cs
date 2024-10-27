@@ -37,6 +37,14 @@ public class LevelBuilderEditorWindow : EditorWindow
         RefreshLevelChunkOptions();
     }
 
+    private void OnDestroy()
+    {
+        for (int i = 0; i < _levelChunkOptionEditors.Length; i++)
+        {
+            _levelChunkOptionEditors[i].DiscardChanges();
+        }
+    }
+
     private void OnGUI()
     {
         if (!FindObjectOfType<IterativeChunkLoad>())
@@ -59,45 +67,24 @@ public class LevelBuilderEditorWindow : EditorWindow
     {
         Action[] buttonMethods = new Action[]
         {
-            RefreshOptions,
-            Button2,
-            Button3,
             LoadFile,
             SaveFile,
-            SaveAsNewFile
+            RefreshOptions
         };
         string[] buttonMethodNames = new string[]
         {
-            "Refresh Chunk Options",
-            "TestButton",
-            "TestButton",
-            "Load File",
-            "Save File",
-            "Save as New File"
+            "Load Level from\nSave File",
+            "Save Current Level\nOrder to File",
+            "Refresh Chunk List\n(Below)"
         };
 
         Vector2 buttonSpacing = new(5, 5);
-
-        Vector2 topButtonSize = new();
-        topButtonSize.x = (GetWindowSize.x - (_settings.EdgeSpacing.x * 2) - (2 * buttonSpacing.x)) / 3f;
-        topButtonSize.y = 25f;
-
-        for (int i = 0; i < 3; i++)
-        {
-            Vector2 buttonOffset = (topButtonSize.x + buttonSpacing.x) * i * Vector2.right;
-            Rect buttonRect = new(_settings.EdgeSpacing + buttonOffset, topButtonSize);
-
-            if (GUI.Button(buttonRect, buttonMethodNames[i]))
-            {
-                buttonMethods[i]();
-            }
-        }
 
         Vector2 textAreaSize = new();
         textAreaSize.x = (GetWindowSize.x - (_settings.EdgeSpacing.x * 2) - buttonSpacing.x) * 0.75f;
         textAreaSize.y = 200f;
 
-        Vector2 textAreaPosition = _settings.EdgeSpacing + ((topButtonSize.y + buttonSpacing.y) * Vector2.up);
+        Vector2 textAreaPosition = _settings.EdgeSpacing;
 
         Rect textAreaRect = new(textAreaPosition, textAreaSize);
         _textAreaText = GUI.TextArea(textAreaRect, _textAreaText);
@@ -110,7 +97,7 @@ public class LevelBuilderEditorWindow : EditorWindow
         {
             Vector2 buttonOffset = new();
             buttonOffset.x = textAreaSize.x + buttonSpacing.x;
-            buttonOffset.y = topButtonSize.y + buttonSpacing.y + (sideButtonSize.y + buttonSpacing.y) * i;
+            buttonOffset.y = (sideButtonSize.y + buttonSpacing.y) * i;
             Rect buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
 
             if (i == 1)
@@ -120,35 +107,23 @@ public class LevelBuilderEditorWindow : EditorWindow
                 GUIStyle style = new("button");
                 style.richText = true;
 
-                string buttonName = buttonMethodNames[i + 3] + (!canWork ? "\n<color=red>Warning! Will not work!</color>" : "");
+                string buttonName = buttonMethodNames[i] + (!canWork ? "\n<color=red>Warning! Will not work!</color>" : "");
 
                 if (GUI.Button(buttonRect, buttonName, style))
                 {
-                    buttonMethods[i + 3]();
+                    buttonMethods[i]();
                 }
 
                 continue;
             }
-            if (GUI.Button(buttonRect, buttonMethodNames[i + 3]))
+            if (GUI.Button(buttonRect, buttonMethodNames[i]))
             {
-                buttonMethods[i + 3]();
+                buttonMethods[i]();
             }
         }
 
-        return topButtonSize.y + textAreaSize.y + (2 * buttonSpacing.y);
+        return textAreaSize.y + (2 * buttonSpacing.y);
 
-        void RefreshOptions()
-        {
-            RefreshLevelChunkOptions();
-        }
-        void Button2()
-        {
-
-        }
-        void Button3()
-        {
-
-        }
         void LoadFile()
         {
             _textAreaText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ChunkQueue.txt");
@@ -157,9 +132,9 @@ public class LevelBuilderEditorWindow : EditorWindow
         {
             System.IO.File.WriteAllText(Application.streamingAssetsPath + "/ChunkQueue.txt", _textAreaText);
         }
-        void SaveAsNewFile()
+        void RefreshOptions()
         {
-
+            RefreshLevelChunkOptions();
         }
     }
 
@@ -197,7 +172,7 @@ public class LevelBuilderEditorWindow : EditorWindow
 
             if (cantUse)
             {
-                style.normal.background = ColoredTexture(buttonSize, Color.red);
+                style.normal.background = ColoredTexture(buttonSize, new(0.75f,0.15f,0.15f));
             }
 
             if (GUI.Button(buttonRect, i + "", style) && !cantUse)
@@ -247,6 +222,16 @@ public class LevelBuilderEditorWindow : EditorWindow
         }
 
         _levelChunkOptions = FindObjectOfType<IterativeChunkLoad>().EveryChunk;
+
+        if (_levelChunkOptionEditors != null)
+        {
+            for (int i = 0; i < _levelChunkOptionEditors.Length; i++)
+            {
+                _levelChunkOptionEditors[i].DiscardChanges();
+                DestroyImmediate(_levelChunkOptionEditors[i]);
+            }
+        }
+
         _levelChunkOptionEditors = new Editor[_levelChunkOptions.Length];
         for (int i = 0; i < _levelChunkOptions.Length; i++)
         {
