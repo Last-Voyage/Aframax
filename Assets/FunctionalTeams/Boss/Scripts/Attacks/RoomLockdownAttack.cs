@@ -18,29 +18,38 @@ public class RoomLockdownAttack : BaseBossAttack
     //attack 1 ref
     [Header("Attack 1")]
     [Space]
+
     [Tooltip("Link to indicator object that flashes red currently")]
     [SerializeField] private GameObject _bossAttack1Indicator;
     [SerializeField] private Material _lowOpacity;
     [SerializeField] private Material _hitOpacity;
-    [Tooltip("the scale of the attack (on a per room basis)")]
-    [SerializeField] private Vector3[] _attackScale;
-    [Tooltip("how fast the indicator blinks when it begins blinking")]
+
+    [Tooltip("The spawn locations of the attack")]
+    [SerializeField] private Vector3[] _spawnLocations;
+
+    [Tooltip("The scale of the attack (on a per room basis)")]
+    [SerializeField] private Vector3[] _attackScales;
+
+    [Tooltip("How fast the indicator blinks when it begins blinking")]
     [SerializeField] private float _startBlinkInterval = 1f;
     [Tooltip("How fast the indicator blinks right before it actually attacks")]
     [SerializeField] private float _endBlinkInterval = .1f;
     [Tooltip("How long the indicator will blink for")]
     [SerializeField] private float _blinkDuration = 3f;
-    [Tooltip("how long the actual attack will stay covering the room")]
+    [Tooltip("How long the actual attack will stay covering the room")]
     [SerializeField] private float _hitBoxAppearDuration = 1f;
+
+    private void Start()
+    {
+        _isAttackActive = false;
+    }
 
     /// <summary>
     /// links attack to boss attack manager
     /// </summary>
     private void OnEnable() 
     {
-        //this.GetAttackBegin().AddListener(ActivateThisAttack);
-        // Remove this once ActSystem is merged
-        BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
+        SubscribeToEvents();
     }
 
     /// <summary>
@@ -48,9 +57,27 @@ public class RoomLockdownAttack : BaseBossAttack
     /// </summary>
     private void OnDisable()
     {
-        //this.GetAttackBegin().RemoveListener(ActivateThisAttack);
-        // Remove this once ActSystem is merged
+        UnsubscribeToEvents();
+    }
+
+    protected override void SubscribeToEvents()
+    {
+        BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
         BossAttackManager.BeginRoomLockdownAttack -= ActivateThisAttack;
+    }
+
+    protected override void BeginAttack()
+    {
+        base.BeginAttack();
+    }
+
+    protected override void EndAttack()
+    {
+        base.EndAttack();
     }
 
     /// <summary>
@@ -67,9 +94,8 @@ public class RoomLockdownAttack : BaseBossAttack
     /// <returns></returns>
     private IEnumerator PerformAttack()
     {
-        // set the scale of the attack to a specified value for this room
-        // for now, we only have this affecting one room, so let's just take index 0
-        transform.localScale = _attackScale[0];
+        // Determine which room to attack
+        AttackRandomRoom();
 
         // tell the attack manager that we are attacking
         BossAttackManager.Instance.AttackInProgress = true;
@@ -105,5 +131,16 @@ public class RoomLockdownAttack : BaseBossAttack
         
         //end attack and cycle to another
         BossAttackManager.Instance.AttackInProgress = false;
+    }
+
+    /// <summary>
+    /// Chooses a random room inside the boat to attack
+    /// </summary>
+    private void AttackRandomRoom()
+    {
+        int randomRoom = UnityEngine.Random.Range(0, _spawnLocations.Length);
+
+        transform.position = _spawnLocations[randomRoom];
+        transform.localScale = _attackScales[randomRoom];
     }
 }
