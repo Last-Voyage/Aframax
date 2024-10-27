@@ -16,6 +16,10 @@ public class PlayerHealth : BaseHealth
 {
     public static PlayerHealth Instance;
 
+    //determins if the player should take damage
+    //This was added by Nabil for implementing god mode
+    public bool _shouldTakeDamage = true;
+
     #region Base Class
     //Performs the base starting functionality and sets the instance
     protected override void Awake()
@@ -82,6 +86,7 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     public void TempEnemyDamage(float damage)
     {
-        HealthDecrease(damage);
+        if (_shouldTakeDamage) { HealthDecrease(damage); }
+        
     }
 }
