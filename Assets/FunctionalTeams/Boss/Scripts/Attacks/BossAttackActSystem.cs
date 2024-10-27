@@ -16,7 +16,7 @@ using UnityEngine.Events;
 /// </summary>
 public class BossAttackActSystem : MonoBehaviour
 {
-    //Should hold a list of numbers which are being swapped into the current max attacks
+    //Should hold a list of Integers which each play the role of current max attacks for each act
     [Tooltip("How many attacks do you want per act")]
     [SerializeField] private int[] _attacksPerAct;
     //The max attacks for the current act we are on
@@ -76,15 +76,15 @@ public class BossAttackActSystem : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1f);
-            if(_isActOver )
+            if(_isActOver)
             {
                 for (int i = 0; i <= _currentMaxAttacks; ++i)
                 {
                     _attackCollection[_attackCounter].SetActive(true);
                     _attackCounter++;
                 }
-                _isActOver = false;
+               _isActOver = false;
+                yield return null;
             }
         }
     }
@@ -102,7 +102,13 @@ public class BossAttackActSystem : MonoBehaviour
     {
         InvokeActEnd();
     }
-
+    protected virtual void NextAct()
+    {
+        InvokeActEnd();
+        _actCounter++;
+        _currentMaxAttacks = _attacksPerAct[_actCounter];
+        InvokeActBegin();
+    }
     /// <summary>
     /// Act Management works as a way to listen to attack events and elaborate on what act it should be on
     /// And when it is over.
@@ -112,31 +118,36 @@ public class BossAttackActSystem : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(1f);
             //When the act is over move to the next one while notifying event system
             if(_isActOver)
             {
-                InvokeActEnd();
-                _actCounter++;
-                _currentMaxAttacks = _attacksPerAct[_actCounter];
-                InvokeActBegin();
+                NextAct();
             }
             if(_actCounter > _attackCollection.Length)
             {
-                //Does game end here??
+                //TODO: Game end here
             }
             if (_attackCounter == _attackOverCounter)
             {
                 _isActOver = true;
             }
+            yield return null
         }
     }
 
     #region Events
+    /// <summary>
+    /// A way for other scripts to see the act beginning
+    /// If needed something can listen to those from another script to do something
+    /// </summary>
     private void InvokeActBegin()
     {
         _actBegin?.Invoke();
     }
+    /// <summary>
+    /// A way for other scripts to see the act ending
+    /// If needed something can listen to those from another script to do something
+    /// </summary>
     private void InvokeActEnd()
     {
         _actEnd?.Invoke();
