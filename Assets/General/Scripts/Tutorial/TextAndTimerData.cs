@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         ScriptableUI.cs
+// File Name :         TextAndTimerData.cs
 // Author :            Nick Rice
 //                     
 // Creation Date :     10/23/24

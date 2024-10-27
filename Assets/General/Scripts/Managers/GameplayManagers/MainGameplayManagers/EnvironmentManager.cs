@@ -1,6 +1,6 @@
 /******************************************************************************
 // File Name:       EnvironmentManager.cs
-// Author:          Ryan Swanson
+// Author:          Ryan Swanson, Nick Rice
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides the functionality behind the way the environment interects with other elements

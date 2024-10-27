@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         ScriptableUI.cs
+// File Name :         TutorialPopUps.cs
 // Author :            Nick Rice
 //                     
 // Creation Date :     10/22/24
@@ -10,6 +10,9 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// This script handles the tutorial process, it's words, and objects
+/// </summary>
 public class TutorialPopUps : MonoBehaviour
 {
     [Tooltip("The UI element that will actually display the text")]
@@ -84,17 +87,17 @@ public class TutorialPopUps : MonoBehaviour
     {
         switch(_dataPointer)
         {
-            case 0:
+            case 0: // Sets the walk tutorial object active
                 _walkTutorialObject.SetActive(true);
                 break;
-            case 1:
+            case 1: // Adds the listener for harpoon focusing
                 PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(NextTutorial);
                 break;
-            case 2:
+            case 2: // Sets the shoot tutorial object active
                 _shootTutorialObject.SetActive(true);
                 break;
-            default:
-                StartCoroutine(WaitForEnd());
+            default: // Prevents the end message from instantly disappearing
+                StartCoroutine(EndMessageBuffer());
                 break;
         }
     }
@@ -123,7 +126,7 @@ public class TutorialPopUps : MonoBehaviour
     /// Adds time before finishing the tutorial to allow the final message to be read
     /// </summary>
     /// <returns></returns>
-    private IEnumerator WaitForEnd()
+    private IEnumerator EndMessageBuffer()
     {
         yield return new WaitForSeconds(2f);
         NextTutorial();
