@@ -33,9 +33,20 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     private UnityEvent _additiveLoadAddedEvent = new();
     private UnityEvent _additiveLoadRemovedEvent = new();
 
+    //private UnityEvent _onPlayerDeath = new();
+
     private void Awake()
     {
         SetupInstance();
+        SubscribeToEvents();
+    }
+
+    protected override void SubscribeToEvents()
+    {
+        //help this doesn't work aaaaaaaaaa
+        //PlayerManager.Instance._onPlayerDeath.AddListener(StartAsyncSceneLoadViaID(1, 1));
+        //StartAsyncSceneLoadViaID(DeathScreenSceneIndex, 0)
+        //SceneLoadingManager.Instance.GetSceneChangedEvent.AddListener(StartBackgroundAudio);
     }
 
     /// <summary>
