@@ -75,6 +75,8 @@ public class FullRoomAttack : MonoBehaviour
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
         var attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
+        VfxManager.Instance.GetEnemyAttackWarningVfx().PlayNextVfxInPool(attackMeshRenderer.transform.position, 
+            attackMeshRenderer.transform.rotation);
         //start blinking indicating attack will happen soon
         float elapsedTime = 0f;
         while(elapsedTime < _blinkDuration)
