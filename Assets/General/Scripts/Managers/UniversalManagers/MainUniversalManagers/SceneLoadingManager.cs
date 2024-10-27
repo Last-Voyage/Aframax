@@ -75,7 +75,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// </summary>
     public void LoadDeathScreen()
     {
-        // Jeremiah TODO: Implement the code to load death screen
+        StartAsyncSceneLoadViaID(SceneLoadingManager.Instance.DeathScreenSceneIndex, 0);
     }
 
     /// <summary>

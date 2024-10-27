@@ -158,8 +158,6 @@ public class PlayerManager : MainGameplayManagerFramework
     public void InvokeOnPlayerDeath()
     {
         _onPlayerDeath?.Invoke();
-        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(SceneLoadingManager.Instance.DeathScreenSceneIndex, 0);
-        //SceneLoadingManager.Instance.DeathReloadCurrentScene();
     }
     #endregion
 

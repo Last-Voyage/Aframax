@@ -704,24 +704,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BezierPoints:
-  - Point: {x: -6.0268497, y: -37.03207}
-    BackDir: {x: -3.661068, y: -6.233204}
-    ForwardDir: {x: 0, y: 3}
-  - Point: {x: 7.9254284, y: 13.59428}
-    BackDir: {x: 0, y: -3}
-    ForwardDir: {x: 0, y: 3}
-  - Point: {x: 20.445135, y: 49.566986}
-    BackDir: {x: 0, y: -3}
-    ForwardDir: {x: 0, y: 3.0000153}
-  - Point: {x: 38.354107, y: 85.69818}
-    BackDir: {x: 0, y: -3}
-    ForwardDir: {x: 0, y: 3.0000076}
-  - Point: {x: 60.64515, y: 122.935715}
-    BackDir: {x: 0, y: -3}
-    ForwardDir: {x: 0, y: 3.0000076}
+  - Point: {x: -6.0268497, y: -37.03207, z: 0}
+    BackDir: {x: -3.661068, y: -6.233204, z: 0}
+    ForwardDir: {x: 0, y: 3, z: 0}
+  - Point: {x: 7.9254284, y: 13.59428, z: 0}
+    BackDir: {x: 0, y: -3, z: 0}
+    ForwardDir: {x: 0, y: 3, z: 0}
+  - Point: {x: 20.445135, y: 49.566986, z: 0}
+    BackDir: {x: 0, y: -3, z: 0}
+    ForwardDir: {x: 0, y: 3.0000153, z: 0}
+  - Point: {x: 38.354107, y: 85.69818, z: 0}
+    BackDir: {x: 0, y: -3, z: 0}
+    ForwardDir: {x: 0, y: 3.0000076, z: 0}
+  - Point: {x: 60.64515, y: 122.935715, z: 0}
+    BackDir: {x: 0, y: -3, z: 0}
+    ForwardDir: {x: 0, y: 3.0000076, z: 0}
   CurveIntensity: 2
   HandleSize: 1
   CurveSmoothness: 15
+  Tweening: 1
 --- !u!4 &474401125
 Transform:
   m_ObjectHideFlags: 0
@@ -3417,12 +3418,22 @@ PrefabInstance:
     - target: {fileID: 2134041665675407905, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.4919549
+      objectReference: {fileID: 0}
+    - target: {fileID: 2134041665675407905, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.48812416
       objectReference: {fileID: 0}
     - target: {fileID: 2134041665675407905, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.51175094
+      objectReference: {fileID: 0}
+    - target: {fileID: 2134041665675407905, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.507766
       objectReference: {fileID: 0}
     - target: {fileID: 2224731888663267205, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -3463,6 +3474,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4199181614066228163, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      propertyPath: <DeathScreenSceneIndex>k__BackingField
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6379697610610471152, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
