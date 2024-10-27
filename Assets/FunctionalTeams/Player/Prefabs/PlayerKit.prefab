@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 3256320120288923392}
   - component: {fileID: 5137148187237992625}
   - component: {fileID: 3051451356196284552}
+  - component: {fileID: 3641362925933844938}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -136,11 +137,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  GROUNDED_CHECK_LENGTH: 0.2
+  _groundedCheckLength: 0.2
   _walkableLayers:
     serializedVersion: 2
     m_Bits: 1
-  _groundedCheckOrigin: {fileID: 4550902234336271058}
 --- !u!114 &2275719215793297427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +224,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &3641362925933844938
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822883443245373252}
+  m_Material: {fileID: 13400000, guid: c8f1e04fb02922e44ad275fde07af5c1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2581785293803075771
 GameObject:
   m_ObjectHideFlags: 0

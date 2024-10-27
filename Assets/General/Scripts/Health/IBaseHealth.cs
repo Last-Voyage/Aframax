@@ -11,14 +11,14 @@ using UnityEngine.Events;
 using UnityEngine;
 
 /// <summary>
-/// The class the will be referred from to call for certain functions
+/// The interface for all health functionality.
 /// </summary>
 public interface IBaseHealth
 {
     /// <summary>
     /// Initializes current health to max health
     /// </summary>
-    abstract void InitializeHealth();
+    abstract void InitializeHealth(float healthValue);
 
     /// <summary>
     /// Decreases health based on damage taken 
@@ -58,8 +58,7 @@ public interface IBaseHealth
     /// <summary>
     /// Access death event
     /// </summary>
-    /// <returns> Health the class death event </returns>
-    abstract UnityEvent<IBaseHealth> GetDeathEvent();
+    abstract UnityEvent GetDeathEvent();
 
     #endregion
 }
