@@ -15,32 +15,6 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerHealth : BaseHealth
 {
-    public static PlayerHealth Instance;
-
-    #region Class Initialization
-
-    private void Awake()
-    {
-        EstablishInstance();
-    }
-
-    /// <summary>
-    /// Establishes the instance and removes
-    /// </summary>
-    private void EstablishInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    #endregion
-
     /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
@@ -63,6 +37,9 @@ public class PlayerHealth : BaseHealth
 
         PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+
+        RuntimeSfxManager.APlayOneShotSFX?
+            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
     }
 
     /// <summary>
