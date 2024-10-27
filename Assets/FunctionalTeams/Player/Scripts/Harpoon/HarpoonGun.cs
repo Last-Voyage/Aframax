@@ -155,7 +155,8 @@ public class HarpoonGun : MonoBehaviour
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //Return when we can't shoot
-        if (_harpoonFiringState != EHarpoonFiringState.Ready || _currentFocusState != EFocusState.Focusing)
+        if (_harpoonFiringState != EHarpoonFiringState.Ready || _currentFocusState != EFocusState.
+Focusing)
         {
             return;
         }
@@ -188,6 +189,9 @@ public class HarpoonGun : MonoBehaviour
         CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
+
+        RuntimeSfxManager.APlayOneShotSFX?
+            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
 
         StartReloadProcess();
     }
@@ -245,6 +249,9 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFiringState = EHarpoonFiringState.Reloading;
 
         StartCoroutine(ReloadHarpoon());
+
+        RuntimeSfxManager.APlayOneShotSFX?
+            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
     }
 
     /// <summary>

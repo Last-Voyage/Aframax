@@ -10,6 +10,7 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Handles all SFX during runtime and how / where they play.
@@ -17,6 +18,8 @@ using UnityEngine;
 public class RuntimeSfxManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSFX;
+
+    private EventInstance _hardSurfaceWalkingEventInstance;
 
     #region Enable and Action Subscriptions
 
@@ -62,6 +65,17 @@ public class RuntimeSfxManager : AudioManager
         }
 
         RuntimeManager.PlayOneShot(eventReference, worldPosition);
+    }
+
+    /// <summary>
+    /// Plays footsteps when the player moves
+    /// </summary>
+    private void PlayFootSteps()
+    {
+        _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
+        _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
+        _hardSurfaceWalkingEventInstance.start();
+        _hardSurfaceWalkingEventInstance.release();
     }
 
     #endregion
