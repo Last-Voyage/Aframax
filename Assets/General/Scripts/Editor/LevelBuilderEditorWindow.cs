@@ -65,19 +65,6 @@ public class LevelBuilderEditorWindow : EditorWindow
 
     private float DisplayTextFileArea()
     {
-        Action[] buttonMethods = new Action[]
-        {
-            LoadFile,
-            SaveFile,
-            RefreshOptions
-        };
-        string[] buttonMethodNames = new string[]
-        {
-            "Load Level from\nSave File",
-            "Save Current Level\nOrder to File",
-            "Refresh Chunk List\n(Below)"
-        };
-
         Vector2 buttonSpacing = new(5, 5);
 
         Vector2 textAreaSize = new();
@@ -93,60 +80,67 @@ public class LevelBuilderEditorWindow : EditorWindow
         sideButtonSize.x = (GetWindowSize.x - (_settings.EdgeSpacing.x * 2) - buttonSpacing.x) * 0.25f;
         sideButtonSize.y = (textAreaSize.y - (2 * buttonSpacing.y)) / 3f;
 
-        for (int i = 0; i < 3; i++)
-        {
-            Vector2 buttonOffset = new();
-            buttonOffset.x = textAreaSize.x + buttonSpacing.x;
-            buttonOffset.y = (sideButtonSize.y + buttonSpacing.y) * i;
-            Rect buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
-
-            if (i == 1)
-            {
-                bool canWork = ValidTextArea();
-
-                GUIStyle style = new("button");
-                style.richText = true;
-
-                string buttonName = buttonMethodNames[i] + (!canWork ? "\n<color=red>Warning! Will not work!</color>" : "");
-
-                if (GUI.Button(buttonRect, buttonName, style))
-                {
-                    buttonMethods[i]();
-                }
-
-                continue;
-            }
-            if (GUI.Button(buttonRect, buttonMethodNames[i]))
-            {
-                buttonMethods[i]();
-            }
-        }
-
-        return textAreaSize.y + (2 * buttonSpacing.y);
-
-        void LoadFile()
+        Vector2 buttonOffset = new();
+        buttonOffset.x = textAreaSize.x + buttonSpacing.x;
+        buttonOffset.y = 0;
+        Rect buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        if (GUI.Button(buttonRect, "Load Level from\nSave File"))
         {
             _textAreaText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ChunkQueue.txt");
         }
-        void SaveFile()
+
+        buttonOffset.y = sideButtonSize.y + buttonSpacing.y;
+        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        bool canWork = ValidTextArea();
+        GUIStyle style = new("button");
+        style.richText = true;
+        string buttonName = "Save Current Level\nOrder to File" + (!canWork ? "\n<color=red>Warning! Will not work!</color>" : "");
+        if (GUI.Button(buttonRect, buttonName, style))
         {
             System.IO.File.WriteAllText(Application.streamingAssetsPath + "/ChunkQueue.txt", _textAreaText);
         }
-        void RefreshOptions()
+
+        buttonOffset.y = (sideButtonSize.y + buttonSpacing.y) * 2;
+        sideButtonSize.y = ((textAreaSize.y - (3 * buttonSpacing.y)) / 3f) * 0.7f;
+        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+
+        if (GUI.Button(buttonRect, "Refresh Chunk List\n(Below)", style))
         {
             RefreshLevelChunkOptions();
         }
+
+        float chunkDistance = FindObjectOfType<IterativeChunkLoad>().DistanceBetweenChunks;
+        buttonOffset.y += buttonSpacing.y + sideButtonSize.y;
+        buttonOffset.x += sideButtonSize.x * 0.75f;
+        sideButtonSize.y *= 0.4f;
+        sideButtonSize.x /= 4f;
+        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        chunkDistance = EditorGUI.FloatField(buttonRect, chunkDistance);
+        FindObjectOfType<IterativeChunkLoad>().SetChunkDistance(chunkDistance);
+
+        buttonOffset.x -= sideButtonSize.x * 3;
+        sideButtonSize.x *= 3f;
+        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        EditorGUI.LabelField(buttonRect, "Chunk Size");
+
+        return textAreaSize.y + (2 * buttonSpacing.y);
     }
 
     private void DisplayChunkOptionButtons(float extraAboveSpace)
     {
+        if (_levelChunkOptions == null
+            || _levelChunkOptions.Length == 0)
+        {
+            return;
+        }
+
         Vector2 buttonSize = new(75, 90);
         Vector2 buttonSpacing = new(5, 5);
 
         int buttonCount = _levelChunkOptions.Length;
         int buttonsPerLine = buttonCount;
 
-        for (int i = 0; i < buttonCount; i++)
+        for (int i = 0; i < buttonCount + 1; i++)
         {
             float currentTotalWidth = (i * buttonSize.x) + ((i - 1) * buttonSpacing.x) + (_settings.EdgeSpacing.x * 2);
 
@@ -227,8 +221,11 @@ public class LevelBuilderEditorWindow : EditorWindow
         {
             for (int i = 0; i < _levelChunkOptionEditors.Length; i++)
             {
-                _levelChunkOptionEditors[i].DiscardChanges();
-                DestroyImmediate(_levelChunkOptionEditors[i]);
+                if (_levelChunkOptionEditors[i] != null)
+                {
+                    _levelChunkOptionEditors[i].DiscardChanges();
+                    DestroyImmediate(_levelChunkOptionEditors[i]);
+                }
             }
         }
 
