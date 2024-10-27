@@ -38,6 +38,10 @@ public class PlayerHealth : BaseHealth
     /// <param name="damage"> amount to reduce health by </param>
     public override void TakeDamage(float damage)
     {
+        //if (_shouldTakeDamage) 
+        //{
+            //add damage code here
+        //}
         base.TakeDamage(damage);
 
         PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
