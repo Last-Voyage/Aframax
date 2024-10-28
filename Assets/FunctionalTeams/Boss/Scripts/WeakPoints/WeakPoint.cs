@@ -47,8 +47,7 @@ public class WeakPoint : MonoBehaviour
     /// </summary>
     private void PlayDeathSFX()
     {
-        //TODO: Uncomment when merged with SFX Manager
-        //SFXManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.weakPointDestroyed, transform.position);
+        RuntimeSfxManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.WeakPointDestroyed, transform.position);
     }
 
     #region Events
