@@ -13,7 +13,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// contains functionality for full room attack
 /// </summary>
-public class RoomLockdownAttack : BaseBossAttack
+public class RoomVineAttack : BaseBossAttack
 {
     //attack 1 ref
     [Header("Attack 1")]
@@ -23,12 +23,17 @@ public class RoomLockdownAttack : BaseBossAttack
     [SerializeField] private GameObject _bossAttack1Indicator;
     [SerializeField] private Material _lowOpacity;
     [SerializeField] private Material _hitOpacity;
+    [Space]
 
-    [Tooltip("The spawn locations of the attack")]
-    [SerializeField] private Vector3[] _spawnLocations;
-
-    [Tooltip("The scale of the attack (on a per room basis)")]
-    [SerializeField] private Vector3[] _attackScales;
+    [Tooltip("Tentacle Prefab goes here")]
+    [SerializeField] private GameObject _tentaclePrefab;
+    [Tooltip("The number of rooms where tentacles will spawn")]
+    [SerializeField] private int _roomsAttacked = 1;
+    [Tooltip("The maximum number of tentacles that can spawn in one room")]
+    [SerializeField] private int _maxEnemies = 3;
+    [Tooltip("The minimum number of tentacles that can spawn in one room")]
+    [SerializeField] private int _minEnemies = 1;
+    [Space]
 
     [Tooltip("How fast the indicator blinks when it begins blinking")]
     [SerializeField] private float _startBlinkInterval = 1f;
@@ -38,10 +43,18 @@ public class RoomLockdownAttack : BaseBossAttack
     [SerializeField] private float _blinkDuration = 3f;
     [Tooltip("How long the actual attack will stay covering the room")]
     [SerializeField] private float _hitBoxAppearDuration = 1f;
+    [Tooltip("Amount of time between attacks (in seconds)")]
+    [SerializeField] private float _timeBetweenAttacks = 3f;
+
+    private Vector3[] _spawnPoints = new Vector3[0];
+    private Vector3[] _attackScales = new Vector3[0];
+    private int _randomRoom = 0;
+    private GameObject[] _spawnedEnemies;
 
     private void Start()
     {
         _isAttackActive = false;
+        CreateRandomSpawnPoints();
     }
 
     /// <summary>
@@ -62,12 +75,12 @@ public class RoomLockdownAttack : BaseBossAttack
 
     protected override void SubscribeToEvents()
     {
-        BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
+        BossAttackManager.BeginRoomVineAttack += ActivateThisAttack;
     }
 
     protected override void UnsubscribeToEvents()
     {
-        BossAttackManager.BeginRoomLockdownAttack -= ActivateThisAttack;
+        BossAttackManager.BeginRoomVineAttack -= ActivateThisAttack;
     }
 
     protected override void BeginAttack()
@@ -80,12 +93,63 @@ public class RoomLockdownAttack : BaseBossAttack
         base.EndAttack();
     }
 
+    private void CreateRandomSpawnPoints()
+    {
+        _spawnPoints = new Vector3[] {new Vector3(11.92f, 8.5f, -9.11f),
+                                      new Vector3(14.86f, 8.5f, -2.52f),
+                                      new Vector3(14.81f, 8.5f, 4.92f),
+                                      new Vector3(10.91f, 8.5f, 17.63f),
+                                      new Vector3(10.95f, 8.5f, 11.5f),
+                                      new Vector3(8.91f, 8.5f, 0.59f)};
+
+        _attackScales = new Vector3[] {new Vector3(1.25f, 1, 0.7f),
+                                       new Vector3(0.5f, 1, 1.5f),
+                                       new Vector3(0.5f, 1, 1.2f),
+                                       Vector3.one,
+                                       new Vector3(1, 1, 1.2f),
+                                       new Vector3(0.52f, 1, 2.75f)};
+    }
+
     /// <summary>
     /// pretty self explanatory
     /// </summary>
     private void ActivateThisAttack()
     {
+        // tell the attack manager that we are attacking
+        BossAttackManager.Instance.AttackInProgress = true;
+
+        // Determine which room to attack
+        AttackRandomRoom();
+
+        SpawnTentacles();
         StartCoroutine(PerformAttack());
+    }
+
+    /// <summary>
+    /// Chooses a random room inside the boat to attack
+    /// </summary>
+    private void AttackRandomRoom()
+    {
+        _randomRoom = UnityEngine.Random.Range(0, _spawnPoints.Length);
+
+        transform.position = _spawnPoints[_randomRoom];
+        transform.localScale = _attackScales[_randomRoom];
+    }
+
+    private void SpawnTentacles()
+    {
+        _spawnedEnemies = new GameObject[UnityEngine.Random.Range(_minEnemies, _maxEnemies)];
+
+        for (int i = 0; i < _spawnedEnemies.Length; i++)
+        {
+            float xDiff = (float)(UnityEngine.Random.Range(-25, 25)) / 100f;
+            float zDiff = (float)(UnityEngine.Random.Range(-25, 25)) / 100f;
+            float yRotation = UnityEngine.Random.Range(-180, 180);
+
+            _spawnedEnemies[i] = Instantiate(_tentaclePrefab, transform);
+            _spawnedEnemies[i].transform.position = transform.position + new Vector3(xDiff, 0, zDiff);
+            _spawnedEnemies[i].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
+        }
     }
 
     /// <summary>
@@ -94,12 +158,6 @@ public class RoomLockdownAttack : BaseBossAttack
     /// <returns></returns>
     private IEnumerator PerformAttack()
     {
-        // Determine which room to attack
-        AttackRandomRoom();
-
-        // tell the attack manager that we are attacking
-        BossAttackManager.Instance.AttackInProgress = true;
-
         // setting attack indicator
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
@@ -114,7 +172,7 @@ public class RoomLockdownAttack : BaseBossAttack
             yield return new WaitForSeconds(currentBlinkInterval);
             attackMeshRenderer.enabled = false;
             yield return new WaitForSeconds(currentBlinkInterval);
-            elapsedTime+= currentBlinkInterval * 2;
+            elapsedTime += currentBlinkInterval * 2;
         }
 
         // after done blinking make the block solid and enable collider to hit player for a second
@@ -131,16 +189,8 @@ public class RoomLockdownAttack : BaseBossAttack
         
         //end attack and cycle to another
         BossAttackManager.Instance.AttackInProgress = false;
-    }
 
-    /// <summary>
-    /// Chooses a random room inside the boat to attack
-    /// </summary>
-    private void AttackRandomRoom()
-    {
-        int randomRoom = UnityEngine.Random.Range(0, _spawnLocations.Length);
-
-        transform.position = _spawnLocations[randomRoom];
-        transform.localScale = _attackScales[randomRoom];
+        // wait before attacking again
+        yield return new WaitForSeconds(_timeBetweenAttacks);
     }
 }

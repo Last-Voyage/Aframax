@@ -31,7 +31,7 @@ public class BossAttackManager : MonoBehaviour
     #region Attack Events
 
     private Action[] _bossAttacks;
-    public static event Action BeginRoomLockdownAttack;
+    public static event Action BeginRoomVineAttack;
     public static event Action BeginInteriorTongueAttack;
 
     #endregion
@@ -68,8 +68,8 @@ public class BossAttackManager : MonoBehaviour
     /// </summary>
     private void BeginAttackAct1()
     {
-        BeginInteriorTongueAttack?.Invoke();
-        BeginRoomLockdownAttack?.Invoke();
+        //BeginInteriorTongueAttack?.Invoke();
+        BeginRoomVineAttack?.Invoke();
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class BossAttackManager : MonoBehaviour
     private void InitializeBossAttackList()
     {
         //add more attacks here
-        _bossAttacks = new Action[]{BeginRoomLockdownAttack, BeginInteriorTongueAttack};
+        _bossAttacks = new Action[]{BeginRoomVineAttack, BeginInteriorTongueAttack};
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class BossAttackManager : MonoBehaviour
                 yield return new WaitForSeconds(_timeBetweenAttacks);
                 //call random attack to start from the list of attacks
                 //_bossAttacks[UnityEngine.Random.Range(0, _bossAttacks.Length)]?.Invoke();
-                _bossAttacks[1]?.Invoke();
+                _bossAttacks[0]?.Invoke();
             }
             yield return null;
         }

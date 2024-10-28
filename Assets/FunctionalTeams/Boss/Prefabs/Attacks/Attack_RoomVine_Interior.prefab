@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 7016663598977083007}
   - component: {fileID: 6141475541131587144}
   m_Layer: 0
-  m_Name: Attack_RoomLockdown_Interior
+  m_Name: Attack_RoomVine_Interior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,16 +182,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523066aca1dad9f4c993a49d0e0bb3e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackObjects: []
-  _spawnLocation:
-  - {fileID: 2713247815593934146}
-  _damageAmount: 20
   _bossAttack1Indicator: {fileID: 5070173258191180023}
   _lowOpacity: {fileID: 2100000, guid: 3cf942017024886408138171bf9b1754, type: 2}
   _hitOpacity: {fileID: 2100000, guid: 9aea404ddd86d7c4e85eb5dea180f724, type: 2}
-  _attackScale:
-  - {x: 1, y: 1, z: 1}
+  _tentaclePrefab: {fileID: 0}
+  _roomsAttacked: 1
+  _maxEnemies: 3
+  _minEnemies: 1
   _startBlinkInterval: 1
   _endBlinkInterval: 0.1
-  _blinkDuration: 3
+  _blinkDuration: 5
   _hitBoxAppearDuration: 1
+  _timeBetweenAttacks: 3
