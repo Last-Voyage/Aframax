@@ -30,7 +30,7 @@ public class FastIKFabric : MonoBehaviour
     private float _completeLength;
     private Transform[] _bones;
     private Vector3[] _jointPositions;
-    private Vector3[] _startDirection; // start direciton of all the joins
+    private Vector3[] _startDirection; // start direction of all the joins
     private Quaternion[] _startRotationBone;
     private Quaternion _startRotationTarget;
     private Transform _root;
