@@ -303,6 +303,8 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void DirectionalInputStarted()
     {
+        PlayerManager.Instance.InvokeOnMovementStartedEvent();
+
         StopAccelerationDeccelerationCoroutines();
 
         StartInitialMovementAcceleration();
@@ -313,6 +315,8 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void DirectionalInputStopped()
     {
+        PlayerManager.Instance.InvokeOnMovementEndedEvent();
+
         StopAccelerationDeccelerationCoroutines();
 
         StartMovementDecceleration();
