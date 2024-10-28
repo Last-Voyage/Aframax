@@ -205,8 +205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a667200f2ae8459b397bc03e59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: {x: 3, y: 0, z: 0}
-  Start: {x: 0, y: 0, z: 0}
+  _direction: {x: 5, y: 0, z: 0}
+  _start: {x: 0, y: 0, z: 0}
 --- !u!1 &2910179870582379614
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,8 +520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a667200f2ae8459b397bc03e59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: {x: -1, y: 2, z: 0}
-  Start: {x: 0, y: 0, z: 0}
+  _direction: {x: 0, y: 0, z: 0}
+  _start: {x: 0, y: 0, z: 0}
 --- !u!114 &3727716188669175149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,13 +534,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e46d0b2e44bb41e41acf1496ba93dbda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  parent: {fileID: 5693276074052173589}
-  attractionRange: 8
-  maxDistanceFromParent: 4
-  stopFollowDistance: 1
-  moveSpeed: 0.6
-  rotationSpeed: 0.3
+  _target: {fileID: 0}
+  _parent: {fileID: 5693276074052173589}
+  _attractionRange: 8
+  _maxDistanceFromParent: 8.5
+  _stopFollowDistance: 1
+  _followSpeed: 0.5
+  _rotateSpeed: 0.5
 --- !u!1 &5315145319613912201
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,12 +947,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ca45bb53dc94f478358a1b6475653d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChainLength: 12
-  Target: {fileID: 2803977282962513188}
-  Pole: {fileID: 8716522877832433617}
-  Iterations: 10
-  Delta: 0.001
-  SnapBackStrength: 1
+  _chainLength: 11
+  _target: {fileID: 2803977282962513188}
+  _pole: {fileID: 8716522877832433617}
+  _iterations: 10
+  _delta: 0.001
+  _snapBackStrength: 1
 --- !u!1 &8669615697796527803
 GameObject:
   m_ObjectHideFlags: 0

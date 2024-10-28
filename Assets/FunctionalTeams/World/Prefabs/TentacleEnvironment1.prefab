@@ -118,8 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a667200f2ae8459b397bc03e59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: {x: -1, y: 2, z: 0}
-  Start: {x: 0, y: 0, z: 0}
+  _direction: {x: -1, y: 2, z: 0}
+  _start: {x: 0, y: 0, z: 0}
 --- !u!1 &3056682689088472654
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,8 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a667200f2ae8459b397bc03e59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: {x: 3, y: 0, z: 0}
-  Start: {x: 0, y: 0, z: 0}
+  _direction: {x: 5, y: 0, z: 0}
+  _start: {x: 0, y: 0, z: 0}
 --- !u!1 &5707721302909558343
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,12 +718,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ca45bb53dc94f478358a1b6475653d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChainLength: 12
-  Target: {fileID: 8790000536942291695}
-  Pole: {fileID: 100184871748600511}
-  Iterations: 10
-  Delta: 0.001
-  SnapBackStrength: 1
+  _chainLength: 12
+  _target: {fileID: 8790000536942291695}
+  _pole: {fileID: 100184871748600511}
+  _iterations: 10
+  _delta: 0.001
+  _snapBackStrength: 1
 --- !u!4 &4828024772829736408 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2662686532825816763, guid: f784daf03b7b0d641b327d9e38b5676c,
