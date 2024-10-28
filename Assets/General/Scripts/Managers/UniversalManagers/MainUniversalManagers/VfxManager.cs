@@ -31,6 +31,11 @@ public class VfxManager : MainUniversalManagerFramework
 
     [SerializeField] private SpecificVisualEffect[] _allVfxInGame;
 
+    //Personally don't like to have to use ids. Let me know if you have a better solution
+    private const int MUZZLE_SMOKE_ID = 0;
+    private const int ENEMY_BLOOD_ID = 1;
+    private const int ENEMY_ATTACK_WARNING_ID = 2;
+
     /// <summary>
     /// Sets up the object pool of all vfx
     /// </summary>
@@ -133,6 +138,16 @@ public class VfxManager : MainUniversalManagerFramework
         SetUpAllVfxInGame();
     }
     #endregion
+
+    #region Getters
+
+    #region GetVfx
+    public SpecificVisualEffect GetMuzzleSmokeVfx() => _allVfxInGame[MUZZLE_SMOKE_ID];
+    public SpecificVisualEffect GetEnemyBloodVfx() => _allVfxInGame[ENEMY_BLOOD_ID];
+    public SpecificVisualEffect GetEnemyAttackWarningVfx() => _allVfxInGame[ENEMY_ATTACK_WARNING_ID];
+    #endregion
+
+    #endregion
 }
 
 /// <summary>
@@ -142,6 +157,9 @@ public class VfxManager : MainUniversalManagerFramework
 [System.Serializable]
 public class SpecificVisualEffect
 {
+    [Tooltip("Name of the visual effect")]
+    [SerializeField] private string _vfxName;
+    
     [Tooltip("The vfx that is created")]
     [SerializeField] private GameObject _vfxObject;
     [Tooltip("How large the object pool is for the object")]
