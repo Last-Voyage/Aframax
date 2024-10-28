@@ -33,8 +33,6 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     private UnityEvent _additiveLoadAddedEvent = new();
     private UnityEvent _additiveLoadRemovedEvent = new();
 
-    //private UnityEvent _onPlayerDeath = new();
-
     private void Awake()
     {
         SetupInstance();
