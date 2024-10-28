@@ -131,7 +131,7 @@ public class BossAttackActSystem : MonoBehaviour
             {
                 _isActOver = true;
             }
-            yield return null
+            yield return null;
         }
     }
 
