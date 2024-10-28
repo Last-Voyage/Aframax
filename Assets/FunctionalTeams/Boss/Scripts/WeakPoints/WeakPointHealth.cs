@@ -1,6 +1,7 @@
 /*********************************************************************************************************************
 // File Name :         WeakPointHealth.cs
 // Author :            Andrea Swihart-DeCoster
+// Contributor :       Ryan Swanson
 // Creation Date :     10/23/24
 //
 // Brief Description : Controls the weak point health
