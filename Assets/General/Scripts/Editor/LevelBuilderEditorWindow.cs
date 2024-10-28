@@ -144,10 +144,10 @@ public class LevelBuilderEditorWindow : EditorWindow
         buttonRect = new(_edgeSpacing + buttonOffset, sideButtonSize);
 
         // Change the text on the button if unable to save safely
-        bool validText = ValidTextArea();
+        bool isValidText = ValidTextArea();
         GUIStyle buttonStyle = new("button");
         buttonStyle.richText = true;
-        string buttonName = "Save Current Level\nOrder to File" + (!validText ? "\n<color=red>Warning! Will not work!</color>" : "");
+        string buttonName = "Save Current Level\nOrder to File" + (!isValidText ? "\n<color=red>Warning! Will not work!</color>" : "");
 
         // Display the button
         if (GUI.Button(buttonRect, buttonName, buttonStyle))
