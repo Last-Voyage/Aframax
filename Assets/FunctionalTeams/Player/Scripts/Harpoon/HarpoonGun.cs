@@ -2,6 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 //                     Ryan Swanson
+//                     Adam Garwacki
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -20,7 +21,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Contains the state in which the harpoon shooting functionality is in
     /// </summary>
-    private enum EHarpoonFiringState
+    public enum EHarpoonFiringState
     {
         Ready,
         Firing,
@@ -30,7 +31,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Contains the state in which the harpoon focusing is currently in
     /// </summary>
-    private enum EFocusState
+    public enum EFocusState
     {
         None,
         Focusing,
@@ -112,6 +113,47 @@ public class HarpoonGun : MonoBehaviour
     private float travelDistance;
 
     private PlayerInputMap _playerInputMap;
+    
+    /// <summary>
+    /// The focus accuracy (or potential deviation) of the harpoon.
+    /// HI, THIS WAS MADE BY ADAM, IS THIS OKAY TO HAVE BEEN MADE?
+    /// </summary>
+    /// <returns>Deviation range of shots. Higher number means more spread.</returns>
+    public float CurrentFocusAccuracy()
+    {
+        return _currentFocusAccuracy;
+    }
+    
+    /// <summary>
+    /// The maximum inaccuracy of the harpoon gun.
+    /// MORE GETTERS!
+    /// </summary>
+    /// <returns></returns>
+    public float FocusStartingInaccuracy()
+    {
+        return _focusStartingInaccuracy;
+    }
+
+    /// <summary>
+    /// The state of focusing.
+    /// MORE PUBLIC DECLARATIONS HAVE BEEN MADE
+    /// </summary>
+    /// <returns>The current state of focusing.</returns>
+    public EFocusState CurrentFocusState()
+    {
+        return _currentFocusState;
+    }
+
+    /// <summary>
+    /// Whether a harpoon is ready to be fired or not.
+    /// THIS ONE IS NEW TOO
+    /// </summary>
+    /// <returns>Current firing state of the player's harpoon.</returns>
+    public EHarpoonFiringState HarpoonFiringState()
+    {
+        return _harpoonFiringState;
+    }
+
     #endregion
 
     #region Setup
