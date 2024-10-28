@@ -26,7 +26,7 @@ public class RoomVineAttack : BaseBossAttack
     [Tooltip("Set locations for tentacle spawns here. If this list is empty, random locations will be added")]
     [SerializeField] private Vector3[] _setSpawnPoints;
     [Tooltip("Set prefab scales for the set tentacle spawns here. " +
-        "Index i in this list will correlate to index i in that list")]
+        "Index i in this list will correlate to index i in the spawn point list")]
     [SerializeField] private Vector3[] _setAttackScales;
     [Tooltip("The number of rooms where tentacles will spawn")]
     [SerializeField] private int _roomsAttacked = 1;
@@ -46,6 +46,10 @@ public class RoomVineAttack : BaseBossAttack
     [SerializeField] private float _hitBoxAppearDuration = 1f;
     [Tooltip("Amount of time between attacks (in seconds)")]
     [SerializeField] private float _timeBetweenAttacks = 3f;
+    [Space]
+
+    [Tooltip("Player Transform goes here to detect when to attack")]
+    [SerializeField] private Transform _playerTransform;
 
     private Vector3[] _spawnPoints = new Vector3[0];
     private Vector3[] _attackScales = new Vector3[0];
@@ -177,34 +181,37 @@ public class RoomVineAttack : BaseBossAttack
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
         var attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
 
-        //start blinking indicating attack will happen soon
-        float elapsedTime = 0f;
-        while(elapsedTime < _blinkDuration)
+        if (Vector3.Distance(transform.position, _playerTransform.position) < 1)
         {
-            float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
+            //start blinking indicating attack will happen soon
+            float elapsedTime = 0f;
+            while (elapsedTime < _blinkDuration)
+            {
+                float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
+                attackMeshRenderer.enabled = true;
+                yield return new WaitForSeconds(currentBlinkInterval);
+                attackMeshRenderer.enabled = false;
+                yield return new WaitForSeconds(currentBlinkInterval);
+                elapsedTime += currentBlinkInterval * 2;
+            }
+
+            // after done blinking make the block solid and enable collider to hit player for a second
+            attackMeshRenderer.material = _hitOpacity;
             attackMeshRenderer.enabled = true;
-            yield return new WaitForSeconds(currentBlinkInterval);
+            attackCollider.enabled = true;
+
+            //wait for hit time
+            yield return new WaitForSeconds(_hitBoxAppearDuration);
+
+            //disable the enabled
             attackMeshRenderer.enabled = false;
-            yield return new WaitForSeconds(currentBlinkInterval);
-            elapsedTime += currentBlinkInterval * 2;
+            attackCollider.enabled = false;
+
+            //end attack and cycle to another
+            BossAttackManager.Instance.AttackInProgress = false;
+
+            // wait before attacking again
+            yield return new WaitForSeconds(_timeBetweenAttacks);
         }
-
-        // after done blinking make the block solid and enable collider to hit player for a second
-        attackMeshRenderer.material = _hitOpacity;
-        attackMeshRenderer.enabled = true;
-        attackCollider.enabled = true;
-
-        //wait for hit time
-        yield return new WaitForSeconds(_hitBoxAppearDuration);
-
-        //disable the enabled
-        attackMeshRenderer.enabled = false;
-        attackCollider.enabled = false;
-        
-        //end attack and cycle to another
-        BossAttackManager.Instance.AttackInProgress = false;
-
-        // wait before attacking again
-        yield return new WaitForSeconds(_timeBetweenAttacks);
     }
 }
