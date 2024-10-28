@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerCollision.cs
 // Author :            Ryan Swanson
+// Contributor:        Andrea Swihart-DeCoster
 // Creation Date :     10/16/24
 //
 // Brief Description : Controls the functionality for collisions
@@ -25,7 +26,7 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        CheckForKillboxContact(other.gameObject);
+        CheckForKillBoxContact(other.gameObject);
 
         CheckForEnemyContact(other.gameObject);
     }
@@ -50,7 +51,7 @@ public class PlayerCollision : MonoBehaviour
     /// Checks if the player hit a killbox
     /// </summary>
     /// <param name="other"></param>
-    private void CheckForKillboxContact(GameObject contact)
+    private void CheckForKillBoxContact(GameObject contact)
     {
         if(contact.CompareTag(KILLBOX_TAG))
         {
@@ -64,16 +65,7 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="collision"></param>
     private void CheckForEnemyContact(GameObject contact)
     {
-        //Currently using this until Mark is done with his universal damage system
-        //TEMPORARY!
-        EnemyDamageTemp enemyDamageTemp = contact.gameObject.GetComponentInChildren<EnemyDamageTemp>();
-        if(enemyDamageTemp!=null)
-        {
-            //THIS IS TEMPORARY - Waiting for Marks Damage system which I imagine
-            //will complete the needed functionality to connect damage to health
-            //Delete this immediately after the universal damage system is implemented
-            GetComponentInParent<IBaseHealth>().TakeDamage(enemyDamageTemp.AttackPower);
-        }
+        //TODO: Implement later
     }
     
     #endregion
