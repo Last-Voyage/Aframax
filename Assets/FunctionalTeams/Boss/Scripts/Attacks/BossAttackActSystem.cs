@@ -43,12 +43,11 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _isActOver = true;
         _currentMaxAttacks = _attacksPerAct[_actCounter];
         InvokeActBegin();
         AttackListentoActs();
-        StartCoroutine(AttackManagement());
-        StartCoroutine(ActManagement());
+        ActManagement();
+        AttackManagement();
     }
     /// <summary>
     /// A way for attacks that are dropped in to listen for when an act ends
@@ -67,26 +66,23 @@ public class BossAttackActSystem : MonoBehaviour
     protected void AttackEnd()
     {
         ++_attackOverCounter;
+        AttackManagement();
     }
     /// <summary>
     /// A way of being able to cycle through as many attack as the acts need
     /// </summary>
     /// <returns></returns>
-    private IEnumerator AttackManagement()
+    protected void AttackManagement()
     {
-        while (true)
-        {
-            if(_isActOver)
-            {
-                for (int i = 0; i <= _currentMaxAttacks; ++i)
-                {
-                    _attackCollection[_attackCounter].SetActive(true);
-                    _attackCounter++;
-                }
-               _isActOver = false;
-                yield return null;
-            }
-        }
+         if(_isActOver)
+         {
+             for (int i = 0; i <= _currentMaxAttacks; ++i)
+             {
+                 _attackCollection[_attackCounter].SetActive(true);
+                 _attackCounter++;
+             }
+            _isActOver = false;
+         }
     }
     /// <summary>
     /// Act beginning for attack
@@ -102,6 +98,9 @@ public class BossAttackActSystem : MonoBehaviour
     {
         InvokeActEnd();
     }
+    /// <summary>
+    /// A way of moving to a new act while showing through events whats its doing to other scripts
+    /// </summary>
     protected virtual void NextAct()
     {
         InvokeActEnd();
@@ -114,10 +113,8 @@ public class BossAttackActSystem : MonoBehaviour
     /// And when it is over.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator ActManagement()
+    protected void ActManagement()
     {
-        while(true)
-        {
             //When the act is over move to the next one while notifying event system
             if(_isActOver)
             {
@@ -131,8 +128,6 @@ public class BossAttackActSystem : MonoBehaviour
             {
                 _isActOver = true;
             }
-            yield return null;
-        }
     }
 
     #region Events
