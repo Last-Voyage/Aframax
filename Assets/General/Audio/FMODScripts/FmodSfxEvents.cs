@@ -30,6 +30,10 @@ public class FmodSfxEvents : MonoBehaviour
 
     [field: Header("Player")]
     [field: SerializeField] public EventReference HardSurfaceWalking { get; private set; }
+    [field: Tooltip("Speed the footsteps play")]
+    [field: SerializeField] public float FootstepSpeed { get; private set; } = 0.3f;
+
+    [field: Space]
     [field: SerializeField] public EventReference PlayerTookDamage { get; private set; }
 
     #region Harpoon

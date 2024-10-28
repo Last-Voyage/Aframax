@@ -11,6 +11,7 @@ using System.Collections;
 using System.Linq.Expressions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -59,7 +60,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private LayerMask _walkableLayers;
 
     private Transform _playerVisuals;
-    private bool _isGrounded = false;
+    public static bool IsGrounded { get; private set; } = false;
     private Transform _groundedCheckOrigin;
 
     [Tooltip("Size of boxcast for the grounded check")]
@@ -79,6 +80,11 @@ public class PlayerMovementController : MonoBehaviour
     /// Movement coroutine related variables
     /// </summary>
     private Coroutine _movementCoroutine;
+
+    /// <summary>
+    /// Updates the player movement state, true if moving, false otherwise
+    /// </summary>
+    public static UnityEvent<bool> UpdateMovingState { get; private set; } = new();
 
     #region Setup
     /// <summary>
@@ -236,10 +242,10 @@ public class PlayerMovementController : MonoBehaviour
     private void GroundedCheck()
     {
         //Checks for if the player is grounded based on a boxcast
-        _isGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
+        IsGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
             transform.up*-1, out _groundHit, Quaternion.identity,_groundedCheckLength,_walkableLayers);
 
-        _playerRigidBody.useGravity = !_isGrounded;
+        _playerRigidBody.useGravity = !IsGrounded;
     }
 
     /// <summary>
@@ -256,7 +262,7 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 newMovement = (_playerVisuals.right * moveDir.x +
             _playerVisuals.forward * moveDir.y) * _currentFocusMoveSpeedMultiplier;
         
-        if(_isGrounded)
+        if(IsGrounded)
         {
             //Projects the movement onto the surface that is being stood on
             //This movement will be vertical when on a sloped surface
@@ -272,7 +278,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Vector3 HandleVerticalMovement()
     {
-        if (_isGrounded)
+        if (IsGrounded)
         {
             return Vector3.zero;
         }
@@ -484,12 +490,18 @@ public class PlayerMovementController : MonoBehaviour
         if (change)
         {
             _movementCoroutine = StartCoroutine(ResolveMovement());
+            UpdateMovingState?.Invoke(true);
         }
         else
         {
             StopCoroutine(_movementCoroutine);
             _playerRigidBody.velocity = Vector3.zero;
+            UpdateMovingState?.Invoke(false);
         }
     }
     #endregion
+
+    #region  Getters
+
+    #endregion Getters
 }
