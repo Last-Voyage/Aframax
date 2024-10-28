@@ -7,6 +7,8 @@
 // Description:     Spawns the weakpoints on some part of the boss (tentacles,etc)
 ******************************************************************************/
 
+using FMODUnity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -133,7 +135,7 @@ public class WeakPointHandler : MonoBehaviour
     /// <returns></returns>
     private Transform DetermineWeakPointSpawnLocation()
     {
-        return _possibleSpawnLocations[Random.Range(0, _possibleSpawnLocations.Count)];
+        return _possibleSpawnLocations[UnityEngine.Random.Range(0, _possibleSpawnLocations.Count)];
     }
 
     #endregion
@@ -170,6 +172,7 @@ public class WeakPointHandler : MonoBehaviour
     private void MaxWeakPointsDestroyed()
     {
         InvokeAllWeakPointsDestroyedEvent();
+        RuntimeSfxManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, _parentGameObject.transform.position);
 
         Destroy(_parentGameObject);
     }
