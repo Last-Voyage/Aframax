@@ -10,23 +10,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// functionality for moving the camera on the title screen
+/// </summary>
 public class TitleScreenScrolling : MonoBehaviour
 {
-    [SerializeField] private Vector3 bottomCameraPosition;
+    [SerializeField] private Vector3 _bottomCameraPosition;
 
-    [SerializeField] private float screenScrollSpeed;
+    [SerializeField] private float _screenScrollSpeed;
 
-    private Camera mainCamera;
+    private Camera _mainCamera;
 
     private PlayerInputMap _playerInputControls;
 
-    private bool _scrollingStarted = false;
+    private bool _hasScrollingStarted = false;
 
     private void Awake()
     {
-        mainCamera = Camera.main;
+        _mainCamera = Camera.main;
         _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(MoveCamera(bottomCameraPosition, screenScrollSpeed));
+        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(MoveCamera(_bottomCameraPosition, _screenScrollSpeed));
     }
 
     /// <summary>
@@ -36,12 +39,12 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <returns></returns>
     private IEnumerator MoveCamera(Vector3 destination, float scrollSpeed)
     {
-        if (_scrollingStarted == false)
+        if (_hasScrollingStarted == false)
         {
-            _scrollingStarted = true;
-            while (mainCamera.transform.position != destination)
+            _hasScrollingStarted = true;
+            while (_mainCamera.transform.position != destination)
             {
-                mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, destination, scrollSpeed * Time.deltaTime);
+                _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, destination, scrollSpeed * Time.deltaTime);
 
                 yield return null;
             }
