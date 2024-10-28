@@ -26,13 +26,24 @@ public class LevelBuilderEditorWindow : EditorWindow
     private Editor[] _levelChunkOptionEditors;
 
     // Various settings to ensure that the window functions correctly
-    private EditorWindowSettings _settings;
     private string _previousTextAreaText;
     private string _textAreaText;
     private int[] _lastThreeValues;
 
-    // A getter for the window's current size
-    private Vector2 GetWindowSize => position.size;
+    // Static UI element sizes
+    private static Vector2 _buttonSpacing = new(5, 5);
+    private static Vector2 _edgeSpacing = new(10, 10);
+    private static float _textAreaHeight = 200f;
+
+    // Static grid UI element sizes
+    private static Vector2 _gridButtonSize = new(75, 90);
+    private static Vector2 _gridButtonSpacing = new(5, 5);
+
+    /// <summary>
+    /// A getter for the current window size
+    /// </summary>
+    /// <returns>The current editor window's size</returns>
+    private Vector2 GetWindowSize() => position.size;
 
     /// <summary>
     /// Once the window is made, set all the variables to default values
@@ -40,8 +51,6 @@ public class LevelBuilderEditorWindow : EditorWindow
     private void OnEnable()
     {
         _textAreaText = "";
-        _settings = new();
-        _settings.EdgeSpacing = new(10, 10);
 
         // Make sure that it doesn't restrict any chunks from being selected
         _lastThreeValues = new int[3]
@@ -100,15 +109,12 @@ public class LevelBuilderEditorWindow : EditorWindow
     /// <returns>The amount of vertical space needed to display something under it</returns>
     private float DisplayTextFileArea()
     {
-        // Define the button padding width and height
-        Vector2 buttonSpacing = new(5, 5);
-
         // Define the text area's size
         Vector2 textAreaSize = new();
-        textAreaSize.x = (GetWindowSize.x - (_settings.EdgeSpacing.x * 2) - buttonSpacing.x) * 0.75f;
-        textAreaSize.y = 200f;
+        textAreaSize.x = (GetWindowSize().x - (_edgeSpacing.x * 2) - _buttonSpacing.x) * 0.75f;
+        textAreaSize.y = _textAreaHeight;
 
-        Vector2 textAreaPosition = _settings.EdgeSpacing;
+        Vector2 textAreaPosition = _edgeSpacing;
 
         // Convert everything into a rect for the text area, and display it
         Rect textAreaRect = new(textAreaPosition, textAreaSize);
@@ -117,16 +123,16 @@ public class LevelBuilderEditorWindow : EditorWindow
         // ----- Button 1: Load Level -----
         // Set default values for the side buttons' size
         Vector2 sideButtonSize;
-        sideButtonSize.x = (GetWindowSize.x - (_settings.EdgeSpacing.x * 2) - buttonSpacing.x) * 0.25f;
-        sideButtonSize.y = (textAreaSize.y - (2 * buttonSpacing.y)) / 3f;
+        sideButtonSize.x = (GetWindowSize().x - (_edgeSpacing.x * 2) - _buttonSpacing.x) * 0.25f;
+        sideButtonSize.y = (textAreaSize.y - (2 * _buttonSpacing.y)) / 3f;
 
         // Set default values for the side buttons' position
         Vector2 buttonOffset = new();
-        buttonOffset.x = textAreaSize.x + buttonSpacing.x;
+        buttonOffset.x = textAreaSize.x + _buttonSpacing.x;
         buttonOffset.y = 0;
 
         // Display the button
-        Rect buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        Rect buttonRect = new(_edgeSpacing + buttonOffset, sideButtonSize);
         if (GUI.Button(buttonRect, "Load Level from\nSave File"))
         {
             _textAreaText = System.IO.File.ReadAllText(Application.streamingAssetsPath + "/ChunkQueue.txt");
@@ -134,36 +140,36 @@ public class LevelBuilderEditorWindow : EditorWindow
 
         // ----- Button 2: Save Level -----
         // Update the position
-        buttonOffset.y = sideButtonSize.y + buttonSpacing.y;
-        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        buttonOffset.y = sideButtonSize.y + _buttonSpacing.y;
+        buttonRect = new(_edgeSpacing + buttonOffset, sideButtonSize);
 
         // Change the text on the button if unable to save safely
-        bool canWork = ValidTextArea();
-        GUIStyle style = new("button");
-        style.richText = true;
-        string buttonName = "Save Current Level\nOrder to File" + (!canWork ? "\n<color=red>Warning! Will not work!</color>" : "");
+        bool validText = ValidTextArea();
+        GUIStyle buttonStyle = new("button");
+        buttonStyle.richText = true;
+        string buttonName = "Save Current Level\nOrder to File" + (!validText ? "\n<color=red>Warning! Will not work!</color>" : "");
 
         // Display the button
-        if (GUI.Button(buttonRect, buttonName, style))
+        if (GUI.Button(buttonRect, buttonName, buttonStyle))
         {
             System.IO.File.WriteAllText(Application.streamingAssetsPath + "/ChunkQueue.txt", _textAreaText);
         }
 
         // ----- Button 3: Refresh Chunk List -----
         // Update the rect
-        buttonOffset.y = (sideButtonSize.y + buttonSpacing.y) * 2;
-        sideButtonSize.y = ((textAreaSize.y - (3 * buttonSpacing.y)) / 3f) * 0.7f;
-        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        buttonOffset.y = (sideButtonSize.y + _buttonSpacing.y) * 2;
+        sideButtonSize.y = ((textAreaSize.y - (3 * _buttonSpacing.y)) / 3f) * 0.7f;
+        buttonRect = new(_edgeSpacing + buttonOffset, sideButtonSize);
 
         // Display the button
-        if (GUI.Button(buttonRect, "Refresh Chunk List\n(Below)", style))
+        if (GUI.Button(buttonRect, "Refresh Chunk List\n(Below)", buttonStyle))
         {
             RefreshLevelChunkOptions();
         }
 
         // ----- Float Field: Chunk Size Field -----
         // Update the field's position
-        buttonOffset.y += buttonSpacing.y + sideButtonSize.y;
+        buttonOffset.y += _buttonSpacing.y + sideButtonSize.y;
         buttonOffset.x += sideButtonSize.x * 0.75f;
 
         // Updating field size
@@ -171,7 +177,7 @@ public class LevelBuilderEditorWindow : EditorWindow
         sideButtonSize.x /= 4f;
 
         // Setting the rect
-        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        buttonRect = new(_edgeSpacing + buttonOffset, sideButtonSize);
 
         // Display the field and update the iterative chunk loader with the new chunk size
         float chunkDistance = FindObjectOfType<IterativeChunkLoad>().DistanceBetweenChunks;
@@ -182,13 +188,13 @@ public class LevelBuilderEditorWindow : EditorWindow
         // Update the label's rect
         buttonOffset.x -= sideButtonSize.x * 3;
         sideButtonSize.x *= 3f;
-        buttonRect = new(_settings.EdgeSpacing + buttonOffset, sideButtonSize);
+        buttonRect = new(_edgeSpacing + buttonOffset, sideButtonSize);
 
         // Display the label
         EditorGUI.LabelField(buttonRect, "Chunk Size");
 
         // Return the y value that was taken up by the text field and buttons
-        return textAreaSize.y + (2 * buttonSpacing.y);
+        return textAreaSize.y + (2 * _buttonSpacing.y);
     }
 
     /// <summary>
@@ -204,10 +210,6 @@ public class LevelBuilderEditorWindow : EditorWindow
             return;
         }
 
-        // Settings for how big the buttons should be
-        Vector2 buttonSize = new(75, 90);
-        Vector2 buttonSpacing = new(5, 5);
-
         // Define the max number of buttons can exist in one row
         int buttonCount = _levelChunkOptions.Length;
         int buttonsPerLine = buttonCount;
@@ -215,10 +217,10 @@ public class LevelBuilderEditorWindow : EditorWindow
         // Iterate through each button to find the max value
         for (int i = 0; i < buttonCount + 1; i++)
         {
-            float currentTotalWidth = (i * buttonSize.x) + ((i - 1) * buttonSpacing.x) + (_settings.EdgeSpacing.x * 2);
+            float currentTotalWidth = (i * _gridButtonSize.x) + ((i - 1) * _buttonSpacing.x) + (_edgeSpacing.x * 2);
 
             // If the buttons can't fit, don't let them get set that long per row
-            if (currentTotalWidth > GetWindowSize.x)
+            if (currentTotalWidth > GetWindowSize().x)
             {
                 buttonsPerLine = i - 1;
                 break;
@@ -230,25 +232,25 @@ public class LevelBuilderEditorWindow : EditorWindow
         {
             // Set the button's positions based on their index
             Vector2 buttonPosition = new();
-            buttonPosition.x = _settings.EdgeSpacing.x + ((buttonSize.x + buttonSpacing.x) * (i % buttonsPerLine));
-            buttonPosition.y = _settings.EdgeSpacing.y + ((buttonSize.y + buttonSpacing.y) * Mathf.Floor(i / buttonsPerLine)) + extraAboveSpace;
+            buttonPosition.x = _edgeSpacing.x + ((_gridButtonSize.x + _buttonSpacing.x) * (i % buttonsPerLine));
+            buttonPosition.y = _edgeSpacing.y + ((_gridButtonSize.y + _buttonSpacing.y) * Mathf.Floor(i / buttonsPerLine)) + extraAboveSpace;
 
             // Update the button's rect with the next position and size
-            Rect buttonRect = new(buttonPosition, buttonSize);
+            Rect buttonRect = new(buttonPosition, _gridButtonSize);
 
             // Create a style for the buttons and make the text at the bottom middle
             GUIStyle style = new("button");
             style.alignment = TextAnchor.LowerCenter;
 
             // Check if the current chunk can be used, if not set it red
-            bool cantUse = _lastThreeValues.Contains(i);
-            if (cantUse)
+            bool isUnusableChunk = _lastThreeValues.Contains(i);
+            if (isUnusableChunk)
             {
-                style.normal.background = ColoredTexture(buttonSize, new(0.75f,0.15f,0.15f));
+                style.normal.background = ColoredTexture(_gridButtonSize, new(0.75f,0.15f,0.15f));
             }
 
             // Update the text if clicked, and if able to add the chunk to the list
-            if (GUI.Button(buttonRect, i + "", style) && !cantUse)
+            if (GUI.Button(buttonRect, i + "", style) && !isUnusableChunk)
             {
                 AppendTextArea(i + "");
             }
@@ -257,14 +259,15 @@ public class LevelBuilderEditorWindow : EditorWindow
             Rect interactivePreviewRect = buttonRect;
             interactivePreviewRect.height = interactivePreviewRect.width;
             interactivePreviewRect.size *= 0.9f;
-            interactivePreviewRect.position += 0.05f * buttonSize.x * Vector2.one;
+            interactivePreviewRect.position += 0.05f * _gridButtonSize.x * Vector2.one;
             GUIStyle bgColor = new();
 
             // Try to place the scene preview, if it can't, refresh the list of chunks to see if it's possible to place it
             try
             {
                 _levelChunkOptionEditors[i].OnInteractivePreviewGUI(interactivePreviewRect, bgColor);
-            } catch
+            }
+            catch
             {
                 RefreshLevelChunkOptions();
                 return;
@@ -428,13 +431,4 @@ public class LevelBuilderEditorWindow : EditorWindow
         // Everything should be safe to read
         return true;
     }
-}
-
-/// <summary>
-/// Settings for the window, to streamline positioning things
-/// </summary>
-public struct EditorWindowSettings
-{
-    // The padding outside of all the objects in the window
-    public Vector2 EdgeSpacing;
 }
