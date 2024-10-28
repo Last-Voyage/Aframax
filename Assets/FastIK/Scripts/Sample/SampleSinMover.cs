@@ -9,13 +9,13 @@ namespace DitzelGames.FastIK
 
         private void Awake()
         {
-            Start = transform.position;
+            Start = transform.localPosition;
         }
 
         void Update()
         {
             //just move the object from a to b and back
-            transform.position = Start + Dir * Mathf.Sin(Time.timeSinceLevelLoad);
+            transform.localPosition = Start + Dir * Mathf.Sin(Time.timeSinceLevelLoad);
         }
     }
 }
