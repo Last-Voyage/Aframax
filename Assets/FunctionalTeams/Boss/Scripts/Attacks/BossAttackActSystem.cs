@@ -26,7 +26,7 @@ public class BossAttackActSystem : MonoBehaviour
     //Keeps tracked of attack that are over then matches with attack counter to determine if an act is over
     protected int _attackOverCounter = 0;
     //The base boss attack system to listen out for attacks
-    public BaseBossAttackSystem AttackComponent { get; private set; }
+    public BaseBossAttack AttackComponent { get; private set; }
 
     //The current act it is on
     protected private int _actCounter = 0;
@@ -54,7 +54,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void AttackListentoActs()
     {
-        if (TryGetComponent<BaseBossAttackSystem>(out BaseBossAttackSystem baseBossAttackSystem))
+        if (TryGetComponent<BaseBossAttack>(out BaseBossAttack baseBossAttackSystem))
         {
             AttackComponent = baseBossAttackSystem;
             AttackComponent.GetAttackEnd().AddListener(AttackEnd);
