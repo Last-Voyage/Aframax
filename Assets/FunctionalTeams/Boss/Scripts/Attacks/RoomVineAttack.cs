@@ -15,10 +15,6 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class RoomVineAttack : BaseBossAttack
 {
-    //attack 1 ref
-    [Header("Attack 1")]
-    [Space]
-
     [Tooltip("Link to indicator object that flashes red currently")]
     [SerializeField] private GameObject _bossAttack1Indicator;
     [SerializeField] private Material _lowOpacity;
@@ -116,7 +112,7 @@ public class RoomVineAttack : BaseBossAttack
     private void ActivateThisAttack()
     {
         // tell the attack manager that we are attacking
-        BossAttackManager.Instance.AttackInProgress = true;
+        _isAttackActive = true;
 
         // Determine which room to attack
         AttackRandomRoom();
