@@ -82,12 +82,12 @@ public class FastIKFabric : MonoBehaviour
 
             if (i == _bones.Length - 1)
             {
-                //leaf
+                //tip of system
                 _startDirection[i] = GetPositionRootSpace(_target) - GetPositionRootSpace(currentJoint);
             }
             else
             {
-                //mid bone
+                //middle of system(not start or end)
                 _startDirection[i] = GetPositionRootSpace(_bones[i + 1]) - GetPositionRootSpace(currentJoint);
                 _bonesLength[i] = _startDirection[i].magnitude;
                 _completeLength += _bonesLength[i];
@@ -149,7 +149,7 @@ public class FastIKFabric : MonoBehaviour
             for (int iteration = 0; iteration < _iterations; iteration++)
             {
                 //https://www.youtube.com/watch?v=UNoX65PRehA
-                //back
+                //backward reaching IK iteration
                 for (int i = _jointPositions.Length - 1; i > 0; i--)
                 {
                     if (i == _jointPositions.Length - 1) 
@@ -162,18 +162,18 @@ public class FastIKFabric : MonoBehaviour
                     }
                 }
 
-                //forward
+                //forward reaching IK iteration
                 for (int i = 1; i < _jointPositions.Length; i++)
                 {
                     _jointPositions[i] = _jointPositions[i - 1] + (_jointPositions[i] - _jointPositions[i - 1]).normalized * _bonesLength[i - 1];
                 }
 
-                //close enough?
+                //check if the tip of the tendril is close enough to target
                 if ((_jointPositions[_jointPositions.Length - 1] - targetPosition).sqrMagnitude < _delta * _delta) { break; }
             }
         }
 
-        //move towards pole
+        //move entire system slightly towards pole
         if (_pole != null)
         {
             var polePosition = GetPositionRootSpace(_pole);
@@ -266,9 +266,9 @@ public class FastIKFabric : MonoBehaviour
     /// <summary>
     /// draws the bones in scene view editor
     /// </summary>
+    #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-    #if UNITY_EDITOR
         var currentJoint = this.transform;
         //draw each bone in editor
         for (int i = 0; i < _chainLength && currentJoint != null && currentJoint.parent != null; i++)
@@ -280,6 +280,6 @@ public class FastIKFabric : MonoBehaviour
             Handles.DrawWireCube(Vector3.up * 0.5f, Vector3.one);
             currentJoint = currentJoint.parent;
         }
-    #endif
     }
+    #endif
 }
