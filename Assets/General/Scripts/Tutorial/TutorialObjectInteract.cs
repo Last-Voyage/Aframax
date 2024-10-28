@@ -25,7 +25,7 @@ public class TutorialObjectInteract : MonoBehaviour
     {
         if(other.gameObject.CompareTag(_objectTag))
         {
-            EnvironmentManager.Instance.CompletedTutorial()?.Invoke();
+            GameStateManager.Instance.CompletedTutorial()?.Invoke();
             gameObject.SetActive(false);
         }
     }

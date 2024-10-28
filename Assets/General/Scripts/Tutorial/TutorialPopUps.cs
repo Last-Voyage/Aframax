@@ -37,6 +37,12 @@ public class TutorialPopUps : MonoBehaviour
     [Tooltip("The message shown after completing a tutorial")]
     private const string _CONGRATULATION_MESSAGE = "Great Job!";
 
+    [Tooltip("The diviser to get the message completed in a certain amount of time")]
+    private const float _TOTAL_DISPLAY_TIME = 3f;
+
+    [Tooltip("The time the final message is displayed")]
+    private const float _FINAL_MESSAGE_DISPLAY_TIME = 2f;
+
     // Start's the tutorial process
     void Start()
     {
@@ -63,27 +69,29 @@ public class TutorialPopUps : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DisplayingTheText()
     {
+        // Takes the display text and makes it invisible
         _textContainer.text = _uIData[_dataPointer].GetTextAndTimer().Text;
-
         _textContainer.maxVisibleCharacters = 0;
 
+        // Gets total length of text in characters, and gets the speed of the text display
         int totalLength = _uIData[_dataPointer].GetTextAndTimer().Text.Length;
+        float typeSpeed = totalLength / _TOTAL_DISPLAY_TIME;
 
-        float typeSpeed = totalLength / 3;
-
+        // As long as all of the text hasn't been fully displayed, this will continually
+        // display more characters for the total display time
         while(_textContainer.maxVisibleCharacters < totalLength)
         {
             _textContainer.maxVisibleCharacters++;
             yield return new WaitForSeconds(1f/typeSpeed);
         }
-        StartTutorialCheck();
+        StartTutorialCompletionCheck();
     }
 
 
     /// <summary>
     /// This will choose which tutorial check is happening based on how many tutorials have been completed
     /// </summary>
-    private void StartTutorialCheck()
+    private void StartTutorialCompletionCheck()
     {
         switch(_dataPointer)
         {
@@ -109,13 +117,8 @@ public class TutorialPopUps : MonoBehaviour
     {
         switch (_dataPointer)
         {
-            case 0:
-                break;
-            case 1:
+            case 1: // Stops listening for whether or not the player has zoomed in
                 PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(NextTutorial);
-                break;
-            case 2:
-                PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(NextTutorial);
                 break;
             default:
                 break;
@@ -128,7 +131,7 @@ public class TutorialPopUps : MonoBehaviour
     /// <returns></returns>
     private IEnumerator EndMessageBuffer()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_FINAL_MESSAGE_DISPLAY_TIME);
         NextTutorial();
     }
 
@@ -159,7 +162,7 @@ public class TutorialPopUps : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        EnvironmentManager.Instance.CompletedTutorial().AddListener(NextTutorial);
+        GameStateManager.Instance.CompletedTutorial().AddListener(NextTutorial);
     }
 
     /// <summary>
@@ -168,6 +171,6 @@ public class TutorialPopUps : MonoBehaviour
     private void OnDisable()
     {
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(NextTutorial);
-        EnvironmentManager.Instance.CompletedTutorial().RemoveListener(NextTutorial);
+        GameStateManager.Instance.CompletedTutorial().RemoveListener(NextTutorial);
     }
 }
