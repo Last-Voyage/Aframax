@@ -23,6 +23,11 @@ public class RoomVineAttack : BaseBossAttack
 
     [Tooltip("Tentacle Prefab goes here")]
     [SerializeField] private GameObject _tentaclePrefab;
+    [Tooltip("Set locations for tentacle spawns here. If this list is empty, random locations will be added")]
+    [SerializeField] private Vector3[] _setSpawnPoints;
+    [Tooltip("Set prefab scales for the set tentacle spawns here. " +
+        "Index i in this list will correlate to index i in that list")]
+    [SerializeField] private Vector3[] _setAttackScales;
     [Tooltip("The number of rooms where tentacles will spawn")]
     [SerializeField] private int _roomsAttacked = 1;
     [Tooltip("The maximum number of tentacles that can spawn in one room")]
@@ -91,19 +96,22 @@ public class RoomVineAttack : BaseBossAttack
 
     private void CreateRandomSpawnPoints()
     {
-        _spawnPoints = new Vector3[] {new Vector3(11.92f, 8.5f, -9.11f),
+        if (_setSpawnPoints.Length == 0)
+        {
+            _spawnPoints = new Vector3[] {new Vector3(11.92f, 8.5f, -9.11f),
                                       new Vector3(14.86f, 8.5f, -2.52f),
                                       new Vector3(14.81f, 8.5f, 4.92f),
                                       new Vector3(10.91f, 8.5f, 17.63f),
                                       new Vector3(10.95f, 8.5f, 11.5f),
                                       new Vector3(8.91f, 8.5f, 0.59f)};
 
-        _attackScales = new Vector3[] {new Vector3(1.25f, 1, 0.7f),
+            _attackScales = new Vector3[] {new Vector3(1.25f, 1, 0.7f),
                                        new Vector3(0.5f, 1, 1.5f),
                                        new Vector3(0.5f, 1, 1.2f),
                                        Vector3.one,
                                        new Vector3(1, 1, 1.2f),
                                        new Vector3(0.52f, 1, 2.75f)};
+        }
     }
 
     /// <summary>
@@ -126,10 +134,20 @@ public class RoomVineAttack : BaseBossAttack
     /// </summary>
     private void AttackRandomRoom()
     {
-        _randomRoom = UnityEngine.Random.Range(0, _spawnPoints.Length);
+        if (_setSpawnPoints.Length == 0)
+        {
+            _randomRoom = UnityEngine.Random.Range(0, _setSpawnPoints.Length);
 
-        transform.position = _spawnPoints[_randomRoom];
-        transform.localScale = _attackScales[_randomRoom];
+            transform.position = _setSpawnPoints[_randomRoom];
+            transform.localScale = _setAttackScales[_randomRoom];
+        }
+        else
+        {
+            _randomRoom = UnityEngine.Random.Range(0, _spawnPoints.Length);
+
+            transform.position = _spawnPoints[_randomRoom];
+            transform.localScale = _attackScales[_randomRoom];
+        }
     }
 
     private void SpawnTentacles()
