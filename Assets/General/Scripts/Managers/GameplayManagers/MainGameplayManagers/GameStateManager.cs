@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       GameStateManager.cs
-// Author:          Ryan Swanson, Nick Rice
+// Author:          Ryan Swanson
+// Contributor:     Nick Rice
 // Creation Date:   September 15, 2024
 //
 // Description:     Holds and moves through the states of gameplay
