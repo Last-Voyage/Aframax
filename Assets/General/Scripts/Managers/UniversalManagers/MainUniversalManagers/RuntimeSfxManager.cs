@@ -9,6 +9,7 @@
 using FMOD.Studio;
 using FMODUnity;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -42,10 +43,12 @@ public class RuntimeSfxManager : AudioManager
         if(val)
         {
             APlayOneShotSFX += PlayOneShotSFX;
+            PlayerMovementController.UpdateMovingState.AddListener(PlayFootSteps);
             return;
         }
 
         APlayOneShotSFX -= PlayOneShotSFX;
+        PlayerMovementController.UpdateMovingState.RemoveListener(PlayFootSteps);
     }
 
     #endregion Enable and Action Subscriptions
@@ -70,12 +73,50 @@ public class RuntimeSfxManager : AudioManager
     /// <summary>
     /// Plays footsteps when the player moves
     /// </summary>
-    private void PlayFootSteps()
+    private void PlayFootSteps(bool isMoving)
     {
-        _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
-        _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
-        _hardSurfaceWalkingEventInstance.start();
-        _hardSurfaceWalkingEventInstance.release();
+        if (isMoving)
+        {
+            StartCoroutine(PlayFootSteps());
+        }
+        else
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// Plays a single instance of the player footstep if the player is grounded
+    /// </summary>
+    private void PlayFootStep()
+    {
+        if (PlayerMovementController.IsGrounded)
+        {
+            Debug.Log("Footstep");
+            _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
+            _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
+            _hardSurfaceWalkingEventInstance.start();
+            _hardSurfaceWalkingEventInstance.release();
+        }
+    }
+
+    /// <summary>
+    /// Plays the footstep SFX repeatedly while moving
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PlayFootSteps()
+    {
+        float timer = 0.0f;
+
+        if (timer > FmodSfxEvents.Instance.FootstepSpeed)
+        {
+            PlayFootStep();
+            timer = 0.0f;
+        }
+
+        timer += Time.deltaTime;
+
+        yield return null;
     }
 
     #endregion
