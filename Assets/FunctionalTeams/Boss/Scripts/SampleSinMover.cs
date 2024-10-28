@@ -12,7 +12,7 @@ using UnityEngine;
 /// </summary>
 public class SampleSinMover : MonoBehaviour
 {
-    [SerializeField] private Vector3 _direction;
+    [SerializeField] private Vector3 _pointToMoveTo;
     [SerializeField] private Vector3 _start;
 
     /// <summary>
@@ -29,6 +29,6 @@ public class SampleSinMover : MonoBehaviour
     void Update()
     {
         //just move the object from a to b and back
-        transform.localPosition = _start + _direction * Mathf.Sin(Time.timeSinceLevelLoad);
+        transform.localPosition = _start + _pointToMoveTo * Mathf.Sin(Time.timeSinceLevelLoad);
     }
 }
