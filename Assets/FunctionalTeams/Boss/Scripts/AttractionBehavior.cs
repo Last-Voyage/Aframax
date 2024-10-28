@@ -1,44 +1,46 @@
+/*****************************************************************************
+// File Name :         AttractionBehavior
+// Author :            Tommy Roberts
+// Creation Date :     10/28/2024
+//
+// Brief Description : Controls attraction behavior for procedural animation
+*****************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// Guides a transform toward a target, but does not get too far away from parent
+/// </summary>
 public class AttractionBehavior : MonoBehaviour
 {
-    public Transform target; // The target GameObject
-    public Transform parent; // The object's parent
-    public float attractionRange = 5f; // The spherical range within which the object moves towards the target
-    public float maxDistanceFromParent = 3f; // Maximum distance from parent
-    public float stopFollowDistance = 2f;
-    public float moveSpeed = 2f; // Speed at which the object moves
-    public float rotationSpeed = 2f;
+    [SerializeField] private Transform _target; // The target GameObject
+    [SerializeField] private  Transform _parent; // The object's parent
+    [SerializeField] private  float _attractionRange = 5f; // The spherical range within which the object moves towards the target
+    [SerializeField] private  float _maxDistanceFromParent = 3f; // Maximum distance from parent
+    [SerializeField] private float _stopFollowDistance = 2f;
+    [SerializeField] private float _followSpeed = 2f; // Speed at which the object moves
+    [SerializeField] private  float _rotateSpeed = 2f;
 
-    private bool isInAttractionRange = false;
-    private Vector3 originalLocalPosition; // The object's original position relative to its parent
-
-    private void Start()
-    {
-        originalLocalPosition = Vector3.zero;
-    }
-
+    /// <summary>
+    /// Contains the functionality to slowly move toward target when in range and then retract when not in range
+    /// </summary>
     private void Update()
     {
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-        float distanceToParent = Vector3.Distance(transform.localPosition, Vector3.zero);
+        float distanceToTarget = Vector3.Distance(transform.position, _target.position);
 
-        if (distanceToTarget <= attractionRange && distanceToTarget >= stopFollowDistance)
+        if (distanceToTarget <= _attractionRange && distanceToTarget >= _stopFollowDistance)
         {
-            isInAttractionRange = true;
-
             // Move towards the target within the max distance from the parent
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-            Vector3 newPosition = transform.position + directionToTarget * moveSpeed * Time.deltaTime;
+            Vector3 directionToTarget = (_target.position - transform.position).normalized;
+            Vector3 newPosition = transform.position + directionToTarget * _followSpeed * Time.deltaTime;
 
-            if (Vector3.Distance(newPosition, parent.position) <= maxDistanceFromParent)
+            if (Vector3.Distance(newPosition, _parent.position) <= _maxDistanceFromParent)
             {
                 transform.position = newPosition;
                 // Check if the direction is valid (to avoid errors when the object is exactly above/below the target)
                 if (directionToTarget.sqrMagnitude > 0.01f)
                 {
                     // Calculate the target rotation
-                    Vector3 targetPosition = new Vector3(target.position.x, transform.root.position.y, target.transform.position.z);
+                    Vector3 targetPosition = new Vector3(_target.position.x, transform.root.position.y, _target.transform.position.z);
                     Vector3 rootPos = transform.root.position;
                     rootPos.y = 0;
 
@@ -46,18 +48,17 @@ public class AttractionBehavior : MonoBehaviour
                     Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.root.position);
 
                     // Smoothly rotate towards the target rotation on the y-axis only
-                    transform.root.rotation = Quaternion.Slerp(transform.root.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                    transform.root.rotation = Quaternion.Slerp(transform.root.rotation, targetRotation, _rotateSpeed * Time.deltaTime);
                 }
             }
         }
         else
         {
             // Move back to the parent position
-            isInAttractionRange = false;
-            Vector3 directionToTarget = (parent.position - transform.position).normalized;
-            Vector3 newPosition = transform.position + directionToTarget * moveSpeed * Time.deltaTime;
+            Vector3 directionToTarget = (_parent.position - transform.position).normalized;
+            Vector3 newPosition = transform.position + directionToTarget * _followSpeed * Time.deltaTime;
 
-            if(Vector3.Distance(newPosition, parent.position) > .1f)
+            if(Vector3.Distance(newPosition, _parent.position) > .1f)
             {
                 transform.position = newPosition;
             }
