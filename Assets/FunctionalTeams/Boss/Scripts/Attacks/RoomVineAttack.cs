@@ -54,7 +54,6 @@ public class RoomVineAttack : BaseBossAttack
     private void Start()
     {
         _isAttackActive = false;
-        InitializePlayerTransform();
     }
 
     /// <summary>
@@ -103,6 +102,8 @@ public class RoomVineAttack : BaseBossAttack
     /// </summary>
     private void ActivateThisAttack()
     {
+        InitializePlayerTransform();
+
         // tell the attack manager that we are attacking
         _isAttackActive = true;
 
