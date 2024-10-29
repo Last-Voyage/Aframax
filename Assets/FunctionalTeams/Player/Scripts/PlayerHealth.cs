@@ -19,6 +19,9 @@ public class PlayerHealth : BaseHealth
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
+    /// 
+
+    public bool _shouldTakeDamage = true;
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
@@ -33,13 +36,18 @@ public class PlayerHealth : BaseHealth
     /// <param name="damage"> amount to reduce health by </param>
     public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        base.TakeDamage(damage, null);
+        if (_shouldTakeDamage)
+        {
+            base.TakeDamage(damage, null);
 
-        PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
-        PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+            PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
+            PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
 
-        RuntimeSfxManager.APlayOneShotSFX?
-            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
+            RuntimeSfxManager.APlayOneShotSFX?
+                .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
+        }
+
+        
     }
 
     /// <summary>

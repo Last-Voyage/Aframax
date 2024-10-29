@@ -86,7 +86,7 @@ public class ConsoleController : MonoBehaviour
             // safty check for having the the health on the player
             try
             {
-                GameObject.FindObjectOfType<PlayerHealth>().TakeDamage(_amount);
+                GameObject.FindObjectOfType<PlayerHealth>().TakeDamage(_amount, null);
             }
             catch (NullReferenceException e)
             {
