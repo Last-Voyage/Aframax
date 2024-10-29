@@ -95,7 +95,6 @@ public class ConsoleController : MonoBehaviour
             
         }
 
-
     }
     #endregion
 

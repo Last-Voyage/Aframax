@@ -15,11 +15,6 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerHealth : BaseHealth
 {
-
-    //determins if the player should take damage
-    //This was added by Nabil for implementing god mode
-    public bool _shouldTakeDamage = true;
-
     /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
@@ -36,13 +31,9 @@ public class PlayerHealth : BaseHealth
     /// Reduces health and calls any player damaged events
     /// </summary>
     /// <param name="damage"> amount to reduce health by </param>
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        //if (_shouldTakeDamage) 
-        //{
-            //add damage code here
-        //}
-        base.TakeDamage(damage);
+        base.TakeDamage(damage, null);
 
         PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
@@ -59,5 +50,4 @@ public class PlayerHealth : BaseHealth
         base.OnDeath();
         PlayerManager.Instance.InvokeOnPlayerDeath();
     }
-
 }
