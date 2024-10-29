@@ -114,46 +114,6 @@ public class HarpoonGun : MonoBehaviour
 
     private PlayerInputMap _playerInputMap;
     
-    /// <summary>
-    /// The focus accuracy (or potential deviation) of the harpoon.
-    /// HI, THIS WAS MADE BY ADAM, IS THIS OKAY TO HAVE BEEN MADE?
-    /// </summary>
-    /// <returns>Deviation range of shots. Higher number means more spread.</returns>
-    public float CurrentFocusAccuracy()
-    {
-        return _currentFocusAccuracy;
-    }
-    
-    /// <summary>
-    /// The maximum inaccuracy of the harpoon gun.
-    /// MORE GETTERS!
-    /// </summary>
-    /// <returns></returns>
-    public float FocusStartingInaccuracy()
-    {
-        return _focusStartingInaccuracy;
-    }
-
-    /// <summary>
-    /// The state of focusing.
-    /// MORE PUBLIC DECLARATIONS HAVE BEEN MADE
-    /// </summary>
-    /// <returns>The current state of focusing.</returns>
-    public EFocusState CurrentFocusState()
-    {
-        return _currentFocusState;
-    }
-
-    /// <summary>
-    /// Whether a harpoon is ready to be fired or not.
-    /// THIS ONE IS NEW TOO
-    /// </summary>
-    /// <returns>Current firing state of the player's harpoon.</returns>
-    public EHarpoonFiringState HarpoonFiringState()
-    {
-        return _harpoonFiringState;
-    }
-
     #endregion
 
     #region Setup
@@ -518,5 +478,42 @@ Focusing)
     #region Getters
     //Getters for private variables
     public Transform GetHarpoonTip() => _harpoonTip;
+
+    /// <summary>
+    /// The focus accuracy (or potential deviation) of the harpoon.
+    /// </summary>
+    /// <returns>Deviation range of shots. Higher numbers mean more spread.</returns>
+    public float GetCurrentFocusAccuracy()
+    {
+        return _currentFocusAccuracy;
+    }
+
+    /// <summary>
+    /// The maximum inaccuracy of the harpoon gun.
+    /// </summary>
+    /// <returns>The initial starting inaccuracy of the harpoon gun.</returns>
+    public float GetFocusStartingInaccuracy()
+    {
+        return _focusStartingInaccuracy;
+    }
+
+    /// <summary>
+    /// The state of focusing.
+    /// </summary>
+    /// <returns>The current state of focusing.</returns>
+    public EFocusState GetCurrentFocusState()
+    {
+        return _currentFocusState;
+    }
+
+    /// <summary>
+    /// Whether a harpoon is ready to be fired or not.
+    /// </summary>
+    /// <returns>Current firing state of the player's harpoon.</returns>
+    public EHarpoonFiringState GetHarpoonFiringState()
+    {
+        return _harpoonFiringState;
+    }
+
     #endregion
 }

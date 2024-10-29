@@ -10,14 +10,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// What needs to be done:
-// 1. Try to add a simple blur overlay if you can
-// 2. Make an event to call out reloading when that state is active
-// 3. Make the reticle outer ring properly sit outside the inner one's biggest position (about 10 units)
-
+/// <summary>
+/// Allows the on-screen reticle to change according to the player's focus.
+/// </summary>
 public class PlayerReticle : MonoBehaviour
 {
-    // The circle which shows the spread of shots
+    [Tooltip("The circle showing the potential deviation of harpoon shots")]
     [SerializeField] private GameObject _reticleScope;
 
     [SerializeField] private HarpoonGun _harpoonGunScript;
@@ -29,22 +27,33 @@ public class PlayerReticle : MonoBehaviour
 
     [Space]
 
-    // The smallest size of the reticle scope on-screen.
-    // Since the smallest deviation is 0, higher numbers will be increasingly inaccurate to pinpoint aim.
+    [Tooltip("The minimum size of the reticle scope. Higher numbers increase visibility.")]
     [SerializeField] private float _minScopeSize;
 
-    // How much bigger the outer ring of the reticle is compared to the inner, dynamic one.
-    // It's just a frame, serves no purpose other than a visual guide as to the maximum deviancy.
+    [Tooltip("How much bigger the outer ring of the reticle is compared to the inner, dynamic one.")]
     [SerializeField] private float _scopePadding;
+
+    private RectTransform _outerRingRectTransform;
+    private RectTransform _scopeRectTransform;
+
+    private Image _frameImage;
+    private Image _scopeImage;
 
     private float _newReticleSize = 0;
     private readonly float _maxScopeSize = 1000;
+    private readonly float _scopeScalar = 1000;
 
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
     /// </summary>
     private void Start()
     {
+        _outerRingRectTransform = gameObject.GetComponent<RectTransform>();
+        _scopeRectTransform = _reticleScope.GetComponent<RectTransform>();
+
+        _frameImage = gameObject.GetComponent<Image>();
+        _scopeImage = _reticleScope.GetComponent<Image>();
+
         gameObject.GetComponent<Image>().color = _unfocusedColor;
 
         InitializeReticle();
@@ -56,8 +65,8 @@ public class PlayerReticle : MonoBehaviour
     private void Update()
     {
         // Updates the sprite of the reticle if spread range is actively changing due to focus
-        if (_harpoonGunScript.CurrentFocusState() == HarpoonGun.EFocusState.Focusing || 
-            _harpoonGunScript.CurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
+        if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing || 
+            _harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
         {
             AdjustReticleSize();
         }
@@ -71,14 +80,14 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     private void InitializeReticle()
     {
-        _newReticleSize = _harpoonGunScript.FocusStartingInaccuracy() * 1000;
+        _newReticleSize = _harpoonGunScript.GetFocusStartingInaccuracy() * _scopeScalar;
 
         // Sets the size of the frame which dynamically represents deviation range of harpoon shots
-        _reticleScope.GetComponent<RectTransform>().sizeDelta =
+        _scopeRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize), 
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
         // Gives the active reticle range a static outer frame
-        gameObject.GetComponent<RectTransform>().sizeDelta =
+        _outerRingRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize), 
             Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize));
     }
@@ -88,11 +97,9 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     private void AdjustReticleSize()
     {
-        gameObject.GetComponent<Image>().color = _focusedColor;
+        _newReticleSize = _harpoonGunScript.GetCurrentFocusAccuracy() * _scopeScalar;
 
-        _newReticleSize = _harpoonGunScript.CurrentFocusAccuracy() * 1000;
-
-        _reticleScope.GetComponent<RectTransform>().sizeDelta =
+        _scopeRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize), 
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
     }
@@ -103,23 +110,24 @@ public class PlayerReticle : MonoBehaviour
     private void AdjustReticleAppearance()
     {
         // If the player is focusing the harpoon gun and not reloading, the reticle gains prominence
-        if (_harpoonGunScript.CurrentFocusState() == HarpoonGun.EFocusState.Focusing &&
-            _harpoonGunScript.HarpoonFiringState() != HarpoonGun.EHarpoonFiringState.Reloading)
+        if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing &&
+            _harpoonGunScript.GetHarpoonFiringState() != HarpoonGun.EHarpoonFiringState.Reloading)
         {
-            gameObject.GetComponent<Image>().color = _focusedColor;
-            _reticleScope.GetComponent<Image>().color = _focusedColor;
+            _frameImage.color = _focusedColor;
+            _scopeImage.color = _focusedColor;
         }
         // When the player is not reloading nor focusing, the reticle is less prominent
-        else if (_harpoonGunScript.HarpoonFiringState() != HarpoonGun.EHarpoonFiringState.Reloading)
+        else if (_harpoonGunScript.GetHarpoonFiringState() != HarpoonGun.EHarpoonFiringState.Reloading)
         {
-            gameObject.GetComponent<Image>().color = _unfocusedColor;
-            _reticleScope.GetComponent<Image>().color = _unfocusedColor;
+            _frameImage.color = _unfocusedColor;
+            _scopeImage.color = _unfocusedColor;
         }
         // When the player is reloading, the reticle disappears
         else
         {
-            gameObject.GetComponent<Image>().color = Color.clear;
-            _reticleScope.GetComponent<Image>().color = Color.clear;
+            _frameImage.color = Color.clear;
+            _scopeImage.color = Color.clear;
         }
+
     }
 }
