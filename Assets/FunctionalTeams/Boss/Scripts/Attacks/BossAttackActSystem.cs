@@ -15,8 +15,15 @@ using UnityEngine.InputSystem;
 [System.Serializable]
 public struct Act
 {
+    [field: Tooltip("Scenes within the act")]
+    [field: SerializeField] public ActScene[] Scenes { get; private set; }
+}
+
+[System.Serializable]
+public struct ActScene
+{
     [field: Tooltip("Attacks within the Act")]
-    [field: SerializeField] public BaseBossAttack[] ActAttacks { get; private set; }
+    [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
 }
 
 /// <summary>
@@ -24,19 +31,19 @@ public struct Act
 /// </summary>
 public class BossAttackActSystem : MonoBehaviour
 {
+    #region Act Variables
+
     [Tooltip("Acts within the boss fight")]
     [SerializeField] private Act[] _bossFightActs;
 
-    private int _currentAct;
-
-    [Tooltip("# of attacks completed")]
-    protected private int _attackCounter = 0;
-
-    //The base boss attack system to listen out for attacks
-    public BaseBossAttack AttackComponent { get; private set; }
-
-    //The current act it is on
-    protected private int _actCounter = 0;
+    /// <summary>
+    /// Current act position in array
+    /// </summary>
+    private int _currentActNum;
+    /// <summary>
+    /// Current act ref
+    /// </summary>
+    private Act _currentAct;
 
     [Tooltip("Invoked when an act begins")]
     private UnityEvent _actBegin = new();
@@ -44,9 +51,34 @@ public class BossAttackActSystem : MonoBehaviour
     [Tooltip("Invoked when an act ends")]
     private UnityEvent _actEnd = new();
 
+    #endregion Act Variables
+
+    #region Act Scene Variables
+
+    /// <summary>
+    /// Current scene position in arr
+    /// </summary>
+    private int _currentSceneNum;
+    /// <summary>
+    /// Current scene ref
+    /// </summary>
+    private ActScene _currentScene;
+
+    [Tooltip("# of attacks completed")]
+    protected private int _attackCounter = 0;
+
+    [Tooltip("Invoked when a scene begins")]
+    private UnityEvent _sceneBegin = new();
+
+    [Tooltip("Invoked when a scene ends")]
+    private UnityEvent _sceneEnd = new();
+
+    #endregion
+
     private void Start()
     {
         InitializeActVariables();
+        InitializeSceneVariables();
     }
 
     /// <summary>
@@ -63,92 +95,156 @@ public class BossAttackActSystem : MonoBehaviour
         }
     }
 
+    #region Act Functions
 
     /// <summary>
     /// Initializes act variables
     /// </summary>
     private void InitializeActVariables()
     {
-        _currentAct = 0;
+        _currentActNum = 0;
+        _currentAct = _bossFightActs[_currentActNum];
     }
 
     /// <summary>
-    /// A way for attacks that are dropped in to listen for when an act ends
+    /// Begins the next act
     /// </summary>
-    private void InitializeActAttackListeners()
-    {
-        Act act = _bossFightActs[_currentAct];
-
-        foreach(BaseBossAttack baseBossAttack in act.ActAttacks)
-        {
-            baseBossAttack.GetAttackEndEvent().AddListener(AttackEnd);
-        }
-    }
-
-    private void RemoveActAttackListeners()
-    {
-        Act act = _bossFightActs[_currentAct];
-
-        foreach (BaseBossAttack baseBossAttack in act.ActAttacks)
-        {
-            baseBossAttack.GetAttackEndEvent().RemoveListener(AttackEnd);
-        }
-    }
-
     private void BeginAct()
     {
-        // Ensures that an act never attempts to begin if past the available acts
-        if (_currentAct == _bossFightActs.Length)
-        {
-            return;
-        }
-
-        InitializeActAttackListeners();
-
-        Act act = _bossFightActs[_currentAct];
-        foreach (BaseBossAttack baseBossAttack in act.ActAttacks)
-        {
-            baseBossAttack.InvokeAttackBegin();
-        }
-    }
-
-
-    /// <summary>
-    /// Method for GetAttackEnd so the act system 
-    /// </summary>
-    private void AttackEnd()
-    {
-        _attackCounter++;
-
-        CheckIfActCompleted();
+        ResetSceneVariables();
+        BeginScene();
+        InvokeBeginActEvent();
     }
 
     /// <summary>
-    /// A way of being able to cycle through as many attack as the acts need
+    /// Returns whether or not the act is complete
     /// </summary>
-    /// <returns></returns>
-    private void CheckIfActCompleted()
+    private bool IsActCompleted()
     {
-        if (_actCounter == _bossFightActs[_currentAct].ActAttacks.Length)
-        {
-            EndAct();
-        }
+        return (_currentSceneNum == _currentAct.Scenes.Length);
     }
 
     /// <summary>
     /// Act end for attack
     /// </summary>
-    private void EndAct()
-    { 
-        InvokeActEndEvent();
+    private void OnActCompleted()
+    {
+        _currentActNum++;
 
+        if(_currentActNum == _bossFightActs.Length)
+        {
+            //  TODO: End Game Here
+            return;
+        }
+
+        _currentAct = _bossFightActs[_currentActNum];
+
+        BeginAct();
+        InvokeActEndEvent();
+    }
+
+    #endregion Act Functions
+
+    #region ActScene Functions
+
+    /// <summary>
+    /// Initializes act variables
+    /// </summary>
+    private void InitializeSceneVariables()
+    {
+        _currentSceneNum = 0;
+    }
+
+    /// <summary>
+    /// Returns whether or not the scene is complete
+    /// </summary>
+    private bool IsSceneCompleted()
+    {
+        return _attackCounter == _currentScene.SceneAttacks.Length;
+    }
+
+    /// <summary>
+    /// Calls when a scene has been completed, progresses to the next scene or act
+    /// </summary>
+    private void OnSceneCompleted()
+    {
         RemoveActAttackListeners();
 
-        if(_currentAct == _bossFightActs.Length)
+        if (_currentSceneNum == _currentAct.Scenes.Length)
         {
-            // TODO: Game End Code Here
+            // Begin next act if all scenes have been completed
+            BeginAct();
+            return;
+        }
+
+        // Begin next scene
+        BeginScene();
+        InvokeSceneEndEvent();
+    }
+
+    /// <summary>
+    /// Sets the current scene num var back to 0
+    /// </summary>
+    private void ResetSceneVariables()
+    {
+        _currentSceneNum = 0;
+        _currentScene = _currentAct.Scenes[_currentSceneNum];
+    }
+
+    /// <summary>
+    /// Begins the next scene in the act
+    /// </summary>
+    private void BeginScene()
+    {
+        InitializeSceneAttackListeners();
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.InvokeAttackBegin();
         }
     }
+
+    #endregion
+
+    #region Attack Functions
+
+    /// <summary>
+    /// Adds listeners for all boss attacks
+    /// </summary>
+    private void InitializeSceneAttackListeners()
+    {
+        Act act = _bossFightActs[_currentActNum];
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.GetAttackEndEvent().AddListener(AttackHasEnded);
+        }
+    }
+
+    /// <summary>
+    /// Removes all listeners from the act attacks
+    /// </summary>
+    private void RemoveActAttackListeners()
+    {
+        Act act = _bossFightActs[_currentActNum];
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.GetAttackEndEvent().RemoveListener(AttackHasEnded);
+        }
+    }
+
+    /// <summary>
+    /// Method for GetAttackEnd so the act system 
+    /// </summary>
+    private void AttackHasEnded()
+    {
+        _attackCounter++;
+
+        IsActCompleted();
+    }
+
+    #endregion Attack Functions
 
     #region Events
 
@@ -167,6 +263,23 @@ public class BossAttackActSystem : MonoBehaviour
     private void InvokeActEndEvent()
     {
         _actEnd?.Invoke();
+    }
+
+    /// <summary>
+    /// Scene beginning for attack
+    /// </summary>
+    private void InvokeBeginSceneEvent()
+    {
+        _sceneBegin?.Invoke();
+    }
+
+    /// <summary>
+    /// A way for other scripts to see the act ending
+    /// If needed something can listen to those from another script to do something
+    /// </summary>
+    private void InvokeSceneEndEvent()
+    {
+        _sceneEnd?.Invoke();
     }
 
     #endregion
