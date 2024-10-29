@@ -1,6 +1,7 @@
 /*********************************************************************************************************************
 // File Name :         WeakPointHealth.cs
 // Author :            Andrea Swihart-DeCoster
+// Contributor :       Ryan Swanson
 // Creation Date :     10/23/24
 //
 // Brief Description : Controls the weak point health
@@ -20,12 +21,13 @@ public class WeakPointHealth : BaseHealth
     /// Applies damage to the weak point and invokes the damage event
     /// </summary>
     /// <param name="damage"></param>
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
         if(damage > 0)
         {
             _weakPointDamageTakenEvent?.Invoke();
-            base.TakeDamage(damage);
+            VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+            base.TakeDamage(damage, null);
         }
     }
 
