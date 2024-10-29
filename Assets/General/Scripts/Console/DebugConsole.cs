@@ -4,6 +4,7 @@
 // Overview: Hosts one function
 // which handles the debug console commands
  */
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,13 +33,10 @@ public class DebugConsole : MonoBehaviour
             //handle system commands
             if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Quit()")
             {
-
                 Application.Quit();
-
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Reload()")
             {
-
                 SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "DrawColliders()")
@@ -52,7 +50,6 @@ public class DebugConsole : MonoBehaviour
             print(_commandInput.text);
         }
     }
-
 }
 
 

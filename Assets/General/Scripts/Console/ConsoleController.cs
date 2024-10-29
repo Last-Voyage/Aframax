@@ -25,7 +25,6 @@ public class ConsoleController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private bool _isInDeveloperMode = false;
 
-
     [Space]
     [Tooltip("Can be found inside of the console prefab")]
     [Header("References")]
@@ -66,7 +65,6 @@ public class ConsoleController : MonoBehaviour
         //toggle console on and off
         if (_isInDeveloperMode)
         {
-
             if (_content.activeSelf)
             {
                 _content.SetActive(false);
@@ -83,6 +81,7 @@ public class ConsoleController : MonoBehaviour
     }
 
     #region Damage Player
+    
     /// <summary>
     /// deal damage to the player
     /// </summary>
@@ -101,9 +100,7 @@ public class ConsoleController : MonoBehaviour
             {
                 print(e.Message);
             }
-            
         }
-
     }
     #endregion
 
@@ -131,10 +128,7 @@ public class ConsoleController : MonoBehaviour
         {
             print(e.Message);
         }
-
-       
     }
-
 
     /// <summary>
     /// putes the player in god mode
@@ -153,6 +147,7 @@ public class ConsoleController : MonoBehaviour
         GameObject.FindObjectOfType<PlayerHealth>()._shouldTakeDamage = true;
         _toggleGodMode.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
     }
+    
     #endregion
 
     /// <summary>
@@ -167,7 +162,6 @@ public class ConsoleController : MonoBehaviour
         _toggleGodMode.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
     }
-
 }
 
 #endif

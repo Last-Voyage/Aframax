@@ -14,12 +14,15 @@ using UnityEngine.Events;
 /// Controls the player health functionality
 /// </summary>
 public class PlayerHealth : BaseHealth
-{
+{ 
+    //Variable is used by the dev console to determin weather the player should take damage or not
+    public bool _shouldTakeDamage = true;//Nabil madde this change
+
     /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
-    
+
 
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
@@ -28,6 +31,7 @@ public class PlayerHealth : BaseHealth
     /// increases health
     /// </summary>
     /// <param name="heal"></param>
+
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
@@ -52,8 +56,6 @@ public class PlayerHealth : BaseHealth
             RuntimeSfxManager.APlayOneShotSFX?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
         }
-
-        
     }
 
     /// <summary>
