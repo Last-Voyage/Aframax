@@ -81,11 +81,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Coroutine _movementCoroutine;
 
-    /// <summary>
-    /// Updates the player movement state, true if moving, false otherwise
-    /// </summary>
-    public static UnityEvent<bool> UpdateMovingState { get; private set; } = new();
-
     #region Setup
     /// <summary>
     /// This function is called before the first frame update.
@@ -494,13 +489,11 @@ public class PlayerMovementController : MonoBehaviour
         if (change)
         {
             _movementCoroutine = StartCoroutine(ResolveMovement());
-            UpdateMovingState?.Invoke(true);
         }
         else
         {
             StopCoroutine(_movementCoroutine);
             _playerRigidBody.velocity = Vector3.zero;
-            UpdateMovingState?.Invoke(false);
         }
     }
     #endregion

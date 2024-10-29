@@ -36,6 +36,11 @@ public class RuntimeSfxManager : AudioManager
         SubscribeToActions(false);
     }
 
+    private void Start()
+    {
+        InitializeFootstepInstance();
+    }
+
     /// <summary>
     /// Subscribes and unsubscribes from actions
     /// </summary>
@@ -74,6 +79,16 @@ public class RuntimeSfxManager : AudioManager
         RuntimeManager.PlayOneShot(eventReference, worldPosition);
     }
 
+    #region Footsteps
+
+    /// <summary>
+    /// Initializes the foot step instance
+    /// </summary>
+    private void InitializeFootstepInstance()
+    {
+        _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
+    }
+
     /// <summary>
     /// Plays footsteps when the player moves
     /// </summary>
@@ -102,7 +117,6 @@ public class RuntimeSfxManager : AudioManager
                 return;
             }
 
-            _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
             _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
             _hardSurfaceWalkingEventInstance.start();
             _hardSurfaceWalkingEventInstance.release();
@@ -130,6 +144,8 @@ public class RuntimeSfxManager : AudioManager
             yield return null;
         }
     }
+
+    #endregion Footsteps
 
     #endregion
 }
