@@ -1,87 +1,53 @@
 /*****************************************************************************
 // File Name :         PlayerHealth.cs
 // Author :            Ryan Swanson
+// Contributors:       Andrea Swihart-DeCoster
 // Creation Date :     10/15/24
 //
 // Brief Description : Controls the player's health functionality
 *****************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Controls the player health functionality
 /// </summary>
 public class PlayerHealth : BaseHealth
 {
-    public static PlayerHealth Instance;
-
-    #region Base Class
-    //Performs the base starting functionality and sets the instance
-    protected override void Awake()
-    {
-        EstablishInstance();
-        base.Awake();
-    }
-
     /// <summary>
-    /// Inherits from BaseHealth
     /// Performs the base functionality then calls player related event
     /// </summary>
-    /// <param name="damage">The amount of damage received</param>
-    protected override void HealthDecrease(float damage)
+    /// <param name="heal"> The amount of healing received </param>
+    public override void IncreaseHealth(float heal)
     {
-        base.HealthDecrease(damage);
-        PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
-        PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
-    }
+        base.IncreaseHealth(heal);
 
-    /// <summary>
-    /// Inherits from BaseHealth
-    /// Performs the base functionality then calls player related event
-    /// </summary>
-    /// <param name="heal">The amount of healing received</param>
-    protected override void HealthIncrease(float heal)
-    {
-        base.HealthIncrease(heal);
         PlayerManager.Instance.InvokePlayerHealEvent(heal);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
     }
 
     /// <summary>
-    /// Inherits from BaseHealth
-    /// Performs the base functionality then calls player related event
+    /// Reduces health and calls any player damaged events
     /// </summary>
-    protected override void Death()
+    /// <param name="damage"> amount to reduce health by </param>
+    public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        base.Death();
+        base.TakeDamage(damage, null);
+
+        PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
+        PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+
+        RuntimeSfxManager.APlayOneShotSFX?
+            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
+    }
+
+    /// <summary>
+    /// When the player dies, performs the base functionality then calls player related event
+    /// </summary>
+    public override void OnDeath()
+    {
+        base.OnDeath();
         PlayerManager.Instance.InvokeOnPlayerDeath();
-    }
-
-    #endregion
-
-    /// <summary>
-    /// Establishes the instance and removes
-    /// </summary>
-    private void EstablishInstance()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    /// <summary>
-    /// This is TEMPORARY
-    /// Waiting for Marks damage system
-    /// Base function for taking damage is protected. Could use an event, but that falls out of my task scope
-    /// </summary>
-    public void TempEnemyDamage(float damage)
-    {
-        HealthDecrease(damage);
     }
 }

@@ -62,7 +62,7 @@ public class CameraManager : MainGameplayManagerFramework
     /// <param name="toggle"> the bool to input into the invoked event </param>
     public void InvokeOnCameraMovementToggle(bool toggle)
     {
-        _onCameraMovementToggled?.Invoke(toggle);
+        _onCameraMovementToggled?.Invoke(!toggle);
     }
     #endregion
 

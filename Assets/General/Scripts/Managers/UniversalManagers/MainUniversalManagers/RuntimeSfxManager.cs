@@ -3,12 +3,15 @@
 // Author:          Andrea Swihart-DeCoster
 // Creation Date:   October 1st, 2024
 //
-// Description:     Manages one shot sound effects.
+// Description:     Manages sound effects during runtime.
 ******************************************************************************/
 
+using FMOD.Studio;
 using FMODUnity;
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Handles all SFX during runtime and how / where they play.
@@ -16,6 +19,10 @@ using UnityEngine;
 public class RuntimeSfxManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSFX;
+
+    private EventInstance _hardSurfaceWalkingEventInstance;
+
+    private Coroutine _footstepsCoroutine;
 
     #region Enable and Action Subscriptions
 
@@ -29,6 +36,11 @@ public class RuntimeSfxManager : AudioManager
         SubscribeToActions(false);
     }
 
+    private void Start()
+    {
+        InitializeFootstepInstance();
+    }
+
     /// <summary>
     /// Subscribes and unsubscribes from actions
     /// </summary>
@@ -38,10 +50,14 @@ public class RuntimeSfxManager : AudioManager
         if(val)
         {
             APlayOneShotSFX += PlayOneShotSFX;
+            PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
+            PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
             return;
         }
 
         APlayOneShotSFX -= PlayOneShotSFX;
+        PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
+        PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
     }
 
     #endregion Enable and Action Subscriptions
@@ -54,7 +70,7 @@ public class RuntimeSfxManager : AudioManager
     /// <param name="eventReference">reference to the FMOD SFX event </param>
     private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
-        if(eventReference.IsNull)
+        if (eventReference.IsNull)
         {
             Debug.LogWarning(eventReference + " is null.");
             return;
@@ -62,6 +78,79 @@ public class RuntimeSfxManager : AudioManager
 
         RuntimeManager.PlayOneShot(eventReference, worldPosition);
     }
+
+    #region Footsteps
+
+    /// <summary>
+    /// Initializes the foot step instance
+    /// </summary>
+    private void InitializeFootstepInstance()
+    {
+        if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
+        {
+            return;
+        }
+
+        _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
+    }
+
+    /// <summary>
+    /// Plays footsteps when the player moves
+    /// </summary>
+    private void PlayFootSteps()
+    { 
+        _footstepsCoroutine = StartCoroutine(LoopFootSteps());
+    }
+
+    /// <summary>
+    /// Stops the footstep coroutine
+    /// </summary>
+    private void StopFootsteps()
+    {
+        StopCoroutine(_footstepsCoroutine);
+    }
+
+    /// <summary>
+    /// Plays a single instance of the player footstep if the player is grounded
+    /// </summary>
+    private void PlayFootStep()
+    {
+        if (PlayerMovementController.IsGrounded)
+        {
+            if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
+            {
+                return;
+            }
+
+            _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
+            _hardSurfaceWalkingEventInstance.start();
+            _hardSurfaceWalkingEventInstance.release();
+        }
+    }
+
+    /// <summary>
+    /// Plays the footstep SFX repeatedly while moving
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator LoopFootSteps()
+    {
+        float timer = 0.0f;
+
+        while (true)
+        {
+            if (timer > FmodSfxEvents.Instance.FootstepSpeed)
+            {
+                PlayFootStep();
+                timer = 0.0f;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+    }
+
+    #endregion Footsteps
 
     #endregion
 }

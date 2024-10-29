@@ -76,15 +76,14 @@ public class ConsoleController : MonoBehaviour
         float _amount;
         if (_dmgAmountInputField.text.Length > 0 && float.TryParse(_dmgAmountInputField.text, out _amount))
         {
-            GameObject.FindObjectOfType<PlayerHealth>().TempEnemyDamage(_amount);
-        }
-        
+            GameObject.FindObjectOfType<PlayerHealth>().TakeDamage(_amount, null);
+        }  
     }
 
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
-    /// of memmory leaks
+    /// of memory leaks
     /// </summary>
     private void OnDestroy()
     {
@@ -92,7 +91,5 @@ public class ConsoleController : MonoBehaviour
         _playerTakeDamageButton.onClick.RemoveAllListeners();
         _playerInput.Disable();
     }
-
-    
 
 }
