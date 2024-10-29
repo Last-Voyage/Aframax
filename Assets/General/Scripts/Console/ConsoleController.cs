@@ -99,6 +99,10 @@ public class ConsoleController : MonoBehaviour
     #endregion
 
     #region God Mode
+
+    /// <summary>
+    /// toggles between going in and out of god mode
+    /// </summary>
     private void ToggleGodMode()
     {
         //safty check to see for player health component not being on the player
@@ -124,7 +128,7 @@ public class ConsoleController : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// putes the player in god mode
     /// </summary>
     private void EnterGodMode()
     {
@@ -133,7 +137,7 @@ public class ConsoleController : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Takes the player out of god mode
     /// </summary>
     private void ExitGodMode() 
     {

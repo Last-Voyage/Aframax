@@ -19,9 +19,10 @@ public class PlayerHealth : BaseHealth
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
-    /// 
+    
 
-    public bool _shouldTakeDamage = true;
+    //Variable is used by the dev console to determin weather the player should take damage or not
+    public bool _shouldTakeDamage = true;//Nabil madde this change
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
