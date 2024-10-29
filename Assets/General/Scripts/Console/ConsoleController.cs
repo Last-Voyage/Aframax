@@ -37,12 +37,19 @@ public class ConsoleController : MonoBehaviour
 
     [SerializeField] private GameObject _toggleGodMode;
 
+
+    /// <summary>
+    /// happens before the start of the game
+    /// </summary>
     private void Awake()
     {
         _playerInput = new PlayerInputMap();
         _playerInput.Enable();
     }
 
+    /// <summary>
+    /// happens when the game starts
+    /// </summary>
     private void Start()
     {
         //linking player take damage button to corresponding methode
@@ -51,7 +58,9 @@ public class ConsoleController : MonoBehaviour
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
     }
 
-  
+  /// <summary>
+  /// toggles the console on and off
+  /// </summary>
     private void ToggleConsole()
     {
         //toggle console on and off
@@ -162,8 +171,3 @@ public class ConsoleController : MonoBehaviour
 }
 
 #endif
-
-
-
-
-

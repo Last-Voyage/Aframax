@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealth.cs
 // Author :            Ryan Swanson
-// Contributors:       Andrea Swihart-DeCoster
+// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba
 // Creation Date :     10/15/24
 //
 // Brief Description : Controls the player's health functionality
@@ -21,8 +21,13 @@ public class PlayerHealth : BaseHealth
     /// <param name="heal"> The amount of healing received </param>
     
 
-    //Variable is used by the dev console to determin weather the player should take damage or not
-    public bool _shouldTakeDamage = true;//Nabil madde this change
+    //Variable is used by the dev console to determine whether the player should take damage or not
+    public bool _shouldTakeDamage = true;//Nabil made this change
+
+    /// <summary>
+    /// increases health
+    /// </summary>
+    /// <param name="heal"></param>
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
