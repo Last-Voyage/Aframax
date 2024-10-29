@@ -2,6 +2,7 @@
 // File Name :         FullRoomAttack.cs
 // Author :            Tommy Roberts
 // Contributor :       Andrew Stapay
+//                     Ryan Swanson
 // Creation Date :     10/9/2024
 //
 // Brief Description : controls the full room attack for the boss
@@ -78,6 +79,8 @@ public class RoomLockdownAttack : BaseBossAttack
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
         var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
         var attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
+        VfxManager.Instance.GetEnemyAttackWarningVfx().PlayNextVfxInPool(attackMeshRenderer.transform.position,
+            attackMeshRenderer.transform.rotation);
 
         //start blinking indicating attack will happen soon
         float elapsedTime = 0f;

@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       IterativeChunkLoad.cs
 // Author:          Nick Rice, Alex Kalscheur
+// Contributer:     Charlie Polonus
 // Creation Date:   September 27, 2024
 //
 // Description:     This script takes in the list of all of the chunks and the queue of chunks,
@@ -46,9 +47,15 @@ public class IterativeChunkLoad : MonoBehaviour
     private Vector3 _unusedChunkLandingArea = Vector3.zero;
 
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
-    private const float _DISTANCE_BETWEEN_CHUNKS = 10f;
+    private float _distanceBetweenChunks;
 
     private BoatMover _boatMover;
+
+    // Returns every chunk in the list (used for the editor window)
+    public GameObject[] EveryChunk => _everyChunk;
+
+    // Returns the chunk size(used for the editor window)
+    public float DistanceBetweenChunks => _distanceBetweenChunks;
 
     #region GrabbingChunksFromOtherScripts
     /// <summary>
@@ -101,6 +108,15 @@ public class IterativeChunkLoad : MonoBehaviour
         EnvironmentManager.Instance.GetAllChunkObjects().RemoveListener(ReceiveEveryChunk);
         EnvironmentManager.Instance.SendChangeTheChunk().RemoveListener(ChunkChange);
     }
+
+    /// <summary>
+    /// Sets the distance between the chunks
+    /// </summary>
+    /// <param name="distance">The distance to set</param>
+    public void SetChunkDistance(float distance)
+    {
+        _distanceBetweenChunks = distance;
+    }
     #endregion
 
     /// <summary>
@@ -131,7 +147,7 @@ public class IterativeChunkLoad : MonoBehaviour
         _chunkQueuePtrPtr++;
 
         _everyChunk[_newFrontChunkPtr].transform.position =
-            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_DISTANCE_BETWEEN_CHUNKS);
+            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_distanceBetweenChunks);
 
         _everyChunk[_newFrontChunkPtr].SetActive(true);
 
@@ -147,7 +163,7 @@ public class IterativeChunkLoad : MonoBehaviour
         _usedChunks[(int)ChunkStates.back].SetActive(false); // If causing errors, put at the bottom of the function
 
         _usedChunks[(int)ChunkStates.back].transform.position =
-            _unusedChunkLandingArea + new Vector3(_DISTANCE_BETWEEN_CHUNKS * _backChunkPtr, 0, 0);
+            _unusedChunkLandingArea + new Vector3(_distanceBetweenChunks * _backChunkPtr, 0, 0);
     }
 
     /// <summary>
