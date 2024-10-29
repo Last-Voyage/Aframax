@@ -21,7 +21,7 @@ public class ReadChunkQueue : MonoBehaviour
 
     int[] _realChunks;
 
-    private void OnEnable()
+    private void Start()
     {
         GetChunkQueue();
     }

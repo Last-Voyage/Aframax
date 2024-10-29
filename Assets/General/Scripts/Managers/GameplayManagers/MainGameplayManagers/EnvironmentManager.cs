@@ -20,11 +20,11 @@ public class EnvironmentManager : MainGameplayManagerFramework
 {
     public static EnvironmentManager Instance;
 
-    private UnityEvent<int[]> _sendingOverChunks = new();
+    public UnityEvent<int[]> _sendingOverChunks = new();
 
-    private UnityEvent<GameObject[]> _allChunkObjects = new();
+    public UnityEvent<GameObject[]> _allChunkObjects = new();
 
-    private UnityEvent _changeTheChunk = new();
+    public UnityEvent _changeTheChunk = new();
 
     /// <summary>
     /// A function that takes in the int array representing the queue, and then it 

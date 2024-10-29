@@ -57,6 +57,67 @@ Transform:
   - {fileID: 4780855660033943084}
   m_Father: {fileID: 5219756235634658170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1042579411315046815
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4761434010316886518}
+  - component: {fileID: 1068182117539774483}
+  m_Layer: 0
+  m_Name: Spline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4761434010316886518
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042579411315046815}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5219756235634658170}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1068182117539774483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042579411315046815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac65d591ad7bf234d862b7c4877755fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BezierPoints:
+  - Point: {x: 0, y: 0, z: -100}
+    BackDir: {x: 0, y: 0, z: -5}
+    ForwardDir: {x: -0.009963989, y: -1.8116837, z: 21.538727}
+  - Point: {x: -11.704941, y: 3.7181702, z: -26.372131}
+    BackDir: {x: 6.4799194, y: 0.4599533, z: -6.9615936}
+    ForwardDir: {x: -6.1020813, y: -0.88983154, z: 10.899994}
+  - Point: {x: -7.3431854, y: -0.3900833, z: 16.292206}
+    BackDir: {x: -8.85965, y: 0.78941345, z: -10.531158}
+    ForwardDir: {x: 5.2046814, y: -0.28881073, z: 5.8271637}
+  - Point: {x: 0, y: 0, z: 100}
+    BackDir: {x: -0.29203796, y: 2.8156738, z: -30.715305}
+    ForwardDir: {x: 0, y: 0, z: 5}
+  CurveIntensity: 2
+  HandleSize: 1
+  CurveSmoothness: 15
+  Tweening: 1
 --- !u!1 &1872058685747968863
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,7 +915,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9178956528207887631
 Transform:
   m_ObjectHideFlags: 0
@@ -1155,6 +1216,7 @@ Transform:
   m_Children:
   - {fileID: 100851666204657940}
   - {fileID: 2819275972124406410}
+  - {fileID: 4761434010316886518}
   - {fileID: 9178956528207887631}
   - {fileID: 6530695279422405408}
   - {fileID: 4346154315037692205}

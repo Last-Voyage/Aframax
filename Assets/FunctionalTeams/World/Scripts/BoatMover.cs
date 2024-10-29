@@ -16,10 +16,10 @@ using UnityEngine;
 public class BoatMover : MonoBehaviour
 {
     [Tooltip("The current spline that the boat is moving along")]
-    private RiverSpline _currentSpline;
+    private BezierCurve _currentSpline;
     
     [Tooltip("After the current spline is completed, this will become the current spline")]
-    private RiverSpline _nextSpline;
+    private BezierCurve _nextSpline;
     
     [Tooltip("Length of the spline")] 
     private float _splineLength;
@@ -59,7 +59,7 @@ public class BoatMover : MonoBehaviour
     {
         _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength / 100;
         CheckSplineChange();
-        Vector3 newPositionOnSpline = _curve.GetPositionAlongSpline(_percentOfSpline, out _newForwardVector);
+        Vector3 newPositionOnSpline = _curve.GetPositionAlongSpline(_percentOfSpline, out _newForwardVector, true);
         gameObject.transform.position = newPositionOnSpline;
         gameObject.transform.forward = _newForwardVector;
     }
@@ -68,10 +68,9 @@ public class BoatMover : MonoBehaviour
     /// Sets the current spline, its length and the curve component for shorthand
     /// </summary>
     /// <param name="spline">the spline</param>
-    public void SetCurrentSpline(RiverSpline spline)
+    public void SetCurrentSpline(BezierCurve spline)
     {
-        _currentSpline = spline;
-        _curve = _currentSpline.GetComponent<BezierCurve>();
+        _curve = spline;
         _splineLength = _curve.GetLengthOfLine();
     }
 
@@ -79,7 +78,7 @@ public class BoatMover : MonoBehaviour
     /// Sets the spline that will be used after the current spline is completed
     /// </summary>
     /// <param name="spline">the spline</param>
-    public void SetNextSpline (RiverSpline spline)
+    public void SetNextSpline (BezierCurve spline)
     {
         _nextSpline = spline;
     }
