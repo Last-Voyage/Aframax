@@ -15,8 +15,6 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerHealth : BaseHealth
 { 
-    //Variable is used by the dev console to determin weather the player should take damage or not
-    public bool _shouldTakeDamage = true;//Nabil madde this change
 
     /// <summary>
     /// Performs the base functionality then calls player related event
