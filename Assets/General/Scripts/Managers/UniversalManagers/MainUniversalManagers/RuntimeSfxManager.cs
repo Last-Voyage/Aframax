@@ -22,6 +22,8 @@ public class RuntimeSfxManager : AudioManager
 
     private EventInstance _hardSurfaceWalkingEventInstance;
 
+    private Coroutine _footstepsCoroutine;
+
     #region Enable and Action Subscriptions
 
     private void OnEnable()
@@ -43,12 +45,14 @@ public class RuntimeSfxManager : AudioManager
         if(val)
         {
             APlayOneShotSFX += PlayOneShotSFX;
-            PlayerMovementController.UpdateMovingState.AddListener(PlayFootSteps);
+            PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
+            PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
             return;
         }
 
         APlayOneShotSFX -= PlayOneShotSFX;
-        PlayerMovementController.UpdateMovingState.RemoveListener(PlayFootSteps);
+        PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
+        PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
     }
 
     #endregion Enable and Action Subscriptions
@@ -73,16 +77,17 @@ public class RuntimeSfxManager : AudioManager
     /// <summary>
     /// Plays footsteps when the player moves
     /// </summary>
-    private void PlayFootSteps(bool isMoving)
-    {
-        if (isMoving)
-        {
-            StartCoroutine(PlayFootSteps());
-        }
-        else
-        {
+    private void PlayFootSteps()
+    { 
+        _footstepsCoroutine = StartCoroutine(LoopFootSteps());
+    }
 
-        }
+    /// <summary>
+    /// Stops the footstep coroutine
+    /// </summary>
+    private void StopFootsteps()
+    {
+        StopCoroutine(_footstepsCoroutine);
     }
 
     /// <summary>
@@ -92,7 +97,11 @@ public class RuntimeSfxManager : AudioManager
     {
         if (PlayerMovementController.IsGrounded)
         {
-            Debug.Log("Footstep");
+            if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
+            {
+                return;
+            }
+
             _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
             _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
             _hardSurfaceWalkingEventInstance.start();
@@ -104,19 +113,22 @@ public class RuntimeSfxManager : AudioManager
     /// Plays the footstep SFX repeatedly while moving
     /// </summary>
     /// <returns></returns>
-    private IEnumerator PlayFootSteps()
+    private IEnumerator LoopFootSteps()
     {
         float timer = 0.0f;
 
-        if (timer > FmodSfxEvents.Instance.FootstepSpeed)
+        while (true)
         {
-            PlayFootStep();
-            timer = 0.0f;
+            if (timer > FmodSfxEvents.Instance.FootstepSpeed)
+            {
+                PlayFootStep();
+                timer = 0.0f;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
         }
-
-        timer += Time.deltaTime;
-
-        yield return null;
     }
 
     #endregion
