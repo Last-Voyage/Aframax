@@ -75,7 +75,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
 
     public virtual void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        _onDamageTaken.Invoke();
+        _onDamageTaken?.Invoke();
 
         _currentHealth -= damage;
  
