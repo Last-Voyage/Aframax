@@ -138,7 +138,7 @@ public class RoomVineAttack : BaseBossAttack
     /// </summary>
     private void AttackRandomRoom()
     {
-        if (_setSpawnPoints.Length == 0)
+        if (_setSpawnPoints.Length > 0)
         {
             _randomRoom = UnityEngine.Random.Range(0, _setSpawnPoints.Length);
 
@@ -161,11 +161,12 @@ public class RoomVineAttack : BaseBossAttack
         for (int i = 0; i < _spawnedEnemies.Length; i++)
         {
             float xDiff = (float)(UnityEngine.Random.Range(-25, 25)) / 100f;
+            float yDiff = 1.15f;
             float zDiff = (float)(UnityEngine.Random.Range(-25, 25)) / 100f;
             float yRotation = UnityEngine.Random.Range(-180, 180);
 
             _spawnedEnemies[i] = Instantiate(_tentaclePrefab, transform);
-            _spawnedEnemies[i].transform.position = transform.position + new Vector3(xDiff, 0, zDiff);
+            _spawnedEnemies[i].transform.position = transform.position + new Vector3(xDiff, yDiff, zDiff);
             _spawnedEnemies[i].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
         }
     }
