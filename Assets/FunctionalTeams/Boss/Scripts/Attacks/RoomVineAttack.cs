@@ -44,8 +44,7 @@ public class RoomVineAttack : BaseBossAttack
     [SerializeField] private float _timeBetweenAttacks = 3f;
     [Space]
 
-    [Tooltip("Player Transform goes here to detect when to attack")]
-    [SerializeField] private Transform _playerTransform;
+    private Transform _playerTransform;
 
     private GameObject[][] _spawnedEnemies = new GameObject[0][];
     private List<Coroutine> _activeCoroutines = new List<Coroutine>();
@@ -55,6 +54,7 @@ public class RoomVineAttack : BaseBossAttack
     private void Start()
     {
         _isAttackActive = false;
+        InitializePlayerTransform();
     }
 
     /// <summary>
@@ -91,6 +91,11 @@ public class RoomVineAttack : BaseBossAttack
     protected override void EndAttack()
     {
         base.EndAttack();
+    }
+
+    private void InitializePlayerTransform()
+    {
+        _playerTransform = PlayerMovementController.Instance.transform;
     }
 
     /// <summary>
