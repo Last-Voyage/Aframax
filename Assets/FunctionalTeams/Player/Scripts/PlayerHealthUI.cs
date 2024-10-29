@@ -1,10 +1,10 @@
 /*****************************************************************************
 // File Name :         PlayerHealthUI.cs
 // Author :            Jeremiah Peters
-//                     Ryan Swanson
+// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster
 // Creation Date :     9/16/24
 //
-// Brief Description : operates the health bar for the player
+// Brief Description : operates the health ui for the player
 *****************************************************************************/
 
 using System.Collections;
@@ -17,30 +17,51 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerHealthUI : MonoBehaviour
 {
-    [Header("Health Bar")]
-    [SerializeField] private Image _healthBar;
-
-    [Space]
     [Header("Player Damaged")]
     [SerializeField] private float _damageUIDisplayTime;
     [SerializeField] private Image _damagedUI;
+
     private Coroutine _damagedUICoroutine;
 
+    [Tooltip("Heart UI Object")]
+    private GameObject _playerHeart;
 
+    private Animator _animator;
+
+    /// <summary>
+    /// locate the heart and subscribe to events
+    /// </summary>
     private void Awake()
-    {
-        //this way it doesn't waste time doing find if it's already connected
-        if (_healthBar == null)
-        {
-            //this used to only find object of type image but i reworked it so it should be less terrible
-            //now it won't break if there's other images in the scene
-            _healthBar = GameObject.Find("Health").GetComponent<Image>();
-            if (_healthBar == null)
-            {
-                Debug.Log("Couldn't find health bar. Make sure there's one in the scene!");
-            }
-        }
+    { 
         SubscribeToEvents();
+    }
+
+    private void Start()
+    {
+        InitializeHeartUI();
+        InitializeAnimator();
+    }
+
+    /// <summary>
+    /// Initializes the heart UI
+    /// </summary>
+    private void InitializeHeartUI()
+    {
+        _playerHeart = transform.GetChild(0).gameObject;
+
+        //this way it doesn't waste time doing find if it's already connected
+        if (_playerHeart == null)
+        {
+            Debug.Log("Couldn't find the heart object. Make sure there's one in the scene!");
+        }
+    }
+
+    /// <summary>
+    /// Initializes the player animator
+    /// </summary>
+    private void InitializeAnimator()
+    {
+        _animator = _playerHeart.GetComponent<Animator>();
     }
 
     private void OnDestroy()
@@ -49,15 +70,12 @@ public class PlayerHealthUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the visual health bar
+    /// Updates the heart ui to match the current health
     /// </summary>
     /// <param name="healthPercent"></param>
-    private void UpdateHealthBar(float healthPercent,float currentHealth)
+    private void UpdateHealthUI(float healthPercent,float currentHealth)
     {
-        if (_healthBar != null)
-        {
-            _healthBar.fillAmount = healthPercent;
-        }
+        _animator.SetFloat("Health_Stage_Num", 4 * healthPercent);
     }
 
     /// <summary>
@@ -88,13 +106,13 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateHealthBar);
+        PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateHealthUI);
         PlayerManager.Instance.GetOnPlayerDamageEvent().AddListener(PlayerDamagedUI);
     }
 
     private void UnsubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateHealthBar);
+        PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateHealthUI);
         PlayerManager.Instance.GetOnPlayerDamageEvent().RemoveListener(PlayerDamagedUI);
     }
 }

@@ -24,6 +24,11 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     private static UnityEvent<bool> _onMovementToggled = new();
 
+    //When the movement starts
+    private static UnityEvent _onMovementStartedEvent = new();
+    //When the movement stops
+    private static UnityEvent _onMovementEndedEvent = new();
+
     //When the projectile is fired
     private static UnityEvent _onHarpoonFiredEvent = new();
     //When the harpoon is reloaded
@@ -68,6 +73,22 @@ public class PlayerManager : MainGameplayManagerFramework
     public void InvokeOnCameraMovementToggle(bool toggle)
     {
         _onMovementToggled?.Invoke(toggle);
+    }
+
+    /// <summary>
+    /// Invokes when the player movement starts
+    /// </summary>
+    public void InvokeOnMovementStartedEvent()
+    {
+        _onMovementStartedEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes when the player movement ends
+    /// </summary>
+    public void InvokeOnMovementEndedEvent()
+    {
+        _onMovementEndedEvent?.Invoke();
     }
 
     /// <summary>
@@ -158,7 +179,6 @@ public class PlayerManager : MainGameplayManagerFramework
     public void InvokeOnPlayerDeath()
     {
         _onPlayerDeath?.Invoke();
-        SceneLoadingManager.Instance.DeathReloadCurrentScene();
     }
     #endregion
 
@@ -167,6 +187,9 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Getter for the _onMovementToggled event
     /// </summary>
     public UnityEvent<bool> GetOnMovementToggleEvent() => _onMovementToggled;
+
+    public UnityEvent GetOnMovementStartEvent() => _onMovementStartedEvent;
+    public UnityEvent GetOnMovementEndEvent() => _onMovementEndedEvent;
 
     public UnityEvent GetOnHarpoonFiredEvent() => _onHarpoonFiredEvent;
     public UnityEvent GetOnHarpoonReloadedEvent() => _onHarpoonReloadedEvent;

@@ -16,8 +16,36 @@ public class FmodSfxEvents : MonoBehaviour
 {
     public static FmodSfxEvents Instance;
 
+    #region Boss
+
     [field: Header("Boss")]
-    [field: SerializeField] public EventReference weakPointDestroyed { get; private set; }
+    [field: SerializeField] public EventReference WeakPointDestroyed { get; private set; }
+    [field: SerializeField] public EventReference LimbDestroyed { get; private set; }
+    [field: SerializeField] public EventReference LimbAttack { get; private set; }
+    [field: SerializeField] public EventReference PhaseStart { get; private set; }
+
+    #endregion Boss
+
+    #region Player
+
+    [field: Header("Player")]
+    [field: SerializeField] public EventReference HardSurfaceWalking { get; private set; }
+    [field: Tooltip("Time between each footstep")]
+    [field: SerializeField] public float FootstepSpeed { get; private set; } = 0.3f;
+
+    [field: Space]
+    [field: SerializeField] public EventReference PlayerTookDamage { get; private set; }
+
+    #region Harpoon
+
+    [field: Header("Harpoon")]
+    [field: SerializeField] public EventReference HarpoonShot { get; private set; }
+    [field: SerializeField] public EventReference HarpoonReload { get; private set; }
+    [field: SerializeField] public EventReference HarpoonHitBoat { get; private set; }
+
+    #endregion Harpoon
+
+    #endregion Player
 
     private void Awake()
     {

@@ -31,12 +31,15 @@ public class PlayerHealth : BaseHealth
     /// Reduces health and calls any player damaged events
     /// </summary>
     /// <param name="damage"> amount to reduce health by </param>
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        base.TakeDamage(damage);
+        base.TakeDamage(damage, null);
 
         PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+
+        RuntimeSfxManager.APlayOneShotSFX?
+            .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
     }
 
     /// <summary>

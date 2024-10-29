@@ -59,6 +59,8 @@ public class GameplayManagers : CoreManagersFramework
         {
             mainManager.SetupMainManager();
         }
+
+        SceneLoadingManager.Instance.InvokeGameplaySceneLoaded();
     }
 
     #region Getters

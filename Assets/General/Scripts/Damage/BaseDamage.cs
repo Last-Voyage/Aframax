@@ -46,7 +46,7 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
 
         if (damageRecipient.TryGetComponent<IBaseHealth>(out IBaseHealth health))
         {
-            health.TakeDamage(Damage);
+            health.TakeDamage(Damage, this);
         }
     }
 }
