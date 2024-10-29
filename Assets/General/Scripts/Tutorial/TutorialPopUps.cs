@@ -24,11 +24,9 @@ public class TutorialPopUps : MonoBehaviour
     ScriptableUI[] _uIData;
 
     [Tooltip("The collider the player has to walk into")]
-    [SerializeField]
     GameObject _walkTutorialObject;
 
     [Tooltip("The collider the player has to shoot")]
-    [SerializeField]
     GameObject _shootTutorialObject;
 
     [Tooltip("The pointer for which ui data is currently being used")]
@@ -46,8 +44,8 @@ public class TutorialPopUps : MonoBehaviour
     // Start's the tutorial process
     void Start()
     {
-        _walkTutorialObject.SetActive(false);
-        _shootTutorialObject.SetActive(false);
+        //_walkTutorialObject.SetActive(false);
+        //_shootTutorialObject.SetActive(false);
         StartCoroutine(TimeBeforeText());
     }
 
@@ -163,6 +161,11 @@ public class TutorialPopUps : MonoBehaviour
     private void OnEnable()
     {
         GameStateManager.Instance.CompletedTutorial().AddListener(NextTutorial);
+
+        _shootTutorialObject = GameObject.Find("TutorialShootObject");
+        _walkTutorialObject = GameObject.Find("TutorialWalkObject");
+        _walkTutorialObject.SetActive(false);
+        _shootTutorialObject.SetActive(false);
     }
 
     /// <summary>
