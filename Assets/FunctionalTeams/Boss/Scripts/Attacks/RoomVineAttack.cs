@@ -54,7 +54,12 @@ public class RoomVineAttack : BaseBossAttack
     private Vector3[] _spawnPoints = new Vector3[0];
     private Vector3[] _attackScales = new Vector3[0];
     private int _randomRoom = 0;
-    private GameObject[] _spawnedEnemies;
+    private GameObject[] _spawnedEnemies = new GameObject[0];
+
+    private MeshRenderer _attackMeshRenderer;
+    private Collider _attackCollider;
+
+    private const float ATTACK_DETECTION_RANGE = 8;
 
     private void Start()
     {
@@ -126,10 +131,17 @@ public class RoomVineAttack : BaseBossAttack
         // tell the attack manager that we are attacking
         _isAttackActive = true;
 
-        // Determine which room to attack
-        AttackRandomRoom();
+        if (_spawnedEnemies.Length == 0)
+        {
+            // Determine which room to attack
+            AttackRandomRoom();
 
-        SpawnTentacles();
+            // Spawn the tentacle enemies
+            SpawnTentacles();
+        }
+
+        SetBlinkingIndicator();
+        
         StartCoroutine(PerformAttack());
     }
 
@@ -160,15 +172,23 @@ public class RoomVineAttack : BaseBossAttack
 
         for (int i = 0; i < _spawnedEnemies.Length; i++)
         {
-            float xDiff = (float)(UnityEngine.Random.Range(-25, 25)) / 100f;
+            float xDiff = (float)(UnityEngine.Random.Range(-100, 100)) / 100f;
             float yDiff = 1.15f;
-            float zDiff = (float)(UnityEngine.Random.Range(-25, 25)) / 100f;
+            float zDiff = (float)(UnityEngine.Random.Range(-100, 100)) / 100f;
+
             float yRotation = UnityEngine.Random.Range(-180, 180);
 
-            _spawnedEnemies[i] = Instantiate(_tentaclePrefab, transform);
+            _spawnedEnemies[i] = Instantiate(_tentaclePrefab, transform.parent);
             _spawnedEnemies[i].transform.position = transform.position + new Vector3(xDiff, yDiff, zDiff);
             _spawnedEnemies[i].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
         }
+    }
+
+    private void SetBlinkingIndicator()
+    {
+        // setting attack indicator
+        _attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
+        _attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
     }
 
     /// <summary>
@@ -177,42 +197,44 @@ public class RoomVineAttack : BaseBossAttack
     /// <returns></returns>
     private IEnumerator PerformAttack()
     {
-        // setting attack indicator
-        _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
-        var attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
-        var attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
-
-        if (Vector3.Distance(transform.position, _playerTransform.position) < 1)
+        while (true)
         {
-            //start blinking indicating attack will happen soon
-            float elapsedTime = 0f;
-            while (elapsedTime < _blinkDuration)
+            if (Vector3.Distance(transform.position, _playerTransform.position) < ATTACK_DETECTION_RANGE)
             {
-                float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
-                attackMeshRenderer.enabled = true;
-                yield return new WaitForSeconds(currentBlinkInterval);
-                attackMeshRenderer.enabled = false;
-                yield return new WaitForSeconds(currentBlinkInterval);
-                elapsedTime += currentBlinkInterval * 2;
+                _attackMeshRenderer.material = _lowOpacity;
+
+                //start blinking indicating attack will happen soon
+                float elapsedTime = 0f;
+                while (elapsedTime < _blinkDuration)
+                {
+                    float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
+                    _attackMeshRenderer.enabled = true;
+                    yield return new WaitForSeconds(currentBlinkInterval);
+                    _attackMeshRenderer.enabled = false;
+                    yield return new WaitForSeconds(currentBlinkInterval);
+                    elapsedTime += currentBlinkInterval * 2;
+                }
+
+                // after done blinking make the block solid and enable collider to hit player for a second
+                _attackMeshRenderer.material = _hitOpacity;
+                _attackMeshRenderer.enabled = true;
+                _attackCollider.enabled = true;
+
+                //wait for hit time
+                yield return new WaitForSeconds(_hitBoxAppearDuration);
+
+                //disable the enabled
+                _attackMeshRenderer.enabled = false;
+                _attackCollider.enabled = false;
+
+                //end attack and cycle to another
+                BossAttackManager.Instance.AttackInProgress = false;
+
+                // wait before attacking again
+                yield return new WaitForSeconds(_timeBetweenAttacks);
             }
 
-            // after done blinking make the block solid and enable collider to hit player for a second
-            attackMeshRenderer.material = _hitOpacity;
-            attackMeshRenderer.enabled = true;
-            attackCollider.enabled = true;
-
-            //wait for hit time
-            yield return new WaitForSeconds(_hitBoxAppearDuration);
-
-            //disable the enabled
-            attackMeshRenderer.enabled = false;
-            attackCollider.enabled = false;
-
-            //end attack and cycle to another
-            BossAttackManager.Instance.AttackInProgress = false;
-
-            // wait before attacking again
-            yield return new WaitForSeconds(_timeBetweenAttacks);
+            yield return null;
         }
     }
 }
