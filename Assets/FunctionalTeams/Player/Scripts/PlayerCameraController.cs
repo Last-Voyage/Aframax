@@ -43,7 +43,7 @@ public class PlayerCameraController : MonoBehaviour
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
 
-        _cameraCoroutine = StartCoroutine(MoveCamera());
+        //_cameraCoroutine = StartCoroutine(MoveCamera());
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public class PlayerCameraController : MonoBehaviour
         if (change)
         {
             _cameraCoroutine = StartCoroutine(MoveCamera());
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
@@ -111,7 +111,7 @@ public class PlayerCameraController : MonoBehaviour
             {
                 StopCoroutine(_cameraCoroutine);
             }
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
@@ -138,7 +138,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
-        ToggleCameraMovement(false);
+        ToggleCameraMovement(true);
     }
 
     /// <summary>
