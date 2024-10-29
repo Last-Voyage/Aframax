@@ -24,7 +24,8 @@ public interface IBaseHealth
     /// Decreases health based on damage taken 
     /// </summary>
     /// <param name="damage"> incoming amount to decrease _currentHealth </param>
-    abstract void TakeDamage(float damage);
+    /// <param name="damageSource"> Source of the incoming damage. Typically input as "this" </param>
+    abstract void TakeDamage(float damage, IBaseDamage damageSource);
 
     /// <summary>
     /// function of health increasing
