@@ -15,7 +15,7 @@ using UnityEngine;
 /// </summary>
 public class TitleScreenScrolling : MonoBehaviour
 {
-    [SerializeField] private Vector3 _bottomCameraPosition;
+    [SerializeField] private Transform _bottomCameraPosition;
 
     [SerializeField] private float _screenScrollSpeed;
 
@@ -29,7 +29,11 @@ public class TitleScreenScrolling : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(MoveCamera(_bottomCameraPosition, _screenScrollSpeed));
+        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(MoveCamera(_bottomCameraPosition.position, _screenScrollSpeed));
+        if (_screenScrollSpeed == 0)
+        {
+            Debug.Log("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
+        }
     }
 
     /// <summary>
@@ -44,7 +48,7 @@ public class TitleScreenScrolling : MonoBehaviour
             _hasScrollingStarted = true;
             while (_mainCamera.transform.position != destination)
             {
-                _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, destination, scrollSpeed * Time.deltaTime);
+                _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, new Vector3(destination.x, destination.y, -300), scrollSpeed * Time.deltaTime);
 
                 yield return null;
             }
