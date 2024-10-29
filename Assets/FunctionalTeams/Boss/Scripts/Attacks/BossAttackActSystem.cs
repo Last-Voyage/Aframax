@@ -12,6 +12,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Defines an act
+/// </summary>
 [System.Serializable]
 public struct Act
 {
@@ -19,6 +22,9 @@ public struct Act
     [field: SerializeField] public ActScene[] Scenes { get; private set; }
 }
 
+/// <summary>
+/// Defines a scene within an act
+/// </summary>
 [System.Serializable]
 public struct ActScene
 {
@@ -131,6 +137,7 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _currentActNum++;
 
+        // Boss fight is over if all acts have been completed
         if(_currentActNum == _bossFightActs.Length)
         {
             //  TODO: End Game Here
@@ -168,15 +175,18 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnSceneCompleted()
     {
+        _currentSceneNum++;
+
         RemoveActAttackListeners();
 
-        if (_currentSceneNum == _currentAct.Scenes.Length)
+        // Progresses to the next act if all scenes are completed
+        if (IsActCompleted())
         {
-            // Begin next act if all scenes have been completed
-            BeginAct();
+            OnActCompleted();
             return;
         }
 
+        _currentScene = _currentAct.Scenes[_currentSceneNum];
         // Begin next scene
         BeginScene();
         InvokeSceneEndEvent();
@@ -213,8 +223,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void InitializeSceneAttackListeners()
     {
-        Act act = _bossFightActs[_currentActNum];
-
         foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
         {
             baseBossAttack.GetAttackEndEvent().AddListener(AttackHasEnded);
@@ -241,7 +249,10 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _attackCounter++;
 
-        IsActCompleted();
+        if(IsSceneCompleted())
+        {
+            OnSceneCompleted();
+        }
     }
 
     #endregion Attack Functions
