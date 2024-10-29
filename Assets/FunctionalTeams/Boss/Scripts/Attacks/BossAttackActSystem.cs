@@ -129,7 +129,7 @@ public class BossAttackActSystem : MonoBehaviour
             if(_actCounter > _attacksPerAct.Length)
             {
                 InvokeEndOfGameScene();
-                SceneManager.LoadScene("TitleSceen", LoadSceneMode.Single);
+                SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
 
             }
             if (_attackCounter == _attackOverCounter)
