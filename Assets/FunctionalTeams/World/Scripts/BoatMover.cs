@@ -1,6 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         BoatMover.cs
 // Author :            Alex Kalscheur
+// Contrubuter :       Charlie Polonus
 // Creation Date :     10/10/24
 // 
 // Brief Description : Moves boat along and between river splines
@@ -60,8 +61,10 @@ public class BoatMover : MonoBehaviour
         _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength / 100;
         CheckSplineChange();
         Vector3 newPositionOnSpline = _curve.GetPositionAlongSpline(_percentOfSpline, out _newForwardVector, true);
-        gameObject.transform.position = newPositionOnSpline;
-        gameObject.transform.forward = _newForwardVector;
+
+        // Update the position and direction of the moving object
+        transform.position = Vector3.Lerp(transform.position, newPositionOnSpline, 0.75f * Time.deltaTime);
+        transform.forward += (_newForwardVector - transform.forward).normalized * Time.deltaTime;
     }
 
     /// <summary>
