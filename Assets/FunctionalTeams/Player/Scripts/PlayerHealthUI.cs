@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealthUI.cs
 // Author :            Jeremiah Peters
-//                     Ryan Swanson
+// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster
 // Creation Date :     9/16/24
 //
 // Brief Description : operates the health ui for the player
@@ -17,31 +17,51 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerHealthUI : MonoBehaviour
 {
-    [Header("Heart UI")]
-    [SerializeField] private GameObject _playerHeart;
-
-    [Space]
     [Header("Player Damaged")]
     [SerializeField] private float _damageUIDisplayTime;
     [SerializeField] private Image _damagedUI;
+
     private Coroutine _damagedUICoroutine;
+
+    [Tooltip("Heart UI Object")]
+    private GameObject _playerHeart;
+
+    private Animator _animator;
 
     /// <summary>
     /// locate the heart and subscribe to events
     /// </summary>
     private void Awake()
+    { 
+        SubscribeToEvents();
+    }
+
+    private void Start()
     {
+        InitializeHeartUI();
+        InitializeAnimator();
+    }
+
+    /// <summary>
+    /// Initializes the heart UI
+    /// </summary>
+    private void InitializeHeartUI()
+    {
+        _playerHeart = transform.GetChild(0).gameObject;
+
         //this way it doesn't waste time doing find if it's already connected
         if (_playerHeart == null)
         {
-            _playerHeart = GameObject.Find("Heart");
-            if (_playerHeart == null)
-            {
-                Debug.Log("Couldn't find the heart object. Make sure there's one in the scene!");
-            }
+            Debug.Log("Couldn't find the heart object. Make sure there's one in the scene!");
         }
+    }
 
-        SubscribeToEvents();
+    /// <summary>
+    /// Initializes the player animator
+    /// </summary>
+    private void InitializeAnimator()
+    {
+        _animator = _playerHeart.GetComponent<Animator>();
     }
 
     private void OnDestroy()
@@ -55,7 +75,7 @@ public class PlayerHealthUI : MonoBehaviour
     /// <param name="healthPercent"></param>
     private void UpdateHealthUI(float healthPercent,float currentHealth)
     {
-        _playerHeart.GetComponent<Animator>().SetFloat("Health_Stage_Num", 4 * healthPercent);
+        _animator.SetFloat("Health_Stage_Num", 4 * healthPercent);
     }
 
     /// <summary>
