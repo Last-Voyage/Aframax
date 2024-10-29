@@ -99,7 +99,7 @@ public class RoomVineAttack : BaseBossAttack
     }
 
     /// <summary>
-    /// pretty self explanatory
+    /// Begins the attack functionality
     /// </summary>
     private void ActivateThisAttack()
     {
