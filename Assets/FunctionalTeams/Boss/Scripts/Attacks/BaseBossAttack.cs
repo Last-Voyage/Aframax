@@ -21,8 +21,8 @@ public class BaseBossAttack : MonoBehaviour
     /// </summary>
     protected bool _isAttackActive;
 
-    private UnityEvent _attackBegin = new();
-    private UnityEvent  _attackEnd = new();
+    protected UnityEvent _beginAttack = new();
+    protected UnityEvent  _endAttack = new();
 
     /// <summary>
     /// Subscribe to any necessary events
@@ -46,7 +46,6 @@ public class BaseBossAttack : MonoBehaviour
     protected virtual void BeginAttack()
     {
         _isAttackActive = true;
-        InvokeAttackBegin();
     }
 
     /// <summary>
@@ -64,25 +63,25 @@ public class BaseBossAttack : MonoBehaviour
     /// <summary>
     /// Invokes this attack's _attackBegin event
     /// </summary>
-    protected void InvokeAttackBegin()
+    public void InvokeAttackBegin()
     {
-        _attackBegin?.Invoke();
+        _beginAttack?.Invoke();
     }
 
     /// <summary>
     /// Invokes this attack's _attackEnd event
     /// </summary>
-    protected void InvokeAttackEnd()
+    public void InvokeAttackEnd()
     {
-        _attackEnd?.Invoke();
+        _endAttack?.Invoke();
     }
 
     #endregion
     
     #region Getters
     
-    public UnityEvent GetAttackBegin() => _attackBegin;
-    public UnityEvent GetAttackEnd() => _attackEnd;
+    public UnityEvent GetAttackBeginEvent() => _beginAttack;
+    public UnityEvent GetAttackEndEvent() => _endAttack;
     
     #endregion
 }

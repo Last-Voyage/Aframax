@@ -41,7 +41,7 @@ public class RoomLockdownAttack : BaseBossAttack
     {
         //this.GetAttackBegin().AddListener(ActivateThisAttack);
         // Remove this once ActSystem is merged
-        BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
+        //BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class RoomLockdownAttack : BaseBossAttack
     {
         //this.GetAttackBegin().RemoveListener(ActivateThisAttack);
         // Remove this once ActSystem is merged
-        BossAttackManager.BeginRoomLockdownAttack -= ActivateThisAttack;
+        //BossAttackManager.BeginRoomLockdownAttack -= ActivateThisAttack;
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public class RoomLockdownAttack : BaseBossAttack
         transform.localScale = _attackScale[0];
 
         // tell the attack manager that we are attacking
-        BossAttackManager.Instance.AttackInProgress = true;
+        //BossAttackManager.Instance.AttackInProgress = true;
 
         // setting attack indicator
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
@@ -107,6 +107,6 @@ public class RoomLockdownAttack : BaseBossAttack
         attackCollider.enabled = false;
         
         //end attack and cycle to another
-        BossAttackManager.Instance.AttackInProgress = false;
+        //BossAttackManager.Instance.AttackInProgress = false;
     }
 }
