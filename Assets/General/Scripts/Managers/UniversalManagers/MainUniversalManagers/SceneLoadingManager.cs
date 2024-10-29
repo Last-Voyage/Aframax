@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       SceneLoadingManager.cs
 // Author:          Ryan Swanson
+// Contributor:     Jeremiah Peters
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides the framework to be used by the core managers
@@ -42,9 +43,6 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     protected override void SubscribeToEvents()
     {
-        //this was causing errors in scenes without the player
-        //PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
-
         _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
     }
 
