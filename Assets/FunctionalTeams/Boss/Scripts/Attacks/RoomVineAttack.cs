@@ -24,12 +24,7 @@ public class RoomVineAttack : BaseBossAttack
     [Tooltip("Tentacle Prefab goes here")]
     [SerializeField] private GameObject _tentaclePrefab;
     [Tooltip("Set locations for tentacle spawns here. If this list is empty, random locations will be added")]
-    [SerializeField] private Vector3[] _setSpawnPoints;
-    [Tooltip("Set prefab scales for the set tentacle spawns here. " +
-        "Index i in this list will correlate to index i in the spawn point list")]
-    [SerializeField] private Vector3[] _setAttackScales;
-    [Tooltip("The number of rooms where tentacles will spawn")]
-    [SerializeField] private int _roomsAttacked = 1;
+    [SerializeField] private Vector3[] _spawnPoints;
     [Tooltip("The maximum number of tentacles that can spawn in one room")]
     [SerializeField] private int _maxEnemies = 3;
     [Tooltip("The minimum number of tentacles that can spawn in one room")]
@@ -51,20 +46,13 @@ public class RoomVineAttack : BaseBossAttack
     [Tooltip("Player Transform goes here to detect when to attack")]
     [SerializeField] private Transform _playerTransform;
 
-    private Vector3[] _spawnPoints = new Vector3[0];
-    private Vector3[] _attackScales = new Vector3[0];
-    private int _randomRoom = 0;
-    private GameObject[] _spawnedEnemies = new GameObject[0];
-
-    private MeshRenderer _attackMeshRenderer;
-    private Collider _attackCollider;
+    private GameObject[][] _spawnedEnemies = new GameObject[0][];
 
     private const float ATTACK_DETECTION_RANGE = 8;
 
     private void Start()
     {
         _isAttackActive = false;
-        CreateRandomSpawnPoints();
     }
 
     /// <summary>
@@ -103,26 +91,6 @@ public class RoomVineAttack : BaseBossAttack
         base.EndAttack();
     }
 
-    private void CreateRandomSpawnPoints()
-    {
-        if (_setSpawnPoints.Length == 0)
-        {
-            _spawnPoints = new Vector3[] {new Vector3(11.92f, 8.5f, -9.11f),
-                                      new Vector3(14.86f, 8.5f, -2.52f),
-                                      new Vector3(14.81f, 8.5f, 4.92f),
-                                      new Vector3(10.91f, 8.5f, 17.63f),
-                                      new Vector3(10.95f, 8.5f, 11.5f),
-                                      new Vector3(8.91f, 8.5f, 0.59f)};
-
-            _attackScales = new Vector3[] {new Vector3(1.25f, 1, 0.7f),
-                                       new Vector3(0.5f, 1, 1.5f),
-                                       new Vector3(0.5f, 1, 1.2f),
-                                       Vector3.one,
-                                       new Vector3(1, 1, 1.2f),
-                                       new Vector3(0.52f, 1, 2.75f)};
-        }
-    }
-
     /// <summary>
     /// pretty self explanatory
     /// </summary>
@@ -133,62 +101,45 @@ public class RoomVineAttack : BaseBossAttack
 
         if (_spawnedEnemies.Length == 0)
         {
-            // Determine which room to attack
-            AttackRandomRoom();
-
             // Spawn the tentacle enemies
             SpawnTentacles();
         }
 
-        SetBlinkingIndicator();
-        
         StartCoroutine(PerformAttack());
     }
 
     /// <summary>
     /// Chooses a random room inside the boat to attack
+    /// Currently unused. It may be used in later iterations if we want random placement
     /// </summary>
     private void AttackRandomRoom()
     {
-        if (_setSpawnPoints.Length > 0)
-        {
-            _randomRoom = UnityEngine.Random.Range(0, _setSpawnPoints.Length);
+        int randomRoom = UnityEngine.Random.Range(0, _spawnPoints.Length);
 
-            transform.position = _setSpawnPoints[_randomRoom];
-            transform.localScale = _setAttackScales[_randomRoom];
-        }
-        else
-        {
-            _randomRoom = UnityEngine.Random.Range(0, _spawnPoints.Length);
-
-            transform.position = _spawnPoints[_randomRoom];
-            transform.localScale = _attackScales[_randomRoom];
-        }
+        transform.position = _spawnPoints[randomRoom];
     }
 
     private void SpawnTentacles()
     {
-        _spawnedEnemies = new GameObject[UnityEngine.Random.Range(_minEnemies, _maxEnemies)];
+        _spawnedEnemies = new GameObject[_spawnPoints.Length][];
 
         for (int i = 0; i < _spawnedEnemies.Length; i++)
         {
-            float xDiff = (float)(UnityEngine.Random.Range(-100, 100)) / 100f;
-            float yDiff = 1.15f;
-            float zDiff = (float)(UnityEngine.Random.Range(-100, 100)) / 100f;
+            _spawnedEnemies[i] = new GameObject[UnityEngine.Random.Range(_minEnemies, _maxEnemies)];
 
-            float yRotation = UnityEngine.Random.Range(-180, 180);
+            for (int j = 0; j < _spawnedEnemies[i].Length; j++)
+            {
+                float xDiff = (float)(UnityEngine.Random.Range(-100, 100)) / 100f;
+                float yDiff = 1.15f;
+                float zDiff = (float)(UnityEngine.Random.Range(-100, 100)) / 100f;
 
-            _spawnedEnemies[i] = Instantiate(_tentaclePrefab, transform.parent);
-            _spawnedEnemies[i].transform.position = transform.position + new Vector3(xDiff, yDiff, zDiff);
-            _spawnedEnemies[i].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
+                float yRotation = UnityEngine.Random.Range(-180, 180);
+
+                _spawnedEnemies[i][j] = Instantiate(_tentaclePrefab, transform.parent);
+                _spawnedEnemies[i][j].transform.position = _spawnPoints[i] + new Vector3(xDiff, yDiff, zDiff);
+                _spawnedEnemies[i][j].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
+            }
         }
-    }
-
-    private void SetBlinkingIndicator()
-    {
-        // setting attack indicator
-        _attackMeshRenderer = _bossAttack1Indicator.GetComponent<MeshRenderer>();
-        _attackCollider = _bossAttack1Indicator.GetComponent<Collider>();
     }
 
     /// <summary>
@@ -199,42 +150,67 @@ public class RoomVineAttack : BaseBossAttack
     {
         while (true)
         {
-            if (Vector3.Distance(transform.position, _playerTransform.position) < ATTACK_DETECTION_RANGE)
+            for (int i = 0; i < _spawnPoints.Length; i++)
             {
-                _attackMeshRenderer.material = _lowOpacity;
-
-                //start blinking indicating attack will happen soon
-                float elapsedTime = 0f;
-                while (elapsedTime < _blinkDuration)
+                if (TentaclesLeft(i))
                 {
-                    float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
-                    _attackMeshRenderer.enabled = true;
-                    yield return new WaitForSeconds(currentBlinkInterval);
-                    _attackMeshRenderer.enabled = false;
-                    yield return new WaitForSeconds(currentBlinkInterval);
-                    elapsedTime += currentBlinkInterval * 2;
+                    if (Vector3.Distance(_spawnPoints[i], _playerTransform.position) < ATTACK_DETECTION_RANGE)
+                    {
+                        GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[i], Quaternion.identity);
+                        var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
+                        var attackCollider = newHitbox.GetComponent<Collider>();
+                        attackMeshRenderer.material = _lowOpacity;
+
+                        //start blinking indicating attack will happen soon
+                        float elapsedTime = 0f;
+                        while (TentaclesLeft(i) && elapsedTime < _blinkDuration)
+                        {
+                            float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
+                            attackMeshRenderer.enabled = true;
+                            yield return new WaitForSeconds(currentBlinkInterval);
+                            attackMeshRenderer.enabled = false;
+                            yield return new WaitForSeconds(currentBlinkInterval);
+                            elapsedTime += currentBlinkInterval * 2;
+                        }
+
+                        if (TentaclesLeft(i))
+                        {
+                            // after done blinking make the block solid and enable collider to hit player for a second
+                            attackMeshRenderer.material = _hitOpacity;
+                            attackMeshRenderer.enabled = true;
+                            attackCollider.enabled = true;
+
+                            //wait for hit time
+                            yield return new WaitForSeconds(_hitBoxAppearDuration);
+
+                            //disable the enabled
+                            attackMeshRenderer.enabled = false;
+                            attackCollider.enabled = false;
+
+                            //end attack and cycle to another
+                            BossAttackManager.Instance.AttackInProgress = false;
+
+                            // wait before attacking again
+                            yield return new WaitForSeconds(_timeBetweenAttacks);
+                        }
+                    }
                 }
-
-                // after done blinking make the block solid and enable collider to hit player for a second
-                _attackMeshRenderer.material = _hitOpacity;
-                _attackMeshRenderer.enabled = true;
-                _attackCollider.enabled = true;
-
-                //wait for hit time
-                yield return new WaitForSeconds(_hitBoxAppearDuration);
-
-                //disable the enabled
-                _attackMeshRenderer.enabled = false;
-                _attackCollider.enabled = false;
-
-                //end attack and cycle to another
-                BossAttackManager.Instance.AttackInProgress = false;
-
-                // wait before attacking again
-                yield return new WaitForSeconds(_timeBetweenAttacks);
             }
 
             yield return null;
         }
+    }
+
+    private bool TentaclesLeft(int i)
+    {
+        for (int j = 0; j < _spawnedEnemies[i].Length; j++)
+        {
+            if (_spawnedEnemies[i][j] != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
