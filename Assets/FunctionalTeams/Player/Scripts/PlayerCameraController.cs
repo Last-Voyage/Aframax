@@ -42,8 +42,6 @@ public class PlayerCameraController : MonoBehaviour
 
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
-
-        //_cameraCoroutine = StartCoroutine(MoveCamera());
     }
 
     /// <summary>
@@ -125,7 +123,7 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when this component is disnabled.
+    /// Called when this component is disabled.
     /// Used to unassign the OnCameraMovementToggled Action to a listener
     /// </summary>
     private void OnDisable()
