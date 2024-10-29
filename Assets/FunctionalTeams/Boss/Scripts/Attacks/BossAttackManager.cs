@@ -68,7 +68,6 @@ public class BossAttackManager : MonoBehaviour
     /// </summary>
     private void BeginAttackAct1()
     {
-        //BeginInteriorTongueAttack?.Invoke();
         BeginRoomVineAttack?.Invoke();
     }
 

@@ -25,7 +25,7 @@ public class RoomVineAttack : BaseBossAttack
     [Tooltip("Tentacle Prefab goes here")]
     [SerializeField] private GameObject _tentaclePrefab;
     [Tooltip("Set locations for tentacle spawns here. If this list is empty, random locations will be added")]
-    [SerializeField] private Vector3[] _spawnPoints;
+    [SerializeField] private Transform[] _spawnPoints;
     [Tooltip("The maximum number of tentacles that can spawn in one room")]
     [SerializeField] private int _maxEnemies = 3;
     [Tooltip("The minimum number of tentacles that can spawn in one room")]
@@ -126,9 +126,12 @@ public class RoomVineAttack : BaseBossAttack
     {
         int randomRoom = UnityEngine.Random.Range(0, _spawnPoints.Length);
 
-        transform.position = _spawnPoints[randomRoom];
+        transform.position = _spawnPoints[randomRoom].position;
     }
 
+    /// <summary>
+    /// Spawns a random number of tentacles at each defined spawn point
+    /// </summary>
     private void SpawnTentacles()
     {
         _spawnedEnemies = new GameObject[_spawnPoints.Length][];
@@ -146,7 +149,7 @@ public class RoomVineAttack : BaseBossAttack
                 float yRotation = UnityEngine.Random.Range(-180, 180);
 
                 _spawnedEnemies[i][j] = Instantiate(_tentaclePrefab, transform.parent);
-                _spawnedEnemies[i][j].transform.position = _spawnPoints[i] + new Vector3(xDiff, yDiff, zDiff);
+                _spawnedEnemies[i][j].transform.position = _spawnPoints[i].position + new Vector3(xDiff, yDiff, zDiff);
                 _spawnedEnemies[i][j].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
             }
         }
@@ -162,9 +165,9 @@ public class RoomVineAttack : BaseBossAttack
         {
             if (TentaclesLeft(spawnIndex))
             {
-                if (Vector3.Distance(_spawnPoints[spawnIndex], _playerTransform.position) < ATTACK_DETECTION_RANGE)
+                if (Vector3.Distance(_spawnPoints[spawnIndex].position, _playerTransform.position) < ATTACK_DETECTION_RANGE)
                 {
-                    GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[spawnIndex], 
+                    GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[spawnIndex].position, 
                         Quaternion.identity);
                     var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
                     var attackCollider = newHitbox.GetComponent<Collider>();
@@ -197,9 +200,6 @@ public class RoomVineAttack : BaseBossAttack
                         attackMeshRenderer.enabled = false;
                         attackCollider.enabled = false;
 
-                        //end attack and cycle to another
-                        BossAttackManager.Instance.AttackInProgress = false;
-
                         // wait before attacking again
                         yield return new WaitForSeconds(_timeBetweenAttacks);
                     }
@@ -217,6 +217,11 @@ public class RoomVineAttack : BaseBossAttack
         }
     }
 
+    /// <summary>
+    /// Determines whether or not there are tentacles at a certain spawn point
+    /// </summary>
+    /// <param name="i"> The index of the spawn point in the _spawnedEnemies array </param>
+    /// <returns> true if there is at least one tentacle at the spawn point. false otherwise </returns>
     private bool TentaclesLeft(int i)
     {
         for (int j = 0; j < _spawnedEnemies[i].Length; j++)
