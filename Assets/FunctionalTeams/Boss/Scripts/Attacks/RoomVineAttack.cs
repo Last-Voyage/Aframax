@@ -7,6 +7,7 @@
 // Brief Description : controls the full room attack for the boss
 *****************************************************************************/
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -47,6 +48,7 @@ public class RoomVineAttack : BaseBossAttack
     [SerializeField] private Transform _playerTransform;
 
     private GameObject[][] _spawnedEnemies = new GameObject[0][];
+    private List<Coroutine> _activeCoroutines = new List<Coroutine>();
 
     private const float ATTACK_DETECTION_RANGE = 8;
 
@@ -105,7 +107,10 @@ public class RoomVineAttack : BaseBossAttack
             SpawnTentacles();
         }
 
-        StartCoroutine(PerformAttack());
+        for (int i = 0; i < _spawnPoints.Length; i++)
+        {
+            _activeCoroutines.Add(StartCoroutine(PerformAttack(i)));
+        }
     }
 
     /// <summary>
@@ -146,55 +151,61 @@ public class RoomVineAttack : BaseBossAttack
     /// creates an indicator that the room is about to be attacked, and then attacks everything in room
     /// </summary>
     /// <returns></returns>
-    private IEnumerator PerformAttack()
+    private IEnumerator PerformAttack(int spawnIndex)
     {
         while (true)
         {
-            for (int i = 0; i < _spawnPoints.Length; i++)
+            if (TentaclesLeft(spawnIndex))
             {
-                if (TentaclesLeft(i))
+                if (Vector3.Distance(_spawnPoints[spawnIndex], _playerTransform.position) < ATTACK_DETECTION_RANGE)
                 {
-                    if (Vector3.Distance(_spawnPoints[i], _playerTransform.position) < ATTACK_DETECTION_RANGE)
+                    GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[spawnIndex], 
+                        Quaternion.identity);
+                    var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
+                    var attackCollider = newHitbox.GetComponent<Collider>();
+                    attackMeshRenderer.material = _lowOpacity;
+
+                    //start blinking indicating attack will happen soon
+                    float elapsedTime = 0f;
+                    while (TentaclesLeft(spawnIndex) && elapsedTime < _blinkDuration)
                     {
-                        GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[i], Quaternion.identity);
-                        var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
-                        var attackCollider = newHitbox.GetComponent<Collider>();
-                        attackMeshRenderer.material = _lowOpacity;
-
-                        //start blinking indicating attack will happen soon
-                        float elapsedTime = 0f;
-                        while (TentaclesLeft(i) && elapsedTime < _blinkDuration)
-                        {
-                            float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
-                            attackMeshRenderer.enabled = true;
-                            yield return new WaitForSeconds(currentBlinkInterval);
-                            attackMeshRenderer.enabled = false;
-                            yield return new WaitForSeconds(currentBlinkInterval);
-                            elapsedTime += currentBlinkInterval * 2;
-                        }
-
-                        if (TentaclesLeft(i))
-                        {
-                            // after done blinking make the block solid and enable collider to hit player for a second
-                            attackMeshRenderer.material = _hitOpacity;
-                            attackMeshRenderer.enabled = true;
-                            attackCollider.enabled = true;
-
-                            //wait for hit time
-                            yield return new WaitForSeconds(_hitBoxAppearDuration);
-
-                            //disable the enabled
-                            attackMeshRenderer.enabled = false;
-                            attackCollider.enabled = false;
-
-                            //end attack and cycle to another
-                            BossAttackManager.Instance.AttackInProgress = false;
-
-                            // wait before attacking again
-                            yield return new WaitForSeconds(_timeBetweenAttacks);
-                        }
+                        float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, 
+                            elapsedTime / _blinkDuration);
+                        attackMeshRenderer.enabled = true;
+                        yield return new WaitForSeconds(currentBlinkInterval);
+                        attackMeshRenderer.enabled = false;
+                        yield return new WaitForSeconds(currentBlinkInterval);
+                        elapsedTime += currentBlinkInterval * 2;
                     }
+
+                    if (TentaclesLeft(spawnIndex))
+                    {
+                        // after done blinking make the block solid and enable collider to hit player for a second
+                        attackMeshRenderer.material = _hitOpacity;
+                        attackMeshRenderer.enabled = true;
+                        attackCollider.enabled = true;
+
+                        //wait for hit time
+                        yield return new WaitForSeconds(_hitBoxAppearDuration);
+
+                        //disable the enabled
+                        attackMeshRenderer.enabled = false;
+                        attackCollider.enabled = false;
+
+                        //end attack and cycle to another
+                        BossAttackManager.Instance.AttackInProgress = false;
+
+                        // wait before attacking again
+                        yield return new WaitForSeconds(_timeBetweenAttacks);
+                    }
+
+                    Destroy(newHitbox);
                 }
+            }
+
+            if (!TentaclesLeft(spawnIndex))
+            {
+                StopCoroutine(_activeCoroutines[spawnIndex]);
             }
 
             yield return null;
