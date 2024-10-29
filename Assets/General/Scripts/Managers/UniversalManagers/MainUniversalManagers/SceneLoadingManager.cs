@@ -29,6 +29,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     //Occurs when the currently active scene is changed
     private UnityEvent _sceneChangedEvent = new();
+    private UnityEvent _gameplaySceneLoaded = new();
 
     private UnityEvent _additiveLoadAddedEvent = new();
     private UnityEvent _additiveLoadRemovedEvent = new();
@@ -40,6 +41,14 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     }
 
     protected override void SubscribeToEvents()
+    {
+        //this was causing errors in scenes without the player
+        //PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
+
+        _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
+    }
+
+    protected void SubscribeToGameplayEvents()
     {
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
@@ -142,12 +151,23 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     {
         base.SetupMainManager();
     }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        _gameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
+    }
     #endregion
 
     #region Events
     private void InvokeSceneChangedEvent()
     {
         _sceneChangedEvent?.Invoke();
+    }
+
+    public void InvokeGameplaySceneLoaded()
+    {
+        _gameplaySceneLoaded?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadAddEvent()
@@ -165,6 +185,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     #region Getters
 
     public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
+
+    public UnityEvent GetGameplaySceneLoaded => _gameplaySceneLoaded;
 
     #endregion
 }
