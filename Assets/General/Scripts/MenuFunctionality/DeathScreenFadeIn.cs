@@ -10,21 +10,24 @@ using System.Collections;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// does the fading in of the death screen ui elements
+/// </summary>
 public class DeathScreenFadeIn : MonoBehaviour
 {
     private CanvasGroup _deathScreenUiElements;
 
     [Tooltip("rough time it takes for things to fade all the way in")]
-    [SerializeField] private float FadeTime;
+    [SerializeField] private float _fadeTime;
 
     [Tooltip("time before the fade in starts")]
-    [SerializeField] private float FadeDelay;
+    [SerializeField] private float _fadeDelay;
 
     [Tooltip("threshold for the speed up to start (should be between 0 and 1")]
-    [SerializeField] private float FadeSpeedUpThreshold;
+    [SerializeField] private float _fadeSpeedUpThreshold;
 
     [Tooltip("how much faster it gets when the threshold is reached (very small number like 1.25)")]
-    [SerializeField] private float FadeSpeedUpMultiplier;
+    [SerializeField] private float _fadeSpeedUpMultiplier;
 
     private void Awake()
     {
@@ -46,7 +49,7 @@ public class DeathScreenFadeIn : MonoBehaviour
     /// <returns></returns>
     private IEnumerator UiFadeIn(CanvasGroup objectsToFadeIn)
     {
-        yield return new WaitForSeconds(FadeDelay);
+        yield return new WaitForSeconds(_fadeDelay);
         float elapsedtime = 0;
 
         while (_deathScreenUiElements.alpha < 1)
@@ -54,14 +57,14 @@ public class DeathScreenFadeIn : MonoBehaviour
             elapsedtime += Time.deltaTime;
 
             //fade slightly faster over half way through
-            //I think this looks slightly better but I can change it if need be
-            if (objectsToFadeIn.alpha > FadeSpeedUpThreshold)
+            //I think this looks slightly better but it can be changed
+            if (objectsToFadeIn.alpha > _fadeSpeedUpThreshold)
             {
-                objectsToFadeIn.alpha = Mathf.Lerp(0, 1, elapsedtime / FadeTime * FadeSpeedUpMultiplier);
+                objectsToFadeIn.alpha = Mathf.Lerp(0, 1, elapsedtime / _fadeTime * _fadeSpeedUpMultiplier);
             }
             else
             {
-                objectsToFadeIn.alpha = Mathf.Lerp(0, 1, elapsedtime / FadeTime);
+                objectsToFadeIn.alpha = Mathf.Lerp(0, 1, elapsedtime / _fadeTime);
             }
 
             yield return null;
