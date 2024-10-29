@@ -86,6 +86,11 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void InitializeFootstepInstance()
     {
+        if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
+        {
+            return;
+        }
+
         _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
     }
 
