@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// A class that contains multiple functions for the act system that are updated within a coroutine
@@ -38,6 +39,7 @@ public class BossAttackActSystem : MonoBehaviour
     //Events for the atacks to listen for
     private UnityEvent _actBegin = new();
     private UnityEvent _actEnd = new();
+    private UnityEvent _endOfGameScene = new();
     /// <summary>
     /// Beginning method to start phase at the beginning
     /// </summary>
@@ -98,6 +100,10 @@ public class BossAttackActSystem : MonoBehaviour
     {
         InvokeActEnd();
     }
+    protected virtual void EndOfGameScene()
+    {
+        InvokeEndOfGameScene();
+    }
     /// <summary>
     /// A way of moving to a new act while showing through events whats its doing to other scripts
     /// </summary>
@@ -120,9 +126,11 @@ public class BossAttackActSystem : MonoBehaviour
             {
                 NextAct();
             }
-            if(_actCounter > _attackCollection.Length)
+            if(_actCounter > _attacksPerAct.Length)
             {
-                //TODO: Game end here
+                InvokeEndOfGameScene();
+                SceneManager.LoadScene("TitleSceen", LoadSceneMode.Single);
+
             }
             if (_attackCounter == _attackOverCounter)
             {
@@ -146,6 +154,13 @@ public class BossAttackActSystem : MonoBehaviour
     private void InvokeActEnd()
     {
         _actEnd?.Invoke();
+    }
+    /// <summary>
+    /// A way for other scripts to see the end of game to shut down stuff if need be
+    /// </summary>
+    private void InvokeEndOfGameScene()
+    {
+        _endOfGameScene?.Invoke();
     }
     #endregion
     #region Getters
