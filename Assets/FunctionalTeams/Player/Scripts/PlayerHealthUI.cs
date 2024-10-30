@@ -21,15 +21,18 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private float _damageUIDisplayTime;
     [SerializeField] private Image _damagedUI;
 
+    [SerializeField] private Image[] _damagedUIImages;
+
     private Coroutine _damagedUICoroutine;
 
     [Tooltip("Heart UI Object")]
-    private GameObject _playerHeart;
+
+    [SerializeField] private GameObject _playerHeart;
 
     private Animator _animator;
 
     /// <summary>
-    /// locate the heart and subscribe to events
+    /// subscribe to events
     /// </summary>
     private void Awake()
     { 
@@ -75,7 +78,28 @@ public class PlayerHealthUI : MonoBehaviour
     /// <param name="healthPercent"></param>
     private void UpdateHealthUI(float healthPercent,float currentHealth)
     {
+        //this updates the heart
         _animator.SetFloat("Health_Stage_Num", 4 * healthPercent);
+
+        //this part does the blood around the edges of the screen
+        switch (4 * healthPercent)
+        {
+            case >3:
+                _damagedUI = _damagedUIImages[3];
+                break;
+            case >2:
+                _damagedUI = _damagedUIImages[2];
+                break;
+            case >1:
+                _damagedUI = _damagedUIImages[1];
+                break;
+            case <1:
+                _damagedUI = _damagedUIImages[0];
+                break;
+            default:
+                print("this shouldn't happen");
+                break;
+        }
     }
 
     /// <summary>
