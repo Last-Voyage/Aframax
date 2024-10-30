@@ -106,6 +106,23 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds a listener to this script when enabled
+    /// Allowing the new act to begin
+    /// </summary>
+    private void OnEnable()
+    {
+        GameStateManager.Instance.StartingNewBossAct().AddListener(BeginAct);
+    }
+
+    /// <summary>
+    /// Removes the listener - PREVENTING MEMORY LEAKS
+    /// </summary>
+    private void OnDisable()
+    {
+        GameStateManager.Instance.StartingNewBossAct().RemoveListener(BeginAct);
+    }
+
+    /// <summary>
     /// just for testing
     /// </summary>
     private void Update()

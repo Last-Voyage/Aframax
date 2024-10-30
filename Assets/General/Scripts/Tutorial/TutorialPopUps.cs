@@ -29,12 +29,6 @@ public class TutorialPopUps : MonoBehaviour
     [Tooltip("The collider the player has to shoot")]
     GameObject _shootTutorialObject;
 
-    [Tooltip("The collider the player has to shoot")]
-    GameObject _tutorialEnemyAttackWalkObject1;
-
-    [Tooltip("The collider the player walks into")]
-    GameObject _tutorialEnemyAttackWalkObject2;
-
     [Tooltip("The pointer for which ui data is currently being used")]
     private int _dataPointer;
 
@@ -50,8 +44,6 @@ public class TutorialPopUps : MonoBehaviour
     // Start's the tutorial process
     void Start()
     {
-        //_walkTutorialObject.SetActive(false);
-        //_shootTutorialObject.SetActive(false);
         StartCoroutine(TimeBeforeText());
     }
 
@@ -108,12 +100,6 @@ public class TutorialPopUps : MonoBehaviour
             case 2: // Sets the shoot tutorial object active
                 _shootTutorialObject.SetActive(true);
                 break;
-            case 3: // Sets the first attack tutorial object active
-                _tutorialEnemyAttackWalkObject1.SetActive(true);
-                break;
-            case 4: // Sets the second attack tutorial object active
-                _tutorialEnemyAttackWalkObject2.SetActive(true);
-                break;
             default: // Prevents the end message from instantly disappearing
                 StartCoroutine(EndMessageBuffer());
                 break;
@@ -163,6 +149,7 @@ public class TutorialPopUps : MonoBehaviour
         }
         else
         {
+            GameStateManager.Instance.StartingNewBossAct()?.Invoke();
             _textContainer.text = "";
         }
     }
@@ -176,13 +163,9 @@ public class TutorialPopUps : MonoBehaviour
 
         _shootTutorialObject = GameObject.Find("TutorialShootObject");
         _walkTutorialObject = GameObject.Find("TutorialWalkObject");
-        _tutorialEnemyAttackWalkObject1 = GameObject.Find("TutorialEnemyAttackWalkObject");
-        _tutorialEnemyAttackWalkObject2 = GameObject.Find("TutorialEnemyAttackWalkObject2");
         
         _walkTutorialObject.SetActive(false);
         _shootTutorialObject.SetActive(false);
-        _tutorialEnemyAttackWalkObject1.SetActive(false);
-        _tutorialEnemyAttackWalkObject2.SetActive(false);
     }
 
     /// <summary>

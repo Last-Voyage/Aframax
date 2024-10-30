@@ -25,6 +25,8 @@ public class GameStateManager : MainGameplayManagerFramework
 
     private UnityEvent _completedTutorial = new();
 
+    private UnityEvent _startingNewBossAct = new();
+
 
     private void ChangeCurrentGameplayState(EGameplayState newState)
     {
@@ -46,6 +48,8 @@ public class GameStateManager : MainGameplayManagerFramework
     #region Getters
 
     public UnityEvent CompletedTutorial() => _completedTutorial;
+
+    public UnityEvent StartingNewBossAct() => _startingNewBossAct;
 
     #endregion
 }
