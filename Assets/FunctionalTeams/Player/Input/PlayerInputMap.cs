@@ -71,6 +71,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnterTitleScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9f23d98-9081-4c63-ad9c-3864b241dd38"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -183,6 +192,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3ded611-cc75-46a5-b590-9c955f2d1395"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterTitleScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -224,6 +244,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
         m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -293,6 +314,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FocusHarpoon;
     private readonly InputAction m_Player_ReelHarpoon;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_EnterTitleScreen;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -302,6 +324,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
         public InputAction @ReelHarpoon => m_Wrapper.m_Player_ReelHarpoon;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -326,6 +349,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @EnterTitleScreen.started += instance.OnEnterTitleScreen;
+            @EnterTitleScreen.performed += instance.OnEnterTitleScreen;
+            @EnterTitleScreen.canceled += instance.OnEnterTitleScreen;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -345,6 +371,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @EnterTitleScreen.started -= instance.OnEnterTitleScreen;
+            @EnterTitleScreen.performed -= instance.OnEnterTitleScreen;
+            @EnterTitleScreen.canceled -= instance.OnEnterTitleScreen;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -415,6 +444,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnFocusHarpoon(InputAction.CallbackContext context);
         void OnReelHarpoon(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnEnterTitleScreen(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {

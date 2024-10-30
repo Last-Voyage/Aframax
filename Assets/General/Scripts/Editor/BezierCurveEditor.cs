@@ -65,10 +65,13 @@ public class BezierCurveEditor : Editor
 
         GUILayout.Space(10);
 
-        // Display curve info
-        GUILayout.Label("Bezier Points: " + ActiveBezier.BezierPoints.Length);
-        GUILayout.Label("Line Segments: " + Mathf.Max((ActiveBezier.BezierPoints.Length - 1) * ActiveBezier.CurveSmoothness, 0));
-        GUILayout.Label("Line Length: " + _bezierLength);
+        if (ActiveBezier.BezierPoints != null)
+        {
+            // Display curve info
+            GUILayout.Label("Bezier Points: " + ActiveBezier.BezierPoints.Length);
+            GUILayout.Label("Line Segments: " + Mathf.Max((ActiveBezier.BezierPoints.Length - 1) * ActiveBezier.CurveSmoothness, 0));
+            GUILayout.Label("Line Length: " + _bezierLength);
+        }
 
         GUILayout.BeginHorizontal();
 

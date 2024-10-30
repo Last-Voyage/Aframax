@@ -53,10 +53,4 @@ public class WeakPoint : MonoBehaviour
     #region Events
 
     #endregion
-
-    #region Getters
-
-    
-
-    #endregion
 }
