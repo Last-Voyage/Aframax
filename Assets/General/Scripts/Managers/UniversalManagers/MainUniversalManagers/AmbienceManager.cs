@@ -10,6 +10,7 @@
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -68,6 +69,10 @@ public class AmbienceManager : AudioManager
         }
         foreach (var sound in FmodAmbienceEvents.Instance.AmbientBackgroundSounds)
         {
+            if(sound.IsNull)
+            {
+                return;
+            }
             StartAmbience(sound);
         }
     }
