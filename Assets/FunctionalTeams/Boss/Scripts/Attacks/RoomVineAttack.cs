@@ -51,6 +51,9 @@ public class RoomVineAttack : BaseBossAttack
 
     private const float ATTACK_DETECTION_RANGE = 8;
 
+    private int _numTentaclesDestroyed;
+    private int _numTentaclesSpawned;
+
     private void Start()
     {
         _isAttackActive = false;
@@ -74,22 +77,12 @@ public class RoomVineAttack : BaseBossAttack
 
     protected override void SubscribeToEvents()
     {
-        BossAttackManager.BeginRoomVineAttack += ActivateThisAttack;
+        BossAttackManager.BeginRoomVineAttack += BeginAttack;
     }
 
     protected override void UnsubscribeToEvents()
     {
-        BossAttackManager.BeginRoomVineAttack -= ActivateThisAttack;
-    }
-
-    protected override void BeginAttack()
-    {
-        base.BeginAttack();
-    }
-
-    protected override void EndAttack()
-    {
-        base.EndAttack();
+        BossAttackManager.BeginRoomVineAttack -= BeginAttack;
     }
 
     private void InitializePlayerTransform()
@@ -100,8 +93,10 @@ public class RoomVineAttack : BaseBossAttack
     /// <summary>
     /// Begins the attack functionality
     /// </summary>
-    private void ActivateThisAttack()
+    protected override void BeginAttack()
     {
+        base.BeginAttack();
+
         InitializePlayerTransform();
 
         // tell the attack manager that we are attacking
@@ -149,11 +144,27 @@ public class RoomVineAttack : BaseBossAttack
 
                 float yRotation = UnityEngine.Random.Range(-180, 180);
 
-                _spawnedEnemies[i][j] = Instantiate(_tentaclePrefab, transform.parent);
+                GameObject spawnedTectacle;
+                spawnedTectacle = Instantiate(_tentaclePrefab, transform.parent);
+
+                _numTentaclesSpawned++;
+
+                _spawnedEnemies[i][j] = spawnedTectacle;
                 _spawnedEnemies[i][j].transform.position = _spawnPoints[i].position + new Vector3(xDiff, yDiff, zDiff);
                 _spawnedEnemies[i][j].transform.eulerAngles = transform.eulerAngles + new Vector3(0, yRotation, 0);
+
+                AddTentacleDestroyedListener(spawnedTectacle.GetComponentInChildren<WeakPointHandler>());
             }
         }
+    }
+
+    /// <summary>
+    /// Adds a listener to the tentacle destroyed event
+    /// </summary>
+    /// <param name="weakPointHandler"></param>
+    private void AddTentacleDestroyedListener(WeakPointHandler weakPointHandler)
+    {
+        weakPointHandler.GetAllWeakPointsDestroyedEvent().AddListener(OnTentacleDestroyed);
     }
 
     /// <summary>
@@ -234,5 +245,25 @@ public class RoomVineAttack : BaseBossAttack
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Called when a tentacle is destroyed to track this attacks lifetime
+    /// </summary>
+    /// <param name="weakPointHandler"></param>
+    private void OnTentacleDestroyed(WeakPointHandler weakPointHandler)
+    {
+        _numTentaclesDestroyed++;
+
+        if (_numTentaclesDestroyed == _numTentaclesSpawned)
+        {
+            EndAttack();
+        }
+    }
+
+    protected override void EndAttack()
+    {
+        Debug.Log("Attack ended");
+        base.EndAttack();
     }
 }
