@@ -25,6 +25,8 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     //Event system used to be called outside of script
     protected UnityEvent _deathEvent = new();
 
+    protected UnityEvent _onDamageTaken = new();
+
     #region Base Class
 
     protected void Awake()
@@ -71,10 +73,12 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
 
     #endregion
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        _currentHealth -= damage;
+        _onDamageTaken?.Invoke();
 
+        _currentHealth -= damage;
+ 
         if (_currentHealth <= 0)
         {
             OnDeath();
@@ -97,6 +101,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
 
     public float GetHealthPercent() => _currentHealth / _maxHealth;
     public UnityEvent GetDeathEvent() => _deathEvent;
+    public UnityEvent GetDamageTakenEvent() => _onDamageTaken;
 
     #endregion Getters
 }

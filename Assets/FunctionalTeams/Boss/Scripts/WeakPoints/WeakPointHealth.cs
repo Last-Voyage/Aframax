@@ -21,13 +21,16 @@ public class WeakPointHealth : BaseHealth
     /// Applies damage to the weak point and invokes the damage event
     /// </summary>
     /// <param name="damage"></param>
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        if(damage > 0)
+        if (damageSource != null)
         {
-            _weakPointDamageTakenEvent?.Invoke();
-            VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
-            base.TakeDamage(damage);
+            if (damageSource is HarpoonDamage)
+            {
+                _weakPointDamageTakenEvent?.Invoke();
+                VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+                base.TakeDamage(damage, null);
+            }
         }
     }
 

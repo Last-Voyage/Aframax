@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttackActSystem.cs
 // Author :            Mark Hanson
+// Contributor:        Andrea Swihart-DeCoster
 // Creation Date :     10/22/2024
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
@@ -10,161 +11,319 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+
+/// <summary>
+/// Defines an act
+/// </summary>
+[System.Serializable]
+public struct Act
+{
+    [field: Tooltip("Scenes within the act")]
+    [field: SerializeField] public ActScene[] Scenes { get; private set; }
+}
+
+/// <summary>
+/// Defines a scene within an act
+/// </summary>
+[System.Serializable]
+public struct ActScene
+{
+    [field: Tooltip("Attacks within the Act")]
+    [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
+}
 
 /// <summary>
 /// A class that contains multiple functions for the act system that are updated within a coroutine
 /// </summary>
 public class BossAttackActSystem : MonoBehaviour
 {
-    //Should hold a list of Integers which each play the role of current max attacks for each act
-    [Tooltip("How many attacks do you want per act")]
-    [SerializeField] private int[] _attacksPerAct;
-    //The max attacks for the current act we are on
-    protected private int _currentMaxAttacks;
-    //Keeps the attacks going through the attack collection and not back tracking through previosly used attacks
-    protected private int _attackCounter = 0;
-    //Keeps tracked of attack that are over then matches with attack counter to determine if an act is over
-    protected int _attackOverCounter = 0;
-    //The base boss attack system to listen out for attacks
-    public BaseBossAttack AttackComponent { get; private set; }
+    public static BossAttackActSystem Instance;
 
-    //The current act it is on
-    protected private int _actCounter = 0;
-    //A switch bool that works in tandem with the act counter
-    protected private bool _isActOver;
-    //Ideally have a empty hold 2 or more attacks in the one empty and match it up with the act number
-    [Tooltip("Throw in attack empty holders that aligns with act")]
-    [SerializeField] private GameObject[] _attackCollection;
-    //Events for the atacks to listen for
-    private UnityEvent _actBegin = new();
-    private UnityEvent _actEnd = new();
-    private UnityEvent _endOfGameScene = new();
+    #region Act Variables
+
+    [Tooltip("Acts within the boss fight")]
+    [SerializeField] private Act[] _bossFightActs;
+
     /// <summary>
-    /// Beginning method to start phase at the beginning
+    /// Current act position in array
     /// </summary>
+    private int _currentActNum;
+    /// <summary>
+    /// Current act ref
+    /// </summary>
+    private Act _currentAct;
+
+    [Tooltip("Invoked when an act begins")]
+    private UnityEvent _onActBegin = new();
+
+    [Tooltip("Invoked when an act ends")]
+    private UnityEvent _onActEnd = new();
+
+    #endregion Act Variables
+
+    #region Act Scene Variables
+
+    /// <summary>
+    /// Current scene position in arr
+    /// </summary>
+    private int _currentSceneNum;
+    /// <summary>
+    /// Current scene ref
+    /// </summary>
+    private ActScene _currentScene;
+
+    [Tooltip("# of attacks completed")]
+    protected private int _attackCounter = 0;
+
+    [Tooltip("Invoked when a scene begins")]
+    private UnityEvent _onSceneBegin = new();
+
+    [Tooltip("Invoked when a scene ends")]
+    private UnityEvent _onSceneEnd = new();
+
+    [Tooltip("Invoked when an attack ends")]
+    private UnityEvent _onAttackCompleted = new();
+
+    #endregion
+
     private void Awake()
     {
-        _currentMaxAttacks = _attacksPerAct[_actCounter];
-        InvokeActBegin();
-        AttackListentoActs();
-        ActManagement();
-        AttackManagement();
-    }
-    /// <summary>
-    /// A way for attacks that are dropped in to listen for when an act ends
-    /// </summary>
-    private void AttackListentoActs()
-    {
-        if (TryGetComponent<BaseBossAttack>(out BaseBossAttack baseBossAttackSystem))
+        if(Instance == null)
         {
-            AttackComponent = baseBossAttackSystem;
-            AttackComponent.GetAttackEnd().AddListener(AttackEnd);
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
         }
     }
-    /// <summary>
-    /// Method for GetAttackEnd so the act system 
-    /// </summary>
-    protected void AttackEnd()
+
+    private void Start()
     {
-        ++_attackOverCounter;
-        AttackManagement();
+        InitializeActVariables();
+        InitializeSceneVariables();
     }
+
     /// <summary>
-    /// A way of being able to cycle through as many attack as the acts need
+    /// just for testing
     /// </summary>
-    /// <returns></returns>
-    protected void AttackManagement()
+    private void Update()
     {
-         if(_isActOver)
-         {
-             for (int i = 0; i <= _currentMaxAttacks; ++i)
-             {
-                 _attackCollection[_attackCounter].SetActive(true);
-                 _attackCounter++;
-             }
-            _isActOver = false;
-         }
+        // TODO - Connect this to the end of the tutorial
+        // Test the begin interior attack until act system is properly connected to the start of the game / end
+        // of tutorial
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            BeginAct();
+        }
     }
+
+    #region Act Functions
+
     /// <summary>
-    /// Act beginning for attack
+    /// Initializes act variables
     /// </summary>
-    protected virtual void ActBegin()
+    private void InitializeActVariables()
     {
-        InvokeActBegin();
+        _currentActNum = 0;
+        _currentAct = _bossFightActs[_currentActNum];
     }
+
+    /// <summary>
+    /// Begins the next act
+    /// </summary>
+    private void BeginAct()
+    {
+        ResetSceneVariables();
+        BeginScene();
+        InvokeBeginActEvent();
+    }
+
+    /// <summary>
+    /// Returns whether or not the act is complete
+    /// </summary>
+    private bool IsActCompleted()
+    {
+        return (_currentSceneNum == _currentAct.Scenes.Length);
+    }
+
     /// <summary>
     /// Act end for attack
     /// </summary>
-    protected virtual void ActEnd()
+    private void CompleteAct()
     {
-        InvokeActEnd();
-    }
-    protected virtual void EndOfGameScene()
-    {
-        InvokeEndOfGameScene();
-    }
-    /// <summary>
-    /// A way of moving to a new act while showing through events whats its doing to other scripts
-    /// </summary>
-    protected virtual void NextAct()
-    {
-        InvokeActEnd();
-        _actCounter++;
-        _currentMaxAttacks = _attacksPerAct[_actCounter];
-        InvokeActBegin();
-    }
-    /// <summary>
-    /// Act Management works as a way to listen to attack events and elaborate on what act it should be on
-    /// And when it is over.
-    /// </summary>
-    /// <returns></returns>
-    protected void ActManagement()
-    {
-            //When the act is over move to the next one while notifying event system
-            if(_isActOver)
-            {
-                NextAct();
-            }
-            if(_actCounter > _attacksPerAct.Length)
-            {
-                InvokeEndOfGameScene();
-                SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+        _currentActNum++;
 
-            }
-            if (_attackCounter == _attackOverCounter)
-            {
-                _isActOver = true;
-            }
+        // Boss fight is over if all acts have been completed
+        if(_currentActNum == _bossFightActs.Length)
+        {
+            //  TODO: End Game Here, Replace debug
+            Debug.Log("Act ended");
+            return;
+        }
+
+        _currentAct = _bossFightActs[_currentActNum];
+
+        BeginAct();
+        InvokeActEndEvent();
     }
+
+    #endregion Act Functions
+
+    #region ActScene Functions
+
+    /// <summary>
+    /// Initializes act variables
+    /// </summary>
+    private void InitializeSceneVariables()
+    {
+        _currentSceneNum = 0;
+    }
+
+    /// <summary>
+    /// Returns whether or not the scene is complete
+    /// </summary>
+    private bool IsSceneCompleted()
+    {
+        return _attackCounter == _currentScene.SceneAttacks.Length;
+    }
+
+    /// <summary>
+    /// Calls when a scene has been completed, progresses to the next scene or act
+    /// </summary>
+    private void CompleteScene()
+    {
+        _currentSceneNum++;
+
+        RemoveActAttackListeners();
+
+        // Progresses to the next act if all scenes are completed
+        if (IsActCompleted())
+        {
+            CompleteAct();
+            return;
+        }
+
+        _currentScene = _currentAct.Scenes[_currentSceneNum];
+        // Begin next scene
+        BeginScene();
+        InvokeSceneEndEvent();
+    }
+
+    /// <summary>
+    /// Sets the current scene num var back to 0
+    /// </summary>
+    private void ResetSceneVariables()
+    {
+        _currentSceneNum = 0;
+        _currentScene = _currentAct.Scenes[_currentSceneNum];
+    }
+
+    /// <summary>
+    /// Begins the next scene in the act
+    /// </summary>
+    private void BeginScene()
+    {
+        InitializeSceneAttackListeners();
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.InvokeAttackBegin();
+        }
+    }
+
+    #endregion
+
+    #region Attack Functions
+
+    /// <summary>
+    /// Adds listeners for all boss attacks
+    /// </summary>
+    private void InitializeSceneAttackListeners()
+    {
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.GetAttackEndEvent().AddListener(AttackHasEnded);
+        }
+    }
+
+    /// <summary>
+    /// Removes all listeners from the act attacks
+    /// </summary>
+    private void RemoveActAttackListeners()
+    {
+        Act act = _bossFightActs[_currentActNum];
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.GetAttackEndEvent().RemoveListener(AttackHasEnded);
+        }
+    }
+
+    /// <summary>
+    /// Method for GetAttackEnd so the act system 
+    /// </summary>
+    private void AttackHasEnded()
+    {
+        _onAttackCompleted?.Invoke();
+
+        _attackCounter++;
+
+        if(IsSceneCompleted())
+        {
+            CompleteScene();
+        }
+    }
+
+    #endregion Attack Functions
 
     #region Events
+
     /// <summary>
-    /// A way for other scripts to see the act beginning
-    /// If needed something can listen to those from another script to do something
+    /// Act beginning for attack
     /// </summary>
-    private void InvokeActBegin()
+    private void InvokeBeginActEvent()
     {
-        _actBegin?.Invoke();
+        _onActBegin?.Invoke();
     }
+
     /// <summary>
     /// A way for other scripts to see the act ending
     /// If needed something can listen to those from another script to do something
     /// </summary>
-    private void InvokeActEnd()
+    private void InvokeActEndEvent()
     {
-        _actEnd?.Invoke();
+        _onActEnd?.Invoke();
     }
+
     /// <summary>
-    /// A way for other scripts to see the end of game to shut down stuff if need be
+    /// Scene beginning for attack
     /// </summary>
-    private void InvokeEndOfGameScene()
+    private void InvokeBeginSceneEvent()
     {
-        _endOfGameScene?.Invoke();
+        _onSceneBegin?.Invoke();
     }
+
+    /// <summary>
+    /// A way for other scripts to see the act ending
+    /// If needed something can listen to those from another script to do something
+    /// </summary>
+    private void InvokeSceneEndEvent()
+    {
+        _onSceneEnd?.Invoke();
+    }
+
     #endregion
+
     #region Getters
-    public UnityEvent GetActBegin() => _actBegin;
-    public UnityEvent GetActEnd() => _actEnd;
+
+    public UnityEvent GetOnActBegin() => _onActBegin;
+    public UnityEvent GetOnActEnd() => _onActEnd;
+    public UnityEvent GetOnSceneBegin() => _onSceneBegin;
+    public UnityEvent GetOnSceneEnd() => _onSceneEnd;
+
+    public UnityEvent GetOnAttackCompleted() => _onAttackCompleted;
+
     #endregion
 }
