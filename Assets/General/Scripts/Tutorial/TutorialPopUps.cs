@@ -149,7 +149,7 @@ public class TutorialPopUps : MonoBehaviour
         }
         else
         {
-            GameStateManager.Instance.GetOnStartingNewBossAct()?.Invoke();
+            BossAttackActSystem.Instance.GetOnActBegin()?.Invoke();
             _textContainer.text = "";
         }
     }
