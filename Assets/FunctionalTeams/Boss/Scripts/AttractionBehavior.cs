@@ -21,6 +21,9 @@ public class AttractionBehavior : MonoBehaviour
     private Transform _target; // The target GameObject
     private Transform _rootTentacleTransform;
 
+    /// <summary>
+    /// set target to player and the gets the root tentacle
+    /// </summary>
     private void Start() 
     {
         _target = GameObject.FindGameObjectWithTag("Player").transform;
