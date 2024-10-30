@@ -181,8 +181,14 @@ public class RoomVineAttack : BaseBossAttack
                 {
                     GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[spawnIndex].position, 
                         Quaternion.identity);
-                    var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
+
+                    //TODO in VS: Damage and timer should be handled by a new script on the indicator prefab, not here
+                    // https://bradleycapstone.atlassian.net/browse/LV-322?atlOrigin=eyJpIjoiZjM1ZGM1MTg5MTA3NDY0ZjlkMmRiYTRhMDViNDYwYjUiLCJwIjoiaiJ9
                     var attackCollider = newHitbox.GetComponent<Collider>();
+                    attackCollider.enabled = false;
+
+                    var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
+                   
                     attackMeshRenderer.material = _lowOpacity;
 
                     //start blinking indicating attack will happen soon
@@ -202,8 +208,12 @@ public class RoomVineAttack : BaseBossAttack
                     {
                         // after done blinking make the block solid and enable collider to hit player for a second
                         attackMeshRenderer.material = _hitOpacity;
-                        attackMeshRenderer.enabled = true;
+
+                        // TODO in VS: Damage and timer should be handled by a new script on the indicator prefab, not here
+                        // https://bradleycapstone.atlassian.net/browse/LV-322?atlOrigin=eyJpIjoiZjM1ZGM1MTg5MTA3NDY0ZjlkMmRiYTRhMDViNDYwYjUiLCJwIjoiaiJ9
                         attackCollider.enabled = true;
+
+                        attackMeshRenderer.enabled = true;
 
                         //wait for hit time
                         yield return new WaitForSeconds(_hitBoxAppearDuration);
