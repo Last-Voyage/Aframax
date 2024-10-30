@@ -8,7 +8,9 @@
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -67,22 +69,22 @@ public class RoomVineAttack : BaseBossAttack
         SubscribeToEvents();
     }
 
+    protected override void SubscribeToEvents()
+    {
+        _onBeginAttack.AddListener(BeginAttack);
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+        _onBeginAttack.RemoveListener(BeginAttack);
+    }
+
     /// <summary>
     /// unlinks attack script from boss manager
     /// </summary>
     private void OnDisable()
     {
         UnsubscribeToEvents();
-    }
-
-    protected override void SubscribeToEvents()
-    {
-        BossAttackManager.BeginRoomVineAttack += BeginAttack;
-    }
-
-    protected override void UnsubscribeToEvents()
-    {
-        BossAttackManager.BeginRoomVineAttack -= BeginAttack;
     }
 
     private void InitializePlayerTransform()
@@ -96,6 +98,8 @@ public class RoomVineAttack : BaseBossAttack
     protected override void BeginAttack()
     {
         base.BeginAttack();
+
+        _numTentaclesDestroyed = 0;
 
         InitializePlayerTransform();
 
@@ -273,7 +277,6 @@ public class RoomVineAttack : BaseBossAttack
 
     protected override void EndAttack()
     {
-        Debug.Log("Attack ended");
         base.EndAttack();
     }
 }

@@ -38,6 +38,8 @@ public struct ActScene
 /// </summary>
 public class BossAttackActSystem : MonoBehaviour
 {
+    public static BossAttackActSystem Instance;
+
     #region Act Variables
 
     [Tooltip("Acts within the boss fight")]
@@ -80,7 +82,22 @@ public class BossAttackActSystem : MonoBehaviour
     [Tooltip("Invoked when a scene ends")]
     private UnityEvent _onSceneEnd = new();
 
+    [Tooltip("Invoked when an attack ends")]
+    private UnityEvent _onAttackCompleted = new();
+
     #endregion
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void Start()
     {
@@ -141,7 +158,8 @@ public class BossAttackActSystem : MonoBehaviour
         // Boss fight is over if all acts have been completed
         if(_currentActNum == _bossFightActs.Length)
         {
-            //  TODO: End Game Here
+            //  TODO: End Game Here, Replace debug
+            Debug.Log("Act ended");
             return;
         }
 
@@ -248,6 +266,8 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void AttackHasEnded()
     {
+        _onAttackCompleted?.Invoke();
+
         _attackCounter++;
 
         if(IsSceneCompleted())
@@ -300,6 +320,10 @@ public class BossAttackActSystem : MonoBehaviour
 
     public UnityEvent GetOnActBegin() => _onActBegin;
     public UnityEvent GetOnActEnd() => _onActEnd;
+    public UnityEvent GetOnSceneBegin() => _onSceneBegin;
+    public UnityEvent GetOnSceneEnd() => _onSceneEnd;
+
+    public UnityEvent GetOnAttackCompleted() => _onAttackCompleted;
 
     #endregion
 }
