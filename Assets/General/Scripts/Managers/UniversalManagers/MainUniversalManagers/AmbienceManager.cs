@@ -48,7 +48,7 @@ public class AmbienceManager : AudioManager
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
-        SceneLoadingManager.Instance.GetSceneChangedEvent.AddListener(StartBackgroundAudio);
+        SceneLoadingManager.Instance.GetOnSceneChangedEvent().AddListener(StartBackgroundAudio);
     }
 
     /// <summary>

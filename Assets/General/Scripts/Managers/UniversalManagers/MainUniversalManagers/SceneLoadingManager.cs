@@ -29,26 +29,16 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     public static SceneLoadingManager Instance;
 
     //Occurs when the currently active scene is changed
-    private UnityEvent _sceneChangedEvent = new();
-    private UnityEvent _gameplaySceneLoaded = new();
+    private UnityEvent _onSceneChangedEvent = new();
+    private UnityEvent _onGameplaySceneLoaded = new();
 
-    private UnityEvent _additiveLoadAddedEvent = new();
-    private UnityEvent _additiveLoadRemovedEvent = new();
+    private UnityEvent _onAdditiveLoadAddedEvent = new();
+    private UnityEvent _onAdditiveLoadRemovedEvent = new();
 
     private void Awake()
     {
         SetupInstance();
         SubscribeToEvents();
-    }
-
-    protected override void SubscribeToEvents()
-    {
-        _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
-    }
-
-    protected void SubscribeToGameplayEvents()
-    {
-        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
 
     /// <summary>
@@ -107,7 +97,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
             yield return null;
         }
 
-        InvokeSceneChangedEvent();
+        InvokeOnSceneChangedEvent();
 
         //Can start the ending scene transition animation here
         //Will be implemented when scene transition work occurs
@@ -124,7 +114,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     {
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
-        InvokeSceneAdditiveLoadAddEvent();
+        InvokeOnSceneAdditiveLoadAddEvent();
     }
 
     /// <summary>
@@ -135,7 +125,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     {
         SceneManager.UnloadSceneAsync(sceneID);
 
-        InvokeSceneAdditiveLoadRemoveEvent();
+        InvokeOnSceneAdditiveLoadRemoveEvent();
     }
 
     #region Base Manager
@@ -153,38 +143,69 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        _gameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
+    }
+
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+    }
+
+    /// <summary>
+    /// Subscribes to all events relating to gameplay
+    /// This is only called when loading into a scene with Gameplay Managers in it
+    /// Subscribes to events that come from gameplay manager
+    /// </summary>
+    protected override void SubscribeToGameplayEvents()
+    {
+        base.SubscribeToGameplayEvents();
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
     #endregion
 
     #region Events
-    private void InvokeSceneChangedEvent()
+    /// <summary>
+    /// Invokes event associated with loading a new scene
+    /// </summary>
+    private void InvokeOnSceneChangedEvent()
     {
-        _sceneChangedEvent?.Invoke();
+        _onSceneChangedEvent?.Invoke();
     }
 
-    public void InvokeGameplaySceneLoaded()
+    /// <summary>
+    /// Invokes event associated with loading a gameplay scene
+    /// Gameplay scenes are any scenes containing gameplay managers
+    /// </summary>
+    public void InvokeOnGameplaySceneLoaded()
     {
-        _gameplaySceneLoaded?.Invoke();
+        _onGameplaySceneLoaded?.Invoke();
     }
 
-    private void InvokeSceneAdditiveLoadAddEvent()
+    /// <summary>
+    /// Invokes event associated with adding an additively loaded scene
+    /// </summary>
+    private void InvokeOnSceneAdditiveLoadAddEvent()
     {
-        _additiveLoadAddedEvent?.Invoke();
+        _onAdditiveLoadAddedEvent?.Invoke();
     }
 
-    private void InvokeSceneAdditiveLoadRemoveEvent()
+    /// <summary>
+    /// Invokes event associated with removing an additively loaded scene
+    /// </summary>
+    private void InvokeOnSceneAdditiveLoadRemoveEvent()
     {
-        _additiveLoadRemovedEvent?.Invoke();
+        _onAdditiveLoadRemovedEvent?.Invoke();
     }
 
     #endregion
 
     #region Getters
 
-    public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
+    public UnityEvent GetOnSceneChangedEvent() => _onSceneChangedEvent;
 
-    public UnityEvent GetGameplaySceneLoaded => _gameplaySceneLoaded;
+    public UnityEvent GetGameplaySceneLoaded() => _onGameplaySceneLoaded;
+
+    public UnityEvent GetOnAdditiveSceneAdded() => _onAdditiveLoadAddedEvent;
+    public UnityEvent GetOnAdditiveSceneRemoved() => _onAdditiveLoadRemovedEvent;
 
     #endregion
 }
