@@ -221,6 +221,8 @@ public class RoomTongueAttack : BaseBossAttack
     private void PatrolEnemySpawned(PatrolEnemyBehavior patrolEnemyBehavior)
     {
         _activePatrolEnemies.Add(patrolEnemyBehavior);
+        // Need to be childed to move with the boat
+        patrolEnemyBehavior.transform.parent = this.transform;
     }
 
     /// <summary>

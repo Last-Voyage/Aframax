@@ -150,6 +150,8 @@ public class RoomVineAttack : BaseBossAttack
 
                 GameObject spawnedTectacle;
                 spawnedTectacle = Instantiate(_tentaclePrefab, transform.parent);
+                // Need to be childed to move with the boat
+                spawnedTectacle.transform.parent = transform;
 
                 _numTentaclesSpawned++;
 
@@ -186,6 +188,9 @@ public class RoomVineAttack : BaseBossAttack
                     GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[spawnIndex].position, 
                         Quaternion.identity);
 
+                    // Need to be childed to move with the boat
+                    newHitbox.transform.parent = transform;
+                    
                     //TODO in VS: Damage and timer should be handled by a new script on the indicator prefab, not here
                     // https://bradleycapstone.atlassian.net/browse/LV-322?atlOrigin=eyJpIjoiZjM1ZGM1MTg5MTA3NDY0ZjlkMmRiYTRhMDViNDYwYjUiLCJwIjoiaiJ9
                     var attackCollider = newHitbox.GetComponent<Collider>();
