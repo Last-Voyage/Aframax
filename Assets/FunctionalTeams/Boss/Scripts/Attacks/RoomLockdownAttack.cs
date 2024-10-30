@@ -35,26 +35,6 @@ public class RoomLockdownAttack : BaseBossAttack
     [SerializeField] private float _hitBoxAppearDuration = 1f;
 
     /// <summary>
-    /// links attack to boss attack manager
-    /// </summary>
-    private void OnEnable() 
-    {
-        //this.GetAttackBegin().AddListener(ActivateThisAttack);
-        // Remove this once ActSystem is merged
-        BossAttackManager.BeginRoomLockdownAttack += ActivateThisAttack;
-    }
-
-    /// <summary>
-    /// unlinks attack script from boss manager
-    /// </summary>
-    private void OnDisable()
-    {
-        //this.GetAttackBegin().RemoveListener(ActivateThisAttack);
-        // Remove this once ActSystem is merged
-        BossAttackManager.BeginRoomLockdownAttack -= ActivateThisAttack;
-    }
-
-    /// <summary>
     /// pretty self explanatory
     /// </summary>
     private void ActivateThisAttack()
@@ -73,7 +53,6 @@ public class RoomLockdownAttack : BaseBossAttack
         transform.localScale = _attackScale[0];
 
         // tell the attack manager that we are attacking
-        BossAttackManager.Instance.AttackInProgress = true;
 
         // setting attack indicator
         _bossAttack1Indicator.GetComponent<MeshRenderer>().material = _lowOpacity;
@@ -107,6 +86,5 @@ public class RoomLockdownAttack : BaseBossAttack
         attackCollider.enabled = false;
         
         //end attack and cycle to another
-        BossAttackManager.Instance.AttackInProgress = false;
     }
 }
