@@ -19,7 +19,7 @@ public class PatrolEnemySpawner : MonoBehaviour
     /// <summary>
     /// Invoked when an enemy is spawned
     /// </summary>
-    public static Action<PatrolEnemyBehavior> EnemySpawned;
+    public static Action<PatrolEnemyBehavior> OnEnemySpawned;
    
     /// <summary>
     /// Initializes the enemy patrol data when an enemy is spawned
@@ -57,6 +57,6 @@ public class PatrolEnemySpawner : MonoBehaviour
         InitializeEnemyData?.Invoke(patrolLocation);
         InitializeEnemyData.RemoveListener(patrolEnemyBehavior.InitializeAttackInformation);
 
-        EnemySpawned?.Invoke(patrolEnemyBehavior);
+        OnEnemySpawned?.Invoke(patrolEnemyBehavior);
     }
 }
