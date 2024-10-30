@@ -32,7 +32,7 @@ public class TitleScreenScrolling : MonoBehaviour
         _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(MoveCamera(_bottomCameraPosition.position, _screenScrollSpeed));
         if (_screenScrollSpeed == 0)
         {
-            Debug.Log("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
+            Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
         }
     }
 
@@ -43,7 +43,7 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <returns></returns>
     private IEnumerator MoveCamera(Vector3 destination, float scrollSpeed)
     {
-        if (_hasScrollingStarted == false)
+        if (!_hasScrollingStarted)
         {
             _hasScrollingStarted = true;
             while (_mainCamera.transform.position != destination)
