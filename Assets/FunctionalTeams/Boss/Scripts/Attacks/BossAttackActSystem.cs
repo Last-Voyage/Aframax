@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Defines an act
@@ -84,6 +85,8 @@ public class BossAttackActSystem : MonoBehaviour
 
     [Tooltip("Invoked when an attack ends")]
     private UnityEvent _onAttackCompleted = new();
+
+    private UnityEvent _endOfGameScene = new();
 
     #endregion
 
@@ -159,6 +162,8 @@ public class BossAttackActSystem : MonoBehaviour
         if(_currentActNum == _bossFightActs.Length)
         {
             //  TODO: End Game Here, Replace debug
+            InvokeEndOfGameScene();
+            SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
             Debug.Log("Act ended");
             return;
         }
@@ -312,6 +317,11 @@ public class BossAttackActSystem : MonoBehaviour
     private void InvokeSceneEndEvent()
     {
         _onSceneEnd?.Invoke();
+    }
+
+   private void InvokeEndOfGameScene()
+    {
+        _endOfGameScene?.Invoke();
     }
 
     #endregion
