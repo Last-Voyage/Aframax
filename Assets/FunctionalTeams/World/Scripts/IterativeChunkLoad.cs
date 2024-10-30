@@ -47,7 +47,7 @@ public class IterativeChunkLoad : MonoBehaviour
     private Vector3 _unusedChunkLandingArea = Vector3.zero;
 
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
-    public float _distanceBetweenChunks;
+    [SerializeField] private float _distanceBetweenChunks;
 
     private BoatMover _boatMover;
 
@@ -174,8 +174,6 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void SwapChunkStates()
     {
-        //bug.Log(_everyChunk[_usedChunks[(int)ChunkStates.newFront]]);
-
         _usedChunks[(int)ChunkStates.back] = _usedChunks[(int)ChunkStates.middle];
         _backChunkPtr = _middleChunkPtr;
         _usedChunks[(int)ChunkStates.middle] = _usedChunks[(int)ChunkStates.front];
