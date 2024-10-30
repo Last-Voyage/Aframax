@@ -38,7 +38,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private Transform _targetPoint;
     
-    private bool _playerInAttackRange = false;
+    private bool _isPlayerInAttackRange = false;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;
@@ -112,7 +112,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             return;
         }
 
-        _playerInAttackRange = IsPlayerInAttackRange();
+        _isPlayerInAttackRange = IsPlayerInAttackRange();
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             CheckPlayerInAttackRoom();
 
             // Only attack if player is within range
-            if(!_playerInAttackRange)
+            if(!_isPlayerInAttackRange)
             {
                 MoveToTarget();
             }

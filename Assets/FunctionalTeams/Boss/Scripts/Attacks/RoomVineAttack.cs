@@ -279,9 +279,4 @@ public class RoomVineAttack : BaseBossAttack
             EndAttack();
         }
     }
-
-    protected override void EndAttack()
-    {
-        base.EndAttack();
-    }
 }
