@@ -87,7 +87,8 @@ public class RoomTongueAttack : BaseBossAttack
 
     protected override void SubscribeToEvents()
     {
-        BossAttackManager.BeginInteriorTongueAttack += BeginAttack;
+        _beginAttack.AddListener(BeginAttack);
+
         PatrolEnemySpawner.EnemySpawned += PatrolEnemySpawned;
 
         PatrolEnemyDied.AddListener(PatrolEnemyDespawned);
@@ -95,7 +96,8 @@ public class RoomTongueAttack : BaseBossAttack
 
     protected override void UnsubscribeToEvents()
     {
-        BossAttackManager.BeginInteriorTongueAttack -= BeginAttack;
+        _beginAttack.RemoveListener(BeginAttack);
+
         PatrolEnemySpawner.EnemySpawned -= PatrolEnemySpawned;
 
         PatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
