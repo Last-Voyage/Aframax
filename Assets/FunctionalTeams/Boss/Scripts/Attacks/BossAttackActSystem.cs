@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttackActSystem.cs
 // Author :            Mark Hanson
+// Contributor:        Andrea Swihart-DeCoster
 // Creation Date :     10/22/2024
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
@@ -52,10 +53,10 @@ public class BossAttackActSystem : MonoBehaviour
     private Act _currentAct;
 
     [Tooltip("Invoked when an act begins")]
-    private UnityEvent _actBegin = new();
+    private UnityEvent _onActBegin = new();
 
     [Tooltip("Invoked when an act ends")]
-    private UnityEvent _actEnd = new();
+    private UnityEvent _onActEnd = new();
 
     #endregion Act Variables
 
@@ -74,10 +75,10 @@ public class BossAttackActSystem : MonoBehaviour
     protected private int _attackCounter = 0;
 
     [Tooltip("Invoked when a scene begins")]
-    private UnityEvent _sceneBegin = new();
+    private UnityEvent _onSceneBegin = new();
 
     [Tooltip("Invoked when a scene ends")]
-    private UnityEvent _sceneEnd = new();
+    private UnityEvent _onSceneEnd = new();
 
     #endregion
 
@@ -133,7 +134,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// <summary>
     /// Act end for attack
     /// </summary>
-    private void OnActCompleted()
+    private void CompleteAct()
     {
         _currentActNum++;
 
@@ -173,7 +174,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// <summary>
     /// Calls when a scene has been completed, progresses to the next scene or act
     /// </summary>
-    private void OnSceneCompleted()
+    private void CompleteScene()
     {
         _currentSceneNum++;
 
@@ -182,7 +183,7 @@ public class BossAttackActSystem : MonoBehaviour
         // Progresses to the next act if all scenes are completed
         if (IsActCompleted())
         {
-            OnActCompleted();
+            CompleteAct();
             return;
         }
 
@@ -251,7 +252,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         if(IsSceneCompleted())
         {
-            OnSceneCompleted();
+            CompleteScene();
         }
     }
 
@@ -264,7 +265,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void InvokeBeginActEvent()
     {
-        _actBegin?.Invoke();
+        _onActBegin?.Invoke();
     }
 
     /// <summary>
@@ -273,7 +274,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void InvokeActEndEvent()
     {
-        _actEnd?.Invoke();
+        _onActEnd?.Invoke();
     }
 
     /// <summary>
@@ -281,7 +282,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void InvokeBeginSceneEvent()
     {
-        _sceneBegin?.Invoke();
+        _onSceneBegin?.Invoke();
     }
 
     /// <summary>
@@ -290,15 +291,15 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void InvokeSceneEndEvent()
     {
-        _sceneEnd?.Invoke();
+        _onSceneEnd?.Invoke();
     }
 
     #endregion
 
     #region Getters
 
-    public UnityEvent GetActBegin() => _actBegin;
-    public UnityEvent GetActEnd() => _actEnd;
+    public UnityEvent GetOnActBegin() => _onActBegin;
+    public UnityEvent GetOnActEnd() => _onActEnd;
 
     #endregion
 }
