@@ -23,11 +23,14 @@ public class WeakPointHealth : BaseHealth
     /// <param name="damage"></param>
     public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        if(damage > 0)
+        if (damageSource != null)
         {
-            _weakPointDamageTakenEvent?.Invoke();
-            VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
-            base.TakeDamage(damage, null);
+            if (damageSource is HarpoonDamage)
+            {
+                _weakPointDamageTakenEvent?.Invoke();
+                VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+                base.TakeDamage(damage, null);
+            }
         }
     }
 

@@ -27,7 +27,7 @@ public class IterativeChunkLoad : MonoBehaviour
     private int _chunkQueuePtrPtr = 0;
 
     [Tooltip("Queue of pointers for chunk order")]
-    private int[] _chunkQueuePtr;
+    private int[] _chunkQueuePtr = new int[0];
 
     // Pointers for where the chunks are in the every chunk array
     // This is necessary to put chunks back into the unused chunk landing area
@@ -47,7 +47,7 @@ public class IterativeChunkLoad : MonoBehaviour
     private Vector3 _unusedChunkLandingArea = Vector3.zero;
 
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
-    private float _distanceBetweenChunks;
+    [SerializeField] private float _distanceBetweenChunks;
 
     private BoatMover _boatMover;
 
@@ -64,11 +64,8 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        
         EnvironmentManager.Instance.GetSendingOverChunks().AddListener(ReceiveChunkQueue);
-
         EnvironmentManager.Instance.GetAllChunkObjects().AddListener(ReceiveEveryChunk); // STILL NEEDS TO BE IMPLEMENTED
-
         EnvironmentManager.Instance.SendChangeTheChunk().AddListener(ChunkChange);
 
         _boatMover = GetComponent<BoatMover>();
@@ -76,9 +73,9 @@ public class IterativeChunkLoad : MonoBehaviour
         // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
         _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
         _usedChunks[(int)ChunkStates.middle] = _everyChunk[_chunkQueuePtrPtr++];
-        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<BezierCurve>());
         _usedChunks[(int)ChunkStates.front] = _everyChunk[_chunkQueuePtrPtr++];
-        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<BezierCurve>());
     }
 
     /// <summary>
@@ -124,6 +121,11 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void ChunkChange()
     {
+        if (_chunkQueuePtr.Length == 0)
+        {
+            return;
+        }
+
         AddChunk();
 
         // PLACE HOLDER LINE - Put a function here that would cleanup anything that happened in the back chunk
@@ -144,7 +146,7 @@ public class IterativeChunkLoad : MonoBehaviour
     {
         _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
 
-        _chunkQueuePtrPtr++;
+        _chunkQueuePtrPtr = (_chunkQueuePtrPtr + 1) % _chunkQueuePtr.Length;
 
         _everyChunk[_newFrontChunkPtr].transform.position =
             _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_distanceBetweenChunks);
@@ -175,10 +177,11 @@ public class IterativeChunkLoad : MonoBehaviour
         _usedChunks[(int)ChunkStates.back] = _usedChunks[(int)ChunkStates.middle];
         _backChunkPtr = _middleChunkPtr;
         _usedChunks[(int)ChunkStates.middle] = _usedChunks[(int)ChunkStates.front];
-        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<BezierCurve>());
+
         _middleChunkPtr = _frontChunkPtr;
         _usedChunks[(int)ChunkStates.front] = _usedChunks[(int)ChunkStates.newFront];
-        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<RiverSpline>());
+        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<BezierCurve>());
         _frontChunkPtr = _newFrontChunkPtr;
         _newFrontChunkPtr = 0; // This ptr is freed until a new chunk is going to be added
     }

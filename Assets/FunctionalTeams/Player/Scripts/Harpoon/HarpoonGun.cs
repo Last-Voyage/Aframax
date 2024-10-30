@@ -2,6 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 //                     Ryan Swanson
+//                     Adam Garwacki
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -20,7 +21,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Contains the state in which the harpoon shooting functionality is in
     /// </summary>
-    private enum EHarpoonFiringState
+    public enum EHarpoonFiringState
     {
         Ready,
         Firing,
@@ -30,7 +31,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Contains the state in which the harpoon focusing is currently in
     /// </summary>
-    private enum EFocusState
+    public enum EFocusState
     {
         None,
         Focusing,
@@ -112,16 +113,36 @@ public class HarpoonGun : MonoBehaviour
     private float travelDistance;
 
     private PlayerInputMap _playerInputMap;
+
+    public static HarpoonGun Instance;
+
     #endregion
 
     #region Setup
     private void Awake()
     {
+        CheckSingletonInstance();
+
         _harpoonAnimator = GetComponent<Animator>();
 
         CreateInitialHarpoonPool();
 
         StartCoroutine(HarpoonCameraOrientation());
+    }
+
+    /// <summary>
+    /// Confirms whether this asset exists as a singleton.
+    /// </summary>
+    private void CheckSingletonInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     #endregion
 
@@ -476,5 +497,42 @@ Focusing)
     #region Getters
     //Getters for private variables
     public Transform GetHarpoonTip() => _harpoonTip;
+
+    /// <summary>
+    /// The focus accuracy (or potential deviation) of the harpoon.
+    /// </summary>
+    /// <returns>Deviation range of shots. Higher numbers mean more spread.</returns>
+    public float GetCurrentFocusAccuracy()
+    {
+        return _currentFocusAccuracy;
+    }
+
+    /// <summary>
+    /// The maximum inaccuracy of the harpoon gun.
+    /// </summary>
+    /// <returns>The initial starting inaccuracy of the harpoon gun.</returns>
+    public float GetFocusStartingInaccuracy()
+    {
+        return _focusStartingInaccuracy;
+    }
+
+    /// <summary>
+    /// The state of focusing.
+    /// </summary>
+    /// <returns>The current state of focusing.</returns>
+    public EFocusState GetCurrentFocusState()
+    {
+        return _currentFocusState;
+    }
+
+    /// <summary>
+    /// Whether a harpoon is ready to be fired or not.
+    /// </summary>
+    /// <returns>Current firing state of the player's harpoon.</returns>
+    public EHarpoonFiringState GetHarpoonFiringState()
+    {
+        return _harpoonFiringState;
+    }
+
     #endregion
 }

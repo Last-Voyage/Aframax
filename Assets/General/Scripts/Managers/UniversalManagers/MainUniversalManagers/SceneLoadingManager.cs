@@ -35,12 +35,6 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     private UnityEvent _additiveLoadAddedEvent = new();
     private UnityEvent _additiveLoadRemovedEvent = new();
 
-    private void Awake()
-    {
-        SetupInstance();
-        SubscribeToEvents();
-    }
-
     protected override void SubscribeToEvents()
     {
         _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);

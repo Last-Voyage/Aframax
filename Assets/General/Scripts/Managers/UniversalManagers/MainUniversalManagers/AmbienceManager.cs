@@ -68,6 +68,10 @@ public class AmbienceManager : AudioManager
         }
         foreach (var sound in FmodAmbienceEvents.Instance.AmbientBackgroundSounds)
         {
+            if(sound.IsNull)
+            {
+                return;
+            }
             StartAmbience(sound);
         }
     }

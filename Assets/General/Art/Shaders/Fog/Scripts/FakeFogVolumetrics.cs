@@ -25,6 +25,12 @@ public class FakeFogVolumetrics : MonoBehaviour
     /// in addition to the point light intensity
     /// </summary>
     public float intensityMultiplier = 1.0F;
+
+    /// <summary>
+    /// How much to add to the scale factor in addition
+    /// to the point light range\
+    /// </summary>
+    public float scaleMultiplier = 1.0F;
     
     private Material _lightMaterial;
     private Light _pointLight;
@@ -70,9 +76,9 @@ public class FakeFogVolumetrics : MonoBehaviour
         {
             _lastRange = _pointLight.range;
             transform.localScale = new Vector3(
-                _lastRange,
-                _lastRange,
-                _lastRange
+                _lastRange * scaleMultiplier,
+                _lastRange * scaleMultiplier,
+                _lastRange * scaleMultiplier
             );
         }
     }

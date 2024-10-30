@@ -180,6 +180,7 @@ public class WeakPointHandler : MonoBehaviour
     #endregion
 
     #region Events
+
     /// <summary>
     /// Calls the weak destroyed event
     /// </summary>
@@ -187,6 +188,7 @@ public class WeakPointHandler : MonoBehaviour
     {
         _allWeakPointsDestroyedEvent?.Invoke(this);
     }
+
     #endregion
 
     #region Getters

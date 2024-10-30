@@ -59,34 +59,6 @@ public class BezierCurve : MonoBehaviour
         return P;
     }
 
-    [System.Obsolete]
-    /// <summary>
-    /// Calculates the distance along the line at a certain point
-    /// </summary>
-    /// <param name="start">The starting bezier point</param>
-    /// <param name="end">The ending bezier point</param>
-    /// <param name="pointIndex">The point to be checking up until</param>
-    /// <returns>The distance along the line</returns>
-    public float DistanceAlongLine(BezierPoint start, BezierPoint end, int pointIndex)
-    {
-        if (pointIndex == 0)
-        {
-            return 0;
-        }
-
-        float totalDistance = 0;
-        Vector3 previousPoint = EvaluateBezierPoint(start, end, 0);
-        for (int i = 1; i < pointIndex; i++)
-        {
-            Vector3 currentPoint = EvaluateBezierPoint(start, end, i / (float)CurveSmoothness);
-
-            totalDistance += Vector3.Distance(previousPoint, currentPoint);
-            previousPoint = currentPoint;
-        }
-
-        return totalDistance;
-    }
-
     /// <summary>
     /// Find the linearly interpolated derivative between two bezier points
     /// </summary>
@@ -277,6 +249,130 @@ public class BezierCurve : MonoBehaviour
     /// <param name="worldPosition">Whether or not the returned position should be in world position</param>
     /// <returns>The position along the line at the given value</returns>
     public Vector3 GetPositionAlongSpline(float value, out Vector3 forward, bool worldPosition = false)
+    {
+        // Clamp the value between 0 and 100%
+        value = Mathf.Clamp01(value);
+
+        // Get the length that the boat needs to travel along the line
+        float length = GetLengthOfLine();
+        float distanceOverLine = value * length;
+
+        // Iterate through each line segment and find the one that the point is in
+        float previousLength = 0;
+        float totalLength = 0;
+        for (int i = 0; i < BezierPoints.Length - 1; i++)
+        {
+            // Get the current length of the "active" segment and add it to the main distance
+            PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], CurveSmoothness, out float currentLength);
+            totalLength += currentLength;
+
+            // If the distance value is less than the current length, it will be in this segment
+            if (distanceOverLine <= totalLength)
+            {
+                // Find the value along and position within the line segment
+                float valueOnSegment = (distanceOverLine - previousLength) / currentLength;
+                Vector3 positionOnSegment = EvaluateBezierPoint(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+
+                // Determine the derivative at the point along the line
+                Vector3 derivativeOnSegment = EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+                forward = derivativeOnSegment;
+
+                // Account for 3D space
+                return positionOnSegment + (worldPosition ? transform.position : Vector3.zero);
+            }
+            previousLength = totalLength;
+        }
+
+        // Edge case
+        forward = Vector3.zero;
+        return worldPosition ? transform.position : Vector3.zero;
+    }
+
+    [System.Obsolete]
+    /// <summary>
+    /// Calculates the distance along the line at a certain point
+    /// </summary>
+    /// <param name="start">The starting bezier point</param>
+    /// <param name="end">The ending bezier point</param>
+    /// <param name="pointIndex">The point to be checking up until</param>
+    /// <returns>The distance along the line</returns>
+    public float DistanceAlongLine(BezierPoint start, BezierPoint end, int pointIndex)
+    {
+        // Edge case: checking 0% of the way through the line, set it to 0
+        if (pointIndex == 0)
+        {
+            return 0;
+        }
+
+        // Add up the total length of the line segments
+        float totalDistance = 0;
+        Vector3 previousPoint = EvaluateBezierPoint(start, end, 0);
+        for (int i = 1; i <= pointIndex; i++)
+        {
+            Vector3 currentPoint = EvaluateBezierPoint(start, end, i / (float)CurveSmoothness);
+
+            // Find the length of each individual segment
+            totalDistance += Vector3.Distance(previousPoint, currentPoint);
+            previousPoint = currentPoint;
+        }
+
+        return totalDistance;
+    }
+
+    [System.Obsolete]
+    /// <summary>
+    /// Convert a specific distance along the line into a float value
+    /// </summary>
+    /// <param name="start">The bezier point at the start of the curve</param>
+    /// <param name="end">The bezier point at the end of the curve</param>
+    /// <param name="distance">The distance to get the values from</param>
+    /// <returns>The percentage value along the spline</returns>
+    public float DistanceToValue(BezierPoint start, BezierPoint end, float distance)
+    {
+        // Edge cases: The start or end of the curve
+        if (distance == 0)
+        {
+            return 0;
+        }
+        if (distance >= DistanceAlongLine(start, end, CurveSmoothness))
+        {
+            return DistanceAlongLine(start, end, CurveSmoothness);
+        }
+
+        // Create a table holding all the percentage values, with the index of the array being the point index
+        float[] indexDistances = new float[CurveSmoothness + 1];
+
+        // Populate the table with the indicies' distances
+        for (int i = 0; i < indexDistances.Length; i++)
+        {
+            indexDistances[i] = DistanceAlongLine(start, end, i);
+        }
+
+        // Run through the list and find the distances the input distance is in between
+        int minIndex = 0;
+        int maxIndex = 1;
+        for (int i = indexDistances.Length - 1; i >= 0; i--)
+        {
+            if (distance > indexDistances[i])
+            {
+                minIndex = i;
+                maxIndex = i + 1;
+            }
+        }
+
+        // Return the ratio of the way through the line segment
+        return ((float)(distance - indexDistances[minIndex]) / (indexDistances[maxIndex] - indexDistances[minIndex])) + (minIndex / (float)CurveSmoothness);
+    }
+
+    [System.Obsolete]
+    /// <summary>
+    /// Get a "normalized" position a percentage of the way across the spline
+    /// </summary>
+    /// <param name="value">The default percentage of the way through the spline</param>
+    /// <param name="forward">The output transform forward vector</param>
+    /// <param name="worldPosition">Whether or not the position should be returned in worldspace</param>
+    /// <returns>The position of the object along the spline</returns>
+    public Vector3 GetNormalizedAlongSpline(float value, out Vector3 forward, bool worldPosition = false)
     {
         // Clamp the value between 0 and 100%
         value = Mathf.Clamp01(value);

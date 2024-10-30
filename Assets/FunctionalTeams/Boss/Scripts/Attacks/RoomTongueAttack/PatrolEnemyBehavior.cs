@@ -38,7 +38,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private Transform _targetPoint;
     
-    private bool _playerInAttackRange = false;
+    private bool _isPlayerInAttackRange = false;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;
@@ -75,6 +75,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void InitializeLifetime()
     {
         _lifetime = 0.0f;
+        RoomTongueAttack.DestroyAllEnemies.AddListener(EndLifetime);
     }
 
     /// <summary>
@@ -111,7 +112,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             return;
         }
 
-        _playerInAttackRange = IsPlayerInAttackRange();
+        _isPlayerInAttackRange = IsPlayerInAttackRange();
     }
 
     /// <summary>
@@ -143,7 +144,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             CheckPlayerInAttackRoom();
 
             // Only attack if player is within range
-            if(!_playerInAttackRange)
+            if(!_isPlayerInAttackRange)
             {
                 MoveToTarget();
             }
@@ -172,8 +173,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void EndLifetime()
     {
-        RoomTongueAttack.PatrolEnemyDied?.Invoke(this);
-
+        RoomTongueAttack.OnPatrolEnemyDied?.Invoke(this);
+        RoomTongueAttack.DestroyAllEnemies.RemoveListener(EndLifetime);
         // Enemy dies once lifetime has expired
         if (gameObject != null)
         {
