@@ -113,17 +113,36 @@ public class HarpoonGun : MonoBehaviour
     private float travelDistance;
 
     private PlayerInputMap _playerInputMap;
-    
+
+    public static HarpoonGun Instance;
+
     #endregion
 
     #region Setup
     private void Awake()
     {
+        CheckSingletonInstance();
+
         _harpoonAnimator = GetComponent<Animator>();
 
         CreateInitialHarpoonPool();
 
         StartCoroutine(HarpoonCameraOrientation());
+    }
+
+    /// <summary>
+    /// Confirms whether this asset exists as a singleton.
+    /// </summary>
+    private void CheckSingletonInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     #endregion
 

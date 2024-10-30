@@ -15,14 +15,9 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerReticle : MonoBehaviour
 {
-    [Tooltip("The circle showing the potential deviation of harpoon shots")]
-    [SerializeField] private GameObject _reticleScope;
-
-    [SerializeField] private HarpoonGun _harpoonGunScript;
-
-    [Space]
-
+    [Tooltip("Reticle color while unfocused. Should be less prominent than the focused color.")]
     [SerializeField] private Color _unfocusedColor;
+    [Tooltip("Reticle color while focused. Should be more prominent than the unfocused color.")]
     [SerializeField] private Color _focusedColor;
 
     [Space]
@@ -33,6 +28,11 @@ public class PlayerReticle : MonoBehaviour
     [Tooltip("How much bigger the outer ring of the reticle is compared to the inner, dynamic one.")]
     [SerializeField] private float _scopePadding;
 
+    [Tooltip("The circle showing the potential deviation of harpoon shots")]
+    private GameObject _reticleScope;
+
+    private HarpoonGun _harpoonGunScript;
+
     private RectTransform _outerRingRectTransform;
     private RectTransform _scopeRectTransform;
 
@@ -40,6 +40,7 @@ public class PlayerReticle : MonoBehaviour
     private Image _scopeImage;
 
     private float _newReticleSize = 0;
+    [Tooltip("Scales reticle assets in relation to reticle inaccuracy. Adjusting this leads to inaccurate shown aim.")]
     private readonly float _maxScopeSize = 1000;
     private readonly float _scopeScalar = 1000;
 
@@ -48,13 +49,7 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _outerRingRectTransform = gameObject.GetComponent<RectTransform>();
-        _scopeRectTransform = _reticleScope.GetComponent<RectTransform>();
-
-        _frameImage = gameObject.GetComponent<Image>();
-        _scopeImage = _reticleScope.GetComponent<Image>();
-
-        gameObject.GetComponent<Image>().color = _unfocusedColor;
+        ObtainReferences();
 
         InitializeReticle();
     }
@@ -65,7 +60,7 @@ public class PlayerReticle : MonoBehaviour
     private void Update()
     {
         // Updates the sprite of the reticle if spread range is actively changing due to focus
-        if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing || 
+        if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing ||
             _harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
         {
             AdjustReticleSize();
@@ -73,6 +68,24 @@ public class PlayerReticle : MonoBehaviour
 
         AdjustReticleAppearance();
 
+    }
+
+    /// <summary>
+    /// Sets references to other GameObjects and components.
+    /// </summary>
+    private void ObtainReferences()
+    {
+        _harpoonGunScript = HarpoonGun.Instance;
+
+        _reticleScope = gameObject.transform.GetChild(0).gameObject;
+
+        _outerRingRectTransform = gameObject.GetComponent<RectTransform>();
+        _scopeRectTransform = _reticleScope.GetComponent<RectTransform>();
+
+        _frameImage = gameObject.GetComponent<Image>();
+        _scopeImage = _reticleScope.GetComponent<Image>();
+
+        gameObject.GetComponent<Image>().color = _unfocusedColor;
     }
 
     /// <summary>
@@ -84,11 +97,11 @@ public class PlayerReticle : MonoBehaviour
 
         // Sets the size of the frame which dynamically represents deviation range of harpoon shots
         _scopeRectTransform.sizeDelta =
-            new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize), 
+            new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
         // Gives the active reticle range a static outer frame
         _outerRingRectTransform.sizeDelta =
-            new Vector2(Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize), 
+            new Vector2(Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize));
     }
 
@@ -100,7 +113,7 @@ public class PlayerReticle : MonoBehaviour
         _newReticleSize = _harpoonGunScript.GetCurrentFocusAccuracy() * _scopeScalar;
 
         _scopeRectTransform.sizeDelta =
-            new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize), 
+            new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
     }
 
