@@ -111,7 +111,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GameStateManager.Instance.StartingNewBossAct().AddListener(BeginAct);
+        GameStateManager.Instance.GetOnStartingNewBossAct().AddListener(BeginAct);
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        GameStateManager.Instance.StartingNewBossAct().RemoveListener(BeginAct);
+        GameStateManager.Instance.GetOnStartingNewBossAct().RemoveListener(BeginAct);
     }
 
 
