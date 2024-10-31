@@ -130,7 +130,7 @@ public class BossAttackActSystem : MonoBehaviour
     {
         // Test the begin interior attack until act system is properly connected to the start of the game / end
         // of tutorial
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && !TimeManager.Instance.GetIsGamePaused())
         {
             BeginAct();
         }
@@ -321,6 +321,8 @@ public class BossAttackActSystem : MonoBehaviour
     private void InvokeBeginSceneEvent()
     {
         _onSceneBegin?.Invoke();
+        RuntimeSfxManager.APlayOneShotSFX?.Invoke
+            (FmodSfxEvents.Instance.SceneStart, PlayerMovementController.Instance.transform.position);
     }
 
     /// <summary>

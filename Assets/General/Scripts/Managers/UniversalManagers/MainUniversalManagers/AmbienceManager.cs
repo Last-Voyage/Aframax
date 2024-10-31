@@ -24,13 +24,9 @@ public class AmbienceManager : AudioManager
 
     private void Awake()
     {
-        // Parent needs to be removed at runtime in order for DontDestroyOnLoad to work
-        transform.parent = null;
-
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

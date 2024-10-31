@@ -24,21 +24,27 @@ public class RuntimeSfxManager : AudioManager
 
     private Coroutine _footstepsCoroutine;
 
+    //TODO Remove after LV-324
+    public static RuntimeSfxManager SFXInstance;
+
     #region Enable and Action Subscriptions
-
-    private void OnEnable()
+    /// <summary>
+    /// Subscribes to any needed actions and initializes the footsteps
+    /// </summary>
+    public override void SetupMainManager()
     {
+        base.SetupMainManager();
+        //TODO Uncomment after LV-324
+        //InitializeFootstepInstance();
         SubscribeToActions(true);
-    }
-    
-    private void OnDisable()
-    {
-        SubscribeToActions(false);
+        //TODO Remove after LV-324
+        SFXInstance = this;
     }
 
-    private void Start()
+    protected override void OnDestroy()
     {
-        InitializeFootstepInstance();
+        base.OnDestroy();
+        SubscribeToActions(false);
     }
 
     /// <summary>
@@ -47,15 +53,28 @@ public class RuntimeSfxManager : AudioManager
     /// <param name="val"> if true, subscribes </param>
     private void SubscribeToActions(bool val)
     {
-        if(val)
+        if (val)
         {
             APlayOneShotSFX += PlayOneShotSFX;
+            
+            return;
+        }
+
+        APlayOneShotSFX -= PlayOneShotSFX;
+        
+    }
+
+    //TODO Remove after LV-324
+    public void SubscribeToGameplayActions(bool val)
+    {
+        if(val)
+        {
+            InitializeFootstepInstance();
             PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
             PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
             return;
         }
 
-        APlayOneShotSFX -= PlayOneShotSFX;
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
     }

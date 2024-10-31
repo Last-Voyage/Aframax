@@ -19,9 +19,8 @@ public class GameplayManagers : CoreManagersFramework
 {
     /// <summary>
     /// Contains all managers to setup. Order of managers is order of setup.
-    /// Order shouldn't technically matter but just in case
     /// </summary>
-    [SerializeField] private List<MainGameplayManagerFramework> _allMainGameplayManagers;
+    private MainGameplayManagerFramework[] _allMainGameplayManagers;
 
     public static GameplayManagers Instance;
 
@@ -39,6 +38,14 @@ public class GameplayManagers : CoreManagersFramework
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets all managers that fall under gameplay manager
+    /// </summary>
+    protected override void GetAllManagers()
+    {
+        _allMainGameplayManagers = GetComponentsInChildren<MainGameplayManagerFramework>();
     }
 
     /// <summary>
@@ -61,8 +68,16 @@ public class GameplayManagers : CoreManagersFramework
         }
 
         SceneLoadingManager.Instance.InvokeGameplaySceneLoaded();
+
+        //TODO Remove after LV-324
+        RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
     }
 
+    //TODO Remove after LV-324
+    private void OnDestroy()
+    {
+        RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(false);
+    }
     #region Getters
 
     #endregion

@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a667200f2ae8459b397bc03e59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _direction: {x: 5, y: 0, z: 0}
+  _pointToMoveTo: {x: 0, y: 0, z: 0}
   _start: {x: 0, y: 0, z: 0}
 --- !u!1 &2910179870582379614
 GameObject:
@@ -520,7 +520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a667200f2ae8459b397bc03e59350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _direction: {x: 0, y: 0, z: 0}
+  _pointToMoveTo: {x: 0, y: 0, z: 0}
   _start: {x: 0, y: 0, z: 0}
 --- !u!114 &3727716188669175149
 MonoBehaviour:
@@ -534,13 +534,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e46d0b2e44bb41e41acf1496ba93dbda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 0}
   _parent: {fileID: 5693276074052173589}
-  _attractionRange: 8
-  _maxDistanceFromParent: 8.5
+  _attractionRange: 16
+  _maxDistanceFromParent: 16.5
   _stopFollowDistance: 1
-  _followSpeed: 0.5
-  _rotateSpeed: 0.5
+  _followSpeed: 2
+  _rotateSpeed: 1
 --- !u!1 &5315145319613912201
 GameObject:
   m_ObjectHideFlags: 0
