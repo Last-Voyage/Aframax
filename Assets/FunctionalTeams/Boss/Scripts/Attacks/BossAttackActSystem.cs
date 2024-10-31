@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Defines an act
@@ -33,7 +32,15 @@ public struct ActScene
     [field: Tooltip("Attacks within the Act")]
     [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
 }
-
+/// <summary>
+/// For functionality of unity scenes
+/// </summary>
+[System.Serializable]
+public struct EndOfGame
+{
+    [field: Tooltip("SceneManagement for end of the game")]
+    [field: SerializeField] public SceneLoadingManager SceneLoading { get; private set; }
+}
 /// <summary>
 /// A class that contains multiple functions for the act system that are updated within a coroutine
 /// </summary>
@@ -54,6 +61,10 @@ public class BossAttackActSystem : MonoBehaviour
     /// Current act ref
     /// </summary>
     private Act _currentAct;
+    /// <summary>
+    /// For unity Scene loading
+    /// </summary>
+    private EndOfGame _sceneManage;
 
     [Tooltip("Invoked when an act begins")]
     private UnityEvent _onActBegin = new();
@@ -163,7 +174,7 @@ public class BossAttackActSystem : MonoBehaviour
         {
             //  TODO: End Game Here, Replace debug
             InvokeEndOfGameScene();
-            SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+            _sceneManage.SceneLoading.StartAsyncSceneLoadViaID(0, 0);
             Debug.Log("Act ended");
             return;
         }
