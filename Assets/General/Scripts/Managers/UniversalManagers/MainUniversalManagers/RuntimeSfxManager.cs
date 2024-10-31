@@ -25,20 +25,20 @@ public class RuntimeSfxManager : AudioManager
     private Coroutine _footstepsCoroutine;
 
     #region Enable and Action Subscriptions
-
-    private void OnEnable()
+    /// <summary>
+    /// Subscribes to any needed actions and initializes the footsteps
+    /// </summary>
+    public override void SetupMainManager()
     {
+        base.SetupMainManager();
+        InitializeFootstepInstance();
         SubscribeToActions(true);
     }
-    
-    private void OnDisable()
-    {
-        SubscribeToActions(false);
-    }
 
-    private void Start()
+    protected override void OnDestroy()
     {
-        InitializeFootstepInstance();
+        base.OnDestroy();
+        SubscribeToActions(false);
     }
 
     /// <summary>

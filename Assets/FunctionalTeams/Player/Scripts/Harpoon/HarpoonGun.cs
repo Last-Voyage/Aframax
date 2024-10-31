@@ -2,6 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 //                     Ryan Swanson
+//                     Adam Garwacki
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -20,7 +21,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Contains the state in which the harpoon shooting functionality is in
     /// </summary>
-    private enum EHarpoonFiringState
+    public enum EHarpoonFiringState
     {
         Ready,
         Firing,
@@ -30,7 +31,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Contains the state in which the harpoon focusing is currently in
     /// </summary>
-    private enum EFocusState
+    public enum EFocusState
     {
         None,
         Focusing,
@@ -67,6 +68,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private float _focusStartingInaccuracy;
     [Tooltip("The curve at which the accuracy increases while focusing")]
     [SerializeField] private AnimationCurve _focusCurve;
+
+    private bool _isFocusButtonHeld;
 
     private float _currentFocusAccuracy = 0;
 
@@ -112,16 +115,36 @@ public class HarpoonGun : MonoBehaviour
     private float travelDistance;
 
     private PlayerInputMap _playerInputMap;
+
+    public static HarpoonGun Instance;
+
     #endregion
 
     #region Setup
     private void Awake()
     {
+        CheckSingletonInstance();
+
         _harpoonAnimator = GetComponent<Animator>();
 
         CreateInitialHarpoonPool();
 
         StartCoroutine(HarpoonCameraOrientation());
+    }
+
+    /// <summary>
+    /// Confirms whether this asset exists as a singleton.
+    /// </summary>
+    private void CheckSingletonInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     #endregion
 
@@ -132,8 +155,8 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed += FireHarpoon;
 
-        _harpoonFocus.action.started += FocusHarpoon;
-        _harpoonFocus.action.canceled += StartUnfocusingHarpoon;
+        _harpoonFocus.action.started += FocusButtonHeld;
+        _harpoonFocus.action.canceled += FocusButtonReleased;
     }
 
     /// <summary>
@@ -143,8 +166,8 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed -= FireHarpoon;
 
-        _harpoonFocus.action.started -= FocusHarpoon;
-        _harpoonFocus.action.canceled -= StartUnfocusingHarpoon;
+        _harpoonFocus.action.started -= FocusButtonHeld;
+        _harpoonFocus.action.canceled -= FocusButtonReleased;
     }
     #endregion
 
@@ -182,6 +205,8 @@ Focusing)
         StartCoroutine(HarpoonFireProcess(currentHarpoon));
 
         VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+
+        ResetFocus();
 
         // Personally I think the projectile should be the same as the object on the visual as the gun itself, 
         // but that's a discussion for a later day
@@ -279,16 +304,49 @@ Focusing)
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
 
+        if(_isFocusButtonHeld)
+        {
+            StartFocusingHarpoon();
+        }
+
         PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
     }
     #endregion
 
     #region Focusing
     /// <summary>
+    /// Called when the focus button begins to be held down
+    /// </summary>
+    /// <param name="context"></param>
+    private void FocusButtonHeld(InputAction.CallbackContext context)
+    {
+        _isFocusButtonHeld = true;
+
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            StartFocusingHarpoon();
+        }
+    }
+
+    /// <summary>
+    /// Called when the focus button is released
+    /// </summary>
+    /// <param name="context"></param>
+    private void FocusButtonReleased(InputAction.CallbackContext context)
+    {
+        _isFocusButtonHeld = false;
+
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            StartUnfocusingHarpoon();
+        }
+    }
+
+    /// <summary>
     /// Starts focusing the weapon
     /// </summary>
     /// <param name="context"></param>
-    private void FocusHarpoon(InputAction.CallbackContext context)
+    private void StartFocusingHarpoon()
     {
         _currentFocusState = EFocusState.Focusing;
 
@@ -302,7 +360,7 @@ Focusing)
     /// Stops the focusing of the weapon
     /// </summary>
     /// <param name="context"></param>
-    private void StartUnfocusingHarpoon(InputAction.CallbackContext context)
+    private void StartUnfocusingHarpoon()
     {
         _currentFocusState = EFocusState.Unfocusing;
 
@@ -379,7 +437,17 @@ Focusing)
     {
         _currentFocusState = EFocusState.None;
 
+        ResetFocus();
+    }
+
+    /// <summary>
+    /// Resets focus back to 0
+    /// </summary>
+    private void ResetFocus()
+    {
+        StopCurrentFocusCoroutine();
         _focusProgress = 0;
+        CalculateCurrentFocusAccuracy();
     }
 
     /// <summary>
@@ -476,5 +544,42 @@ Focusing)
     #region Getters
     //Getters for private variables
     public Transform GetHarpoonTip() => _harpoonTip;
+
+    /// <summary>
+    /// The focus accuracy (or potential deviation) of the harpoon.
+    /// </summary>
+    /// <returns>Deviation range of shots. Higher numbers mean more spread.</returns>
+    public float GetCurrentFocusAccuracy()
+    {
+        return _currentFocusAccuracy;
+    }
+
+    /// <summary>
+    /// The maximum inaccuracy of the harpoon gun.
+    /// </summary>
+    /// <returns>The initial starting inaccuracy of the harpoon gun.</returns>
+    public float GetFocusStartingInaccuracy()
+    {
+        return _focusStartingInaccuracy;
+    }
+
+    /// <summary>
+    /// The state of focusing.
+    /// </summary>
+    /// <returns>The current state of focusing.</returns>
+    public EFocusState GetCurrentFocusState()
+    {
+        return _currentFocusState;
+    }
+
+    /// <summary>
+    /// Whether a harpoon is ready to be fired or not.
+    /// </summary>
+    /// <returns>Current firing state of the player's harpoon.</returns>
+    public EHarpoonFiringState GetHarpoonFiringState()
+    {
+        return _harpoonFiringState;
+    }
+
     #endregion
 }
