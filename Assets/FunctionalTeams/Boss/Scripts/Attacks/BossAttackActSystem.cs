@@ -186,7 +186,7 @@ public class BossAttackActSystem : MonoBehaviour
         if(_currentActNum == _bossFightActs.Length)
         {
             SceneLoadingManager.Instance.InvokeEndOfGameScene();
-            SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(0, 0);
+            SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
             Debug.Log("Act ended");
             return;
         }
