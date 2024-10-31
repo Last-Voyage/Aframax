@@ -18,12 +18,8 @@ using UnityEngine.UI;
 public class PlayerHealthUI : MonoBehaviour
 {
     [Header("Player Damaged")]
-    [SerializeField] private float _damageUIDisplayTime;
-    [SerializeField] private Image _damagedUI;
 
     [SerializeField] private Image[] _damagedUIImages;
-
-    private Coroutine _damagedUICoroutine;
 
     [Tooltip("Heart UI Object")]
 
@@ -84,59 +80,46 @@ public class PlayerHealthUI : MonoBehaviour
         //this part does the blood around the edges of the screen
         switch (4 * healthPercent)
         {
+            case 4:
+                turnOffDamagedUI();
+                break;
             case >3:
-                _damagedUI = _damagedUIImages[3];
+                turnOffDamagedUI();
+                _damagedUIImages[3].gameObject.SetActive(true);
                 break;
             case >2:
-                _damagedUI = _damagedUIImages[2];
+                turnOffDamagedUI();
+                _damagedUIImages[2].gameObject.SetActive(true);
                 break;
             case >1:
-                _damagedUI = _damagedUIImages[1];
+                turnOffDamagedUI();
+                _damagedUIImages[1].gameObject.SetActive(true);
                 break;
             case <1:
-                _damagedUI = _damagedUIImages[0];
+                turnOffDamagedUI();
+                _damagedUIImages[0].gameObject.SetActive(true);
                 break;
             default:
-                print("this shouldn't happen");
+                Debug.Log("this shouldn't happen");
                 break;
         }
     }
 
-    /// <summary>
-    /// Starts the process of showing the player damaged ui
-    /// </summary>
-    private void PlayerDamagedUI(float damage)
+    private void turnOffDamagedUI()
     {
-        if(_damagedUICoroutine != null)
+        foreach (Image I in _damagedUIImages)
         {
-            StopCoroutine(_damagedUICoroutine);
+            I.gameObject.SetActive(false);
         }
-        _damagedUICoroutine = StartCoroutine(PlayerDamagedUIProcess());
-    }
-
-    /// <summary>
-    /// Displays the ui for when the player is damaged
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator PlayerDamagedUIProcess()
-    {
-        //I've been told to simply show it and hide it for now, might use an animation later
-        _damagedUI.enabled = true;
-
-        yield return new WaitForSeconds(_damageUIDisplayTime);
-
-        _damagedUI.enabled = false;
     }
 
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateHealthUI);
-        PlayerManager.Instance.GetOnPlayerDamageEvent().AddListener(PlayerDamagedUI);
     }
 
     private void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateHealthUI);
-        PlayerManager.Instance.GetOnPlayerDamageEvent().RemoveListener(PlayerDamagedUI);
     }
 }
