@@ -113,7 +113,7 @@ public class BossAttackActSystem : MonoBehaviour
         // TODO - Connect this to the end of the tutorial
         // Test the begin interior attack until act system is properly connected to the start of the game / end
         // of tutorial
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && !TimeManager.Instance.GetIsGamePaused())
         {
             BeginAct();
         }
