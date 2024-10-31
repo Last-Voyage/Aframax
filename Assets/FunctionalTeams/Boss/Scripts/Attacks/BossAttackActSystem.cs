@@ -32,6 +32,7 @@ public struct ActScene
     [field: Tooltip("Attacks within the Act")]
     [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
 }
+
 /// <summary>
 /// For functionality of unity scenes
 /// </summary>
@@ -41,6 +42,7 @@ public struct EndOfGame
     [field: Tooltip("SceneManagement for end of the game")]
     [field: SerializeField] public SceneLoadingManager SceneLoading { get; private set; }
 }
+
 /// <summary>
 /// A class that contains multiple functions for the act system that are updated within a coroutine
 /// </summary>
