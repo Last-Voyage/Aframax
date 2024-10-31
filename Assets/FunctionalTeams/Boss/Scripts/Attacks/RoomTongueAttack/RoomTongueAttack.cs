@@ -44,7 +44,7 @@ public class RoomTongueAttack : BaseBossAttack
 {
     public static Action<PatrolLocation> SpawnPatrolEnemies;
 
-    public static UnityEvent<PatrolEnemyBehavior> PatrolEnemyDied = new UnityEvent<PatrolEnemyBehavior>();
+    public static UnityEvent<PatrolEnemyBehavior> OnPatrolEnemyDied = new UnityEvent<PatrolEnemyBehavior>();
 
     #region Attack Settings
 
@@ -70,6 +70,11 @@ public class RoomTongueAttack : BaseBossAttack
 
     private List<PatrolEnemyBehavior> _activePatrolEnemies;
 
+    /// <summary>
+    /// Called when thee attack ends to destroy all spawned enemies
+    /// </summary>
+    public static UnityEvent DestroyAllEnemies {get; private set;} = new();
+
     #region Enable & Action/Event Subscriptions
 
     private void OnEnable()
@@ -87,18 +92,20 @@ public class RoomTongueAttack : BaseBossAttack
 
     protected override void SubscribeToEvents()
     {
-        BossAttackManager.BeginInteriorTongueAttack += BeginAttack;
-        PatrolEnemySpawner.EnemySpawned += PatrolEnemySpawned;
+        _onBeginAttack.AddListener(BeginAttack);
 
-        PatrolEnemyDied.AddListener(PatrolEnemyDespawned);
+        PatrolEnemySpawner.OnEnemySpawned += PatrolEnemySpawned;
+
+        OnPatrolEnemyDied.AddListener(PatrolEnemyDespawned);
     }
 
     protected override void UnsubscribeToEvents()
     {
-        BossAttackManager.BeginInteriorTongueAttack -= BeginAttack;
-        PatrolEnemySpawner.EnemySpawned -= PatrolEnemySpawned;
+        _onBeginAttack.RemoveListener(BeginAttack);
 
-        PatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
+        PatrolEnemySpawner.OnEnemySpawned -= PatrolEnemySpawned;
+
+        OnPatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
     }
 
     #endregion
@@ -152,28 +159,34 @@ public class RoomTongueAttack : BaseBossAttack
     }
 
     /// <summary>
-    /// Destroys all outstanding enemies and calls the endAttack event
-    /// </summary>
-    protected override void EndAttack()
-    {
-        foreach(PatrolEnemyBehavior patrolEnemyBehavior in _activePatrolEnemies)
-        {
-            _activePatrolEnemies.Remove(patrolEnemyBehavior);
-            Destroy(patrolEnemyBehavior.gameObject);
-        }
-        base.EndAttack();
-    }
-
-    #region Enemy Spawning
-
-    /// <summary>
     /// Begins the enemy spawning
     /// </summary>
     protected override void BeginAttack()
     {
+        SubscribeToEvents();
+
+        // This is a passive attack this ends when it's scene is over
+        // This should only subscribe during its lifetime as it's waiting for it's scene to end
+        BossAttackActSystem.Instance.GetOnAttackCompleted().AddListener(EndAttack);
+
         base.BeginAttack();
         StartCoroutine(EnemySpawning());
     }
+
+    /// <summary>
+    /// Destroys all outstanding enemies and calls the endAttack event
+    /// </summary>
+    protected override void EndAttack()
+    {
+        UnsubscribeToEvents();
+
+        // This should only unsubscribe from it's scene if it began, this isn't in unsub from event
+        BossAttackActSystem.Instance.GetOnAttackCompleted().RemoveListener(EndAttack);
+
+        base.EndAttack();
+    }
+
+    #region Enemy Spawning
 
     /// <summary>
     /// Spawns enemies until the max amount have been spawned.
@@ -208,6 +221,8 @@ public class RoomTongueAttack : BaseBossAttack
     private void PatrolEnemySpawned(PatrolEnemyBehavior patrolEnemyBehavior)
     {
         _activePatrolEnemies.Add(patrolEnemyBehavior);
+        // Need to be childed to move with the boat
+        patrolEnemyBehavior.transform.parent = this.transform;
     }
 
     /// <summary>

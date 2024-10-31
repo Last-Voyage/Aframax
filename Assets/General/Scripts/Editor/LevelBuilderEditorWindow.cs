@@ -84,6 +84,13 @@ public class LevelBuilderEditorWindow : EditorWindow
     /// </summary>
     private void OnGUI()
     {
+        // If the game is playing, don't let the users edit the text files
+        if (EditorApplication.isPlaying)
+        {
+            GUILayout.Label("\nCannot edit the text file while playing");
+            return;
+        }
+
         // If there's no iterative chunk loader, don't even try to render, just show a warning
         if (!FindObjectOfType<IterativeChunkLoad>())
         {
@@ -320,7 +327,17 @@ public class LevelBuilderEditorWindow : EditorWindow
                 {
                     // Removes the scene preview from the list
                     _levelChunkOptionEditors[i].DiscardChanges();
-                    DestroyImmediate(_levelChunkOptionEditors[i]);
+
+                    // Check to see if the objects can be destroyed, and do so if possible
+                    try
+                    {
+                        DestroyImmediate(_levelChunkOptionEditors[i]);
+                    }
+                    catch
+                    {
+
+                    }
+                    
                 }
             }
         }
