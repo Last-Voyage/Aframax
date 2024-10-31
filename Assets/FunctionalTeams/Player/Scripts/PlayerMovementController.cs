@@ -91,7 +91,6 @@ public class PlayerMovementController : MonoBehaviour
         EstablishInstance();
 
         // Initialize input variables and the Rigidbody
-        SubscribeToEvents();
         InitializeRigidbody();
         SetupPlayerVisuals();
         SetupPlayerGroundedCheckTransform();
@@ -255,7 +254,7 @@ public class PlayerMovementController : MonoBehaviour
         // in certain directions in the world
         // By manipulating them, we can move the character
         Vector3 newMovement = (_playerVisuals.right * moveDir.x +
-            _playerVisuals.forward * moveDir.y) * _currentFocusMoveSpeedMultiplier;
+            _playerVisuals.forward * moveDir.y);
         
         if(IsGrounded)
         {
@@ -265,7 +264,7 @@ public class PlayerMovementController : MonoBehaviour
         }
         
         // Returns the movement direction times the speed and acceleration
-        return newMovement * _playerMovementSpeed * _currentAcceleration;
+        return newMovement * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration;
     }
 
     /// <summary>
