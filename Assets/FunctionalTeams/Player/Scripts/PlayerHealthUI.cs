@@ -37,22 +37,7 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void Start()
     {
-        InitializeHeartUI();
         InitializeAnimator();
-    }
-
-    /// <summary>
-    /// Initializes the heart UI
-    /// </summary>
-    private void InitializeHeartUI()
-    {
-        _playerHeart = transform.GetChild(0).gameObject;
-
-        //this way it doesn't waste time doing find if it's already connected
-        if (_playerHeart == null)
-        {
-            Debug.Log("Couldn't find the heart object. Make sure there's one in the scene!");
-        }
     }
 
     /// <summary>
