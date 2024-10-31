@@ -448,6 +448,7 @@ Focusing)
         StopCurrentFocusCoroutine();
         _focusProgress = 0;
         CalculateCurrentFocusAccuracy();
+        _currentFocusState = EFocusState.None;
     }
 
     /// <summary>

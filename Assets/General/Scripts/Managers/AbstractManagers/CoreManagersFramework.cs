@@ -23,6 +23,8 @@ public abstract class CoreManagersFramework : MonoBehaviour
         //Attempts to establish the instance
         if(EstablishInstance())
         {
+            //Gets all managers
+            GetAllManagers();
             //If successful setup all main managers
             SetupMainManagers();
         }
@@ -32,6 +34,11 @@ public abstract class CoreManagersFramework : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    /// <summary>
+    /// Gets all managers under the 
+    /// </summary>
+    protected abstract void GetAllManagers();
 
     /// <summary>
     /// Attempts to establish the singleton
