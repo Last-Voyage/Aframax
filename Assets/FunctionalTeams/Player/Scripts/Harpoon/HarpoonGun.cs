@@ -69,6 +69,8 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The curve at which the accuracy increases while focusing")]
     [SerializeField] private AnimationCurve _focusCurve;
 
+    private bool _isFocusButtonHeld;
+
     private float _currentFocusAccuracy = 0;
 
     private float _focusProgress = 0;
@@ -153,8 +155,8 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed += FireHarpoon;
 
-        _harpoonFocus.action.started += FocusHarpoon;
-        _harpoonFocus.action.canceled += StartUnfocusingHarpoon;
+        _harpoonFocus.action.started += FocusButtonHeld;
+        _harpoonFocus.action.canceled += FocusButtonReleased;
     }
 
     /// <summary>
@@ -164,8 +166,8 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed -= FireHarpoon;
 
-        _harpoonFocus.action.started -= FocusHarpoon;
-        _harpoonFocus.action.canceled -= StartUnfocusingHarpoon;
+        _harpoonFocus.action.started -= FocusButtonHeld;
+        _harpoonFocus.action.canceled -= FocusButtonReleased;
     }
     #endregion
 
@@ -203,6 +205,8 @@ Focusing)
         StartCoroutine(HarpoonFireProcess(currentHarpoon));
 
         VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+
+        ResetFocus();
 
         // Personally I think the projectile should be the same as the object on the visual as the gun itself, 
         // but that's a discussion for a later day
@@ -300,16 +304,49 @@ Focusing)
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
 
+        if(_isFocusButtonHeld)
+        {
+            StartFocusingHarpoon();
+        }
+
         PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
     }
     #endregion
 
     #region Focusing
     /// <summary>
+    /// Called when the focus button begins to be held down
+    /// </summary>
+    /// <param name="context"></param>
+    private void FocusButtonHeld(InputAction.CallbackContext context)
+    {
+        _isFocusButtonHeld = true;
+
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            StartFocusingHarpoon();
+        }
+    }
+
+    /// <summary>
+    /// Called when the focus button is released
+    /// </summary>
+    /// <param name="context"></param>
+    private void FocusButtonReleased(InputAction.CallbackContext context)
+    {
+        _isFocusButtonHeld = false;
+
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            StartUnfocusingHarpoon();
+        }
+    }
+
+    /// <summary>
     /// Starts focusing the weapon
     /// </summary>
     /// <param name="context"></param>
-    private void FocusHarpoon(InputAction.CallbackContext context)
+    private void StartFocusingHarpoon()
     {
         _currentFocusState = EFocusState.Focusing;
 
@@ -323,7 +360,7 @@ Focusing)
     /// Stops the focusing of the weapon
     /// </summary>
     /// <param name="context"></param>
-    private void StartUnfocusingHarpoon(InputAction.CallbackContext context)
+    private void StartUnfocusingHarpoon()
     {
         _currentFocusState = EFocusState.Unfocusing;
 
@@ -400,7 +437,17 @@ Focusing)
     {
         _currentFocusState = EFocusState.None;
 
+        ResetFocus();
+    }
+
+    /// <summary>
+    /// Resets focus back to 0
+    /// </summary>
+    private void ResetFocus()
+    {
+        StopCurrentFocusCoroutine();
         _focusProgress = 0;
+        CalculateCurrentFocusAccuracy();
     }
 
     /// <summary>

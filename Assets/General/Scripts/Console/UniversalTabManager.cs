@@ -25,7 +25,9 @@ public class UniversalTabManager : MonoBehaviour
     private Color _selectedColor;
     private Color _unSelectedColor;
 
-
+    /// <summary>
+    /// runs on start
+    /// </summary>
     void Start()
     {
 
