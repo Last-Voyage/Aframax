@@ -66,31 +66,31 @@ public class PlayerHealthUI : MonoBehaviour
         switch (4 * healthPercent)
         {
             case 4:
-                turnOffDamagedUI();
+                TurnOffDamagedUI();
                 break;
             case >3:
-                turnOffDamagedUI();
+                TurnOffDamagedUI();
                 _damagedUIImages[3].gameObject.SetActive(true);
                 break;
             case >2:
-                turnOffDamagedUI();
+                TurnOffDamagedUI();
                 _damagedUIImages[2].gameObject.SetActive(true);
                 break;
             case >1:
-                turnOffDamagedUI();
+                TurnOffDamagedUI();
                 _damagedUIImages[1].gameObject.SetActive(true);
                 break;
             case <1:
-                turnOffDamagedUI();
+                TurnOffDamagedUI();
                 _damagedUIImages[0].gameObject.SetActive(true);
                 break;
             default:
-                Debug.Log("this shouldn't happen");
+                Debug.LogWarning("this shouldn't happen");
                 break;
         }
     }
 
-    private void turnOffDamagedUI()
+    private void TurnOffDamagedUI()
     {
         foreach (Image I in _damagedUIImages)
         {
