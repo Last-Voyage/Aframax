@@ -19,10 +19,8 @@ public class UniversalManagers : CoreManagersFramework
 {
     /// <summary>
     /// Contains all managers to setup. Order of managers is order of setup.
-    /// Order shouldn't technically matter but just in case
     /// </summary>
-    [SerializeField] private List<MainUniversalManagerFramework> _allMainManagers;
-
+    private MainUniversalManagerFramework[] _allMainManagers;
     public static UniversalManagers Instance;
 
     /// <summary>
@@ -41,6 +39,14 @@ public class UniversalManagers : CoreManagersFramework
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets all managers that fall under universal managers
+    /// </summary>
+    protected override void GetAllManagers()
+    {
+        _allMainManagers = GetComponentsInChildren<MainUniversalManagerFramework>();
     }
 
     /// <summary>
@@ -74,6 +80,6 @@ public class UniversalManagers : CoreManagersFramework
     }
 
     #region Getters
-    public List<MainUniversalManagerFramework> GetAllUniversalManagers() => _allMainManagers;
+    public MainUniversalManagerFramework[] GetAllUniversalManagers() => _allMainManagers;
     #endregion
 }
