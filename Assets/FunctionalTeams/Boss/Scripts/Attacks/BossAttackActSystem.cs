@@ -63,10 +63,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// Current act ref
     /// </summary>
     private Act _currentAct;
-    /// <summary>
-    /// For unity Scene loading
-    /// </summary>
-    private EndOfGame _sceneManage;
 
     [Tooltip("Invoked when an act begins")]
     private UnityEvent _onActBegin = new();
@@ -98,9 +94,6 @@ public class BossAttackActSystem : MonoBehaviour
 
     [Tooltip("Invoked when an attack ends")]
     private UnityEvent _onAttackCompleted = new();
-
-    private UnityEvent _endOfGameScene = new();
-
     #endregion
 
     private void Awake()
@@ -174,9 +167,8 @@ public class BossAttackActSystem : MonoBehaviour
         // Boss fight is over if all acts have been completed
         if(_currentActNum == _bossFightActs.Length)
         {
-            //  TODO: End Game Here, Replace debug
-            InvokeEndOfGameScene();
-            _sceneManage.SceneLoading.StartAsyncSceneLoadViaID(0, 0);
+            SceneLoadingManager.Instance.InvokeEndOfGameScene();
+            SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(0, 0);
             Debug.Log("Act ended");
             return;
         }
@@ -331,12 +323,6 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _onSceneEnd?.Invoke();
     }
-
-   private void InvokeEndOfGameScene()
-    {
-        _endOfGameScene?.Invoke();
-    }
-
     #endregion
 
     #region Getters
