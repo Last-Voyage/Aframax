@@ -34,6 +34,8 @@ public class UniversalManagers : CoreManagersFramework
         {
             //This is the new singleton
             Instance = this;
+            // Parent needs to be removed at runtime in order for DontDestroyOnLoad to work
+            transform.parent = null;
             //Don't destroy
             DontDestroyOnLoad(gameObject);
             return true;
