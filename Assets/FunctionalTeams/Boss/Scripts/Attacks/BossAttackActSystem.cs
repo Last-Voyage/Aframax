@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttackActSystem.cs
 // Author :            Mark Hanson
-// Contributor:        Andrea Swihart-DeCoster
+// Contributor:        Andrea Swihart-DeCoster, Nick Rice
 // Creation Date :     10/22/2024
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
@@ -115,18 +115,36 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds a listener to this script when enabled
+    /// Allowing the new act to begin
+    /// </summary>
+    private void OnEnable()
+    {
+        GetOnActBegin().AddListener(BeginAct);
+    }
+
+    /// <summary>
+    /// Removes the listener - PREVENTING MEMORY LEAKS
+    /// </summary>
+    private void OnDisable()
+    {
+        GetOnActBegin().RemoveListener(BeginAct);
+    }
+
+#if UNITY_EDITOR
+    /// <summary>
     /// just for testing
     /// </summary>
     private void Update()
     {
-        // TODO - Connect this to the end of the tutorial
         // Test the begin interior attack until act system is properly connected to the start of the game / end
         // of tutorial
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && !TimeManager.Instance.GetIsGamePaused())
         {
             BeginAct();
         }
     }
+#endif
 
     #region Act Functions
 
@@ -313,6 +331,8 @@ public class BossAttackActSystem : MonoBehaviour
     private void InvokeBeginSceneEvent()
     {
         _onSceneBegin?.Invoke();
+        RuntimeSfxManager.APlayOneShotSFX?.Invoke
+            (FmodSfxEvents.Instance.SceneStart, PlayerMovementController.Instance.transform.position);
     }
 
     /// <summary>

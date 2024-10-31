@@ -22,7 +22,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference WeakPointDestroyed { get; private set; }
     [field: SerializeField] public EventReference LimbDestroyed { get; private set; }
     [field: SerializeField] public EventReference LimbAttack { get; private set; }
-    [field: SerializeField] public EventReference PhaseStart { get; private set; }
+    [field: SerializeField] public EventReference SceneStart { get; private set; }
 
     #endregion Boss
 
