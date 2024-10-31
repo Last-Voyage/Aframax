@@ -24,8 +24,6 @@ public class AmbienceManager : AudioManager
 
     private void Awake()
     {
-        // Parent needs to be removed at runtime in order for DontDestroyOnLoad to work
-
         if (Instance == null)
         {
             Instance = this;
