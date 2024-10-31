@@ -12,13 +12,24 @@ using UnityEngine;
 /// </summary>
 public class AttractionBehavior : MonoBehaviour
 {
-    [SerializeField] private Transform _target; // The target GameObject
     [SerializeField] private  Transform _parent; // The object's parent
     [SerializeField] private  float _attractionRange = 5f; // The spherical range within which the object moves towards the target
     [SerializeField] private  float _maxDistanceFromParent = 3f; // Maximum distance from parent
     [SerializeField] private float _stopFollowDistance = 2f;
     [SerializeField] private float _followSpeed = 2f; // Speed at which the object moves
     [SerializeField] private  float _rotateSpeed = 2f;
+    private Transform _target; // The target GameObject
+    private Transform _rootTentacleTransform;
+
+    /// <summary>
+    /// set target to player and the gets the root tentacle
+    /// </summary>
+    private void Start() 
+    {
+        _target = GameObject.FindGameObjectWithTag("Player").transform;
+        //.parent.parent gets the tentacle root parent
+        _rootTentacleTransform = transform.parent.parent;
+    }
 
     /// <summary>
     /// Contains the functionality to slowly move toward target when in range and then retract when not in range
@@ -39,16 +50,16 @@ public class AttractionBehavior : MonoBehaviour
                 // Check if the direction is valid (to avoid errors when the object is exactly above/below the target)
                 if (directionToTarget.sqrMagnitude > 0.01f)
                 {
-                    // Calculate the target rotation
-                    Vector3 targetPosition = new Vector3(_target.position.x, transform.root.position.y, _target.transform.position.z);
-                    Vector3 rootPos = transform.root.position;
+                    // Calculate the target rotation 
+                    Vector3 targetPosition = new Vector3(_target.position.x, _rootTentacleTransform.position.y, _target.transform.position.z);
+                    Vector3 rootPos = _rootTentacleTransform.position;
                     rootPos.y = 0;
 
                     // Calculate the target rotation to look at the target position
-                    Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.root.position);
+                    Quaternion targetRotation = Quaternion.LookRotation(targetPosition - _rootTentacleTransform.position);
 
                     // Smoothly rotate towards the target rotation on the y-axis only
-                    transform.root.rotation = Quaternion.Slerp(transform.root.rotation, targetRotation, _rotateSpeed * Time.deltaTime);
+                    _rootTentacleTransform.rotation = Quaternion.Slerp(_rootTentacleTransform.rotation, targetRotation, _rotateSpeed * Time.deltaTime);
                 }
             }
         }
