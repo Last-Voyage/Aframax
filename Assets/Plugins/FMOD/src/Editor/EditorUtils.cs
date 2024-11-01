@@ -1566,6 +1566,11 @@ namespace FMODUnity
         {
             if (!AssetDatabase.IsValidFolder(StagingFolder))
             {
+                if (Settings.Instance.SharedLibraryUpdateStage != Settings.SharedLibraryUpdateStages.Start
+                    || Settings.Instance.SharedLibraryTimeSinceStart != 0)
+                {
+                    ResetUpdateStage();
+                }
                 ResetUpdateStage();
                 return null;
             }

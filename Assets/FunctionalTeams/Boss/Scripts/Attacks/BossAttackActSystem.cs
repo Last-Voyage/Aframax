@@ -111,7 +111,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GetOnActBegin().AddListener(BeginAct);
+        //GetOnActBegin().AddListener(BeginAct);
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        GetOnActBegin().RemoveListener(BeginAct);
+        //GetOnActBegin().RemoveListener(BeginAct);
     }
 
 #if UNITY_EDITOR
