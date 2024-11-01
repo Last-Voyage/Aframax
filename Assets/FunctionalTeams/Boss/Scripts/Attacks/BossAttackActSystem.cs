@@ -19,7 +19,8 @@ using UnityEngine.InputSystem;
 public struct Act
 {
     [field: Tooltip("Scenes within the act")]
-    [field: SerializeField] public ActScene[] Scenes { get; private set; }
+    [field: SerializeField]
+    public ActScene[] Scenes { get; private set; }
 }
 
 /// <summary>
@@ -29,7 +30,8 @@ public struct Act
 public struct ActScene
 {
     [field: Tooltip("Attacks within the Act")]
-    [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
+    [field: SerializeField]
+    public BaseBossAttack[] SceneAttacks { get; private set; }
 }
 
 /// <summary>
@@ -41,13 +43,14 @@ public class BossAttackActSystem : MonoBehaviour
 
     #region Act Variables
 
-    [Tooltip("Acts within the boss fight")]
-    [SerializeField] private Act[] _bossFightActs;
+    [Tooltip("Acts within the boss fight")] [SerializeField]
+    private Act[] _bossFightActs;
 
     /// <summary>
     /// Current act position in array
     /// </summary>
     private int _currentActNum;
+
     /// <summary>
     /// Current act ref
     /// </summary>
@@ -56,8 +59,7 @@ public class BossAttackActSystem : MonoBehaviour
     [Tooltip("Invoked when an act begins")]
     private readonly UnityEvent _onActBegin = new();
 
-    [Tooltip("Invoked when an act ends")]
-    private readonly UnityEvent _onActEnd = new();
+    [Tooltip("Invoked when an act ends")] private readonly UnityEvent _onActEnd = new();
 
     #endregion Act Variables
 
@@ -67,19 +69,18 @@ public class BossAttackActSystem : MonoBehaviour
     /// Current scene position in arr
     /// </summary>
     private int _currentSceneNum;
+
     /// <summary>
     /// Current scene ref
     /// </summary>
     private ActScene _currentScene;
 
-    [Tooltip("# of attacks completed")] 
-    private int _attackCounter;
+    [Tooltip("# of attacks completed")] private int _attackCounter;
 
     [Tooltip("Invoked when a scene begins")]
     private readonly UnityEvent _onSceneBegin = new();
 
-    [Tooltip("Invoked when a scene ends")]
-    private readonly UnityEvent _onSceneEnd = new();
+    [Tooltip("Invoked when a scene ends")] private readonly UnityEvent _onSceneEnd = new();
 
     [Tooltip("Invoked when an attack ends")]
     private readonly UnityEvent _onAttackCompleted = new();
@@ -88,7 +89,7 @@ public class BossAttackActSystem : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -173,7 +174,7 @@ public class BossAttackActSystem : MonoBehaviour
         _currentActNum++;
 
         // Boss fight is over if all acts have been completed
-        if(_currentActNum == _bossFightActs.Length)
+        if (_currentActNum == _bossFightActs.Length)
         {
             //  TODO: End Game Here, Replace debug
             Debug.Log("Act ended");
@@ -248,6 +249,7 @@ public class BossAttackActSystem : MonoBehaviour
         {
             baseBossAttack.InvokeAttackBegin();
         }
+
         InvokeBeginSceneEvent();
     }
 
@@ -286,7 +288,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         _attackCounter++;
 
-        if(IsSceneCompleted())
+        if (IsSceneCompleted())
         {
             CompleteScene();
         }
