@@ -16,6 +16,16 @@ jobs:
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
     steps:
+      - name: Notify Discord
+        if: always()
+        uses: stegzilla/discord-notify@v4
+        with:
+            webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+            title: "Build Started"
+            message: "Build In Progress"
+            avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            username: GitHub
+
       - uses: actions/checkout@v4
         # Git LFS
       - name: Create LFS file list
@@ -54,11 +64,11 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
       - name: Notify Discord
-        if: success()
+        if: always()
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
             title: "Build Report"
-            message: "Build succeeded, artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
+            message: "Artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
