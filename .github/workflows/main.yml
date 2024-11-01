@@ -73,7 +73,7 @@ jobs:
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
       - name: Notify Discord Fail
-            if: failed()
+            if: failure()
           uses: stegzilla/discord-notify@v4
           with:
               webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
