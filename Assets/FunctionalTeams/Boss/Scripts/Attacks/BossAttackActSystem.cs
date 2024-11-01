@@ -4,11 +4,10 @@
 // Contributor:        Andrea Swihart-DeCoster, Nick Rice
 // Creation Date :     10/22/2024
 //
-// Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
+// Brief Description : The system to manage what act the boss is on and also switch between them along with which attack
+//                     comes out
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -55,10 +54,10 @@ public class BossAttackActSystem : MonoBehaviour
     private Act _currentAct;
 
     [Tooltip("Invoked when an act begins")]
-    private UnityEvent _onActBegin = new();
+    private readonly UnityEvent _onActBegin = new();
 
     [Tooltip("Invoked when an act ends")]
-    private UnityEvent _onActEnd = new();
+    private readonly UnityEvent _onActEnd = new();
 
     #endregion Act Variables
 
@@ -73,17 +72,17 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private ActScene _currentScene;
 
-    [Tooltip("# of attacks completed")]
-    protected private int _attackCounter = 0;
+    [Tooltip("# of attacks completed")] 
+    private int _attackCounter;
 
     [Tooltip("Invoked when a scene begins")]
-    private UnityEvent _onSceneBegin = new();
+    private readonly UnityEvent _onSceneBegin = new();
 
     [Tooltip("Invoked when a scene ends")]
-    private UnityEvent _onSceneEnd = new();
+    private readonly UnityEvent _onSceneEnd = new();
 
     [Tooltip("Invoked when an attack ends")]
-    private UnityEvent _onAttackCompleted = new();
+    private readonly UnityEvent _onAttackCompleted = new();
 
     #endregion
 
@@ -128,7 +127,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        // Test the begin interior attack until act system is properly connected to the start of the game / end
+        // Test begin interior attack until act system is properly connected to the start of the game / end
         // of tutorial
         if (Keyboard.current.spaceKey.wasPressedThisFrame && !TimeManager.Instance.GetIsGamePaused())
         {
@@ -159,7 +158,7 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns whether or not the act is complete
+    /// Whether the act is complete
     /// </summary>
     private bool IsActCompleted()
     {
@@ -200,7 +199,7 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns whether or not the scene is complete
+    /// Whether the scene is complete
     /// </summary>
     private bool IsSceneCompleted()
     {
@@ -249,6 +248,7 @@ public class BossAttackActSystem : MonoBehaviour
         {
             baseBossAttack.InvokeAttackBegin();
         }
+        InvokeBeginSceneEvent();
     }
 
     #endregion
@@ -271,8 +271,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void RemoveActAttackListeners()
     {
-        Act act = _bossFightActs[_currentActNum];
-
         foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
         {
             baseBossAttack.GetAttackEndEvent().RemoveListener(AttackHasEnded);
