@@ -64,7 +64,7 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
       - name: Notify Discord Success
-        if: always()
+        if: success()
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -72,3 +72,13 @@ jobs:
             message: "Artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
+
+      - name: Notify Discord Failure
+        if: failure()
+        uses: stegzilla/discord-notify@v4
+        with:
+              webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+              title: "Build Failed"
+              message: "Artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
+              avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+              username: GitHub
