@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttackActSystem.cs
 // Author :            Mark Hanson
-// Contributor:        Andrea Swihart-DeCoster
+// Contributor:        Andrea Swihart-DeCoster, Nick Rice
 // Creation Date :     10/22/2024
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
@@ -111,7 +111,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GameStateManager.Instance.GetOnStartingNewBossAct().AddListener(BeginAct);
+        GetOnActBegin().AddListener(BeginAct);
     }
 
     /// <summary>
@@ -119,9 +119,8 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        GameStateManager.Instance.GetOnStartingNewBossAct().RemoveListener(BeginAct);
+        GetOnActBegin().RemoveListener(BeginAct);
     }
-
 
 #if UNITY_EDITOR
     /// <summary>
