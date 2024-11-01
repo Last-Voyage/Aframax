@@ -85,12 +85,12 @@ jobs:
 
        # Upload to Drive
       - name: Upload build folder to Google Drive
-      uses: Jodebu/upload-to-drive@master
-      id: driveUpload
-      with:
-        target: public
-        credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
-        folder: "1JX0EnNEVAZRTR0Ci71IUqqM_SWLxD0oT"
+        uses: Jodebu/upload-to-drive@master
+        id: driveUpload
+        with:
+              target: public
+              credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
+              folder: "1JX0EnNEVAZRTR0Ci71IUqqM_SWLxD0oT"
         
        # Send Discord message
       - name: Send link to file
