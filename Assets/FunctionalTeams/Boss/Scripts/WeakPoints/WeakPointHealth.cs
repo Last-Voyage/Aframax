@@ -7,7 +7,6 @@
 // Brief Description : Controls the weak point health
 *********************************************************************************************************************/
 
-using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -15,28 +14,25 @@ using UnityEngine.Events;
 /// </summary>
 public class WeakPointHealth : BaseHealth
 {
-    private UnityEvent _weakPointDamageTakenEvent = new();
+    private readonly UnityEvent _onWeakPointDamageTakenEvent = new();
 
     /// <summary>
     /// Applies damage to the weak point and invokes the damage event
     /// </summary>
-    /// <param name="damage"></param>
+    /// <param name="damage"> damage amount applied to health </param>
+    /// <param name="damageSource"> Incoming damage source </param>
     public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        if (damageSource != null)
+        if (damageSource == null)
         {
-            if (damageSource is HarpoonDamage)
-            {
-                _weakPointDamageTakenEvent?.Invoke();
-                VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
-                base.TakeDamage(damage, null);
-            }
+            return;
+        }
+        
+        if (damageSource is HarpoonDamage)
+        {
+            _onWeakPointDamageTakenEvent?.Invoke();
+            VfxManager.Instance.GetEnemyBloodVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+            base.TakeDamage(damage, null);
         }
     }
-
-    #region Getters
-
-    public UnityEvent DeathEvent() => _onDeathEvent;
-
-    #endregion Getters
 }

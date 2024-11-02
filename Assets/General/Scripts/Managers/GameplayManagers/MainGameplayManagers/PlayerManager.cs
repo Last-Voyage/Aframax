@@ -154,6 +154,22 @@ public class PlayerManager : MainGameplayManagerFramework
         _onPlayerDeath?.Invoke();
     }
     
+    /// <summary>
+    /// Invokes the crosshair over enemy start event
+    /// </summary>
+    public void InvokeOnCrosshairOverEnemyStartEvent()
+    {
+        _onEnemyOverCrosshairStartEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the crosshair over enemy end event
+    /// </summary>
+    public void InvokeOnCrosshairOverEnemyEndEvent()
+    {
+        _onEnemyOverCrosshairEndEvent?.Invoke();
+    }
+    
     #endregion
 
     #region Getters

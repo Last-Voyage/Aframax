@@ -199,7 +199,7 @@ public class WeakPointHandler : MonoBehaviour
 
     #region Getters
 
-    public UnityEvent<WeakPointHandler> GetAllWeakPointsDestroyedEvent() => _onAllWeakPointsDestroyedEvent;
+    public UnityEvent<WeakPointHandler> GetOnAllWeakPointsDestroyedEvent() => _onAllWeakPointsDestroyedEvent;
 
     #endregion
 }

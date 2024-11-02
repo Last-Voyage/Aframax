@@ -29,7 +29,7 @@ public class WeakPoint : MonoBehaviour
     {
         if (!TryGetComponent(out WeakPointHealth weakPointHealth)) return;
         HealthComponent = weakPointHealth;
-        HealthComponent.DeathEvent().AddListener(PlayDeathSfx);
+        HealthComponent.GetOnDeathEvent().AddListener(PlayDeathSfx);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class WeakPoint : MonoBehaviour
     /// <returns></returns>
     public UnityEvent GetWeakPointDeathEvent()
     {
-        return HealthComponent.GetDeathEvent();
+        return ((BaseHealth)HealthComponent).GetOnDeathEvent();
     }
 
     /// <summary>

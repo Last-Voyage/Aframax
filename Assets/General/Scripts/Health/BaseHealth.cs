@@ -105,8 +105,8 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     #region Getters
 
     public float GetHealthPercent() => _currentHealth / _maxHealth;
-    public UnityEvent GetDeathEvent() => _onDeathEvent;
-    public UnityEvent GetDamageTakenEvent() => _onDamageTaken;
+    public UnityEvent GetOnDeathEvent() => _onDeathEvent;
+    public UnityEvent GetOnDamageTakenEvent() => _onDamageTaken;
 
     #endregion Getters
 }

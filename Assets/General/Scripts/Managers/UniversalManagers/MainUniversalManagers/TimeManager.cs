@@ -58,7 +58,7 @@ public class TimeManager : MainUniversalManagerFramework
     private void UnpauseGame()
     {
         Time.timeScale = 1;
-        InvokeGameUnpaused();
+        InvokeOnGameUnpaused();
     }
     #endregion
 
@@ -77,7 +77,7 @@ public class TimeManager : MainUniversalManagerFramework
     /// Toggles the game being paused or unpaused
     /// </summary>
     /// <param name="toggle"></param>
-    private void InvokeGamePauseToggle(bool toggle)
+    private void InvokeOnGamePauseToggle(bool toggle)
     {
         _onGamePauseToggleEvent?.Invoke(toggle);
     }
@@ -85,13 +85,13 @@ public class TimeManager : MainUniversalManagerFramework
     private void InvokeOnGamePause()
     {
         _onGamePausedEvent?.Invoke();
-        InvokeGamePauseToggle(true);
+        InvokeOnGamePauseToggle(true);
     }
     
-    private void InvokeGameUnpaused()
+    private void InvokeOnGameUnpaused()
     {
         _onGameUnpausedEvent?.Invoke();
-        InvokeGamePauseToggle(false);
+        InvokeOnGamePauseToggle(false);
     }
     
     #endregion
@@ -99,9 +99,9 @@ public class TimeManager : MainUniversalManagerFramework
     #region Getters
     public bool GetIsGamePaused() => _isGamePaused;
 
-    public UnityEvent<bool> GetGamePauseToggleEvent() => _onGamePauseToggleEvent;
+    public UnityEvent<bool> GetOnGamePauseToggleEvent() => _onGamePauseToggleEvent;
 
-    public UnityEvent GetGamePauseEvent() => _onGamePausedEvent;
-    public UnityEvent GetGameUnpauseEvent() => _onGameUnpausedEvent;
+    public UnityEvent GetOnGamePauseEvent() => _onGamePausedEvent;
+    public UnityEvent GetOnGameUnpauseEvent() => _onGameUnpausedEvent;
     #endregion
 }

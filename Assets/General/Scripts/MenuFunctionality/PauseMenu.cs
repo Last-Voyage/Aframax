@@ -58,13 +58,13 @@ public class PauseMenu : MonoBehaviour
     {
         _playerInputControls.Enable();
 
-        TimeManager.Instance.GetGamePauseToggleEvent().AddListener(PauseUIVisibility);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(PauseUIVisibility);
     }
 
     private void OnDisable()
     {
         _playerInputControls.Disable();
 
-        TimeManager.Instance.GetGamePauseToggleEvent().RemoveListener(PauseUIVisibility);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(PauseUIVisibility);
     }
 }

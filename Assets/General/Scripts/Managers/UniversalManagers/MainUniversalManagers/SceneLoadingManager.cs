@@ -32,8 +32,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     private readonly UnityEvent _onSceneChanged = new();
     private readonly UnityEvent _onGameplaySceneLoaded = new();
 
-    private readonly UnityEvent _additiveLoadAddedEvent = new();
-    private readonly UnityEvent _additiveLoadRemovedEvent = new();
+    private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
+    private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
     protected override void SubscribeToEvents()
     {
@@ -160,12 +160,12 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     private void InvokeSceneAdditiveLoadAddEvent()
     {
-        _additiveLoadAddedEvent?.Invoke();
+        _onAdditiveLoadAddedEvent?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadRemoveEvent()
     {
-        _additiveLoadRemovedEvent?.Invoke();
+        _onAdditiveLoadRemovedEvent?.Invoke();
     }
 
     #endregion
