@@ -4,11 +4,9 @@
 // Contributors:    Andrea Swihart-DeCoster
 // Creation Date:   September 22, 2024
 //
-// Description:     Spawns the weakpoints on some part of the boss (tentacles,etc)
+// Description:     Spawns the weak points on some part of the boss (tentacles, etc.)
 ******************************************************************************/
 
-using FMODUnity;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +20,7 @@ public class WeakPointHandler : MonoBehaviour
     [Header("Spawning Options")]
     [Tooltip("The time before the first weak point spawns")]
     [SerializeField] private float _delayFirstSpawn;
-    [Tooltip("The time between spawning weakpoints")]
+    [Tooltip("The time between spawning weak points")]
     [SerializeField] private float _spawnInterval;
 
     [Header("Weak Point Options")]
@@ -34,17 +32,26 @@ public class WeakPointHandler : MonoBehaviour
     [SerializeField] private float _numNeededToDestroy;
 
     private List<Transform> _possibleSpawnLocations;
-    private List<WeakPoint> _spawnedWeakpoints = new List<WeakPoint>();
     private GameObject _spawnedWeakPointsParent;
 
     private GameObject _parentGameObject;
 
-    private float _weakPointSpawnCounter = 0;
-    private float _weakPointDestructionCounter = 0;
+    /// <summary>
+    /// Num of weak points spawned
+    /// </summary>
+    private float _weakPointSpawnCounter;
+    
+    /// <summary>
+    /// Num weakpoints destroyed
+    /// </summary>
+    private float _weakPointDestructionCounter;
 
+    /// <summary>
+    /// Stores the weak point spawning coroutine process
+    /// </summary>
     private Coroutine _weakPointSpawnProcessCoroutine;
 
-    private UnityEvent<WeakPointHandler> _allWeakPointsDestroyedEvent = new();
+    private readonly UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
 
     private void Awake()
     {
@@ -117,7 +124,6 @@ public class WeakPointHandler : MonoBehaviour
         */
         WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc.position,
             weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>();
-        _spawnedWeakpoints.Add(spawnedWeakPoint);
 
         spawnedWeakPoint.HealthComponent.InitializeHealth(_weakPointHealth);
         spawnedWeakPoint.transform.parent = _spawnedWeakPointsParent.transform;
@@ -135,7 +141,7 @@ public class WeakPointHandler : MonoBehaviour
     /// <returns></returns>
     private Transform DetermineWeakPointSpawnLocation()
     {
-        return _possibleSpawnLocations[UnityEngine.Random.Range(0, _possibleSpawnLocations.Count)];
+        return _possibleSpawnLocations[Random.Range(0, _possibleSpawnLocations.Count)];
     }
 
     #endregion
@@ -186,14 +192,14 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private void InvokeAllWeakPointsDestroyedEvent()
     {
-        _allWeakPointsDestroyedEvent?.Invoke(this);
+        _onAllWeakPointsDestroyedEvent?.Invoke(this);
     }
 
     #endregion
 
     #region Getters
 
-    public UnityEvent<WeakPointHandler> GetAllWeakPointsDestroyedEvent() => _allWeakPointsDestroyedEvent;
+    public UnityEvent<WeakPointHandler> GetAllWeakPointsDestroyedEvent() => _onAllWeakPointsDestroyedEvent;
 
     #endregion
 }

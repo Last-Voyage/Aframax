@@ -29,18 +29,18 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     public static SceneLoadingManager Instance;
 
     //Occurs when the currently active scene is changed
-    private UnityEvent _sceneChangedEvent = new();
-    private UnityEvent _gameplaySceneLoaded = new();
+    private readonly UnityEvent _onSceneChanged = new();
+    private readonly UnityEvent _onGameplaySceneLoaded = new();
 
-    private UnityEvent _additiveLoadAddedEvent = new();
-    private UnityEvent _additiveLoadRemovedEvent = new();
+    private readonly UnityEvent _additiveLoadAddedEvent = new();
+    private readonly UnityEvent _additiveLoadRemovedEvent = new();
 
     protected override void SubscribeToEvents()
     {
-        _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
+        _onGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
     }
 
-    protected void SubscribeToGameplayEvents()
+    private void SubscribeToGameplayEvents()
     {
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
@@ -72,9 +72,9 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// <summary>
     /// This will be changed to happening through a button later, so this function is temporary
     /// </summary>
-    public void LoadDeathScreen()
+    private void LoadDeathScreen()
     {
-        StartAsyncSceneLoadViaID(SceneLoadingManager.Instance.DeathScreenSceneIndex, 0);
+        StartAsyncSceneLoadViaID(DeathScreenSceneIndex, 0);
     }
 
     /// <summary>
@@ -139,27 +139,23 @@ public class SceneLoadingManager : MainUniversalManagerFramework
         Instance = this;
     }
 
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
-
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        _gameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
+        _onGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
     }
+    
     #endregion
 
     #region Events
     private void InvokeSceneChangedEvent()
     {
-        _sceneChangedEvent?.Invoke();
+        _onSceneChanged?.Invoke();
     }
 
     public void InvokeGameplaySceneLoaded()
     {
-        _gameplaySceneLoaded?.Invoke();
+        _onGameplaySceneLoaded?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadAddEvent()
@@ -176,9 +172,9 @@ public class SceneLoadingManager : MainUniversalManagerFramework
 
     #region Getters
 
-    public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
+    public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
-    public UnityEvent GetGameplaySceneLoaded => _gameplaySceneLoaded;
+    public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
 
     #endregion
 }

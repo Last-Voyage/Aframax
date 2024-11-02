@@ -7,9 +7,6 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -22,58 +19,48 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Controls the player's movement
     /// </summary>
-    private static UnityEvent<bool> _onMovementToggled = new();
+    private static readonly UnityEvent<bool> _onMovementToggled = new();
 
     //When the movement starts
-    private static UnityEvent _onMovementStartedEvent = new();
+    private static readonly UnityEvent _onMovementStartedEvent = new();
     //When the movement stops
-    private static UnityEvent _onMovementEndedEvent = new();
+    private static readonly UnityEvent _onMovementEndedEvent = new();
 
     //When the projectile is fired
-    private static UnityEvent _onHarpoonFiredEvent = new();
+    private static readonly UnityEvent _onHarpoonFiredEvent = new();
     //When the harpoon is reloaded
-    private static UnityEvent _onHarpoonReloadedEvent = new();
+    private static readonly UnityEvent _onHarpoonReloadedEvent = new();
 
     //When the player starts focusing
-    private static UnityEvent _onHarpoonFocusStartEvent = new();
+    private static readonly UnityEvent _onHarpoonFocusStartEvent = new();
     //When the player is at max focus
-    private static UnityEvent _onHarpoonFocusMaxEvent = new();
+    private static readonly UnityEvent _onHarpoonFocusMaxEvent = new();
     //When the player is no longer focused
-    private static UnityEvent _onHarpoonFocusEndEvent = new();
+    private static readonly UnityEvent _onHarpoonFocusEndEvent = new();
 
-    private static UnityEvent _onEnemyOverCrosshairStartEvent = new();
-    private static UnityEvent _onEnemyOverCrosshairEndEvent = new();
+    private static readonly UnityEvent _onEnemyOverCrosshairStartEvent = new();
+    private static readonly UnityEvent _onEnemyOverCrosshairEndEvent = new();
 
     //When the player takes damage
-    private static UnityEvent<float> _onPlayerDamageEvent = new();
+    private static readonly UnityEvent<float> _onPlayerDamageEvent = new();
     //When the player receives healing
-    private static UnityEvent<float> _onPlayerHealEvent = new();
+    private static readonly UnityEvent<float> _onPlayerHealEvent = new();
     //When the player health changes for any reason
-    private static UnityEvent<float, float> _onHealthChange = new();
+    private static readonly UnityEvent<float, float> _onHealthChange = new();
     //When the player dies
-    private static UnityEvent _onPlayerDeath = new();
+    private static readonly UnityEvent _onPlayerDeath = new();
 
     #region Base Manager
-    public override void SetupInstance()
-    {
-        base.SetupInstance();
-    }
+
     public override void SetupMainManager()
     {
         base.SetupMainManager();
         Instance = this;
     }
+    
     #endregion
 
     #region Events
-    /// <summary>
-    /// Invokes the _onMovementToggled event with the input bool
-    /// </summary>
-    /// <param name="toggle"> the bool to input into the invoked event </param>
-    public void InvokeOnCameraMovementToggle(bool toggle)
-    {
-        _onMovementToggled?.Invoke(toggle);
-    }
 
     /// <summary>
     /// Invokes when the player movement starts
@@ -114,6 +101,7 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onHarpoonFocusStartEvent?.Invoke();
     }
+    
     /// <summary>
     /// Invokes the harpoon focus max event
     /// </summary>
@@ -121,28 +109,13 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onHarpoonFocusMaxEvent?.Invoke();
     }
+    
     /// <summary>
     /// Invokes the harpoon focus end event
     /// </summary>
     public void InvokeOnHarpoonFocusEndEvent()
     {
         _onHarpoonFocusEndEvent?.Invoke();
-    }
-
-    /// <summary>
-    /// Invokes the crosshair over enemy start event
-    /// </summary>
-    public void InvokeOnCrosshairOverEnemyStartEvent()
-    {
-        _onEnemyOverCrosshairStartEvent?.Invoke();
-    }
-
-    /// <summary>
-    /// Invokes the crosshair over enemy end event
-    /// </summary>
-    public void InvokeOnCrosshairOverEnemyEndEvent()
-    {
-        _onEnemyOverCrosshairEndEvent?.Invoke();
     }
 
     /// <summary>
@@ -180,9 +153,11 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onPlayerDeath?.Invoke();
     }
+    
     #endregion
 
     #region Getters
+    
     /// <summary>
     /// Getter for the _onMovementToggled event
     /// </summary>
@@ -205,5 +180,6 @@ public class PlayerManager : MainGameplayManagerFramework
     public UnityEvent<float> GetOnPlayerHealEvent() => _onPlayerHealEvent;
     public UnityEvent<float, float> GetOnPlayerHealthChangeEvent() => _onHealthChange;
     public UnityEvent GetOnPlayerDeath() => _onPlayerDeath;
+    
     #endregion
 }

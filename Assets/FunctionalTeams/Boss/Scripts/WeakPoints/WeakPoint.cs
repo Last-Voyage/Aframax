@@ -1,11 +1,11 @@
-/******************************************************************************
-// File Name:       WeakPointSpawner.cs
+/***********************************************************************************************************************
+// File Name:       WeakPoint.cs
 // Author:          Ryan Swanson
 // Contributors:    Andrea Swihart-DeCoster
 // Creation Date:   September 22, 2024
 //
 // Description:     Provides the weak point with its needed functionality
-******************************************************************************/
+***********************************************************************************************************************/
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +16,7 @@ using UnityEngine.Events;
 public class WeakPoint : MonoBehaviour
 {
     public WeakPointHealth HealthComponent {  get; private set; }
+    
     private void Awake()
     {
         InitializeHealthComponent();
@@ -26,11 +27,9 @@ public class WeakPoint : MonoBehaviour
     /// </summary>
     private void InitializeHealthComponent()
     {
-        if (TryGetComponent<WeakPointHealth>(out WeakPointHealth weakPointHealth))
-        {
-            HealthComponent = weakPointHealth;
-            HealthComponent.DeathEvent().AddListener(PlayDeathSFX);
-        }
+        if (!TryGetComponent(out WeakPointHealth weakPointHealth)) return;
+        HealthComponent = weakPointHealth;
+        HealthComponent.DeathEvent().AddListener(PlayDeathSfx);
     }
 
     /// <summary>
@@ -45,12 +44,8 @@ public class WeakPoint : MonoBehaviour
     /// <summary>
     /// Plays the Death SFX
     /// </summary>
-    private void PlayDeathSFX()
+    private void PlayDeathSfx()
     {
         RuntimeSfxManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.WeakPointDestroyed, transform.position);
     }
-
-    #region Events
-
-    #endregion
 }

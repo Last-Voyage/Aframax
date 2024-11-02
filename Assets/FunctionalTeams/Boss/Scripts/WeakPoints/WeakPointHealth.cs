@@ -36,7 +36,7 @@ public class WeakPointHealth : BaseHealth
 
     #region Getters
 
-    public UnityEvent DeathEvent() => _deathEvent;
+    public UnityEvent DeathEvent() => _onDeathEvent;
 
     #endregion Getters
 }

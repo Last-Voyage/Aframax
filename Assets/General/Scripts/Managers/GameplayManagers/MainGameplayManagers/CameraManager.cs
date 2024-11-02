@@ -6,9 +6,6 @@
 // Description:     Provides functionality to how the camera moves and interacts.
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -22,17 +19,14 @@ public class CameraManager : MainGameplayManagerFramework
     /// <summary>
     /// Controls the player camera
     /// </summary>
-    private static UnityEvent<bool> _onCameraMovementToggled = new();
+    private static readonly UnityEvent<bool> _onCameraMovementToggled = new();
+    
     #region Base Manager
+    
     public override void SetupInstance()
     {
         base.SetupInstance();
         Instance = this;
-    }
-
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
     }
 
     /// <summary>
@@ -53,23 +47,28 @@ public class CameraManager : MainGameplayManagerFramework
         base.UnsubscribeToEvents();
         TimeManager.Instance.GetGamePauseToggleEvent().RemoveListener(InvokeOnCameraMovementToggle);
     }
+    
     #endregion
 
     #region Events
+    
     /// <summary>
     /// Invokes the _onCameraMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    public void InvokeOnCameraMovementToggle(bool toggle)
+    private void InvokeOnCameraMovementToggle(bool toggle)
     {
         _onCameraMovementToggled?.Invoke(!toggle);
     }
+    
     #endregion
 
     #region Getters
+    
     /// <summary>
     /// Getter for the _onCameraMovementToggled event
     /// </summary>
     public UnityEvent<bool> GetCameraMovementToggleEvent() => _onCameraMovementToggled;
+    
     #endregion
 }
