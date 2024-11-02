@@ -66,6 +66,11 @@ public class GameplayManagers : CoreManagersFramework
         SceneLoadingManager.Instance.InvokeGameplaySceneLoaded();
 
         //TODO Remove after LV-324
+        //RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
+    }
+
+    private void Start()
+    {
         RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
     }
 
