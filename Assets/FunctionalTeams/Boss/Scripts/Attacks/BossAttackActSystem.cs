@@ -134,6 +134,7 @@ public class BossAttackActSystem : MonoBehaviour
     private void OnEnable()
     {
         //GetOnActBegin().AddListener(BeginAct);
+        GameStateManager.Instance.GetOnCompletedEntireTutorial().AddListener(BeginAct);
     }
 
     /// <summary>
@@ -142,6 +143,7 @@ public class BossAttackActSystem : MonoBehaviour
     private void OnDisable()
     {
         //GetOnActBegin().RemoveListener(BeginAct);
+        GameStateManager.Instance.GetOnCompletedEntireTutorial().RemoveListener(BeginAct);
     }
 
 #if UNITY_EDITOR
@@ -183,7 +185,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         ResetSceneVariables();
         BeginScene();
-        InvokeBeginActEvent();
+        //InvokeBeginActEvent();
 
         _currentAct.SetHasActBegun(true);
         _currentActNum++;

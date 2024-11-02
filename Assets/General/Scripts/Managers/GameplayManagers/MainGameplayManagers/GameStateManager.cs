@@ -23,7 +23,9 @@ public class GameStateManager : MainGameplayManagerFramework
 
     public static GameStateManager Instance;
 
-    private UnityEvent _onCompletedTutorial = new();
+    private UnityEvent _onCompletedTutorialSection = new();
+
+    private UnityEvent _onCompletedEntireTutorial = new();
 
 
     private void ChangeCurrentGameplayState(EGameplayState newState)
@@ -45,7 +47,9 @@ public class GameStateManager : MainGameplayManagerFramework
 
     #region Getters
 
-    public UnityEvent GetOnCompletedTutorial() => _onCompletedTutorial;
+    public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
+
+    public UnityEvent GetOnCompletedEntireTutorial() => _onCompletedEntireTutorial;
 
     #endregion
 }
