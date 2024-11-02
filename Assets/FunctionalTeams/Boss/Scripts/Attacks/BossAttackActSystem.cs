@@ -215,6 +215,7 @@ public class BossAttackActSystem : MonoBehaviour
         _currentAct = _bossFightActs[_currentActNum];
 
         BeginAct();
+        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeActEndEvent();
     }
 
