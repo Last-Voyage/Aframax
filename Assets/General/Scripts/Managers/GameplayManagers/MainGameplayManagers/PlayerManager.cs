@@ -22,7 +22,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Controls the player's movement
     /// </summary>
-    private static UnityEvent<bool> _onMovementToggled = new();
+    private static UnityEvent<bool> _onPlayerInputToggled = new();
 
     //When the movement starts
     private static UnityEvent _onMovementStartedEvent = new();
@@ -70,9 +70,9 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Invokes the _onMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    public void InvokeOnCameraMovementToggle(bool toggle)
+    public void InvokeOnPlayerInputToggle(bool toggle)
     {
-        _onMovementToggled?.Invoke(toggle);
+        _onPlayerInputToggled?.Invoke(toggle);
     }
 
     /// <summary>
@@ -186,7 +186,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Getter for the _onMovementToggled event
     /// </summary>
-    public UnityEvent<bool> GetOnMovementToggleEvent() => _onMovementToggled;
+    public UnityEvent<bool> GetOnInputToggleEvent() => _onPlayerInputToggled;
 
     public UnityEvent GetOnMovementStartEvent() => _onMovementStartedEvent;
     public UnityEvent GetOnMovementEndEvent() => _onMovementEndedEvent;

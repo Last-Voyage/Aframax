@@ -21,11 +21,11 @@ public class EnvironmentManager : MainGameplayManagerFramework
 {
     public static EnvironmentManager Instance;
 
-    private UnityEvent<int[]> _sendingOverChunks = new();
+    private UnityEvent<int[]> _onSendingOverChunks = new();
 
-    private UnityEvent<GameObject[]> _allChunkObjects = new();
+    private UnityEvent<GameObject[]> _onSendAllChunkObjects = new();
 
-    private UnityEvent _changeTheChunk = new();
+    private UnityEvent _onChangeTheChunk = new();
 
     /// <summary>
     /// A function that takes in the int array representing the queue, and then it 
@@ -35,7 +35,7 @@ public class EnvironmentManager : MainGameplayManagerFramework
     /// <param name="theQueue">The int array representing the queue of chunks</param>
     public void SendOutChunks(int[] theQueue)
     {
-        GetSendingOverChunks()?.Invoke(theQueue);
+        GetOnSendingOverChunks()?.Invoke(theQueue);
     }
 
     #region Base Manager
@@ -51,10 +51,10 @@ public class EnvironmentManager : MainGameplayManagerFramework
     #endregion
 
     #region Getters
-    public UnityEvent<int[]> GetSendingOverChunks() => _sendingOverChunks;
+    public UnityEvent<int[]> GetOnSendingOverChunks() => _onSendingOverChunks;
 
-    public UnityEvent<GameObject[]> GetAllChunkObjects() => _allChunkObjects;
+    public UnityEvent<GameObject[]> GetOnSendAllChunkObjects() => _onSendAllChunkObjects;
 
-    public UnityEvent SendChangeTheChunk() => _changeTheChunk;
+    public UnityEvent GetOnChangeTheChunk() => _onChangeTheChunk;
     #endregion
 }
