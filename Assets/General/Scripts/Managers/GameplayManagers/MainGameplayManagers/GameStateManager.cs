@@ -20,9 +20,9 @@ public class GameStateManager : MainGameplayManagerFramework
 
     public static GameStateManager Instance;
 
-    private UnityEvent _onCompletedTutorialSection = new();
+    private readonly UnityEvent _onCompletedTutorialSection = new();
 
-    private UnityEvent _onCompletedEntireTutorial = new();
+    private readonly UnityEvent _onCompletedEntireTutorial = new();
 
     /// <summary>
     /// Switches gameplay state 
