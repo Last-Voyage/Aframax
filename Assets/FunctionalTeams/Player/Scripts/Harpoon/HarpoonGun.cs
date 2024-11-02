@@ -129,6 +129,8 @@ public class HarpoonGun : MonoBehaviour
 
         CreateInitialHarpoonPool();
 
+        SubscribeToEvents();
+
         StartCoroutine(HarpoonCameraOrientation());
     }
 
@@ -145,6 +147,30 @@ public class HarpoonGun : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// Subscribes to all needed events
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        TimeManager.Instance.GetGamePauseEvent().AddListener(StartUnfocusingHarpoon);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all needed event
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        TimeManager.Instance.GetGamePauseEvent().RemoveListener(StartUnfocusingHarpoon);
+    }
+
+    /// <summary>
+    /// Unsubscribes to events on destruction
+    /// </summary>
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
     }
     #endregion
 
@@ -448,6 +474,7 @@ Focusing)
         StopCurrentFocusCoroutine();
         _focusProgress = 0;
         CalculateCurrentFocusAccuracy();
+        _currentFocusState = EFocusState.None;
     }
 
     /// <summary>

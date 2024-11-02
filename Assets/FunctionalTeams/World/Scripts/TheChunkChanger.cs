@@ -23,7 +23,7 @@ public class TheChunkChanger : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(_TAG_CHECK_NAME))
         {
-            EnvironmentManager.Instance.SendChangeTheChunk()?.Invoke();
+            EnvironmentManager.Instance.GetOnChangeTheChunk()?.Invoke();
         }
     }
 }

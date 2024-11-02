@@ -94,7 +94,7 @@ public class BoatMover : MonoBehaviour
     {
         if (_percentOfSpline >= 1) {
             _percentOfSpline -= 1;
-            EnvironmentManager.Instance.SendChangeTheChunk()?.Invoke();
+            EnvironmentManager.Instance.GetOnChangeTheChunk()?.Invoke();
         }
     }
 }
