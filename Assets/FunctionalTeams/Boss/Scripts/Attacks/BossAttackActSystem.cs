@@ -233,7 +233,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void BeginScene()
     {
-        /// Scene should only begin once
+        // Scene should only begin once
         if(_currentScene.HasSceneBegun)
         {
             return;
