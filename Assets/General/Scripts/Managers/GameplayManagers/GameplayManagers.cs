@@ -7,10 +7,6 @@
                     Provides access to all gameplay managers
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// Instanced to allow for anything to use the manager
 /// Provides access to all gameplay managers
@@ -78,7 +74,4 @@ public class GameplayManagers : CoreManagersFramework
     {
         RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(false);
     }
-    #region Getters
-
-    #endregion
 }

@@ -7,8 +7,6 @@
 // Brief Description : operates the health ui for the player
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,10 +24,7 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private GameObject _playerHeart;
 
     private Animator _animator;
-
-    /// <summary>
-    /// subscribe to events
-    /// </summary>
+    
     private void Awake()
     { 
         SubscribeToEvents();
@@ -56,7 +51,8 @@ public class PlayerHealthUI : MonoBehaviour
     /// <summary>
     /// Updates the heart ui to match the current health
     /// </summary>
-    /// <param name="healthPercent"></param>
+    /// <param name="healthPercent"> current health percentage </param>
+    /// <param name="currentHealth"> current health value </param>
     private void UpdateHealthUI(float healthPercent,float currentHealth)
     {
         //this updates the heart
@@ -90,6 +86,9 @@ public class PlayerHealthUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Disables damaged UI
+    /// </summary>
     private void TurnOffDamagedUI()
     {
         foreach (Image I in _damagedUIImages)
@@ -98,11 +97,17 @@ public class PlayerHealthUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Subscribes to events
+    /// </summary>
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateHealthUI);
     }
 
+    /// <summary>
+    /// Removes event subscriptions
+    /// </summary>
     private void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateHealthUI);

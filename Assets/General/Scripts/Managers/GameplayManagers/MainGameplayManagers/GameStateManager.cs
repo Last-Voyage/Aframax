@@ -8,9 +8,6 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
@@ -23,24 +20,25 @@ public class GameStateManager : MainGameplayManagerFramework
 
     public static GameStateManager Instance;
 
-    private UnityEvent _onCompletedTutorial = new();
+    private readonly UnityEvent _onCompletedTutorial = new();
 
-
+    /// <summary>
+    /// Switches gameplay state 
+    /// </summary>
+    /// <param name="newState"> new gameplay state </param>
     private void ChangeCurrentGameplayState(EGameplayState newState)
     {
         _currentGameplayState = newState;
     }
 
     #region Base Manager
+    
     public override void SetupInstance()
     {
         base.SetupInstance();
         Instance = this;
     }
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
+    
     #endregion
 
     #region Getters
@@ -50,7 +48,10 @@ public class GameStateManager : MainGameplayManagerFramework
     #endregion
 }
 
+/// <summary>
+/// Various states of the game
+/// </summary>
 public enum EGameplayState
 {
-    tempState
-};
+    TempState
+}
