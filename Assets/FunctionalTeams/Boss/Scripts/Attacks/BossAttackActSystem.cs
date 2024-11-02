@@ -207,16 +207,14 @@ public class BossAttackActSystem : MonoBehaviour
         // Boss fight is over if all acts have been completed
         if (_currentActNum == _bossFightActs.Length)
         {
-            SceneLoadingManager.Instance.InvokeEndOfGameScene();
-            SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
-
+            AframaxSceneManager.Instance.LoadEndScene();
             return;
         }
 
         _currentAct = _bossFightActs[_currentActNum];
 
         BeginAct();
-        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeActEndEvent();
     }
 
@@ -279,7 +277,6 @@ public class BossAttackActSystem : MonoBehaviour
         _currentScene = _currentAct.Scenes[_currentSceneNum];
         // Begin next scene
         BeginScene();
-        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeSceneEndEvent();
     }
 

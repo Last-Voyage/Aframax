@@ -88,7 +88,16 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// </summary>
     private void LoadDeathScreen()
     {
-        StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.DeathScreenSceneIndex, 0);
+        StartAsyncSceneLoadViaID(DeathScreenSceneIndex, 0);
+    }
+    
+    /// <summary>
+    /// Loads the end scene for when the player "wins"
+    /// </summary>
+    public void LoadEndScene()
+    {
+        InvokeEndOfGameScene();
+        StartAsyncSceneLoadViaID(EndScreenSceneIndex, 0);
     }
 
     /// <summary>
