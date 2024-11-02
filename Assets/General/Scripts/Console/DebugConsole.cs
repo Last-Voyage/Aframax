@@ -1,9 +1,9 @@
-/*
+/***********************************************************************************************************************
 // Name: DebugConsole.CS
 // Author: Nabil Tagba
 // Overview: Hosts one function
 // which handles the debug console commands
- */
+***********************************************************************************************************************/
 
 using TMPro;
 using UnityEngine;
