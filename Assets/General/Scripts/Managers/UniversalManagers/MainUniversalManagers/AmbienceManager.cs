@@ -4,14 +4,12 @@
 // Creation Date:   October 1st, 2024
 //
 // Description:     Manages any sound that player persistently throughout the
-                    game. e.g music, background audio, etc
+                    game. e.g. music, background audio, etc
 ******************************************************************************/
 
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages audio that persists throughout the game
@@ -44,7 +42,7 @@ public class AmbienceManager : AudioManager
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
-        AframaxSceneManager.Instance.GetSceneChangedEvent.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
     }
 
     /// <summary>
