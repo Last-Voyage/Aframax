@@ -33,7 +33,6 @@ public struct ActScene
     [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
 }
 
-
 /// <summary>
 /// A class that contains multiple functions for the act system that are updated within a coroutine
 /// </summary>
@@ -123,6 +122,7 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+
     /// <summary>
     /// just for testing
     /// </summary>
@@ -135,6 +135,7 @@ public class BossAttackActSystem : MonoBehaviour
             BeginAct();
         }
     }
+    
 #endif
 
     #region Act Functions
@@ -334,6 +335,7 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _onSceneEnd?.Invoke();
     }
+    
     #endregion
 
     #region Getters
