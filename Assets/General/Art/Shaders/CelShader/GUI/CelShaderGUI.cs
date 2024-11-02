@@ -25,6 +25,7 @@ public class CelShaderGUI : ShaderGUI
     private bool _showEmissionFoldout = false;
     private bool _showPomFoldout = false;
     private bool _showVertexPaintFoldout = false;
+    private bool _showVertexSwayFoldout = false;
     private bool _showPostFoldout = false;
     
     // When the ShaderGUI is drawn (immediate-mode)
@@ -160,6 +161,26 @@ public class CelShaderGUI : ShaderGUI
                 { "_MaskMapTexture", "Mask Map (Texture)" },
                 { "_MaskMapIntensity", "Intensity" },
                 { "_MaskMapContrast", "Contrast" }
+            },
+            properties,
+            materialEditor
+        );
+        
+        // Render the Wind Sway Foldout
+        _showVertexSwayFoldout = CoreEditorUtils.DrawHeaderFoldout(
+            "Wind Sway",
+            _showVertexSwayFoldout,
+            false,
+            (Func<bool>)null,
+            null
+        );
+        DrawProperties(
+            _showVertexSwayFoldout,
+            new Dictionary<string, string> {
+                { "_WindSway", "Enable Wind Sway"},
+                { "_WindSwayIntensity", "Wind Sway Intensity" },
+                { "_WindSwayFrequency", "Wind Sway Frequency" },
+                { "_WindSwaySpeed", "Wind Sway Speed" }
             },
             properties,
             materialEditor
