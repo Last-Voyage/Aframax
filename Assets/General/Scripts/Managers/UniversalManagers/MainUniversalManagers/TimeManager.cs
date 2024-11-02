@@ -7,8 +7,6 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,10 +21,10 @@ public class TimeManager : MainUniversalManagerFramework
     private bool _isGamePaused;
 
     // Listens for whenever the game pauses
-    private static UnityEvent _gamePausedEvent = new();
-    private static UnityEvent _gameUnpausedEvent = new();
+    private static readonly UnityEvent _onGamePausedEvent = new();
+    private static readonly UnityEvent _onGameUnpausedEvent = new();
 
-    private static UnityEvent<bool> _gamePauseToggleEvent = new();
+    private static readonly UnityEvent<bool> _onGamePauseToggleEvent = new();
 
     #region General Time Management
     /// <summary>
@@ -60,7 +58,7 @@ public class TimeManager : MainUniversalManagerFramework
     private void UnpauseGame()
     {
         Time.timeScale = 1;
-        InvokeGameUnpaused();
+        InvokeOnGameUnpaused();
     }
     #endregion
 
@@ -70,39 +68,40 @@ public class TimeManager : MainUniversalManagerFramework
         base.SetupInstance();
         Instance = this;
     }
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
+
     #endregion
 
     #region Events
+    
     /// <summary>
     /// Toggles the game being paused or unpaused
     /// </summary>
     /// <param name="toggle"></param>
-    private void InvokeGamePauseToggle(bool toggle)
+    private void InvokeOnGamePauseToggle(bool toggle)
     {
-        _gamePauseToggleEvent?.Invoke(toggle);
+        _onGamePauseToggleEvent?.Invoke(toggle);
     }
+    
     private void InvokeOnGamePause()
     {
-        _gamePausedEvent?.Invoke();
-        InvokeGamePauseToggle(true);
+        _onGamePausedEvent?.Invoke();
+        InvokeOnGamePauseToggle(true);
     }
-    private void InvokeGameUnpaused()
+    
+    private void InvokeOnGameUnpaused()
     {
-        _gameUnpausedEvent?.Invoke();
-        InvokeGamePauseToggle(false);
+        _onGameUnpausedEvent?.Invoke();
+        InvokeOnGamePauseToggle(false);
     }
+    
     #endregion
 
     #region Getters
     public bool GetIsGamePaused() => _isGamePaused;
 
-    public UnityEvent<bool> GetGamePauseToggleEvent() => _gamePauseToggleEvent;
+    public UnityEvent<bool> GetOnGamePauseToggleEvent() => _onGamePauseToggleEvent;
 
-    public UnityEvent GetGamePauseEvent() => _gamePausedEvent;
-    public UnityEvent GetGameUnpauseEvent() => _gameUnpausedEvent;
+    public UnityEvent GetOnGamePauseEvent() => _onGamePausedEvent;
+    public UnityEvent GetOnGameUnpauseEvent() => _onGameUnpausedEvent;
     #endregion
 }

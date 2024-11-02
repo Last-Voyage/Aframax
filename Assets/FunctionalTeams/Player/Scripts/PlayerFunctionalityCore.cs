@@ -3,11 +3,9 @@
 // Author :            Ryan Swanson
 // Creation Date :     9/28/2024
 //
-// Brief Description : Holds higher level functionality to setup the player and harpoon
+// Brief Description : Holds higher level functionality to set up the player and harpoon
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -31,7 +29,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private bool _subscribedToInput;
 
     /// <summary>
-    /// Peroforms any set up before everything else
+    /// Performs any set up before everything else
     /// </summary>
     private void Awake()
     {
@@ -102,8 +100,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        TimeManager.Instance.GetGamePauseEvent().AddListener(GamePaused);
-        TimeManager.Instance.GetGameUnpauseEvent().AddListener(GameUnpaused);
+        TimeManager.Instance.GetOnGamePauseEvent().AddListener(GamePaused);
+        TimeManager.Instance.GetOnGameUnpauseEvent().AddListener(GameUnpaused);
     }
 
     /// <summary>
@@ -111,8 +109,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        TimeManager.Instance.GetGamePauseEvent().RemoveListener(GamePaused);
-        TimeManager.Instance.GetGameUnpauseEvent().RemoveListener(GameUnpaused);
+        TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(GamePaused);
+        TimeManager.Instance.GetOnGameUnpauseEvent().RemoveListener(GameUnpaused);
     }
 
     /// <summary>

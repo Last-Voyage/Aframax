@@ -119,7 +119,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        CameraManager.Instance.GetCameraMovementToggleEvent().AddListener(ToggleCameraMovement);
+        CameraManager.Instance.GetOnCameraMovementToggleEvent().AddListener(ToggleCameraMovement);
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        CameraManager.Instance.GetCameraMovementToggleEvent().RemoveListener(ToggleCameraMovement);
+        CameraManager.Instance.GetOnCameraMovementToggleEvent().RemoveListener(ToggleCameraMovement);
     }
 
     /// <summary>

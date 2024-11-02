@@ -59,7 +59,7 @@ public interface IBaseHealth
     /// <summary>
     /// Access death event
     /// </summary>
-    abstract UnityEvent GetDeathEvent();
+    abstract UnityEvent GetOnDeathEvent();
 
     #endregion
 }

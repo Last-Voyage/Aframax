@@ -5,11 +5,13 @@
 //
 // Brief Description : Shakes the camera ;)
 *****************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using Cinemachine;
 
+/// <summary>
+/// Controls shakes to the cinemachine
+/// </summary>
 public class CinemachineShake : MonoBehaviour
 {
     public static CinemachineShake Instance { get; private set; }
@@ -17,7 +19,7 @@ public class CinemachineShake : MonoBehaviour
     private float _shakeTimer;
 
     /// <summary>
-    /// creates an instance of the CinemachineShake object so you can call a shake anywhere you wwant.
+    /// creates an instance of the CinemachineShake object so you can call a shake anywhere you want.
     /// </summary>
     private void Awake() 
     {
@@ -28,8 +30,8 @@ public class CinemachineShake : MonoBehaviour
     /// <summary>
     /// times the shake after its is called from where ever it is called. When time is up stop the shake
     /// </summary>
-    /// <param name="intensity"></param>
-    /// <param name="time"></param>
+    /// <param name="intensity"> how intense the shake is </param>
+    /// <param name="time"> duration of the shake </param>
     public void ShakeCamera(float intensity, float time)
     {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = 
@@ -42,18 +44,17 @@ public class CinemachineShake : MonoBehaviour
     /// <summary>
     /// times the shake
     /// </summary>
-    private void Update() 
+    private void Update()
     {
-        if(_shakeTimer > 0)
-        {
-            _shakeTimer -= Time.deltaTime;
-            if(_shakeTimer <= 0f)
-            {
-                CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
-                    _cinemachineVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-                //turns off the shake
-                cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
-            }
-        }
+        if (!(_shakeTimer > 0)) return;
+        
+        _shakeTimer -= Time.deltaTime;
+        
+        if (!(_shakeTimer <= 0f)) return;
+        
+        CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
+            _cinemachineVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        //turns off the shake
+        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
     }
 }
