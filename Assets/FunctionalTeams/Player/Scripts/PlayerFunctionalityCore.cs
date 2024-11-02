@@ -28,13 +28,36 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
     private PlayerInputMap _playerInputMap;
 
+    private bool _subscribedToInput;
+
+    /// <summary>
+    /// Peroforms any set up before everything else
+    /// </summary>
+    private void Awake()
+    {
+        SetUpPlayer();
+    }
+
+    /// <summary>
+    /// Performs any set up in the player
+    /// This occurs before any player input subscription
+    /// Used for if any player functionality needs to called before movement begins
+    /// </summary>
+    private void SetUpPlayer()
+    {
+        // Sets needed variables in the player movement controller before movement begins
+        _playerMovementController.SetUpMovementController();
+    }
+
     private void OnEnable()
     {
+        SubscribeToEvents();
         SubscribePlayerInput();
     }
 
     private void OnDisable()
     {
+        UnsubscribeToEvents();
         UnsubscribePlayerInput();
     }
 
@@ -44,12 +67,18 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribePlayerInput()
     {
+        if (_subscribedToInput) { return; }
+
         _playerInputMap = new();
         _playerInputMap.Enable();
 
         SubscribeToMovementInput();
         SubscribeToCameraInput();
         SubscribeToHarpoonInput();
+
+        PlayerManager.Instance.InvokeOnPlayerInputToggle(true);
+
+        _subscribedToInput = true;
     }
 
     /// <summary>
@@ -69,6 +98,40 @@ public class PlayerFunctionalityCore : MonoBehaviour
     }
 
     /// <summary>
+    /// Subscribes to all needed events
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        TimeManager.Instance.GetGamePauseEvent().AddListener(GamePaused);
+        TimeManager.Instance.GetGameUnpauseEvent().AddListener(GameUnpaused);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all needed events
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        TimeManager.Instance.GetGamePauseEvent().RemoveListener(GamePaused);
+        TimeManager.Instance.GetGameUnpauseEvent().RemoveListener(GameUnpaused);
+    }
+
+    /// <summary>
+    /// Unsubscribes player input when the game is paused
+    /// </summary>
+    private void GamePaused()
+    {
+        UnsubscribePlayerInput();
+    }
+
+    /// <summary>
+    /// Subscribes player input when the game is unpaused
+    /// </summary>
+    private void GameUnpaused()
+    {
+        SubscribePlayerInput();
+    }    
+
+    /// <summary>
     /// Subscribes to harpoon input
     /// </summary>
     private void SubscribeToHarpoonInput()
@@ -81,11 +144,16 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void UnsubscribePlayerInput()
     {
+        if (!_subscribedToInput) { return; }
         UnsubscribeToMovementInput();
         UnsubscribeToCameraInput();
         UnsubscribeToHarpoonInput();
 
         _playerInputMap.Disable();
+
+        PlayerManager.Instance.InvokeOnPlayerInputToggle(false);
+
+        _subscribedToInput = false;
     }
 
     /// <summary>

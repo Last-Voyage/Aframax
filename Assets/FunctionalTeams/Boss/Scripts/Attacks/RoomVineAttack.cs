@@ -98,13 +98,9 @@ public class RoomVineAttack : BaseBossAttack
     protected override void BeginAttack()
     {
         base.BeginAttack();
-
         _numTentaclesDestroyed = 0;
 
         InitializePlayerTransform();
-
-        // tell the attack manager that we are attacking
-        _isAttackActive = true;
 
         if (_spawnedEnemies.Length == 0)
         {

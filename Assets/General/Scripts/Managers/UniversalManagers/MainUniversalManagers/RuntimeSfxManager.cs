@@ -114,7 +114,7 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
-    /// Plays footsteps when the player moves
+    /// Plays foot steps when the player moves
     /// </summary>
     private void PlayFootSteps()
     { 

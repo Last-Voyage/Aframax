@@ -19,7 +19,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Controls the player's movement
     /// </summary>
-    private static readonly UnityEvent<bool> _onMovementToggled = new();
+    private static readonly UnityEvent<bool> _onPlayerInputToggled = new();
 
     //When the movement starts
     private static readonly UnityEvent _onMovementStartedEvent = new();
@@ -61,6 +61,14 @@ public class PlayerManager : MainGameplayManagerFramework
     #endregion
 
     #region Events
+    /// <summary>
+    /// Invokes the _onMovementToggled event with the input bool
+    /// </summary>
+    /// <param name="toggle"> the bool to input into the invoked event </param>
+    public void InvokeOnPlayerInputToggle(bool toggle)
+    {
+        _onPlayerInputToggled?.Invoke(toggle);
+    }
 
     /// <summary>
     /// Invokes when the player movement starts
@@ -119,6 +127,22 @@ public class PlayerManager : MainGameplayManagerFramework
     }
 
     /// <summary>
+    /// Invokes the crosshair over enemy start event
+    /// </summary>
+    public void InvokeOnCrosshairOverEnemyStartEvent()
+    {
+        _onEnemyOverCrosshairStartEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the crosshair over enemy end event
+    /// </summary>
+    public void InvokeOnCrosshairOverEnemyEndEvent()
+    {
+        _onEnemyOverCrosshairEndEvent?.Invoke();
+    }
+
+    /// <summary>
     /// Invokes when the player receives damage
     /// </summary>
     /// <param name="damageTaken">The damage received</param>
@@ -153,23 +177,6 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         _onPlayerDeath?.Invoke();
     }
-    
-    /// <summary>
-    /// Invokes the crosshair over enemy start event
-    /// </summary>
-    public void InvokeOnCrosshairOverEnemyStartEvent()
-    {
-        _onEnemyOverCrosshairStartEvent?.Invoke();
-    }
-
-    /// <summary>
-    /// Invokes the crosshair over enemy end event
-    /// </summary>
-    public void InvokeOnCrosshairOverEnemyEndEvent()
-    {
-        _onEnemyOverCrosshairEndEvent?.Invoke();
-    }
-    
     #endregion
 
     #region Getters
@@ -177,7 +184,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Getter for the _onMovementToggled event
     /// </summary>
-    public UnityEvent<bool> GetOnMovementToggleEvent() => _onMovementToggled;
+    public UnityEvent<bool> GetOnInputToggleEvent() => _onPlayerInputToggled;
 
     public UnityEvent GetOnMovementStartEvent() => _onMovementStartedEvent;
     public UnityEvent GetOnMovementEndEvent() => _onMovementEndedEvent;
