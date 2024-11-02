@@ -83,10 +83,10 @@ public class PlayerMovementController : MonoBehaviour
 
     #region Setup
     /// <summary>
-    /// This function is called before the first frame update.
-    /// Used to initialize any variables that are not serialized.
+    /// Used to initialized any variables
+    /// Called by Functionality Core
     /// </summary>
-    private void Start()
+    public void SetUpMovementController()
     {
         EstablishInstance();
 
@@ -94,9 +94,6 @@ public class PlayerMovementController : MonoBehaviour
         InitializeRigidbody();
         SetupPlayerVisuals();
         SetupPlayerGroundedCheckTransform();
-
-        // Run the movement coroutine
-        _movementCoroutine = StartCoroutine(ResolveMovement());
     }
 
     /// <summary>
@@ -124,6 +121,9 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput.currentActionMap.Enable();
 
         _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
+
+        // Run the movement coroutine
+        _movementCoroutine = StartCoroutine(ResolveMovement());
     }
 
     /// <summary>
@@ -131,7 +131,8 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     public void UnsubscribeInput()
     {
-        _movementInput = null;
+        _playerInput = null;
+        StopCoroutine(ResolveMovement());
     }
     #endregion
 
@@ -141,7 +142,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnMovementToggleEvent().AddListener(ToggleMovement);
+        PlayerManager.Instance.GetOnInputToggleEvent().AddListener(ToggleMovement);
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StopHarpoonSpeedSlowdown);
@@ -152,7 +153,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnMovementToggleEvent().RemoveListener(ToggleMovement);
+        PlayerManager.Instance.GetOnInputToggleEvent().RemoveListener(ToggleMovement);
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StopHarpoonSpeedSlowdown);
