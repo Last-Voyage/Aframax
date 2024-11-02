@@ -166,7 +166,7 @@ public class RoomVineAttack : BaseBossAttack
     /// <param name="weakPointHandler"></param>
     private void AddTentacleDestroyedListener(WeakPointHandler weakPointHandler)
     {
-        weakPointHandler.GetAllWeakPointsDestroyedEvent().AddListener(OnTentacleDestroyed);
+        weakPointHandler.GetOnAllWeakPointsDestroyedEvent().AddListener(OnTentacleDestroyed);
     }
 
     /// <summary>

@@ -21,11 +21,10 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// Current health value
     /// </summary>
     protected float _currentHealth;
+    
+    protected readonly UnityEvent _onDeathEvent = new();
 
-    //Event system used to be called outside of script
-    protected UnityEvent _deathEvent = new();
-
-    protected UnityEvent _onDamageTaken = new();
+    private readonly UnityEvent _onDamageTaken = new();
 
     #region Base Class
 
@@ -37,6 +36,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// <summary>
     /// Initializes any starter health values
     /// </summary>
+    /// <param name="healthValue"> value health is being set to </param>
     public void InitializeHealth(float healthValue)
     {
         if(healthValue > _maxHealth)
@@ -68,11 +68,16 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// </summary>
     public virtual void OnDeath() 
     { 
-        _deathEvent.Invoke();
+        _onDeathEvent.Invoke();
     }
 
     #endregion
-
+    
+    /// <summary>
+    /// Reduces health by incoming damage
+    /// </summary>
+    /// <param name="damage"> amount of incoming damage to remove from health </param>
+    /// <param name="damageSource"> applicator of damage </param>
     public virtual void TakeDamage(float damage, IBaseDamage damageSource)
     {
         _onDamageTaken?.Invoke();
@@ -92,7 +97,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// </summary>
     public void InvokeDeathEvent()
     {
-        _deathEvent?.Invoke();
+        _onDeathEvent?.Invoke();
     }
 
     #endregion
@@ -100,8 +105,8 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     #region Getters
 
     public float GetHealthPercent() => _currentHealth / _maxHealth;
-    public UnityEvent GetDeathEvent() => _deathEvent;
-    public UnityEvent GetDamageTakenEvent() => _onDamageTaken;
+    public UnityEvent GetOnDeathEvent() => _onDeathEvent;
+    public UnityEvent GetOnDamageTakenEvent() => _onDamageTaken;
 
     #endregion Getters
 }

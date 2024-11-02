@@ -101,7 +101,7 @@ public class RuntimeSfxManager : AudioManager
     #region Footsteps
 
     /// <summary>
-    /// Initializes the foot step instance
+    /// Initializes the footstep instance
     /// </summary>
     private void InitializeFootstepInstance()
     {
