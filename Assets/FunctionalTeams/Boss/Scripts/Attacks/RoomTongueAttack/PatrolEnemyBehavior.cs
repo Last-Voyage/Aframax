@@ -6,8 +6,8 @@
 //
 // Brief Description : Controls functionality for the spawned patrol enemy
 *****************************************************************************/
-
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -27,9 +27,9 @@ public class PatrolEnemyBehavior : MonoBehaviour
 
     [Tooltip("How long the enemy patrols before despawning")]
     [SerializeField] private float _attackDuration = 15f;
-    
+
     [Tooltip("Adds a delay before starting to patrol the room")]
-    [SerializeField] private float _timeToWaitBeforePatrolling = .5f;
+    [SerializeField] private float _timeToWaitBeforePatroling = .5f;
 
     #endregion Patrol Settings
 
@@ -37,8 +37,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// Current waypoint target of patrol enemy
     /// </summary>
     private Transform _targetPoint;
-
-    private bool _isPlayerInAttackRange;
+    
+    private bool _isPlayerInAttackRange = false;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;
@@ -56,6 +56,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void Start() 
     {
+        SubscribeToEvents();
+        CheckPlayerAlreadyInRoom();
         BeginPatrolling();
         InitializeLifetime();
         InitializePlayerTransform();
@@ -89,6 +91,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void OnDestroy()
     {
         StopCoroutine(_patrolCoroutine);
+        UnsubscribeToEvents();
     }
 
     /// <summary>
@@ -101,39 +104,39 @@ public class PatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if player is within the range to be attacked
+    /// Listens for room event of player entering room
     /// </summary>
-    private void CheckPlayerInAttackRoom()
+    private void PlayerEnteredRoom()
     {
-        // Attack is invalid if there is no proper room data
-        if(_patrolLocationData.RoomBorder1 == null || _patrolLocationData.RoomBorder2 == null)
+        _isPlayerInAttackRange = true;
+    }
+
+    /// <summary>
+    /// Listens for room event of player leaving room
+    /// </summary>
+    private void PlayerExitedRoom()
+    {
+        _isPlayerInAttackRange = false;
+    }
+
+    /// <summary>
+    /// Checks if the player entered the room before the enemy spawned
+    /// </summary>
+    private void CheckPlayerAlreadyInRoom()
+    {
+        if (_patrolLocationData.EnemyRoom.IsPlayerInRoom())
         {
-            Destroy(gameObject);
-            return;
+            PlayerEnteredRoom();
         }
-
-        _isPlayerInAttackRange = IsPlayerInAttackRange();
     }
 
     /// <summary>
-    /// Checks if player is within bounds of the room to be attacked
-    /// </summary>
-    /// <returns> T if player is within attack range </returns>
-    private bool IsPlayerInAttackRange()
-    {
-        return (_playerTransform.position.x > _patrolLocationData.RoomBorder1.position.x)
-            && (_playerTransform.position.x < _patrolLocationData.RoomBorder2.position.x)
-            && (_playerTransform.position.z > _patrolLocationData.RoomBorder1.position.z)
-            && (_playerTransform.position.z < _patrolLocationData.RoomBorder2.position.z);
-    }
-
-    /// <summary>
-    /// Starts patrolling room going to set waypoints until detecting a player or time runs out
+    /// Starts patroling room going to set waypoints until detecting a player or time runs out
     /// </summary>
     /// <returns></returns>
     private IEnumerator PatrolRoom()
     {
-        yield return new WaitForSeconds(_timeToWaitBeforePatrolling);
+        yield return new WaitForSeconds(_timeToWaitBeforePatroling);
 
         // Choose initial patrol point
         ChooseNextRandomPatrolPoint();
@@ -141,8 +144,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
         // Controls enemy movement as long as it's alive
         while(gameObject != null && _lifetime < _attackDuration)
         {
-            CheckPlayerInAttackRoom();
-
             // Only attack if player is within range
             if(!_isPlayerInAttackRange)
             {
@@ -190,8 +191,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
         // Move the GameObject towards the target point at a constant speed
         if(_targetPoint != null)
         {
-            transform.position = 
-                Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
         }
     }
 
@@ -201,17 +201,40 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void MoveToPlayer()
     {
         // Move the GameObject towards the target point at a constant speed
-        transform.position = 
-            Vector3.MoveTowards(transform.position, _playerTransform.position, _seekPlayerSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _playerTransform.position, _seekPlayerSpeed * Time.deltaTime);
     }
 
     /// <summary>
-    /// Chooses next random point for paroling enemy
+    /// Chooses next random point for patroling enemy
     /// </summary>
     private void ChooseNextRandomPatrolPoint()
     {
         // Pick a random point from the list of possible transforms
         _currentTargetIndex = Random.Range(0, _patrolLocationData.WaypointTransforms.Length);
         _targetPoint = _patrolLocationData.WaypointTransforms.ElementAt(_currentTargetIndex);
+    }
+
+    /// <returns> This enemies patrol data </returns>
+    public PatrolLocation GetPatrolLocationData()
+    {
+        return _patrolLocationData;
+    }
+
+    /// <summary>
+    /// Subscribes to the room event
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().AddListener(PlayerExitedRoom);
+    }
+
+    /// <summary>
+    /// Unsubscribes to the room event
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().RemoveListener(PlayerExitedRoom);
     }
 }
