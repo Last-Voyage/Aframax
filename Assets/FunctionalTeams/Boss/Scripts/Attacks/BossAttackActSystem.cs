@@ -21,6 +21,17 @@ public struct Act
 {
     [field: Tooltip("Scenes within the act")]
     [field: SerializeField] public ActScene[] Scenes { get; private set; }
+
+    public bool HasActBegun { get; private set; }
+
+    /// <summary>
+    /// Scene should only begin once. This is set to true when the act begins.
+    /// </summary>
+    /// <param name="hasActBegun"></param>
+    public void SetHasActBegun(bool hasActBegun)
+    {
+        HasActBegun = hasActBegun;
+    }
 }
 
 /// <summary>
@@ -31,6 +42,17 @@ public struct ActScene
 {
     [field: Tooltip("Attacks within the Act")]
     [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
+
+    public bool HasSceneBegun {  get; private set; }
+
+    /// <summary>
+    /// Scene should only begin once. This is set to true when the scene begins.
+    /// </summary>
+    /// <param name="hasSceneBegun"></param>
+    public void SetHasSceneBegun(bool hasSceneBegun)
+    {
+        HasSceneBegun = hasSceneBegun;
+    }
 }
 
 /// <summary>
@@ -111,7 +133,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GetOnActBegin().AddListener(BeginAct);
+        //GetOnActBegin().AddListener(BeginAct);
     }
 
     /// <summary>
@@ -119,7 +141,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        GetOnActBegin().RemoveListener(BeginAct);
+        //GetOnActBegin().RemoveListener(BeginAct);
     }
 
 #if UNITY_EDITOR
@@ -153,9 +175,18 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void BeginAct()
     {
+        /// Scene should only begin once
+        if (_currentAct.HasActBegun)
+        {
+            return;
+        }
+
         ResetSceneVariables();
         BeginScene();
         InvokeBeginActEvent();
+
+        _currentAct.SetHasActBegun(true);
+        _currentActNum++;
     }
 
     /// <summary>
@@ -171,8 +202,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void CompleteAct()
     {
-        _currentActNum++;
-
         // Boss fight is over if all acts have been completed
         if(_currentActNum == _bossFightActs.Length)
         {
@@ -198,6 +227,28 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _currentSceneNum = 0;
     }
+    
+    /// <summary>
+    /// Begins the next scene in the act
+    /// </summary>
+    private void BeginScene()
+    {
+        /// Scene should only begin once
+        if(_currentScene.HasSceneBegun)
+        {
+            return;
+        }
+
+        InitializeSceneAttackListeners();
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.InvokeAttackBegin();
+        }
+        InvokeBeginSceneEvent();
+        _currentScene.SetHasSceneBegun(true);
+        _currentSceneNum++;
+    }
 
     /// <summary>
     /// Returns whether or not the scene is complete
@@ -212,8 +263,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void CompleteScene()
     {
-        _currentSceneNum++;
-
         RemoveActAttackListeners();
 
         // Progresses to the next act if all scenes are completed
@@ -236,19 +285,6 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _currentSceneNum = 0;
         _currentScene = _currentAct.Scenes[_currentSceneNum];
-    }
-
-    /// <summary>
-    /// Begins the next scene in the act
-    /// </summary>
-    private void BeginScene()
-    {
-        InitializeSceneAttackListeners();
-
-        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
-        {
-            baseBossAttack.InvokeAttackBegin();
-        }
     }
 
     #endregion
