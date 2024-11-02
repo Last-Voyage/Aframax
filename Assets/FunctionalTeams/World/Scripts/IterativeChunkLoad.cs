@@ -64,9 +64,9 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        EnvironmentManager.Instance.GetSendingOverChunks().AddListener(ReceiveChunkQueue);
-        EnvironmentManager.Instance.GetAllChunkObjects().AddListener(ReceiveEveryChunk); // STILL NEEDS TO BE IMPLEMENTED
-        EnvironmentManager.Instance.SendChangeTheChunk().AddListener(ChunkChange);
+        EnvironmentManager.Instance.GetOnSendingOverChunks().AddListener(ReceiveChunkQueue);
+        EnvironmentManager.Instance.GetOnSendAllChunkObjects().AddListener(ReceiveEveryChunk); // STILL NEEDS TO BE IMPLEMENTED
+        EnvironmentManager.Instance.GetOnChangeTheChunk().AddListener(ChunkChange);
 
         _boatMover = GetComponent<BoatMover>();
 
@@ -101,9 +101,9 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EnvironmentManager.Instance.GetSendingOverChunks().RemoveListener(ReceiveChunkQueue);
-        EnvironmentManager.Instance.GetAllChunkObjects().RemoveListener(ReceiveEveryChunk);
-        EnvironmentManager.Instance.SendChangeTheChunk().RemoveListener(ChunkChange);
+        EnvironmentManager.Instance.GetOnSendingOverChunks().RemoveListener(ReceiveChunkQueue);
+        EnvironmentManager.Instance.GetOnSendAllChunkObjects().RemoveListener(ReceiveEveryChunk);
+        EnvironmentManager.Instance.GetOnChangeTheChunk().RemoveListener(ChunkChange);
     }
 
     /// <summary>

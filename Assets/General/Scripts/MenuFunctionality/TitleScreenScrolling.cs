@@ -15,11 +15,9 @@ using UnityEngine;
 /// </summary>
 public class TitleScreenScrolling : MonoBehaviour
 {
-    [SerializeField] private Transform _bottomCameraPosition;
+    [SerializeField] private Transform _movingDestination;
 
     [SerializeField] private float _screenScrollSpeed;
-
-    private Camera _mainCamera;
 
     private PlayerInputMap _playerInputControls;
 
@@ -27,9 +25,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     private void Awake()
     {
-        _mainCamera = Camera.main;
         _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(MoveCamera(_bottomCameraPosition.position, _screenScrollSpeed));
+        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed));
         if (_screenScrollSpeed == 0)
         {
             Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
@@ -37,18 +34,18 @@ public class TitleScreenScrolling : MonoBehaviour
     }
 
     /// <summary>
-    /// moves the camera from the top of the screen to the bottom
+    /// moves the ui up to simulate the camera moving down
     /// </summary>
-    /// <param name="destination"></param> designated location of the bottom part of the screen
+    /// <param name="destination"></param> designated movement destination
     /// <returns></returns>
-    private IEnumerator MoveCamera(Vector3 destination, float scrollSpeed)
+    private IEnumerator ScrollingScreen(Vector3 destination, float scrollSpeed)
     {
         if (!_hasScrollingStarted)
         {
             _hasScrollingStarted = true;
-            while (_mainCamera.transform.position != destination)
+            while (transform.position != destination)
             {
-                _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, new Vector3(destination.x, destination.y, -300), scrollSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, transform.position.z), scrollSpeed * Time.deltaTime);
 
                 yield return null;
             }
