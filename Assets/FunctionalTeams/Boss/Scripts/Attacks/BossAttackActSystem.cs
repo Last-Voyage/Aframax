@@ -273,8 +273,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void RemoveActAttackListeners()
     {
-        Act act = _bossFightActs[_currentActNum];
-
         foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
         {
             baseBossAttack.GetAttackEndEvent().RemoveListener(AttackHasEnded);
