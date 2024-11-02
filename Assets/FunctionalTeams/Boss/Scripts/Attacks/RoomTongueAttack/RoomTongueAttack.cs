@@ -171,8 +171,6 @@ public class RoomTongueAttack : BaseBossAttack
     /// </summary>
     protected override void BeginAttack()
     {
-        SubscribeToEvents();
-
         // This is a passive attack this ends when it's scene is over
         // This should only subscribe during its lifetime as it's waiting for it's scene to end
         BossAttackActSystem.Instance.GetOnAttackCompleted().AddListener(EndAttack);
