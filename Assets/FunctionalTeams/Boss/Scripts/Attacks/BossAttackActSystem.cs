@@ -133,7 +133,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        //GetOnActBegin().AddListener(BeginAct);
         GameStateManager.Instance.GetOnCompletedEntireTutorial().AddListener(BeginAct);
     }
 
@@ -142,7 +141,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        //GetOnActBegin().RemoveListener(BeginAct);
         GameStateManager.Instance.GetOnCompletedEntireTutorial().RemoveListener(BeginAct);
     }
 
@@ -177,6 +175,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void BeginAct()
     {
+        GameStateManager.Instance.GetOnCompletedEntireTutorial().RemoveListener(BeginAct);
         // Scene should only begin once
         if (_currentAct.HasActBegun)
         {
@@ -185,7 +184,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         ResetSceneVariables();
         BeginScene();
-        //InvokeBeginActEvent();
+        InvokeBeginActEvent();
 
         _currentAct.SetHasActBegun(true);
         _currentActNum++;
