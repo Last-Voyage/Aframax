@@ -153,7 +153,7 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        TimeManager.Instance.GetGamePauseEvent().AddListener(StartUnfocusingHarpoon);
+        TimeManager.Instance.GetOnGamePauseEvent().AddListener(StartUnfocusingHarpoon);
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        TimeManager.Instance.GetGamePauseEvent().RemoveListener(StartUnfocusingHarpoon);
+        TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(StartUnfocusingHarpoon);
     }
 
     /// <summary>
