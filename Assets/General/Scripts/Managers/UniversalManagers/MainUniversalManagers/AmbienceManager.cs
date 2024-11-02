@@ -37,32 +37,35 @@ public class AmbienceManager : AudioManager
     private void Start()
     {
         _allAmbientEvents = new List<EventInstance>();
-        StartBackgroundAudio();
+        StartGameBackgroundAudio();
         SubscribeToEvents();
     }
 
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
-        SceneLoadingManager.Instance.GetSceneChangedEvent.AddListener(StartBackgroundAudio);
+        AframaxSceneManager.Instance.GetSceneChangedEvent.AddListener(StartGameBackgroundAudio);
     }
 
     /// <summary>
-    /// Starts playing an continuous background audio
+    /// Starts playing continuous background audio in game scenes
     /// </summary>
-    private void StartBackgroundAudio()
+    private void StartGameBackgroundAudio()
     {
-        //Ambience manager should only play in game scenes, not the main menu.
-        if (SceneManager.GetActiveScene().buildIndex == SceneLoadingManager.Instance.MainMenuSceneIndex)
+        // Stop any instances of music playing
+        foreach (var sound in _allAmbientEvents)
         {
-            foreach (var sound in _allAmbientEvents)
-            {
-                sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            }
-
+            sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+        
+        // Ambience Manager should not play outside of game scenes
+        if (!AframaxSceneManager.Instance.IsGameScene())
+        {
             return;
         }
-        foreach (var sound in FmodAmbienceEvents.Instance.AmbientBackgroundSounds)
+        
+        // Loop through and play all ambient game sounds
+        foreach (var sound in FmodAmbienceEvents.Instance.AmbientGameBackgroundSounds)
         {
             if(sound.IsNull)
             {

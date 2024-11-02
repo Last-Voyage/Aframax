@@ -67,7 +67,7 @@ public class GameplayManagers : CoreManagersFramework
             mainManager.SetupMainManager();
         }
 
-        SceneLoadingManager.Instance.InvokeGameplaySceneLoaded();
+        AframaxSceneManager.Instance.InvokeGameplaySceneLoaded();
 
         //TODO Remove after LV-324
         RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
