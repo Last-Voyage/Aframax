@@ -4,24 +4,22 @@
 // Creation Date :     September 23, 2024
 //
 // Brief Description : An custom editor class for BezierCurve that allows easy
-                       editing of the bezier curve
+                       editing of the Bézier curve
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 /// <summary>
-/// Streamlines the editing of bezier curves
+/// Streamlines the editing of Bézier curves
 /// </summary>
 [CustomEditor(typeof(BezierCurve))]
 public class BezierCurveEditor : Editor
 {
-    // The total length of the bezier curve
+    // The total length of the Bézier curve
     private float _bezierLength;
 
-    // Whether or not the inspector is in debug mode
+    // Whether the inspector is in debug mode
     private bool _debugMode;
 
     // The ideal y value
@@ -34,7 +32,7 @@ public class BezierCurveEditor : Editor
     private Transform ActiveTransform => ((BezierCurve)target).GetComponent<Transform>();
 
     /// <summary>
-    /// Displays the base properties as well as buttons and info to edit the bezier curve
+    /// Displays the base properties as well as buttons and info to edit the Bézier curve
     /// </summary>
     public override void OnInspectorGUI()
     {
@@ -51,7 +49,8 @@ public class BezierCurveEditor : Editor
         {
             // Display general editor settings
             GUILayout.Label("Editor Settings", EditorStyles.boldLabel);
-            ActiveBezier.HandleSize = Mathf.Max(EditorGUILayout.FloatField("Handle Size", ActiveBezier.HandleSize), 0);
+            ActiveBezier.HandleSize = 
+                Mathf.Max(EditorGUILayout.FloatField("Handle Size", ActiveBezier.HandleSize), 0);
             
             GUILayout.Space(10);
             
@@ -59,23 +58,28 @@ public class BezierCurveEditor : Editor
             GUILayout.Label("Curve Settings", EditorStyles.boldLabel);
             GUILayout.BeginHorizontal();
             ActiveBezier.CurveIntensity = EditorGUILayout.FloatField("Intensity", ActiveBezier.CurveIntensity);
-            ActiveBezier.CurveSmoothness = Mathf.Max(EditorGUILayout.IntField("Smoothness", ActiveBezier.CurveSmoothness), 1);
+            ActiveBezier.CurveSmoothness = 
+                Mathf.Max(EditorGUILayout.IntField("Smoothness", ActiveBezier.CurveSmoothness), 1);
             GUILayout.EndHorizontal();
         }
 
         GUILayout.Space(10);
 
-        // Display curve info
-        GUILayout.Label("Bezier Points: " + ActiveBezier.BezierPoints.Length);
-        GUILayout.Label("Line Segments: " + Mathf.Max((ActiveBezier.BezierPoints.Length - 1) * ActiveBezier.CurveSmoothness, 0));
-        GUILayout.Label("Line Length: " + _bezierLength);
+        if (ActiveBezier.BezierPoints != null)
+        {
+            // Display curve info
+            GUILayout.Label("Bezier Points: " + ActiveBezier.BezierPoints.Length);
+            GUILayout.Label("Line Segments: " + Mathf.Max((ActiveBezier.BezierPoints.Length - 1) * 
+                                                          ActiveBezier.CurveSmoothness, 0));
+            GUILayout.Label("Line Length: " + _bezierLength);
+        }
 
         GUILayout.BeginHorizontal();
 
-        // Add a new point to the end of the bezier curve
+        // Add a new point to the end of the Bézier curve
         if (GUILayout.Button("Add Point"))
         {
-            // Creates a new list if there no bezier points
+            // Creates a new list if there are no bezier points
             if (ActiveBezier.BezierPoints == null)
             {
                 ActiveBezier.BezierPoints = new BezierPoint[0];
@@ -94,7 +98,8 @@ public class BezierCurveEditor : Editor
             if (ActiveBezier.BezierPoints.Length > 0)
             {
                 // Moves the new node in front of the last one, and copies its direction
-                newPoint = ActiveBezier.BezierPoints[^1].Point + ActiveBezier.BezierPoints[^1].ForwardDir.normalized * 5;
+                newPoint = 
+                    ActiveBezier.BezierPoints[^1].Point + ActiveBezier.BezierPoints[^1].ForwardDir.normalized * 5;
                 newBackDir = ActiveBezier.BezierPoints[^1].BackDir.normalized * 3;
                 newForwardDir = ActiveBezier.BezierPoints[^1].ForwardDir.normalized * 3;
             }
@@ -149,9 +154,12 @@ public class BezierCurveEditor : Editor
             // Edits all points to be at a set y value
             for (int i = 0; i < ActiveBezier.BezierPoints.Length; i++)
             {
-                ActiveBezier.BezierPoints[i].Point = new(ActiveBezier.BezierPoints[i].Point.x, _yValue, ActiveBezier.BezierPoints[i].Point.z);
-                ActiveBezier.BezierPoints[i].BackDir = new(ActiveBezier.BezierPoints[i].BackDir.x, 0, ActiveBezier.BezierPoints[i].BackDir.z);
-                ActiveBezier.BezierPoints[i].ForwardDir = new(ActiveBezier.BezierPoints[i].ForwardDir.x, 0, ActiveBezier.BezierPoints[i].ForwardDir.z);
+                ActiveBezier.BezierPoints[i].Point =
+                    new(ActiveBezier.BezierPoints[i].Point.x, _yValue, ActiveBezier.BezierPoints[i].Point.z);
+                ActiveBezier.BezierPoints[i].BackDir = 
+                    new(ActiveBezier.BezierPoints[i].BackDir.x, 0, ActiveBezier.BezierPoints[i].BackDir.z);
+                ActiveBezier.BezierPoints[i].ForwardDir = 
+                    new(ActiveBezier.BezierPoints[i].ForwardDir.x, 0, ActiveBezier.BezierPoints[i].ForwardDir.z);
             }
         }
 
@@ -159,7 +167,7 @@ public class BezierCurveEditor : Editor
     }
 
     /// <summary>
-    /// Generates the bezier curve and handles to edit it
+    /// Generates the Bézier curve and handles to edit it
     /// </summary>
     private void OnSceneGUI()
     {
@@ -199,7 +207,7 @@ public class BezierCurveEditor : Editor
     }
 
     /// <summary>
-    /// Draw the bezier curve between two points
+    /// Draw the Bézier curve between two points
     /// </summary>
     /// <param name="start">The bezier to start drawing from</param>
     /// <param name="end">The bezier to draw towards</param>
@@ -242,12 +250,16 @@ public class BezierCurveEditor : Editor
 
         // Draw the line to the backward direction as well as the backward handle
         Handles.color = Color.red;
-        bezierBackPoint = Handles.FreeMoveHandle(bezierPoint + bezier.BackDir, handleSize, Vector3.zero, Handles.DotHandleCap);
+        bezierBackPoint = 
+            Handles.FreeMoveHandle(bezierPoint + bezier.BackDir, handleSize, Vector3.zero, 
+                Handles.DotHandleCap);
         Handles.DrawLine(bezierBackPoint, bezierPoint);
 
         // Draw the line to the forward direction as well as the forward handle
         Handles.color = Color.green;
-        bezierForwardPoint = Handles.FreeMoveHandle(bezierPoint + bezier.ForwardDir, handleSize, Vector3.zero, Handles.DotHandleCap);
+        bezierForwardPoint = 
+            Handles.FreeMoveHandle(bezierPoint + bezier.ForwardDir, handleSize, Vector3.zero, 
+                Handles.DotHandleCap);
         Handles.DrawLine(bezierPoint, bezierForwardPoint);
 
         // Update the bezier's variables based on what the player moved them to

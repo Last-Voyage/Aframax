@@ -6,8 +6,8 @@
 //
 // Brief Description : Controls functionality for the spawned patrol enemy
 *****************************************************************************/
+
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -27,9 +27,9 @@ public class PatrolEnemyBehavior : MonoBehaviour
 
     [Tooltip("How long the enemy patrols before despawning")]
     [SerializeField] private float _attackDuration = 15f;
-
+    
     [Tooltip("Adds a delay before starting to patrol the room")]
-    [SerializeField] private float _timeToWaitBeforePatroling = .5f;
+    [SerializeField] private float _timeToWaitBeforePatrolling = .5f;
 
     #endregion Patrol Settings
 
@@ -37,8 +37,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// Current waypoint target of patrol enemy
     /// </summary>
     private Transform _targetPoint;
-    
-    private bool _playerInAttackRange = false;
+
+    private bool _isPlayerInAttackRange;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;
@@ -75,6 +75,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void InitializeLifetime()
     {
         _lifetime = 0.0f;
+        RoomTongueAttack.DestroyAllEnemies.AddListener(EndLifetime);
     }
 
     /// <summary>
@@ -104,14 +105,14 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void CheckPlayerInAttackRoom()
     {
-        // Attack is invalid if there is not proper room data
+        // Attack is invalid if there is no proper room data
         if(_patrolLocationData.RoomBorder1 == null || _patrolLocationData.RoomBorder2 == null)
         {
             Destroy(gameObject);
             return;
         }
 
-        _playerInAttackRange = IsPlayerInAttackRange();
+        _isPlayerInAttackRange = IsPlayerInAttackRange();
     }
 
     /// <summary>
@@ -127,12 +128,12 @@ public class PatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts patroling room going to set waypoints until detecting a player or time runs out
+    /// Starts patrolling room going to set waypoints until detecting a player or time runs out
     /// </summary>
     /// <returns></returns>
     private IEnumerator PatrolRoom()
     {
-        yield return new WaitForSeconds(_timeToWaitBeforePatroling);
+        yield return new WaitForSeconds(_timeToWaitBeforePatrolling);
 
         // Choose initial patrol point
         ChooseNextRandomPatrolPoint();
@@ -143,7 +144,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
             CheckPlayerInAttackRoom();
 
             // Only attack if player is within range
-            if(!_playerInAttackRange)
+            if(!_isPlayerInAttackRange)
             {
                 MoveToTarget();
             }
@@ -172,8 +173,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void EndLifetime()
     {
-        RoomTongueAttack.PatrolEnemyDied?.Invoke(this);
-
+        RoomTongueAttack.OnPatrolEnemyDied?.Invoke(this);
+        RoomTongueAttack.DestroyAllEnemies.RemoveListener(EndLifetime);
         // Enemy dies once lifetime has expired
         if (gameObject != null)
         {
@@ -189,7 +190,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
         // Move the GameObject towards the target point at a constant speed
         if(_targetPoint != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+            transform.position = 
+                Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
         }
     }
 
@@ -199,22 +201,17 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void MoveToPlayer()
     {
         // Move the GameObject towards the target point at a constant speed
-        transform.position = Vector3.MoveTowards(transform.position, _playerTransform.position, _seekPlayerSpeed * Time.deltaTime);
+        transform.position = 
+            Vector3.MoveTowards(transform.position, _playerTransform.position, _seekPlayerSpeed * Time.deltaTime);
     }
 
     /// <summary>
-    /// Chooses next random point for patroling enemy
+    /// Chooses next random point for paroling enemy
     /// </summary>
     private void ChooseNextRandomPatrolPoint()
     {
         // Pick a random point from the list of possible transforms
         _currentTargetIndex = Random.Range(0, _patrolLocationData.WaypointTransforms.Length);
         _targetPoint = _patrolLocationData.WaypointTransforms.ElementAt(_currentTargetIndex);
-    }
-
-    /// <returns> This enemies patrol data </returns>
-    public PatrolLocation GetPatrolLocationData()
-    {
-        return _patrolLocationData;
     }
 }
