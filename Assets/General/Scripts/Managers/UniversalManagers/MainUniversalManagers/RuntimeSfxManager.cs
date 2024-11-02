@@ -101,7 +101,7 @@ public class RuntimeSfxManager : AudioManager
     #region Footsteps
 
     /// <summary>
-    /// Initializes the foot step instance
+    /// Initializes the footstep instance
     /// </summary>
     private void InitializeFootstepInstance()
     {
@@ -114,7 +114,7 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
-    /// Plays foot steps when the player moves
+    /// Plays footsteps when the player moves
     /// </summary>
     private void PlayFootSteps()
     { 

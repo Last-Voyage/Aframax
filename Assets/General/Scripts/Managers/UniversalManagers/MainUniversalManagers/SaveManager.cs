@@ -3,17 +3,15 @@
 // Author:          Ryan Swanson
 // Creation Date:   September 14, 2024
 //
-// Description:     Contains the functionality to setup and get access to save data
+// Description:     Contains the functionality to set up and get access to save data
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 
 /// <summary>
-/// Provides the system by which the saving is setup and
+/// Provides the system by which the saving is set up and
 /// </summary>
 public class SaveManager : MainUniversalManagerFramework
 {
@@ -28,7 +26,7 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void EstablishPath()
     {
-        //Checks to see if we're in editor, if so use datapath instead of persistent datapath
+        //Checks to see if we're in editor, if so use data path instead of persistent data path
         //Needed so that saving works both in editor and build
         _path = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
         //Append /SaveData/ to said path
@@ -43,7 +41,7 @@ public class SaveManager : MainUniversalManagerFramework
     }
 
     /// <summary>
-    /// Fills the save data with it's initial values when the file is first created as needed
+    /// Fills the save data with its initial values when the file is first created as needed
     /// You could use this to populate a dictionary on start up for example
     /// For simpler variable types just set them in the Game Save Data class
     /// </summary>
@@ -55,7 +53,7 @@ public class SaveManager : MainUniversalManagerFramework
     /// <summary>
     /// Writes all variables in the Game Save Data class into Json
     /// </summary>
-    public void SaveText()
+    private void SaveText()
     {
         //Converts the Game Save Data class into a string
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
@@ -63,7 +61,10 @@ public class SaveManager : MainUniversalManagerFramework
         File.WriteAllText(_path + "Data.json", convertedJson);
     }
 
-    public void Load()
+    /// <summary>
+    /// Loads the data from a file
+    /// </summary>
+    private void Load()
     {
         //Loads all variables in Json into the Game Save Data class
         if (File.Exists(_path + "Data.json"))
@@ -82,6 +83,9 @@ public class SaveManager : MainUniversalManagerFramework
         }
     }
 
+    /// <summary>
+    /// Resets all vars in the saved data
+    /// </summary>
     public void ResetSaveData()
     {
         //Fully resets all variables in the Game Save Data
@@ -111,10 +115,6 @@ public class SaveManager : MainUniversalManagerFramework
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
     #endregion
-
-    #region Setters
-
-    #endregion
 }
 
 /// <summary>
@@ -124,16 +124,20 @@ public class SaveManager : MainUniversalManagerFramework
 [System.Serializable]
 public class GameSaveData
 {
-    public bool tempSaveBool = false;
+    public bool TempSaveBool;
 
     #region Getters
-    public bool GetTempBool() => tempSaveBool;
+    
+    public bool GetTempBool() => TempSaveBool;
+    
     #endregion
 
     #region Setters
+    
     public void SetTempBool(bool newTemp)
     {
-        tempSaveBool = newTemp;
+        TempSaveBool = newTemp;
     }
+    
     #endregion
 }

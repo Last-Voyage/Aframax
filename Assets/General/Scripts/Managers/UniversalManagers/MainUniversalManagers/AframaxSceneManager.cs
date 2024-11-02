@@ -1,5 +1,5 @@
 /******************************************************************************
-// File Name:       SceneLoadingManager.cs
+// File Name:       AframaxSceneManager.cs
 // Author:          Ryan Swanson
 // Contributor:     Jeremiah Peters
 // Creation Date:   September 15, 2024
@@ -17,7 +17,7 @@ using UnityEngine.Events;
 /// Provides the functionality for scenes to be loaded
 /// Can be accessed from the universal manager
 /// </summary>
-public class SceneLoadingManager : MainUniversalManagerFramework
+public class AframaxSceneManager : MainUniversalManagerFramework
 {
     [SerializeField] private List<SceneTransition> _sceneTransitions;
     private Coroutine _sceneLoadingCoroutine;
@@ -25,24 +25,38 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
 
     [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
+    [field: SerializeField] public int EndScreenSceneIndex { get; private set; }
 
-    public static SceneLoadingManager Instance;
+    public static AframaxSceneManager Instance;
 
     //Occurs when the currently active scene is changed
-    private UnityEvent _sceneChangedEvent = new();
-    private UnityEvent _gameplaySceneLoaded = new();
+    private readonly UnityEvent _onSceneChanged = new();
+    private readonly UnityEvent _onGameplaySceneLoaded = new();
 
-    private UnityEvent _additiveLoadAddedEvent = new();
-    private UnityEvent _additiveLoadRemovedEvent = new();
+    private readonly UnityEvent _onEndOfGameScene = new();
+
+    private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
+    private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
     protected override void SubscribeToEvents()
     {
-        _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
+        _onGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
     }
 
-    protected void SubscribeToGameplayEvents()
+    private void SubscribeToGameplayEvents()
     {
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
+    }
+
+    /// <summary>
+    /// Checks if the current scene is a game scene or auxiliary scene
+    /// </summary>
+    /// <returns> True if currently in a game scene </returns>
+    public bool IsGameScene()
+    {
+        return !(SceneManager.GetActiveScene().buildIndex == MainMenuSceneIndex ||
+               SceneManager.GetActiveScene().buildIndex == DeathScreenSceneIndex ||
+               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex);
     }
 
     /// <summary>
@@ -72,9 +86,18 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     /// <summary>
     /// This will be changed to happening through a button later, so this function is temporary
     /// </summary>
-    public void LoadDeathScreen()
+    private void LoadDeathScreen()
     {
-        StartAsyncSceneLoadViaID(SceneLoadingManager.Instance.DeathScreenSceneIndex, 0);
+        StartAsyncSceneLoadViaID(DeathScreenSceneIndex, 0);
+    }
+    
+    /// <summary>
+    /// Loads the end scene for when the player "wins"
+    /// </summary>
+    public void LoadEndScene()
+    {
+        InvokeEndOfGameScene();
+        StartAsyncSceneLoadViaID(EndScreenSceneIndex, 0);
     }
 
     /// <summary>
@@ -86,7 +109,7 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     private IEnumerator AsyncSceneLoadingProcess(int sceneID, SceneTransition sceneTransition)
     {
         //Starts loading the scene
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneID);
+        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneID);
 
         //Can start the starting scene transition animation here
         //Will be implemented when scene transition work occurs
@@ -139,46 +162,52 @@ public class SceneLoadingManager : MainUniversalManagerFramework
         Instance = this;
     }
 
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
-
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        _gameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
+        _onGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
     }
+    
     #endregion
 
     #region Events
     private void InvokeSceneChangedEvent()
     {
-        _sceneChangedEvent?.Invoke();
+        _onSceneChanged?.Invoke();
     }
 
     public void InvokeGameplaySceneLoaded()
     {
-        _gameplaySceneLoaded?.Invoke();
+        _onGameplaySceneLoaded?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadAddEvent()
     {
-        _additiveLoadAddedEvent?.Invoke();
+        _onAdditiveLoadAddedEvent?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadRemoveEvent()
     {
-        _additiveLoadRemovedEvent?.Invoke();
+        _onAdditiveLoadRemovedEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// For Boss Attacks Act System to end the game
+    /// </summary>
+    public void InvokeEndOfGameScene()
+    {
+        _onEndOfGameScene?.Invoke();
     }
 
     #endregion
 
-    #region Getters
+        #region Getters
 
-    public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
+    public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
-    public UnityEvent GetGameplaySceneLoaded => _gameplaySceneLoaded;
+    public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
+
+    public UnityEvent GetOnEndOfGameScene => _onEndOfGameScene;
 
     #endregion
 }

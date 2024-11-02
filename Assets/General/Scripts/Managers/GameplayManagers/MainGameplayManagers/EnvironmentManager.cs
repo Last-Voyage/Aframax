@@ -8,8 +8,6 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,11 +19,11 @@ public class EnvironmentManager : MainGameplayManagerFramework
 {
     public static EnvironmentManager Instance;
 
-    private UnityEvent<int[]> _onSendingOverChunks = new();
+    private readonly UnityEvent<int[]> _onSendingOverChunks = new();
 
-    private UnityEvent<GameObject[]> _onSendAllChunkObjects = new();
+    private readonly UnityEvent<GameObject[]> _onSendAllChunkObjects = new();
 
-    private UnityEvent _onChangeTheChunk = new();
+    private readonly UnityEvent _onChangeTheChunk = new();
 
     /// <summary>
     /// A function that takes in the int array representing the queue, and then it 
@@ -39,15 +37,13 @@ public class EnvironmentManager : MainGameplayManagerFramework
     }
 
     #region Base Manager
+    
     public override void SetupInstance()
     {
         base.SetupInstance();
         Instance = this;
     }
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
+
     #endregion
 
     #region Getters
@@ -56,5 +52,6 @@ public class EnvironmentManager : MainGameplayManagerFramework
     public UnityEvent<GameObject[]> GetOnSendAllChunkObjects() => _onSendAllChunkObjects;
 
     public UnityEvent GetOnChangeTheChunk() => _onChangeTheChunk;
+    
     #endregion
 }

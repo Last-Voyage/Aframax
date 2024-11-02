@@ -1,17 +1,18 @@
 /******************************************************************************
 // File Name:       IterativeChunkLoad.cs
 // Author:          Nick Rice, Alex Kalscheur
-// Contributer:     Charlie Polonus
+// Contributor:     Charlie Polonus
 // Creation Date:   September 27, 2024
 //
-// Description:     This script takes in the list of all of the chunks and the queue of chunks,
+// Description:     This script takes in the list of all the chunks and the queue of chunks,
 //                  then goes through the queue and enables + disables the necessary and unnecessary
 //                  chunks
 ******************************************************************************/
+
 using UnityEngine;
 
 /// <summary>
-/// This script takes in the list of all of the chunks and the queue of chunks, 
+/// This script takes in the list of all the chunks and the queue of chunks, 
 /// then goes through the queue and enables + disables the necessary and unnecessary chunks
 /// </summary>
 public class IterativeChunkLoad : MonoBehaviour
@@ -20,31 +21,32 @@ public class IterativeChunkLoad : MonoBehaviour
     [SerializeField]private GameObject[] _everyChunk;
 
     [Tooltip("The queue of in-scene chunks")]
-    private GameObject[] _usedChunks = new GameObject[4];
+    private readonly GameObject[] _usedChunks = new GameObject[4];
 
     #region Pointers
     [Tooltip("Selects the next chunk in the queue")]
-    private int _chunkQueuePtrPtr = 0;
+    private int _chunkQueuePtrPtr;
 
     [Tooltip("Queue of pointers for chunk order")]
     private int[] _chunkQueuePtr = new int[0];
 
     // Pointers for where the chunks are in the every chunk array
-    // This is necessary to put chunks back into the unused chunk landing area
+    // This is necessary to put chunks Back into the unused chunk landing area
     private int _newFrontChunkPtr;
     private int _frontChunkPtr;
     private int _middleChunkPtr;
     private int _backChunkPtr;
 
-    [Tooltip("Keeps track of which chunk get's removed next")]
+    [Tooltip("Keeps track of which chunk get removed next")]
     private enum ChunkStates
     {
-        newFront, front, middle, back
+        NewFront, Front, Middle, Back
     }
+    
     #endregion
 
     [Tooltip("The starting position for placing unused chunks")] // Currently just 0,0,0
-    private Vector3 _unusedChunkLandingArea = Vector3.zero;
+    private readonly Vector3 _unusedChunkLandingArea = Vector3.zero;
 
     [Tooltip("Size of chunks. Used to for placing new chunk properly distanced.")]
     [SerializeField] private float _distanceBetweenChunks;
@@ -58,6 +60,7 @@ public class IterativeChunkLoad : MonoBehaviour
     public float DistanceBetweenChunks => _distanceBetweenChunks;
 
     #region GrabbingChunksFromOtherScripts
+    
     /// <summary>
     /// Make sure the enviro manager is in the scene for testing
     /// ~ Gameplay manager and universal manager
@@ -71,11 +74,11 @@ public class IterativeChunkLoad : MonoBehaviour
         _boatMover = GetComponent<BoatMover>();
 
         // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
-        _usedChunks[(int)ChunkStates.back] = _everyChunk[_chunkQueuePtrPtr++];
-        _usedChunks[(int)ChunkStates.middle] = _everyChunk[_chunkQueuePtrPtr++];
-        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<BezierCurve>());
-        _usedChunks[(int)ChunkStates.front] = _everyChunk[_chunkQueuePtrPtr++];
-        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<BezierCurve>());
+        _usedChunks[(int)ChunkStates.Back] = _everyChunk[_chunkQueuePtrPtr++];
+        _usedChunks[(int)ChunkStates.Middle] = _everyChunk[_chunkQueuePtrPtr++];
+        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.Middle].GetComponentInChildren<BezierCurve>());
+        _usedChunks[(int)ChunkStates.Front] = _everyChunk[_chunkQueuePtrPtr++];
+        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.Front].GetComponentInChildren<BezierCurve>());
     }
 
     /// <summary>
@@ -114,10 +117,11 @@ public class IterativeChunkLoad : MonoBehaviour
     {
         _distanceBetweenChunks = distance;
     }
+    
     #endregion
 
     /// <summary>
-    /// That way, I don't have to keep track of other nonsense!
+    /// Adds a chunk and removes chunks
     /// </summary>
     private void ChunkChange()
     {
@@ -127,19 +131,18 @@ public class IterativeChunkLoad : MonoBehaviour
         }
 
         AddChunk();
-
-        // PLACE HOLDER LINE - Put a function here that would cleanup anything that happened in the back chunk
-
+        
         SendChunksAway();
         SwapChunkStates();
     }
 
     #region FunctionsForChunkChange
+    
     /// <summary>
-    /// Get's the front chunk pointer 
-    /// Tick's up the pointer pointer to the next queue item for the next usage
-    /// Moves the chunk to the front
-    /// Set's the frontmost chunk active
+    /// Get the Front chunk pointer 
+    /// Tick's up the pointer to the next queue item for the next usage
+    /// Moves the chunk to the Front
+    /// Set's the front-most chunk active
     /// Adds chunk to the in scene chunk array
     /// </summary>
     private void AddChunk()
@@ -149,42 +152,43 @@ public class IterativeChunkLoad : MonoBehaviour
         _chunkQueuePtrPtr = (_chunkQueuePtrPtr + 1) % _chunkQueuePtr.Length;
 
         _everyChunk[_newFrontChunkPtr].transform.position =
-            _usedChunks[(int)ChunkStates.front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_distanceBetweenChunks);
+            _usedChunks[(int)ChunkStates.Front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_distanceBetweenChunks);
 
         _everyChunk[_newFrontChunkPtr].SetActive(true);
 
-        _usedChunks[(int)ChunkStates.newFront] = _everyChunk[_newFrontChunkPtr];
+        _usedChunks[(int)ChunkStates.NewFront] = _everyChunk[_newFrontChunkPtr];
     }
 
     /// <summary>
-    /// Disables the back chunk
-    /// And teleport's it away to the unused chunk area
+    /// Disables the Back chunk
+    /// And teleports it away to the unused chunk area
     /// </summary>
     private void SendChunksAway()
     {
-        _usedChunks[(int)ChunkStates.back].SetActive(false); // If causing errors, put at the bottom of the function
+        _usedChunks[(int)ChunkStates.Back].SetActive(false); // If causing errors, put at the bottom of the function
 
-        _usedChunks[(int)ChunkStates.back].transform.position =
+        _usedChunks[(int)ChunkStates.Back].transform.position =
             _unusedChunkLandingArea + new Vector3(_distanceBetweenChunks * _backChunkPtr, 0, 0);
     }
 
     /// <summary>
-    /// Swaps all of the chunks to be in the new order they are in
+    /// Swaps all the chunks to be in the new order they are in
     /// This ordering prevents any loss of data
     /// </summary>
     private void SwapChunkStates()
     {
-        _usedChunks[(int)ChunkStates.back] = _usedChunks[(int)ChunkStates.middle];
+        _usedChunks[(int)ChunkStates.Back] = _usedChunks[(int)ChunkStates.Middle];
         _backChunkPtr = _middleChunkPtr;
-        _usedChunks[(int)ChunkStates.middle] = _usedChunks[(int)ChunkStates.front];
-        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.middle].GetComponentInChildren<BezierCurve>());
+        _usedChunks[(int)ChunkStates.Middle] = _usedChunks[(int)ChunkStates.Front];
+        _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.Middle].GetComponentInChildren<BezierCurve>());
 
         _middleChunkPtr = _frontChunkPtr;
-        _usedChunks[(int)ChunkStates.front] = _usedChunks[(int)ChunkStates.newFront];
-        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.front].GetComponentInChildren<BezierCurve>());
+        _usedChunks[(int)ChunkStates.Front] = _usedChunks[(int)ChunkStates.NewFront];
+        _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.Front].GetComponentInChildren<BezierCurve>());
         _frontChunkPtr = _newFrontChunkPtr;
         _newFrontChunkPtr = 0; // This ptr is freed until a new chunk is going to be added
     }
+    
     #endregion
 }
 
