@@ -33,6 +33,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private readonly UnityEvent _onSceneChanged = new();
     private readonly UnityEvent _onGameplaySceneLoaded = new();
 
+    private readonly UnityEvent _onEndOfGameScene = new();
+
     private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
     private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
@@ -180,13 +182,23 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         _onAdditiveLoadRemovedEvent?.Invoke();
     }
 
+    /// <summary>
+    /// For Boss Attacks Act System to end the game
+    /// </summary>
+    public void InvokeEndOfGameScene()
+    {
+        _onEndOfGameScene?.Invoke();
+    }
+
     #endregion
 
-    #region Getters
+        #region Getters
 
     public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
     public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
+
+    public UnityEvent GetOnEndOfGameScene => _onEndOfGameScene;
 
     #endregion
 }

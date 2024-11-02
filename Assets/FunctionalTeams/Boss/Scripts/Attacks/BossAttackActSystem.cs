@@ -145,6 +145,7 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+
     /// <summary>
     /// just for testing
     /// </summary>
@@ -157,6 +158,7 @@ public class BossAttackActSystem : MonoBehaviour
             BeginAct();
         }
     }
+    
 #endif
 
     #region Act Functions
@@ -205,14 +207,16 @@ public class BossAttackActSystem : MonoBehaviour
         // Boss fight is over if all acts have been completed
         if (_currentActNum == _bossFightActs.Length)
         {
-            //  TODO: End Game Here, Replace debug
-            Debug.Log("Act ended");
+            SceneLoadingManager.Instance.InvokeEndOfGameScene();
+            SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
+
             return;
         }
 
         _currentAct = _bossFightActs[_currentActNum];
 
         BeginAct();
+        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeActEndEvent();
     }
 
@@ -275,6 +279,7 @@ public class BossAttackActSystem : MonoBehaviour
         _currentScene = _currentAct.Scenes[_currentSceneNum];
         // Begin next scene
         BeginScene();
+        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeSceneEndEvent();
     }
 
@@ -367,7 +372,7 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _onSceneEnd?.Invoke();
     }
-
+    
     #endregion
 
     #region Getters
