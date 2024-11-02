@@ -30,18 +30,18 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     public static AframaxSceneManager Instance;
 
     //Occurs when the currently active scene is changed
-    private UnityEvent _sceneChangedEvent = new();
-    private UnityEvent _gameplaySceneLoaded = new();
+    private readonly UnityEvent _onSceneChanged = new();
+    private readonly UnityEvent _onGameplaySceneLoaded = new();
 
-    private UnityEvent _additiveLoadAddedEvent = new();
-    private UnityEvent _additiveLoadRemovedEvent = new();
+    private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
+    private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
     protected override void SubscribeToEvents()
     {
-        _gameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
+        _onGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
     }
 
-    protected void SubscribeToGameplayEvents()
+    private void SubscribeToGameplayEvents()
     {
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
@@ -84,7 +84,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// This will be changed to happening through a button later, so this function is temporary
     /// </summary>
-    public void LoadDeathScreen()
+    private void LoadDeathScreen()
     {
         StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.DeathScreenSceneIndex, 0);
     }
@@ -128,7 +128,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <param name="sceneID">The specific scene in the build index to add</param>
     private void AdditiveLoadScene(int sceneID)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
+        SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
         InvokeSceneAdditiveLoadAddEvent();
     }
@@ -139,7 +139,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <param name="sceneID">The specific scene in the build index to remove</param>
     private void RemoveAdditiveLoadedScene(int sceneID)
     {
-        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneID);
+        SceneManager.UnloadSceneAsync(sceneID);
 
         InvokeSceneAdditiveLoadRemoveEvent();
     }
@@ -151,46 +151,42 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         Instance = this;
     }
 
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
-
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        _gameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
+        _onGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
     }
+    
     #endregion
 
     #region Events
     private void InvokeSceneChangedEvent()
     {
-        _sceneChangedEvent?.Invoke();
+        _onSceneChanged?.Invoke();
     }
 
     public void InvokeGameplaySceneLoaded()
     {
-        _gameplaySceneLoaded?.Invoke();
+        _onGameplaySceneLoaded?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadAddEvent()
     {
-        _additiveLoadAddedEvent?.Invoke();
+        _onAdditiveLoadAddedEvent?.Invoke();
     }
 
     private void InvokeSceneAdditiveLoadRemoveEvent()
     {
-        _additiveLoadRemovedEvent?.Invoke();
+        _onAdditiveLoadRemovedEvent?.Invoke();
     }
 
     #endregion
 
     #region Getters
 
-    public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
+    public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
-    public UnityEvent GetGameplaySceneLoaded => _gameplaySceneLoaded;
+    public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
 
     #endregion
 }
