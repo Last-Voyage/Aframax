@@ -279,6 +279,7 @@ public class BossAttackActSystem : MonoBehaviour
         _currentScene = _currentAct.Scenes[_currentSceneNum];
         // Begin next scene
         BeginScene();
+        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeSceneEndEvent();
     }
 
