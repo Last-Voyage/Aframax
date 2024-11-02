@@ -32,6 +32,8 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     private UnityEvent _sceneChangedEvent = new();
     private UnityEvent _gameplaySceneLoaded = new();
 
+    private UnityEvent _endOfGameScene = new();
+
     private UnityEvent _additiveLoadAddedEvent = new();
     private UnityEvent _additiveLoadRemovedEvent = new();
 
@@ -171,13 +173,19 @@ public class SceneLoadingManager : MainUniversalManagerFramework
     {
         _additiveLoadRemovedEvent?.Invoke();
     }
-
+    /// <summary>
+    /// For Boss Attacks Act System to end the game
+    /// </summary>
+    public void InvokeEndOfGameScene()
+    {
+        _endOfGameScene?.Invoke();
+    }
     #endregion
 
     #region Getters
 
     public UnityEvent GetSceneChangedEvent => _sceneChangedEvent;
-
+    public UnityEvent GetEndOfGameScene => _endOfGameScene;
     public UnityEvent GetGameplaySceneLoaded => _gameplaySceneLoaded;
 
     #endregion
