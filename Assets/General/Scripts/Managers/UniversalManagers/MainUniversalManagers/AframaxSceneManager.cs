@@ -30,6 +30,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     public static AframaxSceneManager Instance;
 
     //Occurs when the currently active scene is changed
+    private readonly UnityEvent _onBeforeSceneChange = new();
     private readonly UnityEvent _onSceneChanged = new();
     private readonly UnityEvent _onGameplaySceneLoaded = new();
 
@@ -108,11 +109,14 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <returns></returns>
     private IEnumerator AsyncSceneLoadingProcess(int sceneID, SceneTransition sceneTransition)
     {
+        InvokeOnBeforeSceneChangeEvent();
+
         //Starts loading the scene
         AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneID);
 
         //Can start the starting scene transition animation here
         //Will be implemented when scene transition work occurs
+        
 
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
@@ -167,10 +171,15 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         base.OnDestroy();
         _onGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
     }
-    
+
     #endregion
 
     #region Events
+    private void InvokeOnBeforeSceneChangeEvent()
+    {
+        _onBeforeSceneChange?.Invoke();
+    }
+
     private void InvokeSceneChangedEvent()
     {
         _onSceneChanged?.Invoke();
@@ -202,6 +211,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     #endregion
 
         #region Getters
+
+    public UnityEvent GetOnBeforeSceneChanged => _onBeforeSceneChange;
 
     public UnityEvent GetOnSceneChanged => _onSceneChanged;
 

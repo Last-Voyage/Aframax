@@ -47,6 +47,14 @@ public class VfxManager : MainUniversalManagerFramework
         }
     }
 
+    private void ReclaimAllVFXBeforeSceneChange()
+    {
+        foreach (SpecificVisualEffect vfx in _allVfxInGame)
+        {
+            vfx.MoveAllVfxBackToPool();
+        }
+    }
+
     /// <summary>
     /// Spawns the vfx to be added to the pool
     /// SpecificVisualEffects cannot do this as it isn't a monobehavior
@@ -78,47 +86,6 @@ public class VfxManager : MainUniversalManagerFramework
         StartCoroutine(specificVisualEffect.MoveObjectBackToPool(vfxObj.gameObject));
     }
 
-    /// <summary>
-    /// Plays a vfx at a location
-    /// </summary>
-    /// <param name="visualEffect">The visual effect to play</param>
-    /// <param name="location">The location to play it at</param>
-    public void PlayVFXAtPoint(SpecificVisualEffect visualEffect, Vector3 location)
-    {
-        visualEffect.PlayNextVfxInPool(location, Quaternion.identity);
-    }
-
-    /// <summary>
-    /// Plays a vfx at a location with rotation
-    /// </summary>
-    /// <param name="visualEffect">The visual effect to play</param>
-    /// <param name="location"></param>
-    public void PlayVFXAtPoint(SpecificVisualEffect visualEffect, Vector3 location, Quaternion rotation)
-    {
-        visualEffect.PlayNextVfxInPool(location,rotation);
-    }
-
-    /// <summary>
-    /// Plays a vfx as a child of a specific object
-    /// </summary>
-    /// <param name="visualEffect"></param>
-    /// <param name="parent"></param>
-    public void PlayVFXChilded(SpecificVisualEffect visualEffect, Transform parent)
-    {
-        visualEffect.PlayNextVfxInPool(parent, Quaternion.identity);
-    }
-
-    /// <summary>
-    /// plays a vfx as a child of a specific object with rotation
-    /// </summary>
-    /// <param name="visualEffect"></param>
-    /// <param name="parent"></param>
-    /// <param name="Rotation"></param>
-    public void PlayVFXChilded(SpecificVisualEffect visualEffect, Transform parent, Quaternion rotation)
-    {
-        visualEffect.PlayNextVfxInPool(parent, rotation);
-    }
-
     #region Base Manager
     /// <summary>
     /// Establishes the instance of VfxManager
@@ -136,6 +103,18 @@ public class VfxManager : MainUniversalManagerFramework
     {
         base.SetupMainManager();
         SetUpAllVfxInGame();
+    }
+
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(ReclaimAllVFXBeforeSceneChange);
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.RemoveListener(ReclaimAllVFXBeforeSceneChange);
     }
     #endregion
 
@@ -264,10 +243,11 @@ public class SpecificVisualEffect
     /// </summary>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public GeneralVfxFunctionality PlayNextVfxInPool(Transform parent, Quaternion rotation)
+    public GeneralVfxFunctionality PlayNextVfxInPool(Transform parent, Vector3 location, Quaternion rotation)
     {
-        GeneralVfxFunctionality currentVfx = PlayNextVfxInPool(parent.position,rotation);
+        GeneralVfxFunctionality currentVfx = PlayNextVfxInPool(location,rotation);
         currentVfx.gameObject.transform.SetParent(parent);
+        currentVfx.transform.position = location;
         
         return currentVfx;
     }
@@ -282,6 +262,14 @@ public class SpecificVisualEffect
         yield return new WaitForSeconds(_particleDuration);
         HideVfx(vfxObject);
         ObjectPoolingParent.Instance.AddObjectAsChild(vfxObject);
+    }
+
+    public void MoveAllVfxBackToPool()
+    {
+        foreach(GeneralVfxFunctionality vfx in _vfxPool)
+        {
+            ObjectPoolingParent.Instance.AddObjectAsChild(vfx.gameObject);
+        }
     }
 
     /// <summary>
