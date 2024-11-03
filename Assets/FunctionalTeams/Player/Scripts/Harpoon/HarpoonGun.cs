@@ -232,7 +232,8 @@ public class HarpoonGun : MonoBehaviour
         // Start moving the harpoon
         StartCoroutine(HarpoonFireProcess(currentHarpoon));
 
-        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform, 
+            transform.position, transform.rotation);
 
         ResetFocus();
 

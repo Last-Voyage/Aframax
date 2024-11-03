@@ -23,6 +23,8 @@ public class UniversalManagers : CoreManagersFramework
     private MainUniversalManagerFramework[] _allMainManagers;
     public static UniversalManagers Instance;
 
+    private ObjectPoolingParent _objectPoolingParent;
+
     /// <summary>
     /// Sets up the singleton
     /// </summary>
@@ -78,7 +80,8 @@ public class UniversalManagers : CoreManagersFramework
     /// </summary>
     private void SetupObjectPoolingParent()
     {
-        FindObjectOfType<ObjectPoolingParent>().SetupInstance();
+        _objectPoolingParent = FindObjectOfType<ObjectPoolingParent>();
+        _objectPoolingParent.SetupInstance();
     }
 
     #region Getters
