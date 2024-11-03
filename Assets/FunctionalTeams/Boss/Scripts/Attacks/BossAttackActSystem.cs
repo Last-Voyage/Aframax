@@ -4,11 +4,10 @@
 // Contributor:        Andrea Swihart-DeCoster, Nick Rice
 // Creation Date :     10/22/2024
 //
-// Brief Description : The system to manage what act the boss is on and also switch between them along with which attack comes out
+// Brief Description : The system to manage what act the boss is on and also switch between them along with which attack
+//                     comes out
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -20,7 +19,19 @@ using UnityEngine.InputSystem;
 public struct Act
 {
     [field: Tooltip("Scenes within the act")]
-    [field: SerializeField] public ActScene[] Scenes { get; private set; }
+    [field: SerializeField]
+    public ActScene[] Scenes { get; private set; }
+
+    public bool HasActBegun { get; private set; }
+
+    /// <summary>
+    /// Scene should only begin once. This is set to true when the act begins.
+    /// </summary>
+    /// <param name="hasActBegun"></param>
+    public void SetHasActBegun(bool hasActBegun)
+    {
+        HasActBegun = hasActBegun;
+    }
 }
 
 /// <summary>
@@ -30,7 +41,19 @@ public struct Act
 public struct ActScene
 {
     [field: Tooltip("Attacks within the Act")]
-    [field: SerializeField] public BaseBossAttack[] SceneAttacks { get; private set; }
+    [field: SerializeField]
+    public BaseBossAttack[] SceneAttacks { get; private set; }
+
+    public bool HasSceneBegun {  get; private set; }
+
+    /// <summary>
+    /// Scene should only begin once. This is set to true when the scene begins.
+    /// </summary>
+    /// <param name="hasSceneBegun"></param>
+    public void SetHasSceneBegun(bool hasSceneBegun)
+    {
+        HasSceneBegun = hasSceneBegun;
+    }
 }
 
 /// <summary>
@@ -42,23 +65,23 @@ public class BossAttackActSystem : MonoBehaviour
 
     #region Act Variables
 
-    [Tooltip("Acts within the boss fight")]
-    [SerializeField] private Act[] _bossFightActs;
+    [Tooltip("Acts within the boss fight")] [SerializeField]
+    private Act[] _bossFightActs;
 
     /// <summary>
     /// Current act position in array
     /// </summary>
     private int _currentActNum;
+
     /// <summary>
     /// Current act ref
     /// </summary>
     private Act _currentAct;
 
     [Tooltip("Invoked when an act begins")]
-    private UnityEvent _onActBegin = new();
+    private readonly UnityEvent _onActBegin = new();
 
-    [Tooltip("Invoked when an act ends")]
-    private UnityEvent _onActEnd = new();
+    [Tooltip("Invoked when an act ends")] private readonly UnityEvent _onActEnd = new();
 
     #endregion Act Variables
 
@@ -68,28 +91,27 @@ public class BossAttackActSystem : MonoBehaviour
     /// Current scene position in arr
     /// </summary>
     private int _currentSceneNum;
+
     /// <summary>
     /// Current scene ref
     /// </summary>
     private ActScene _currentScene;
 
-    [Tooltip("# of attacks completed")]
-    protected private int _attackCounter = 0;
+    [Tooltip("# of attacks completed")] private int _attackCounter;
 
     [Tooltip("Invoked when a scene begins")]
-    private UnityEvent _onSceneBegin = new();
+    private readonly UnityEvent _onSceneBegin = new();
 
-    [Tooltip("Invoked when a scene ends")]
-    private UnityEvent _onSceneEnd = new();
+    [Tooltip("Invoked when a scene ends")] private readonly UnityEvent _onSceneEnd = new();
 
     [Tooltip("Invoked when an attack ends")]
-    private UnityEvent _onAttackCompleted = new();
+    private readonly UnityEvent _onAttackCompleted = new();
 
     #endregion
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -111,7 +133,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        //GetOnActBegin().AddListener(BeginAct);
+        GameStateManager.Instance.GetOnCompletedEntireTutorial().AddListener(BeginAct);
     }
 
     /// <summary>
@@ -119,22 +141,24 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        //GetOnActBegin().RemoveListener(BeginAct);
+        GameStateManager.Instance.GetOnCompletedEntireTutorial().RemoveListener(BeginAct);
     }
 
 #if UNITY_EDITOR
+
     /// <summary>
     /// just for testing
     /// </summary>
     private void Update()
     {
-        // Test the begin interior attack until act system is properly connected to the start of the game / end
+        // Test begin interior attack until act system is properly connected to the start of the game / end
         // of tutorial
         if (Keyboard.current.spaceKey.wasPressedThisFrame && !TimeManager.Instance.GetIsGamePaused())
         {
             BeginAct();
         }
     }
+    
 #endif
 
     #region Act Functions
@@ -153,13 +177,23 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void BeginAct()
     {
+        GameStateManager.Instance.GetOnCompletedEntireTutorial().RemoveListener(BeginAct);
+        // Scene should only begin once
+        if (_currentAct.HasActBegun)
+        {
+            return;
+        }
+
         ResetSceneVariables();
         BeginScene();
         InvokeBeginActEvent();
+
+        _currentAct.SetHasActBegun(true);
+        _currentActNum++;
     }
 
     /// <summary>
-    /// Returns whether or not the act is complete
+    /// Whether the act is complete
     /// </summary>
     private bool IsActCompleted()
     {
@@ -171,19 +205,17 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void CompleteAct()
     {
-        _currentActNum++;
-
         // Boss fight is over if all acts have been completed
-        if(_currentActNum == _bossFightActs.Length)
+        if (_currentActNum == _bossFightActs.Length)
         {
-            //  TODO: End Game Here, Replace debug
-            Debug.Log("Act ended");
+            AframaxSceneManager.Instance.LoadEndScene();
             return;
         }
 
         _currentAct = _bossFightActs[_currentActNum];
 
         BeginAct();
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(3, 0);
         InvokeActEndEvent();
     }
 
@@ -198,9 +230,31 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _currentSceneNum = 0;
     }
+    
+    /// <summary>
+    /// Begins the next scene in the act
+    /// </summary>
+    private void BeginScene()
+    {
+        // Scene should only begin once
+        if(_currentScene.HasSceneBegun)
+        {
+            return;
+        }
+
+        InitializeSceneAttackListeners();
+
+        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
+        {
+            baseBossAttack.InvokeAttackBegin();
+        }
+        InvokeBeginSceneEvent();
+        _currentScene.SetHasSceneBegun(true);
+        _currentSceneNum++;
+    }
 
     /// <summary>
-    /// Returns whether or not the scene is complete
+    /// Whether the scene is complete
     /// </summary>
     private bool IsSceneCompleted()
     {
@@ -212,8 +266,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void CompleteScene()
     {
-        _currentSceneNum++;
-
         RemoveActAttackListeners();
 
         // Progresses to the next act if all scenes are completed
@@ -238,19 +290,6 @@ public class BossAttackActSystem : MonoBehaviour
         _currentScene = _currentAct.Scenes[_currentSceneNum];
     }
 
-    /// <summary>
-    /// Begins the next scene in the act
-    /// </summary>
-    private void BeginScene()
-    {
-        InitializeSceneAttackListeners();
-
-        foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
-        {
-            baseBossAttack.InvokeAttackBegin();
-        }
-    }
-
     #endregion
 
     #region Attack Functions
@@ -271,8 +310,6 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     private void RemoveActAttackListeners()
     {
-        Act act = _bossFightActs[_currentActNum];
-
         foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
         {
             baseBossAttack.GetAttackEndEvent().RemoveListener(AttackHasEnded);
@@ -288,7 +325,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         _attackCounter++;
 
-        if(IsSceneCompleted())
+        if (IsSceneCompleted())
         {
             CompleteScene();
         }
@@ -333,7 +370,7 @@ public class BossAttackActSystem : MonoBehaviour
     {
         _onSceneEnd?.Invoke();
     }
-
+    
     #endregion
 
     #region Getters

@@ -149,7 +149,7 @@ public class TutorialPopUps : MonoBehaviour
         }
         else
         {
-            BossAttackActSystem.Instance.GetOnActBegin()?.Invoke();
+            GameStateManager.Instance.GetOnCompletedEntireTutorial()?.Invoke();
             _textContainer.text = "";
         }
     }
@@ -159,7 +159,7 @@ public class TutorialPopUps : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GameStateManager.Instance.GetOnCompletedTutorial().AddListener(NextTutorial);
+        GameStateManager.Instance.GetOnCompletedTutorialSection().AddListener(NextTutorial);
 
         _shootTutorialObject = GameObject.Find("TutorialShootObject");
         _walkTutorialObject = GameObject.Find("TutorialWalkObject");
@@ -174,6 +174,6 @@ public class TutorialPopUps : MonoBehaviour
     private void OnDisable()
     {
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(NextTutorial);
-        GameStateManager.Instance.GetOnCompletedTutorial().RemoveListener(NextTutorial);
+        GameStateManager.Instance.GetOnCompletedTutorialSection().RemoveListener(NextTutorial);
     }
 }
