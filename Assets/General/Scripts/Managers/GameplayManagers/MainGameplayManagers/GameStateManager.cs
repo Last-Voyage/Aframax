@@ -20,7 +20,9 @@ public class GameStateManager : MainGameplayManagerFramework
 
     public static GameStateManager Instance;
 
-    private readonly UnityEvent _onCompletedTutorial = new();
+    private readonly UnityEvent _onCompletedTutorialSection = new();
+
+    private readonly UnityEvent _onCompletedEntireTutorial = new();
 
     /// <summary>
     /// Switches gameplay state 
@@ -43,7 +45,9 @@ public class GameStateManager : MainGameplayManagerFramework
 
     #region Getters
 
-    public UnityEvent GetOnCompletedTutorial() => _onCompletedTutorial;
+    public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
+
+    public UnityEvent GetOnCompletedEntireTutorial() => _onCompletedEntireTutorial;
 
     #endregion
 }
