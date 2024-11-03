@@ -47,6 +47,9 @@ public class VfxManager : MainUniversalManagerFramework
         }
     }
 
+    /// <summary>
+    /// Reclaims all vfx from all vfx in game back into the game
+    /// </summary>
     private void ReclaimAllVFXBeforeSceneChange()
     {
         foreach (SpecificVisualEffect vfx in _allVfxInGame)
@@ -264,6 +267,9 @@ public class SpecificVisualEffect
         ObjectPoolingParent.Instance.AddObjectAsChild(vfxObject);
     }
 
+    /// <summary>
+    /// Moves all vfx back to being in the object pool
+    /// </summary>
     public void MoveAllVfxBackToPool()
     {
         foreach(GeneralVfxFunctionality vfx in _vfxPool)
