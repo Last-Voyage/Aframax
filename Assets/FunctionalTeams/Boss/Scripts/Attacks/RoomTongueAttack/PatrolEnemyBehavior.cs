@@ -38,7 +38,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private Transform _targetPoint;
     
-    private bool _playerInAttackRange = false;
+    private bool _isPlayerInAttackRange = false;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;
@@ -56,6 +56,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void Start() 
     {
+        SubscribeToEvents();
+        CheckPlayerAlreadyInRoom();
         BeginPatrolling();
         InitializeLifetime();
         InitializePlayerTransform();
@@ -75,6 +77,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void InitializeLifetime()
     {
         _lifetime = 0.0f;
+        RoomTongueAttack.DestroyAllEnemies.AddListener(EndLifetime);
     }
 
     /// <summary>
@@ -88,6 +91,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void OnDestroy()
     {
         StopCoroutine(_patrolCoroutine);
+        UnsubscribeToEvents();
     }
 
     /// <summary>
@@ -100,30 +104,30 @@ public class PatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if player is within the range to be attacked
+    /// Listens for room event of player entering room
     /// </summary>
-    private void CheckPlayerInAttackRoom()
+    private void PlayerEnteredRoom()
     {
-        // Attack is invalid if there is not proper room data
-        if(_patrolLocationData.RoomBorder1 == null || _patrolLocationData.RoomBorder2 == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _playerInAttackRange = IsPlayerInAttackRange();
+        _isPlayerInAttackRange = true;
     }
 
     /// <summary>
-    /// Checks if player is within bounds of the room to be attacked
+    /// Listens for room event of player leaving room
     /// </summary>
-    /// <returns> T if player is within attack range </returns>
-    private bool IsPlayerInAttackRange()
+    private void PlayerExitedRoom()
     {
-        return (_playerTransform.position.x > _patrolLocationData.RoomBorder1.position.x)
-            && (_playerTransform.position.x < _patrolLocationData.RoomBorder2.position.x)
-            && (_playerTransform.position.z > _patrolLocationData.RoomBorder1.position.z)
-            && (_playerTransform.position.z < _patrolLocationData.RoomBorder2.position.z);
+        _isPlayerInAttackRange = false;
+    }
+
+    /// <summary>
+    /// Checks if the player entered the room before the enemy spawned
+    /// </summary>
+    private void CheckPlayerAlreadyInRoom()
+    {
+        if (_patrolLocationData.EnemyRoom.IsPlayerInRoom())
+        {
+            PlayerEnteredRoom();
+        }
     }
 
     /// <summary>
@@ -140,10 +144,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
         // Controls enemy movement as long as it's alive
         while(gameObject != null && _lifetime < _attackDuration)
         {
-            CheckPlayerInAttackRoom();
-
             // Only attack if player is within range
-            if(!_playerInAttackRange)
+            if(!_isPlayerInAttackRange)
             {
                 MoveToTarget();
             }
@@ -172,8 +174,8 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void EndLifetime()
     {
-        RoomTongueAttack.PatrolEnemyDied?.Invoke(this);
-
+        RoomTongueAttack.OnPatrolEnemyDied?.Invoke(this);
+        RoomTongueAttack.DestroyAllEnemies.RemoveListener(EndLifetime);
         // Enemy dies once lifetime has expired
         if (gameObject != null)
         {
@@ -216,5 +218,23 @@ public class PatrolEnemyBehavior : MonoBehaviour
     public PatrolLocation GetPatrolLocationData()
     {
         return _patrolLocationData;
+    }
+
+    /// <summary>
+    /// Subscribes to the room event
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().AddListener(PlayerExitedRoom);
+    }
+
+    /// <summary>
+    /// Unsubscribes to the room event
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
+        _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().RemoveListener(PlayerExitedRoom);
     }
 }

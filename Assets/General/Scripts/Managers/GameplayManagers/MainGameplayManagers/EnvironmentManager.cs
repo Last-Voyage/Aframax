@@ -1,14 +1,13 @@
 /******************************************************************************
 // File Name:       EnvironmentManager.cs
 // Author:          Ryan Swanson
+// Contributor:     Nick Rice
 // Creation Date:   September 15, 2024
 //
-// Description:     Provides the functionality behind the way the environment interects with other elements
+// Description:     Provides the functionality behind the way the environment interacts with other elements
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,11 +19,11 @@ public class EnvironmentManager : MainGameplayManagerFramework
 {
     public static EnvironmentManager Instance;
 
-    private UnityEvent<int[]> _sendingOverChunks = new();
+    private readonly UnityEvent<int[]> _onSendingOverChunks = new();
 
-    private UnityEvent<GameObject[]> _allChunkObjects = new();
+    private readonly UnityEvent<GameObject[]> _onSendAllChunkObjects = new();
 
-    private UnityEvent _changeTheChunk = new();
+    private readonly UnityEvent _onChangeTheChunk = new();
 
     /// <summary>
     /// A function that takes in the int array representing the queue, and then it 
@@ -34,26 +33,25 @@ public class EnvironmentManager : MainGameplayManagerFramework
     /// <param name="theQueue">The int array representing the queue of chunks</param>
     public void SendOutChunks(int[] theQueue)
     {
-        GetSendingOverChunks()?.Invoke(theQueue);
+        GetOnSendingOverChunks()?.Invoke(theQueue);
     }
 
     #region Base Manager
+    
     public override void SetupInstance()
     {
         base.SetupInstance();
         Instance = this;
     }
-    public override void SetupMainManager()
-    {
-        base.SetupMainManager();
-    }
+
     #endregion
 
     #region Getters
-    public UnityEvent<int[]> GetSendingOverChunks() => _sendingOverChunks;
+    public UnityEvent<int[]> GetOnSendingOverChunks() => _onSendingOverChunks;
 
-    public UnityEvent<GameObject[]> GetAllChunkObjects() => _allChunkObjects;
+    public UnityEvent<GameObject[]> GetOnSendAllChunkObjects() => _onSendAllChunkObjects;
 
-    public UnityEvent SendChangeTheChunk() => _changeTheChunk;
+    public UnityEvent GetOnChangeTheChunk() => _onChangeTheChunk;
+    
     #endregion
 }

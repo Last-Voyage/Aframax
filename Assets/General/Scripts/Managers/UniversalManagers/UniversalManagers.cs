@@ -19,11 +19,11 @@ public class UniversalManagers : CoreManagersFramework
 {
     /// <summary>
     /// Contains all managers to setup. Order of managers is order of setup.
-    /// Order shouldn't technically matter but just in case
     /// </summary>
-    [SerializeField] private List<MainUniversalManagerFramework> _allMainManagers;
-
+    private MainUniversalManagerFramework[] _allMainManagers;
     public static UniversalManagers Instance;
+
+    private ObjectPoolingParent _objectPoolingParent;
 
     /// <summary>
     /// Sets up the singleton
@@ -36,11 +36,21 @@ public class UniversalManagers : CoreManagersFramework
         {
             //This is the new singleton
             Instance = this;
+            // Parent needs to be removed at runtime in order for DontDestroyOnLoad to work
+            transform.parent = null;
             //Don't destroy
             DontDestroyOnLoad(gameObject);
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets all managers that fall under universal managers
+    /// </summary>
+    protected override void GetAllManagers()
+    {
+        _allMainManagers = GetComponentsInChildren<MainUniversalManagerFramework>();
     }
 
     /// <summary>
@@ -70,10 +80,11 @@ public class UniversalManagers : CoreManagersFramework
     /// </summary>
     private void SetupObjectPoolingParent()
     {
-        FindObjectOfType<ObjectPoolingParent>().SetupInstance();
+        _objectPoolingParent = FindObjectOfType<ObjectPoolingParent>();
+        _objectPoolingParent.SetupInstance();
     }
 
     #region Getters
-    public List<MainUniversalManagerFramework> GetAllUniversalManagers() => _allMainManagers;
+    public MainUniversalManagerFramework[] GetAllUniversalManagers() => _allMainManagers;
     #endregion
 }

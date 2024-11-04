@@ -20,19 +20,16 @@ public struct PatrolLocation
     [Tooltip("Where attack two spawns")]
     public Transform EnemySpawnPoint { get; private set; }
 
-    [Tooltip("Needs to be set to top right corner of room")]
-    public Transform RoomBorder1 { get; private set; }
-
-    [Tooltip("Needs to be set to bottom left corner of room")]
-    public Transform RoomBorder2 { get; private set; }
+    [Tooltip("The associated room of the enemy")]
+    public PatrolEnemyRoom EnemyRoom { get; private set; }
     
     public Transform[] WaypointTransforms { get; private set;}
 
-    public PatrolLocation(Transform spawnPoint, Transform roomBorder1, Transform roomBorder2, Transform[] waypoints)
+    public PatrolLocation(Transform spawnPoint,
+        PatrolEnemyRoom enemyRoom,Transform[] waypoints)
     {
         EnemySpawnPoint = spawnPoint;
-        RoomBorder1 = roomBorder1;
-        RoomBorder2 = roomBorder2;
+        EnemyRoom = enemyRoom;
         WaypointTransforms = waypoints;
     }
 }
@@ -44,7 +41,7 @@ public class RoomTongueAttack : BaseBossAttack
 {
     public static Action<PatrolLocation> SpawnPatrolEnemies;
 
-    public static UnityEvent<PatrolEnemyBehavior> PatrolEnemyDied = new UnityEvent<PatrolEnemyBehavior>();
+    public static UnityEvent<PatrolEnemyBehavior> OnPatrolEnemyDied = new UnityEvent<PatrolEnemyBehavior>();
 
     #region Attack Settings
 
@@ -70,6 +67,14 @@ public class RoomTongueAttack : BaseBossAttack
 
     private List<PatrolEnemyBehavior> _activePatrolEnemies;
 
+    //Since the events can be unsubscribed 2 ways we have to have a check to prevent the second unsubscription
+    private bool _subscribedToEvents = false;
+
+    /// <summary>
+    /// Called when thee attack ends to destroy all spawned enemies
+    /// </summary>
+    public static UnityEvent DestroyAllEnemies {get; private set;} = new();
+
     #region Enable & Action/Event Subscriptions
 
     private void OnEnable()
@@ -87,18 +92,30 @@ public class RoomTongueAttack : BaseBossAttack
 
     protected override void SubscribeToEvents()
     {
-        BossAttackManager.BeginInteriorTongueAttack += BeginAttack;
-        PatrolEnemySpawner.EnemySpawned += PatrolEnemySpawned;
+        _onBeginAttack.AddListener(BeginAttack);
 
-        PatrolEnemyDied.AddListener(PatrolEnemyDespawned);
+        PatrolEnemySpawner.OnEnemySpawned += PatrolEnemySpawned;
+
+        OnPatrolEnemyDied.AddListener(PatrolEnemyDespawned);
+
+        _subscribedToEvents = true;
     }
 
     protected override void UnsubscribeToEvents()
     {
-        BossAttackManager.BeginInteriorTongueAttack -= BeginAttack;
-        PatrolEnemySpawner.EnemySpawned -= PatrolEnemySpawned;
+        //Prevents unsubscription while already unsubscribed
+        if(!_subscribedToEvents)
+        {
+            return;
+        }
 
-        PatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
+        _onBeginAttack.RemoveListener(BeginAttack);
+
+        PatrolEnemySpawner.OnEnemySpawned -= PatrolEnemySpawned;
+
+        OnPatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
+
+        _subscribedToEvents = false;
     }
 
     #endregion
@@ -131,12 +148,11 @@ public class RoomTongueAttack : BaseBossAttack
         // Loop through allRooms to populate _patrolLocations with room data
         for(int i = 0; i < allRooms.Count; i++)
         {
-            Transform roomBorder1 = allRooms.ElementAt(i).GetChild(0);
-            Transform roomBorder2 = allRooms.ElementAt(i).GetChild(1);
-            Transform spawnLocation = allRooms.ElementAt(i).GetChild(2);
+            PatrolEnemyRoom enemyRoom = allRooms.ElementAt(i).GetComponentInChildren<PatrolEnemyRoom>();
+            Transform spawnLocation = allRooms.ElementAt(i).GetChild(0);
 
             // Parent Waypoint Object
-            Transform waypointsParent = allRooms.ElementAt(i).GetChild(3);
+            Transform waypointsParent = allRooms.ElementAt(i).GetChild(1);
 
             // Remove first element of waypoints (parent obj)
             List<Transform> waypointsList = waypointsParent.GetComponentsInChildren<Transform>().ToList();
@@ -145,10 +161,22 @@ public class RoomTongueAttack : BaseBossAttack
             // Create array from the waypoints list to pass into the new patrol location
             Transform[] waypoints = waypointsList.ToArray();
 
-            // Create new Patrol Location with the cached data and add it to _patrolLocations
-            PatrolLocation patrolLocation = new PatrolLocation(roomBorder1, roomBorder2, spawnLocation, waypoints);
+            PatrolLocation patrolLocation = new PatrolLocation(spawnLocation,enemyRoom, waypoints);
             _patrolLocations[i] = patrolLocation;
         }
+    }
+
+    /// <summary>
+    /// Begins the enemy spawning
+    /// </summary>
+    protected override void BeginAttack()
+    {
+        // This is a passive attack this ends when it's scene is over
+        // This should only subscribe during its lifetime as it's waiting for it's scene to end
+        BossAttackActSystem.Instance.GetOnAttackCompleted().AddListener(EndAttack);
+
+        base.BeginAttack();
+        StartCoroutine(EnemySpawning());
     }
 
     /// <summary>
@@ -156,24 +184,15 @@ public class RoomTongueAttack : BaseBossAttack
     /// </summary>
     protected override void EndAttack()
     {
-        foreach(PatrolEnemyBehavior patrolEnemyBehavior in _activePatrolEnemies)
-        {
-            _activePatrolEnemies.Remove(patrolEnemyBehavior);
-            Destroy(patrolEnemyBehavior.gameObject);
-        }
+        UnsubscribeToEvents();
+
+        // This should only unsubscribe from it's scene if it began, this isn't in unsub from event
+        BossAttackActSystem.Instance.GetOnAttackCompleted().RemoveListener(EndAttack);
+
         base.EndAttack();
     }
 
     #region Enemy Spawning
-
-    /// <summary>
-    /// Begins the enemy spawning
-    /// </summary>
-    protected override void BeginAttack()
-    {
-        base.BeginAttack();
-        StartCoroutine(EnemySpawning());
-    }
 
     /// <summary>
     /// Spawns enemies until the max amount have been spawned.
@@ -208,6 +227,8 @@ public class RoomTongueAttack : BaseBossAttack
     private void PatrolEnemySpawned(PatrolEnemyBehavior patrolEnemyBehavior)
     {
         _activePatrolEnemies.Add(patrolEnemyBehavior);
+        // Need to be childed to move with the boat
+        patrolEnemyBehavior.transform.parent = this.transform;
     }
 
     /// <summary>
