@@ -92,7 +92,7 @@ jobs:
         with:
               target: public
               credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
-              folder: "1JX0EnNEVAZRTR0Ci71IUqqM_SWLxD0oT"
+              folder: ${{ secrets.DRIVE_UPLOAD_ID }}
         
        # Send Discord message
       - name: Send link to file
