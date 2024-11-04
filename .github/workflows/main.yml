@@ -90,7 +90,7 @@ jobs:
         uses: Jodebu/upload-to-drive@master
         id: driveUpload
         with:
-              target: public
+              target: build
               credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
               folder: ${{ secrets.DRIVE_UPLOAD_ID }}
         
