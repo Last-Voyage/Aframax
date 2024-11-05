@@ -60,7 +60,7 @@ public class GameplayManagers : CoreManagersFramework
         //  then the order doesn't matter
         foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
         {
-            mainManager.SetupMainManager();
+            mainManager.SetUpMainManager();
         }
 
         AframaxSceneManager.Instance.InvokeGameplaySceneLoaded();

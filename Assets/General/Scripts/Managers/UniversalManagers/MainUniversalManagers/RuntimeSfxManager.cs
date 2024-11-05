@@ -30,9 +30,9 @@ public class RuntimeSfxManager : AudioManager
     /// <summary>
     /// Subscribes to any needed actions and initializes the footsteps
     /// </summary>
-    public override void SetupMainManager()
+    public override void SetUpMainManager()
     {
-        base.SetupMainManager();
+        base.SetUpMainManager();
         SubscribeToActions(true);
     }
 

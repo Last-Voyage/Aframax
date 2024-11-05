@@ -24,7 +24,7 @@ public abstract class MainManagerFramework : MonoBehaviour
     /// <summary>
     /// Performs any needed setup specific to the manager
     /// </summary>
-    public abstract void SetupMainManager();
+    public abstract void SetUpMainManager();
     /// <summary>
     /// Used to subscribe to all events required for functionality
     /// </summary>

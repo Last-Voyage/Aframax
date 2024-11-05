@@ -108,9 +108,12 @@ public class SaveManager : MainUniversalManagerFramework
         Instance = this;
     }
 
-    public override void SetupMainManager()
+    /// <summary>
+    /// Sets up the main manager by establishing the path to the Json file and loading the data
+    /// </summary>
+    public override void SetUpMainManager()
     {
-        base.SetupMainManager();
+        base.SetUpMainManager();
         EstablishPath();
         Load();
     }

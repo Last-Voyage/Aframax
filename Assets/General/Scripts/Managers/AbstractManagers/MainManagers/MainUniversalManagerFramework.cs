@@ -27,7 +27,7 @@ public class MainUniversalManagerFramework : MainManagerFramework
     /// <summary>
     /// Subscribes the manager to needed events
     /// </summary>
-    public override void SetupMainManager()
+    public override void SetUpMainManager()
     {
         SubscribeToEvents();
     }

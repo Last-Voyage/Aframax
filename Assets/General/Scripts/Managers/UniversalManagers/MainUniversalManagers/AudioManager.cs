@@ -23,9 +23,9 @@ public class AudioManager : MainUniversalManagerFramework
         base.SetUpInstance();
     }
 
-    public override void SetupMainManager()
+    public override void SetUpMainManager()
     {
-        base.SetupMainManager();
+        base.SetUpMainManager();
     }
 
     #endregion

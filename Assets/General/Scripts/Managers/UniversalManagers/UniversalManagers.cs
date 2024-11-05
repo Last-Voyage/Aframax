@@ -73,7 +73,7 @@ public class UniversalManagers : CoreManagersFramework
         //  then the order doesn't matter
         foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
         {
-            mainManager.SetupMainManager();
+            mainManager.SetUpMainManager();
         }
     }
 
