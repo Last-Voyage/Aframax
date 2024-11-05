@@ -1,15 +1,13 @@
-/*
+/***********************************************************************************************************************
 // Name: UniversalTabManager.CS
 // Author: Nabil Tagba
 // Overview: Seamlessly handles and manages the creation and
 //transitions of tabs and their corresponding pages
- */
+***********************************************************************************************************************/
 
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-
 
 /// <summary>
 /// Allows for seamless transitions between
@@ -17,23 +15,23 @@ using UnityEngine.UI;
 /// </summary>
 public class UniversalTabManager : MonoBehaviour
 {   
-    //the list of the bachground of the tabs and the pages the tab
+    //the list of the background of the tabs and the pages the tab
     //enables. the indexes should correlate
-    [SerializeField] private List<GameObject> _tabsBackgrounds = new List<GameObject>();
-    [SerializeField] private List<GameObject> _tabsPages = new List<GameObject>();
+    [SerializeField] private List<GameObject> _tabsBackgrounds = new();
+    [SerializeField] private List<GameObject> _tabsPages = new();
 
     private Color _selectedColor;
     private Color _unSelectedColor;
 
-
-    void Start()
+    /// <summary>
+    /// runs on start
+    /// </summary>
+    private void Start()
     {
-
         _selectedColor = Color.white;
         _unSelectedColor = new Color(0.4037736f, 0.383204f, 0.383204f, 1);
 
         ChangeTab(0);
-
     }
 
 
@@ -51,16 +49,16 @@ public class UniversalTabManager : MonoBehaviour
             if (i == tabIndex)
             {
                 //enable the tab
-                GameObject _currentSelectedTab = _tabsPages[i];
-                GameObject _currentSelectedTabBK = _tabsBackgrounds[i];
+                GameObject currentSelectedTab = _tabsPages[i];
+                GameObject currentSelectedTabBk = _tabsBackgrounds[i];
 
-                _currentSelectedTab.SetActive(true);
+                currentSelectedTab.SetActive(true);
 
-                _currentSelectedTabBK.GetComponent<Image>().color = _selectedColor;
+                currentSelectedTabBk.GetComponent<Image>().color = _selectedColor;
                 //turn off the other tab pages except for the select tab's page
                 foreach (GameObject tab in _tabsPages)
                 {
-                    if (tab != _currentSelectedTab)
+                    if (tab != currentSelectedTab)
                     {
                         tab.SetActive(false);
                     }
@@ -69,11 +67,11 @@ public class UniversalTabManager : MonoBehaviour
 
                 //change the unselected tabs backgrounds to the unselect tab bk color
 
-                foreach (GameObject tabBK in _tabsBackgrounds) 
+                foreach (GameObject tabBk in _tabsBackgrounds) 
                 {
-                    if (tabBK != _currentSelectedTabBK)
+                    if (tabBk != currentSelectedTabBk)
                     {
-                        tabBK.GetComponent<Image>().color = _unSelectedColor;
+                        tabBk.GetComponent<Image>().color = _unSelectedColor;
                     }
                 }
 

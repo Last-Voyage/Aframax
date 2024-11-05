@@ -7,10 +7,6 @@
                     Provides access to all gameplay managers
 ******************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// Instanced to allow for anything to use the manager
 /// Provides access to all gameplay managers
@@ -19,9 +15,8 @@ public class GameplayManagers : CoreManagersFramework
 {
     /// <summary>
     /// Contains all managers to setup. Order of managers is order of setup.
-    /// Order shouldn't technically matter but just in case
     /// </summary>
-    [SerializeField] private List<MainGameplayManagerFramework> _allMainGameplayManagers;
+    private MainGameplayManagerFramework[] _allMainGameplayManagers;
 
     public static GameplayManagers Instance;
 
@@ -39,6 +34,14 @@ public class GameplayManagers : CoreManagersFramework
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets all managers that fall under gameplay manager
+    /// </summary>
+    protected override void GetAllManagers()
+    {
+        _allMainGameplayManagers = GetComponentsInChildren<MainGameplayManagerFramework>();
     }
 
     /// <summary>
@@ -60,10 +63,20 @@ public class GameplayManagers : CoreManagersFramework
             mainManager.SetupMainManager();
         }
 
-        SceneLoadingManager.Instance.InvokeGameplaySceneLoaded();
+        AframaxSceneManager.Instance.InvokeGameplaySceneLoaded();
+
+        //TODO Remove after LV-324
+        //RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
     }
 
-    #region Getters
+    private void Start()
+    {
+        RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
+    }
 
-    #endregion
+    //TODO Remove after LV-324
+    private void OnDestroy()
+    {
+        RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(false);
+    }
 }
