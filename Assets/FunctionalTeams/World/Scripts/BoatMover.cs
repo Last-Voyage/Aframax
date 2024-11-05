@@ -16,6 +16,8 @@ using UnityEngine;
 /// </summary>
 public class BoatMover : MonoBehaviour
 {
+    public static BoatMover Instance;
+
     [Tooltip("The current spline that the boat is moving along")]
     private BezierCurve _currentSpline;
     
@@ -39,6 +41,23 @@ public class BoatMover : MonoBehaviour
 
     [Tooltip("Arbitrary float for adjusting the speed of the boat")]
     [SerializeField] private float _speedModifier;
+
+    private void Start()
+    {
+        EstablishInstance();
+    }
+
+    private void EstablishInstance()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     /// <summary>
     /// Every frame, the boat will be moved
@@ -94,7 +113,7 @@ public class BoatMover : MonoBehaviour
     {
         if (_percentOfSpline >= 1) {
             _percentOfSpline -= 1;
-            EnvironmentManager.Instance.SendChangeTheChunk()?.Invoke();
+            EnvironmentManager.Instance.GetOnChangeTheChunk()?.Invoke();
         }
     }
 }

@@ -22,9 +22,12 @@ public class SceneLoadingButtons : MonoBehaviour
     /// </summary>
     public void LoadDesiredSceneButton()
     {
-        SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(_sceneToLoad, _sceneTransitionID);
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneToLoad, _sceneTransitionID);
     }
 
+    /// <summary>
+    /// Quits the game
+    /// </summary>
     public void QuitGame()
     {
         Application.Quit();

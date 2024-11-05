@@ -6,10 +6,8 @@
 //
 // Brief Description : operates pausing the game and the pause menu buttons
 *****************************************************************************/
-using System.Collections.Generic;
-using System.Collections;
+
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// functionality for pausing the game and the pause menu buttons
@@ -42,10 +40,10 @@ public class PauseMenu : MonoBehaviour
     /// <summary>
     /// Enables and disables the pause menu ui
     /// </summary>
-    /// <param name="visible"></param>
-    private void PauseUIVisibility(bool visible)
+    /// <param name="isVisible"></param>
+    private void PauseUIVisibility(bool isVisible)
     {
-        _pauseMenuContent.SetActive(visible);
+        _pauseMenuContent.SetActive(isVisible);
     }
 
     /// <summary>
@@ -60,13 +58,13 @@ public class PauseMenu : MonoBehaviour
     {
         _playerInputControls.Enable();
 
-        TimeManager.Instance.GetGamePauseToggleEvent().AddListener(PauseUIVisibility);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(PauseUIVisibility);
     }
 
     private void OnDisable()
     {
         _playerInputControls.Disable();
 
-        TimeManager.Instance.GetGamePauseToggleEvent().RemoveListener(PauseUIVisibility);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(PauseUIVisibility);
     }
 }

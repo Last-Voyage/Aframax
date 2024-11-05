@@ -44,8 +44,6 @@ public class TutorialPopUps : MonoBehaviour
     // Start's the tutorial process
     void Start()
     {
-        //_walkTutorialObject.SetActive(false);
-        //_shootTutorialObject.SetActive(false);
         StartCoroutine(TimeBeforeText());
     }
 
@@ -151,6 +149,7 @@ public class TutorialPopUps : MonoBehaviour
         }
         else
         {
+            GameStateManager.Instance.GetOnCompletedEntireTutorial()?.Invoke();
             _textContainer.text = "";
         }
     }
@@ -160,10 +159,11 @@ public class TutorialPopUps : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GameStateManager.Instance.CompletedTutorial().AddListener(NextTutorial);
+        GameStateManager.Instance.GetOnCompletedTutorialSection().AddListener(NextTutorial);
 
         _shootTutorialObject = GameObject.Find("TutorialShootObject");
         _walkTutorialObject = GameObject.Find("TutorialWalkObject");
+        
         _walkTutorialObject.SetActive(false);
         _shootTutorialObject.SetActive(false);
     }
@@ -174,6 +174,6 @@ public class TutorialPopUps : MonoBehaviour
     private void OnDisable()
     {
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(NextTutorial);
-        GameStateManager.Instance.CompletedTutorial().RemoveListener(NextTutorial);
+        GameStateManager.Instance.GetOnCompletedTutorialSection().RemoveListener(NextTutorial);
     }
 }

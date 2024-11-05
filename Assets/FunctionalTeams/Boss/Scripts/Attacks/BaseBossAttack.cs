@@ -55,7 +55,6 @@ public class BaseBossAttack : MonoBehaviour
     {
         _isAttackActive = false;
         InvokeAttackEnd();
-        gameObject.SetActive(false);
     }
 
     #region Events

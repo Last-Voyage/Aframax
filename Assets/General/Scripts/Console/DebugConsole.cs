@@ -1,9 +1,9 @@
-/*
+/***********************************************************************************************************************
 // Name: DebugConsole.CS
 // Author: Nabil Tagba
 // Overview: Hosts one function
 // which handles the debug console commands
- */
+***********************************************************************************************************************/
 
 using TMPro;
 using UnityEngine;
@@ -37,7 +37,7 @@ public class DebugConsole : MonoBehaviour
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "Reload()")
             {
-                SceneLoadingManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
+                AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex, 0);
             }
             else if (_commandInput.text.Substring(4, _commandInput.text.Length - 4) == "DrawColliders()")
             {
