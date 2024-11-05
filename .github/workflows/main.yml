@@ -16,16 +16,6 @@ jobs:
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
     steps:
-      - name: Notify Discord
-        if: always()
-        uses: stegzilla/discord-notify@v4
-        with:
-            webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-            title: "Build Started"
-            message: " "
-            avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-            username: GitHub
-
       - uses: actions/checkout@v4
         # Git LFS
       - name: Create LFS file list
@@ -44,13 +34,11 @@ jobs:
           git add .
           git reset --hard
           
-      # Cache
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
       - if: matrix.targetPlatform == 'Android'
         uses: jlumbroso/free-disk-space@v1.3.1
       - uses: game-ci/unity-builder@v4
@@ -65,41 +53,12 @@ jobs:
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
-      - name: Notify Discord Success
+      - name: Notify Discord
         if: success()
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-            title: "Build Succeeded"
-            message: "Artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
+            title: "Build Report"
+            message: "Build succeeded, artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
-
-      - name: Notify Discord Failure
-        if: failure()
-        uses: stegzilla/discord-notify@v4
-        with:
-              webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              title: "Build Failed"
-              message: " "
-              avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-              username: GitHub
-
-        # Upload to Drive
-      - name: Upload build folder to Google Drive
-        uses: Jodebu/upload-to-drive@master
-        id: driveUpload
-        with:
-              target: build
-              credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
-              folder: ${{ secrets.DRIVE_UPLOAD_ID }}
-        
-       # Send Discord message
-      - name: Send link to file
-        uses: stegzilla/discord-notify@v4
-        with:
-              webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              title: "Build Report"
-              message: "File uploaded to ${{ steps.driveUpload.outputs.link }}"
-              avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-              username: GitHub
