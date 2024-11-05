@@ -16,11 +16,17 @@ using UnityEngine;
 /// </summary>
 public class MainGameplayManagerFramework : MainManagerFramework
 {
-    public override void SetupInstance()
+    /// <summary>
+    /// Overrides the set up instance function
+    /// </summary>
+    public override void SetUpInstance()
     {
         
     }
 
+    /// <summary>
+    /// Subscribes the manager to needed events
+    /// </summary>
     public override void SetupMainManager()
     {
         SubscribeToEvents();

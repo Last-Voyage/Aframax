@@ -156,9 +156,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     #region Base Manager
-    public override void SetupInstance()
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 

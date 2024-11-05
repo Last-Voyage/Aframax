@@ -24,6 +24,7 @@ public class UniversalManagers : CoreManagersFramework
     public static UniversalManagers Instance;
 
     private ObjectPoolingParent _objectPoolingParent;
+    private FmodSfxEvents _fModSfxEvents;
 
     /// <summary>
     /// Sets up the singleton
@@ -59,10 +60,12 @@ public class UniversalManagers : CoreManagersFramework
     protected override void SetupMainManagers()
     {
         SetupObjectPoolingParent();
+        SetUpFModSfxEvents();
+
         //Instances all managers
         foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
         {
-            mainManager.SetupInstance();
+            mainManager.SetUpInstance();
         }
 
         //Thens sets them up
@@ -80,8 +83,14 @@ public class UniversalManagers : CoreManagersFramework
     /// </summary>
     private void SetupObjectPoolingParent()
     {
-        _objectPoolingParent = FindObjectOfType<ObjectPoolingParent>();
+        _objectPoolingParent = GetComponentInChildren<ObjectPoolingParent>();
         _objectPoolingParent.SetupInstance();
+    }
+
+    private void SetUpFModSfxEvents()
+    {
+        _fModSfxEvents = GetComponentInChildren<FmodSfxEvents>();
+        _fModSfxEvents.SetUpInstance();
     }
 
     #region Getters

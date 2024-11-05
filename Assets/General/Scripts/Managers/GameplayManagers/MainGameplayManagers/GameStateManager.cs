@@ -34,13 +34,15 @@ public class GameStateManager : MainGameplayManagerFramework
     }
 
     #region Base Manager
-    
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the game state manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
-    
+
     #endregion
 
     #region Getters

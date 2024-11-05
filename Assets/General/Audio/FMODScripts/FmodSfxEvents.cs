@@ -47,15 +47,8 @@ public class FmodSfxEvents : MonoBehaviour
 
     #endregion Player
 
-    private void Awake()
+    public void SetUpInstance()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+        Instance = this;
     }
 }

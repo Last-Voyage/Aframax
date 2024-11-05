@@ -52,12 +52,12 @@ public class PlayerManager : MainGameplayManagerFramework
 
     #region Base Manager
 
-    public override void SetupMainManager()
+    public override void SetUpInstance()
     {
-        base.SetupMainManager();
+        base.SetUpInstance();
         Instance = this;
     }
-    
+
     #endregion
 
     #region Events

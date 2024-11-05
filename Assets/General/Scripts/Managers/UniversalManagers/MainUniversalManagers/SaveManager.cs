@@ -99,11 +99,15 @@ public class SaveManager : MainUniversalManagerFramework
     }
 
     #region BaseManager
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the save manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
+
     public override void SetupMainManager()
     {
         base.SetupMainManager();

@@ -52,7 +52,7 @@ public class GameplayManagers : CoreManagersFramework
         //Instances all managers
         foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
         {
-            mainManager.SetupInstance();
+            mainManager.SetUpInstance();
         }
 
         //Thens sets them up
@@ -64,19 +64,5 @@ public class GameplayManagers : CoreManagersFramework
         }
 
         AframaxSceneManager.Instance.InvokeGameplaySceneLoaded();
-
-        //TODO Remove after LV-324
-        //RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
-    }
-
-    private void Start()
-    {
-        RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(true);
-    }
-
-    //TODO Remove after LV-324
-    private void OnDestroy()
-    {
-        RuntimeSfxManager.SFXInstance.SubscribeToGameplayActions(false);
     }
 }

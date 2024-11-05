@@ -19,21 +19,31 @@ public class MainUniversalManagerFramework : MainManagerFramework
     /// <summary>
     /// Overrides the set up instance function
     /// </summary>
-    public override void SetupInstance()
+    public override void SetUpInstance()
     {
 
     }
 
+    /// <summary>
+    /// Subscribes the manager to needed events
+    /// </summary>
     public override void SetupMainManager()
     {
         SubscribeToEvents();
     }
+    
+    /// <summary>
+    /// Subscribes to universal events
+    /// </summary>
     protected override void SubscribeToEvents()
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
         AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(UnsubscribeToGameplayEvents);
     }
 
+    /// <summary>
+    /// Unsubscribes to universal events
+    /// </summary>
     protected override void UnsubscribeToEvents()
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);

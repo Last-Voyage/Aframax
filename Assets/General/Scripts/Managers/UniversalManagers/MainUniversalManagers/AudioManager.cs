@@ -15,14 +15,12 @@ using UnityEngine;
 /// </summary>
 public class AudioManager : MainUniversalManagerFramework
 {
-    public static AudioManager Instance;
 
     #region Base Manager
 
-    public override void SetupInstance()
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
-        Instance = this;
+        base.SetUpInstance();
     }
 
     public override void SetupMainManager()

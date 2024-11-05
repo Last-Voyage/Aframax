@@ -93,9 +93,9 @@ public class VfxManager : MainUniversalManagerFramework
     /// <summary>
     /// Establishes the instance of VfxManager
     /// </summary>
-    public override void SetupInstance()
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 
