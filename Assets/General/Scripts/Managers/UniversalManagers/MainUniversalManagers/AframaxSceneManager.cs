@@ -39,13 +39,10 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
     private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
-    protected override void SubscribeToEvents()
-    {
-        _onGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
-    }
 
-    private void SubscribeToGameplayEvents()
+    protected override void SubscribeToGameplayEvents()
     {
+        base.SubscribeToGameplayEvents();
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
 
@@ -117,7 +114,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         //Can start the starting scene transition animation here
         //Will be implemented when scene transition work occurs
         
-
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
 
@@ -166,12 +162,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         Instance = this;
     }
 
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        _onGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
-    }
-
     #endregion
 
     #region Events
@@ -210,7 +200,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     #endregion
 
-        #region Getters
+    #region Getters
 
     public UnityEvent GetOnBeforeSceneChanged => _onBeforeSceneChange;
 
