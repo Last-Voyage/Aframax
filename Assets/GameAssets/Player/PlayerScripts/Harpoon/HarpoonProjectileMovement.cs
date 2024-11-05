@@ -49,7 +49,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
             if (Physics.Raycast(transform.position, movement, out RaycastHit hit,
                 movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
             {
-                // Harpoon _hit something, stop its movement and start reeling it in
                 transform.position = hit.point; // Snap the harpoon to the _hit point
                 break;
             }
