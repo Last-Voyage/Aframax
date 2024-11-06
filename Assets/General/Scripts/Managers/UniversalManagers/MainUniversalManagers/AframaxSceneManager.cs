@@ -33,17 +33,33 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private readonly UnityEvent _onBeforeSceneChange = new();
     private readonly UnityEvent _onSceneChanged = new();
     private readonly UnityEvent _onGameplaySceneLoaded = new();
+    private readonly UnityEvent _onLeavingGameplayScene = new();
 
     private readonly UnityEvent _onEndOfGameScene = new();
 
     private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
     private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
+    private bool _isGameplaySceneLoaded;
 
+    /// <summary>
+    /// Subscribes to any needed gameplay events
+    /// </summary>
     protected override void SubscribeToGameplayEvents()
     {
         base.SubscribeToGameplayEvents();
+        _isGameplaySceneLoaded = true;
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
+    }
+
+    /// <summary>
+    /// Unsubscribes to any subscribed gameplay events
+    /// </summary>
+    protected override void UnsubscribeToGameplayEvents()
+    {
+        base.UnsubscribeToGameplayEvents();
+        _isGameplaySceneLoaded = false;
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(LoadDeathScreen);
     }
 
     /// <summary>
@@ -108,6 +124,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         InvokeOnBeforeSceneChangeEvent();
 
+        if (_isGameplaySceneLoaded)
+        {
+            InvokeOnLeavingGameplayScene();
+        }
+        
         //Starts loading the scene
         AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneID);
 
@@ -180,6 +201,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         _onGameplaySceneLoaded?.Invoke();
     }
 
+    public void InvokeOnLeavingGameplayScene()
+    {
+        _onLeavingGameplayScene?.Invoke();
+    }
+
     private void InvokeSceneAdditiveLoadAddEvent()
     {
         _onAdditiveLoadAddedEvent?.Invoke();
@@ -207,6 +233,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
     public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
+
+    public UnityEvent GetOnLeavingGameplayScene => _onLeavingGameplayScene;
 
     public UnityEvent GetOnEndOfGameScene => _onEndOfGameScene;
 

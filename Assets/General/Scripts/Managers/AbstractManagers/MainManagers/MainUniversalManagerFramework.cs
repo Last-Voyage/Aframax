@@ -38,7 +38,7 @@ public class MainUniversalManagerFramework : MainManagerFramework
     protected override void SubscribeToEvents()
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
-        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(UnsubscribeToGameplayEvents);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(UnsubscribeToGameplayEvents);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class MainUniversalManagerFramework : MainManagerFramework
     protected override void UnsubscribeToEvents()
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
-        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.RemoveListener(UnsubscribeToGameplayEvents);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(UnsubscribeToGameplayEvents);
     }
 
     /// <summary>
