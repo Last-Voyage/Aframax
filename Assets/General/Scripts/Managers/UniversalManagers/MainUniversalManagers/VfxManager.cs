@@ -48,17 +48,6 @@ public class VfxManager : MainUniversalManagerFramework
     }
 
     /// <summary>
-    /// Reclaims all vfx from all vfx in game back into the game
-    /// </summary>
-    private void ReclaimAllVFXBeforeSceneChange()
-    {
-        foreach (SpecificVisualEffect vfx in _allVfxInGame)
-        {
-            vfx.MoveAllVfxBackToPool();
-        }
-    }
-
-    /// <summary>
     /// Spawns the vfx to be added to the pool
     /// SpecificVisualEffects cannot do this as it isn't a monobehavior
     /// </summary>
@@ -68,7 +57,7 @@ public class VfxManager : MainUniversalManagerFramework
         //Spawn the vfx
         GameObject newVfx = Instantiate(specificVisualEffect.GetVFXObject());
         newVfx.SetActive(false);
-        ObjectPoolingParent.Instance.AddObjectAsChild(newVfx);
+        ObjectPoolingParent.Instance.InitiallyAddObjectToPool(newVfx);
 
         //Gets the GeneralVfxFunctionality which acts as a mini manager of that set of vfx
         GeneralVfxFunctionality generalVfxFunctionality = newVfx.GetComponent<GeneralVfxFunctionality>();
@@ -106,18 +95,6 @@ public class VfxManager : MainUniversalManagerFramework
     {
         base.SetupMainManager();
         SetUpAllVfxInGame();
-    }
-
-    protected override void SubscribeToEvents()
-    {
-        base.SubscribeToEvents();
-        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(ReclaimAllVFXBeforeSceneChange);
-    }
-
-    protected override void UnsubscribeToEvents()
-    {
-        base.UnsubscribeToEvents();
-        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.RemoveListener(ReclaimAllVFXBeforeSceneChange);
     }
     #endregion
 
