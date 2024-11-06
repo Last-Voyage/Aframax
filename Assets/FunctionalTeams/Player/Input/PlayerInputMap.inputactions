@@ -201,16 +201,16 @@
                     "name": "FreeCamMoveRight",
                     "type": "PassThrough",
                     "id": "e1b4d9e2-c1f0-4ba9-8762-804963097b48",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Vector3",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
                     "name": "FreeCamLookRight",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "b6a40698-9dde-4acb-94c6-d9b9851e0858",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -229,20 +229,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "e11d21ef-0d9e-4145-802a-55fbfcfe9795",
-                    "path": "<Mouse>/position/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FreeCamLookRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "Move",
-                    "id": "17abc516-75c1-485a-8866-4b4f40a37d0d",
-                    "path": "2DVector",
+                    "id": "a6a08539-d924-4f21-b576-6e477a664669",
+                    "path": "3DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -252,50 +241,144 @@
                 },
                 {
                     "name": "up",
-                    "id": "830c2e94-e6fd-418f-b210-04414e60b4ba",
-                    "path": "<Keyboard>/w",
+                    "id": "6389f561-4576-4010-87cf-06f1c16f4e90",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard and Mouse",
                     "action": "FreeCamMoveRight",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "down",
-                    "id": "71f9293e-eff8-4839-9507-72b54f2622ed",
-                    "path": "<Keyboard>/s",
+                    "id": "86dbc300-ab87-40ed-9b59-074b624036a5",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard and Mouse",
                     "action": "FreeCamMoveRight",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "left",
-                    "id": "8f00e585-0197-4a7e-9a41-54eb6ff3e081",
+                    "id": "43defc72-9534-4f82-a2bb-46c0724bc26a",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard and Mouse",
                     "action": "FreeCamMoveRight",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "right",
-                    "id": "25ae09ec-6564-4e0e-9e51-5ee9993b1220",
+                    "id": "e7e6617b-5a17-4f8e-bfe7-9c930f151258",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard and Mouse",
                     "action": "FreeCamMoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "forward",
+                    "id": "c70a4c15-d541-4b8d-9dd2-c833fdb5d91f",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "FreeCamMoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "backward",
+                    "id": "afde98fa-348a-42ee-9381-32ae17032ec6",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "FreeCamMoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Look",
+                    "id": "ea89932d-ccbe-4640-b741-3c4840fadfad",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FreeCamLookRight",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "51fd6ad9-d019-4646-a605-d4548c86becd",
+                    "path": "<Mouse>/delta/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "FreeCamLookRight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "7ed5f78e-0288-4d57-846c-91578586f7fe",
+                    "path": "<Mouse>/delta/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "FreeCamLookRight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "0b195d9e-1ff3-4670-b3cc-d26ac95940f6",
+                    "path": "<Mouse>/delta/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "FreeCamLookRight",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "327ea4ad-a5bb-4783-a055-2f517450e574",
+                    "path": "<Mouse>/delta/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "FreeCamLookRight",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Keyboard and Mouse",
+            "bindingGroup": "Keyboard and Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }
