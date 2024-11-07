@@ -14,7 +14,7 @@ using UnityEngine;
 /// <summary>
 /// contains behavior for the spawned patrol enemy
 /// </summary>
-public class PatrolEnemyBehavior : MonoBehaviour
+public class LockdownAttackEnemyBehavior : MonoBehaviour
 {
     #region Patrol Settings
 
@@ -155,7 +155,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void DestroyEnemy()
     {
-        RoomTongueAttack.OnPatrolEnemyDied?.Invoke(this);
+        LockdownAttack.OnPatrolEnemyDied?.Invoke(this);
         
         // Destroys enemy
         if (gameObject != null)
@@ -208,7 +208,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().AddListener(PlayerExitedRoom);
-        RoomTongueAttack.DestroyAllEnemies.AddListener(DestroyEnemy);
+        LockdownAttack.DestroyAllEnemies.AddListener(DestroyEnemy);
     }
 
     /// <summary>
@@ -218,6 +218,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().RemoveListener(PlayerExitedRoom);
-        RoomTongueAttack.DestroyAllEnemies.RemoveListener(DestroyEnemy);
+        LockdownAttack.DestroyAllEnemies.RemoveListener(DestroyEnemy);
     }
 }

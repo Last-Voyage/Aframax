@@ -21,12 +21,12 @@ public struct PatrolLocation
     public Transform EnemySpawnPoint { get; private set; }
 
     [Tooltip("The associated room of the enemy")]
-    public PatrolEnemyRoom EnemyRoom { get; private set; }
+    public LockdownAttackPatrolRoom EnemyRoom { get; private set; }
     
     public Transform[] WaypointTransforms { get; private set;}
 
     public PatrolLocation(Transform spawnPoint,
-        PatrolEnemyRoom enemyRoom,Transform[] waypoints)
+        LockdownAttackPatrolRoom enemyRoom,Transform[] waypoints)
     {
         EnemySpawnPoint = spawnPoint;
         EnemyRoom = enemyRoom;
@@ -37,11 +37,11 @@ public struct PatrolLocation
 /// <summary>
 /// Manages the Aggressive Room Tongue Attack.
 /// </summary>
-public class RoomTongueAttack : BaseBossAttack
+public class LockdownAttack : BaseBossAttack
 {
     public static Action<PatrolLocation> SpawnPatrolEnemies;
 
-    public static UnityEvent<PatrolEnemyBehavior> OnPatrolEnemyDied = new UnityEvent<PatrolEnemyBehavior>();
+    public static UnityEvent<LockdownAttackEnemyBehavior> OnPatrolEnemyDied = new UnityEvent<LockdownAttackEnemyBehavior>();
 
     #region Attack Settings
 
@@ -65,7 +65,7 @@ public class RoomTongueAttack : BaseBossAttack
 
     #endregion
 
-    private List<PatrolEnemyBehavior> _activePatrolEnemies;
+    private List<LockdownAttackEnemyBehavior> _activePatrolEnemies;
 
     //Since the events can be unsubscribed 2 ways we have to have a check to prevent the second unsubscription
     private bool _subscribedToEvents = false;
@@ -94,7 +94,7 @@ public class RoomTongueAttack : BaseBossAttack
     {
         _onBeginAttack.AddListener(BeginAttack);
 
-        PatrolEnemySpawner.OnEnemySpawned += PatrolEnemySpawned;
+        LockdownAttackEnemySpawner.OnEnemySpawned += PatrolEnemySpawned;
 
         OnPatrolEnemyDied.AddListener(PatrolEnemyDespawned);
 
@@ -111,7 +111,7 @@ public class RoomTongueAttack : BaseBossAttack
 
         _onBeginAttack.RemoveListener(BeginAttack);
 
-        PatrolEnemySpawner.OnEnemySpawned -= PatrolEnemySpawned;
+        LockdownAttackEnemySpawner.OnEnemySpawned -= PatrolEnemySpawned;
 
         OnPatrolEnemyDied.RemoveListener(PatrolEnemyDespawned);
 
@@ -148,7 +148,7 @@ public class RoomTongueAttack : BaseBossAttack
         // Loop through allRooms to populate _patrolLocations with room data
         for(int i = 0; i < allRooms.Count; i++)
         {
-            PatrolEnemyRoom enemyRoom = allRooms.ElementAt(i).GetComponentInChildren<PatrolEnemyRoom>();
+            LockdownAttackPatrolRoom enemyRoom = allRooms.ElementAt(i).GetComponentInChildren<LockdownAttackPatrolRoom>();
             Transform spawnLocation = allRooms.ElementAt(i).GetChild(0);
 
             // Parent Waypoint Object
@@ -200,7 +200,7 @@ public class RoomTongueAttack : BaseBossAttack
     /// <returns></returns>
     private IEnumerator EnemySpawning()
     {
-        _activePatrolEnemies = new List<PatrolEnemyBehavior>();
+        _activePatrolEnemies = new List<LockdownAttackEnemyBehavior>();
 
         while(_isAttackActive)
         {
@@ -224,7 +224,7 @@ public class RoomTongueAttack : BaseBossAttack
     /// Adds the new spawned patrol enemies to the list of active patrol enemies
     /// </summary>
     /// <param name="patrolEnemyBehavior"> enemy that just spawned </param>
-    private void PatrolEnemySpawned(PatrolEnemyBehavior patrolEnemyBehavior)
+    private void PatrolEnemySpawned(LockdownAttackEnemyBehavior patrolEnemyBehavior)
     {
         _activePatrolEnemies.Add(patrolEnemyBehavior);
         // Need to be childed to move with the boat
@@ -235,7 +235,7 @@ public class RoomTongueAttack : BaseBossAttack
     /// Adds the new spawned patrol enemies to the list of active patrol enemies
     /// </summary>
     /// <param name="patrolEnemyBehavior"> enemy that just spawned </param>
-    private void PatrolEnemyDespawned(PatrolEnemyBehavior patrolEnemyBehavior)
+    private void PatrolEnemyDespawned(LockdownAttackEnemyBehavior patrolEnemyBehavior)
     {
         _activePatrolEnemies.Remove(patrolEnemyBehavior);
     }
