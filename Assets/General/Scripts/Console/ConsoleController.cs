@@ -1,10 +1,10 @@
-/*
+/*****************************************************************************
 // Name: ConsoleController.CS
 // Author: Nabil Tagba
 // Overview: Handles the console being turned on and off
-// along with its hosting the methodes the quick action buttons
+// along with its hosting the methods the quick action buttons
 // in the console will use
- */
+*****************************************************************************/
 
 using System;
 using TMPro;
@@ -15,15 +15,15 @@ using UnityEngine.UI;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
 
 /// <summary>
-/// Controlls the console onn a global scope,
+/// Controls the console onn a global scope,
 /// for example the console being turned on and
-/// off. May contain funtions for quick action with 
+/// off. May contain functions for quick action with 
 /// buttons
 /// </summary>
 public class ConsoleController : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private bool _isInDeveloperMode = false;
+    [SerializeField] private bool _isInDeveloperMode;
 
     [Space]
     [Tooltip("Can be found inside of the console prefab")]
@@ -32,11 +32,11 @@ public class ConsoleController : MonoBehaviour
     [Tooltip("Can be found inside of the console prefab")]
     [SerializeField] private Button _playerTakeDamageButton;
     [SerializeField] private TMP_InputField _dmgAmountInputField;
-    private PlayerInputMap _playerInput;
 
     [SerializeField] private GameObject _toggleGodMode;
 
-
+    private PlayerInputMap _playerInput;
+    
     /// <summary>
     /// happens before the start of the game
     /// </summary>
@@ -63,20 +63,19 @@ public class ConsoleController : MonoBehaviour
     private void ToggleConsole()
     {
         //toggle console on and off
-        if (_isInDeveloperMode)
+        if (!_isInDeveloperMode) return;
+        
+        if (_content.activeSelf)
         {
-            if (_content.activeSelf)
-            {
-                _content.SetActive(false);
-                Cursor.lockState = CursorLockMode.Locked;
-                Time.timeScale = 1;
-            }
-            else
-            {
-                _content.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                Time.timeScale = 0;
-            }
+            _content.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1;
+        }
+        else
+        {
+            _content.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0;
         }
     }
 
@@ -87,14 +86,14 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void HurtPlayer()
     {
-        float _amount;
-        //making sure there is input and geting the amount
-        if (_dmgAmountInputField.text.Length > 0 && float.TryParse(_dmgAmountInputField.text, out _amount))
+        float amount;
+        //making sure there is input and getting the amount
+        if (_dmgAmountInputField.text.Length > 0 && float.TryParse(_dmgAmountInputField.text, out amount))
         {
-            // safty check for having the the health on the player
+            // safety check for having the health on the player
             try
             {
-                GameObject.FindObjectOfType<PlayerHealth>().TakeDamage(_amount, null);
+                FindObjectOfType<PlayerHealth>().TakeDamage(amount, null);
             }
             catch (NullReferenceException e)
             {
@@ -111,15 +110,15 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void ToggleGodMode()
     {
-        //safty check to see for player health component not being on the player
+        //safety check to see for player health component not being on the player
         try
         {
             //toggling between god mode
-            if (GameObject.FindObjectOfType<PlayerHealth>()._shouldTakeDamage == true)
+            if (FindObjectOfType<PlayerHealth>()._shouldTakeDamage)
             {
                 EnterGodMode();
             }
-            else if (GameObject.FindObjectOfType<PlayerHealth>()._shouldTakeDamage == false)
+            else if (!FindObjectOfType<PlayerHealth>()._shouldTakeDamage)
             {
                 ExitGodMode();
             }
@@ -131,11 +130,11 @@ public class ConsoleController : MonoBehaviour
     }
 
     /// <summary>
-    /// putes the player in god mode
+    /// puts the player in god mode
     /// </summary>
     private void EnterGodMode()
     {
-        GameObject.FindObjectOfType<PlayerHealth>()._shouldTakeDamage = false;
+        FindObjectOfType<PlayerHealth>()._shouldTakeDamage = false;
         _toggleGodMode.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
     }
 
@@ -144,7 +143,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void ExitGodMode() 
     {
-        GameObject.FindObjectOfType<PlayerHealth>()._shouldTakeDamage = true;
+        FindObjectOfType<PlayerHealth>()._shouldTakeDamage = true;
         _toggleGodMode.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
     }
     
