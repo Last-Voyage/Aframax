@@ -2,12 +2,12 @@
 // File Name :         PatrolEnemyBehavior.cs
 // Author :            Tommy Roberts
 // Contributor:        Andrea Swihart-DeCoster
+//                     Ryan Swanson
 // Creation Date :     10/10/2024
 //
 // Brief Description : Controls functionality for the spawned patrol enemy
 *****************************************************************************/
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -47,11 +47,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private Coroutine _patrolCoroutine;
 
     /// <summary>
-    /// Attack will despawn when lifetime >= attackDurations
-    /// </summary>
-    private float _lifetime;
-
-    /// <summary>
     /// Starts the patrol
     /// </summary>
     private void Start() 
@@ -59,7 +54,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
         SubscribeToEvents();
         CheckPlayerAlreadyInRoom();
         BeginPatrolling();
-        InitializeLifetime();
         InitializePlayerTransform();
     }
 
@@ -69,15 +63,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     private void InitializePlayerTransform()
     {
         _playerTransform = PlayerMovementController.Instance.transform;
-    }
-
-    /// <summary>
-    /// Initializes _lifetime
-    /// </summary>
-    private void InitializeLifetime()
-    {
-        _lifetime = 0.0f;
-        RoomTongueAttack.DestroyAllEnemies.AddListener(EndLifetime);
     }
 
     /// <summary>
@@ -142,7 +127,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
         ChooseNextRandomPatrolPoint();
 
         // Controls enemy movement as long as it's alive
-        while(gameObject != null && _lifetime < _attackDuration)
+        while(gameObject != null)
         {
             // Only attack if player is within range
             if(!_isPlayerInAttackRange)
@@ -161,22 +146,18 @@ public class PatrolEnemyBehavior : MonoBehaviour
                 ChooseNextRandomPatrolPoint();
             }
 
-            _lifetime += Time.deltaTime;
             yield return null;
         }
-
-        EndLifetime();
-        
     }
 
     /// <summary>
     /// Notifies that patrol enemy has died and destroys self
     /// </summary>
-    private void EndLifetime()
+    private void DestroyEnemy()
     {
         RoomTongueAttack.OnPatrolEnemyDied?.Invoke(this);
-        RoomTongueAttack.DestroyAllEnemies.RemoveListener(EndLifetime);
-        // Enemy dies once lifetime has expired
+        
+        // Destroys enemy
         if (gameObject != null)
         {
             Destroy(gameObject);
@@ -227,6 +208,7 @@ public class PatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().AddListener(PlayerExitedRoom);
+        RoomTongueAttack.DestroyAllEnemies.AddListener(DestroyEnemy);
     }
 
     /// <summary>
@@ -236,5 +218,6 @@ public class PatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().RemoveListener(PlayerExitedRoom);
+        RoomTongueAttack.DestroyAllEnemies.RemoveListener(DestroyEnemy);
     }
 }

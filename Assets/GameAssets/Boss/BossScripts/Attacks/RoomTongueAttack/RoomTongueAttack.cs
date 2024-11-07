@@ -71,7 +71,7 @@ public class RoomTongueAttack : BaseBossAttack
     private bool _subscribedToEvents = false;
 
     /// <summary>
-    /// Called when thee attack ends to destroy all spawned enemies
+    /// Called when the attack ends to destroy all spawned enemies
     /// </summary>
     public static UnityEvent DestroyAllEnemies {get; private set;} = new();
 
