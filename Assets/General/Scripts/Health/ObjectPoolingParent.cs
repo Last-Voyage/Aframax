@@ -63,7 +63,7 @@ public class ObjectPoolingParent : MonoBehaviour
     }
 
     /// <summary>
-    /// Reclaims all objects any object pool
+    /// Reclaims all objects in any object pool
     /// </summary>
     private void ReclaimAllObjects()
     {
