@@ -14,12 +14,12 @@ using UnityEngine.Events;
 /// <summary>
 /// contains functionality for the patrol enemy spawning
 /// </summary>
-public class PatrolEnemySpawner : MonoBehaviour
+public class LockdownAttackEnemySpawner : MonoBehaviour
 {
     /// <summary>
     /// Invoked when an enemy is spawned
     /// </summary>
-    public static Action<PatrolEnemyBehavior> OnEnemySpawned;
+    public static Action<LockdownAttackEnemyBehavior> OnEnemySpawned;
    
     /// <summary>
     /// Initializes the enemy patrol data when an enemy is spawned
@@ -33,12 +33,12 @@ public class PatrolEnemySpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        RoomTongueAttack.SpawnPatrolEnemies += SpawnEnemy;
+        LockdownAttack.SpawnPatrolEnemies += SpawnEnemy;
     }
 
     private void OnDisable()
     {
-        RoomTongueAttack.SpawnPatrolEnemies -= SpawnEnemy;
+        LockdownAttack.SpawnPatrolEnemies -= SpawnEnemy;
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class PatrolEnemySpawner : MonoBehaviour
         _instantiatedPatrolEnemy = 
             Instantiate(_patrolEnemyPrefab, patrolLocation.EnemySpawnPoint.position, Quaternion.identity);
 
-        PatrolEnemyBehavior patrolEnemyBehavior = _instantiatedPatrolEnemy.GetComponent<PatrolEnemyBehavior>();
+        LockdownAttackEnemyBehavior patrolEnemyBehavior = _instantiatedPatrolEnemy.GetComponent<LockdownAttackEnemyBehavior>();
 
         //Initializes the enemies patrol data information
         InitializeEnemyData.AddListener(patrolEnemyBehavior.InitializeAttackInformation);
