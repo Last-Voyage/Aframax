@@ -72,6 +72,7 @@ public class UniversalManagers : CoreManagersFramework
         {
             mainManager.SetupMainManager();
         }
+        _objectPoolingParent.SubscribeToEvents();
     }
 
     /// <summary>
