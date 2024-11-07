@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Interface for implementing interactible system with player
+/// Interface for implementing interactable system with player
 /// </summary>
 public interface PlayerInteractableInterface
 {
