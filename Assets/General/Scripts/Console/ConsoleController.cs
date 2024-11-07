@@ -6,6 +6,7 @@
 // in the console will use
 *****************************************************************************/
 
+using Cinemachine;
 using System;
 using TMPro;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class ConsoleController : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private bool _isInDeveloperMode;
+    private bool _isInFreeLookCamMode = false;
 
     [Space]
     [Tooltip("Can be found inside of the console prefab")]
@@ -34,6 +36,14 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private TMP_InputField _dmgAmountInputField;
 
     [SerializeField] private GameObject _toggleGodMode;
+
+    [Header("Free look cam references")]
+    [SerializeField] private GameObject _freeLookCam;
+    [SerializeField] private GameObject _toggleFreeLookCamButton;
+    
+    private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
+    //look cam mode
+
 
     private PlayerInputMap _playerInput;
     
@@ -55,6 +65,10 @@ public class ConsoleController : MonoBehaviour
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
         _toggleGodMode.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
+
+        //free look cam
+        _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
+        
     }
 
   /// <summary>
@@ -79,8 +93,72 @@ public class ConsoleController : MonoBehaviour
         }
     }
 
+    #region FreelookCam
+    /// <summary>
+    /// The player unposseses the character
+    /// and become a free look cam that can
+    /// fly arround
+    /// </summary>
+    private void ToggleFreeLookCam()
+    {
+        if (!_isInDeveloperMode) return;
+
+        if (!_isInFreeLookCamMode)
+        {
+             _spawnedFreeLookCam = EnterFreeLookCam();
+            _toggleFreeLookCamButton.GetComponentInChildren<TMP_Text>().text = "Exit Free Look Cam";
+        }
+        else if (_isInFreeLookCamMode)
+        {
+            ExitFreeLookCam();
+            _toggleFreeLookCamButton.GetComponentInChildren<TMP_Text>().text = "Enter Free Look Cam";
+        }
+
+    }
+    /// <summary>
+    /// Puts the player in free look cam
+    /// mode
+    /// </summary>
+    private GameObject EnterFreeLookCam()
+    {
+        if (!_isInDeveloperMode) return null;
+
+        CinemachineVirtualCamera _playerVirtualCam = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
+
+        //spawn free look cam
+        GameObject _tempFreeLookCam = Instantiate(_freeLookCam,
+            GameObject.FindGameObjectWithTag("MainCamera").transform.position, Quaternion.identity,
+            GameObject.FindObjectOfType<BoatScriptTag>().transform);
+        
+        //turn off the players old virtualmachine cam gameobject
+        _playerVirtualCam.enabled = false;
+
+        _isInFreeLookCamMode = true;
+        return _tempFreeLookCam;
+    }
+    /// <summary>
+    /// takes the player out of free look cam mode
+    /// </summary>
+    private void ExitFreeLookCam()
+    {
+        if (!_isInDeveloperMode) return;
+
+
+        //turn on the player virtual machine cam
+        GameObject.FindObjectOfType<PlayerCamScriptTag>().gameObject.
+            GetComponent<CinemachineVirtualCamera>().enabled = true;
+        //Destroy free look cam
+        Destroy(_spawnedFreeLookCam);
+        
+
+        _isInFreeLookCamMode = false;
+
+    }
+
+    #endregion
+
     #region Damage Player
-    
+
     /// <summary>
     /// deal damage to the player
     /// </summary>
@@ -159,6 +237,7 @@ public class ConsoleController : MonoBehaviour
         Time.timeScale = 1;
         _playerTakeDamageButton.onClick.RemoveAllListeners();
         _toggleGodMode.GetComponent<Button>().onClick.RemoveAllListeners();
+        _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
     }
 }
