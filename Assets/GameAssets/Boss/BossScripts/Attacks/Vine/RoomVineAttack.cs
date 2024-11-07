@@ -2,6 +2,7 @@
 // File Name :         FullRoomAttack.cs
 // Author :            Tommy Roberts
 // Contributor :       Andrew Stapay
+//                     Ryan Swanson
 // Creation Date :     10/9/2024
 //
 // Brief Description : controls the full room attack for the boss
@@ -188,6 +189,7 @@ public class RoomVineAttack : BaseBossAttack
                     newHitbox.transform.parent = transform;
                     
                     //TODO in VS: Damage and timer should be handled by a new script on the indicator prefab, not here
+                    //That link doesn't exist
                     // https://bradleycapstone.atlassian.net/browse/LV-322?atlOrigin=eyJpIjoiZjM1ZGM1MTg5MTA3NDY0ZjlkMmRiYTRhMDViNDYwYjUiLCJwIjoiaiJ9
                     var attackCollider = newHitbox.GetComponent<Collider>();
                     attackCollider.enabled = false;
