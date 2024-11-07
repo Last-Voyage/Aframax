@@ -145,7 +145,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             yield return null;
         }
 
-        InvokeSceneChangedEvent();
+        InvokeOnSceneChangedEvent();
 
         //Can start the ending scene transition animation here
         //Will be implemented when scene transition work occurs
@@ -162,7 +162,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
-        InvokeSceneAdditiveLoadAddEvent();
+        InvokeOnSceneAdditiveLoadAddEvent();
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         SceneManager.UnloadSceneAsync(sceneID);
 
-        InvokeSceneAdditiveLoadRemoveEvent();
+        InvokeOnSceneAdditiveLoadRemoveEvent();
     }
 
     #region Base Manager
@@ -186,32 +186,51 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     #endregion
 
     #region Events
+    /// <summary>
+    /// Invokes event for just before a scene changes
+    /// </summary>
     private void InvokeOnBeforeSceneChangeEvent()
     {
         _onBeforeSceneChange?.Invoke();
     }
 
-    private void InvokeSceneChangedEvent()
+    /// <summary>
+    /// Invokes event for after a scene changes
+    /// </summary>
+    private void InvokeOnSceneChangedEvent()
     {
         _onSceneChanged?.Invoke();
     }
 
-    public void InvokeGameplaySceneLoaded()
+    /// <summary>
+    /// Invokes event for when a gameplay scene is loaded
+    /// A gameplay scene is a scene with gameplay managers
+    /// </summary>
+    public void InvokeOnGameplaySceneLoaded()
     {
         _onGameplaySceneLoaded?.Invoke();
     }
 
+    /// <summary>
+    /// Invokes event for when leaving a gameplay scene
+    /// </summary>
     public void InvokeOnLeavingGameplayScene()
     {
         _onLeavingGameplayScene?.Invoke();
     }
 
-    private void InvokeSceneAdditiveLoadAddEvent()
+    /// <summary>
+    /// Invokes an event for when a scene is additively loaded
+    /// </summary>
+    private void InvokeOnSceneAdditiveLoadAddEvent()
     {
         _onAdditiveLoadAddedEvent?.Invoke();
     }
 
-    private void InvokeSceneAdditiveLoadRemoveEvent()
+    /// <summary>
+    /// Invokes an event for when an additively loaded scene is removed
+    /// </summary>
+    private void InvokeOnSceneAdditiveLoadRemoveEvent()
     {
         _onAdditiveLoadRemovedEvent?.Invoke();
     }

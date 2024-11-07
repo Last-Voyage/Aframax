@@ -63,6 +63,6 @@ public class GameplayManagers : CoreManagersFramework
             mainManager.SetUpMainManager();
         }
 
-        AframaxSceneManager.Instance.InvokeGameplaySceneLoaded();
+        AframaxSceneManager.Instance.InvokeOnGameplaySceneLoaded();
     }
 }
