@@ -37,10 +37,12 @@ public class EnvironmentManager : MainGameplayManagerFramework
     }
 
     #region Base Manager
-    
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the environment manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 

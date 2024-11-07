@@ -82,18 +82,18 @@ public class VfxManager : MainUniversalManagerFramework
     /// <summary>
     /// Establishes the instance of VfxManager
     /// </summary>
-    public override void SetupInstance()
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 
     /// <summary>
     /// Performs the needed setup for the manager including spawning and setting up VFX
     /// </summary>
-    public override void SetupMainManager()
+    public override void SetUpMainManager()
     {
-        base.SetupMainManager();
+        base.SetUpMainManager();
         SetUpAllVfxInGame();
     }
     #endregion
