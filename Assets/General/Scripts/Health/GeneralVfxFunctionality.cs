@@ -13,7 +13,13 @@ using UnityEngine;
 /// </summary>
 public class GeneralVfxFunctionality : MonoBehaviour
 {
+    [Tooltip("All vfx to play when activated")]
     private ParticleSystem[] _particleSystems;
+    [Tooltip("All animations to play with an associated vfx if it has any")]
+    private Animator[] _vfxAnimators;
+
+    [Tooltip("The animation trigger used for all vfx animations")]
+    private const string VFX_ANIMATION_TRIGGER = "PlayVfxAnim";
 
     /// <summary>
     /// Adds all particle systems attached to this to a list
@@ -21,6 +27,7 @@ public class GeneralVfxFunctionality : MonoBehaviour
     public void SetupChildParticleSystems()
     {
         _particleSystems = GetComponentsInChildren<ParticleSystem>();
+        _vfxAnimators = GetComponentsInChildren<Animator>();
     }
 
     /// <summary>
@@ -28,9 +35,15 @@ public class GeneralVfxFunctionality : MonoBehaviour
     /// </summary>
     public void StartAllVfx()
     {
+        //Play all vfx
         foreach (ParticleSystem particleSystem in _particleSystems)
         {
             particleSystem.Play();
+        }
+        //Play all animations
+        foreach (Animator animator in _vfxAnimators)
+        {
+            animator.SetTrigger(VFX_ANIMATION_TRIGGER);
         }
     }
 
