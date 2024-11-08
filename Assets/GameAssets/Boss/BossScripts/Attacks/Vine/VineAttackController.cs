@@ -1,11 +1,11 @@
 /*****************************************************************************
-// File Name :         FullRoomAttack.cs
+// File Name :         VineAttackController.cs
 // Author :            Tommy Roberts
 // Contributor :       Andrew Stapay
 //                     Ryan Swanson
 // Creation Date :     10/9/2024
 //
-// Brief Description : controls the full room attack for the boss
+// Brief Description : Controls the functionality for the bosses vine attack
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -17,14 +17,8 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// contains functionality for full room attack
 /// </summary>
-public class RoomVineAttack : BaseBossAttack
+public class VineAttackController : BaseBossAttack
 {
-    [Tooltip("Link to indicator object that flashes red currently")]
-    [SerializeField] private GameObject _bossAttack1Indicator;
-    [SerializeField] private Material _lowOpacity;
-    [SerializeField] private Material _hitOpacity;
-    [Space]
-
     [Tooltip("Tentacle Prefab goes here")]
     [SerializeField] private GameObject _tentaclePrefab;
     [Tooltip("Set locations for tentacle spawns here. If this list is empty, random locations will be added")]
@@ -35,24 +29,10 @@ public class RoomVineAttack : BaseBossAttack
     [SerializeField] private int _minEnemies = 1;
     [Space]
 
-    [Tooltip("How fast the indicator blinks when it begins blinking")]
-    [SerializeField] private float _startBlinkInterval = 1f;
-    [Tooltip("How fast the indicator blinks right before it actually attacks")]
-    [SerializeField] private float _endBlinkInterval = .1f;
-    [Tooltip("How long the indicator will blink for")]
-    [SerializeField] private float _blinkDuration = 3f;
-    [Tooltip("How long the actual attack will stay covering the room")]
-    [SerializeField] private float _hitBoxAppearDuration = 1f;
-    [Tooltip("Amount of time between attacks (in seconds)")]
-    [SerializeField] private float _timeBetweenAttacks = 3f;
-    [Space]
-
     private Transform _playerTransform;
 
     private GameObject[][] _spawnedEnemies = new GameObject[0][];
     private List<Coroutine> _activeCoroutines = new List<Coroutine>();
-
-    private const float ATTACK_DETECTION_RANGE = 8;
 
     private int _numTentaclesDestroyed;
     private int _numTentaclesSpawned;
@@ -176,42 +156,9 @@ public class RoomVineAttack : BaseBossAttack
     /// <returns></returns>
     private IEnumerator PerformAttack(int spawnIndex)
     {
-        while (true)
-        {
-            if (TentaclesLeft(spawnIndex))
-            {
-                if (Vector3.Distance(_spawnPoints[spawnIndex].position, _playerTransform.position) < ATTACK_DETECTION_RANGE)
-                {
-                    GameObject newHitbox = Instantiate(_bossAttack1Indicator, _spawnPoints[spawnIndex].position, 
-                        Quaternion.identity);
 
-                    // Need to be childed to move with the boat
-                    newHitbox.transform.parent = transform;
-                    
-                    //TODO in VS: Damage and timer should be handled by a new script on the indicator prefab, not here
-                    //That link doesn't exist
-                    // https://bradleycapstone.atlassian.net/browse/LV-322?atlOrigin=eyJpIjoiZjM1ZGM1MTg5MTA3NDY0ZjlkMmRiYTRhMDViNDYwYjUiLCJwIjoiaiJ9
-                    var attackCollider = newHitbox.GetComponent<Collider>();
-                    attackCollider.enabled = false;
 
-                    var attackMeshRenderer = newHitbox.GetComponent<MeshRenderer>();
-                   
-                    attackMeshRenderer.material = _lowOpacity;
-
-                    //start blinking indicating attack will happen soon
-                    float elapsedTime = 0f;
-                    while (TentaclesLeft(spawnIndex) && elapsedTime < _blinkDuration)
-                    {
-                        float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, 
-                            elapsedTime / _blinkDuration);
-                        attackMeshRenderer.enabled = true;
-                        yield return new WaitForSeconds(currentBlinkInterval);
-                        attackMeshRenderer.enabled = false;
-                        yield return new WaitForSeconds(currentBlinkInterval);
-                        elapsedTime += currentBlinkInterval * 2;
-                    }
-
-                    if (TentaclesLeft(spawnIndex))
+                    /*if (TentaclesLeft(spawnIndex))
                     {
                         // after done blinking make the block solid and enable collider to hit player for a second
                         attackMeshRenderer.material = _hitOpacity;
@@ -233,17 +180,14 @@ public class RoomVineAttack : BaseBossAttack
                         yield return new WaitForSeconds(_timeBetweenAttacks);
                     }
 
-                    Destroy(newHitbox);
-                }
-            }
-
+                    Destroy(newHitbox);*/
             if (!TentaclesLeft(spawnIndex))
             {
                 StopCoroutine(_activeCoroutines[spawnIndex]);
             }
 
             yield return null;
-        }
+        
     }
 
     /// <summary>
