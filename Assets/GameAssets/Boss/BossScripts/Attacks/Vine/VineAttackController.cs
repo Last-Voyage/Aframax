@@ -7,12 +7,8 @@
 //
 // Brief Description : Controls the functionality for the bosses vine attack
 *****************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// contains functionality for full room attack
@@ -29,10 +25,7 @@ public class VineAttackController : BaseBossAttack
     [SerializeField] private int _minEnemies = 1;
     [Space]
 
-    private Transform _playerTransform;
-
     private GameObject[][] _spawnedEnemies = new GameObject[0][];
-    private List<Coroutine> _activeCoroutines = new List<Coroutine>();
 
     private int _numTentaclesDestroyed;
     private int _numTentaclesSpawned;
@@ -50,11 +43,17 @@ public class VineAttackController : BaseBossAttack
         SubscribeToEvents();
     }
 
+    /// <summary>
+    /// Subscribes to any needed events
+    /// </summary>
     protected override void SubscribeToEvents()
     {
         _onBeginAttack.AddListener(BeginAttack);
     }
 
+    /// <summary>
+    /// Unsubscribes to any needed events
+    /// </summary>
     protected override void UnsubscribeToEvents()
     {
         _onBeginAttack.RemoveListener(BeginAttack);
@@ -68,11 +67,6 @@ public class VineAttackController : BaseBossAttack
         UnsubscribeToEvents();
     }
 
-    private void InitializePlayerTransform()
-    {
-        _playerTransform = PlayerMovementController.Instance.transform;
-    }
-
     /// <summary>
     /// Begins the attack functionality
     /// </summary>
@@ -81,17 +75,10 @@ public class VineAttackController : BaseBossAttack
         base.BeginAttack();
         _numTentaclesDestroyed = 0;
 
-        InitializePlayerTransform();
-
         if (_spawnedEnemies.Length == 0)
         {
             // Spawn the tentacle enemies
             SpawnTentacles();
-        }
-
-        for (int i = 0; i < _spawnPoints.Length; i++)
-        {
-            _activeCoroutines.Add(StartCoroutine(PerformAttack(i)));
         }
     }
 
@@ -148,46 +135,6 @@ public class VineAttackController : BaseBossAttack
     private void AddTentacleDestroyedListener(WeakPointHandler weakPointHandler)
     {
         weakPointHandler.GetOnAllWeakPointsDestroyedEvent().AddListener(OnTentacleDestroyed);
-    }
-
-    /// <summary>
-    /// creates an indicator that the room is about to be attacked, and then attacks everything in room
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator PerformAttack(int spawnIndex)
-    {
-
-
-                    /*if (TentaclesLeft(spawnIndex))
-                    {
-                        // after done blinking make the block solid and enable collider to hit player for a second
-                        attackMeshRenderer.material = _hitOpacity;
-
-                        // TODO in VS: Damage and timer should be handled by a new script on the indicator prefab, not here
-                        // https://bradleycapstone.atlassian.net/browse/LV-322?atlOrigin=eyJpIjoiZjM1ZGM1MTg5MTA3NDY0ZjlkMmRiYTRhMDViNDYwYjUiLCJwIjoiaiJ9
-                        attackCollider.enabled = true;
-
-                        attackMeshRenderer.enabled = true;
-
-                        //wait for hit time
-                        yield return new WaitForSeconds(_hitBoxAppearDuration);
-
-                        //disable the enabled
-                        attackMeshRenderer.enabled = false;
-                        attackCollider.enabled = false;
-
-                        // wait before attacking again
-                        yield return new WaitForSeconds(_timeBetweenAttacks);
-                    }
-
-                    Destroy(newHitbox);*/
-            if (!TentaclesLeft(spawnIndex))
-            {
-                StopCoroutine(_activeCoroutines[spawnIndex]);
-            }
-
-            yield return null;
-        
     }
 
     /// <summary>

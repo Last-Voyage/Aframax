@@ -7,13 +7,17 @@
 *****************************************************************************/
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Functionality for the spawned tentacles for the vine attack
+/// </summary>
 [RequireComponent(typeof(AttackWarningZone))]
 public class VineAttack : MonoBehaviour
 {
+    [Tooltip("The range the player must be within before it attacks")]
     [SerializeField] private float _attackRange;
+    [Tooltip("How long the attack hitbox remains active")]
     [SerializeField] private float _attackDuration;
 
     private GameObject _attackGameObject;
@@ -22,25 +26,31 @@ public class VineAttack : MonoBehaviour
     private Transform _attackTargetLocation;
 
     private Coroutine _attackRangeChecksCoroutine;
-    private Coroutine _attackCoroutine;
 
     // Start is called before the first frame update
     void Start()
     {
         SetStartingValues();
+        SubscribeToEvents();
         StartAttackRangeChecks();
     }
 
+    /// <summary>
+    /// Sets any values that are needed before functionality begins
+    /// </summary>
     private void SetStartingValues()
     {
-        _attackGameObject = transform.GetChild(0).gameObject;
+        _attackGameObject = transform.GetChild(0).GetChild(0).gameObject;
         _attackGameObject.SetActive(false);
 
-        _warningZone.GetComponent<AttackWarningZone>();
+        _warningZone = GetComponent<AttackWarningZone>();
 
         _attackTargetLocation = PlayerMovementController.Instance.transform;
     }
 
+    /// <summary>
+    /// Starts checking if the player is in the attack range
+    /// </summary>
     private void StartAttackRangeChecks()
     {
         if(_attackRangeChecksCoroutine == null)
@@ -55,38 +65,66 @@ public class VineAttack : MonoBehaviour
     /// <returns></returns>
     private IEnumerator PlayerInAttackRangeChecks()
     {
-        while (Vector3.Distance(transform.position, _attackTargetLocation.position) < _attackRange)
+        while (Vector3.Distance(transform.position, _attackTargetLocation.position) > _attackRange)
         {
             yield return null;
         }
         AttackWarningStart();
     }
 
-
+    /// <summary>
+    /// Starts the attack warning
+    /// </summary>
     private void AttackWarningStart()
     {
         _attackRangeChecksCoroutine = null;
-        _warningZone.GetOnWarningEndEvent().AddListener(BeginAttack);
+        
         _warningZone.StartWarningZone();
     }
 
+    /// <summary>
+    /// Activates the hitbox after the warning has concluded
+    /// </summary>
     private void BeginAttack()
     {
-        _warningZone.GetOnWarningEndEvent().RemoveListener(BeginAttack);
         _attackGameObject.SetActive(true);
-        _attackCoroutine = StartCoroutine(AttackProcess());
+        StartCoroutine(AttackProcess());
     }
 
+    /// <summary>
+    /// The duration of the attack
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator AttackProcess()
     {
         yield return new WaitForSeconds(_attackDuration);
         AttackEnd();
     }
 
+    /// <summary>
+    /// Concludes the attack
+    /// </summary>
     private void AttackEnd()
     {
-        _attackCoroutine = null;
         _attackGameObject.SetActive(false);
+
+        //Loops back around to continue attacking
+        StartAttackRangeChecks();
+    }
+
+    private void SubscribeToEvents()
+    {
+        _warningZone.GetOnWarningEndEvent().AddListener(BeginAttack);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        _warningZone.GetOnWarningEndEvent().RemoveListener(BeginAttack);
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
     }
 
 }
