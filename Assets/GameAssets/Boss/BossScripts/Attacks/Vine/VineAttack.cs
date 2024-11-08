@@ -65,6 +65,7 @@ public class VineAttack : MonoBehaviour
     /// <returns></returns>
     private IEnumerator PlayerInAttackRangeChecks()
     {
+        //Returns null until the player is in range
         while (Vector3.Distance(transform.position, _attackTargetLocation.position) > _attackRange)
         {
             yield return null;
@@ -112,11 +113,17 @@ public class VineAttack : MonoBehaviour
         StartAttackRangeChecks();
     }
 
+    /// <summary>
+    /// Subscribes to any needed events
+    /// </summary>
     private void SubscribeToEvents()
     {
         _warningZone.GetOnWarningEndEvent().AddListener(BeginAttack);
     }
 
+    /// <summary>
+    /// Unsubscribes to any subscribed events
+    /// </summary>
     private void UnsubscribeToEvents()
     {
         _warningZone.GetOnWarningEndEvent().RemoveListener(BeginAttack);
