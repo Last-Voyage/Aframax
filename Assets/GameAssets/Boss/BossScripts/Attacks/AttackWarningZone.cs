@@ -58,6 +58,14 @@ public class AttackWarningZone : MonoBehaviour
     }
 
     /// <summary>
+    /// Removes all listeners to prevent memory leaks
+    /// </summary>
+    private void OnDestroy()
+    {
+        _onWarningEnd.RemoveAllListeners();
+    }
+
+    /// <summary>
     /// Sets any values before functionalty begins
     /// </summary>
     private void SetStartingValues()

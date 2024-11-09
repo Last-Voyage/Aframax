@@ -8,31 +8,47 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Functionality for the spawned tentacles for the vine attack
 /// </summary>
-[RequireComponent(typeof(AttackWarningZone))]
 public class VineAttack : MonoBehaviour
 {
-    [Tooltip("The range the player must be within before it attacks")]
-    [SerializeField] private float _attackRange;
     [Tooltip("How long the attack hitbox remains active")]
     [SerializeField] private float _attackDuration;
 
-    private GameObject _attackGameObject;
+    /// <summary>
+    /// READ ME --------------
+    /// At some point I would like to turn the Lockdown Enemy Room into a more general script so that it's
+    /// functionality can
+    /// </summary>
+    [Tooltip("The time between when the vine can attempt an attack")]
+    [SerializeField] private float _attackCooldown;
+    private bool _canAttack;
+
+    [SerializeField] private Transform _vineAttackSpawnLocation;
+    [SerializeField] private GameObject _vineAttackPrefab;
+
     private AttackWarningZone _warningZone;
+    /// <summary>
+    /// NOTE THIS HAS BEEN RENAMED IN ANOTHER COMMIT
+    /// I WOULD LIKE TO TURN THIS SCRIPT FROM BEING ASSOCIATED WITH ONLY THE PATROL ENEMIES INTO BEING A GENERAL
+    /// SCRIPT FOR DETECTING WHEN A PLAYER ENTERS A ROOM
+    /// So yes I get it that it doesn't make sense to be using the functionality from a seperate attack here
+    /// </summary>
+    private PatrolEnemyRoom _roomDetection;
 
-    private Transform _attackTargetLocation;
+    private GameObject _spawnedVine;
 
-    private Coroutine _attackRangeChecksCoroutine;
+    private UnityEvent _onVinesInRoomDestroyed = new();
 
-    // Start is called before the first frame update
-    void Start()
+    private GameObject _attackGameObject;
+
+    private void Start()
     {
         SetStartingValues();
         SubscribeToEvents();
-        StartAttackRangeChecks();
     }
 
     /// <summary>
@@ -40,98 +56,92 @@ public class VineAttack : MonoBehaviour
     /// </summary>
     private void SetStartingValues()
     {
+        _canAttack = true;
+        _warningZone = GetComponent<AttackWarningZone>();
+        _roomDetection = GetComponent<PatrolEnemyRoom>();
+
         _attackGameObject = transform.GetChild(0).GetChild(0).gameObject;
         _attackGameObject.SetActive(false);
-
-        _warningZone = GetComponent<AttackWarningZone>();
-
-        _attackTargetLocation = PlayerMovementController.Instance.transform;
     }
 
-    /// <summary>
-    /// Starts checking if the player is in the attack range
-    /// </summary>
-    private void StartAttackRangeChecks()
+    
+    public void StartVineAttack()
     {
-        if(_attackRangeChecksCoroutine == null)
-        {
-            _attackRangeChecksCoroutine = StartCoroutine(PlayerInAttackRangeChecks());
-        }
-    }
+        _spawnedVine = Instantiate(_vineAttackPrefab);
 
-    /// <summary>
-    /// creates an indicator that the room is about to be attacked, and then attacks everything in room
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator PlayerInAttackRangeChecks()
-    {
-        //Returns null until the player is in range
-        while (Vector3.Distance(transform.position, _attackTargetLocation.position) > _attackRange)
-        {
-            yield return null;
-        }
-        AttackWarningStart();
-    }
-
-    /// <summary>
-    /// Starts the attack warning
-    /// </summary>
-    private void AttackWarningStart()
-    {
-        _attackRangeChecksCoroutine = null;
         
+    }
+
+    private void PlayerEnteredRoom()
+    {
+        if (_canAttack)
+        {
+            _canAttack = false;
+            StartAttackProcess();
+        }
+    }
+
+    private void StartAttackProcess()
+    {
         _warningZone.StartWarningZone();
+        _warningZone.GetOnWarningEndEvent().AddListener(BeginAttackDamage);
     }
 
     /// <summary>
     /// Activates the hitbox after the warning has concluded
     /// </summary>
-    private void BeginAttack()
+    private void BeginAttackDamage()
     {
         _attackGameObject.SetActive(true);
-        StartCoroutine(AttackProcess());
+        StartCoroutine(AttackDamageProcess());
     }
 
     /// <summary>
     /// The duration of the attack
     /// </summary>
     /// <returns></returns>
-    private IEnumerator AttackProcess()
+    private IEnumerator AttackDamageProcess()
     {
         yield return new WaitForSeconds(_attackDuration);
-        AttackEnd();
+        AttackDamageEnd();
+        yield return new WaitForSeconds(_attackCooldown);
+        CooldownOver();
     }
 
     /// <summary>
     /// Concludes the attack
     /// </summary>
-    private void AttackEnd()
+    private void AttackDamageEnd()
     {
         _attackGameObject.SetActive(false);
-
-        //Loops back around to continue attacking
-        StartAttackRangeChecks();
     }
 
-    /// <summary>
-    /// Subscribes to any needed events
-    /// </summary>
-    private void SubscribeToEvents()
+    private void CooldownOver()
     {
-        _warningZone.GetOnWarningEndEvent().AddListener(BeginAttack);
+        _canAttack = true;
+        CheckPlayerIsAlreadyInRoom();
     }
 
-    /// <summary>
-    /// Unsubscribes to any subscribed events
-    /// </summary>
+    private void CheckPlayerIsAlreadyInRoom()
+    {
+        if(_roomDetection.IsPlayerInRoom())
+        {
+            PlayerEnteredRoom();
+        }
+    }
+
+    public void SubscribeToEvents()
+    {
+        _roomDetection.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
+    }
+
     private void UnsubscribeToEvents()
     {
-        _warningZone.GetOnWarningEndEvent().RemoveListener(BeginAttack);
+        _roomDetection.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
     }
 
     private void OnDestroy()
     {
         UnsubscribeToEvents();
     }
-
 }
