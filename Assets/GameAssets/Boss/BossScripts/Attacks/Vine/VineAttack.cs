@@ -13,39 +13,25 @@ using UnityEngine.Events;
 /// <summary>
 /// Functionality for the spawned tentacles for the vine attack
 /// </summary>
+[RequireComponent(typeof(AttackWarningZone))]
 public class VineAttack : MonoBehaviour
 {
     [Tooltip("How long the attack hitbox remains active")]
-    [SerializeField] private float _attackDuration;
-
-    /// <summary>
-    /// READ ME --------------
-    /// At some point I would like to turn the Lockdown Enemy Room into a more general script so that it's
-    /// functionality can
-    /// </summary>
-    [Tooltip("The time between when the vine can attempt an attack")]
-    [SerializeField] private float _attackCooldown;
-    private bool _canAttack;
+    [SerializeField] private float _attackHitboxDuration;
 
     [SerializeField] private Transform _vineAttackSpawnLocation;
     [SerializeField] private GameObject _vineAttackPrefab;
 
     private AttackWarningZone _warningZone;
-    /// <summary>
-    /// NOTE THIS HAS BEEN RENAMED IN ANOTHER COMMIT
-    /// I WOULD LIKE TO TURN THIS SCRIPT FROM BEING ASSOCIATED WITH ONLY THE PATROL ENEMIES INTO BEING A GENERAL
-    /// SCRIPT FOR DETECTING WHEN A PLAYER ENTERS A ROOM
-    /// So yes I get it that it doesn't make sense to be using the functionality from a seperate attack here
-    /// </summary>
-    private PatrolEnemyRoom _roomDetection;
 
     private GameObject _spawnedVine;
 
-    private UnityEvent _onVinesInRoomDestroyed = new();
-
     private GameObject _attackGameObject;
 
-    private void Start()
+    /// <summary>
+    /// Sets up the vine attack
+    /// </summary>
+    public void PerformSetUp()
     {
         SetStartingValues();
         SubscribeToEvents();
@@ -56,32 +42,24 @@ public class VineAttack : MonoBehaviour
     /// </summary>
     private void SetStartingValues()
     {
-        _canAttack = true;
         _warningZone = GetComponent<AttackWarningZone>();
-        _roomDetection = GetComponent<PatrolEnemyRoom>();
 
-        _attackGameObject = transform.GetChild(0).GetChild(0).gameObject;
+        _attackGameObject = transform.GetChild(0).gameObject;
         _attackGameObject.SetActive(false);
     }
 
-    
-    public void StartVineAttack()
+    /// <summary>
+    /// Spawns the visual vine
+    /// </summary>
+    public void SpawnVine()
     {
-        _spawnedVine = Instantiate(_vineAttackPrefab);
-
-        
+        _spawnedVine = Instantiate(_vineAttackPrefab, _vineAttackSpawnLocation);
     }
 
-    private void PlayerEnteredRoom()
-    {
-        if (_canAttack)
-        {
-            _canAttack = false;
-            StartAttackProcess();
-        }
-    }
-
-    private void StartAttackProcess()
+    /// <summary>
+    /// Causes the vine to attack
+    /// </summary>
+    public void StartAttackProcess()
     {
         _warningZone.StartWarningZone();
         _warningZone.GetOnWarningEndEvent().AddListener(BeginAttackDamage);
@@ -102,10 +80,8 @@ public class VineAttack : MonoBehaviour
     /// <returns></returns>
     private IEnumerator AttackDamageProcess()
     {
-        yield return new WaitForSeconds(_attackDuration);
+        yield return new WaitForSeconds(_attackHitboxDuration);
         AttackDamageEnd();
-        yield return new WaitForSeconds(_attackCooldown);
-        CooldownOver();
     }
 
     /// <summary>
@@ -116,32 +92,41 @@ public class VineAttack : MonoBehaviour
         _attackGameObject.SetActive(false);
     }
 
-    private void CooldownOver()
+    /// <summary>
+    /// Destroys all vines when the attack ends
+    /// </summary>
+    private void AttackEnd()
     {
-        _canAttack = true;
-        CheckPlayerIsAlreadyInRoom();
+        Destroy(_spawnedVine);
     }
 
-    private void CheckPlayerIsAlreadyInRoom()
-    {
-        if(_roomDetection.IsPlayerInRoom())
-        {
-            PlayerEnteredRoom();
-        }
-    }
-
+    /// <summary>
+    /// Subscribes to all needed events
+    /// </summary>
     public void SubscribeToEvents()
     {
-        _roomDetection.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
+        //Please rename this getter to include on. Not going to do so in this to avoid merge conflicts just in case
+        VineAttackController.Instance.GetAttackEndEvent().AddListener(AttackEnd);
     }
 
+    /// <summary>
+    /// Unsubscribes to all subscribed events
+    /// </summary>
     private void UnsubscribeToEvents()
     {
-        _roomDetection.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
+        VineAttackController.Instance.GetAttackEndEvent().RemoveListener(AttackEnd);
     }
 
+    /// <summary>
+    /// Unsubscribes to events on destruction
+    /// </summary>
     private void OnDestroy()
     {
         UnsubscribeToEvents();
     }
+
+
+    #region Getters
+
+    #endregion
 }

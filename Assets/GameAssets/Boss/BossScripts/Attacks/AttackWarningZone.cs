@@ -29,17 +29,12 @@ public class AttackWarningZone : MonoBehaviour
     [SerializeField] private float _blinkDuration = 3f;
     [Tooltip("How long the actual attack will stay covering the room")]
     [SerializeField] private float _hitBoxAppearDuration = 1f;
-    [Tooltip("Amount of time between attacks (in seconds)")]
-    [SerializeField] private float _timeBetweenAttacks = 3f;
 
     [Space]
     //Left serialized as this may be used on multiple attacks and as
     //  such the child may not always be in the same location
     [Tooltip("Link to indicator object that flashes red currently")]
     [SerializeField] private GameObject _attackIndicator;
-    [Space]
-    [Tooltip("The location and parent of the attack warning")]
-    [SerializeField] private Transform _attackLocation;
 
     private MeshRenderer _warningMeshRenderer;
 
@@ -79,6 +74,7 @@ public class AttackWarningZone : MonoBehaviour
     /// </summary>
     public void StartWarningZone()
     {
+        print("Start warning zone");
         if(_warningZoneCoroutine == null)
         {
             _warningZoneCoroutine = StartCoroutine(WarningZoneProcess());
@@ -93,6 +89,7 @@ public class AttackWarningZone : MonoBehaviour
         if (_warningZoneCoroutine != null)
         {
             StopCoroutine(_warningZoneCoroutine);
+            _warningZoneCoroutine = null;
         }
     }
 
@@ -124,6 +121,7 @@ public class AttackWarningZone : MonoBehaviour
     /// </summary>
     private void WarningComplete()
     {
+        _warningZoneCoroutine = null;
         InvokeOnWarningEnd();
         if(_doesDestroyOnWarningEnd)
         {
