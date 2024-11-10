@@ -5,36 +5,61 @@
 //
 // Brief Description : The array of different boat layouts that are accessible in other scripts
 *****************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// The class holding the functionality of map shifting
+/// </summary>
 public class MapShifting : MonoBehaviour
 {
     //A way of adding layouts into the scene outside of this script
+    [FormerlySerializedAs("_listOfLayouts")]
     [Tooltip("Add all layouts of boat inside of here")]
-    [SerializeField]private protected GameObject[] _listOfLayouts;
+    [SerializeField]private protected GameObject[] _boatLayouts;
     private protected int _currentLayout = 0;
+    
     //For calling outside of script into another script
     private UnityEvent _onMapShifting = new();
     private UnityEvent _onMapReset = new();
+    
     /// <summary>
     /// Allow for first layout to turn on if not on already
     /// </summary>
     void Start()
     {
-        _listOfLayouts[_currentLayout].SetActive(true);
-        Subscribe();
+        _boatLayouts[_currentLayout].SetActive(true);
+        
+        SubscribeToEvents();
     }
     /// <summary>
     /// Turns off current layout of boat and goes to the next one
     /// </summary>
     private protected void LayoutSwapForward()
     {
-        _listOfLayouts[_currentLayout].SetActive(false);
-        ++_currentLayout;
-        _listOfLayouts[_currentLayout].SetActive(true);
+        if (_currentLayout <= _boatLayouts.Length - 1)
+        {
+            _boatLayouts[_currentLayout].SetActive(false);
+        
+            ++_currentLayout;
+        
+            _boatLayouts[_currentLayout].SetActive(true);
+        }
+    }
+    /// <summary>
+    /// Turns off current layout of boat and goes back one
+    /// </summary>
+    private protected void LayoutSwapBackward()
+    {
+        if (_currentLayout > 0)
+        {
+            _boatLayouts[_currentLayout].SetActive(false);
+        
+            --_currentLayout;
+        
+            _boatLayouts[_currentLayout].SetActive(true);
+        }
     }
     /// <summary>
     /// Turns off current layout of boat and goes all the way back to the
@@ -42,14 +67,16 @@ public class MapShifting : MonoBehaviour
     /// </summary>
     private protected void LayoutSwapToOriginal()
     {
-        _listOfLayouts[_currentLayout].SetActive(false);
+        _boatLayouts[_currentLayout].SetActive(false);
+        
         _currentLayout = 0;
-        _listOfLayouts[_currentLayout].SetActive(true);
+        
+        _boatLayouts[_currentLayout].SetActive(true);
     }
     /// <summary>
     /// Attach functionality on to the events 
     /// </summary>
-    protected virtual void Subscribe()
+    private protected void SubscribeToEvents()
     {
         _onMapReset.AddListener(LayoutSwapToOriginal);
         _onMapShifting.AddListener(LayoutSwapForward);
@@ -57,7 +84,7 @@ public class MapShifting : MonoBehaviour
     /// <summary>
     /// Detach functionality away from the events
     /// </summary>
-    protected virtual void Unsubscribe()
+    private protected void Unsubscribe()
     {
         _onMapReset.RemoveListener(LayoutSwapToOriginal);
         _onMapShifting.RemoveListener(LayoutSwapForward);
