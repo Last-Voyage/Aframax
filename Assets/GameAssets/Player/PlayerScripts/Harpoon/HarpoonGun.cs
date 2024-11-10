@@ -54,7 +54,7 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The projectile being fired")]
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
 
-    private HarpoonProjectileMovement[] _harpoonSpearPool;
+    private static HarpoonProjectileMovement[] _harpoonSpearPool;
     private int _harpoonPoolCounter;
 
     private EHarpoonFiringState _harpoonFiringState;
@@ -458,6 +458,8 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void CreateInitialHarpoonPool()
     {
+        if(_harpoonSpearPool != null) { return; }
+
         //Sets the size of the object to pool to be determined based on the _harpoonPoolingAmount
         _harpoonSpearPool = new HarpoonProjectileMovement[_harpoonPoolingAmount];
         //Iterate for each space in the harpoon pool
@@ -468,7 +470,7 @@ public class HarpoonGun : MonoBehaviour
                 _playerLookDirection.position, Quaternion.identity).GetComponent<HarpoonProjectileMovement>();
             //Adds the new harpoon to the pool
             _harpoonSpearPool[i] = newestHarpoon;
-            ObjectPoolingParent.Instance.AddObjectAsChild(newestHarpoon.gameObject);
+            ObjectPoolingParent.Instance.InitiallyAddObjectToPool(newestHarpoon.gameObject);
             newestHarpoon.gameObject.SetActive(false);
         }
     }

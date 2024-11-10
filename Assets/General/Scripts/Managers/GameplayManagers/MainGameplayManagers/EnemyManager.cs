@@ -14,11 +14,14 @@
 public class EnemyManager : MainGameplayManagerFramework
 {
     public static EnemyManager Instance;
-    
+
     #region Base Manager
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the enemy manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 

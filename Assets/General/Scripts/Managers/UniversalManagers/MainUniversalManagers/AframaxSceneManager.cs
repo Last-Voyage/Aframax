@@ -33,20 +33,33 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private readonly UnityEvent _onBeforeSceneChange = new();
     private readonly UnityEvent _onSceneChanged = new();
     private readonly UnityEvent _onGameplaySceneLoaded = new();
+    private readonly UnityEvent _onLeavingGameplayScene = new();
 
     private readonly UnityEvent _onEndOfGameScene = new();
 
     private readonly UnityEvent _onAdditiveLoadAddedEvent = new();
     private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
-    protected override void SubscribeToEvents()
+    private bool _isGameplaySceneLoaded;
+
+    /// <summary>
+    /// Subscribes to any needed gameplay events
+    /// </summary>
+    protected override void SubscribeToGameplayEvents()
     {
-        _onGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
+        base.SubscribeToGameplayEvents();
+        _isGameplaySceneLoaded = true;
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
     }
 
-    private void SubscribeToGameplayEvents()
+    /// <summary>
+    /// Unsubscribes to any subscribed gameplay events
+    /// </summary>
+    protected override void UnsubscribeToGameplayEvents()
     {
-        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
+        base.UnsubscribeToGameplayEvents();
+        _isGameplaySceneLoaded = false;
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(LoadDeathScreen);
     }
 
     /// <summary>
@@ -111,13 +124,17 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         InvokeOnBeforeSceneChangeEvent();
 
+        if (_isGameplaySceneLoaded)
+        {
+            InvokeOnLeavingGameplayScene();
+        }
+        
         //Starts loading the scene
         AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneID);
 
         //Can start the starting scene transition animation here
         //Will be implemented when scene transition work occurs
         
-
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
 
@@ -128,7 +145,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             yield return null;
         }
 
-        InvokeSceneChangedEvent();
+        InvokeOnSceneChangedEvent();
 
         //Can start the ending scene transition animation here
         //Will be implemented when scene transition work occurs
@@ -145,7 +162,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
-        InvokeSceneAdditiveLoadAddEvent();
+        InvokeOnSceneAdditiveLoadAddEvent();
     }
 
     /// <summary>
@@ -156,46 +173,64 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         SceneManager.UnloadSceneAsync(sceneID);
 
-        InvokeSceneAdditiveLoadRemoveEvent();
+        InvokeOnSceneAdditiveLoadRemoveEvent();
     }
 
     #region Base Manager
-    public override void SetupInstance()
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        _onGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
     }
 
     #endregion
 
     #region Events
+    /// <summary>
+    /// Invokes event for just before a scene changes
+    /// </summary>
     private void InvokeOnBeforeSceneChangeEvent()
     {
         _onBeforeSceneChange?.Invoke();
     }
 
-    private void InvokeSceneChangedEvent()
+    /// <summary>
+    /// Invokes event for after a scene changes
+    /// </summary>
+    private void InvokeOnSceneChangedEvent()
     {
         _onSceneChanged?.Invoke();
     }
 
-    public void InvokeGameplaySceneLoaded()
+    /// <summary>
+    /// Invokes event for when a gameplay scene is loaded
+    /// A gameplay scene is a scene with gameplay managers
+    /// </summary>
+    public void InvokeOnGameplaySceneLoaded()
     {
         _onGameplaySceneLoaded?.Invoke();
     }
 
-    private void InvokeSceneAdditiveLoadAddEvent()
+    /// <summary>
+    /// Invokes event for when leaving a gameplay scene
+    /// </summary>
+    public void InvokeOnLeavingGameplayScene()
+    {
+        _onLeavingGameplayScene?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes an event for when a scene is additively loaded
+    /// </summary>
+    private void InvokeOnSceneAdditiveLoadAddEvent()
     {
         _onAdditiveLoadAddedEvent?.Invoke();
     }
 
-    private void InvokeSceneAdditiveLoadRemoveEvent()
+    /// <summary>
+    /// Invokes an event for when an additively loaded scene is removed
+    /// </summary>
+    private void InvokeOnSceneAdditiveLoadRemoveEvent()
     {
         _onAdditiveLoadRemovedEvent?.Invoke();
     }
@@ -210,13 +245,15 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     #endregion
 
-        #region Getters
+    #region Getters
 
     public UnityEvent GetOnBeforeSceneChanged => _onBeforeSceneChange;
 
     public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
     public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
+
+    public UnityEvent GetOnLeavingGameplayScene => _onLeavingGameplayScene;
 
     public UnityEvent GetOnEndOfGameScene => _onEndOfGameScene;
 
