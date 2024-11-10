@@ -99,14 +99,21 @@ public class SaveManager : MainUniversalManagerFramework
     }
 
     #region BaseManager
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the save manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
-    public override void SetupMainManager()
+
+    /// <summary>
+    /// Sets up the main manager by establishing the path to the Json file and loading the data
+    /// </summary>
+    public override void SetUpMainManager()
     {
-        base.SetupMainManager();
+        base.SetUpMainManager();
         EstablishPath();
         Load();
     }
