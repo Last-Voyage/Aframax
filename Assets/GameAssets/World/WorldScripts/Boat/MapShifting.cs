@@ -84,7 +84,7 @@ public class MapShifting : MonoBehaviour
     /// <summary>
     /// Detach functionality away from the events
     /// </summary>
-    private protected void Unsubscribe()
+    private protected void OnDestroy()
     {
         _onMapReset.RemoveListener(LayoutSwapToOriginal);
         _onMapShifting.RemoveListener(LayoutSwapForward);
