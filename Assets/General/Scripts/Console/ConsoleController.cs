@@ -129,6 +129,8 @@ public class ConsoleController : MonoBehaviour
         GameObject _tempFreeLookCam = Instantiate(_freeLookCam,
             GameObject.FindGameObjectWithTag("MainCamera").transform.position, Quaternion.identity,
             GameObject.FindObjectOfType<BoatScriptTag>().transform);
+
+        //stop actual player from moving
         
         //turn off the players old virtualmachine cam gameobject
         _playerVirtualCam.enabled = false;
@@ -147,6 +149,9 @@ public class ConsoleController : MonoBehaviour
         //turn on the player virtual machine cam
         GameObject.FindObjectOfType<PlayerCamScriptTag>().gameObject.
             GetComponent<CinemachineVirtualCamera>().enabled = true;
+
+        //allow the real player to move
+
         //Destroy free look cam
         Destroy(_spawnedFreeLookCam);
         

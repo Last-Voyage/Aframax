@@ -36,10 +36,16 @@ public class FreeLookCamController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _playerInput.DebugConsole.FreeCamMoveRight.performed += ctx => Move(ctx.ReadValue<Vector3>(), _body);
-
         //assign cam
         _cam = Camera.main.gameObject.transform;
+    }
+    /// <summary>
+    /// happens every frame
+    /// </summary>
+    private void Update()
+    {
+        //moves the player with a Horizontal, vertical, forward axis
+        Move(_playerInput.DebugConsole.FreeCamMoveRight.ReadValue<Vector3>(), _body);
     }
 
     /// <summary>
