@@ -377,7 +377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6341873227037195287}
   m_Layer: 0
-  m_Name: Spawn Location
+  m_Name: Patrol Spawn Location
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -439,6 +439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6627824112831669272}
   - component: {fileID: 7038147037736771759}
+  - component: {fileID: 6289667806234695398}
   - component: {fileID: 3856976843622544238}
   m_Layer: 0
   m_Name: Room 2
@@ -461,6 +462,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7744926274610057594}
+  - {fileID: 2555909484923295434}
   - {fileID: 157525344420337225}
   - {fileID: 1462188777118910007}
   m_Father: {fileID: 8997744881989016829}
@@ -475,6 +477,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62bec63bb3277ff48840cc98b87db92c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6289667806234695398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2339223663021862977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978138afebabc11469261cf3b7bc4fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &3856976843622544238
@@ -502,8 +516,39 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!1 &2350781988944875196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2555909484923295434}
+  m_Layer: 0
+  m_Name: Core Spawn Location
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2555909484923295434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350781988944875196}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 3.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6627824112831669272}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2542220225447457474
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,7 +559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7744926274610057594}
   m_Layer: 0
-  m_Name: Spawn Location
+  m_Name: Patrol Spawn Location
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -637,6 +682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7153886658006366543}
+  - component: {fileID: 8518846359608737576}
   - component: {fileID: 850279219270789402}
   - component: {fileID: 4842948938765100013}
   m_Layer: 0
@@ -660,10 +706,23 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6341873227037195287}
+  - {fileID: 7474759396547217712}
   - {fileID: 27892005251510206}
   - {fileID: 1051113227370512345}
   m_Father: {fileID: 8997744881989016829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8518846359608737576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4076551583303942971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978138afebabc11469261cf3b7bc4fcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &850279219270789402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701,7 +760,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!1 &4526684751437036583
 GameObject:
@@ -733,6 +792,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 157525344420337225}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5601342851089425200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7474759396547217712}
+  m_Layer: 0
+  m_Name: Core Spawn Location
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7474759396547217712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5601342851089425200}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -6.94}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7153886658006366543}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7371341158954784983
 GameObject:
@@ -775,7 +865,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9150284068057102002}
   - component: {fileID: 8295260928953096001}
-  - component: {fileID: 3618937016815793247}
   m_Layer: 0
   m_Name: LockdownBossAttack
   m_TagString: Untagged
@@ -811,21 +900,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07abd4a5cd5661342a595dfaf43ee676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _numEnemiesPerSpawnSet: 2
-  _timeBetweenIndividualSpawns: 0.5
-  _timeBetweenSpawnSets: 5
-  _maxEnemiesSpawned: 6
---- !u!114 &3618937016815793247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8623397831901295661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 978138afebabc11469261cf3b7bc4fcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   _patrolEnemyPrefab: {fileID: 8693923624853357280, guid: 8ddc0c87ec7ffd242a5721f373cf2ee2,
     type: 3}
+  _coreEnemyPrefab: {fileID: 2967664288150767758, guid: 759f513581148dc44a0633a4439b869d,
+    type: 3}
+  _numberOfRoomsToAttack: 1
