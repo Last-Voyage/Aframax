@@ -23,6 +23,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
     [SerializeField] private PlayerCameraController _playerCamera;
     //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
+    //Controls player interaction functionality
+    [SerializeField] private PlayerInteraction _playerInteraction;
 
     private PlayerInputMap _playerInputMap;
 
@@ -73,6 +75,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         SubscribeToMovementInput();
         SubscribeToCameraInput();
         SubscribeToHarpoonInput();
+        SubscribeToPlayerInteraction();
 
         PlayerManager.Instance.InvokeOnPlayerInputToggle(true);
 
@@ -137,6 +140,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
         _harpoonGun.SubscribeInput();
     }
 
+    private void SubscribeToPlayerInteraction()
+    {
+        _playerInteraction.SubscribeInput();
+    }
+
     /// <summary>
     /// Unsubscribes to all input
     /// </summary>
@@ -146,6 +154,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         UnsubscribeToMovementInput();
         UnsubscribeToCameraInput();
         UnsubscribeToHarpoonInput();
+        UnsubscribeToPlayerInteraction();
 
         _playerInputMap.Disable();
 
@@ -176,6 +185,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToHarpoonInput()
     {
         _harpoonGun.UnsubscribeInput();
+    }
+
+    private void UnsubscribeToPlayerInteraction()
+    {
+        _playerInteraction.UnsubscribeInput();
     }
     #endregion
 

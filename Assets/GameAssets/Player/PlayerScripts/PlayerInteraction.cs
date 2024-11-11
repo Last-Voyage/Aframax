@@ -37,6 +37,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             GiveInteractableFeedback(hit.collider.gameObject);
             if (_interactInput.WasPerformedThisFrame()) 
+
             {
                 Interact(hit.collider.gameObject);
             }
@@ -70,7 +71,7 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     #region INPUT
-    private void OnEnable()
+    /*private void OnEnable()
     {
         SubscribeInput();
     }
@@ -78,7 +79,7 @@ public class PlayerInteraction : MonoBehaviour
     private void OnDisable()
     {
         UnsubscribeInput();
-    }
+    }*/
 
     public void SubscribeInput()
     {
@@ -86,6 +87,14 @@ public class PlayerInteraction : MonoBehaviour
         _playerInput.currentActionMap.Enable();
 
         _interactInput = _playerInput.currentActionMap.FindAction("Interact");
+        if (_interactInput != null)
+        {
+            Debug.Log("InteractInput established");
+        }
+        else
+        {
+            Debug.Log("Houston...");
+        }
     }
 
     /// <summary>
