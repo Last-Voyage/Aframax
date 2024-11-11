@@ -54,7 +54,7 @@ Shader "Custom/WaterShader"
         // The base water color
         _WaterColor("Water Color", Color) = (0, 0, 1, 1)
         
-        // The base water color
+        // A color to multiply the water by after all effects are applied
         _WaterTint("Water Tint", Color) = (1, 1, 1, 1)
         
         // The opacity of the overall specular contribution
@@ -835,7 +835,10 @@ Shader "Custom/WaterShader"
                 // Main light
                 Light mainLight = GetMainLight();
 
+                // Diffuse lighting
                 float diffuse = saturate(dot(normal, mainLight.direction));
+
+                // Specular contribution
                 float specularDot = saturate(dot(
                     normal,
                     normalize(mainLight.direction + viewDir)
