@@ -17,7 +17,7 @@ using UnityEngine.Events;
 public class PlayerHealth : BaseHealth
 {
     //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
-    [SerializeField] private int _iFrameDelay;
+    [SerializeField] private float _iFrameDelayInSeconds;
     private Coroutine _IFrameCoroutine;
 
 
@@ -64,17 +64,9 @@ public class PlayerHealth : BaseHealth
     /// <returns></returns>
     IEnumerator InvincibilityFrames()
     {
-        int i = 0;
-        while(i < _iFrameDelay)
-        {
-            _shouldTakeDamage = false;
-            i++;
-        }
-        if(i >= _iFrameDelay)
-        {
-            _shouldTakeDamage = true;
-            yield return null;
-        }
+        _shouldTakeDamage = false;
+        yield return new WaitForSeconds(_iFrameDelayInSeconds);
+        _shouldTakeDamage = true;
     }
 
 
