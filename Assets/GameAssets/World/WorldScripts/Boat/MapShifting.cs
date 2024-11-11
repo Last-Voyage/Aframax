@@ -17,7 +17,7 @@ public class MapShifting : MonoBehaviour
     //A way of adding layouts into the scene outside of this script
     [FormerlySerializedAs("_listOfLayouts")]
     [Tooltip("Add all layouts of boat inside of here")]
-    [SerializeField]private protected GameObject[] _boatLayouts;
+    [SerializeField] private protected GameObject[] _boatLayouts;
     private protected int _currentLayout = 0;
     
     //For calling outside of script into another script
@@ -33,6 +33,7 @@ public class MapShifting : MonoBehaviour
         
         SubscribeToEvents();
     }
+    
     /// <summary>
     /// Turns off current layout of boat and goes to the next one
     /// </summary>
@@ -47,6 +48,7 @@ public class MapShifting : MonoBehaviour
             _boatLayouts[_currentLayout].SetActive(true);
         }
     }
+    
     /// <summary>
     /// Turns off current layout of boat and goes back one
     /// </summary>
@@ -61,6 +63,7 @@ public class MapShifting : MonoBehaviour
             _boatLayouts[_currentLayout].SetActive(true);
         }
     }
+    
     /// <summary>
     /// Turns off current layout of boat and goes all the way back to the
     /// Original
@@ -73,6 +76,7 @@ public class MapShifting : MonoBehaviour
         
         _boatLayouts[_currentLayout].SetActive(true);
     }
+    
     /// <summary>
     /// Attach functionality on to the events 
     /// </summary>
@@ -81,6 +85,7 @@ public class MapShifting : MonoBehaviour
         _onMapReset.AddListener(LayoutSwapToOriginal);
         _onMapShifting.AddListener(LayoutSwapForward);
     }
+    
     /// <summary>
     /// Detach functionality away from the events
     /// </summary>
@@ -89,24 +94,30 @@ public class MapShifting : MonoBehaviour
         _onMapReset.RemoveListener(LayoutSwapToOriginal);
         _onMapShifting.RemoveListener(LayoutSwapForward);
     }
+    
     #region Events
-/// <summary>
-/// For map shifting to be used outside this script
-/// </summary>
+    /// <summary>
+    /// For map shifting to be used outside this script
+    /// </summary>
     private void InvokeOnMapShifting()
     {
         _onMapShifting?.Invoke();
     }
-/// <summary>
-///  For map resetting to be used outside this script
-/// </summary>
+    
+    /// <summary>
+    ///  For map resetting to be used outside this script
+    /// </summary>
     private void InvokeOnMapReset()
     {
         _onMapReset?.Invoke();
     }
+    
     #endregion
+    
     #region Getters
+    
     public UnityEvent OnMapShifting => _onMapShifting;
     public UnityEvent OnMapReset => _onMapReset;
+    
     #endregion
 }
