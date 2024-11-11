@@ -3,7 +3,7 @@
 // Author :            Jeremiah Peters
 // Creation Date :     11/10/24
 //
-// Brief Description : handles using escape to leave the settings menu and what scene to go to after
+// Brief Description : handles using escape to leave the settings menu
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -22,8 +22,6 @@ public class SettingsSceneBehaviour : MonoBehaviour
 
     public void ExitScene()
     {
-        Debug.Log("hi");
-
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance._lastSceneIndex, 0);
     }
 
