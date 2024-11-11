@@ -18,7 +18,7 @@ public class PlayerHealth : BaseHealth
 {
     //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
-    private Coroutine _IFrameCoroutine;
+    private Coroutine _iFrameCoroutine;
 
 
 
@@ -54,7 +54,7 @@ public class PlayerHealth : BaseHealth
             RuntimeSfxManager.APlayOneShotSFX?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
 
-            _IFrameCoroutine = StartCoroutine(InvincibilityFrames());
+            _iFrameCoroutine = StartCoroutine(InvincibilityFrames());
         }
     }
 
