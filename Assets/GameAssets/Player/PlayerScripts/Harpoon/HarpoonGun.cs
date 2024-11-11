@@ -231,7 +231,7 @@ public class HarpoonGun : MonoBehaviour
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
 
-        RuntimeSfxManager.APlayOneShotSFX?
+        RuntimeSfxManager.APlayOneShotSfx?
             .Invoke(FmodSfxEvents.Instance.HarpoonShot, gameObject.transform.position);
 
         StartReloadProcess();
@@ -249,7 +249,7 @@ public class HarpoonGun : MonoBehaviour
 
         StartCoroutine(ReloadHarpoon());
 
-        RuntimeSfxManager.APlayOneShotSFX?
+        RuntimeSfxManager.APlayOneShotSfx?
             .Invoke(FmodSfxEvents.Instance.HarpoonReload, gameObject.transform.position);
     }
 
