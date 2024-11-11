@@ -25,7 +25,6 @@ public class SettingsSceneBehaviour : MonoBehaviour
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance._lastSceneIndex, 0);
     }
 
-
     private void OnEnable()
     {
         _playerInputControls.Enable();
