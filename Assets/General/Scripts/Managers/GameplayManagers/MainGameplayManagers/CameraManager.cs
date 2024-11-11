@@ -20,12 +20,14 @@ public class CameraManager : MainGameplayManagerFramework
     /// Controls the player camera
     /// </summary>
     private static readonly UnityEvent<bool> _onCameraMovementToggled = new();
-    
+
     #region Base Manager
-    
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the camera manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 

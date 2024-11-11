@@ -63,16 +63,19 @@ public class TimeManager : MainUniversalManagerFramework
     #endregion
 
     #region Base Manager
-    public override void SetupInstance()
+    /// <summary>
+    /// Establishes the instance for the time manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupInstance();
+        base.SetUpInstance();
         Instance = this;
     }
 
     #endregion
 
     #region Events
-    
+
     /// <summary>
     /// Toggles the game being paused or unpaused
     /// </summary>

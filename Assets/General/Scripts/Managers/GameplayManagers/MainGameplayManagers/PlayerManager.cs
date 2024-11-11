@@ -51,13 +51,15 @@ public class PlayerManager : MainGameplayManagerFramework
     private static readonly UnityEvent _onPlayerDeath = new();
 
     #region Base Manager
-
-    public override void SetupMainManager()
+    /// <summary>
+    /// Establishes the instance for the player manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        base.SetupMainManager();
+        base.SetUpInstance();
         Instance = this;
     }
-    
+
     #endregion
 
     #region Events
