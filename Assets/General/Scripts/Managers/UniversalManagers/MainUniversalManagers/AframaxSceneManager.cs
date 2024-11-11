@@ -25,7 +25,12 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
 
     [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
+
     [field: SerializeField] public int EndScreenSceneIndex { get; private set; }
+
+    [field: SerializeField] public int SettingsSceneIndex { get; private set; }
+
+    public int _lastSceneIndex;
 
     public static AframaxSceneManager Instance;
 
@@ -57,7 +62,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         return !(SceneManager.GetActiveScene().buildIndex == MainMenuSceneIndex ||
                SceneManager.GetActiveScene().buildIndex == DeathScreenSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex);
+               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex ||
+               SceneManager.GetActiveScene().buildIndex == SettingsSceneIndex);
     }
 
     /// <summary>
@@ -67,6 +73,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <param name="sceneTransition">The scene transition being used</param>
     private void StartAsyncSceneLoad(int sceneID, SceneTransition sceneTransition)
     {
+        UpdateLastScene();
+
         //Only starts loading a scene if no other scene is being loaded already
         if (_sceneLoadingCoroutine == null)
         {
@@ -157,6 +165,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         SceneManager.UnloadSceneAsync(sceneID);
 
         InvokeSceneAdditiveLoadRemoveEvent();
+    }
+
+    private void UpdateLastScene()
+    {
+        _lastSceneIndex = SceneManager.GetActiveScene().buildIndex;
     }
 
     #region Base Manager
