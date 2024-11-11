@@ -44,7 +44,6 @@ public class ConsoleController : MonoBehaviour
     private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
     //look cam mode
 
-
     private PlayerInputMap _playerInput;
     
     /// <summary>
@@ -67,8 +66,7 @@ public class ConsoleController : MonoBehaviour
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
 
         //free look cam
-        _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
-        
+        _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);    
     }
 
   /// <summary>
@@ -94,6 +92,7 @@ public class ConsoleController : MonoBehaviour
     }
 
     #region FreelookCam
+    
     /// <summary>
     /// The player unposseses the character
     /// and become a free look cam that can
@@ -113,8 +112,8 @@ public class ConsoleController : MonoBehaviour
             ExitFreeLookCam();
             _toggleFreeLookCamButton.GetComponentInChildren<TMP_Text>().text = "Enter Free Look Cam";
         }
-
     }
+    
     /// <summary>
     /// Puts the player in free look cam
     /// mode
@@ -138,13 +137,13 @@ public class ConsoleController : MonoBehaviour
         _isInFreeLookCamMode = true;
         return _tempFreeLookCam;
     }
+    
     /// <summary>
     /// takes the player out of free look cam mode
     /// </summary>
     private void ExitFreeLookCam()
     {
         if (!_isInDeveloperMode) return;
-
 
         //turn on the player virtual machine cam
         GameObject.FindObjectOfType<PlayerCamScriptTag>().gameObject.
@@ -153,11 +152,9 @@ public class ConsoleController : MonoBehaviour
         //allow the real player to move
 
         //Destroy free look cam
-        Destroy(_spawnedFreeLookCam);
-        
+        Destroy(_spawnedFreeLookCam);   
 
         _isInFreeLookCamMode = false;
-
     }
 
     #endregion
@@ -184,6 +181,7 @@ public class ConsoleController : MonoBehaviour
             }
         }
     }
+    
     #endregion
 
     #region God Mode
