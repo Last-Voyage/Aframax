@@ -151,6 +151,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribePlayerInput()
     {
         if (!_subscribedToInput) { return; }
+        
         UnsubscribeToMovementInput();
         UnsubscribeToCameraInput();
         UnsubscribeToHarpoonInput();
