@@ -26,7 +26,6 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerInput _playerInput;
     private InputAction _interactInput;
 
-
     /// <summary>
     /// Every frame, Ray is cast.  If the ray hits something and the button is
     /// </summary>
