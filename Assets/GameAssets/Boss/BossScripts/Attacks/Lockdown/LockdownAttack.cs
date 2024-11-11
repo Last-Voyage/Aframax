@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         RoomTongueAttack.cs
 // Author :            Andrea Swihart-DeCoster
+// Contributor :       Ryan Swanson
 // Creation Date :     10/26/24
 //
 // Brief Description : Controls the Aggressive Room 1 Attack Behavior
