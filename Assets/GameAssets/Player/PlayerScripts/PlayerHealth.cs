@@ -7,6 +7,7 @@
 // Brief Description : Controls the player's health functionality
 *****************************************************************************/
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,21 +15,20 @@ using UnityEngine.Events;
 /// Controls the player health functionality
 /// </summary>
 public class PlayerHealth : BaseHealth
-{ 
+{
+    //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
+    [SerializeField] private int _iFrameDelay;
+    private Coroutine _IFrameCoroutine;
 
-    /// <summary>
-    /// Performs the base functionality then calls player related event
-    /// </summary>
-    /// <param name="heal"> The amount of healing received </param>
 
 
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
 
     /// <summary>
-    /// increases health
+    /// Performs the base functionality then calls player related event
     /// </summary>
-    /// <param name="heal"></param>
+    /// <param name="heal"> The amount of healing received </param>
 
     public override void IncreaseHealth(float heal)
     {
@@ -53,8 +53,30 @@ public class PlayerHealth : BaseHealth
 
             RuntimeSfxManager.APlayOneShotSFX?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
+
+            _IFrameCoroutine = StartCoroutine(InvincibilityFrames());
         }
     }
+
+    /// <summary>
+    /// used to grant the player temporary invincibility after taking damage
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator InvincibilityFrames()
+    {
+        int i = 0;
+        while(i < _iFrameDelay)
+        {
+            _shouldTakeDamage = false;
+            i++;
+        }
+        if(i >= _iFrameDelay)
+        {
+            _shouldTakeDamage = true;
+            yield return null;
+        }
+    }
+
 
     /// <summary>
     /// When the player dies, performs the base functionality then calls player related event
