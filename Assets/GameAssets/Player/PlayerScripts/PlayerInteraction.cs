@@ -20,27 +20,44 @@ public class PlayerInteraction : MonoBehaviour
     [Tooltip("How far can the player reach interactable objects")]
     [SerializeField] private float _maxReach;
     [Tooltip("Ray that is cast from camera to find interactable objects")]
-    Ray ray;
+    private Ray _ray;
 
     //Input
     private PlayerInput _playerInput;
     private InputAction _interactInput;
 
     /// <summary>
-    /// Every frame, Ray is cast.  If the ray hits something and the button is
+    /// Every frame, checks for interactable objects
     /// </summary>
     private void Update()
     {
-        ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit, _maxReach))
+        CheckForInteractable();
+    }
+
+    /// <summary>
+    /// Sets the ray, then checks to see if ray intersects interactable object
+    ///     If it intersects, then checks if interact button was pressed
+    ///         If button is pressed, it interacts with object
+    /// </summary>
+    private void CheckForInteractable()
+    {
+        SetRaycast();
+        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach))
         {
             GiveInteractableFeedback(hit.collider.gameObject);
-            if (_interactInput.WasPerformedThisFrame()) 
-
+            if (_interactInput.WasPerformedThisFrame())
             {
                 Interact(hit.collider.gameObject);
             }
         }
+    }
+
+    /// <summary>
+    /// Casts ray from center of camera.  Used to check for interactable objects
+    /// </summary>
+    private void SetRaycast()
+    {
+        _ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
     }
 
     /// <summary>
@@ -70,34 +87,19 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     #region INPUT
-    /*private void OnEnable()
-    {
-        SubscribeInput();
-    }
-
-    private void OnDisable()
-    {
-        UnsubscribeInput();
-    }*/
-
+    /// <summary>
+    /// Subscribes to input
+    /// </summary>
     public void SubscribeInput()
     {
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
         _interactInput = _playerInput.currentActionMap.FindAction("Interact");
-        if (_interactInput != null)
-        {
-            Debug.Log("InteractInput established");
-        }
-        else
-        {
-            Debug.Log("Houston...");
-        }
     }
 
     /// <summary>
-    /// Unsubscribes from all input
+    /// Unsubscribes from input
     /// </summary>
     public void UnsubscribeInput()
     {

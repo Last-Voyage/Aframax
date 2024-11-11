@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         PlayerFunctionalityCore.cs
-// Author :            Ryan Swanson
+// Author :            Ryan Swanson, Alex Kalscheur
 // Creation Date :     9/28/2024
 //
 // Brief Description : Holds higher level functionality to set up the player and harpoon
@@ -140,6 +140,9 @@ public class PlayerFunctionalityCore : MonoBehaviour
         _harpoonGun.SubscribeInput();
     }
 
+    /// <summary>
+    /// Subscribes to interaction input
+    /// </summary>
     private void SubscribeToPlayerInteraction()
     {
         _playerInteraction.SubscribeInput();
@@ -188,6 +191,9 @@ public class PlayerFunctionalityCore : MonoBehaviour
         _harpoonGun.UnsubscribeInput();
     }
 
+    /// <summary>
+    /// Unsubscribes from interaction input
+    /// </summary>
     private void UnsubscribeToPlayerInteraction()
     {
         _playerInteraction.UnsubscribeInput();
