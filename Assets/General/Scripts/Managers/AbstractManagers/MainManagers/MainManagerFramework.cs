@@ -20,11 +20,11 @@ public abstract class MainManagerFramework : MonoBehaviour
     /// <summary>
     /// Establishes the instance relating to the manager
     /// </summary>
-    public abstract void SetupInstance();
+    public abstract void SetUpInstance();
     /// <summary>
     /// Performs any needed setup specific to the manager
     /// </summary>
-    public abstract void SetupMainManager();
+    public abstract void SetUpMainManager();
     /// <summary>
     /// Used to subscribe to all events required for functionality
     /// </summary>
