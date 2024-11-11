@@ -54,6 +54,9 @@ Shader "Custom/WaterShader"
         // The base water color
         _WaterColor("Water Color", Color) = (0, 0, 1, 1)
         
+        // The base water color
+        _WaterTint("Water Tint", Color) = (1, 1, 1, 1)
+        
         // The opacity of the overall specular contribution
         _SpecularIntensity("Specular Intensity", Float) = 1.0
         
@@ -120,21 +123,18 @@ Shader "Custom/WaterShader"
         
         // Speed of the ripples from center
         _RippleSpeed("Ripple Speed", Float) = 0.1
-        
     }
     SubShader 
     {
         Tags 
         { 
-            "RenderType"="Transparent"
-            "Queue"="Transparent"
-            "RenderPipeline"="UniversalPipeline"
+            "RenderType" = "Transparent"
+            "Queue" = "Transparent"
+            "RenderPipeline" = "UniversalPipeline"
         }
         
         Pass
         {
-            ZWrite Off
-            
             HLSLPROGRAM
 
             #pragma target 5.0
@@ -143,12 +143,10 @@ Shader "Custom/WaterShader"
             #pragma hull Hull
             #pragma domain Domain
             #pragma fragment Fragment
-            #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3 _GBUFFER_NORMALS_OCT
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
 
             // Unity requires a re-declaration of all
             // ShaderLab Properties in the SubShader
@@ -165,6 +163,7 @@ Shader "Custom/WaterShader"
                 float4 _WaveC;
             
                 float4 _WaterColor;
+                float4 _WaterTint;
                 float _SpecularIntensity;
                 float _NormalIntensity;
                 float3 _WaterFogColor;
@@ -830,6 +829,21 @@ Shader "Custom/WaterShader"
 
                 return n * _RippleIntensity;
             }
+
+            float CalculateSpecular(float3 normal, float3 viewDir)
+            {
+                // Main light
+                Light mainLight = GetMainLight();
+
+                float diffuse = saturate(dot(normal, mainLight.direction));
+                float specularDot = saturate(dot(
+                    normal,
+                    normalize(mainLight.direction + viewDir)
+                ));
+
+                // Output specular
+                return pow(diffuse * specularDot, 16.0) * _SpecularIntensity;
+            }
             
             float4 Fragment(Interpolators input) : SV_Target
             {
@@ -907,20 +921,11 @@ Shader "Custom/WaterShader"
                 // Reflection angle
                 const float3 reflectDir = reflect(-L, -N);
 
-                // Fresnel term
-                const float f90 = saturate(
-                    1.0F - dot(
-                        viewDir,
-                        float3(0.0F, 1.0F, 0.0F)
-                ));
-
                 // Specular contribution
-                const float specular = pow(
-                    max(
-                        dot(viewDir, reflectDir),
-                        0.0F),
-                        32
-                ) * _SpecularIntensity * f90;
+                const float specular = CalculateSpecular(
+                    input.normalWS,
+                    GetWorldSpaceNormalizeViewDir(input.positionWS)
+                );
 
                 // Depth Fog
                 const float edgeFoam = ObjectSurroundingFoam(
@@ -944,6 +949,7 @@ Shader "Custom/WaterShader"
                 // Adding all the colors together
                 float3 finalColor = (
                     _WaterColor *
+                    _WaterTint *
                     NdotL *
                     gradient) +
                         specular +
