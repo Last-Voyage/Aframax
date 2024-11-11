@@ -71,7 +71,9 @@ public class LockdownAttackController : BaseBossAttack
     }
 
     #endregion
-
+    /// <summary>
+    /// Sets up all patrol locations before gameplay
+    /// </summary>
     private void Start()
     {
         _isAttackActive = false;
