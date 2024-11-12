@@ -18,11 +18,6 @@ public class PlayerHealth : BaseHealth
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
 
-    private void Update()
-    {
-        print(_currentHealth);
-    }
-
     private void Awake()
     {
         base.Awake();
