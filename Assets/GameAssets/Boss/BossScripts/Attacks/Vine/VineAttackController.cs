@@ -5,7 +5,7 @@
 //                     Ryan Swanson
 // Creation Date :     10/9/2024
 //
-// Brief Description : Controls the functionality for the bosses vine attack
+// Brief Description : Controls the functionality of handling all vine attacks
 *****************************************************************************/
 
 using System.Collections;
@@ -14,12 +14,10 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// contains functionality for full room attack
+/// Contains functionality to spawn and control multiple vine attacks
 /// </summary>
 public class VineAttackController : BaseBossAttack
 {
-    public static VineAttackController Instance;
-
     /// <summary>
     /// Unity doesn't seem to like Serializing an array of arrays but it likes this
     /// </summary>
@@ -36,26 +34,9 @@ public class VineAttackController : BaseBossAttack
 
     private void Start()
     {
-        EstablishInstance();
-
         _isAttackActive = false;
         _attackIntervalDelay = new WaitForSeconds(_attackInterval);
         GetAllRooms();
-    }
-
-    /// <summary>
-    /// Creates the instance of the attack
-    /// </summary>
-    private void EstablishInstance()
-    {
-        if(Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 
     /// <summary>
@@ -69,7 +50,7 @@ public class VineAttackController : BaseBossAttack
         //Not done in start in order make sure events are established first
         foreach(VineAttack vine in _vineAttackRooms)
         {
-            vine.PerformSetUp();
+            vine.PerformSetUp(this);
         }
     }
 

@@ -233,9 +233,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 92350673162037560}
-  - component: {fileID: 4715608059660128362}
-  - component: {fileID: 8897050658041414724}
-  - component: {fileID: 3973382322082704958}
   m_Layer: 0
   m_Name: VineAttackTentacle
   m_TagString: Untagged
@@ -260,55 +257,6 @@ Transform:
   - {fileID: 3671775698919499786}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4715608059660128362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4102899853790034209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7518098f94600054bac6ab2be835c1ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackDuration: 2
-  _attackCooldown: 0
-  _vineAttackSpawnLocation: {fileID: 0}
-  _vineAttackPrefab: {fileID: 0}
---- !u!114 &8897050658041414724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4102899853790034209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 311ec2a7dbdea234e8232eea6cd99387, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _doesBeginWarningOnStart: 0
-  _doesDestroyOnWarningEnd: 0
-  _startBlinkInterval: 1
-  _endBlinkInterval: 0.1
-  _blinkDuration: 3
-  _hitBoxAppearDuration: 1
-  _timeBetweenAttacks: 3
-  _attackIndicator: {fileID: 3844897149455458727}
-  _attackLocation: {fileID: 495891984572979587}
---- !u!114 &3973382322082704958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4102899853790034209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bec63bb3277ff48840cc98b87db92c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6067405269208179620
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,12 +361,6 @@ PrefabInstance:
 --- !u!4 &2334519725037163007 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6356517113549253535, guid: a05cfd229c3c5ec4992548aa6ee9b83b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8670278040203360864}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3844897149455458727 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5550917879836482503, guid: a05cfd229c3c5ec4992548aa6ee9b83b,
     type: 3}
   m_PrefabInstance: {fileID: 8670278040203360864}
   m_PrefabAsset: {fileID: 0}

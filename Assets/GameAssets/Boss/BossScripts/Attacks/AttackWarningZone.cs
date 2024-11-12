@@ -2,6 +2,7 @@
 // File Name :         FullRoomAttack.cs
 // Author :            Tommy Roberts
 // Contributor :       Andrew Stapay
+//                     Ryan Swanson
 // Creation Date :     10/9/2024
 //
 // Brief Description : controls the full room attack for the boss
@@ -74,7 +75,6 @@ public class AttackWarningZone : MonoBehaviour
     /// </summary>
     public void StartWarningZone()
     {
-        print("Start warning zone");
         if(_warningZoneCoroutine == null)
         {
             _warningZoneCoroutine = StartCoroutine(WarningZoneProcess());

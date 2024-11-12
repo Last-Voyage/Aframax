@@ -29,20 +29,24 @@ public class VineAttack : MonoBehaviour
 
     private GameObject _attackGameObject;
 
+    private VineAttackController _associatedController;
+
     /// <summary>
     /// Sets up the vine attack
     /// </summary>
-    public void PerformSetUp()
+    public void PerformSetUp(VineAttackController vineAttackController)
     {
-        SetStartingValues();
+        SetStartingValues(vineAttackController);
         SubscribeToEvents();
     }
 
     /// <summary>
     /// Sets any values that are needed before functionality begins
     /// </summary>
-    private void SetStartingValues()
+    private void SetStartingValues(VineAttackController vineAttackController)
     {
+        _associatedController = vineAttackController;
+
         _warningZone = GetComponent<AttackWarningZone>();
 
         _attackGameObject = transform.GetChild(0).gameObject;
@@ -107,7 +111,7 @@ public class VineAttack : MonoBehaviour
     public void SubscribeToEvents()
     {
         //Please rename this getter to include on. Not going to do so in this to avoid merge conflicts just in case
-        VineAttackController.Instance.GetAttackEndEvent().AddListener(AttackEnd);
+        _associatedController.GetAttackEndEvent().AddListener(AttackEnd);
     }
 
     /// <summary>
@@ -115,7 +119,7 @@ public class VineAttack : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        VineAttackController.Instance.GetAttackEndEvent().RemoveListener(AttackEnd);
+        _associatedController.GetAttackEndEvent().RemoveListener(AttackEnd);
     }
 
     /// <summary>
