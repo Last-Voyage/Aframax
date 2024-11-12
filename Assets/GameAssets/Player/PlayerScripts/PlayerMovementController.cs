@@ -142,7 +142,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnInputToggleEvent().AddListener(ToggleMovement);
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StopHarpoonSpeedSlowdown);
@@ -153,7 +152,6 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnInputToggleEvent().RemoveListener(ToggleMovement);
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StopHarpoonSpeedSlowdown);
@@ -479,23 +477,6 @@ public class PlayerMovementController : MonoBehaviour
 
     #endregion
 
-    /// <summary>
-    /// Activates or deactivates the movement coroutine based on the input boolean
-    /// Used when the OnMovementToggled Action is invoked
-    /// </summary>
-    /// <param name="change"> Determines if the movement should be turned on or off </param>
-    private void ToggleMovement(bool change)
-    {
-        if (change)
-        {
-            _movementCoroutine = StartCoroutine(ResolveMovement());
-        }
-        else
-        {
-            StopCoroutine(_movementCoroutine);
-            _playerRigidBody.velocity = Vector3.zero;
-        }
-    }
     #endregion
 
     #region  Getters

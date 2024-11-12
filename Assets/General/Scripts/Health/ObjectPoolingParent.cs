@@ -15,6 +15,9 @@ using UnityEngine;
 public class ObjectPoolingParent : MonoBehaviour
 {
     public static ObjectPoolingParent Instance;
+    
+    [Tooltip("Contains a list of pooled objects even if they are not currently childed to the pooling parent")]
+    private List<GameObject> _allPooledObjects = new();
 
     /// <summary>
     /// Establishes the instances
@@ -29,6 +32,16 @@ public class ObjectPoolingParent : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// Adds an object 
+    /// </summary>
+    /// <param name="newObject"></param>
+    public void InitiallyAddObjectToPool(GameObject newObject)
+    {
+        AddObjectAsChild(newObject);
+        _allPooledObjects.Add(newObject);
     }
 
     /// <summary>
@@ -47,5 +60,41 @@ public class ObjectPoolingParent : MonoBehaviour
     public void RemoveObjectAsChild(GameObject child)
     {
         child.transform.SetParent(null);
+    }
+
+    /// <summary>
+    /// Reclaims all objects in any object pool
+    /// </summary>
+    private void ReclaimAllObjects()
+    {
+        foreach(GameObject pooledObject in _allPooledObjects)
+        {
+            pooledObject.SetActive(false);
+            AddObjectAsChild(pooledObject);
+        }
+    }
+
+    /// <summary>
+    /// Subscribes to all events
+    /// </summary>
+    public void SubscribeToEvents()
+    {
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(ReclaimAllObjects);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all events
+    /// </summary>
+    private void UnsubscribeToEvents()
+    {
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.RemoveListener(ReclaimAllObjects);
+    }
+
+    /// <summary>
+    /// Unsubscribes events on destruction
+    /// </summary>
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
     }
 }
