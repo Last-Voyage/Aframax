@@ -155,7 +155,6 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private void DestroyEnemy()
     {
-        LockdownAttackController.OnPatrolEnemyDied?.Invoke(this);
         
         // Destroys enemy
         if (gameObject != null)
