@@ -14,7 +14,7 @@ using UnityEngine.Events;
 /// <summary>
 /// Controls functionality for detecing if the player is in the associated room
 /// </summary>
-public class PatrolEnemyRoom : MonoBehaviour
+public class LockdownAttackPatrolRoom : MonoBehaviour
 {
     /// <summary>
     /// Exists so that if the room has multiple trigger colliders. 
