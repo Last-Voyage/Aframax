@@ -197,6 +197,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         LastSceneIndex = SceneManager.GetActiveScene().buildIndex;
     }
 
+    /// <summary>
+    /// toggles the bool value for checking if the settings scene is loaded
+    /// </summary>
     public void ToggleSettingsSceneLoadedBool()
     {
         IsSettingsSceneLoaded = !IsSettingsSceneLoaded;
