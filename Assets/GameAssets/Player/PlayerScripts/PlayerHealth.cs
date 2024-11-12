@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealth.cs
 // Author :            Ryan Swanson
-// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba
+// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba, David Henvick
 // Creation Date :     10/15/24
 //
 // Brief Description : Controls the player's health functionality
@@ -62,7 +62,7 @@ public class PlayerHealth : BaseHealth
     /// used to grant the player temporary invincibility after taking damage
     /// </summary>
     /// <returns></returns>
-    IEnumerator InvincibilityFrames()
+    private IEnumerator InvincibilityFrames()
     {
         _shouldTakeDamage = false;
         yield return new WaitForSeconds(_iFrameDelayInSeconds);
