@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         RoomTongueAttack.cs
+// File Name :         LockdownAttackController.cs
 // Author :            Andrea Swihart-DeCoster
 // Contributor :       Ryan Swanson
 // Creation Date :     10/26/24
@@ -37,8 +37,6 @@ public class LockdownAttackController : BaseBossAttack
 
     #region Enable & Action/Event Subscriptions
 
-    //NOTE: Not sure why this isn't done in a base class but ok. Not changing it now to avoid issues with other attacks
-
     /// <summary>
     /// Subscribes to needed events
     /// </summary>
@@ -55,8 +53,6 @@ public class LockdownAttackController : BaseBossAttack
         UnsubscribeToEvents();
     }
 
-    //NOTE: Not sure why this is an override and isn't done in the base class.
-    //Don't want to change this now to avoid any issues with other attacks
     protected override void SubscribeToEvents()
     {
         _onBeginAttack.AddListener(BeginAttack);
