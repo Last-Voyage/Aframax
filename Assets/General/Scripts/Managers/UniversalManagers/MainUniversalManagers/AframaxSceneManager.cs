@@ -24,8 +24,17 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
 
+    [field: SerializeField] public int GameplaySceneIndex { get; private set; }
+
     [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
+
     [field: SerializeField] public int EndScreenSceneIndex { get; private set; }
+
+    [field: SerializeField] public int SettingsSceneIndex { get; private set; }
+
+    public int LastSceneIndex { get; private set; }
+
+    public bool IsSettingsSceneLoaded { get; private set; }
 
     public static AframaxSceneManager Instance;
 
@@ -70,7 +79,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         return !(SceneManager.GetActiveScene().buildIndex == MainMenuSceneIndex ||
                SceneManager.GetActiveScene().buildIndex == DeathScreenSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex);
+               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex ||
+               SceneManager.GetActiveScene().buildIndex == SettingsSceneIndex);
     }
 
     /// <summary>
@@ -80,6 +90,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <param name="sceneTransition">The scene transition being used</param>
     private void StartAsyncSceneLoad(int sceneID, SceneTransition sceneTransition)
     {
+        UpdateLastScene();
+
         //Only starts loading a scene if no other scene is being loaded already
         if (_sceneLoadingCoroutine == null)
         {
@@ -158,8 +170,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// Additively loads a specific scene
     /// </summary>
     /// <param name="sceneID">The specific scene in the build index to add</param>
-    private void AdditiveLoadScene(int sceneID)
+    public void AdditiveLoadScene(int sceneID)
     {
+        UpdateLastScene();
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
         InvokeOnSceneAdditiveLoadAddEvent();
@@ -169,11 +182,27 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// Removes a specific scene from being additively loaded
     /// </summary>
     /// <param name="sceneID">The specific scene in the build index to remove</param>
-    private void RemoveAdditiveLoadedScene(int sceneID)
+    public void RemoveAdditiveLoadedScene(int sceneID)
     {
         SceneManager.UnloadSceneAsync(sceneID);
 
         InvokeOnSceneAdditiveLoadRemoveEvent();
+    }
+
+    /// <summary>
+    /// updates the last scene index to the currently loaded scene. called before loading a new scene
+    /// </summary>
+    private void UpdateLastScene()
+    {
+        LastSceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
+
+    /// <summary>
+    /// toggles the bool value for checking if the settings scene is loaded
+    /// </summary>
+    public void ToggleSettingsSceneLoadedBool()
+    {
+        IsSettingsSceneLoaded = !IsSettingsSceneLoaded;
     }
 
     #region Base Manager
