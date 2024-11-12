@@ -12,7 +12,7 @@ using UnityEngine;
 /// <summary>
 /// The data class for text and time
 /// </summary>
-[Serializable]
+/*[Serializable]
 public class TextAndTimerData
 {
     #region Constructor
@@ -35,7 +35,7 @@ public class TextAndTimerData
     #region Private Variables
 
     [Space]
-    [TextArea(1,2)]
+    [TextArea(1, 2)]
     [SerializeField]
     string _displayedText;
 
@@ -44,3 +44,4 @@ public class TextAndTimerData
     int _timeBeforeDisplaying;
     #endregion
 }
+*/

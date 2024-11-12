@@ -8,10 +8,11 @@
 *****************************************************************************/
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// This script handles the tutorial process, it's words, and objects
+/// This class handles the tutorial process, it's words, and objects
 /// </summary>
 public class TutorialPopUps : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class TutorialPopUps : MonoBehaviour
 
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    ScriptableUI[] _uIData;
+    ScriptableTutorialUI[] _uIData;
 
     [Tooltip("The collider the player has to walk into")]
     GameObject _walkTutorialObject;
@@ -35,8 +36,8 @@ public class TutorialPopUps : MonoBehaviour
     [Tooltip("The message shown after completing a tutorial")]
     private const string _CONGRATULATION_MESSAGE = "Great Job!";
 
-    [Tooltip("The diviser to get the message completed in a certain amount of time")]
-    private const float _TOTAL_DISPLAY_TIME = 3f;
+    /*[Tooltip("The diviser to get the message completed in a certain amount of time")]
+    private const float _TOTAL_DISPLAY_TIME = 3f;*/
 
     [Tooltip("The time the final message is displayed")]
     private const float _FINAL_MESSAGE_DISPLAY_TIME = 2f;
@@ -44,7 +45,12 @@ public class TutorialPopUps : MonoBehaviour
     // Start's the tutorial process
     void Start()
     {
-        StartCoroutine(TimeBeforeText());
+        if (_uIData.Length > 0 && _uIData != null &&
+            !_uIData[_dataPointer].GetTextAndTimer().GetText.IsUnityNull() &&
+            _uIData[_dataPointer].GetTextAndTimer().GetText != "")
+        {
+            StartCoroutine(TimeBeforeText());
+        }
     }
 
 
@@ -54,7 +60,7 @@ public class TutorialPopUps : MonoBehaviour
     /// <returns>The number of seconds in the UI data</returns>
     private IEnumerator TimeBeforeText()
     {
-        yield return new WaitForSeconds(_uIData[_dataPointer].GetTextAndTimer().Time);
+        yield return new WaitForSeconds(_uIData[_dataPointer].GetTextAndTimer().GetTimeBeforeText);
         StartCoroutine(DisplayingTheText());
     }
 
@@ -66,14 +72,14 @@ public class TutorialPopUps : MonoBehaviour
     private IEnumerator DisplayingTheText()
     {
         // Takes the display text and makes it invisible
-        _textContainer.text = _uIData[_dataPointer].GetTextAndTimer().Text;
+        _textContainer.text = _uIData[_dataPointer].GetTextAndTimer().GetText;
         _textContainer.maxVisibleCharacters = 0;
 
         // Gets total length of text in characters, and gets the speed of the text display
-        int totalLength = _uIData[_dataPointer].GetTextAndTimer().Text.Length;
-        float typeSpeed = totalLength / _TOTAL_DISPLAY_TIME;
+        int totalLength = _uIData[_dataPointer].GetTextAndTimer().GetText.Length;
+        float typeSpeed = totalLength / (float)_uIData[_dataPointer].GetTextAndTimer().GetTimeToDisplay;
 
-        // As long as all of the text hasn't been fully displayed, this will continually
+        // As long as all the text hasn't been fully displayed, this will continually
         // display more characters for the total display time
         while(_textContainer.maxVisibleCharacters < totalLength)
         {
