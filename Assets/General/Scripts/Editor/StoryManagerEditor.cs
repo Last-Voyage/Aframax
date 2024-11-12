@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Events;
-using UnityEditorInternal;
 
 [CustomEditor(typeof(StoryManager))]
 public class StoryManagerEditor : Editor
@@ -116,21 +115,29 @@ public class StoryManagerEditor : Editor
         {
             EditorGUILayout.Space(8);
             DrawGUILine(1);
-            DisplayStoryBeatEvent(storyBeatEvents, i);
+            DisplayStoryBeatEvent(storyBeatEvents, index, i);
         }
     }
 
-    private void DisplayStoryBeatEvent(List<StoryBeatEvent> storyBeatEvents, int index)
+    private void DisplayStoryBeatEvent(List<StoryBeatEvent> storyBeatEvents, int beatIndex, int eventIndex)
     {
+        SerializedObject serializedStoryManager = new(GetStoryManager);
+        SerializedProperty storyBeatsProperty = serializedStoryManager.FindProperty("StoryBeats");
+
+        SerializedProperty beatProperty = storyBeatsProperty.GetArrayElementAtIndex(beatIndex);
+        SerializedProperty storyBeatEventsProperty = beatProperty.FindPropertyRelative("StoryBeatEvents");
+
+        SerializedProperty storyBeatEventProperty = storyBeatEventsProperty.GetArrayElementAtIndex(eventIndex);
+
         GUIStyle headerStyle = new(GUI.skin.label);
         headerStyle.fontStyle = FontStyle.Bold;
 
-        GUILayout.Label("Event " + index, headerStyle);
+        GUILayout.Label("Event " + eventIndex, headerStyle);
 
         GUILayout.BeginHorizontal();
         for (int i = 0; i < 4; i++)
         {
-            bool isEventType = (int)storyBeatEvents[index].EventType == i;
+            bool isEventType = (int)storyBeatEvents[eventIndex].EventType == i;
 
             Color defaultColor = GUI.backgroundColor;
 
@@ -141,7 +148,7 @@ public class StoryManagerEditor : Editor
 
             if (GUILayout.Button((StoryBeatEvent.BeatEventType)i + ""))
             {
-                storyBeatEvents[index].EventType = (StoryBeatEvent.BeatEventType)i;
+                storyBeatEvents[eventIndex].EventType = (StoryBeatEvent.BeatEventType)i;
             }
 
             GUI.backgroundColor = defaultColor;
@@ -149,46 +156,103 @@ public class StoryManagerEditor : Editor
         GUILayout.EndHorizontal();
 
         EditorGUI.indentLevel++;
-        switch (storyBeatEvents[index].EventType)
+        switch (storyBeatEvents[eventIndex].EventType)
         {
             case StoryBeatEvent.BeatEventType.Dialogue:
 
-                for (int i = 0; i < storyBeatEvents[index].DialogueLines.Count; i++)
-                {
-                    GUILayout.BeginHorizontal();
+                // TODO: Implement dialogue line things
+                // 
+                // As an example:
+                storyBeatEvents[eventIndex].DialogueLine = (DialogueLine)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].DialogueLine, typeof(DialogueLine), true);
 
-                    storyBeatEvents[index].DialogueLines[i] = (DialogueLine)EditorGUILayout.ObjectField(storyBeatEvents[index].DialogueLines[i], typeof(DialogueLine), true);
-                    if (GUILayout.Button("Delete"))
-                    {
-                        storyBeatEvents[index].DialogueLines.RemoveAt(i);
-                    }
+                //for (int i = 0; i < storyBeatEvents[eventIndex].DialogueLines.Count; i++)
+                //{
+                //    GUILayout.BeginHorizontal();
 
-                    GUILayout.EndHorizontal();
-                }
+                //    storyBeatEvents[eventIndex].DialogueLines[i] = (DialogueLine)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].DialogueLines[i], typeof(DialogueLine), true);
+                //    if (GUILayout.Button("Delete"))
+                //    {
+                //        storyBeatEvents[eventIndex].DialogueLines.RemoveAt(i);
+                //    }
 
-                if (GUILayout.Button("Add Dialogue"))
-                {
-                    storyBeatEvents[index].DialogueLines.Add(null);
-                }
+                //    GUILayout.EndHorizontal();
+                //}
 
-                storyBeatEvents[index].IsShuffled = EditorGUILayout.Toggle("Shuffled", storyBeatEvents[index].IsShuffled);
-                storyBeatEvents[index].IsLoop = EditorGUILayout.Toggle("Loop", storyBeatEvents[index].IsLoop);
-                if (storyBeatEvents[index].IsLoop)
-                {
-                    storyBeatEvents[index].MinimumWaitTime = EditorGUILayout.FloatField("Min Wait Time", storyBeatEvents[index].MinimumWaitTime);
-                    storyBeatEvents[index].MaximumWaitTime = EditorGUILayout.FloatField("Max Wait Time", storyBeatEvents[index].MaximumWaitTime);
-                }
+                //if (GUILayout.Button("Add Dialogue"))
+                //{
+                //    storyBeatEvents[eventIndex].DialogueLines.Add(null);
+                //}
+
+                //storyBeatEvents[eventIndex].IsShuffled = EditorGUILayout.Toggle("Shuffled", storyBeatEvents[eventIndex].IsShuffled);
+                //storyBeatEvents[eventIndex].IsLoop = EditorGUILayout.Toggle("Loop", storyBeatEvents[eventIndex].IsLoop);
+                //if (storyBeatEvents[eventIndex].IsLoop)
+                //{
+                //    storyBeatEvents[eventIndex].MinimumWaitTime = EditorGUILayout.FloatField("Min Wait Time", storyBeatEvents[eventIndex].MinimumWaitTime);
+                //    storyBeatEvents[eventIndex].MaximumWaitTime = EditorGUILayout.FloatField("Max Wait Time", storyBeatEvents[eventIndex].MaximumWaitTime);
+                //}
 
                 break;
             case StoryBeatEvent.BeatEventType.BoatSpeed:
 
-                storyBeatEvents[index].BoatSpeed = EditorGUILayout.FloatField("Boat Speed", storyBeatEvents[index].BoatSpeed);
-                storyBeatEvents[index].SpeedChangeTime = EditorGUILayout.FloatField("Change Time", storyBeatEvents[index].SpeedChangeTime);
+                storyBeatEvents[eventIndex].BoatSpeed = EditorGUILayout.FloatField("Boat Speed", storyBeatEvents[eventIndex].BoatSpeed);
+                storyBeatEvents[eventIndex].SpeedChangeTime = EditorGUILayout.FloatField("Change Time", storyBeatEvents[eventIndex].SpeedChangeTime);
 
                 break;
             case StoryBeatEvent.BeatEventType.BossAttack:
+
+                if (storyBeatEvents[eventIndex].BossAttacks == null)
+                {
+                    storyBeatEvents[eventIndex].BossAttacks = new();
+                }
+
+                SerializedProperty attackListProperty = storyBeatEventProperty.FindPropertyRelative("BossAttacks");
+                EditorGUILayout.PropertyField(attackListProperty);
+                serializedStoryManager.ApplyModifiedProperties();
+
+                //for (int i = 0; i < storyBeatEvents[eventIndex].BossAttacks.Count; i++)
+                //{
+                //    GUILayout.BeginHorizontal();
+
+                //    storyBeatEvents[eventIndex].BossAttacks[i] = (BaseBossAttack)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].BossAttacks[i], typeof(BaseBossAttack), true);
+                //    if (GUILayout.Button("Delete"))
+                //    {
+                //        storyBeatEvents[eventIndex].BossAttacks.RemoveAt(i);
+                //    }
+
+                //    GUILayout.EndHorizontal();
+                //}
+
+                //if (GUILayout.Button("Add Attack"))
+                //{
+                //    storyBeatEvents[eventIndex].BossAttacks.Add(null);
+                //}
+
                 break;
             case StoryBeatEvent.BeatEventType.Function:
+
+                // Courtesy of #praetorblue on Discord
+
+                SerializedProperty beatEventProperty = storyBeatEventProperty.FindPropertyRelative("BeatEvent");
+                EditorGUILayout.PropertyField(beatEventProperty);
+                serializedStoryManager.ApplyModifiedProperties();
+
+                //for (int i = 0; i < storyBeatsProp.arraySize; i++)
+                //{
+                //    SerializedProperty beatProp = storyBeatsProp.GetArrayElementAtIndex(i);
+                //    SerializedProperty beatEventsProp = beatProp.FindPropertyRelative("StoryBeatEvents");
+                //    for (int j = 0; j < beatEventsProp.arraySize; j++)
+                //    {
+                //        SerializedProperty sbeProp = beatEventsProp.GetArrayElementAtIndex(j);
+                //        SerializedProperty eventToRunProp = sbeProp.FindPropertyRelative("EventToRun");
+                //        EditorGUILayout.PropertyField(eventToRunProp); // for example
+                //    }
+                //}
+
+
+
+                //SerializedProperty eventProperty = serializedObject.FindProperty("UnityEvent");
+                //EditorGUILayout.PropertyField(eventProperty);
+                //eventObject.ApplyModifiedProperties();
 
                 break;
         }
@@ -199,10 +263,10 @@ public class StoryManagerEditor : Editor
 
         GUILayout.BeginHorizontal();
 
-        storyBeatEvents[index].DelayTime = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[index].DelayTime);
+        storyBeatEvents[eventIndex].DelayTime = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[eventIndex].DelayTime);
         if (GUILayout.Button("Delete Event"))
         {
-            storyBeatEvents.Remove(storyBeatEvents[index]);
+            storyBeatEvents.Remove(storyBeatEvents[eventIndex]);
         }
 
         GUILayout.EndHorizontal();

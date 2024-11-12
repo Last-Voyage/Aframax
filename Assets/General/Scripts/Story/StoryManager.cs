@@ -15,6 +15,9 @@ public class StoryManager : MonoBehaviour
     public List<StoryBeat> StoryBeats;
     private Coroutine _beatEventsCoroutine;
 
+    [Header("Temporary")]
+    public List<UnityEvent> TempEvents;
+
     private void Awake()
     {
         if (main == null)
@@ -74,18 +77,18 @@ public class StoryBeatEvent
     public float DelayTime;
 
     [Header("Dialogue Variables")]
-    public List<DialogueLine> DialogueLines = new();
-    public bool IsShuffled;
-    public bool IsLoop;
-    public float MinimumWaitTime;
-    public float MaximumWaitTime;
+    public DialogueLine DialogueLine;
+    //public List<DialogueLine> DialogueLines = new();
+    //public bool IsShuffled;
+    //public bool IsLoop;
+    //public float MinimumWaitTime;
+    //public float MaximumWaitTime;
 
     [Header("Boat Speed Variables")]
     public float BoatSpeed;
     public float SpeedChangeTime;
 
-    [Header("Boss Attack Variables")]
-    // TODO: Boss Attack Event Variables
+    public List<BaseBossAttack> BossAttacks;
 
     [Header("Function Variables")]
     public UnityEvent BeatEvent;
@@ -95,17 +98,31 @@ public class StoryBeatEvent
         switch (EventType)
         {
             case BeatEventType.Dialogue:
+
                 // TODO: Run dialogue
+                // (DialogueManager.RunDialogue(DialogueLine);) as an example
+                
                 break;
             case BeatEventType.BoatSpeed:
+                
                 Object.FindObjectOfType<BoatMover>().ChangeSpeed(BoatSpeed, SpeedChangeTime);
+                
                 break;
             case BeatEventType.BossAttack:
+
+                foreach (BaseBossAttack currentAttack in BossAttacks)
+                {
+                    currentAttack.InvokeAttackBegin();
+                }
+
                 break;
             case BeatEventType.Function:
+                
                 BeatEvent.Invoke();
+                
                 break;
             default:
+                
                 break;
         }
     }
