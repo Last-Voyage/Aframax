@@ -1,6 +1,6 @@
 /*****************************************************************************
 // File Name :         PlayerFunctionalityCore.cs
-// Author :            Ryan Swanson
+// Author :            Ryan Swanson, Alex Kalscheur
 // Creation Date :     9/28/2024
 //
 // Brief Description : Holds higher level functionality to set up the player and harpoon
@@ -23,6 +23,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
     [SerializeField] private PlayerCameraController _playerCamera;
     //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
+    //Controls player interaction functionality
+    [SerializeField] private PlayerInteraction _playerInteraction;
 
     private PlayerInputMap _playerInputMap;
 
@@ -73,6 +75,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         SubscribeToMovementInput();
         SubscribeToCameraInput();
         SubscribeToHarpoonInput();
+        SubscribeToPlayerInteraction();
 
         PlayerManager.Instance.InvokeOnPlayerInputToggle(true);
 
@@ -138,14 +141,24 @@ public class PlayerFunctionalityCore : MonoBehaviour
     }
 
     /// <summary>
+    /// Subscribes to interaction input
+    /// </summary>
+    private void SubscribeToPlayerInteraction()
+    {
+        _playerInteraction.SubscribeInput();
+    }
+
+    /// <summary>
     /// Unsubscribes to all input
     /// </summary>
     private void UnsubscribePlayerInput()
     {
         if (!_subscribedToInput) { return; }
+        
         UnsubscribeToMovementInput();
         UnsubscribeToCameraInput();
         UnsubscribeToHarpoonInput();
+        UnsubscribeToPlayerInteraction();
 
         _playerInputMap.Disable();
 
@@ -176,6 +189,14 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToHarpoonInput()
     {
         _harpoonGun.UnsubscribeInput();
+    }
+
+    /// <summary>
+    /// Unsubscribes from interaction input
+    /// </summary>
+    private void UnsubscribeToPlayerInteraction()
+    {
+        _playerInteraction.UnsubscribeInput();
     }
     #endregion
 
