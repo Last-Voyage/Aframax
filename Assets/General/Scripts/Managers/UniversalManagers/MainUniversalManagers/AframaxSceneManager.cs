@@ -34,6 +34,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     public int LastSceneIndex { get; private set; }
 
+    public bool IsSettingsSceneLoaded;
+
     public static AframaxSceneManager Instance;
 
     //Occurs when the currently active scene is changed

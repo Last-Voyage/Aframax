@@ -40,11 +40,13 @@ public class SettingsSceneBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
+        AframaxSceneManager.Instance.IsSettingsSceneLoaded = true;
         _playerInputControls.Enable();
     }
 
     private void OnDisable()
     {
+        AframaxSceneManager.Instance.IsSettingsSceneLoaded = false;
         _playerInputControls.Player.Pause.performed -= ctx => ExitScene();
         _playerInputControls.Disable();
     }
