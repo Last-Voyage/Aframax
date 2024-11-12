@@ -37,6 +37,6 @@ public class BoatGeometryHealth : BaseHealth
     /// </summary>
     private void PlayOnHitSFX()
     {
-        RuntimeSfxManager.APlayOneShotSFX?.Invoke(FmodSfxEvents.Instance.HarpoonHitBoat, transform.position);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.HarpoonHitBoat, transform.position);
     }
 }

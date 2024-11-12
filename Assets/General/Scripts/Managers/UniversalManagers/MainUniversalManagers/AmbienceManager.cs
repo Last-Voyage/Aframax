@@ -16,21 +16,9 @@ using System.Collections.Generic;
 /// </summary>
 public class AmbienceManager : AudioManager
 {
-    public static new AmbienceManager Instance;
+    public static AmbienceManager Instance;
 
     private List<EventInstance> _allAmbientEvents;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
 
     private void Start()
     {
@@ -43,6 +31,15 @@ public class AmbienceManager : AudioManager
     {
         base.SubscribeToEvents();
         AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
+    }
+
+    /// <summary>
+    /// Establishes the instance for the ambience manager
+    /// </summary>
+    public override void SetUpInstance()
+    {
+        base.SetUpInstance();
+        Instance = this;
     }
 
     /// <summary>

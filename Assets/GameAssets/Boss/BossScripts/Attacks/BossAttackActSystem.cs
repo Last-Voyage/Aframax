@@ -358,7 +358,7 @@ public class BossAttackActSystem : MonoBehaviour
     private void InvokeBeginSceneEvent()
     {
         _onSceneBegin?.Invoke();
-        RuntimeSfxManager.APlayOneShotSFX?.Invoke
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke
             (FmodSfxEvents.Instance.SceneStart, PlayerMovementController.Instance.transform.position);
     }
 
