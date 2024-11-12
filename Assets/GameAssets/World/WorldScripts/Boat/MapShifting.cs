@@ -23,6 +23,7 @@ public class MapShifting : MonoBehaviour
     //For calling outside of script into another script
     private UnityEvent _onMapShifting = new();
     private UnityEvent _onMapReset = new();
+    private UnityEvent _onMapPrevious = new();
     
     /// <summary>
     /// Allow for first layout to turn on if not on already
@@ -40,15 +41,15 @@ public class MapShifting : MonoBehaviour
     {
         if (Keyboard.current.oKey.wasPressedThisFrame)
         {
-            LayoutSwapForward();
+            InvokeOnMapShifting();    
         }
         if (Keyboard.current.pKey.wasPressedThisFrame)
         {
-            LayoutSwapBackwards();
+            InvokeOnMapPrevious();
         }
         if (Keyboard.current.iKey.wasPressedThisFrame)
         {
-            LayoutSwapToOriginal();
+            InvokeOnMapReset();
         }
     }
     
@@ -66,6 +67,16 @@ public class MapShifting : MonoBehaviour
         
             _boatLayouts[_currentLayout].SetActive(true);
         }
+    }
+    /// <summary>
+    /// Choose any layout
+    /// </summary>
+    /// <param name="_choice"></param>
+    public void LayoutChoice(int _choice)
+    {
+        _boatLayouts[_currentLayout].SetActive(false);
+        _currentLayout = _choice;
+        _boatLayouts[_currentLayout].SetActive(true);
     }
     
     /// <summary>
@@ -103,6 +114,7 @@ public class MapShifting : MonoBehaviour
     {
         _onMapReset.AddListener(LayoutSwapToOriginal);
         _onMapShifting.AddListener(LayoutSwapForward);
+        _onMapPrevious.AddListener(LayoutSwapBackwards);
     }
     
     /// <summary>
@@ -112,6 +124,7 @@ public class MapShifting : MonoBehaviour
     {
         _onMapReset.RemoveListener(LayoutSwapToOriginal);
         _onMapShifting.RemoveListener(LayoutSwapForward);
+        _onMapPrevious.RemoveListener(LayoutSwapBackwards);
     }
     
     #region Events
@@ -130,13 +143,19 @@ public class MapShifting : MonoBehaviour
     {
         _onMapReset?.Invoke();
     }
-    
+
+    private void InvokeOnMapPrevious()
+    {
+        _onMapPrevious?.Invoke();
+    }
     #endregion
     
     #region Getters
     
     public UnityEvent OnMapShifting => _onMapShifting;
     public UnityEvent OnMapReset => _onMapReset;
+    
+    public UnityEvent OnMapPrevious => _onMapPrevious;
     
     #endregion
 }
