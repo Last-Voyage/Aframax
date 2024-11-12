@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealth.cs
 // Author :            Ryan Swanson
-// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba
+// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba, Andrew Stapay
 // Creation Date :     10/15/24
 //
 // Brief Description : Controls the player's health functionality
@@ -15,26 +15,34 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerHealth : BaseHealth
 { 
+    //Variable is used by the dev console to determine whether the player should take damage or not
+    public bool _shouldTakeDamage = true;//Nabil made this change
+
+    private void Update()
+    {
+        print(_currentHealth);
+    }
+
+    private void Awake()
+    {
+        base.Awake();
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
 
     /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
 
-
-    //Variable is used by the dev console to determine whether the player should take damage or not
-    public bool _shouldTakeDamage = true;//Nabil made this change
-
-    /// <summary>
-    /// increases health
-    /// </summary>
-    /// <param name="heal"></param>
-
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
 
-        PlayerManager.Instance.InvokePlayerHealEvent(heal);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
     }
 
@@ -63,5 +71,15 @@ public class PlayerHealth : BaseHealth
     {
         base.OnDeath();
         PlayerManager.Instance.InvokeOnPlayerDeath();
+    }
+
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(IncreaseHealth);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(IncreaseHealth);
     }
 }
