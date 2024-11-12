@@ -1,6 +1,7 @@
 /*****************************************************************************
 // Name: FreeLookCamController.CS
 // Author: Nabil Tagba
+// Date: 11/5/2024
 // Overview: Handles movement for the free look cam
 *****************************************************************************/
 using UnityEngine;
@@ -14,7 +15,7 @@ public class FreeLookCamController : MonoBehaviour
     private PlayerInputMap _playerInput;
 
     [Header("Settings")]
-    [SerializeField] private float _speed;
+    [SerializeField] private float _moveSpeed;
     [SerializeField] private float _lookSpeed;
 
     [Header("References")]
@@ -58,7 +59,7 @@ public class FreeLookCamController : MonoBehaviour
     private void Move(Vector3 value, Rigidbody body)
     {
         Vector3 dir = (_cam.right * value.x) + (_cam.up * value.y) +  (_cam.forward * value.z);
-        body.velocity = dir.normalized * _speed * Time.deltaTime;// dir * speed * delta time
+        body.velocity = dir.normalized * _moveSpeed * Time.deltaTime;// dir * speed * delta time
     }
 
     

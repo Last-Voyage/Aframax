@@ -35,7 +35,7 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private Button _playerTakeDamageButton;
     [SerializeField] private TMP_InputField _dmgAmountInputField;
 
-    [SerializeField] private GameObject _toggleGodMode;
+    [SerializeField] private GameObject _toggleGodModeButton;
 
     [Header("Free look cam references")]
     [SerializeField] private GameObject _freeLookCam;
@@ -63,9 +63,10 @@ public class ConsoleController : MonoBehaviour
     {
         //linking player take damage button to corresponding methode
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
-        _toggleGodMode.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
+        _toggleGodModeButton.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
 
+        if (_toggleFreeLookCamButton.GetComponent<Button>() == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
         
@@ -105,7 +106,8 @@ public class ConsoleController : MonoBehaviour
 
         if (!_isInFreeLookCamMode)
         {
-             _spawnedFreeLookCam = EnterFreeLookCam();
+            if (_freeLookCam == null) return;
+            _spawnedFreeLookCam = EnterFreeLookCam();
             _toggleFreeLookCamButton.GetComponentInChildren<TMP_Text>().text = "Exit Free Look Cam";
         }
         else if (_isInFreeLookCamMode)
@@ -127,8 +129,8 @@ public class ConsoleController : MonoBehaviour
 
         //spawn free look cam
         GameObject _tempFreeLookCam = Instantiate(_freeLookCam,
-            GameObject.FindGameObjectWithTag("MainCamera").transform.position, Quaternion.identity,
-            GameObject.FindObjectOfType<BoatScriptTag>().transform);
+            Camera.main.transform.position, Quaternion.identity,
+            GameObject.FindObjectOfType<BoatMover>().transform);
 
         //stop actual player from moving
         
@@ -144,7 +146,6 @@ public class ConsoleController : MonoBehaviour
     private void ExitFreeLookCam()
     {
         if (!_isInDeveloperMode) return;
-
 
         //turn on the player virtual machine cam
         GameObject.FindObjectOfType<PlayerCamScriptTag>().gameObject.
@@ -218,7 +219,7 @@ public class ConsoleController : MonoBehaviour
     private void EnterGodMode()
     {
         FindObjectOfType<PlayerHealth>()._shouldTakeDamage = false;
-        _toggleGodMode.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
+        _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
     }
 
     /// <summary>
@@ -227,7 +228,7 @@ public class ConsoleController : MonoBehaviour
     private void ExitGodMode() 
     {
         FindObjectOfType<PlayerHealth>()._shouldTakeDamage = true;
-        _toggleGodMode.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
+        _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
     }
     
     #endregion
@@ -241,7 +242,7 @@ public class ConsoleController : MonoBehaviour
     {
         Time.timeScale = 1;
         _playerTakeDamageButton.onClick.RemoveAllListeners();
-        _toggleGodMode.GetComponent<Button>().onClick.RemoveAllListeners();
+        _toggleGodModeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
     }
