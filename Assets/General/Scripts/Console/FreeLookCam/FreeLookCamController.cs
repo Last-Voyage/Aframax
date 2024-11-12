@@ -30,8 +30,8 @@ public class FreeLookCamController : MonoBehaviour
     {
         _playerInput = new PlayerInputMap();
         _playerInput.Enable();
-        
     }
+    
     /// <summary>
     /// happens on start
     /// </summary>
@@ -40,6 +40,7 @@ public class FreeLookCamController : MonoBehaviour
         //assign cam
         _cam = Camera.main.gameObject.transform;
     }
+    
     /// <summary>
     /// happens every frame
     /// </summary>
@@ -62,7 +63,6 @@ public class FreeLookCamController : MonoBehaviour
         body.velocity = dir.normalized * _moveSpeed * Time.deltaTime;// dir * speed * delta time
     }
 
-    
     /// <summary>
     /// happens when the object is destroyed
     /// </summary>
@@ -70,6 +70,5 @@ public class FreeLookCamController : MonoBehaviour
     {
         _playerInput.DebugConsole.FreeCamMoveRight.performed -= ctx => Move(ctx.ReadValue<Vector3>(), _body);
         _playerInput.Disable();
-
     }
 }
