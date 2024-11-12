@@ -2421,6 +2421,79 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1288520067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288520069}
+  - component: {fileID: 1288520070}
+  m_Layer: 0
+  m_Name: StoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1288520069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288520067}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1288520070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288520067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3639bd6efd0451442a2875bf2bb9fe5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogueTextField: {fileID: 0}
+  StoryBeats:
+  - Name: 
+    StoryBeatEvents:
+    - EventType: 2
+      DelayTime: 0
+      DialogueLines: []
+      IsShuffled: 0
+      IsLoop: 0
+      MinimumWaitTime: 0
+      MaximumWaitTime: 0
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BeatEventEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - EventType: 2
+      DelayTime: 0
+      DialogueLines: []
+      IsShuffled: 0
+      IsLoop: 0
+      MinimumWaitTime: 0
+      MaximumWaitTime: 0
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BeatEventEvent:
+        m_PersistentCalls:
+          m_Calls: []
+  TempUnityEvent: []
 --- !u!1001 &1332017025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2538,7 +2611,7 @@ PrefabInstance:
     - target: {fileID: 558806877871608667, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 7835
+      value: 7841
       objectReference: {fileID: 0}
     - target: {fileID: 558806877871608667, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -7823,7 +7896,7 @@ PrefabInstance:
     - target: {fileID: 832482979754980524, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 2997
+      value: 3003
       objectReference: {fileID: 0}
     - target: {fileID: 867180341327450443, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -7863,7 +7936,7 @@ PrefabInstance:
     - target: {fileID: 2536511570866971916, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 2997
+      value: 3003
       objectReference: {fileID: 0}
     - target: {fileID: 2619616251539522133, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -7893,7 +7966,7 @@ PrefabInstance:
     - target: {fileID: 3728818813075818329, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 1124
+      value: 1130
       objectReference: {fileID: 0}
     - target: {fileID: 4727547903989284734, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -8013,7 +8086,7 @@ PrefabInstance:
     - target: {fileID: 7665353123156269975, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 15526
+      value: 15532
       objectReference: {fileID: 0}
     - target: {fileID: 7673541175453373626, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -8043,7 +8116,7 @@ PrefabInstance:
     - target: {fileID: 8033749914194261457, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 6281
+      value: 6287
       objectReference: {fileID: 0}
     - target: {fileID: 8292550236711555494, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -8053,7 +8126,7 @@ PrefabInstance:
     - target: {fileID: 8292550236711555494, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 2997
+      value: 3003
       objectReference: {fileID: 0}
     - target: {fileID: 8504406389722587310, guid: 28f576cd3d040ad40a4189793c1ac92a,
         type: 3}
@@ -8944,3 +9017,4 @@ SceneRoots:
   - {fileID: 745303542}
   - {fileID: 1924084577}
   - {fileID: 1587963121}
+  - {fileID: 1288520069}

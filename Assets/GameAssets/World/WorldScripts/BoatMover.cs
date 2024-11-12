@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         BoatMover.cs
 // Author :            Alex Kalscheur
-// Contrubuter :       Charlie Polonus
+// Contributer :       Charlie Polonus
 // Creation Date :     10/10/24
 // 
 // Brief Description : Moves boat along and between river splines
@@ -77,13 +77,29 @@ public class BoatMover : MonoBehaviour
     /// </summary>
     private void MoveBoat()
     {
-        _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength / 100;
+        _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength * 0.0001f;
         CheckSplineChange();
         Vector3 newPositionOnSpline = _curve.GetPositionAlongSpline(_percentOfSpline, out _newForwardVector, true);
 
         // Update the position and direction of the moving object
         transform.position = Vector3.Lerp(transform.position, newPositionOnSpline, 0.75f * Time.deltaTime);
         transform.forward += (_newForwardVector - transform.forward).normalized * Time.deltaTime;
+    }
+
+    public void ChangeSpeed(float newSpeed, float moveTime)
+    {
+        StartCoroutine(LerpSpeed(newSpeed, moveTime));
+
+        IEnumerator LerpSpeed(float newSpeed, float moveTime)
+        {
+            float oldSpeed = _speedModifier;
+            float currentTime = 0;
+            while (currentTime < moveTime)
+            {
+                _speedModifier = Mathf.Lerp(oldSpeed, newSpeed, currentTime / moveTime);
+                yield return null;
+            }
+        }
     }
 
     /// <summary>
