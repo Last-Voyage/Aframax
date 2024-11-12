@@ -44,6 +44,7 @@ public class ConsoleController : MonoBehaviour
     private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
     //look cam mode
 
+
     private PlayerInputMap _playerInput;
     
     /// <summary>
@@ -65,9 +66,10 @@ public class ConsoleController : MonoBehaviour
         _toggleGodModeButton.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
 
-        if (_toggleFreeLookCamButton.GetComponent<Button>() == null) return;
+        if (_toggleFreeLookCamButton == null) return;
         //free look cam
-        _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);    
+        _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
+        
     }
 
   /// <summary>
@@ -93,7 +95,6 @@ public class ConsoleController : MonoBehaviour
     }
 
     #region FreelookCam
-    
     /// <summary>
     /// The player unposseses the character
     /// and become a free look cam that can
@@ -114,8 +115,8 @@ public class ConsoleController : MonoBehaviour
             ExitFreeLookCam();
             _toggleFreeLookCamButton.GetComponentInChildren<TMP_Text>().text = "Enter Free Look Cam";
         }
+
     }
-    
     /// <summary>
     /// Puts the player in free look cam
     /// mode
@@ -139,7 +140,6 @@ public class ConsoleController : MonoBehaviour
         _isInFreeLookCamMode = true;
         return _tempFreeLookCam;
     }
-    
     /// <summary>
     /// takes the player out of free look cam mode
     /// </summary>
@@ -154,9 +154,11 @@ public class ConsoleController : MonoBehaviour
         //allow the real player to move
 
         //Destroy free look cam
-        Destroy(_spawnedFreeLookCam);   
+        Destroy(_spawnedFreeLookCam);
+        
 
         _isInFreeLookCamMode = false;
+
     }
 
     #endregion
@@ -183,7 +185,6 @@ public class ConsoleController : MonoBehaviour
             }
         }
     }
-    
     #endregion
 
     #region God Mode
@@ -242,8 +243,10 @@ public class ConsoleController : MonoBehaviour
         Time.timeScale = 1;
         _playerTakeDamageButton.onClick.RemoveAllListeners();
         _toggleGodModeButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
+        if (_toggleFreeLookCamButton == null) return;
+        _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        
     }
 }
 

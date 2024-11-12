@@ -273,7 +273,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Move"",
                     ""id"": ""a6a08539-d924-4f21-b576-6e477a664669"",
-                    ""path"": ""3DVector(mode=2)"",
+                    ""path"": ""3DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
