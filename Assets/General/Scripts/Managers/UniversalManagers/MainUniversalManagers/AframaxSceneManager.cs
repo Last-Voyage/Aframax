@@ -34,7 +34,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     public int LastSceneIndex { get; private set; }
 
-    public bool IsSettingsSceneLoaded;
+    public bool IsSettingsSceneLoaded { get; private set; }
 
     public static AframaxSceneManager Instance;
 
@@ -195,6 +195,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private void UpdateLastScene()
     {
         LastSceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
+
+    public void ToggleSettingsSceneLoadedBool()
+    {
+        IsSettingsSceneLoaded = !IsSettingsSceneLoaded;
     }
 
     #region Base Manager

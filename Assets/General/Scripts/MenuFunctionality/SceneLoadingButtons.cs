@@ -25,6 +25,9 @@ public class SceneLoadingButtons : MonoBehaviour
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneToLoad, _sceneTransitionID);
     }
 
+    /// <summary>
+    /// function for buttons to use for additive loading (used for loading the settings menu)
+    /// </summary>
     public void LoadDesiredSceneButtonAdditive()
     {
         AframaxSceneManager.Instance.AdditiveLoadScene(_sceneToLoad);

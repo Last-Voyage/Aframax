@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// this makes it so u can press escape to return to the previous scene
@@ -28,25 +29,26 @@ public class SettingsSceneBehaviour : MonoBehaviour
     /// </summary>
     public void ExitScene()
     {
-        if (AframaxSceneManager.Instance.LastSceneIndex == AframaxSceneManager.Instance.GameplaySceneIndex)
+        //checks if the settings scene was additively loaded. if additive, then just unload it. if not, load old scene as well
+        if (SceneManager.GetActiveScene().buildIndex == AframaxSceneManager.Instance.SettingsSceneIndex)
         {
-            AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(AframaxSceneManager.Instance.SettingsSceneIndex);
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.LastSceneIndex, 0);
         }
         else
         {
-            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.LastSceneIndex, 0);
+            AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(AframaxSceneManager.Instance.SettingsSceneIndex);
         }
     }
 
     private void OnEnable()
     {
-        AframaxSceneManager.Instance.IsSettingsSceneLoaded = true;
+        AframaxSceneManager.Instance.ToggleSettingsSceneLoadedBool();
         _playerInputControls.Enable();
     }
 
     private void OnDisable()
     {
-        AframaxSceneManager.Instance.IsSettingsSceneLoaded = false;
+        AframaxSceneManager.Instance.ToggleSettingsSceneLoadedBool();
         _playerInputControls.Player.Pause.performed -= ctx => ExitScene();
         _playerInputControls.Disable();
     }
