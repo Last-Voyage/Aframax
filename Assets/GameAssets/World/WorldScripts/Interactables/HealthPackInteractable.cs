@@ -8,6 +8,9 @@
 *****************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// The class that contains the necessary methods to control the health pack
+/// </summary>
 public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
 {
     // Variables to store the amount of health restored
