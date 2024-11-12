@@ -20,7 +20,10 @@ public class VineAttackController : BaseBossAttack
 {
     public static VineAttackController Instance;
 
-    [SerializeField] private int _amountOfRoomsToAttack;
+    /// <summary>
+    /// Unity doesn't seem to like Serializing an array of arrays but it likes this
+    /// </summary>
+    [SerializeField] private VineAttackGroup[] _attackOrder;
     [SerializeField] private float _attackInterval;
 
     private VineAttack[] _vineAttackRooms;
@@ -29,12 +32,14 @@ public class VineAttackController : BaseBossAttack
 
     private Coroutine _attackProcessCoroutine;
 
+    WaitForSeconds _attackIntervalDelay;
 
     private void Start()
     {
         EstablishInstance();
 
         _isAttackActive = false;
+        _attackIntervalDelay = new WaitForSeconds(_attackInterval);
         GetAllRooms();
     }
 
@@ -75,16 +80,17 @@ public class VineAttackController : BaseBossAttack
     {
         base.BeginAttack();
         //Determines which rooms are being attacked
-        DetermineAttackRooms(_amountOfRoomsToAttack);
+
         SpawnVinesInRooms();
         _attackProcessCoroutine = StartCoroutine(AttackProcess());
     }
 
     /// <summary>
-    /// Determines which rooms are being attacked
+    /// Functionality to randomly pick attack rooms
+    /// Not currently in use as design wants to pick the attacks but I believe this functionality should remain
     /// </summary>
     /// <param name="roomCount"> The number of rooms to attack in</param>
-    private void DetermineAttackRooms(int roomCount)
+    private void DetermineRandomAttackRooms(int roomCount)
     {
         //Check that the number of rooms to attack doesn't exceed the amount of rooms that exist
         if (roomCount >= _vineAttackRooms.Length)
@@ -108,18 +114,6 @@ public class VineAttackController : BaseBossAttack
     }
 
     /// <summary>
-    /// Spawns vines in the rooms that are being attacked
-    /// </summary>
-    /// <param name="roomCount"></param>
-    private void SpawnVinesInRooms()
-    {
-        foreach(VineAttack vine in _currentAttackingRooms)
-        {
-            vine.SpawnVine();
-        }
-    }
-
-    /// <summary>
     /// Attacks in a random active room
     /// </summary>
     private void AttackInRandomCurrentRoom()
@@ -130,29 +124,41 @@ public class VineAttackController : BaseBossAttack
     }
 
     /// <summary>
+    /// Spawns vines in the rooms that are being attacked
+    /// </summary>
+    /// <param name="roomCount"></param>
+    private void SpawnVinesInRooms()
+    {
+        foreach(VineAttack vine in _vineAttackRooms)
+        {
+            vine.SpawnVine();
+        }
+    }
+
+    /// <summary>
     /// Attacks until cancelled
     /// </summary>
     /// <returns></returns>
     private IEnumerator AttackProcess()
     {
-        while(_isAttackActive)
+        foreach(VineAttackGroup attackOrder in _attackOrder)
         {
-            AttackInRandomCurrentRoom();
-            yield return new WaitForSeconds(_attackInterval);
+            UseAllAttacksInAttackGroup(attackOrder);
+            yield return _attackIntervalDelay;
         }
+        EndAttack();
     }
 
     /// <summary>
-    /// Forcibly stops the attack process if needed
+    /// Uses all attacks in the current group of attacks
     /// </summary>
-    public void StopAttackProcess()
+    /// <param name="attackOrder"></param>
+    private void UseAllAttacksInAttackGroup(VineAttackGroup attackOrder)
     {
-        if(_attackProcessCoroutine != null)
+        foreach (VineAttack vineAttack in attackOrder.VineAttacksThisGroup)
         {
-            StopCoroutine(_attackProcessCoroutine);
-            _attackProcessCoroutine = null;
+            vineAttack.StartAttackProcess();
         }
-        EndAttack();
     }
 
     /// <summary>
@@ -194,4 +200,14 @@ public class VineAttackController : BaseBossAttack
     {
         UnsubscribeToEvents();
     }
+}
+
+/// <summary>
+/// Contains an array of vine attacks
+/// Can contain additional functionality as needed
+/// </summary>
+[System.Serializable]
+public class VineAttackGroup
+{
+    [field:SerializeField] public VineAttack[] VineAttacksThisGroup { get; private set; }
 }

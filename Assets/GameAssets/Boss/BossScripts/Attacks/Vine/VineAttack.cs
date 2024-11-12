@@ -14,6 +14,7 @@ using UnityEngine.Events;
 /// Functionality for the spawned tentacles for the vine attack
 /// </summary>
 [RequireComponent(typeof(AttackWarningZone))]
+[System.Serializable]
 public class VineAttack : MonoBehaviour
 {
     [Tooltip("How long the attack hitbox remains active")]
