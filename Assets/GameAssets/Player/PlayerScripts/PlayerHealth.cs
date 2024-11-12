@@ -18,7 +18,6 @@ public class PlayerHealth : BaseHealth
 {
     //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
-    private Coroutine _iFrameCoroutine;
 
 
 
@@ -54,21 +53,27 @@ public class PlayerHealth : BaseHealth
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
 
-            _iFrameCoroutine = StartCoroutine(InvincibilityFrames());
+            StartIFrames();
         }
     }
 
     /// <summary>
-    /// used to grant the player temporary invincibility after taking damage
+    /// used to start the player's invincibility after taking damage
     /// </summary>
     /// <returns></returns>
-    private IEnumerator InvincibilityFrames()
+    private void StartIFrames()
     {
         _shouldTakeDamage = false;
-        yield return new WaitForSeconds(_iFrameDelayInSeconds);
-        _shouldTakeDamage = true;
+        PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
     }
 
+    /// <summary>
+    /// used to end the player's invincibility after taking damage
+    /// </summary>
+    private void EndIFrames()
+    {
+        _shouldTakeDamage = true;
+    }
 
     /// <summary>
     /// When the player dies, performs the base functionality then calls player related event
