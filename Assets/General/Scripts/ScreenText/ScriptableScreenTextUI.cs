@@ -79,6 +79,9 @@ public class ScriptableDialogueUI : ScriptableObject
         }
     }
     
+    /// <summary>
+    /// Gets the total time it would take for all of the dialogue to be completed
+    /// </summary>
     private void FindTotalTime()
     {
         foreach (TextAndTimerData data in _dialogueData)
