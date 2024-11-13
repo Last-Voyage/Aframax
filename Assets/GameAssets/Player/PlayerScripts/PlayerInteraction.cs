@@ -21,10 +21,21 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private float _maxReach;
     [Tooltip("Ray that is cast from camera to find interactable objects")]
     private Ray _ray;
+    [Tooltip("UI object that will be toggled when you can or cannot interact with an object")]
+    private GameObject _interactUI;
 
     //Input
     private PlayerInput _playerInput;
     private InputAction _interactInput;
+
+    /// <summary>
+    /// Right away finds the InteractionUI object for future use and disables it before player can see
+    /// </summary>
+    private void Awake()
+    {
+        _interactUI = GameObject.Find("InteractionUI");
+        _interactUI.SetActive(false);
+    }
 
     /// <summary>
     /// Every frame, checks for interactable objects
@@ -62,20 +73,29 @@ public class PlayerInteraction : MonoBehaviour
 
     /// <summary>
     /// checks if gameObject can be interacted with
-    ///     If so, calls GiveInteractableFeedback, which should give player feedback that the object is interactable
+    ///     If so, makes interactable text appear in HUD.  Otherwise disables text
     /// </summary>
     /// <param name="gameObject">GameObject that can potentially be interacted with</param>
     private void GiveInteractableFeedback(GameObject gameObject)
     {
         if (gameObject.TryGetComponent(out IPlayerInteractable interactable))
         {
-            //REPLACE THIS WHEN WE MAKE UI FOR INTERACTION
-            Debug.Log("Press E to Interact");
+            if (!_interactUI.activeInHierarchy)
+            {
+                _interactUI.SetActive(true);
+            }
+        }
+        else
+        {
+            if (_interactUI.activeInHierarchy)
+            {
+                _interactUI.SetActive(false);
+            }
         }
     }
 
     /// <summary>
-    /// Calls the gameObject's OnINteractedByPlayer function if it is interactable
+    /// Calls the gameObject's OnInteractedByPlayer function if it is interactable
     /// </summary>
     /// <param name="gameObject">GameObject that can potentially be interacted with</param>
     private void Interact(GameObject gameObject)
