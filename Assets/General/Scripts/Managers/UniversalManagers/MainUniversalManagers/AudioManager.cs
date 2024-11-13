@@ -29,8 +29,9 @@ public class AudioManager : MainUniversalManagerFramework
     private void Awake()
     {
         if (_audioManager != null && _audioManager != this)
+        {
             Destroy(_audioManager.gameObject);
-
+        }
         _audioManager = this;
         _audioPairs = new Dictionary<EventReference, EventInstance>();
     }
@@ -88,7 +89,10 @@ public class AudioManager : MainUniversalManagerFramework
         EventInstance audioEvent;
 
         if (_audioPairs.ContainsKey(reference))
+        {
             _audioPairs.TryGetValue(reference, out audioEvent);
+        }
+
         else
         {
             audioEvent = RuntimeManager.CreateInstance(reference);
@@ -104,11 +108,11 @@ public class AudioManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="audioEvent">the sound instance you want ended</param>
     /// <param name="fade">toggles whether the sound will fade when done playing</param>
-    public void StopAmbientSound(EventInstance instance, bool fade = false)
+    public void StopAmbientSound(EventInstance instance, bool willFade = false)
     {
         if (instance.isValid())
         {
-            instance.stop(fade ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
+            instance.stop(willFade ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
         }
         else
         {
