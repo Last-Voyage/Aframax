@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 5137148187237992625}
   - component: {fileID: 3051451356196284552}
   - component: {fileID: 3641362925933844938}
+  - component: {fileID: 1332581679622314858}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -153,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 100
+  _iFrameDelayInSeconds: 0
   _shouldTakeDamage: 1
 --- !u!114 &3256320120288923392
 MonoBehaviour:
@@ -247,6 +249,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1332581679622314858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822883443245373252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9297d0e62b3d14ea04e77873c4ba42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxReach: 5
 --- !u!1 &2581785293803075771
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +755,7 @@ MonoBehaviour:
   _playerHealthController: {fileID: 2275719215793297427}
   _playerCamera: {fileID: 3697781239049282484}
   _harpoonGun: {fileID: 1154209733901946177}
+  _playerInteraction: {fileID: 1332581679622314858}
 --- !u!1001 &7289724734657163392
 PrefabInstance:
   m_ObjectHideFlags: 0
