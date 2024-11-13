@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       AudioManager.cs
 // Author:          Ryan Swanson
-// Contributors:    Andrea Swihart-DeCoster
+// Contributors:    Andrea Swihart-DeCoster, David Henvick
 // Creation Date:   September 14, 2024
 //
 // Description:     Provides the functionality behind all audio
@@ -53,6 +53,11 @@ public class AudioManager : MainUniversalManagerFramework
     #endregion
 
     #region Public Functions
+    /// <summary>
+    /// Plays a one shot sound that removes it's self after ending
+    /// </summary>
+    /// <param name="eventReference"></param> the sound you want played
+    /// <param name="worldPosition"></param> the position you want it to be played
     public void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
         if (eventReference.IsNull)
@@ -65,9 +70,9 @@ public class AudioManager : MainUniversalManagerFramework
     }
 
     /// <summary>
-    /// Plays an FMOD sound using a reference. Just add an eventreference and setup the sound
+    /// Plays an FMOD sound using a reference. Just add the event reference and setup the sound in the dictionary
     /// </summary>
-    /// <param name="reference">the desired sound reference</param>
+    /// <param name="reference">the sound reference you want to play</param>
     /// <returns>an EventInstance, save it if you need to use a parameter</returns>
     public EventInstance PlayAmbientSFX(EventReference reference)
     {
@@ -92,15 +97,15 @@ public class AudioManager : MainUniversalManagerFramework
     }
 
     /// <summary>
-    /// stops an FMOD sound using a reference.
+    /// stops an FMOD sound using the reference it takes
     /// </summary>
-    /// <param name="audioEvent">the desired sound instance</param>
-    /// <param name="fade">toggles wether the sound will fade when done playing</param>
-    public void StopAmbientSFX(EventInstance audioEvent, bool fade = false)
+    /// <param name="audioEvent">the sound instance you want ended</param>
+    /// <param name="fade">toggles whether the sound will fade when done playing</param>
+    public void StopAmbientSFX(EventInstance instance, bool fade = false)
     {
-        if (audioEvent.isValid())
+        if (instance.isValid())
         {
-            audioEvent.stop(fade ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
+            instance.stop(fade ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
         }
         else
         {
