@@ -11,13 +11,9 @@ using UnityEngine;
 public class SpannerInteractable : MonoBehaviour, IPlayerInteractable
 {
     /// <summary>
-    /// Called when the player presses the interact key on it
+    /// Implements the OnInteractedByPlayer function from IPlayerInteractable
+    /// Called when the player presses the interact key while looking at this object
     /// </summary>
-    protected void OnA()
-    {
-        
-    }
-
     void IPlayerInteractable.OnInteractedByPlayer()
     {
         PlayerInventory.Instance.DoesPlayerHaveSpanner = true;
