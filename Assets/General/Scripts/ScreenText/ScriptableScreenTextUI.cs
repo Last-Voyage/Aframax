@@ -30,8 +30,7 @@ public class ScriptableTutorialUI : ScriptableObject
     /// </summary>
     private void Awake()
     {
-        _tutorialData.GetText.NullIfEmpty();
-        if (IsActive())
+        if (IsContainingData())
         {
             TotalTime  = _tutorialData.GetTimeBeforeText + _tutorialData.GetTimeToDisplay;
         }
@@ -41,13 +40,9 @@ public class ScriptableTutorialUI : ScriptableObject
     /// <summary>
     /// Checks to see if the dialogue data is not null or unused
     /// </summary>
-    public bool IsActive()
+    public bool IsContainingData()
     {
-        bool active = false;
-
-        active = !_tutorialData.GetText.IsUnityNull() && _tutorialData.GetText != "";
-        
-        return active;
+        return !_tutorialData.GetText.IsUnityNull() && _tutorialData.GetText != "";
     }
     
     /// <summary>
@@ -78,13 +73,17 @@ public class ScriptableDialogueUI : ScriptableObject
     /// </summary>
     private void Awake()
     {
-        _dialogueData[0].GetText.NullIfEmpty();
-        if (IsActive())
+        if (IsContainingData())
         {
-            for (int i = 0; i < _dialogueData.Length; i++)
-            {
-                TotalTime += _dialogueData[i].GetTimeBeforeText + _dialogueData[i].GetTimeToDisplay;
-            }
+            FindTotalTime();
+        }
+    }
+    
+    private void FindTotalTime()
+    {
+        foreach (TextAndTimerData data in _dialogueData)
+        {
+            TotalTime += data.GetTimeBeforeText + data.GetTimeToDisplay;
         }
     }
     #endregion
@@ -92,21 +91,17 @@ public class ScriptableDialogueUI : ScriptableObject
     /// <summary>
     /// Checks to see if the dialogue data is not null or unused
     /// </summary>
-    private bool IsActive()
+    private bool IsContainingData()
     {
-        bool active = false;
-
-        active = _dialogueData.Length > 0 && _dialogueData != null &&
-                 !_dialogueData[0].GetText.IsUnityNull() &&
-                 _dialogueData[0].GetText != "";
-        
-        return active;
+        return _dialogueData.Length > 0 && _dialogueData != null &&
+               !_dialogueData[0].GetText.IsUnityNull() &&
+               _dialogueData[0].GetText != "";
     }
     
     /// <summary>
     /// Returns the reference to dialogue data
     /// </summary>
-    public TextAndTimerData[] GetTextAndTimer2()
+    public TextAndTimerData[] GetTextAndTimer()
     {
         return _dialogueData;
     }
@@ -121,11 +116,11 @@ public struct TextAndTimerData
     #region Text/Time
     #region Constructor
     [Tooltip("Data for on screen tutorial text")]
-    public TextAndTimerData(string onScreenGetText, uint getTimeUntilNextWords, uint getTimeToDisplay)
+    public TextAndTimerData(string screenGetText, uint timeUntilNextWords, uint timeToDisplay)
     {
-        _displayedText = onScreenGetText;
-        _getTimeBeforeTextDisplays = getTimeUntilNextWords;
-        _getTimeToDisplay = getTimeToDisplay;
+        _displayedText = screenGetText;
+        _getTimeBeforeTextDisplays = timeUntilNextWords;
+        _getTimeToDisplay = timeToDisplay;
     }
     #endregion
 

@@ -47,7 +47,7 @@ public class TutorialPopUps : MonoBehaviour
     {
         _finalMessageWait = new WaitForSeconds(_FINAL_MESSAGE_DISPLAY_TIME);
         
-        if (_uIData[0].IsActive())
+        if (_uIData[0].IsContainingData())
         {
             StartCoroutine(TimeBeforeText());
         }
