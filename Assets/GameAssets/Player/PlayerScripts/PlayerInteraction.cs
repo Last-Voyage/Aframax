@@ -85,12 +85,9 @@ public class PlayerInteraction : MonoBehaviour
                 _interactUI.SetActive(true);
             }
         }
-        else
+        else if (_interactUI.activeInHierarchy)
         {
-            if (_interactUI.activeInHierarchy)
-            {
-                _interactUI.SetActive(false);
-            }
+            _interactUI.SetActive(false);
         }
     }
 
