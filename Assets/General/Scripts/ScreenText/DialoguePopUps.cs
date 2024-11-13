@@ -43,14 +43,14 @@ public class DialoguePopUps : MonoBehaviour
     /// </summary>
     private void BeginDisplayingText(ScriptableDialogueUI dialogueUI)
     {
-        StartCoroutine(DisplayingTheText(dialogueUI));
+        StartCoroutine(DisplayText(dialogueUI));
     }
 
     /// <summary>
     /// This takes the text, makes it invisible, then slowly makes it visible by x characters a second
     /// </summary>
     /// <returns></returns>
-    private IEnumerator DisplayingTheText(ScriptableDialogueUI moreDialogue)
+    private IEnumerator DisplayText(ScriptableDialogueUI moreDialogue)
     {
         foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer2())
         {
