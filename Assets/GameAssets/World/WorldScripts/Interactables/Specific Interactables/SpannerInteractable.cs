@@ -8,6 +8,9 @@
 
 using UnityEngine;
 
+/// <summary>
+/// Provides the functionality for the player to pickup the spanner
+/// </summary>
 public class SpannerInteractable : MonoBehaviour, IPlayerInteractable
 {
     /// <summary>
@@ -17,7 +20,7 @@ public class SpannerInteractable : MonoBehaviour, IPlayerInteractable
     void IPlayerInteractable.OnInteractedByPlayer()
     {
         PlayerInventory.Instance.DoesPlayerHaveSpanner = true;
-        //I imagine there will be an animation or vfx for this in the future, but for now we just destroy it
+        //TODO: I imagine there will be an animation or vfx for this in the future, but for now we just destroy it
         Destroy(gameObject);
     }
 }
