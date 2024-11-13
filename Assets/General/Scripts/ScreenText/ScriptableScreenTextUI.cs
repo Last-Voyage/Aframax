@@ -8,17 +8,8 @@
 *****************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Overlays;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEditor.UIElements;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 
 /// <summary>
 /// The scriptable object for tutorial text and timing
@@ -29,15 +20,39 @@ public class ScriptableTutorialUI : ScriptableObject
     [Tooltip("Tutorial text and time variables")]
     [SerializeField]
     private TextAndTimerData _tutorialData;
-
+    
+    #region Getting Total Time
     [Tooltip("How much time the tutorial takes to display")]
-    public uint TotalTime { get => TotalTime; private set => TotalTime = value; }
+    public uint TotalTime { get; private set; }
 
+    /// <summary>
+    /// Checks to see if it's null, then performs total time operation
+    /// </summary>
     private void Awake()
     {
-        TotalTime  = _tutorialData.GetTimeBeforeText + _tutorialData.GetTimeToDisplay;
+        _tutorialData.GetText.NullIfEmpty();
+        if (IsActive())
+        {
+            TotalTime  = _tutorialData.GetTimeBeforeText + _tutorialData.GetTimeToDisplay;
+        }
     }
+    #endregion
+    
+    /// <summary>
+    /// Checks to see if the dialogue data is not null or unused
+    /// </summary>
+    public bool IsActive()
+    {
+        bool active = false;
 
+        active = !_tutorialData.GetText.IsUnityNull() && _tutorialData.GetText != "";
+        
+        return active;
+    }
+    
+    /// <summary>
+    /// Returns a reference to tutorial data
+    /// </summary>
     public TextAndTimerData GetTextAndTimer()
     {
         return _tutorialData;
@@ -54,17 +69,43 @@ public class ScriptableDialogueUI : ScriptableObject
     [SerializeField]
     private TextAndTimerData[] _dialogueData;
 
+    #region Getting Total Time
     [Tooltip("How much time a chain of dialogue takes to display")]
-    public uint TotalTime { get => TotalTime; private set => TotalTime = value; }
+    public uint TotalTime { get; private set; }
 
+    /// <summary>
+    /// Checks to see if it's null, then performs total time operation
+    /// </summary>
     private void Awake()
     {
-        for (int i = 0; i < _dialogueData.Length; i++)
+        _dialogueData[0].GetText.NullIfEmpty();
+        if (IsActive())
         {
-            TotalTime += _dialogueData[i].GetTimeBeforeText + _dialogueData[i].GetTimeToDisplay;
+            for (int i = 0; i < _dialogueData.Length; i++)
+            {
+                TotalTime += _dialogueData[i].GetTimeBeforeText + _dialogueData[i].GetTimeToDisplay;
+            }
         }
     }
+    #endregion
+
+    /// <summary>
+    /// Checks to see if the dialogue data is not null or unused
+    /// </summary>
+    private bool IsActive()
+    {
+        bool active = false;
+
+        active = _dialogueData.Length > 0 && _dialogueData != null &&
+                 !_dialogueData[0].GetText.IsUnityNull() &&
+                 _dialogueData[0].GetText != "";
+        
+        return active;
+    }
     
+    /// <summary>
+    /// Returns the reference to dialogue data
+    /// </summary>
     public TextAndTimerData[] GetTextAndTimer2()
     {
         return _dialogueData;
@@ -121,68 +162,3 @@ public struct TextAndTimerData
 
     #endregion
 }
-
-/*[CustomPropertyDrawer(typeof(TextAndTimerData))]
-public sealed class DialoguePropertyDrawer : PropertyDrawer
-{
-    /*public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
-
-
-        EditorGUI.EndProperty();
-    }#1#
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
-    {
-        VisualElement uiContainer = new();
-        Box dialogueInfoBox = new();
-
-        PropertyField textProperty = new PropertyField(property.FindPropertyRelative("_displayedText"));
-        PropertyField timeProperty = new PropertyField(property.FindPropertyRelative("_timeBeforeDisplaying"));
-        
-
-        TextField dialogueField = new();
-        UnsignedIntegerField waitTimeField = new();
-        
-        dialogueField.label = "Dialogue";
-        waitTimeField.label = "Wait Time";
-        dialogueInfoBox.name = "DialogueInfoBox";
-
-        dialogueField.value = "Write Text Here";
-
-        textProperty.label = "Dialogue";
-
-        dialogueField.Serialize();
-        waitTimeField.Serialize();
-
-        textProperty.style.whiteSpace = WhiteSpace.Normal;
-
-        textProperty.style.overflow = Overflow.Hidden;
-        textProperty.style.width = 100;
-
-        dialogueField.multiline = true;
-        dialogueField.style.whiteSpace = WhiteSpace.Normal;
-        dialogueField.style.unityTextAlign = TextAnchor.UpperLeft;
-
-        dialogueField.labelElement.style.color = Color.white;
-
-        dialogueField.style.maxHeight = 60;
-
-        dialogueField.autoCorrection = true;
-
-        dialogueField.style.color = Color.blue;
-
-        /*uiContainer.Add(dialogueField);
-        uiContainer.Add(waitTimeField);
-        uiContainer.Add(dialogueInfoBox);#1#
-        
-        textProperty.Add(dialogueField);
-        timeProperty.Add(waitTimeField);
-        dialogueInfoBox.Add(textProperty);
-        dialogueInfoBox.Add(timeProperty);
-
-        uiContainer.Add(dialogueInfoBox);
-        
-        return uiContainer;
-    }
-    
-}*/

@@ -19,21 +19,15 @@ public class DialoguePopUps : MonoBehaviour
 {
     [Tooltip("The UI element that will actually display the text")]
     [SerializeField]
-    TextMeshProUGUI _textContainer;
+    private TextMeshProUGUI _textContainer;
 
     // Temp variable used for testing
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    ScriptableDialogueUI _uIData;
-
-    [Tooltip("The collider the player has to walk into")]
-    GameObject _walkTutorialObject;
-
-    [Tooltip("The collider the player has to shoot")]
-    GameObject _shootTutorialObject;
+    private ScriptableDialogueUI _uIData;
 
     [Tooltip("The pointer for which ui data is currently being used")]
-    private int _dataPointer = 0;
+    private int _dataPointer;
     
     /// <summary>
     /// Temporary; used for testing
@@ -47,7 +41,7 @@ public class DialoguePopUps : MonoBehaviour
     /// The pass through function for actually displaying the dialogue
     /// Because events do not like coroutines
     /// </summary>
-    private void FunctionForDisplayingText(ScriptableDialogueUI dialogueUI)
+    private void BeginDisplayingText(ScriptableDialogueUI dialogueUI)
     {
         StartCoroutine(DisplayingTheText(dialogueUI));
     }
@@ -91,7 +85,7 @@ public class DialoguePopUps : MonoBehaviour
     private void OnEnable()
     {
         GameStateManager.Instance.GetOnNewDialogueChain().
-            AddListener(FunctionForDisplayingText);
+            AddListener(BeginDisplayingText);
     }
 
     /// <summary>
@@ -101,6 +95,6 @@ public class DialoguePopUps : MonoBehaviour
     private void OnDisable()
     {
         GameStateManager.Instance.GetOnNewDialogueChain().
-            RemoveListener(FunctionForDisplayingText);
+            RemoveListener(BeginDisplayingText);
     }
 }

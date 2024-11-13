@@ -18,17 +18,17 @@ public class TutorialPopUps : MonoBehaviour
 {
     [Tooltip("The UI element that will actually display the text")]
     [SerializeField]
-    TextMeshProUGUI _textContainer;
+    private TextMeshProUGUI _textContainer;
 
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    ScriptableTutorialUI[] _uIData;
+    private ScriptableTutorialUI[] _uIData;
 
     [Tooltip("The collider the player has to walk into")]
-    GameObject _walkTutorialObject;
+    private GameObject _walkTutorialObject;
 
     [Tooltip("The collider the player has to shoot")]
-    GameObject _shootTutorialObject;
+    private GameObject _shootTutorialObject;
 
     [Tooltip("The pointer for which ui data is currently being used")]
     private int _dataPointer;
@@ -36,24 +36,23 @@ public class TutorialPopUps : MonoBehaviour
     [Tooltip("The message shown after completing a tutorial")]
     private const string _CONGRATULATION_MESSAGE = "Great Job!";
 
-    /*[Tooltip("The diviser to get the message completed in a certain amount of time")]
-    private const float _TOTAL_DISPLAY_TIME = 3f;*/
-
     [Tooltip("The time the final message is displayed")]
     private const float _FINAL_MESSAGE_DISPLAY_TIME = 2f;
+    
+    [Tooltip("The time the final message is displayed")]
+    private WaitForSeconds _finalMessageWait;
 
     // Start's the tutorial process
     void Start()
     {
-        if (_uIData.Length > 0 && _uIData != null &&
-            !_uIData[_dataPointer].GetTextAndTimer().GetText.IsUnityNull() &&
-            _uIData[_dataPointer].GetTextAndTimer().GetText != "")
+        _finalMessageWait = new WaitForSeconds(_FINAL_MESSAGE_DISPLAY_TIME);
+        
+        if (_uIData[0].IsActive())
         {
             StartCoroutine(TimeBeforeText());
         }
     }
-
-
+    
     /// <summary>
     /// This coroutine will wait for x seconds, then start the displaying text coroutine
     /// </summary>
@@ -133,7 +132,7 @@ public class TutorialPopUps : MonoBehaviour
     /// <returns></returns>
     private IEnumerator EndMessageBuffer()
     {
-        yield return new WaitForSeconds(_FINAL_MESSAGE_DISPLAY_TIME);
+        yield return _finalMessageWait;
         NextTutorial();
     }
 
