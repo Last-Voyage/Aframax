@@ -26,6 +26,14 @@ public class SceneLoadingButtons : MonoBehaviour
     }
 
     /// <summary>
+    /// function for buttons to use for additive loading (used for loading the settings menu)
+    /// </summary>
+    public void LoadDesiredSceneButtonAdditive()
+    {
+        AframaxSceneManager.Instance.AdditiveLoadScene(_sceneToLoad);
+    }
+
+    /// <summary>
     /// Quits the game
     /// </summary>
     public void QuitGame()
