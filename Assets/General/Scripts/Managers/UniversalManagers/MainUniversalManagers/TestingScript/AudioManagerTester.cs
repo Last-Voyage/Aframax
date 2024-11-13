@@ -14,15 +14,15 @@ public class AudioManagerTester : MonoBehaviour
 
     public void PlayOneshotSound()
     {
-        Manager.PlayOneShotSFX(OneShot);
+        Manager.PlayOneShotSound(OneShot);
     }
     public void PlayAmbient()
     {
-        _audioEvent = Manager.PlayAmbientSFX(Ambient);
+        _audioEvent = Manager.PlayAmbientSound(Ambient);
     }
     public void StopAmbient()
     {
-        Manager.StopAmbientSFX(_audioEvent);
+        Manager.StopAmbientSound(_audioEvent);
     }
 
 }

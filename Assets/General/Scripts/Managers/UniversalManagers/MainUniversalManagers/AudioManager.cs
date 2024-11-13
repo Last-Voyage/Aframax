@@ -58,7 +58,7 @@ public class AudioManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="eventReference"></param> the sound you want played
     /// <param name="worldPosition"></param> the position you want it to be played
-    public void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
+    public void PlayOneShotSound(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
         if (eventReference.IsNull)
         {
@@ -74,7 +74,7 @@ public class AudioManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="reference">the sound reference you want to play</param>
     /// <returns>an EventInstance, save it if you need to use a parameter</returns>
-    public EventInstance PlayAmbientSFX(EventReference reference)
+    public EventInstance PlayAmbientSound(EventReference reference)
     {
         if (reference.IsNull)
         {
@@ -101,7 +101,7 @@ public class AudioManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="audioEvent">the sound instance you want ended</param>
     /// <param name="fade">toggles whether the sound will fade when done playing</param>
-    public void StopAmbientSFX(EventInstance instance, bool fade = false)
+    public void StopAmbientSound(EventInstance instance, bool fade = false)
     {
         if (instance.isValid())
         {
