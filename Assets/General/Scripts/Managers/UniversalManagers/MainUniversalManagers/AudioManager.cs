@@ -54,7 +54,7 @@ public class AudioManager : MainUniversalManagerFramework
     #region Getters
 
     #endregion
-
+        
     #region Public Functions
     /// <summary>
     /// Plays a one shot sound that removes it's self after ending
