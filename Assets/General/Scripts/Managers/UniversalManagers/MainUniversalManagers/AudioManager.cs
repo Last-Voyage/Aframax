@@ -19,19 +19,22 @@ using STOP_MODE = FMOD.Studio.STOP_MODE;
 /// </summary>
 public class AudioManager : MainUniversalManagerFramework
 {
-    #region Variables
-    public static AudioManager audioManager;
-    Dictionary<EventReference, EventInstance> AudioPairs;
+    #region Variables and public function set up
+    //reference to self
+    private static AudioManager _audioManager;
+    //dictionary to hold the currently playing to keep the same instance being layered on itself.
+    private Dictionary<EventReference, EventInstance> _audioPairs;
 
+    //sets all needed variables
     private void Awake()
     {
-        if (audioManager != null && audioManager != this)
-            Destroy(audioManager.gameObject);
+        if (_audioManager != null && _audioManager != this)
+            Destroy(_audioManager.gameObject);
 
-        audioManager = this;
-        AudioPairs = new Dictionary<EventReference, EventInstance>();
+        _audioManager = this;
+        _audioPairs = new Dictionary<EventReference, EventInstance>();
     }
-    #endregion Variables
+    #endregion Variables and public function set up
 
 
     #region Base Manager
@@ -84,12 +87,12 @@ public class AudioManager : MainUniversalManagerFramework
 
         EventInstance audioEvent;
 
-        if (AudioPairs.ContainsKey(reference))
-            AudioPairs.TryGetValue(reference, out audioEvent);
+        if (_audioPairs.ContainsKey(reference))
+            _audioPairs.TryGetValue(reference, out audioEvent);
         else
         {
             audioEvent = RuntimeManager.CreateInstance(reference);
-            AudioPairs.Add(reference, audioEvent);
+            _audioPairs.Add(reference, audioEvent);
         }
 
         audioEvent.start();
