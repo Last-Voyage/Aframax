@@ -21,7 +21,12 @@ public class PlayerHealth : BaseHealth
 
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
-
+    [Tooltip ("Health point at which the heart beat sfx starts")]
+    [SerializeField] private float _HeartBeatStart;
+    [Tooltip ("Health point at which the heart beat sfx ends")]
+    [SerializeField] private float _HeartBeatEnd;
+    [SerializeField] private float _HeartBeatRate;
+    private Coroutine _heartBeatCoroutine;
     private void Awake()
     {
         base.Awake();
@@ -43,8 +48,40 @@ public class PlayerHealth : BaseHealth
         base.IncreaseHealth(heal);
 
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+        CheckHeartBeat();
     }
 
+    private void CheckHeartBeat()
+    {
+        if (base._currentHealth <= _HeartBeatStart && base._currentHealth != _HeartBeatEnd && _heartBeatCoroutine == null)
+        {
+            StartCoroutine(HeartbeatLoop());
+        }
+        if (base._currentHealth == _HeartBeatEnd && _heartBeatCoroutine != null)
+        {
+            StopCoroutine(HeartbeatLoop());
+        }
+    }
+/// <summary>
+/// A coroutine that is mean't to loop the heartbeat sfx
+/// </summary>
+/// <returns>returns null to loop similar to update function</returns>
+    IEnumerator HeartbeatLoop()
+    {
+        float timer = 0.0f;
+        while (true)
+        {
+            if (timer > _HeartBeatRate)
+            {
+                RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.PlayerHeartBeat,
+                    gameObject.transform.position);
+                timer = 0.0f;
+            }
+            timer += Time.deltaTime;
+            yield return null;
+    }
+    }
+    
     /// <summary>
     /// Reduces health and calls any player damaged events
     /// </summary>
@@ -60,7 +97,7 @@ public class PlayerHealth : BaseHealth
 
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
-
+            CheckHeartBeat();
             StartIFrames();
         }
     }

@@ -35,6 +35,7 @@ public class FmodSfxEvents : MonoBehaviour
 
     [field: Space]
     [field: SerializeField] public EventReference PlayerTookDamage { get; private set; }
+    [field: SerializeField] public EventReference PlayerHeartBeat { get; private set; }
 
     #region Harpoon
 
