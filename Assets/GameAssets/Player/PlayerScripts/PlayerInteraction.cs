@@ -72,13 +72,13 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     /// <summary>
-    /// checks if gameObject can be interacted with
+    /// checks if potentialInteractable can be interacted with
     ///     If so, makes interactable text appear in HUD.  Otherwise disables text
     /// </summary>
-    /// <param name="gameObject">GameObject that can potentially be interacted with</param>
-    private void GiveInteractableFeedback(GameObject gameObject)
+    /// <param name="potentialInteractable">GameObject that can potentially be interacted with</param>
+    private void GiveInteractableFeedback(GameObject potentialInteractable)
     {
-        if (gameObject.TryGetComponent(out IPlayerInteractable interactable))
+        if (potentialInteractable.TryGetComponent(out IPlayerInteractable interactable))
         {
             if (!_interactUI.activeInHierarchy)
             {
@@ -92,12 +92,12 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     /// <summary>
-    /// Calls the gameObject's OnInteractedByPlayer function if it is interactable
+    /// Calls the interactable's OnInteractedByPlayer function if potentialInteractable is interactable
     /// </summary>
-    /// <param name="gameObject">GameObject that can potentially be interacted with</param>
-    private void Interact(GameObject gameObject)
+    /// <param name="potentialInteractable">GameObject that can potentially be interacted with</param>
+    private void Interact(GameObject potentialInteractable)
     {
-        if (gameObject.TryGetComponent(out IPlayerInteractable interactable))
+        if (potentialInteractable.TryGetComponent(out IPlayerInteractable interactable))
         {
             interactable.OnInteractedByPlayer();
         }
