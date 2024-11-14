@@ -6,19 +6,19 @@ using UnityEngine;
 
 public class AudioManagerTester : MonoBehaviour
 {
-    [field: SerializeField] public EventReference OneShot { get; private set; }
-    [field: SerializeField] public EventReference Ambient { get; private set; }
+    [SerializeField] public EventReference[] OneshotSounds;
+    [SerializeField] public EventReference[] AmbientSounds;
 
     [SerializeField] AudioManager Manager;
     EventInstance _audioEvent;
 
-    public void PlayOneshotSound()
+    public void PlayOneshotSound(int index)
     {
-        Manager.PlayOneShotSound(OneShot);
+        Manager.PlayOneShotSound(OneshotSounds[index]);
     }
-    public void PlayAmbient()
+    public void PlayAmbient(int index)
     {
-        _audioEvent = Manager.PlayAmbientSound(Ambient);
+        _audioEvent = Manager.PlayAmbientSound(AmbientSounds[index]);
     }
     public void StopAmbient()
     {
