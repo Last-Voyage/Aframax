@@ -23,6 +23,8 @@ public class GameStateManager : MainGameplayManagerFramework
     private readonly UnityEvent _onCompletedTutorialSection = new();
 
     private readonly UnityEvent _onCompletedEntireTutorial = new();
+    
+    private readonly UnityEvent<ScriptableDialogueUI> _onNewDialogueChain = new();
 
     /// <summary>
     /// Switches gameplay state 
@@ -50,6 +52,8 @@ public class GameStateManager : MainGameplayManagerFramework
     public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
 
     public UnityEvent GetOnCompletedEntireTutorial() => _onCompletedEntireTutorial;
+    
+    public UnityEvent<ScriptableDialogueUI> GetOnNewDialogueChain() => _onNewDialogueChain;
 
     #endregion
 }

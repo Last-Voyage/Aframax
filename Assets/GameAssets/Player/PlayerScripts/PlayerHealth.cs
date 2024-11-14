@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealth.cs
 // Author :            Ryan Swanson
-// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba, David Henvick
+// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba, David Henvick, Andrew Stapay
 // Creation Date :     10/15/24
 //
 // Brief Description : Controls the player's health functionality
@@ -19,10 +19,19 @@ public class PlayerHealth : BaseHealth
     //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
 
-
-
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
+
+    private void Awake()
+    {
+        base.Awake();
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
 
     /// <summary>
     /// Performs the base functionality then calls player related event
@@ -33,7 +42,6 @@ public class PlayerHealth : BaseHealth
     {
         base.IncreaseHealth(heal);
 
-        PlayerManager.Instance.InvokePlayerHealEvent(heal);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
     }
 
@@ -82,5 +90,15 @@ public class PlayerHealth : BaseHealth
     {
         base.OnDeath();
         PlayerManager.Instance.InvokeOnPlayerDeath();
+    }
+
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(IncreaseHealth);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(IncreaseHealth);
     }
 }
