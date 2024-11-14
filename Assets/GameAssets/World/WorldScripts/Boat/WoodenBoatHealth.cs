@@ -29,9 +29,10 @@ public class WoodenBoatHealth : BaseHealth
             }
         }
     }
-/// <summary>
-///  Plays the on Hit VFX if hit by the harpoon
-/// </summary>
+    
+    /// <summary>
+    ///  Plays the on Hit VFX if hit by the harpoon
+    /// </summary>
     private void PlayOnHitVFX()
     {
         VfxManager.Instance.GetWoodenSparksVfx()
