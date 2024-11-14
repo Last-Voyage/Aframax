@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.SceneManagement;
 using UnityEditor;
 
 /// <summary>
@@ -85,6 +86,13 @@ public class StoryManagerEditor : Editor
             GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents.Add(new StoryBeatEvent());
         }
         GUI.backgroundColor = DEFAULT_COLOR;
+
+        // Make sure the changes actually saved
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(GetStoryManager);
+            EditorSceneManager.MarkSceneDirty(GetStoryManager.gameObject.scene);
+        }
     }
 
     /// <summary>
