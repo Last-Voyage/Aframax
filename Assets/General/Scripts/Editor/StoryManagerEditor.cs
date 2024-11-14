@@ -157,8 +157,12 @@ public class StoryManagerEditor : Editor
         GUI.backgroundColor = DEFAULT_COLOR;
         EditorGUILayout.EndHorizontal();
 
+        // Allow the description to be word wrapped
+        GUIStyle textAreaStyle = new(GUI.skin.textArea);
+        textAreaStyle.wordWrap = true;
+
         // Display the description of the currently selected beat
-        GetStoryBeats[OpenStoryBeat].BeatDescription = EditorGUILayout.TextArea(GetStoryBeats[OpenStoryBeat].BeatDescription);
+        GetStoryBeats[OpenStoryBeat].BeatDescription = EditorGUILayout.TextArea(GetStoryBeats[OpenStoryBeat].BeatDescription, textAreaStyle);
     }
 
     /// <summary>
