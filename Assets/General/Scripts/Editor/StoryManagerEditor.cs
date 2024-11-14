@@ -9,11 +9,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// The custom editor script for the story manager, makes everything much easier to read/edit
+/// </summary>
 [CustomEditor(typeof(StoryManager))]
 public class StoryManagerEditor : Editor
 {
     // Settings for the editor specifically
-    private bool _debugMode;
+    private bool _isInDebugMode;
     private static Color DEFAULT_COLOR;
 
     // Getters for the StoryManager and the StoryBeats list
@@ -47,8 +50,8 @@ public class StoryManagerEditor : Editor
         }
 
         // Debug mode option for those without fear
-        _debugMode = EditorGUILayout.Toggle("Debug Mode", _debugMode);
-        if (_debugMode)
+        _isInDebugMode = EditorGUILayout.Toggle("Debug Mode", _isInDebugMode);
+        if (_isInDebugMode)
         {
             base.OnInspectorGUI();
             return;
@@ -137,7 +140,7 @@ public class StoryManagerEditor : Editor
 
         EditorGUILayout.BeginHorizontal();
         // Display more information about the currently selected beat
-        GetStoryBeats[OpenStoryBeat].Name = EditorGUILayout.TextField(GetStoryBeats[OpenStoryBeat].Name);
+        GetStoryBeats[OpenStoryBeat].BeatName = EditorGUILayout.TextField(GetStoryBeats[OpenStoryBeat].BeatName);
 
         // Allow the current beat to be deleted
         GUI.backgroundColor = new(1f, 0.25f, 0.25f, 1);
@@ -214,7 +217,7 @@ public class StoryManagerEditor : Editor
 
         GUILayout.BeginHorizontal();
         // Figure out the title to display based on the event name
-        string eventName = storyBeatEvents[eventIndex].Name;
+        string eventName = storyBeatEvents[eventIndex].EventName;
         if (eventName == "" || eventName == null)
         {
             // Either set it to its actual name, or a placeholder
@@ -222,20 +225,20 @@ public class StoryManagerEditor : Editor
         }
 
         // Display the minimize/maximize button
-        if (GUILayout.Button(storyBeatEvents[eventIndex].Minimized ? "+" : "-"))
+        if (GUILayout.Button(storyBeatEvents[eventIndex].IsMinimized ? "+" : "-"))
         {
-            storyBeatEvents[eventIndex].Minimized = !storyBeatEvents[eventIndex].Minimized;
+            storyBeatEvents[eventIndex].IsMinimized = !storyBeatEvents[eventIndex].IsMinimized;
         }
 
         // Display the name, or display the name text field
-        if (storyBeatEvents[eventIndex].Minimized)
+        if (storyBeatEvents[eventIndex].IsMinimized)
         {
             EditorGUILayout.LabelField(eventName, headerStyle);
         }
         else
         {
             // If it's not minimized, allow the user to edit the name
-            storyBeatEvents[eventIndex].Name = EditorGUILayout.TextField(storyBeatEvents[eventIndex].Name);
+            storyBeatEvents[eventIndex].EventName = EditorGUILayout.TextField(storyBeatEvents[eventIndex].EventName);
         }
 
         // Display the "move back in the list" button
@@ -270,7 +273,7 @@ public class StoryManagerEditor : Editor
 
         // If the event is minimized or doesn't exist anymore, don't display the event
         if (eventIndex >= storyBeatEvents.Count ||
-            storyBeatEvents[eventIndex].Minimized)
+            storyBeatEvents[eventIndex].IsMinimized)
         {
             return;
         }
@@ -287,9 +290,9 @@ public class StoryManagerEditor : Editor
             }
 
             // Display the event type buttons
-            if (GUILayout.Button((StoryBeatEvent.BeatEventType)i + ""))
+            if (GUILayout.Button((StoryBeatEvent.EBeatEventType)i + ""))
             {
-                storyBeatEvents[eventIndex].EventType = (StoryBeatEvent.BeatEventType)i;
+                storyBeatEvents[eventIndex].EventType = (StoryBeatEvent.EBeatEventType)i;
             }
 
             GUI.backgroundColor = DEFAULT_COLOR;
@@ -301,19 +304,19 @@ public class StoryManagerEditor : Editor
         switch (storyBeatEvents[eventIndex].EventType)
         {
             // If it's dialogue, show the dialogue settings
-            case StoryBeatEvent.BeatEventType.Dialogue:
+            case StoryBeatEvent.EBeatEventType.Dialogue:
                 // TODO: Implement dialogue line things
                 storyBeatEvents[eventIndex].Dialogue = (ScriptableDialogueUI)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].Dialogue, typeof(ScriptableDialogueUI), true);
                 break;
 
             // If it's boat speed change, show the boat speed settings
-            case StoryBeatEvent.BeatEventType.BoatSpeed:
+            case StoryBeatEvent.EBeatEventType.BoatSpeed:
                 storyBeatEvents[eventIndex].BoatSpeed = EditorGUILayout.FloatField("Boat Speed", storyBeatEvents[eventIndex].BoatSpeed);
                 storyBeatEvents[eventIndex].SpeedChangeTime = EditorGUILayout.FloatField("Change Time", storyBeatEvents[eventIndex].SpeedChangeTime);
                 break;
 
             // If it's a boss attack, show the boss attack settings
-            case StoryBeatEvent.BeatEventType.BossAttack:
+            case StoryBeatEvent.EBeatEventType.BossAttack:
                 // Edge case if the boss attacks don't exist
                 if (storyBeatEvents[eventIndex].BossAttacks == null)
                 {
@@ -327,9 +330,9 @@ public class StoryManagerEditor : Editor
                 break;
 
             // If it's a UnityEvent, display the event
-            case StoryBeatEvent.BeatEventType.Function:
+            case StoryBeatEvent.EBeatEventType.Function:
                 // Display the function properties
-                SerializedProperty beatEventProperty = storyBeatEventProperty.FindPropertyRelative("BeatEvent");
+                SerializedProperty beatEventProperty = storyBeatEventProperty.FindPropertyRelative("OnBeatEvent");
                 EditorGUILayout.PropertyField(beatEventProperty);
                 serializedStoryManager.ApplyModifiedProperties();
                 break;
@@ -343,7 +346,7 @@ public class StoryManagerEditor : Editor
         // Display the settings for the delay on the beat event
         storyBeatEvents[eventIndex].DelayTime = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[eventIndex].DelayTime);
 
-        if (storyBeatEvents[eventIndex].EventType == StoryBeatEvent.BeatEventType.Dialogue)
+        if (storyBeatEvents[eventIndex].EventType == StoryBeatEvent.EBeatEventType.Dialogue)
         {
             if (GUILayout.Button("Set Auto Delay"))
             {
@@ -373,15 +376,15 @@ public class StoryManagerEditor : Editor
     /// <param name="list">The list object</param>
     /// <param name="oldIndex">The old index of the item</param>
     /// <param name="newIndex">The new index to move the item to</param>
-    private void MoveItem<T>(List<T> list, int oldIndex, int newIndex)
+    private void MoveItem<T>(List<T> targetList, int oldIndex, int newIndex)
     {
-        // Clamp the index to the size of the list
-        oldIndex = Mathf.Clamp(oldIndex, 0, list.Count - 1);
-        newIndex = Mathf.Clamp(newIndex, 0, list.Count - 1);
+        // Clamp the index to the size of the targetList
+        oldIndex = Mathf.Clamp(oldIndex, 0, targetList.Count - 1);
+        newIndex = Mathf.Clamp(newIndex, 0, targetList.Count - 1);
 
         // Move the item
-        T item = list[oldIndex];
-        list.RemoveAt(oldIndex);
-        list.Insert(newIndex, item);
+        T item = targetList[oldIndex];
+        targetList.RemoveAt(oldIndex);
+        targetList.Insert(newIndex, item);
     }
 }

@@ -11,10 +11,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// The manager for all the story beats and story events
+/// </summary>
 public class StoryManager : MonoBehaviour
 {
     // The singleton StoryManager
-    public static StoryManager main;
+    public static StoryManager Instance;
 
     // The StoryBeat and coroutine system
     public List<StoryBeat> StoryBeats;
@@ -28,9 +31,18 @@ public class StoryManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        if (main == null)
+        DefineSingleton();
+    }
+
+    /// <summary>
+    /// Defines the Instance singleton variable
+    /// </summary>
+    private void DefineSingleton()
+    {
+        // Only sets it as the singleton if there isn't one already
+        if (Instance == null)
         {
-            main = this;
+            Instance = this;
         }
         else
         {
@@ -64,7 +76,7 @@ public class StoryManager : MonoBehaviour
         foreach (StoryBeat curBeat in StoryBeats)
         {
             // Disregard case of the names
-            if (curBeat.Name.ToLower() == beatName.ToLower())
+            if (curBeat.BeatName.ToLower() == beatName.ToLower())
             {
                 // Start the coroutine on the specific story beat
                 _beatEventsCoroutine = StartCoroutine(nameof(TriggerBeatEvents), curBeat.StoryBeatEvents);
@@ -80,15 +92,12 @@ public class StoryManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator TriggerBeatEvents(List<StoryBeatEvent> events)
     {
-        WaitForSeconds postEventDelay;
-
         // Iterate through each event
         for (int i = 0; i < events.Count; i++)
         {
             // Trigger the event, then start a delay before triggering the next event
             events[i].TriggerEvent();
-            postEventDelay = new(events[i].DelayTime);
-            yield return postEventDelay;
+            yield return new WaitForSeconds(events[i].DelayTime);
         }
     }
 }
@@ -100,7 +109,7 @@ public class StoryManager : MonoBehaviour
 public class StoryBeat
 {
     // The name of the story beat
-    public string Name;
+    public string BeatName;
 
     // The list of story beat events in the beat
     public List<StoryBeatEvent> StoryBeatEvents;
@@ -113,14 +122,14 @@ public class StoryBeat
 public class StoryBeatEvent
 {
     // Enumerable for setting the type of beat event
-    public enum BeatEventType { Dialogue, BoatSpeed, BossAttack, Function }
+    public enum EBeatEventType { Dialogue, BoatSpeed, BossAttack, Function }
 
     // Editor settings
-    public bool Minimized;
+    public bool IsMinimized;
 
     // General settings
-    public string Name;
-    public BeatEventType EventType;
+    public string EventName;
+    public EBeatEventType EventType;
     public float DelayTime;
 
     // Dialogue settings
@@ -134,7 +143,7 @@ public class StoryBeatEvent
     public List<BaseBossAttack> BossAttacks;
 
     // Function settings
-    public UnityEvent BeatEvent;
+    public UnityEvent OnBeatEvent;
 
     /// <summary>
     /// Start the story beat event
@@ -145,17 +154,17 @@ public class StoryBeatEvent
         switch (EventType)
         {
             // If it's a dialogue event, start the dialogue
-            case BeatEventType.Dialogue:
+            case EBeatEventType.Dialogue:
                 GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(Dialogue);
                 break;
 
             // If it's a boat speed event, change the speed of the boat
-            case BeatEventType.BoatSpeed:
-                Object.FindObjectOfType<BoatMover>().ChangeSpeed(BoatSpeed, SpeedChangeTime);
+            case EBeatEventType.BoatSpeed:
+                BoatMover.Instance.ChangeSpeed(BoatSpeed, SpeedChangeTime);
                 break;
 
             // If it's a boss attack event, start the attacks of all the individual attackers
-            case BeatEventType.BossAttack:
+            case EBeatEventType.BossAttack:
                 foreach (BaseBossAttack currentAttack in BossAttacks)
                 {
                     currentAttack.InvokeAttackBegin();
@@ -163,13 +172,13 @@ public class StoryBeatEvent
                 break;
 
             // If it's a UnityEvent event, invoke the UnityEvent
-            case BeatEventType.Function:
-                BeatEvent.Invoke();
+            case EBeatEventType.Function:
+                OnBeatEvent?.Invoke();
                 break;
 
-            // If it's not an event that can exist, print a little smiley face
+            // If it's not a predefined type, send an error line
             default:
-                Debug.Log(":P");
+                Debug.LogError("Unable to read the event type " + EventType.ToString());
                 break;
         }
     }
