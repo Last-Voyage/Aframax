@@ -68,7 +68,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// </summary>
     public virtual void OnDeath() 
     { 
-        _onDeathEvent.Invoke();
+        _onDeathEvent?.Invoke();
     }
 
     #endregion
