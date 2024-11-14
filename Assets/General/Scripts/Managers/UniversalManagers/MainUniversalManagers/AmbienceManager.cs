@@ -1,6 +1,7 @@
 /******************************************************************************
-// File Name:       PersistentSoundManager.cs
+// File Name:       AmbienceManager.cs
 // Author:          Andrea Swihart-DeCoster
+// Contributors:    Ryan Swanson
 // Creation Date:   October 1st, 2024
 //
 // Description:     Manages any sound that player persistently throughout the
