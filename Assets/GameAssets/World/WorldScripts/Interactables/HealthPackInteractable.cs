@@ -29,16 +29,7 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
 
         if (_numUses == 0)
         {
-            OutOfUses();
+            Destroy(gameObject);
         }
-    }
-
-    /// <summary>
-    /// Called when this health pack is out of uses
-    /// Simply destroys the health pack
-    /// </summary>
-    private void OutOfUses()
-    {
-        Destroy(gameObject);
     }
 }
