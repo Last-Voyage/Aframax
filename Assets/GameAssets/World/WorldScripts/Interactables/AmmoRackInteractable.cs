@@ -35,20 +35,21 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
-    /// Removes a harpoon from the ammo rack
+    /// Removes a number of harpoons from the ammo rack
     /// </summary>
-    public void RemoveHarpoon()
+    /// <param name="numHarpoons"> the number of harpoons to remove </param>
+    public void RemoveHarpoons(int numHarpoons)
     {
-        _currentHarpoons--;
-        DestroyImmediate(transform.GetChild(0).GetChild(0).gameObject);
+        for (int i = 0; i < numHarpoons; i++)
+        {
+            _currentHarpoons--;
+            DestroyImmediate(transform.GetChild(0).GetChild(0).gameObject);
+        }
     }
 
     /// <summary>
-    /// Determines if there are any more harpoons in the ammo rack
+    /// Gets the number of harpoons in this ammo rack
     /// </summary>
-    /// <returns> True if there are no more harpoons in the rack, false otherwise. </returns>
-    public bool OutOfHarpoons()
-    {
-        return _currentHarpoons == 0;
-    }
+    /// <returns> The number of harpoons in the ammo rack </returns>
+    public int GetNumHarpoons() => _currentHarpoons;
 }
