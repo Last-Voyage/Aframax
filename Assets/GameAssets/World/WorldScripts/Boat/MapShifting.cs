@@ -28,7 +28,7 @@ public class MapShifting : MonoBehaviour
     /// <summary>
     /// Allow for first layout to turn on if not on already
     /// </summary>
-    void Start()
+    private void Start()
     {
         _boatLayouts[_currentLayout].SetActive(true);
         
@@ -72,11 +72,14 @@ public class MapShifting : MonoBehaviour
     /// Choose any layout
     /// </summary>
     /// <param name="_choice"></param>
-    public void LayoutChoice(int _choice)
+    public void LayoutChoice(int choice)
     {
-        _boatLayouts[_currentLayout].SetActive(false);
-        _currentLayout = _choice;
-        _boatLayouts[_currentLayout].SetActive(true);
+        if (choice < _boatLayouts.Length && choice >= 0)
+        {
+            _boatLayouts[_currentLayout].SetActive(false);
+            _currentLayout = choice;
+            _boatLayouts[_currentLayout].SetActive(true);
+        }
     }
     
     /// <summary>
