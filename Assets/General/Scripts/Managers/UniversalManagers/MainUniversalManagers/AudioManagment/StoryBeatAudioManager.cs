@@ -24,5 +24,4 @@ public class AudioManagerTester : MonoBehaviour
     {
         Manager.StopAmbientSound(_audioEvent);
     }
-
 }
