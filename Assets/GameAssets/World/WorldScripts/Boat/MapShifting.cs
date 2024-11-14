@@ -34,6 +34,7 @@ public class MapShifting : MonoBehaviour
         
         SubscribeToEvents();
     }
+    
 /// <summary>
 /// THIS IS FOR TESTING ONLY
 /// </summary>
@@ -53,7 +54,6 @@ public class MapShifting : MonoBehaviour
         }
     }
     
-
     /// <summary>
     /// Turns off current layout of boat and goes to the next one
     /// </summary>
@@ -68,6 +68,7 @@ public class MapShifting : MonoBehaviour
             _boatLayouts[_currentLayout].SetActive(true);
         }
     }
+    
     /// <summary>
     /// Choose any layout
     /// </summary>
