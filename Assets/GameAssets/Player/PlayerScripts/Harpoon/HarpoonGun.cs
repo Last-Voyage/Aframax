@@ -120,18 +120,6 @@ public class HarpoonGun : MonoBehaviour
 
     #endregion
 
-    //REMOVE THIS
-    private void Update()
-    {
-        int state = 0;
-        if (_harpoonFiringState == EHarpoonFiringState.Ready)
-        {
-            state = 1;
-        }
-
-        print(state + " " + _currentReserveAmmo);
-    }
-
     #region Setup
     private void Awake()
     {
