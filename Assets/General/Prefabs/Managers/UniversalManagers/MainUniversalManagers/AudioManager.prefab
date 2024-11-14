@@ -74,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6713638435920780164}
   - component: {fileID: 5386958290789125694}
-  - component: {fileID: 1934635801513810261}
   m_Layer: 0
   m_Name: SFXManager
   m_TagString: Untagged
@@ -109,82 +108,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14b1129206b53446b2ce056d5bf4bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1934635801513810261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8436064714450324664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b944ce7207df32049bbf822a450eea31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <WeakPointDestroyed>k__BackingField:
-    Guid:
-      Data1: 70777364
-      Data2: 1224663744
-      Data3: -135098709
-      Data4: -1207205548
-    Path: event:/EnemyWeakSpotSFX
-  <LimbDestroyed>k__BackingField:
-    Guid:
-      Data1: 682358699
-      Data2: 1192911574
-      Data3: -243917647
-      Data4: -1321129303
-    Path: event:/LimbDestroyedSFX
-  <LimbAttack>k__BackingField:
-    Guid:
-      Data1: 565132600
-      Data2: 1260276445
-      Data3: -1298699378
-      Data4: -1073181273
-    Path: event:/LimbAttackSFX
-  <SceneStart>k__BackingField:
-    Guid:
-      Data1: -776193466
-      Data2: 1323933284
-      Data3: 1306389638
-      Data4: 1417873818
-    Path: event:/CreatureCrySFX
-  <HardSurfaceWalking>k__BackingField:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  <FootstepSpeed>k__BackingField: 0.3
-  <PlayerTookDamage>k__BackingField:
-    Guid:
-      Data1: -1523959944
-      Data2: 1076261045
-      Data3: -1454688109
-      Data4: 265074087
-    Path: event:/PlayerTakeDamageSFX
-  <HarpoonShot>k__BackingField:
-    Guid:
-      Data1: 1125143964
-      Data2: 1233834793
-      Data3: -76295502
-      Data4: 1649262482
-    Path: event:/HarpoonShotSFX
-  <HarpoonReload>k__BackingField:
-    Guid:
-      Data1: -950613845
-      Data2: 1141151142
-      Data3: 1569353353
-      Data4: -60362704
-    Path: event:/HarpoonReloadSFX
-  <HarpoonHitBoat>k__BackingField:
-    Guid:
-      Data1: 1661224611
-      Data2: 1136842543
-      Data3: 500295301
-      Data4: 1614888561
-    Path: event:/HarpoonHitSFX
 --- !u!1 &9016497912938786864
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,6 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2592068699120065575}
   - component: {fileID: 7595618826597541881}
+  - component: {fileID: 9004683927271639808}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -231,3 +155,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1639991eb0baf7a4691718e9d3f7940c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9004683927271639808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9016497912938786864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b944ce7207df32049bbf822a450eea31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <WeakPointDestroyed>k__BackingField:
+    Guid:
+      Data1: 70777364
+      Data2: 1224663744
+      Data3: -135098709
+      Data4: -1207205548
+    Path: event:/EnemyWeakSpotSFX
+  <LimbDestroyed>k__BackingField:
+    Guid:
+      Data1: 682358699
+      Data2: 1192911574
+      Data3: -243917647
+      Data4: -1321129303
+    Path: event:/LimbDestroyedSFX
+  <LimbAttack>k__BackingField:
+    Guid:
+      Data1: 565132600
+      Data2: 1260276445
+      Data3: -1298699378
+      Data4: -1073181273
+    Path: event:/LimbAttackSFX
+  <SceneStart>k__BackingField:
+    Guid:
+      Data1: -776193466
+      Data2: 1323933284
+      Data3: 1306389638
+      Data4: 1417873818
+    Path: event:/CreatureCrySFX
+  <HardSurfaceWalking>k__BackingField:
+    Guid:
+      Data1: -924465006
+      Data2: 1302696570
+      Data3: 914098310
+      Data4: 1914202771
+    Path: event:/HardSurfaceWalkingSFX
+  <FootstepSpeed>k__BackingField: 0.3
+  <PlayerTookDamage>k__BackingField:
+    Guid:
+      Data1: -1523959944
+      Data2: 1076261045
+      Data3: -1454688109
+      Data4: 265074087
+    Path: event:/PlayerTakeDamageSFX
+  <HarpoonShot>k__BackingField:
+    Guid:
+      Data1: 1125143964
+      Data2: 1233834793
+      Data3: -76295502
+      Data4: 1649262482
+    Path: event:/HarpoonShotSFX
+  <HarpoonReload>k__BackingField:
+    Guid:
+      Data1: -950613845
+      Data2: 1141151142
+      Data3: 1569353353
+      Data4: -60362704
+    Path: event:/HarpoonReloadSFX
+  <HarpoonHitBoat>k__BackingField:
+    Guid:
+      Data1: 1661224611
+      Data2: 1136842543
+      Data3: 500295301
+      Data4: 1614888561
+    Path: event:/HarpoonHitSFX

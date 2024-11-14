@@ -11,40 +11,66 @@ using FMODUnity;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Handles all SFX during runtime and how / where they play.
 /// </summary>
 public class RuntimeSfxManager : AudioManager
 {
-    public static Action<EventReference, Vector3> APlayOneShotSFX;
+    public static Action<EventReference, Vector3> APlayOneShotSfx;
 
     private EventInstance _hardSurfaceWalkingEventInstance;
 
     private Coroutine _footstepsCoroutine;
 
-    //TODO Remove after LV-324
-    public static RuntimeSfxManager SFXInstance;
+    public static RuntimeSfxManager Instance;
 
     #region Enable and Action Subscriptions
     /// <summary>
     /// Subscribes to any needed actions and initializes the footsteps
     /// </summary>
-    public override void SetupMainManager()
+    public override void SetUpMainManager()
     {
-        base.SetupMainManager();
-        //TODO Uncomment after LV-324
-        //InitializeFootstepInstance();
+        base.SetUpMainManager();
         SubscribeToActions(true);
-        //TODO Remove after LV-324
-        SFXInstance = this;
+    }
+
+    /// <summary>
+    /// Establishes the instance for the runtime sfx manager
+    /// </summary>
+    public override void SetUpInstance()
+    {
+        base.SetUpInstance();
+        Instance = this;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
         SubscribeToActions(false);
+    }
+
+    /// <summary>
+    /// Subscribes to events in gameplay scenes
+    /// </summary>
+    protected override void SubscribeToGameplayEvents()
+    {
+        base.SubscribeToGameplayEvents();
+        InitializeFootstepInstance();
+        PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
+        PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
+    }
+
+    /// <summary>
+    /// Unsubscribes to events in gameplay scenes
+    /// </summary>
+    protected override void UnsubscribeToGameplayEvents()
+    {
+        base.UnsubscribeToGameplayEvents();
+        PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
+        PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+        
+        ReleaseFootstepInstance();
     }
 
     /// <summary>
@@ -55,28 +81,12 @@ public class RuntimeSfxManager : AudioManager
     {
         if (val)
         {
-            APlayOneShotSFX += PlayOneShotSFX;
+            APlayOneShotSfx += PlayOneShotSFX;
             
             return;
         }
 
-        APlayOneShotSFX -= PlayOneShotSFX;
-        
-    }
-
-    //TODO Remove after LV-324
-    public void SubscribeToGameplayActions(bool val)
-    {
-        if(val)
-        {
-            InitializeFootstepInstance();
-            PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
-            PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
-            return;
-        }
-
-        PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
-        PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+        APlayOneShotSfx -= PlayOneShotSFX;
     }
 
     #endregion Enable and Action Subscriptions
@@ -87,6 +97,7 @@ public class RuntimeSfxManager : AudioManager
     /// Plays an audio event at a specific position
     /// </summary>
     /// <param name="eventReference">reference to the FMOD SFX event </param>
+    /// <param name="worldPosition"> position where the sound plays in the world </param>
     private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
         if (eventReference.IsNull)
@@ -109,8 +120,19 @@ public class RuntimeSfxManager : AudioManager
         {
             return;
         }
-
         _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
+    }
+
+    /// <summary>
+    /// Releases the hard surface event instance
+    /// </summary>
+    private void ReleaseFootstepInstance()
+    {
+        if (!_hardSurfaceWalkingEventInstance.isValid())
+        {
+            return;
+        }
+        _hardSurfaceWalkingEventInstance.release();
     }
 
     /// <summary>
@@ -126,7 +148,12 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void StopFootsteps()
     {
+        if (_footstepsCoroutine == null)
+        {
+            return;
+        }
         StopCoroutine(_footstepsCoroutine);
+        _footstepsCoroutine = null;
     }
 
     /// <summary>
@@ -141,9 +168,8 @@ public class RuntimeSfxManager : AudioManager
                 return;
             }
 
-            _hardSurfaceWalkingEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
+            _hardSurfaceWalkingEventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
             _hardSurfaceWalkingEventInstance.start();
-            _hardSurfaceWalkingEventInstance.release();
         }
     }
 
