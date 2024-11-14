@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         DialoguePopUps.cs
 // Author :            Nick Rice
+// Contributer :       Charlie Polonus
 //                     
 // Creation Date :     11/12/24
 //
@@ -28,14 +29,6 @@ public class DialoguePopUps : MonoBehaviour
 
     [Tooltip("The pointer for which ui data is currently being used")]
     private int _dataPointer;
-    
-    /// <summary>
-    /// Temporary; used for testing
-    /// </summary>
-    private void Start()
-    {
-        GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_uIData);
-    }
 
     /// <summary>
     /// The pass through function for actually displaying the dialogue
@@ -55,14 +48,14 @@ public class DialoguePopUps : MonoBehaviour
         foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer())
         {
             // Wait to start displaying the next text
-            yield return new WaitForSeconds(moreDialogue.GetTextAndTimer()[_dataPointer].GetTimeBeforeText);
+            yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeText);
             // Takes the display text and makes it invisible
-            _textContainer.text = moreDialogue.GetTextAndTimer()[_dataPointer].GetText;
+            _textContainer.text = dialogueInfo.GetText;
             _textContainer.maxVisibleCharacters = 0;
 
             // Gets total length of text in characters, and gets the speed of the text display
-            int totalLength = moreDialogue.GetTextAndTimer()[_dataPointer].GetText.Length;
-            float typeSpeed = totalLength / (float)moreDialogue.GetTextAndTimer()[_dataPointer].GetTimeToDisplay;
+            int totalLength = dialogueInfo.GetText.Length;
+            float typeSpeed = totalLength / (float)dialogueInfo.GetTimeToDisplay;
 
             // As long as all the text hasn't been fully displayed, this will continually
             // display more characters for the total display time

@@ -124,7 +124,7 @@ public class StoryBeatEvent
     public float DelayTime;
 
     // Dialogue settings
-    public DialogueLine DialogueLine;
+    public ScriptableDialogueUI Dialogue;
 
     // Boat speed settings
     public float BoatSpeed;
@@ -146,8 +146,7 @@ public class StoryBeatEvent
         {
             // If it's a dialogue event, start the dialogue
             case BeatEventType.Dialogue:
-                // TODO: Run dialogue
-                // (DialogueManager.RunDialogue(DialogueLine);) as an example
+                GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(Dialogue);
                 break;
 
             // If it's a boat speed event, change the speed of the boat

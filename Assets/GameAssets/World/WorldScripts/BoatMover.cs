@@ -86,17 +86,28 @@ public class BoatMover : MonoBehaviour
         transform.forward += (_newForwardVector - transform.forward).normalized * Time.deltaTime;
     }
 
+    /// <summary>
+    /// Lerp the speed of the boat to a new speed
+    /// </summary>
+    /// <param name="newSpeed">The new speed to be changed to</param>
+    /// <param name="moveTime">The amount of time it should take to change to the new speed</param>
     public void ChangeSpeed(float newSpeed, float moveTime)
     {
+        // Run the coroutine
         StartCoroutine(LerpSpeed(newSpeed, moveTime));
 
+        // The internal IEnumerator to actually lerp the speed
         IEnumerator LerpSpeed(float newSpeed, float moveTime)
         {
+            // Temporarily set the old speed and initialize the time
             float oldSpeed = _speedModifier;
             float currentTime = 0;
+
+            // Find the ratio of time, and set the speed accordingly
             while (currentTime < moveTime)
             {
                 _speedModifier = Mathf.Lerp(oldSpeed, newSpeed, currentTime / moveTime);
+                currentTime += Time.deltaTime;
                 yield return null;
             }
         }

@@ -1,6 +1,7 @@
 /*****************************************************************************
-// File Name :         ScriptableScreenTextUI.cs
+// File Name :         ScriptableDialogueUI.cs
 // Author :            Nick Rice
+// Contributer :       Charlie Polonus
 //                     
 // Creation Date :     10/21/24
 //
@@ -10,49 +11,6 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
-
-/// <summary>
-/// The scriptable object for tutorial text and timing
-/// </summary>
-[CreateAssetMenu(menuName = "UI Data Object/TutorialData")]
-public class ScriptableTutorialUI : ScriptableObject
-{
-    [Tooltip("Tutorial text and time variables")]
-    [SerializeField]
-    private TextAndTimerData _tutorialData;
-    
-    #region Getting Total Time
-    [Tooltip("How much time the tutorial takes to display")]
-    public uint TotalTime { get; private set; }
-
-    /// <summary>
-    /// Checks to see if it's null, then performs total time operation
-    /// </summary>
-    private void Awake()
-    {
-        if (IsContainingData())
-        {
-            TotalTime  = _tutorialData.GetTimeBeforeText + _tutorialData.GetTimeToDisplay;
-        }
-    }
-    #endregion
-    
-    /// <summary>
-    /// Checks to see if the dialogue data is not null or unused
-    /// </summary>
-    public bool IsContainingData()
-    {
-        return !_tutorialData.GetText.IsUnityNull() && _tutorialData.GetText != "";
-    }
-    
-    /// <summary>
-    /// Returns a reference to tutorial data
-    /// </summary>
-    public TextAndTimerData GetTextAndTimer()
-    {
-        return _tutorialData;
-    }
-}
 
 /// <summary>
 /// The scriptable object for dialogue text and timing
@@ -94,7 +52,7 @@ public class ScriptableDialogueUI : ScriptableObject
     /// <summary>
     /// Checks to see if the dialogue data is not null or unused
     /// </summary>
-    private bool IsContainingData()
+    public bool IsContainingData()
     {
         return _dialogueData.Length > 0 && _dialogueData != null &&
                !_dialogueData[0].GetText.IsUnityNull() &&

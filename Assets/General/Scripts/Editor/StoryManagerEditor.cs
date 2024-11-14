@@ -268,8 +268,9 @@ public class StoryManagerEditor : Editor
         GUI.backgroundColor = DEFAULT_COLOR;
         GUILayout.EndHorizontal();
 
-        // If the event is minimized, don't actually display the event
-        if (storyBeatEvents[eventIndex].Minimized)
+        // If the event is minimized or doesn't exist anymore, don't display the event
+        if (eventIndex >= storyBeatEvents.Count ||
+            storyBeatEvents[eventIndex].Minimized)
         {
             return;
         }
@@ -302,7 +303,7 @@ public class StoryManagerEditor : Editor
             // If it's dialogue, show the dialogue settings
             case StoryBeatEvent.BeatEventType.Dialogue:
                 // TODO: Implement dialogue line things
-                storyBeatEvents[eventIndex].DialogueLine = (DialogueLine)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].DialogueLine, typeof(DialogueLine), true);
+                storyBeatEvents[eventIndex].Dialogue = (ScriptableDialogueUI)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].Dialogue, typeof(ScriptableDialogueUI), true);
                 break;
 
             // If it's boat speed change, show the boat speed settings
@@ -338,8 +339,19 @@ public class StoryManagerEditor : Editor
 
         GUILayout.Space(4);
 
+        GUILayout.BeginHorizontal();
         // Display the settings for the delay on the beat event
         storyBeatEvents[eventIndex].DelayTime = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[eventIndex].DelayTime);
+
+        if (storyBeatEvents[eventIndex].EventType == StoryBeatEvent.BeatEventType.Dialogue)
+        {
+            if (GUILayout.Button("Set Auto Delay"))
+            {
+                storyBeatEvents[eventIndex].DelayTime = storyBeatEvents[eventIndex].Dialogue.TotalTime;
+            }
+        }
+
+        GUILayout.EndHorizontal();
     }
 
     /// <summary>
