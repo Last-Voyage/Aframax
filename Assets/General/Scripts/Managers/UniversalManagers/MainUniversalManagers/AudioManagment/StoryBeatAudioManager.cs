@@ -17,8 +17,8 @@ public class AudioManagerTester : MonoBehaviour
     [SerializeField] public EventReference[] OneshotSounds;
     [SerializeField] public EventReference[] AmbientSounds;
 
-    [SerializeField] AudioManager Manager;
-    EventInstance _audioEvent;
+    [SerializeField] private AudioManager _manager;
+    private EventInstance _audioEvent;
 
     /// <summary>
     /// Used to play a shorter and non-persistant sound
@@ -26,7 +26,7 @@ public class AudioManagerTester : MonoBehaviour
     /// <param name="index"></param> will be the index of the desired sound
     public void PlayOneshotSound(int index)
     {
-        Manager.PlayOneShotSound(OneshotSounds[index]);
+        _manager.PlayOneShotSound(OneshotSounds[index]);
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class AudioManagerTester : MonoBehaviour
     /// <param name="index"></param> will be the index of the desired sound
     public void PlayAmbient(int index)
     {
-        _audioEvent = Manager.PlayAmbientSound(AmbientSounds[index]);
+        _audioEvent = _manager.PlayAmbientSound(AmbientSounds[index]);
     }
 
     /// <summary>
@@ -43,6 +43,6 @@ public class AudioManagerTester : MonoBehaviour
     /// </summary>
     public void StopAmbient()
     {
-        Manager.StopAmbientSound(_audioEvent);
+        _manager.StopAmbientSound(_audioEvent);
     }
 }
