@@ -120,6 +120,18 @@ public class HarpoonGun : MonoBehaviour
 
     #endregion
 
+    //REMOVE THIS
+    private void Update()
+    {
+        int state = 0;
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            state = 1;
+        }
+
+        print(state + " " + _currentReserveAmmo);
+    }
+
     #region Setup
     private void Awake()
     {
@@ -311,22 +323,18 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="ammoRack"> The ammo rack to take harpoons from </param>
     private void RestockHarpoons(AmmoRackInteractable ammoRack)
     {
-        int targetAmmo = 0;
-
-        if (_harpoonFiringState != EHarpoonFiringState.Ready)
+        int missingAmmo = _maxAmmo - _currentReserveAmmo;
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
         {
-            targetAmmo = _maxAmmo;
-        }
-        else
-        {
-            targetAmmo = _maxAmmo - 1;
+            missingAmmo--;
         }
 
-        while (!ammoRack.OutOfHarpoons() && _currentReserveAmmo < targetAmmo)
-        {
-            _currentReserveAmmo++;
-            ammoRack.RemoveHarpoon();
-        }
+        int numHarpoons = ammoRack.GetNumHarpoons();
+
+        int targetAmmo = numHarpoons < missingAmmo ? numHarpoons : missingAmmo;
+
+        _currentReserveAmmo += targetAmmo;
+        ammoRack.RemoveHarpoons(targetAmmo);
     }
     #endregion
 
