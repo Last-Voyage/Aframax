@@ -21,12 +21,14 @@ public class PlayerHealth : BaseHealth
 
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
+    
     [Tooltip ("Health point at which the heart beat sfx starts")]
     [SerializeField] private float _HeartBeatStart;
     [Tooltip ("Health point at which the heart beat sfx ends")]
     [SerializeField] private float _HeartBeatEnd;
     [SerializeField] private float _HeartBeatRate;
     private Coroutine _heartBeatCoroutine;
+    
     private void Awake()
     {
         base.Awake();
@@ -42,7 +44,6 @@ public class PlayerHealth : BaseHealth
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
-
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
@@ -62,10 +63,11 @@ public class PlayerHealth : BaseHealth
             StopCoroutine(HeartbeatLoop());
         }
     }
-/// <summary>
-/// A coroutine that is mean't to loop the heartbeat sfx
-/// </summary>
-/// <returns>returns null to loop similar to update function</returns>
+
+    /// <summary>
+    /// A coroutine that is mean't to loop the heartbeat sfx
+    /// </summary>
+    /// <returns>returns null to loop similar to update function</returns>
     IEnumerator HeartbeatLoop()
     {
         float timer = 0.0f;
@@ -77,11 +79,12 @@ public class PlayerHealth : BaseHealth
                     gameObject.transform.position);
                 timer = 0.0f;
             }
+
             timer += Time.deltaTime;
             yield return null;
+        }
     }
-    }
-    
+
     /// <summary>
     /// Reduces health and calls any player damaged events
     /// </summary>
