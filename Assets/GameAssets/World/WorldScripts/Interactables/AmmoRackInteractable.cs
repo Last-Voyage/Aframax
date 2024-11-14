@@ -40,7 +40,6 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     public void RemoveHarpoon()
     {
         _currentHarpoons--;
-        print(transform.GetChild(0).GetChild(0));
         DestroyImmediate(transform.GetChild(0).GetChild(0).gameObject);
     }
 
