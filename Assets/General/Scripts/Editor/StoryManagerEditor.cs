@@ -139,7 +139,7 @@ public class StoryManagerEditor : Editor
         EditorGUILayout.Space(16);
 
         EditorGUILayout.BeginHorizontal();
-        // Display more information about the currently selected beat
+        // Display the name of the currently selected beat
         GetStoryBeats[OpenStoryBeat].BeatName = EditorGUILayout.TextField(GetStoryBeats[OpenStoryBeat].BeatName);
 
         // Allow the current beat to be deleted
@@ -156,6 +156,9 @@ public class StoryManagerEditor : Editor
         }
         GUI.backgroundColor = DEFAULT_COLOR;
         EditorGUILayout.EndHorizontal();
+
+        // Display the description of the currently selected beat
+        GetStoryBeats[OpenStoryBeat].BeatDescription = EditorGUILayout.TextArea(GetStoryBeats[OpenStoryBeat].BeatDescription);
     }
 
     /// <summary>

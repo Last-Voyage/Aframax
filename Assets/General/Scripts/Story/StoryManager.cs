@@ -110,6 +110,7 @@ public class StoryBeat
 {
     // The name of the story beat
     public string BeatName;
+    public string BeatDescription;
 
     // The list of story beat events in the beat
     public List<StoryBeatEvent> StoryBeatEvents;
