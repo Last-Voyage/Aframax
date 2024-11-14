@@ -117,7 +117,7 @@ public class StoryManagerEditor : Editor
         // Draw the label for the currently active story beat
         GUIStyle labelStyle = new(GUI.skin.label);
         labelStyle.alignment = TextAnchor.MiddleCenter;
-        GUILayout.Label(OpenStoryBeat + " - " + (GetStoryBeats.Count - 1), labelStyle);
+        GUILayout.Label(OpenStoryBeat + " / " + (GetStoryBeats.Count - 1), labelStyle);
 
         // The button to move to the next story beat
         if (GUILayout.Button(">"))
