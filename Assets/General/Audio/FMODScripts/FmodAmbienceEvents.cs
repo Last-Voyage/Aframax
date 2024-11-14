@@ -22,15 +22,11 @@ public class FmodAmbienceEvents : MonoBehaviour
     [field: Tooltip("Any audio added here will play throughout the full game")]
     [field: SerializeField] public EventReference[] AmbientGameBackgroundSounds { get; private set; }
 
-    private void Awake()
+    /// <summary>
+    /// Creates the instance of the FmodAmbienceEvents
+    /// </summary>
+    public void SetUpInstance()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+        Instance = this;
     }
 }
