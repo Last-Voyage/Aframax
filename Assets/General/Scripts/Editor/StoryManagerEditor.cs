@@ -1,20 +1,44 @@
-using System.Collections;
+﻿/*****************************************************************************
+// Name :           StoryManagerEditor.cs
+// Author :         Charlie Polonus
+// Created :        11/7/2024
+// Description :    The custom editor for the StoryManager script
+*****************************************************************************/
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.Events;
 
 [CustomEditor(typeof(StoryManager))]
 public class StoryManagerEditor : Editor
 {
-    private int _openStoryBeat = 0;
+    // Settings for the editor specifically
     private bool _debugMode;
+    private static Color DEFAULT_COLOR;
 
+    // Getters for the StoryManager and the StoryBeats list
     StoryManager GetStoryManager => (StoryManager)target;
     List<StoryBeat> GetStoryBeats => GetStoryManager.StoryBeats;
+    int OpenStoryBeat
+    {
+        get { return GetStoryManager.OpenStoryBeat; }
+        set { GetStoryManager.OpenStoryBeat = value; }
+    }
 
+    /// <summary>
+    /// Initialize variables
+    /// </summary>
+    private void OnEnable()
+    {
+        DEFAULT_COLOR = GUI.backgroundColor;
+    }
+
+    /// <summary>
+    /// Display the custom editor
+    /// </summary>
     public override void OnInspectorGUI()
     {
+        // Edge cases if the list of story beats doesn't exist
         if (GetStoryBeats == null
             || GetStoryBeats.Count == 0)
         {
@@ -22,6 +46,7 @@ public class StoryManagerEditor : Editor
             GetStoryBeats.Add(new());
         }
 
+        // Debug mode option for those without fear
         _debugMode = EditorGUILayout.Toggle("Debug Mode", _debugMode);
         if (_debugMode)
         {
@@ -29,231 +54,283 @@ public class StoryManagerEditor : Editor
             return;
         }
 
+        // Display the controls to move through the individual story beats
         DisplayStoryBeatControls();
 
+        // Show the currently selected story beat
+        DisplayStoryBeat(GetStoryBeats, OpenStoryBeat);
+
+        // Editor spacing
+        EditorGUILayout.Space(8);
+        DrawGUILine(1);
+        EditorGUILayout.Space(8);
+
+        // Buttons for creating a new event to add on to the end of the existing list of event
+        GUI.backgroundColor = new(0.25f, 1f, 0.25f, 1);
         if (GUILayout.Button("Create New Event"))
         {
-            _openStoryBeat = Mathf.Clamp(_openStoryBeat, 0, GetStoryBeats.Count - 1);
+            // Change the currently open story beat, in case it got moved around
+            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat, 0, GetStoryBeats.Count - 1);
 
-            if (GetStoryBeats[_openStoryBeat].StoryBeatEvents == null)
+            // Edge case if the story beat events list doesn't exist
+            if (GetStoryBeats[OpenStoryBeat].StoryBeatEvents == null)
             {
-                GetStoryManager.StoryBeats[_openStoryBeat].StoryBeatEvents = new();
+                GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents = new();
             }
-            GetStoryManager.StoryBeats[_openStoryBeat].StoryBeatEvents.Add(new StoryBeatEvent());
-        }
 
-        DisplayStoryBeat(GetStoryBeats, _openStoryBeat);
+            // Add a new story beat event to the end of all the events
+            GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents.Add(new StoryBeatEvent());
+        }
+        GUI.backgroundColor = DEFAULT_COLOR;
     }
 
+    /// <summary>
+    /// Display controls for moving around between individual story beats
+    /// </summary>
     private void DisplayStoryBeatControls()
     {
-        EditorGUILayout.BeginHorizontal();
+        // Edge case if the current open story beat doesn't exist
+        if (GetStoryBeats[OpenStoryBeat].StoryBeatEvents == null)
+        {
+            GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents = new();
+        }
 
+        EditorGUILayout.BeginHorizontal();
+        // The button to add a beat before the current one
+        GUI.backgroundColor = new(0.25f, 1f, 0.25f, 1);
         if (GUILayout.Button("+"))
         {
-            if (GetStoryBeats[_openStoryBeat].StoryBeatEvents == null)
-            {
-                GetStoryManager.StoryBeats[_openStoryBeat].StoryBeatEvents = new();
-            }
-            GetStoryManager.StoryBeats.Insert(_openStoryBeat, new());
-            _openStoryBeat++;
+            // Add a story beat before the current and select the new one
+            GetStoryManager.StoryBeats.Insert(OpenStoryBeat, new());
         }
+        GUI.backgroundColor = DEFAULT_COLOR;
+
+        // The button to move to the previous story beat
         if (GUILayout.Button("<"))
         {
-            _openStoryBeat = Mathf.Clamp(_openStoryBeat - 1, 0, GetStoryBeats.Count - 1);
-        }
-        GUIStyle labelStyle = new(GUI.skin.label);
-        labelStyle.alignment = TextAnchor.MiddleCenter;
-        GUILayout.Label(_openStoryBeat + " - " + (GetStoryBeats.Count - 1), labelStyle);
-        if (GUILayout.Button(">"))
-        {
-            _openStoryBeat = Mathf.Clamp(_openStoryBeat + 1, 0, GetStoryBeats.Count - 1);
-        }
-        if (GUILayout.Button("+"))
-        {
-            if (GetStoryBeats[_openStoryBeat].StoryBeatEvents == null)
-            {
-                GetStoryManager.StoryBeats[_openStoryBeat].StoryBeatEvents = new();
-            }
-            GetStoryManager.StoryBeats.Insert(_openStoryBeat + 1, new());
+            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat - 1, 0, GetStoryBeats.Count - 1);
         }
 
+        // Draw the label for the currently active story beat
+        GUIStyle labelStyle = new(GUI.skin.label);
+        labelStyle.alignment = TextAnchor.MiddleCenter;
+        GUILayout.Label(OpenStoryBeat + " - " + (GetStoryBeats.Count - 1), labelStyle);
+
+        // The button to move to the next story beat
+        if (GUILayout.Button(">"))
+        {
+            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat + 1, 0, GetStoryBeats.Count - 1);
+        }
+
+        // The button to add a beat after the current one
+        GUI.backgroundColor = new(0.25f, 1f, 0.25f, 1);
+        if (GUILayout.Button("+"))
+        {
+            // Add a story beat after the current and select the new one
+            GetStoryManager.StoryBeats.Insert(OpenStoryBeat + 1, new());
+            OpenStoryBeat++;
+        }
+        GUI.backgroundColor = DEFAULT_COLOR;
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space(16);
 
         EditorGUILayout.BeginHorizontal();
+        // Display more information about the currently selected beat
+        GetStoryBeats[OpenStoryBeat].Name = EditorGUILayout.TextField(GetStoryBeats[OpenStoryBeat].Name);
 
-        GetStoryBeats[_openStoryBeat].Name = EditorGUILayout.TextField(GetStoryBeats[_openStoryBeat].Name);
+        // Allow the current beat to be deleted
+        GUI.backgroundColor = new(1f, 0.25f, 0.25f, 1);
         if (GUILayout.Button("Delete Beat"))
         {
+            // Make sure there are actually beats to delete
             if (GetStoryBeats.Count > 1)
             {
-                GetStoryBeats.RemoveAt(_openStoryBeat);
-                _openStoryBeat = Mathf.Clamp(_openStoryBeat, 0, GetStoryBeats.Count - 1);
+                // Fix variables to correctly match the new range
+                GetStoryBeats.RemoveAt(OpenStoryBeat);
+                OpenStoryBeat = Mathf.Clamp(OpenStoryBeat, 0, GetStoryBeats.Count - 1);
             }
         }
-
+        GUI.backgroundColor = DEFAULT_COLOR;
         EditorGUILayout.EndHorizontal();
     }
 
+    /// <summary>
+    /// Display the current story beat
+    /// </summary>
+    /// <param name="storyBeats">The full list of all story beats</param>
+    /// <param name="index">The index of the currently active story beat</param>
     private void DisplayStoryBeat(List<StoryBeat> storyBeats, int index)
     {
+        // Edge case if the story beat list doesn't exist
         if (storyBeats == null)
         {
             return;
         }
 
+        // Get the list of all events
         List<StoryBeatEvent> storyBeatEvents = storyBeats[index].StoryBeatEvents;
 
+        // Edge case if the list of events doesn't exist
         if (storyBeatEvents == null)
         {
             return;
         }
 
+        // Display each individual story beat event
         for (int i = 0; i < storyBeatEvents.Count; i++)
         {
+            // Editor spacing
             EditorGUILayout.Space(8);
             DrawGUILine(1);
+
+            // Display the story beat event
             DisplayStoryBeatEvent(storyBeatEvents, index, i);
         }
     }
 
+    /// <summary>
+    /// Displays the individual story beat event
+    /// </summary>
+    /// <param name="storyBeatEvents">The full list of all story beats</param>
+    /// <param name="beatIndex">The index of the beat</param>
+    /// <param name="eventIndex">The index of the event</param>
     private void DisplayStoryBeatEvent(List<StoryBeatEvent> storyBeatEvents, int beatIndex, int eventIndex)
     {
+        // Setting up the serialized objects/properties for the story manager
         SerializedObject serializedStoryManager = new(GetStoryManager);
         SerializedProperty storyBeatsProperty = serializedStoryManager.FindProperty("StoryBeats");
 
+        // Setting up the serialized objects/properties for the selected beat
         SerializedProperty beatProperty = storyBeatsProperty.GetArrayElementAtIndex(beatIndex);
         SerializedProperty storyBeatEventsProperty = beatProperty.FindPropertyRelative("StoryBeatEvents");
 
+        // Setting up the serialized objects/properties for the selected event
         SerializedProperty storyBeatEventProperty = storyBeatEventsProperty.GetArrayElementAtIndex(eventIndex);
 
+        // Bold header style
         GUIStyle headerStyle = new(GUI.skin.label);
         headerStyle.fontStyle = FontStyle.Bold;
 
-        GUILayout.Label("Event " + eventIndex, headerStyle);
+        GUILayout.BeginHorizontal();
+        // Figure out the title to display based on the event name
+        string eventName = storyBeatEvents[eventIndex].Name;
+        if (eventName == "" || eventName == null)
+        {
+            // Either set it to its actual name, or a placeholder
+            eventName = "Event " + eventIndex + ": " + storyBeatEvents[eventIndex].EventType.ToString();
+        }
+
+        // Display the minimize/maximize button
+        if (GUILayout.Button(storyBeatEvents[eventIndex].Minimized ? "+" : "-"))
+        {
+            storyBeatEvents[eventIndex].Minimized = !storyBeatEvents[eventIndex].Minimized;
+        }
+
+        // Display the name, or display the name text field
+        if (storyBeatEvents[eventIndex].Minimized)
+        {
+            EditorGUILayout.LabelField(eventName, headerStyle);
+        }
+        else
+        {
+            // If it's not minimized, allow the user to edit the name
+            storyBeatEvents[eventIndex].Name = EditorGUILayout.TextField(storyBeatEvents[eventIndex].Name);
+        }
+
+        // Display the "move back in the list" button
+        if (GUILayout.Button("↑"))
+        {
+            MoveItem(storyBeatEvents, eventIndex, eventIndex - 1);
+        }
+
+        // Display the "move forward in the list" button
+        if (GUILayout.Button("↓"))
+        {
+            MoveItem(storyBeatEvents, eventIndex, eventIndex + 1);
+        }
+
+        // Display the delete event button
+        GUI.backgroundColor = new(1f, 0.25f, 0.25f, 1);
+        if (GUILayout.Button("-"))
+        {
+            // Delete the event
+            storyBeatEvents.Remove(storyBeatEvents[eventIndex]);
+            // If suddenly the events need to stop displaying, cancel the temporary GUI changes
+            if (storyBeatEvents.Count == 0)
+            {
+                // Restting editor settings
+                GUI.backgroundColor = DEFAULT_COLOR;
+                GUILayout.EndHorizontal();
+                return;
+            }
+        }
+        GUI.backgroundColor = DEFAULT_COLOR;
+        GUILayout.EndHorizontal();
+
+        // If the event is minimized, don't actually display the event
+        if (storyBeatEvents[eventIndex].Minimized)
+        {
+            return;
+        }
 
         GUILayout.BeginHorizontal();
+        // Display the event type buttons
         for (int i = 0; i < 4; i++)
         {
+            // Check if the current event type is correct, and change the color accordingly
             bool isEventType = (int)storyBeatEvents[eventIndex].EventType == i;
-
-            Color defaultColor = GUI.backgroundColor;
-
             if (isEventType)
             {
                 GUI.backgroundColor = new(0.5f, 0.5f, 1f, 1);
             }
 
+            // Display the event type buttons
             if (GUILayout.Button((StoryBeatEvent.BeatEventType)i + ""))
             {
                 storyBeatEvents[eventIndex].EventType = (StoryBeatEvent.BeatEventType)i;
             }
 
-            GUI.backgroundColor = defaultColor;
+            GUI.backgroundColor = DEFAULT_COLOR;
         }
         GUILayout.EndHorizontal();
 
+        // Show the individual editor event settings
         EditorGUI.indentLevel++;
         switch (storyBeatEvents[eventIndex].EventType)
         {
+            // If it's dialogue, show the dialogue settings
             case StoryBeatEvent.BeatEventType.Dialogue:
-
                 // TODO: Implement dialogue line things
-                // 
-                // As an example:
                 storyBeatEvents[eventIndex].DialogueLine = (DialogueLine)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].DialogueLine, typeof(DialogueLine), true);
-
-                //for (int i = 0; i < storyBeatEvents[eventIndex].DialogueLines.Count; i++)
-                //{
-                //    GUILayout.BeginHorizontal();
-
-                //    storyBeatEvents[eventIndex].DialogueLines[i] = (DialogueLine)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].DialogueLines[i], typeof(DialogueLine), true);
-                //    if (GUILayout.Button("Delete"))
-                //    {
-                //        storyBeatEvents[eventIndex].DialogueLines.RemoveAt(i);
-                //    }
-
-                //    GUILayout.EndHorizontal();
-                //}
-
-                //if (GUILayout.Button("Add Dialogue"))
-                //{
-                //    storyBeatEvents[eventIndex].DialogueLines.Add(null);
-                //}
-
-                //storyBeatEvents[eventIndex].IsShuffled = EditorGUILayout.Toggle("Shuffled", storyBeatEvents[eventIndex].IsShuffled);
-                //storyBeatEvents[eventIndex].IsLoop = EditorGUILayout.Toggle("Loop", storyBeatEvents[eventIndex].IsLoop);
-                //if (storyBeatEvents[eventIndex].IsLoop)
-                //{
-                //    storyBeatEvents[eventIndex].MinimumWaitTime = EditorGUILayout.FloatField("Min Wait Time", storyBeatEvents[eventIndex].MinimumWaitTime);
-                //    storyBeatEvents[eventIndex].MaximumWaitTime = EditorGUILayout.FloatField("Max Wait Time", storyBeatEvents[eventIndex].MaximumWaitTime);
-                //}
-
                 break;
-            case StoryBeatEvent.BeatEventType.BoatSpeed:
 
+            // If it's boat speed change, show the boat speed settings
+            case StoryBeatEvent.BeatEventType.BoatSpeed:
                 storyBeatEvents[eventIndex].BoatSpeed = EditorGUILayout.FloatField("Boat Speed", storyBeatEvents[eventIndex].BoatSpeed);
                 storyBeatEvents[eventIndex].SpeedChangeTime = EditorGUILayout.FloatField("Change Time", storyBeatEvents[eventIndex].SpeedChangeTime);
-
                 break;
-            case StoryBeatEvent.BeatEventType.BossAttack:
 
+            // If it's a boss attack, show the boss attack settings
+            case StoryBeatEvent.BeatEventType.BossAttack:
+                // Edge case if the boss attacks don't exist
                 if (storyBeatEvents[eventIndex].BossAttacks == null)
                 {
                     storyBeatEvents[eventIndex].BossAttacks = new();
                 }
 
+                // Display the list of boss attacks
                 SerializedProperty attackListProperty = storyBeatEventProperty.FindPropertyRelative("BossAttacks");
                 EditorGUILayout.PropertyField(attackListProperty);
                 serializedStoryManager.ApplyModifiedProperties();
-
-                //for (int i = 0; i < storyBeatEvents[eventIndex].BossAttacks.Count; i++)
-                //{
-                //    GUILayout.BeginHorizontal();
-
-                //    storyBeatEvents[eventIndex].BossAttacks[i] = (BaseBossAttack)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].BossAttacks[i], typeof(BaseBossAttack), true);
-                //    if (GUILayout.Button("Delete"))
-                //    {
-                //        storyBeatEvents[eventIndex].BossAttacks.RemoveAt(i);
-                //    }
-
-                //    GUILayout.EndHorizontal();
-                //}
-
-                //if (GUILayout.Button("Add Attack"))
-                //{
-                //    storyBeatEvents[eventIndex].BossAttacks.Add(null);
-                //}
-
                 break;
+
+            // If it's a UnityEvent, display the event
             case StoryBeatEvent.BeatEventType.Function:
-
-                // Courtesy of #praetorblue on Discord
-
+                // Display the function properties
                 SerializedProperty beatEventProperty = storyBeatEventProperty.FindPropertyRelative("BeatEvent");
                 EditorGUILayout.PropertyField(beatEventProperty);
                 serializedStoryManager.ApplyModifiedProperties();
-
-                //for (int i = 0; i < storyBeatsProp.arraySize; i++)
-                //{
-                //    SerializedProperty beatProp = storyBeatsProp.GetArrayElementAtIndex(i);
-                //    SerializedProperty beatEventsProp = beatProp.FindPropertyRelative("StoryBeatEvents");
-                //    for (int j = 0; j < beatEventsProp.arraySize; j++)
-                //    {
-                //        SerializedProperty sbeProp = beatEventsProp.GetArrayElementAtIndex(j);
-                //        SerializedProperty eventToRunProp = sbeProp.FindPropertyRelative("EventToRun");
-                //        EditorGUILayout.PropertyField(eventToRunProp); // for example
-                //    }
-                //}
-
-
-
-                //SerializedProperty eventProperty = serializedObject.FindProperty("UnityEvent");
-                //EditorGUILayout.PropertyField(eventProperty);
-                //eventObject.ApplyModifiedProperties();
-
                 break;
         }
 
@@ -261,21 +338,38 @@ public class StoryManagerEditor : Editor
 
         GUILayout.Space(4);
 
-        GUILayout.BeginHorizontal();
-
+        // Display the settings for the delay on the beat event
         storyBeatEvents[eventIndex].DelayTime = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[eventIndex].DelayTime);
-        if (GUILayout.Button("Delete Event"))
-        {
-            storyBeatEvents.Remove(storyBeatEvents[eventIndex]);
-        }
-
-        GUILayout.EndHorizontal();
     }
 
+    /// <summary>
+    /// Draw a horizontal line across the inspector
+    /// </summary>
+    /// <param name="height">The height of the line</param>
     private void DrawGUILine(int height = 1)
     {
+        // Draw the line at the current position
         Rect rect = EditorGUILayout.GetControlRect(false, height);
         rect.height = height;
         EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
+    }
+
+    /// <summary>
+    /// Move an item in a list to a new index
+    /// </summary>
+    /// <typeparam name="T">The list type</typeparam>
+    /// <param name="list">The list object</param>
+    /// <param name="oldIndex">The old index of the item</param>
+    /// <param name="newIndex">The new index to move the item to</param>
+    private void MoveItem<T>(List<T> list, int oldIndex, int newIndex)
+    {
+        // Clamp the index to the size of the list
+        oldIndex = Mathf.Clamp(oldIndex, 0, list.Count - 1);
+        newIndex = Mathf.Clamp(newIndex, 0, list.Count - 1);
+
+        // Move the item
+        T item = list[oldIndex];
+        list.RemoveAt(oldIndex);
+        list.Insert(newIndex, item);
     }
 }

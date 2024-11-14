@@ -832,12 +832,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _boatObject: {fileID: 1609326914}
---- !u!64 &298607316 stripped
-MeshCollider:
-  m_CorrespondingSourceObject: {fileID: 6792615806471611328, guid: 2397866ad34f7b34f80a0814aed99bfb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1587963121}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &349007251
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,12 +938,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &353106505 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7579009369141623204, guid: 28f576cd3d040ad40a4189793c1ac92a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1547762588}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &395907185
 Mesh:
   m_ObjectHideFlags: 0
@@ -2477,95 +2465,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3639bd6efd0451442a2875bf2bb9fe5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dialogueTextField: {fileID: 0}
   StoryBeats:
   - Name: 
-    StoryBeatEvents:
-    - EventType: 3
-      DelayTime: 3
-      DialogueLine: {fileID: 0}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks:
-      - {fileID: 1898755885}
-      - {fileID: 1957022819}
-      BeatEvent:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 353106505}
-            m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_MethodName: set_name
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: lez goooo
-              m_BoolArgument: 0
-            m_CallState: 2
-    - EventType: 0
-      DelayTime: 0
-      DialogueLine: {fileID: 11400000, guid: 6cfb87abadae8b848add9783193adfa3, type: 2}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks: []
-      BeatEvent:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 1898755885}
-            m_TargetAssemblyTypeName: BaseBossAttack, Assembly-CSharp
-            m_MethodName: InvokeAttackBegin
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-          - m_Target: {fileID: 298607316}
-            m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
-            m_MethodName: set_enabled
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 1
-            m_CallState: 2
-    - EventType: 1
-      DelayTime: 14
-      DialogueLine: {fileID: 0}
-      BoatSpeed: 5
-      SpeedChangeTime: 10
-      BossAttacks: []
-      BeatEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - EventType: 2
-      DelayTime: 10
-      DialogueLine: {fileID: 0}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks:
-      - {fileID: 1898755885}
-      - {fileID: 1957022819}
-      BeatEvent:
-        m_PersistentCalls:
-          m_Calls: []
-  - Name: 
     StoryBeatEvents: []
-  - Name: 
-    StoryBeatEvents: []
-  - Name: 
-    StoryBeatEvents: []
-  - Name: 
-    StoryBeatEvents: []
-  TempEvents: []
+  OpenStoryBeat: 0
 --- !u!1001 &1332017025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8773,18 +8676,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dba63f6ef6e9b246ac771d4fa67a22d, type: 3}
---- !u!114 &1898755885 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4763839495357857790, guid: 28f576cd3d040ad40a4189793c1ac92a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1547762588}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523066aca1dad9f4c993a49d0e0bb3e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1913743910
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8991,18 +8882,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isMoving: 1
   _speedModifier: 0
---- !u!114 &1957022819 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5472327707456733759, guid: 28f576cd3d040ad40a4189793c1ac92a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1547762588}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8234bd27de7f9a246b0819fc15a93106, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &157630887165412654
 PrefabInstance:
   m_ObjectHideFlags: 0
