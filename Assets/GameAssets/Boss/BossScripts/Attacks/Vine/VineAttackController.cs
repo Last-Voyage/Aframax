@@ -23,7 +23,8 @@ public class VineAttackController : BaseBossAttack
     /// </summary>
     [SerializeField] private VineAttackGroup[] _attackOrder;
     [SerializeField] private float _attackInterval;
-
+    [Tooltip("rate at which the limp idle sfx should loop")]
+    [SerializeField] private float _loopRate;
     private VineAttack[] _vineAttackRooms;
 
     private List<VineAttack> _currentAttackingRooms;
@@ -113,6 +114,8 @@ public class VineAttackController : BaseBossAttack
         foreach(VineAttack vine in _vineAttackRooms)
         {
             vine.SpawnVine();
+            //Sfx for limb idle
+            base.PlayIdleLoop(_loopRate);
         }
     }
 
@@ -127,6 +130,8 @@ public class VineAttackController : BaseBossAttack
             UseAllAttacksInAttackGroup(attackOrder);
             yield return _attackIntervalDelay;
         }
+        //For SFX of limb idle
+        base.DestroyIdleLoop();
         EndAttack();
     }
 

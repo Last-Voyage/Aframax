@@ -59,6 +59,7 @@ public class VineAttack : MonoBehaviour
     public void SpawnVine()
     {
         _spawnedVine = Instantiate(_vineAttackPrefab, _vineAttackSpawnLocation);
+        
     }
 
     /// <summary>
@@ -77,6 +78,7 @@ public class VineAttack : MonoBehaviour
     {
         _attackGameObject.SetActive(true);
         StartCoroutine(AttackDamageProcess());
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbAttack, transform.position);
     }
 
     /// <summary>

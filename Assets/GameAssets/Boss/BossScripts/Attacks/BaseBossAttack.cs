@@ -7,6 +7,9 @@
 // Brief Description : The base of each attack the boss does to make each attack easier to set up
 *****************************************************************************/
 
+using System.Collections;
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,9 +24,11 @@ public class BaseBossAttack : MonoBehaviour
     /// </summary>
     protected bool _isAttackActive;
 
+    protected Coroutine _idleSFXCoroutine;
+
     protected UnityEvent _onBeginAttack = new();
     protected UnityEvent  _onAttackEnd = new();
-
+    
     /// <summary>
     /// Subscribe to any necessary events
     /// </summary>
@@ -48,6 +53,40 @@ public class BaseBossAttack : MonoBehaviour
         _isAttackActive = true;
     }
 
+    protected virtual void PlayIdleLoop(float second)
+    {
+        if (_idleSFXCoroutine == null)
+        _idleSFXCoroutine = StartCoroutine(LoopIdleCorrectfloat(second));
+    }
+    protected virtual void DestroyIdleLoop()
+    {
+        if (_idleSFXCoroutine != null)
+        {
+            StopCoroutine(_idleSFXCoroutine);
+        }
+    }
+    /// <summary>
+    /// Play heartbeat at controlled rate 
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator LoopIdleCorrectfloat (float second)
+    {
+        float timer = 0.0f;
+
+        while (true)
+        {
+            if (timer > second)
+            {
+                RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbIdle, transform.position);
+                timer = 0.0f;
+            }
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+    }
+    
+    
     /// <summary>
     /// Stops the attack from playing
     /// </summary>

@@ -25,6 +25,10 @@ public class LockdownAttackController : BaseBossAttack
     [SerializeField] private GameObject _coreEnemyPrefab;
 
     [Space]
+    [Tooltip("rate at which the limp idle sfx should loop")]
+    [SerializeField] private int _loopRate;
+    
+    [Space]
     [SerializeField] private int _numberOfRoomsToAttack;
     private int _roomCoresDefeated=0;
 
@@ -96,7 +100,8 @@ public class LockdownAttackController : BaseBossAttack
         // This is a passive attack this ends when it's scene is over
         // This should only subscribe during its lifetime as it's waiting for it's scene to end
         BossAttackActSystem.Instance.GetOnAttackCompleted().AddListener(EndAttack);
-
+        //sfx for idle limbs
+        base.PlayIdleLoop(_loopRate);
         base.BeginAttack();
 
         AttackRandomRooms(_numberOfRoomsToAttack);
@@ -141,7 +146,8 @@ public class LockdownAttackController : BaseBossAttack
     {
         // This should only unsubscribe from it's scene if it began, this isn't in unsub from event
         BossAttackActSystem.Instance.GetOnAttackCompleted().RemoveListener(EndAttack);
-
+        //Sfx remover for limp idle
+        base.DestroyIdleLoop();
         base.EndAttack();
     }
 }

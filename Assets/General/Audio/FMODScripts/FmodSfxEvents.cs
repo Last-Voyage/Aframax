@@ -22,6 +22,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference WeakPointDestroyed { get; private set; }
     [field: SerializeField] public EventReference LimbDestroyed { get; private set; }
     [field: SerializeField] public EventReference LimbAttack { get; private set; }
+    [field: SerializeField] public EventReference LimbIdle { get; private set; }
     [field: SerializeField] public EventReference SceneStart { get; private set; }
 
     #endregion Boss
@@ -35,7 +36,7 @@ public class FmodSfxEvents : MonoBehaviour
 
     [field: Space]
     [field: SerializeField] public EventReference PlayerTookDamage { get; private set; }
-
+    
     #region Harpoon
 
     [field: Header("Harpoon")]
