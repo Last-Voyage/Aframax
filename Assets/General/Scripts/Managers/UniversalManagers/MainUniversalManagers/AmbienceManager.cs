@@ -1,6 +1,7 @@
 /******************************************************************************
-// File Name:       PersistentSoundManager.cs
+// File Name:       AmbienceManager.cs
 // Author:          Andrea Swihart-DeCoster
+// Contributors:    Ryan Swanson
 // Creation Date:   October 1st, 2024
 //
 // Description:     Manages any sound that player persistently throughout the
@@ -20,11 +21,14 @@ public class AmbienceManager : AudioManager
 
     private List<EventInstance> _allAmbientEvents;
 
-    private void Start()
+    /// <summary>
+    /// Performs any set up needed for the manager
+    /// </summary>
+    public override void SetUpMainManager()
     {
-        _allAmbientEvents = new List<EventInstance>();
+        base.SetUpMainManager();
+        
         StartGameBackgroundAudio();
-        SubscribeToEvents();
     }
 
     protected override void SubscribeToEvents()
@@ -40,6 +44,9 @@ public class AmbienceManager : AudioManager
     {
         base.SetUpInstance();
         Instance = this;
+
+        //Established the instance for the FmodAmbienceEvents
+        GetComponent<FmodAmbienceEvents>().SetUpInstance();
     }
 
     /// <summary>
@@ -47,6 +54,8 @@ public class AmbienceManager : AudioManager
     /// </summary>
     private void StartGameBackgroundAudio()
     {
+        _allAmbientEvents = new List<EventInstance>();
+
         // Stop any instances of music playing
         foreach (var sound in _allAmbientEvents)
         {
