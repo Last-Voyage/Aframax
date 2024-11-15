@@ -51,9 +51,10 @@ public class PlayerHealth : BaseHealth
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
         PlayHeartBeatSfx();
     }
-/// <summary>
-/// The initiator of heart beat coroutines (should only start up and stop once per calll at max)
-/// </summary>
+    
+    /// <summary>
+    /// The initiator of heart beat coroutines (should only start up and stop once per calll at max)
+    /// </summary>
     public void PlayHeartBeatSfx()
     {
         if (_currentHealth <= _heartToStartHeartSfx && _currentHealth != _heartToEndHeartSfx && _heartBeatCoroutine == null)
@@ -66,10 +67,10 @@ public class PlayerHealth : BaseHealth
         }
     }
 
-        /// <summary>
-        /// A coroutine that is mean't to loop the heartbeat sfx
-        /// </summary>
-        /// <returns>returns null to loop similar to update function</returns>
+    /// <summary>
+    /// A coroutine that is mean't to loop the heartbeat sfx
+    /// </summary>
+    /// <returns>returns null to loop similar to update function</returns>
     private IEnumerator HeartbeatLoop()
     {
         while (true)
