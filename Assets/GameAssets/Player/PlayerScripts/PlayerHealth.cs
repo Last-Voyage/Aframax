@@ -23,10 +23,10 @@ public class PlayerHealth : BaseHealth
     public bool _shouldTakeDamage = true;//Nabil made this change
     
     [Tooltip ("Health point at which the heart beat sfx starts")]
-    [SerializeField] private float _HeartBeatStart;
+    [SerializeField] private float _heartToStartHeartSfx;
     [Tooltip ("Health point at which the heart beat sfx ends")]
-    [SerializeField] private float _HeartBeatEnd;
-    [SerializeField] private float _HeartBeatRate;
+    [SerializeField] private float _heartToEndHeartSfx;
+    [SerializeField] private float _heartBeatRateSfx;
     private Coroutine _heartBeatCoroutine;
     
     private void Awake()
@@ -49,39 +49,34 @@ public class PlayerHealth : BaseHealth
         base.IncreaseHealth(heal);
 
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
-        CheckHeartBeat();
+        PlayHeartBeatSfx();
     }
-
-    private void CheckHeartBeat()
+/// <summary>
+/// The initiator of heart beat coroutines (should only start up and stop once per calll at max)
+/// </summary>
+    public void PlayHeartBeatSfx()
     {
-        if (base._currentHealth <= _HeartBeatStart && base._currentHealth != _HeartBeatEnd && _heartBeatCoroutine == null)
+        if (_currentHealth <= _heartToStartHeartSfx && _currentHealth != _heartToEndHeartSfx && _heartBeatCoroutine == null)
         {
             StartCoroutine(HeartbeatLoop());
         }
-        if (base._currentHealth == _HeartBeatEnd && _heartBeatCoroutine != null)
+        if (_currentHealth >= _heartToEndHeartSfx && _heartBeatCoroutine != null)
         {
             StopCoroutine(HeartbeatLoop());
         }
     }
 
-    /// <summary>
-    /// A coroutine that is mean't to loop the heartbeat sfx
-    /// </summary>
-    /// <returns>returns null to loop similar to update function</returns>
-    IEnumerator HeartbeatLoop()
+        /// <summary>
+        /// A coroutine that is mean't to loop the heartbeat sfx
+        /// </summary>
+        /// <returns>returns null to loop similar to update function</returns>
+    private IEnumerator HeartbeatLoop()
     {
-        float timer = 0.0f;
         while (true)
         {
-            if (timer > _HeartBeatRate)
-            {
+            yield return new WaitForSeconds(_heartBeatRateSfx);
                 RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.PlayerHeartBeat,
                     gameObject.transform.position);
-                timer = 0.0f;
-            }
-
-            timer += Time.deltaTime;
-            yield return null;
         }
     }
 
@@ -100,7 +95,7 @@ public class PlayerHealth : BaseHealth
 
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
-            CheckHeartBeat();
+            PlayHeartBeatSfx();
             StartIFrames();
         }
     }
