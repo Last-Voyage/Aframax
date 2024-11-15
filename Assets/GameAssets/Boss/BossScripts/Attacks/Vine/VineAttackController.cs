@@ -143,14 +143,6 @@ public class VineAttackController : BaseBossAttack
     }
 
     /// <summary>
-    /// Ends the attack
-    /// </summary>
-    protected override void EndAttack()
-    {
-        base.EndAttack();
-    }
-
-    /// <summary>
     /// links attack to boss attack manager
     /// </summary>
     private void OnEnable()

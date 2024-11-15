@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         BaseBossAttackSystem.cs
 // Author :            Mark Hanson
-// Contributors:       Andrew Stapay, Andrea Swihart-DeCoster
+// Contributors:       Andrew Stapay, Andrea Swihart-DeCoster, Ryan Swanson
 // Creation Date :     10/21/2024
 //
 // Brief Description : The base of each attack the boss does to make each attack easier to set up
@@ -45,14 +45,24 @@ public class BaseBossAttack : MonoBehaviour
     /// </summary>
     protected virtual void BeginAttack()
     {
+        if (_isAttackActive)
+        {
+            return;
+        }
+
         _isAttackActive = true;
     }
 
     /// <summary>
     /// Stops the attack from playing
     /// </summary>
-    protected virtual void EndAttack()
+    public virtual void EndAttack()
     {
+        if (!_isAttackActive)
+        {
+            return;
+        }
+
         _isAttackActive = false;
         InvokeAttackEnd();
     }

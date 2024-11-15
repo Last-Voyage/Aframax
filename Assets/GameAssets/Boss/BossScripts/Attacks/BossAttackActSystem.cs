@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttackActSystem.cs
 // Author :            Mark Hanson
-// Contributor:        Andrea Swihart-DeCoster, Nick Rice
+// Contributor:        Andrea Swihart-DeCoster, Nick Rice, Ryan Swanson
 // Creation Date :     10/22/2024
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack
@@ -279,6 +279,24 @@ public class BossAttackActSystem : MonoBehaviour
         // Begin next scene
         BeginScene();
         InvokeSceneEndEvent();
+    }
+
+    /// <summary>
+    /// Stops all active attacks if needed
+    /// Used by StoryManager to stop attacks
+    /// </summary>
+    public void ForceEndAllAttacks()
+    {
+        //I bet you are asking why are not just going through all attacks in the "current combat scenes"
+        //Based on how the story manager is set up I'm assuming that "combat scenes are older functionality being 
+        // removed so this is the alternative. Can't get the attacks in the current combat scene if there is no combat scene
+        //TODO rework the "Combat Scenes" functionality
+        BaseBossAttack[] allAttacks = GetComponentsInChildren<BaseBossAttack>();
+        foreach(BaseBossAttack attack in allAttacks)
+        {
+            attack.EndAttack();
+        }
+
     }
 
     /// <summary>
