@@ -1,12 +1,13 @@
 /*****************************************************************************
 // File Name :         PlayerHealth.cs
 // Author :            Ryan Swanson
-// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba
+// Contributors:       Andrea Swihart-DeCoster, Nabil Tagba, David Henvick, Andrew Stapay
 // Creation Date :     10/15/24
 //
 // Brief Description : Controls the player's health functionality
 *****************************************************************************/
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,27 +15,33 @@ using UnityEngine.Events;
 /// Controls the player health functionality
 /// </summary>
 public class PlayerHealth : BaseHealth
-{ 
+{
+    //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
+    [SerializeField] private float _iFrameDelayInSeconds;
+
+    //Variable is used by the dev console to determine whether the player should take damage or not
+    public bool _shouldTakeDamage = true;//Nabil made this change
+
+    private void Awake()
+    {
+        base.Awake();
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
 
     /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
 
-
-    //Variable is used by the dev console to determine whether the player should take damage or not
-    public bool _shouldTakeDamage = true;//Nabil made this change
-
-    /// <summary>
-    /// increases health
-    /// </summary>
-    /// <param name="heal"></param>
-
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
 
-        PlayerManager.Instance.InvokePlayerHealEvent(heal);
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
     }
 
@@ -53,7 +60,27 @@ public class PlayerHealth : BaseHealth
 
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
+
+            StartIFrames();
         }
+    }
+
+    /// <summary>
+    /// used to start the player's invincibility after taking damage
+    /// </summary>
+    /// <returns></returns>
+    private void StartIFrames()
+    {
+        _shouldTakeDamage = false;
+        PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
+    }
+
+    /// <summary>
+    /// used to end the player's invincibility after taking damage
+    /// </summary>
+    private void EndIFrames()
+    {
+        _shouldTakeDamage = true;
     }
 
     /// <summary>
@@ -63,5 +90,15 @@ public class PlayerHealth : BaseHealth
     {
         base.OnDeath();
         PlayerManager.Instance.InvokeOnPlayerDeath();
+    }
+
+    private void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(IncreaseHealth);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(IncreaseHealth);
     }
 }
