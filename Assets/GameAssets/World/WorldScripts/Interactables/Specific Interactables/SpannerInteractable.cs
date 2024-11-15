@@ -17,7 +17,7 @@ public class SpannerInteractable : MonoBehaviour, IPlayerInteractable
     /// Implements the OnInteractedByPlayer function from IPlayerInteractable
     /// Called when the player presses the interact key while looking at this object
     /// </summary>
-    void IPlayerInteractable.OnInteractedByPlayer()
+    public void OnInteractedByPlayer()
     {
         PlayerInventory.Instance.DoesPlayerHaveSpanner = true;
         //TODO: I imagine there will be an animation or vfx for this in the future, but for now we just destroy it

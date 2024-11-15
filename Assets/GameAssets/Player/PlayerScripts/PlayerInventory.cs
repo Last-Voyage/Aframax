@@ -21,7 +21,7 @@ public class PlayerInventory : MonoBehaviour
     public bool DoesPlayerHaveSpanner { get; set; }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         EstablishInstance();
     }
