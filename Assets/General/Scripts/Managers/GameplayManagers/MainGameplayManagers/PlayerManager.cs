@@ -35,6 +35,8 @@ public class PlayerManager : MainGameplayManagerFramework
     private static readonly UnityEvent _onHarpoonReloadedEvent = new();
     //When the harpoon's ammo is restocked
     private static readonly UnityEvent<AmmoRackInteractable> _onHarpoonRestockEvent = new();
+    //When the harpoon's ammo restocking is complete
+    private static readonly UnityEvent<int> _onHarpoonRestockCompleteEvent = new();
 
     //When the player starts focusing
     private static readonly UnityEvent _onHarpoonFocusStartEvent = new();
@@ -124,6 +126,15 @@ public class PlayerManager : MainGameplayManagerFramework
     public void InvokeOnHarpoonRestockEvent(AmmoRackInteractable ammoRack)
     {
         _onHarpoonRestockEvent?.Invoke(ammoRack);
+    }
+
+    /// <summary>
+    /// Invokes event for when the harpoon is finished restocking
+    /// </summary>
+    /// <param name="numHarpoons"> the number of harpoons that were restocked </param>
+    public void InvokeOnHarpoonRestockCompleteEvent(int numHarpoons)
+    {
+        _onHarpoonRestockCompleteEvent?.Invoke(numHarpoons);
     }
 
     /// <summary>
@@ -217,6 +228,7 @@ public class PlayerManager : MainGameplayManagerFramework
     public UnityEvent GetOnHarpoonStartReloadEvent() => _onHarpoonReloadStartEvent;
     public UnityEvent GetOnHarpoonReloadedEvent() => _onHarpoonReloadedEvent;
     public UnityEvent<AmmoRackInteractable> GetOnHarpoonRestockEvent() => _onHarpoonRestockEvent;
+    public UnityEvent<int> GetOnHarpoonRestockCompleteEvent() => _onHarpoonRestockCompleteEvent;
 
     public UnityEvent GetOnHarpoonFocusStartEvent() => _onHarpoonFocusStartEvent;
     public UnityEvent GetOnHarpoonFocusMaxEvent() => _onHarpoonFocusMaxEvent;

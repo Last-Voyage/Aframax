@@ -323,6 +323,8 @@ public class HarpoonGun : MonoBehaviour
 
         _currentReserveAmmo += targetAmmo;
         ammoRack.RemoveHarpoons(targetAmmo);
+
+        PlayerManager.Instance.InvokeOnHarpoonRestockCompleteEvent(targetAmmo);
     }
     #endregion
 
@@ -556,6 +558,7 @@ public class HarpoonGun : MonoBehaviour
     public LayerMask GetHarpoonExcludeLayers() => _excludeLayers;
     public bool GetDoesHarpoonRemainsInObject() => _doesHarpoonRemainInHitObject;
     public Transform GetHarpoonTip() => _harpoonTip;
+    public int GetReserveAmmo() => _currentReserveAmmo;
 
     /// <summary>
     /// The focus accuracy (or potential deviation) of the harpoon.
