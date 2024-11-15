@@ -53,10 +53,9 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     /// <summary>
-    /// THIS IS PURELY FOR TESTING PURPOSES
-    /// IF YOU ARE NOT CODE REVIEWING THIS TASK AND I DIDNT DELETE IT YOU CAN DIRECT ALL HATE TOWARDS RYAN :D
-    /// if(!reviewing && this != null) DirectHate("Ryan");
+    /// FOR TESTING ONLY
     /// </summary>
     private void Update()
     {
@@ -65,6 +64,7 @@ public class StoryManager : MonoBehaviour
             ProgressNextStoryBeat();
         }
     }
+#endif
 
     /// <summary>
     /// Moves to the next beat index in order

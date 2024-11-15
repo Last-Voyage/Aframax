@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         BossAttackActSystem.cs
 // Author :            Mark Hanson
-// Contributor:        Andrea Swihart-DeCoster, Nick Rice
+// Contributor:        Andrea Swihart-DeCoster, Nick Rice, Ryan Swanson
 // Creation Date :     10/22/2024
 //
 // Brief Description : The system to manage what act the boss is on and also switch between them along with which attack
