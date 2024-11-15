@@ -21,12 +21,14 @@ public class FmodAmbienceEvents : MonoBehaviour
     [field: Header("Ambient Background Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game")]
     [field: SerializeField] public EventReference[] AmbientGameBackgroundSounds { get; private set; }
+    [field: SerializeField] public EventReference LimbIdle { get; private set; }
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            
         }
         else
         {
