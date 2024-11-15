@@ -73,7 +73,7 @@ public class MapShifting : MonoBehaviour
     /// Choose any layout
     /// </summary>
     /// <param name="_choice"></param>
-    public void LayoutChoice(int choice)
+    public void SwapLayout(int choice)
     {
         if (choice < _boatLayouts.Length && choice >= 0)
         {
