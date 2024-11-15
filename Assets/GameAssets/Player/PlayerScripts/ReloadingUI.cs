@@ -1,7 +1,6 @@
 /******************************************************************************
 // File Name:       ReloadingUI.cs
 // Author:          Ryan Swanson
-// Contributors:    Andrew Stapay
 // Creation Date:   October 28, 2024
 //
 // Description:     A temporary script that exists to show the ui for reloading
@@ -62,7 +61,7 @@ public class ReloadingUI : MonoBehaviour
     /// </summary>
     private void SubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(ShowReloadingUI);
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(ShowReloadingUI);
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().AddListener(HideReloadingUI);
     }
 
@@ -71,7 +70,7 @@ public class ReloadingUI : MonoBehaviour
     /// </summary>
     private void UnsubscribeToEvents()
     {
-        PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(ShowReloadingUI);
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(ShowReloadingUI);
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().RemoveListener(HideReloadingUI);
     }
 }

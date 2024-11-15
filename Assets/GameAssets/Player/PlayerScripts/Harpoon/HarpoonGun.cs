@@ -1,7 +1,8 @@
 /*****************************************************************************
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
-// Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay
+//                     Ryan Swanson
+//                     Adam Garwacki
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -52,12 +53,9 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private bool _doesHarpoonRemainInHitObject;
     [Tooltip("The projectile being fired")]
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
-    [Tooltip("The maximum amount of ammo that the harpoon may have")]
-    [SerializeField] private int _maxAmmo = 3;
 
     private static HarpoonProjectileMovement[] _harpoonSpearPool;
     private int _harpoonPoolCounter;
-    private int _currentReserveAmmo;
 
     private EHarpoonFiringState _harpoonFiringState;
 
@@ -123,8 +121,6 @@ public class HarpoonGun : MonoBehaviour
     #region Setup
     private void Awake()
     {
-        _currentReserveAmmo = _maxAmmo - 1;
-
         CheckSingletonInstance();
 
         CreateInitialHarpoonPool();
@@ -155,18 +151,14 @@ public class HarpoonGun : MonoBehaviour
     private void SubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(StartUnfocusingHarpoon);
-        PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(RestockHarpoons);
-        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadAfterRestocking);
     }
 
     /// <summary>
-    /// Unsubscribes to all needed events
+    /// Unsubscribes to all needed event
     /// </summary>
     private void UnsubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(StartUnfocusingHarpoon);
-        PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(RestockHarpoons);
-        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadAfterRestocking);
     }
 
     /// <summary>
@@ -256,6 +248,9 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFiringState = EHarpoonFiringState.Reloading;
 
         StartCoroutine(ReloadHarpoon());
+
+        RuntimeSfxManager.APlayOneShotSfx?
+            .Invoke(FmodSfxEvents.Instance.HarpoonReload, gameObject.transform.position);
     }
 
     /// <summary>
@@ -263,20 +258,13 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private IEnumerator ReloadHarpoon()
     {
-        if (_currentReserveAmmo > 0)
+        float reloadTimeRemaining = _reloadTime;
+        while(reloadTimeRemaining > 0)
         {
-            PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
-            float reloadTimeRemaining = _reloadTime;
-            while (reloadTimeRemaining > 0)
-            {
-                reloadTimeRemaining -= Time.deltaTime;
-                yield return null;
-            }
-
-            _currentReserveAmmo--;
-
-            HarpoonFullyReloaded();
+            reloadTimeRemaining -= Time.deltaTime;
+            yield return null;
         }
+        HarpoonFullyReloaded();
     }
 
     /// <summary>
@@ -287,47 +275,13 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
-        RuntimeSfxManager.APlayOneShotSfx?
-            .Invoke(FmodSfxEvents.Instance.HarpoonReload, gameObject.transform.position);
 
-        if (_isFocusButtonHeld)
+        if(_isFocusButtonHeld)
         {
             StartFocusingHarpoon();
         }
 
         PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
-    }
-
-    /// <summary>
-    /// Restocks harpoons to full from the given ammo rack
-    /// </summary>
-    /// <param name="ammoRack"> The ammo rack to take harpoons from </param>
-    private void RestockHarpoons(AmmoRackInteractable ammoRack)
-    {
-        int missingAmmo = _maxAmmo - _currentReserveAmmo;
-        if (_harpoonFiringState == EHarpoonFiringState.Ready)
-        {
-            missingAmmo--;
-        }
-
-        int numHarpoons = ammoRack.GetNumHarpoons();
-
-        // The ternary operator is useful for assigning a value without going into an if statement
-        // targetAmmo will become the lesser of numHarpoons and missingAmmo
-        int targetAmmo = numHarpoons < missingAmmo ? numHarpoons : missingAmmo;
-
-        _currentReserveAmmo += targetAmmo;
-        ammoRack.RemoveHarpoons(targetAmmo);
-
-        PlayerManager.Instance.InvokeOnHarpoonRestockCompleteEvent(targetAmmo);
-    }
-
-    private void ReloadAfterRestocking(int ammoRestored)
-    {
-        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo - ammoRestored == 0)
-        {
-            StartCoroutine(ReloadHarpoon());
-        }
     }
     #endregion
 
@@ -561,7 +515,6 @@ public class HarpoonGun : MonoBehaviour
     public LayerMask GetHarpoonExcludeLayers() => _excludeLayers;
     public bool GetDoesHarpoonRemainsInObject() => _doesHarpoonRemainInHitObject;
     public Transform GetHarpoonTip() => _harpoonTip;
-    public int GetReserveAmmo() => _currentReserveAmmo;
 
     /// <summary>
     /// The focus accuracy (or potential deviation) of the harpoon.
