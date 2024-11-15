@@ -52,40 +52,43 @@ public class BaseBossAttack : MonoBehaviour
     {
         _isAttackActive = true;
     }
-
+    
+/// <summary>
+/// Coroutine for playing the idle loop sfx
+/// </summary>
+/// <param name="second"></param>
     protected virtual void PlayIdleLoop(float second)
     {
         if (_idleSFXCoroutine == null)
-        _idleSFXCoroutine = StartCoroutine(LoopIdleCorrectfloat(second));
+        {
+            _idleSFXCoroutine = StartCoroutine(LoopIdleCorrectFloat(second));
+        }
     }
-    protected virtual void DestroyIdleLoop()
+
+/// <summary>
+/// Stop coroutines for playing the idle loop sfx
+/// </summary>
+protected virtual void DestroyIdleLoop()
     {
         if (_idleSFXCoroutine != null)
         {
             StopCoroutine(_idleSFXCoroutine);
         }
     }
+
     /// <summary>
     /// Play heartbeat at controlled rate 
     /// </summary>
     /// <returns></returns>
-    private IEnumerator LoopIdleCorrectfloat (float second)
+    private IEnumerator LoopIdleCorrectFloat (float second)
     {
-        float timer = 0.0f;
-
         while (true)
         {
-            if (timer > second)
-            {
-                RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbIdle, transform.position);
-                timer = 0.0f;
-            }
-            timer += Time.deltaTime;
-
-            yield return null;
+            yield return new WaitForSeconds(second);
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbIdle, transform.position);
+                
         }
     }
-    
     
     /// <summary>
     /// Stops the attack from playing
@@ -95,7 +98,6 @@ public class BaseBossAttack : MonoBehaviour
         _isAttackActive = false;
         InvokeAttackEnd();
     }
-
     #region Events
 
     /// <summary>

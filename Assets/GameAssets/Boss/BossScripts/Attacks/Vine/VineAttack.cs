@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         VineAttack.cs
 // Author :            Ryan Swanson
+//Contributor:      Mark Hanson
 // Creation Date :     11/7/2024
 //
 // Brief Description : Controls the functionality for the bosses vine attack
@@ -59,7 +60,6 @@ public class VineAttack : MonoBehaviour
     public void SpawnVine()
     {
         _spawnedVine = Instantiate(_vineAttackPrefab, _vineAttackSpawnLocation);
-        
     }
 
     /// <summary>

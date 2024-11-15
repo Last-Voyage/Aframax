@@ -1,8 +1,7 @@
 /*****************************************************************************
 // File Name :         VineAttackController.cs
 // Author :            Tommy Roberts
-// Contributor :       Andrew Stapay
-//                     Ryan Swanson
+// Contributor :       Andrew Stapay, Ryan Swanson, Mark Hanson
 // Creation Date :     10/9/2024
 //
 // Brief Description : Controls the functionality of handling all vine attacks
