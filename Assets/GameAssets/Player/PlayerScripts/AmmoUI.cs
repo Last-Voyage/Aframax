@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
-// File Name :         AmmoRackInteractable.cs
+// File Name :         AmmoUI.cs
 // Author :            Andrew Stapay
 // Creation Date :     11/13/2024
 //
@@ -42,6 +42,14 @@ public class AmmoUI : MonoBehaviour
     private void SetUpText()
     {
         _ammoText = GetComponent<TMP_Text>();
+
+        // Wait for the HarpoonGun to set up its instance
+        while (HarpoonGun.Instance == null)
+        {
+
+        }
+
+        _ammoText.text = "1/" + HarpoonGun.Instance.GetReserveAmmo();
     }
 
     /// <summary>
@@ -77,7 +85,7 @@ public class AmmoUI : MonoBehaviour
     /// </summary>
     private void RestoreMainAmmo()
     {
-        _ammoText.text = "1/" + (int.Parse(_ammoText.text.Substring(2)) - 1);
+        _ammoText.text = "1/" + HarpoonGun.Instance.GetReserveAmmo();
     }
 
     /// <summary>
