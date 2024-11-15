@@ -156,6 +156,7 @@ public class HarpoonGun : MonoBehaviour
     {
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(StartUnfocusingHarpoon);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(RestockHarpoons);
+        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadAfterRestocking);
     }
 
     /// <summary>
@@ -165,6 +166,7 @@ public class HarpoonGun : MonoBehaviour
     {
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(StartUnfocusingHarpoon);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(RestockHarpoons);
+        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadAfterRestocking);
     }
 
     /// <summary>
@@ -261,28 +263,19 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private IEnumerator ReloadHarpoon()
     {
-        while (true)
+        if (_currentReserveAmmo > 0)
         {
-            if (_currentReserveAmmo > 0)
+            PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
+            float reloadTimeRemaining = _reloadTime;
+            while (reloadTimeRemaining > 0)
             {
-                PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
-                float reloadTimeRemaining = _reloadTime;
-                while (reloadTimeRemaining > 0)
-                {
-                    reloadTimeRemaining -= Time.deltaTime;
-                    yield return null;
-                }
-
-                _currentReserveAmmo--;
-
-                HarpoonFullyReloaded();
-
-                break;
-            }
-            else
-            {
+                reloadTimeRemaining -= Time.deltaTime;
                 yield return null;
             }
+
+            _currentReserveAmmo--;
+
+            HarpoonFullyReloaded();
         }
     }
 
@@ -325,6 +318,14 @@ public class HarpoonGun : MonoBehaviour
         ammoRack.RemoveHarpoons(targetAmmo);
 
         PlayerManager.Instance.InvokeOnHarpoonRestockCompleteEvent(targetAmmo);
+    }
+
+    private void ReloadAfterRestocking(int ammoRestored)
+    {
+        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo - ammoRestored == 0)
+        {
+            StartCoroutine(ReloadHarpoon());
+        }
     }
     #endregion
 

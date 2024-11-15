@@ -44,7 +44,7 @@ public class PlayerInteraction : MonoBehaviour
         SetRaycast();
         if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach))
         {
-            //GiveInteractableFeedback(hit.collider.gameObject);
+            GiveInteractableFeedback(hit.collider.gameObject);
             if (_interactInput.WasPerformedThisFrame())
             {
                 Interact(hit.collider.gameObject);
