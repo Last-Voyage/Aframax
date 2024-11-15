@@ -282,6 +282,24 @@ public class BossAttackActSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// Stops all active attacks if needed
+    /// Used by StoryManager to stop attacks
+    /// </summary>
+    public void ForceEndAllAttacks()
+    {
+        //I bet you are asking why are not just going through all attacks in the "current combat scenes"
+        //Based on how the story manager is set up I'm assuming that "combat scenes are older functionality being 
+        // removed so this is the alternative. Can't get the attacks in the current combat scene if there is no combat scene
+        //TODO rework the "Combat Scenes" functionality
+        BaseBossAttack[] allAttacks = GetComponentsInChildren<BaseBossAttack>();
+        foreach(BaseBossAttack attack in allAttacks)
+        {
+            attack.EndAttack();
+        }
+
+    }
+
+    /// <summary>
     /// Sets the current scene num var back to 0
     /// </summary>
     private void ResetSceneVariables()

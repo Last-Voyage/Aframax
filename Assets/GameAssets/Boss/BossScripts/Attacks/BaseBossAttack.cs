@@ -45,14 +45,24 @@ public class BaseBossAttack : MonoBehaviour
     /// </summary>
     protected virtual void BeginAttack()
     {
+        if (_isAttackActive)
+        {
+            return;
+        }
+
         _isAttackActive = true;
     }
 
     /// <summary>
     /// Stops the attack from playing
     /// </summary>
-    protected virtual void EndAttack()
+    public virtual void EndAttack()
     {
+        if (!_isAttackActive)
+        {
+            return;
+        }
+
         _isAttackActive = false;
         InvokeAttackEnd();
     }
