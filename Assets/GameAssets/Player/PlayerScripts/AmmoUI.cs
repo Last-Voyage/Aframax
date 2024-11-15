@@ -77,7 +77,8 @@ public class AmmoUI : MonoBehaviour
     /// </summary>
     private void ReduceMainAmmo()
     {
-        _ammoText.text = "0/" + _ammoText.text.Substring(2);
+        string currentReserveAmmo = _ammoText.text.Substring(2);
+        _ammoText.text = "0/" + currentReserveAmmo;
     }
 
     /// <summary>
@@ -91,9 +92,11 @@ public class AmmoUI : MonoBehaviour
     /// <summary>
     /// Updates the UI when the player restocks on ammo
     /// </summary>
-    /// <param name="unused"> An unused reference to the ammo rack used </param>
-    private void RestoreReserveAmmo(int unused)
+    /// <param name="ammoRestored"> The number of ammo that was restored </param>
+    private void RestoreReserveAmmo(int ammoRestored)
     {
-        _ammoText.text = _ammoText.text.Substring(0, 2) + HarpoonGun.Instance.GetReserveAmmo();
+        int oldReserveAmmo = int.Parse(_ammoText.text.Substring(2));
+        int newReserveAmmo = oldReserveAmmo + ammoRestored;
+        _ammoText.text = _ammoText.text.Substring(0, 2) + newReserveAmmo;
     }
 }
