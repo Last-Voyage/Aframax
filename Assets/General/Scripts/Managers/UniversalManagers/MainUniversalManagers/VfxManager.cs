@@ -35,8 +35,8 @@ public class VfxManager : MainUniversalManagerFramework
     private const int MUZZLE_SMOKE_ID = 0;
     private const int ENEMY_BLOOD_ID = 1;
     private const int ENEMY_ATTACK_WARNING_ID = 2;
-    private const int METAL_SPARKS_ID = 4;
     private const int WOODEN_SPARKS_ID = 3;
+    private const int METAL_SPARKS_ID = 4;
 
     /// <summary>
     /// Sets up the object pool of all vfx
