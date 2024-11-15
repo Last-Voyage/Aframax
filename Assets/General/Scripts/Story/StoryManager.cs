@@ -26,6 +26,9 @@ public class StoryManager : MonoBehaviour
     // Editor settings
     public int OpenStoryBeat;
 
+    // The current index of the story we are on. Begins at -1 as the first story index is 0. So -1 is before any beats
+    private int _currentStoryIndex = -1;
+
     /// <summary>
     /// Run initialization functions on the StoryManager
     /// </summary>
@@ -50,6 +53,28 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
+    /// <summary>
+    /// FOR TESTING ONLY
+    /// </summary>
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            ProgressNextStoryBeat();
+        }
+    }
+#endif
+
+    /// <summary>
+    /// Moves to the next beat index in order
+    /// </summary>
+    public void ProgressNextStoryBeat()
+    {
+        TriggerStoryBeat(++_currentStoryIndex);
+        print("I am now on act " + _currentStoryIndex);
+    }
+
     /// <summary>
     /// Trigger a story beat by index
     /// </summary>
@@ -64,6 +89,8 @@ public class StoryManager : MonoBehaviour
 
         // Start the coroutine on the specific story beat
         _beatEventsCoroutine = StartCoroutine(nameof(TriggerBeatEvents), StoryBeats[index].StoryBeatEvents);
+
+        _currentStoryIndex = index;
     }
 
     /// <summary>
