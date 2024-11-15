@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         BoatMover.cs
 // Author :            Alex Kalscheur
-// Contrubuter :       Charlie Polonus
+// Contributer :       Charlie Polonus
 // Creation Date :     10/10/24
 // 
 // Brief Description : Moves boat along and between river splines
@@ -77,13 +77,40 @@ public class BoatMover : MonoBehaviour
     /// </summary>
     private void MoveBoat()
     {
-        _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength / 100;
+        _percentOfSpline += Time.deltaTime * _speedModifier * _splineLength * 0.0001f;
         CheckSplineChange();
         Vector3 newPositionOnSpline = _curve.GetPositionAlongSpline(_percentOfSpline, out _newForwardVector, true);
 
         // Update the position and direction of the moving object
         transform.position = Vector3.Lerp(transform.position, newPositionOnSpline, 0.75f * Time.deltaTime);
         transform.forward += (_newForwardVector - transform.forward).normalized * Time.deltaTime;
+    }
+
+    /// <summary>
+    /// Lerp the speed of the boat to a new speed
+    /// </summary>
+    /// <param name="newSpeed">The new speed to be changed to</param>
+    /// <param name="moveTime">The amount of time it should take to change to the new speed</param>
+    public void ChangeSpeed(float newSpeed, float moveTime)
+    {
+        // Run the coroutine
+        StartCoroutine(LerpSpeed(newSpeed, moveTime));
+
+        // The internal IEnumerator to actually lerp the speed
+        IEnumerator LerpSpeed(float newSpeed, float moveTime)
+        {
+            // Temporarily set the old speed and initialize the time
+            float oldSpeed = _speedModifier;
+            float currentTime = 0;
+
+            // Find the ratio of time, and set the speed accordingly
+            while (currentTime < moveTime)
+            {
+                _speedModifier = Mathf.Lerp(oldSpeed, newSpeed, currentTime / moveTime);
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
+        }
     }
 
     /// <summary>
