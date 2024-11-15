@@ -23,9 +23,9 @@ public class PlayerHealth : BaseHealth
     public bool _shouldTakeDamage = true;//Nabil made this change
     
     [Tooltip ("Health point at which the heart beat sfx starts")]
-    [SerializeField] private float _heartToStartHeartSfx;
+    [SerializeField] private float _healthToStartHeartSfx;
     [Tooltip ("Health point at which the heart beat sfx ends")]
-    [SerializeField] private float _heartToEndHeartSfx;
+    [SerializeField] private float _healthToEndHeartSfx;
     [SerializeField] private float _heartBeatRateSfx;
     private Coroutine _heartBeatCoroutine;
     
@@ -57,13 +57,13 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     public void PlayHeartBeatSfx()
     {
-        if (_currentHealth <= _heartToStartHeartSfx && _currentHealth != _heartToEndHeartSfx && _heartBeatCoroutine == null)
+        if (_currentHealth <= _healthToStartHeartSfx && _currentHealth != _healthToEndHeartSfx && _heartBeatCoroutine == null)
         {
-            StartCoroutine(HeartbeatLoop());
+            _heartBeatCoroutine = StartCoroutine(HeartbeatLoop());
         }
-        if (_currentHealth >= _heartToEndHeartSfx && _heartBeatCoroutine != null)
+        if (_currentHealth >= _healthToEndHeartSfx && _heartBeatCoroutine != null)
         {
-            StopCoroutine(HeartbeatLoop());
+          StopCoroutine(_heartBeatCoroutine);
         }
     }
 
@@ -75,9 +75,9 @@ public class PlayerHealth : BaseHealth
     {
         while (true)
         {
-            yield return new WaitForSeconds(_heartBeatRateSfx);
                 RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.PlayerHeartBeat,
                     gameObject.transform.position);
+                yield return new WaitForSeconds(_heartBeatRateSfx);
         }
     }
 
