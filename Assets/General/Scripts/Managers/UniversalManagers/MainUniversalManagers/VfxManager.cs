@@ -36,6 +36,7 @@ public class VfxManager : MainUniversalManagerFramework
     private const int ENEMY_BLOOD_ID = 1;
     private const int ENEMY_ATTACK_WARNING_ID = 2;
     private const int METAL_SPARKS_ID = 4;
+    private const int WOODEN_SPARKS_ID = 3;
 
     /// <summary>
     /// Sets up the object pool of all vfx
@@ -106,6 +107,7 @@ public class VfxManager : MainUniversalManagerFramework
     public SpecificVisualEffect GetEnemyBloodVfx() => _allVfxInGame[ENEMY_BLOOD_ID];
     public SpecificVisualEffect GetEnemyAttackWarningVfx() => _allVfxInGame[ENEMY_ATTACK_WARNING_ID];
     public SpecificVisualEffect GetMetalSparksVfx() => _allVfxInGame[METAL_SPARKS_ID];
+    public SpecificVisualEffect GetWoodenSparksVfx() => _allVfxInGame[WOODEN_SPARKS_ID];
     #endregion
 
     #endregion
