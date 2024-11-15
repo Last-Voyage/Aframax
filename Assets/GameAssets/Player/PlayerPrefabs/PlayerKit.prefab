@@ -43,10 +43,10 @@ GameObject:
   - component: {fileID: 2827958547727462404}
   - component: {fileID: 2275719215793297427}
   - component: {fileID: 3256320120288923392}
-  - component: {fileID: 4036495945649008060}
   - component: {fileID: 5137148187237992625}
   - component: {fileID: 3051451356196284552}
   - component: {fileID: 3641362925933844938}
+  - component: {fileID: 7776482993356936769}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 100
-  _iFrameDelayInSeconds: 0
   _shouldTakeDamage: 1
 --- !u!114 &3256320120288923392
 MonoBehaviour:
@@ -166,18 +165,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b0a2c06f1a99d2488c41637d7437ded, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4036495945649008060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822883443245373252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5e337c04816a5f40b0ccfc7f669f9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5137148187237992625
@@ -261,6 +248,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7776482993356936769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822883443245373252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9297d0e62b3d14ea04e77873c4ba42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxReach: 5
 --- !u!1 &2581785293803075771
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,8 +435,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.1141025, y: 0.6895454, z: -0.111368425, w: 0.7064736}
+  m_LocalPosition: {x: 0, y: 0.029788256, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -754,7 +754,7 @@ MonoBehaviour:
   _playerHealthController: {fileID: 2275719215793297427}
   _playerCamera: {fileID: 3697781239049282484}
   _harpoonGun: {fileID: 1154209733901946177}
-  _playerInteraction: {fileID: 0}
+  _playerInteraction: {fileID: 7776482993356936769}
 --- !u!1001 &7289724734657163392
 PrefabInstance:
   m_ObjectHideFlags: 0
