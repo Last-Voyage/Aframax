@@ -11,52 +11,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using Random = UnityEngine.Random;
-/// <summary>
-/// Handler of random ambient sound effects at random times
-/// </summary>
-public class IntervalAmbienceEvents : MonoBehaviour
+
+namespace FMODUnity
 {
-  /// <summary>
-  /// Struct to hold min and max time for random range
-  /// </summary>
+    /// <summary>
+    /// Handler of random ambient sound effects at random times
+    /// </summary>
+    [Serializable]
     public struct FModEventReference
     {
-        public int MinTimeBetweenEvents;
-        public int MaxTimeBetweenEvents;
-    }
 
-    public FModEventReference FmodEvents { get; set; }
-   [SerializeField] private EventReference[] _ambienceArray;
+        public int MinTimeBetweenEvents { get; set; }
+        public int MaxTimeBetweenEvents { get; set; }
 
-   private Coroutine _ambienceCoroutine;
-   /// <summary>
-   /// Start coroutine 
-   /// </summary>
-   private void Start()
-   {
-       if (_ambienceCoroutine == null)
-       {
-           StartCoroutine(PlayIntervalAudio());  
-       }
-   }
-/// <summary>
-/// The Coroutine to loop through the array with different timers per sound call
-/// </summary>
-/// <returns></returns>
-   private IEnumerator PlayIntervalAudio()
-    {
-        while (true)
+        [Tooltip("All Sfx to be played")]
+        [field: SerializeField]
+        public FModEventReference[] FmodEventsArray { get; set; }
+
+        /// <summary>
+        /// The Coroutine to loops through the array with different timers per sound call
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator RandomAmbienceLoop()
         {
-            float Timer = 0.0f;
-            for (int i = 0; i < _ambienceArray.Length; i++)
+            float timer = 0f;
+            while (true)
             {
-                if (Timer > Random.Range(FmodEvents.MinTimeBetweenEvents, FmodEvents.MaxTimeBetweenEvents))
+                for (int i = 0; i < FmodEventsArray.Length; i++)
                 {
-                    RuntimeSfxManager.APlayOneShotSfx?
-                        .Invoke(_ambienceArray[i], gameObject.transform.position);
+                    if (timer > Random.Range(MinTimeBetweenEvents, MaxTimeBetweenEvents))
+                    {
 
+                        timer = 0f;
+                    }
+
+                    timer += Time.deltaTime;
+                    yield return null;
                 }
-                Timer += Time.deltaTime;
             }
         }
     }

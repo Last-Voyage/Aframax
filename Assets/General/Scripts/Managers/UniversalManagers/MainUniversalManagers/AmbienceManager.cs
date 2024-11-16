@@ -17,8 +17,8 @@ using System.Collections.Generic;
 /// </summary>
 public class AmbienceManager : AudioManager
 {
-    public static AmbienceManager Instance;
-
+    public static AmbienceManager Instance; 
+    public FModEventReference IntervalEvent;
     private List<EventInstance> _allAmbientEvents;
 
     /// <summary>
@@ -47,6 +47,11 @@ public class AmbienceManager : AudioManager
 
         //Established the instance for the FmodAmbienceEvents
         GetComponent<FmodAmbienceEvents>().SetUpInstance();
+    }
+
+    public void PlayintervalAudio()
+    {
+        StartCoroutine(IntervalEvent.RandomAmbienceLoop());
     }
 
     /// <summary>
