@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 2881108460329128381}
   - component: {fileID: 8692308638164313921}
   m_Layer: 5
-  m_Name: Settings
+  m_Name: Options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -181,21 +181,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: PauseToggle
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 8692308638164313921}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: LoadDesiredSceneButton
+        m_MethodName: LoadDesiredSceneButtonAdditive
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -217,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 4
+  _sceneToLoad: 5
   _sceneTransitionID: 0
 --- !u!1 &391825581419431555
 GameObject:
@@ -2782,7 +2770,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3745379537181484424}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: LoadDesiredSceneButtonAdditive
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2804,7 +2792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 1
+  _sceneToLoad: 7
   _sceneTransitionID: 0
 --- !u!1 &8515277942726040230
 GameObject:
@@ -3070,7 +3058,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Settings
+  m_text: Options
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
