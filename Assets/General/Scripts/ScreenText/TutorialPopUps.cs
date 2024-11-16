@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         TutorialPopUps.cs
 // Author :            Nick Rice
+// Contributer :       Charlie Polonus
 //                     
 // Creation Date :     10/22/24
 //
@@ -22,7 +23,7 @@ public class TutorialPopUps : MonoBehaviour
 
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    private ScriptableTutorialUI[] _uIData;
+    private ScriptableDialogueUI[] _uIData;
 
     [Tooltip("The collider the player has to walk into")]
     private GameObject _walkTutorialObject;
@@ -59,7 +60,7 @@ public class TutorialPopUps : MonoBehaviour
     /// <returns>The number of seconds in the UI data</returns>
     private IEnumerator TimeBeforeText()
     {
-        yield return new WaitForSeconds(_uIData[_dataPointer].GetTextAndTimer().GetTimeBeforeText);
+        yield return new WaitForSeconds(_uIData[_dataPointer].GetTextAndTimer()[0].GetTimeBeforeText);
         StartCoroutine(DisplayingTheText());
     }
 
@@ -71,19 +72,19 @@ public class TutorialPopUps : MonoBehaviour
     private IEnumerator DisplayingTheText()
     {
         // Takes the display text and makes it invisible
-        _textContainer.text = _uIData[_dataPointer].GetTextAndTimer().GetText;
+        _textContainer.text = _uIData[_dataPointer].GetTextAndTimer()[0].GetText;
         _textContainer.maxVisibleCharacters = 0;
 
         // Gets total length of text in characters, and gets the speed of the text display
-        int totalLength = _uIData[_dataPointer].GetTextAndTimer().GetText.Length;
-        float typeSpeed = totalLength / (float)_uIData[_dataPointer].GetTextAndTimer().GetTimeToDisplay;
+        int totalLength = _uIData[_dataPointer].GetTextAndTimer()[0].GetText.Length;
+        float typeSpeed = totalLength / (float)_uIData[_dataPointer].GetTextAndTimer()[0].GetTimeToDisplay;
 
         // As long as all the text hasn't been fully displayed, this will continually
         // display more characters for the total display time
-        while(_textContainer.maxVisibleCharacters < totalLength)
+        while (_textContainer.maxVisibleCharacters < totalLength)
         {
             _textContainer.maxVisibleCharacters++;
-            yield return new WaitForSeconds(1f/typeSpeed);
+            yield return new WaitForSeconds(1f / typeSpeed);
         }
         StartTutorialCompletionCheck();
     }

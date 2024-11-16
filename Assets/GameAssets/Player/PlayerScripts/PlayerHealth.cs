@@ -21,7 +21,14 @@ public class PlayerHealth : BaseHealth
 
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
-
+    
+    [Tooltip ("Health point at which the heart beat sfx starts")]
+    [SerializeField] private float _healthToStartHeartSfx;
+    [Tooltip ("Health point at which the heart beat sfx ends")]
+    [SerializeField] private float _healthToEndHeartSfx;
+    [SerializeField] private float _heartBeatRateSfx;
+    private Coroutine _heartBeatCoroutine;
+    
     private void Awake()
     {
         base.Awake();
@@ -37,12 +44,41 @@ public class PlayerHealth : BaseHealth
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
-
     public override void IncreaseHealth(float heal)
     {
         base.IncreaseHealth(heal);
 
         PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+        PlayHeartBeatSfx();
+    }
+    
+    /// <summary>
+    /// The initiator of heart beat coroutines (should only start up and stop once per calll at max)
+    /// </summary>
+    public void PlayHeartBeatSfx()
+    {
+        if (_currentHealth <= _healthToStartHeartSfx && _currentHealth != _healthToEndHeartSfx && _heartBeatCoroutine == null)
+        {
+            _heartBeatCoroutine = StartCoroutine(HeartbeatLoop());
+        }
+        if (_currentHealth >= _healthToEndHeartSfx && _heartBeatCoroutine != null)
+        {
+          StopCoroutine(_heartBeatCoroutine);
+        }
+    }
+
+    /// <summary>
+    /// A coroutine that is mean't to loop the heartbeat sfx
+    /// </summary>
+    /// <returns>returns null to loop similar to update function</returns>
+    private IEnumerator HeartbeatLoop()
+    {
+        while (true)
+        {
+                RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.PlayerHeartBeat,
+                    gameObject.transform.position);
+                yield return new WaitForSeconds(_heartBeatRateSfx);
+        }
     }
 
     /// <summary>
@@ -60,7 +96,7 @@ public class PlayerHealth : BaseHealth
 
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
-
+            PlayHeartBeatSfx();
             StartIFrames();
         }
     }
