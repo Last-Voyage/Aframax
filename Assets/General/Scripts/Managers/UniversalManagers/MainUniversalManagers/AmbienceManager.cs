@@ -8,9 +8,11 @@
                     game. e.g. music, background audio, etc
 ******************************************************************************/
 
+using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Manages audio that persists throughout the game
@@ -49,11 +51,52 @@ public class AmbienceManager : AudioManager
         GetComponent<FmodAmbienceEvents>().SetUpInstance();
     }
 
-    public void PlayintervalAudio()
+    private void Awake()
     {
-        StartCoroutine(IntervalEvent.RandomAmbienceLoop());
+        PlayintervalAudio();
     }
 
+    /// <summary>
+    /// The Coroutine to loops through the array with different timers per sound call
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator RandomAmbienceLoop()
+    {
+        float timer = 0f;
+        while (true)
+        {
+            foreach (var sound in IntervalEvent.FmodEvents)
+            {
+                if (timer > Random.Range(IntervalEvent.MinTimeBetweenEvents, IntervalEvent.MaxTimeBetweenEvents))
+                {
+                    // RuntimeSfxManager.APlayOneShotSfx?.Invoke(RuntimeManager.CreateInstance(FmodEvents));
+                    timer = 0f;
+                    RuntimeSfxManager.APlayOneShotSfx?.Invoke(sound, transform.position);
+                }
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
+        }
+    }
+
+    public void PlayintervalAudio()
+    {
+        if (IntervalEvent.PlaySfxCoroutine == null)
+        {
+            IntervalEvent.PlaySfxCoroutine = StartCoroutine(RandomAmbienceLoop());
+            return;
+        }
+    }
+    
+    public void StopintervalAudio()
+    {
+        if (IntervalEvent.PlaySfxCoroutine != null)
+        {
+            StopCoroutine(IntervalEvent.PlaySfxCoroutine);
+        }
+    }
+    
     /// <summary>
     /// Starts playing continuous background audio in game scenes
     /// </summary>
