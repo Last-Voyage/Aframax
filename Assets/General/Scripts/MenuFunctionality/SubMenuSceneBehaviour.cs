@@ -1,9 +1,9 @@
 /*****************************************************************************
-// File Name :         SettingsSceneBehaviour.cs
+// File Name :         SubMenuSceneBehaviour.cs
 // Author :            Jeremiah Peters
 // Creation Date :     11/10/24
 //
-// Brief Description : handles using escape to leave the settings menu
+// Brief Description : handles using escape to leave the submenu scenes
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -13,9 +13,11 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// this makes it so u can press escape to return to the previous scene
 /// </summary>
-public class SettingsSceneBehaviour : MonoBehaviour
+public class SubMenuSceneBehaviour : MonoBehaviour
 {
     private PlayerInputMap _playerInputControls;
+
+    [SerializeField] private int _thisSceneID;
 
     private void Awake()
     {
@@ -29,26 +31,26 @@ public class SettingsSceneBehaviour : MonoBehaviour
     /// </summary>
     public void ExitScene()
     {
-        //checks if the settings scene was additively loaded. if additive, then just unload it. if not, load old scene as well
-        if (SceneManager.GetActiveScene().buildIndex == AframaxSceneManager.Instance.SettingsSceneIndex)
+        //checks if this scene was additively loaded. if additive, then just unload it. if not, load old scene
+        if (SceneManager.GetActiveScene().buildIndex == _thisSceneID)
         {
             AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.LastSceneIndex, 0);
         }
         else
         {
-            AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(AframaxSceneManager.Instance.SettingsSceneIndex);
+            AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(_thisSceneID);
         }
     }
 
     private void OnEnable()
     {
-        AframaxSceneManager.Instance.ToggleSettingsSceneLoadedBool();
+        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(true);
         _playerInputControls.Enable();
     }
 
     private void OnDisable()
     {
-        AframaxSceneManager.Instance.ToggleSettingsSceneLoadedBool();
+        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(false);
         _playerInputControls.Player.Pause.performed -= ctx => ExitScene();
         _playerInputControls.Disable();
     }
