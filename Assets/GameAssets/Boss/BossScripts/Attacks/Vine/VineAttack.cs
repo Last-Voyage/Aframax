@@ -78,7 +78,7 @@ public class VineAttack : MonoBehaviour
     {
         _attackGameObject.SetActive(true);
         StartCoroutine(AttackDamageProcess());
-        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbAttack, transform.position);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbAttack,transform.position);
     }
 
     /// <summary>

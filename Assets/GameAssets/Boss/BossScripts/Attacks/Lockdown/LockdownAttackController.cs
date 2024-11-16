@@ -103,7 +103,7 @@ public class LockdownAttackController : BaseBossAttack
         //sfx for idle limbs
         base.PlayIdleLoop(_loopRate);
         base.BeginAttack();
-
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbAttack,transform.position);
         AttackRandomRooms(_numberOfRoomsToAttack);
     }
 

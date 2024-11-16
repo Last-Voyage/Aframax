@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -62,6 +63,7 @@ public class BaseBossAttack : MonoBehaviour
         if (_idleSFXCoroutine == null)
         {
             _idleSFXCoroutine = StartCoroutine(LoopIdleCorrectFloat(second));
+            return;
         }
     }
 
@@ -79,14 +81,15 @@ protected virtual void DestroyIdleLoop()
     /// <summary>
     /// Play heartbeat at controlled rate 
     /// </summary>
+    /// <param name="second"></param>
     /// <returns></returns>
     private IEnumerator LoopIdleCorrectFloat (float second)
     {
+        yield return new WaitForSeconds(second);
         while (true)
         {
-            yield return new WaitForSeconds(second);
-            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbIdle, transform.position);
-                
+            RuntimeManager.CreateInstance(FmodAmbienceEvents.Instance.LimbIdle);
+
         }
     }
     
