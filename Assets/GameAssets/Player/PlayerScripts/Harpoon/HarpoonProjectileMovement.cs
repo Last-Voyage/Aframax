@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonProjectileMovement.cs
 // Author :            Ryan Swanson
+// Contributors:       David Henvick
 // Creation Date :     10/28/2024
 //
 // Brief Description : Controls the movement of the harpoon projectile
@@ -67,6 +68,10 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position += movement;
     }
 
+    /// <summary>
+    /// Used to destroy the harpoon projectile when it hits something in scene.
+    /// </summary>
+    /// <param name="block"></param> what it collides against. 
     private void OnTriggerEnter(Collider block)
     {
         UnityEngine.Debug.Log(block.gameObject.name);
