@@ -64,25 +64,53 @@ MonoBehaviour:
       Data3: 840459650
       Data4: 1316730629
     Path: event:/AmbientBugNoisesSFX
-  <IntervalAmbientEvents>k__BackingField:
-  - <MinTimeBetweenEvents>k__BackingField: 2
-    <MaxTimeBetweenEvents>k__BackingField: 5
-    <IntervalEvent>k__BackingField:
-      Guid:
-        Data1: -1523959944
-        Data2: 1076261045
-        Data3: -1454688109
-        Data4: 265074087
-      Path: event:/PlayerTakeDamageSFX
-  - <MinTimeBetweenEvents>k__BackingField: 5
-    <MaxTimeBetweenEvents>k__BackingField: 7
-    <IntervalEvent>k__BackingField:
-      Guid:
-        Data1: 1661224611
-        Data2: 1136842543
-        Data3: 500295301
-        Data4: 1614888561
-      Path: event:/HarpoonHitSFX
+--- !u!1 &6730670262102700080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6909289104129828165}
+  - component: {fileID: 3765887407214756233}
+  m_Layer: 0
+  m_Name: StoryBeatAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6909289104129828165
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730670262102700080}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2592068699120065575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3765887407214756233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730670262102700080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98dbfa91af712304eb99d6d85a757353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OneshotSounds: []
+  AmbientSounds: []
+  _manager: {fileID: 0}
 --- !u!1 &8436064714450324664
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6713638435920780164}
   - component: {fileID: 5386958290789125694}
-  - component: {fileID: 482226466468958769}
+  - component: {fileID: 3525013294109823446}
   m_Layer: 0
   m_Name: SFXManager
   m_TagString: Untagged
@@ -128,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14b1129206b53446b2ce056d5bf4bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &482226466468958769
+--- !u!114 &3525013294109823446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,6 +211,13 @@ MonoBehaviour:
       Data3: -1454688109
       Data4: 265074087
     Path: event:/PlayerTakeDamageSFX
+  <PlayerHeartBeat>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   <HarpoonShot>k__BackingField:
     Guid:
       Data1: 1125143964
@@ -204,6 +239,13 @@ MonoBehaviour:
       Data3: 500295301
       Data4: 1614888561
     Path: event:/HarpoonHitSFX
+  <HarpoonWaterSplash>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &9016497912938786864
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +278,7 @@ Transform:
   m_Children:
   - {fileID: 6713638435920780164}
   - {fileID: 3786870146230784565}
+  - {fileID: 6909289104129828165}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7595618826597541881
