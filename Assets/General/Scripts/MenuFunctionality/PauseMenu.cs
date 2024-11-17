@@ -34,7 +34,11 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PauseToggle()
     {
-        TimeManager.Instance.PauseGameToggle();
+        //don't unpause if the settings scene is loaded
+        if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded)
+        {
+            TimeManager.Instance.PauseGameToggle();
+        }
     }
 
     /// <summary>
