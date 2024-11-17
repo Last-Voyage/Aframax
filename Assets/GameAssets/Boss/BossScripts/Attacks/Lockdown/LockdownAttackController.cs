@@ -26,7 +26,7 @@ public class LockdownAttackController : BaseBossAttack
 
     [Space]
     [SerializeField] private int _numberOfRoomsToAttack;
-    private int _roomCoresDefeated=0;
+    private int _roomCoresDefeated = 0;
 
     private LockdownAttackEnemyController[] _lockdownEnemyControllers;
 
@@ -82,6 +82,7 @@ public class LockdownAttackController : BaseBossAttack
     private void InitializePatrolLocations()
     {
         _lockdownEnemyControllers = GetComponentsInChildren<LockdownAttackEnemyController>();
+        
         foreach (LockdownAttackEnemyController lockdownAttackEnemyController in _lockdownEnemyControllers)
         {
             lockdownAttackEnemyController.SetUpEnemyController(_patrolEnemyPrefab,_coreEnemyPrefab);
