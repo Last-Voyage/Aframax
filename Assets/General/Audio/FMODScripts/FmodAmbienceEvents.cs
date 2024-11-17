@@ -7,10 +7,46 @@
 // Brief Description : Stores all ambient sounds.
 *********************************************************************************************************************/
 
+using System.Collections;
 using FMODUnity;
-using FMOD.Studio;
 using UnityEngine;
-using UnityEngine.Events;
+
+/// <summary>
+/// Handler of random ambient sound effects at random times
+/// </summary>
+[System.Serializable]
+public class IntervalFMODEvent
+{
+    [field:SerializeField] public int MinTimeBetweenEvents { get; private set; }
+    [field:SerializeField] public int MaxTimeBetweenEvents { get; private set; }
+
+    [Tooltip("All Sfx to be played")]
+    [field: SerializeField]
+    public EventReference IntervalEvent { get; private set; }
+
+    public Coroutine IntervalCoroutine;
+    
+    /// <summary>
+    /// The Coroutine to loops through the array with different timers per sound call
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator RandomAmbienceLoop()
+    {
+        if (IntervalEvent.IsNull)
+        {
+            yield break;
+        }
+        
+        while (true)
+        {
+            int interval = Random.Range(MinTimeBetweenEvents, MaxTimeBetweenEvents);
+ 
+            yield return new WaitForSeconds(interval);
+            
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(IntervalEvent, PlayerMovementController.Instance.transform.position);
+        }
+    }
+}
 
 /// <summary>
 /// Stores all FMOD ambient / background audio events
@@ -22,10 +58,12 @@ public class FmodAmbienceEvents : MonoBehaviour
     [field: Header("Ambient Background Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game")]
     [field: SerializeField] public EventReference[] AmbientGameBackgroundSounds { get; private set; }
+    [field: SerializeField] public EventReference LimbIdle { get; private set; }
+    
+    [field: Header("Random Interval Ambience")]
+    [field: Tooltip("Any audio added here will play throughout the full game at random intervals")]
+    [field: SerializeField] public IntervalFMODEvent[] IntervalAmbientEvents { get; private set; }
 
-    /// <summary>
-    /// Creates the instance of the FmodAmbienceEvents
-    /// </summary>
     public void SetUpInstance()
     {
         Instance = this;
