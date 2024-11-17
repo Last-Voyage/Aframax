@@ -58,14 +58,12 @@ public class FmodAmbienceEvents : MonoBehaviour
     [field: Header("Ambient Background Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game")]
     [field: SerializeField] public EventReference[] AmbientGameBackgroundSounds { get; private set; }
+    [field: SerializeField] public EventReference LimbIdle { get; private set; }
     
     [field: Header("Random Interval Ambience")]
     [field: Tooltip("Any audio added here will play throughout the full game at random intervals")]
     [field: SerializeField] public IntervalFMODEvent[] IntervalAmbientEvents { get; private set; }
 
-    /// <summary>
-    /// Creates the instance of the FmodAmbienceEvents
-    /// </summary>
     public void SetUpInstance()
     {
         Instance = this;
