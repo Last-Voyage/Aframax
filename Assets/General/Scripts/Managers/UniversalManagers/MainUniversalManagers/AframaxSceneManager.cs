@@ -34,7 +34,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     public int LastSceneIndex { get; private set; }
 
-    public bool IsSettingsSceneLoaded { get; private set; }
+    public bool IsASubMenuSceneLoaded { get; private set; }
 
     public static AframaxSceneManager Instance;
 
@@ -200,9 +200,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// toggles the bool value for checking if the settings scene is loaded
     /// </summary>
-    public void ToggleSettingsSceneLoadedBool()
+    public void SetSubMenuSceneLoadedBool(bool value)
     {
-        IsSettingsSceneLoaded = !IsSettingsSceneLoaded;
+        IsASubMenuSceneLoaded = value;
     }
 
     #region Base Manager

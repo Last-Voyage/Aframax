@@ -644,7 +644,7 @@ GameObject:
   - component: {fileID: 446559029}
   - component: {fileID: 446559032}
   m_Layer: 5
-  m_Name: Settings
+  m_Name: Options
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -776,7 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 4
+  _sceneToLoad: 5
   _sceneTransitionID: 0
 --- !u!1 &637296203
 GameObject:
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Settings
+  m_text: Options
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6ec631fc172124eceaa01000696cc89d, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 6ec631fc172124eceaa01000696cc89d, type: 2}
@@ -1384,8 +1384,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1627,7 +1627,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8a7dc8172d57f4e768ee0cb56aa4f30a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6c902778e698847ab82b35a90704059b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1731,7 +1731,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1277778833}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: LoadDesiredSceneButtonAdditive
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1791,7 +1791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 1
+  _sceneToLoad: 7
   _sceneTransitionID: 0
 --- !u!1 &1322408111
 GameObject:
@@ -1829,7 +1829,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -50}
+  m_AnchoredPosition: {x: 50, y: -74}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1322408113
