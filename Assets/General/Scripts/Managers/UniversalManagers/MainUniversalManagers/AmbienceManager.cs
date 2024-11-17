@@ -1,6 +1,7 @@
 /******************************************************************************
-// File Name:       PersistentSoundManager.cs
+// File Name:       AmbienceManager.cs
 // Author:          Andrea Swihart-DeCoster
+// Contributors:    Ryan Swanson
 // Creation Date:   October 1st, 2024
 //
 // Description:     Manages any sound that player persistently throughout the
@@ -10,27 +11,37 @@
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Manages audio that persists throughout the game
 /// </summary>
 public class AmbienceManager : AudioManager
 {
-    public static AmbienceManager Instance;
-
+    public static AmbienceManager Instance; 
     private List<EventInstance> _allAmbientEvents;
 
-    private void Start()
+    /// <summary>
+    /// Performs any set up needed for the manager
+    /// </summary>
+    public override void SetUpMainManager()
     {
-        _allAmbientEvents = new List<EventInstance>();
+        base.SetUpMainManager();
+        
         StartGameBackgroundAudio();
-        SubscribeToEvents();
     }
 
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
+        
         AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
+    }
+
+    protected override void SubscribeToGameplayEvents()
+    {
+        GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
+        GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
     }
 
     /// <summary>
@@ -40,13 +51,23 @@ public class AmbienceManager : AudioManager
     {
         base.SetUpInstance();
         Instance = this;
+
+        //Established the instance for the FmodAmbienceEvents
+        GetComponent<FmodAmbienceEvents>().SetUpInstance();
     }
 
+    private void Awake()
+    {
+        PlayIntervalAudio();
+    }
+    
     /// <summary>
     /// Starts playing continuous background audio in game scenes
     /// </summary>
     private void StartGameBackgroundAudio()
     {
+        _allAmbientEvents = new List<EventInstance>();
+
         // Stop any instances of music playing
         foreach (var sound in _allAmbientEvents)
         {
@@ -68,8 +89,38 @@ public class AmbienceManager : AudioManager
             }
             StartAmbience(sound);
         }
+        
+        PlayIntervalAudio();
     }
 
+    #region Interval Ambience
+    
+    /// <summary>
+    /// Plays audio at certain intervals
+    /// </summary>
+    private void PlayIntervalAudio()
+    {
+        // Loop through and play all ambient game sounds
+        foreach (var intervalEvent in FmodAmbienceEvents.Instance.IntervalAmbientEvents)
+        {
+            intervalEvent.IntervalCoroutine = StartCoroutine(intervalEvent.RandomAmbienceLoop());
+        }
+    }
+    
+    /// <summary>
+    /// Stops all interval audio sounds
+    /// </summary>
+    private void StopIntervalAudio()
+    {
+        // Loop through and play all ambient game sounds
+        foreach (var intervalEvent in FmodAmbienceEvents.Instance.IntervalAmbientEvents)
+        {
+            StopCoroutine(intervalEvent.IntervalCoroutine);
+        }
+    }
+    
+    #endregion
+    
     /// <summary>
     /// Starts an instance of the persistent audio to play
     /// </summary>
@@ -80,5 +131,19 @@ public class AmbienceManager : AudioManager
         _allAmbientEvents.Add(eventInstance);
         eventInstance.start();
         eventInstance.release();
+    }
+
+    /// <summary>
+    /// Stops all ambient audio
+    /// </summary>
+    private void StopAllAmbience()
+    {
+        // Stop any instances of music playing
+        foreach (var sound in _allAmbientEvents)
+        {
+            sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+        
+        StopIntervalAudio();
     }
 }

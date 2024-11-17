@@ -1,7 +1,6 @@
 /*********************************************************************************************************************
 // File Name :         FmodSfxEvents
 // Author :            Andrea Swihart-DeCoster
-//Contributor:      Mark Hanson
 // Creation Date :     10/18/24
 //
 // Brief Description : Stores all the SFX
@@ -36,7 +35,8 @@ public class FmodSfxEvents : MonoBehaviour
 
     [field: Space]
     [field: SerializeField] public EventReference PlayerTookDamage { get; private set; }
-    
+    [field: SerializeField] public EventReference PlayerHeartBeat { get; private set; }
+
     #region Harpoon
 
     [field: Header("Harpoon")]

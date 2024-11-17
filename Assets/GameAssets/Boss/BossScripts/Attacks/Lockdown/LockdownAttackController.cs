@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         LockdownAttackController.cs
 // Author :            Andrea Swihart-DeCoster
-// Contributor :       Ryan Swanson, Mark Hanson
+// Contributor :       Ryan Swanson
 // Creation Date :     10/26/24
 //
 // Brief Description : Controls the Aggressive Room 1 Attack Behavior
@@ -24,10 +24,6 @@ public class LockdownAttackController : BaseBossAttack
     [Tooltip("The core of the patrol enemy. The part that receives damage")]
     [SerializeField] private GameObject _coreEnemyPrefab;
 
-    [Space]
-    [Tooltip("rate at which the limp idle sfx should loop")]
-    [SerializeField] private int _loopRate;
-    
     [Space]
     [SerializeField] private int _numberOfRoomsToAttack;
     private int _roomCoresDefeated=0;
@@ -100,10 +96,9 @@ public class LockdownAttackController : BaseBossAttack
         // This is a passive attack this ends when it's scene is over
         // This should only subscribe during its lifetime as it's waiting for it's scene to end
         BossAttackActSystem.Instance.GetOnAttackCompleted().AddListener(EndAttack);
-        //sfx for idle limbs
-        base.PlayIdleLoop(_loopRate);
+
         base.BeginAttack();
-        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbAttack,transform.position);
+
         AttackRandomRooms(_numberOfRoomsToAttack);
     }
 
@@ -140,14 +135,26 @@ public class LockdownAttackController : BaseBossAttack
     }
 
     /// <summary>
+    /// Kills any living attack controllers that may remain
+    /// </summary>
+    private void KillAnyLivingAttackControllers()
+    {
+        foreach(LockdownAttackEnemyController enemyController in _lockdownEnemyControllers)
+        {
+            enemyController.ForceDestroy();
+        }
+    }
+
+    /// <summary>
     /// Destroys all outstanding enemies and calls the endAttack event
     /// </summary>
-    protected override void EndAttack()
+    public override void EndAttack()
     {
         // This should only unsubscribe from it's scene if it began, this isn't in unsub from event
         BossAttackActSystem.Instance.GetOnAttackCompleted().RemoveListener(EndAttack);
-        //Sfx remover for limp idle
-        base.DestroyIdleLoop();
+
+        KillAnyLivingAttackControllers();
+
         base.EndAttack();
     }
 }

@@ -136,11 +136,20 @@ public class LockdownAttackEnemyController : MonoBehaviour
     /// <param name="handler"></param>
     private void CoreDestroyed(WeakPointHandler handler)
     {
+        //Invokes event for core destruction and removes its listeners
+        InvokeOnCoreDestroyed();
+        ForceDestroy();
+    }
+
+    /// <summary>
+    /// Called externally to forcibly destroy the lockdown attack
+    /// </summary>
+    public void ForceDestroy()
+    {
         //Destroys the patrol enemy and core
         Destroy(_instantiatedPatrolEnemy);
         Destroy(_instantiatedCoreEnemy);
-        //Invokes event for core destruction and removes its listeners
-        InvokeOnCoreDestroyed();
+
         _onCoreDestroyed.RemoveAllListeners();
     }
 
