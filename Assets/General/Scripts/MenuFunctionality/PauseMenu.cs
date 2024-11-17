@@ -48,13 +48,14 @@ public class PauseMenu : MonoBehaviour
     private void PauseUIVisibility(bool isVisible)
     {
         _pauseMenuContent.SetActive(isVisible);
+        
         if (isVisible)
         {
-            AmbienceManager.Instance.StopintervalAudio();
+            GameStateManager.Instance.GetOnGamePaused()?.Invoke();
         }
         else
         {
-            AmbienceManager.Instance.PlayintervalAudio();
+            GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();
         }
     }
 

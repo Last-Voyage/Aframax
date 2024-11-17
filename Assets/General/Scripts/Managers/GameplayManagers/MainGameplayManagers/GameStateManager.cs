@@ -8,6 +8,7 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
+using Unity.VisualScripting;
 using UnityEngine.Events;
 
 /// <summary>
@@ -24,6 +25,9 @@ public class GameStateManager : MainGameplayManagerFramework
 
     private readonly UnityEvent _onCompletedEntireTutorial = new();
     
+    private readonly UnityEvent _onGamePaused = new();
+    private readonly UnityEvent _onGameUnpaused = new();
+    
     private readonly UnityEvent<ScriptableDialogueUI> _onNewDialogueChain = new();
 
     /// <summary>
@@ -36,13 +40,27 @@ public class GameStateManager : MainGameplayManagerFramework
     }
 
     #region Base Manager
+
+    private void Awake()
+    {
+        SetUpInstance();
+    }
+    
     /// <summary>
     /// Establishes the instance for the game state manager
     /// </summary>
     public override void SetUpInstance()
     {
         base.SetUpInstance();
-        Instance = this;
+        
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);  
+        }
     }
 
     #endregion
@@ -52,6 +70,8 @@ public class GameStateManager : MainGameplayManagerFramework
     public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
 
     public UnityEvent GetOnCompletedEntireTutorial() => _onCompletedEntireTutorial;
+    public UnityEvent GetOnGamePaused() => _onGamePaused;
+    public UnityEvent GetOnGameUnpaused() => _onGameUnpaused;
     
     public UnityEvent<ScriptableDialogueUI> GetOnNewDialogueChain() => _onNewDialogueChain;
 

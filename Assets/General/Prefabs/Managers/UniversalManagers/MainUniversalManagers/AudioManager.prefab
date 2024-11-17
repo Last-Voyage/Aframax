@@ -45,10 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a1022dd26a2a343b54f5dddf62b684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IntervalEvent:
-    <MinTimeBetweenEvents>k__BackingField: 0
-    <MaxTimeBetweenEvents>k__BackingField: 0
-    <FmodEvents>k__BackingField: []
 --- !u!114 &5853790819556739120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,6 +64,25 @@ MonoBehaviour:
       Data3: 840459650
       Data4: 1316730629
     Path: event:/AmbientBugNoisesSFX
+  <IntervalAmbientEvents>k__BackingField:
+  - <MinTimeBetweenEvents>k__BackingField: 2
+    <MaxTimeBetweenEvents>k__BackingField: 5
+    <IntervalEvent>k__BackingField:
+      Guid:
+        Data1: -1523959944
+        Data2: 1076261045
+        Data3: -1454688109
+        Data4: 265074087
+      Path: event:/PlayerTakeDamageSFX
+  - <MinTimeBetweenEvents>k__BackingField: 5
+    <MaxTimeBetweenEvents>k__BackingField: 7
+    <IntervalEvent>k__BackingField:
+      Guid:
+        Data1: 1661224611
+        Data2: 1136842543
+        Data3: 500295301
+        Data4: 1614888561
+      Path: event:/HarpoonHitSFX
 --- !u!1 &8436064714450324664
 GameObject:
   m_ObjectHideFlags: 0

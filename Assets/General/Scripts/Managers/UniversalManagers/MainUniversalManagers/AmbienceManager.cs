@@ -8,7 +8,6 @@
                     game. e.g. music, background audio, etc
 ******************************************************************************/
 
-using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections.Generic;
@@ -20,7 +19,6 @@ using UnityEngine;
 public class AmbienceManager : AudioManager
 {
     public static AmbienceManager Instance; 
-    public FModEventReference IntervalEvent;
     private List<EventInstance> _allAmbientEvents;
 
     /// <summary>
@@ -36,7 +34,14 @@ public class AmbienceManager : AudioManager
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
+        
         AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
+    }
+
+    protected override void SubscribeToGameplayEvents()
+    {
+        GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
+        GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
     }
 
     /// <summary>
@@ -53,48 +58,7 @@ public class AmbienceManager : AudioManager
 
     private void Awake()
     {
-        PlayintervalAudio();
-    }
-
-    /// <summary>
-    /// The Coroutine to loops through the array with different timers per sound call
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator RandomAmbienceLoop()
-    {
-        float timer = 0f;
-        while (true)
-        {
-            foreach (var sound in IntervalEvent.FmodEvents)
-            {
-                if (timer > Random.Range(IntervalEvent.MinTimeBetweenEvents, IntervalEvent.MaxTimeBetweenEvents))
-                {
-                    // RuntimeSfxManager.APlayOneShotSfx?.Invoke(RuntimeManager.CreateInstance(FmodEvents));
-                    timer = 0f;
-                    RuntimeSfxManager.APlayOneShotSfx?.Invoke(sound, transform.position);
-                }
-
-                timer += Time.deltaTime;
-                yield return null;
-            }
-        }
-    }
-
-    public void PlayintervalAudio()
-    {
-        if (IntervalEvent.PlaySfxCoroutine == null)
-        {
-            IntervalEvent.PlaySfxCoroutine = StartCoroutine(RandomAmbienceLoop());
-            return;
-        }
-    }
-    
-    public void StopintervalAudio()
-    {
-        if (IntervalEvent.PlaySfxCoroutine != null)
-        {
-            StopCoroutine(IntervalEvent.PlaySfxCoroutine);
-        }
+        PlayIntervalAudio();
     }
     
     /// <summary>
@@ -125,8 +89,38 @@ public class AmbienceManager : AudioManager
             }
             StartAmbience(sound);
         }
+        
+        PlayIntervalAudio();
     }
 
+    #region Interval Ambience
+    
+    /// <summary>
+    /// Plays audio at certain intervals
+    /// </summary>
+    private void PlayIntervalAudio()
+    {
+        // Loop through and play all ambient game sounds
+        foreach (var intervalEvent in FmodAmbienceEvents.Instance.IntervalAmbientEvents)
+        {
+            intervalEvent.IntervalCoroutine = StartCoroutine(intervalEvent.RandomAmbienceLoop());
+        }
+    }
+    
+    /// <summary>
+    /// Stops all interval audio sounds
+    /// </summary>
+    private void StopIntervalAudio()
+    {
+        // Loop through and play all ambient game sounds
+        foreach (var intervalEvent in FmodAmbienceEvents.Instance.IntervalAmbientEvents)
+        {
+            StopCoroutine(intervalEvent.IntervalCoroutine);
+        }
+    }
+    
+    #endregion
+    
     /// <summary>
     /// Starts an instance of the persistent audio to play
     /// </summary>
@@ -137,5 +131,19 @@ public class AmbienceManager : AudioManager
         _allAmbientEvents.Add(eventInstance);
         eventInstance.start();
         eventInstance.release();
+    }
+
+    /// <summary>
+    /// Stops all ambient audio
+    /// </summary>
+    private void StopAllAmbience()
+    {
+        // Stop any instances of music playing
+        foreach (var sound in _allAmbientEvents)
+        {
+            sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
+        
+        StopIntervalAudio();
     }
 }
