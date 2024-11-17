@@ -19,6 +19,7 @@ public class PlayerHealth : BaseHealth
     //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
 
+    [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
     public bool _shouldTakeDamage = true;//Nabil made this change
     
