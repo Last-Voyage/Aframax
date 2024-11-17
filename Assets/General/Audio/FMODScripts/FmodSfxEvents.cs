@@ -23,6 +23,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference LimbDestroyed { get; private set; }
     [field: SerializeField] public EventReference LimbAttack { get; private set; }
     [field: SerializeField] public EventReference SceneStart { get; private set; }
+    [field: SerializeField] public EventReference LimbSpawn { get; private set; }
 
     #endregion Boss
 
@@ -43,6 +44,8 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference HarpoonShot { get; private set; }
     [field: SerializeField] public EventReference HarpoonReload { get; private set; }
     [field: SerializeField] public EventReference HarpoonHitBoat { get; private set; }
+    [field: SerializeField] public EventReference HarpoonWaterSplash { get; private set; }
+    
 
     #endregion Harpoon
 

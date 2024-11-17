@@ -25,8 +25,6 @@ public class BaseBossAttack : MonoBehaviour
     /// </summary>
     protected bool _isAttackActive;
 
-    protected Coroutine _idleSFXCoroutine;
-
     protected UnityEvent _onBeginAttack = new();
     protected UnityEvent  _onAttackEnd = new();
     
@@ -59,45 +57,6 @@ public class BaseBossAttack : MonoBehaviour
         _isAttackActive = true;
     }
     
-/// <summary>
-/// Coroutine for playing the idle loop sfx
-/// </summary>
-/// <param name="second"></param>
-    protected virtual void PlayIdleLoop(float second)
-    {
-        if (_idleSFXCoroutine == null)
-        {
-            _idleSFXCoroutine = StartCoroutine(LoopIdleCorrectFloat(second));
-            return;
-        }
-    }
-
-/// <summary>
-/// Stop coroutines for playing the idle loop sfx
-/// </summary>
-protected virtual void DestroyIdleLoop()
-    {
-        if (_idleSFXCoroutine != null)
-        {
-            StopCoroutine(_idleSFXCoroutine);
-        }
-    }
-
-    /// <summary>
-    /// Play heartbeat at controlled rate 
-    /// </summary>
-    /// <param name="second"></param>
-    /// <returns></returns>
-    private IEnumerator LoopIdleCorrectFloat (float second)
-    {
-        yield return new WaitForSeconds(second);
-        while (true)
-        {
-            RuntimeManager.CreateInstance(FmodAmbienceEvents.Instance.LimbIdle);
-
-        }
-    }
-    
     /// <summary>
     /// Stops the attack from playing
     /// </summary>
@@ -111,6 +70,7 @@ protected virtual void DestroyIdleLoop()
         _isAttackActive = false;
         InvokeAttackEnd();
     }
+    
     #region Events
 
     /// <summary>

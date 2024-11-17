@@ -113,8 +113,6 @@ public class VineAttackController : BaseBossAttack
         foreach(VineAttack vine in _vineAttackRooms)
         {
             vine.SpawnVine();
-            //Sfx for limb idle
-            base.PlayIdleLoop(_loopRate);
         }
     }
 
@@ -129,8 +127,6 @@ public class VineAttackController : BaseBossAttack
             UseAllAttacksInAttackGroup(attackOrder);
             yield return _attackIntervalDelay;
         }
-        //For SFX of limb idle
-        base.DestroyIdleLoop();
         EndAttack();
     }
 

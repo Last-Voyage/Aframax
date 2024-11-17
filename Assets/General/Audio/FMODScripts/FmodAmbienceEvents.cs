@@ -64,16 +64,8 @@ public class FmodAmbienceEvents : MonoBehaviour
     [field: Tooltip("Any audio added here will play throughout the full game at random intervals")]
     [field: SerializeField] public IntervalFMODEvent[] IntervalAmbientEvents { get; private set; }
 
-    private void Awake()
+    public void SetUpInstance()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            
-        }
-        else
-        {
-            Destroy(this);
-        }
+        Instance = this;
     }
 }
