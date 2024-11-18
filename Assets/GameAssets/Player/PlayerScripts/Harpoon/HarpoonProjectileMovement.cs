@@ -74,7 +74,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <param name="block"></param> what it collides against. 
     private void OnTriggerEnter(Collider block)
     {
-        if(block.gameObject.name != "WeakPoint(Clone)")
+        if(block.gameObject.tag != "enemy")
         {
             Destroy(this);
         }
