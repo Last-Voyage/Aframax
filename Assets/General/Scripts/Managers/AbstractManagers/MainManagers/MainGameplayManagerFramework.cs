@@ -21,7 +21,7 @@ public class MainGameplayManagerFramework : MainManagerFramework
     /// </summary>
     public override void SetUpInstance()
     {
-        
+
     }
 
     /// <summary>
