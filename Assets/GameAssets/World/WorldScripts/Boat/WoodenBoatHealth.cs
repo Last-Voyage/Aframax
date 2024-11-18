@@ -35,7 +35,7 @@ public class WoodenBoatHealth : BaseHealth
     /// </summary>
     private void PlayOnHitVFX()
     {
-        VfxManager.Instance.GetWoodenSparksVfx()
+        VfxManager.Instance.GetTreeSplintersVfx()
             .PlayNextVfxInPool(BoatMover.Instance.transform, transform.position, transform.rotation);
     }
 }
