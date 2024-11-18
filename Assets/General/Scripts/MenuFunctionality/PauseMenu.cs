@@ -48,6 +48,15 @@ public class PauseMenu : MonoBehaviour
     private void PauseUIVisibility(bool isVisible)
     {
         _pauseMenuContent.SetActive(isVisible);
+        
+        if (isVisible)
+        {
+            GameStateManager.Instance.GetOnGamePaused()?.Invoke();
+        }
+        else
+        {
+            GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();
+        }
     }
 
     /// <summary>
