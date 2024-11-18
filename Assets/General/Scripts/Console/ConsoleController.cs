@@ -196,11 +196,11 @@ public class ConsoleController : MonoBehaviour
         try
         {
             //toggling between god mode
-            if (FindObjectOfType<PlayerHealth>().shouldTakeDamage)
+            if (FindObjectOfType<PlayerHealth>().ShouldTakeDamage)
             {
                 EnterGodMode();
             }
-            else if (!FindObjectOfType<PlayerHealth>().shouldTakeDamage)
+            else if (!FindObjectOfType<PlayerHealth>().ShouldTakeDamage)
             {
                 ExitGodMode();
             }
@@ -216,7 +216,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void EnterGodMode()
     {
-        FindObjectOfType<PlayerHealth>().shouldTakeDamage = false;
+        FindObjectOfType<PlayerHealth>().ShouldTakeDamage = false;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
     }
 
@@ -225,7 +225,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void ExitGodMode() 
     {
-        FindObjectOfType<PlayerHealth>().shouldTakeDamage = true;
+        FindObjectOfType<PlayerHealth>().ShouldTakeDamage = true;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
     }
     

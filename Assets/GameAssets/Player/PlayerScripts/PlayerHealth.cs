@@ -21,7 +21,7 @@ public class PlayerHealth : BaseHealth
 
     [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
-    public bool shouldTakeDamage = true;//Nabil made this change
+    public bool ShouldTakeDamage = true;//Nabil made this change
     
     [Tooltip ("Health point at which the heart beat sfx starts")]
     [SerializeField] private float _healthToStartHeartSfx;
@@ -88,7 +88,7 @@ public class PlayerHealth : BaseHealth
     /// <param name="damage"> amount to reduce health by </param>
     public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        if (shouldTakeDamage)
+        if (ShouldTakeDamage)
         {
             base.TakeDamage(damage, null);
 
@@ -108,7 +108,7 @@ public class PlayerHealth : BaseHealth
     /// <returns></returns>
     private void StartIFrames()
     {
-        shouldTakeDamage = false;
+        ShouldTakeDamage = false;
         PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
     }
 
@@ -117,7 +117,7 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     private void EndIFrames()
     {
-        shouldTakeDamage = true;
+        ShouldTakeDamage = true;
     }
 
     /// <summary>
