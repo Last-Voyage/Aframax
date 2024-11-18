@@ -19,6 +19,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [SerializeField] private float _screenScrollSpeed;
 
+    [SerializeField] private Canvas _SceneCanvas;
+
     private PlayerInputMap _playerInputControls;
 
     private bool _hasScrollingStarted = false;
@@ -45,8 +47,15 @@ public class TitleScreenScrolling : MonoBehaviour
             _hasScrollingStarted = true;
             while (transform.position != destination)
             {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, transform.position.z), scrollSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, transform.position.z), scrollSpeed * (_SceneCanvas.renderingDisplaySize.x/100) * Time.deltaTime);
 
+                //for whatever reason (probably rounding bs) this coroutine doesn't actually stop itself properly when done
+                //this fixes that
+                if (Mathf.Approximately(transform.position.y, destination.y))
+                {
+                    yield break;
+                }
+                
                 yield return null;
             }
         }
