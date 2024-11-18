@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerReticle.cs
 // Author :            Adam Garwacki
+// Contributors:       David Henvick
 // Creation Date :     10/27/2024
 //
 // Brief Description : Allows for dynamic reticle control based on inputs.
@@ -47,6 +48,7 @@ public class PlayerReticle : MonoBehaviour
 
     private bool _isFocusing;
     private bool _isUnfocusing;
+    private bool _isFocusChanging;
 
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
@@ -59,66 +61,39 @@ public class PlayerReticle : MonoBehaviour
 
         _isFocusing = false;
         _isUnfocusing = false;
-}
+    }
 
     /// <summary>
-    /// Checks for inputs related to the harpoon gun and appropriately updates UI.
+    /// Called by the harpoon when the state of the reticle needs to change (focusing and unfocusing)
     /// </summary>
-    private void Update()
+    public void ChangeFocus()
     {
-        //// Updates the sprite of the reticle if spread range is actively changing due to focus
-        //if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing ||
-        //    _harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
-        //{
-        //    AdjustReticleSize();
-        //}
-
-        AdjustReticleAppearance();
-
+        _isFocusChanging = true;
+        StartCoroutine(ChangingReticleFocus());
     }
 
-    public void StartFocus()
+    /// <summary>
+    /// Used to update the reticle appearance and size
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ChangingReticleFocus()
     {
-        if (_isUnfocusing)
-        {
-            StopCoroutine(ReticleUnfocus());
+        while (_isFocusChanging)
+        { 
+            if (_newReticleSize < _maxScopeSize || _newReticleSize > _minScopeSize)
+            {
+                yield return new WaitForFixedUpdate();
+                AdjustReticleSize();
+                AdjustReticleAppearance();
+            }
+            else
+            {
+                _isFocusChanging = false;
+            }
         }
-        _isFocusing = true;
-        _isUnfocusing = false;
-        StartCoroutine(ReticleFocus());
     }
 
-    private IEnumerator ReticleFocus()
-    {
-        while (_isFocusing)
-        {
-            yield return new WaitForFixedUpdate();
-            AdjustReticleSize();
-        }
-        yield return null;
-    }
-
-    public void StartUnfocus()
-    {
-        //if (_isUnfocusing)
-        //{
-        //    StopCoroutine(ReticleUnfocus());
-        //}
-        //_isFocusing = false;
-        //_isUnfocusing = false;
-        //StartCoroutine(ReticleFocus());
-    }
-    public IEnumerator ReticleUnfocus()
-    {
-        while (_isUnfocusing)
-        {
-            yield return new WaitForFixedUpdate();
-            AdjustReticleSize();
-        }
-        yield return null;
-    }
-
-    public void ReticleFire()
+        public void ReticleFire()
     {
         //_newReticleSize = _maxScopeSize;
         //AdjustReticleAppearance();
