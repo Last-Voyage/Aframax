@@ -83,14 +83,16 @@ public class PlayerReticle : MonoBehaviour
         {
             StopCoroutine(ReticleUnfocus());
         }
+        _isFocusing = true;
+        _isUnfocusing = false;
         StartCoroutine(ReticleFocus());
     }
 
     private IEnumerator ReticleFocus()
     {
-        _isFocusing = true; 
-        _isUnfocusing = false;
-        while(_newReticleSize > _minScopeSize ){
+        while (_isFocusing)
+        {
+            yield return new WaitForFixedUpdate();
             AdjustReticleSize();
         }
         yield return null;
@@ -98,18 +100,19 @@ public class PlayerReticle : MonoBehaviour
 
     public void StartUnfocus()
     {
-        //UnityEngine.Debug.Log("unfocusing");
-        //if (_isFocusing)
+        //if (_isUnfocusing)
         //{
-        //    StopCoroutine(ReticleFocus());
+        //    StopCoroutine(ReticleUnfocus());
         //}
-        //StartCoroutine(ReticleUnfocus());
+        //_isFocusing = false;
+        //_isUnfocusing = false;
+        //StartCoroutine(ReticleFocus());
     }
     public IEnumerator ReticleUnfocus()
     {
-        _isUnfocusing = true;
-        _isFocusing = false;
-        while (_newReticleSize < _maxScopeSize){
+        while (_isUnfocusing)
+        {
+            yield return new WaitForFixedUpdate();
             AdjustReticleSize();
         }
         yield return null;
