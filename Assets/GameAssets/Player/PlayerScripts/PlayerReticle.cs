@@ -45,6 +45,9 @@ public class PlayerReticle : MonoBehaviour
     private readonly float _maxScopeSize = 1000;
     private readonly float _scopeScalar = 1000;
 
+    private bool _isFocusing;
+    private bool _isUnfocusing;
+
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
     /// </summary>
@@ -53,19 +56,22 @@ public class PlayerReticle : MonoBehaviour
         ObtainReferences();
 
         InitializeReticle();
-    }
+
+        _isFocusing = false;
+        _isUnfocusing = false;
+}
 
     /// <summary>
     /// Checks for inputs related to the harpoon gun and appropriately updates UI.
     /// </summary>
     private void Update()
     {
-        // Updates the sprite of the reticle if spread range is actively changing due to focus
-        if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing ||
-            _harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
-        {
-            AdjustReticleSize();
-        }
+        //// Updates the sprite of the reticle if spread range is actively changing due to focus
+        //if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing ||
+        //    _harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
+        //{
+        //    AdjustReticleSize();
+        //}
 
         AdjustReticleAppearance();
 
@@ -73,37 +79,46 @@ public class PlayerReticle : MonoBehaviour
 
     public void StartFocus()
     {
-        StopCoroutine(ReticleUnfocus());
+        if (_isUnfocusing)
+        {
+            StopCoroutine(ReticleUnfocus());
+        }
         StartCoroutine(ReticleFocus());
     }
 
     private IEnumerator ReticleFocus()
     {
+        _isFocusing = true; 
+        _isUnfocusing = false;
         while(_newReticleSize > _minScopeSize ){
             AdjustReticleSize();
-            AdjustReticleAppearance();
         }
         yield return null;
     }
 
     public void StartUnfocus()
     {
-        StopCoroutine(ReticleFocus());
-        StartCoroutine(ReticleUnfocus());
+        //UnityEngine.Debug.Log("unfocusing");
+        //if (_isFocusing)
+        //{
+        //    StopCoroutine(ReticleFocus());
+        //}
+        //StartCoroutine(ReticleUnfocus());
     }
     public IEnumerator ReticleUnfocus()
     {
-        while(_newReticleSize < _maxScopeSize){
+        _isUnfocusing = true;
+        _isFocusing = false;
+        while (_newReticleSize < _maxScopeSize){
             AdjustReticleSize();
-            AdjustReticleAppearance();
         }
         yield return null;
     }
 
     public void ReticleFire()
     {
-        _newReticleSize = _maxScopeSize;
-        AdjustReticleAppearance();
+        //_newReticleSize = _maxScopeSize;
+        //AdjustReticleAppearance();
     }
 
     /// <summary>

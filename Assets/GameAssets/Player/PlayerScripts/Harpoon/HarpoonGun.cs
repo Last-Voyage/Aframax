@@ -118,9 +118,7 @@ public class HarpoonGun : MonoBehaviour
 
     public static HarpoonGun Instance;
 
-    private GameObject _reticleObject;
     private PlayerReticle _reticle;
-    private bool isReticle;
 
     #endregion
 
@@ -137,18 +135,7 @@ public class HarpoonGun : MonoBehaviour
 
         StartCoroutine(HarpoonCameraOrientation());
 
-        _reticleObject = GameObject.Find("Reticle");
-        UnityEngine.Debug.Log("line 141");
-        if(_reticleObject != null)
-        {
-            UnityEngine.Debug.Log("line 144");
-            _reticle = _reticleObject.GetComponent<PlayerReticle>();
-            if(_reticle = null)
-            {
-                UnityEngine.Debug.Log("line 148");
-                isReticle = false;
-            }
-        }
+        _reticle = GameObject.FindObjectOfType<PlayerReticle>();
     }
 
     /// <summary>
