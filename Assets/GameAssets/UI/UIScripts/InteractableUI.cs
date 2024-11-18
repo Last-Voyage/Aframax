@@ -11,8 +11,8 @@ public class InteractableUI : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _interactUI = GameObject.Find("InteractionUI");
-        _interactUI.SetActive(false);
+        _interactUI = transform.GetChild(0).gameObject;
+        SetInteractUIStatus(false);
     }
 
     /// <summary>

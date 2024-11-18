@@ -29,11 +29,12 @@ public class PlayerInteraction : MonoBehaviour
     private InputAction _interactInput;
 
     /// <summary>
-    /// Right away finds the InteractionUI object for future use and disables it before player can see
+    /// Right away finds the InteractableUI script
+    ///     Uses FindObjectOfType as both this object and the InteractableUI object are on prefabs
     /// </summary>
     private void Awake()
     {
-        _interactableUI = gameObject.GetComponent<InteractableUI>();
+        _interactableUI = FindObjectOfType<InteractableUI>();
     }
 
     /// <summary>
