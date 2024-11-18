@@ -46,8 +46,6 @@ public class PlayerReticle : MonoBehaviour
     private readonly float _maxScopeSize = 1000;
     private readonly float _scopeScalar = 1000;
 
-    private bool _isFocusing;
-    private bool _isUnfocusing;
     private bool _isFocusChanging;
 
     /// <summary>
@@ -59,8 +57,7 @@ public class PlayerReticle : MonoBehaviour
 
         InitializeReticle();
 
-        _isFocusing = false;
-        _isUnfocusing = false;
+        _isFocusChanging = false;
     }
 
     /// <summary>
