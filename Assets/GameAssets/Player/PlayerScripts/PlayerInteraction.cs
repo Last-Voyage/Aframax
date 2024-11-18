@@ -22,19 +22,19 @@ public class PlayerInteraction : MonoBehaviour
     [Tooltip("Ray that is cast from camera to find interactable objects")]
     private Ray _ray;
     [Tooltip("UI object that will be toggled when you can or cannot interact with an object")]
-    private GameObject _interactUI;
+    private InteractableUI _interactableUI;
 
     //Input
     private PlayerInput _playerInput;
     private InputAction _interactInput;
 
     /// <summary>
-    /// Right away finds the InteractionUI object for future use and disables it before player can see
+    /// Right away finds the InteractableUI script
+    ///     Uses FindObjectOfType as both this object and the InteractableUI object are on prefabs
     /// </summary>
     private void Awake()
     {
-        _interactUI = GameObject.Find("InteractionUI");
-        _interactUI.SetActive(false);
+        _interactableUI = FindObjectOfType<InteractableUI>();
     }
 
     /// <summary>
@@ -47,19 +47,25 @@ public class PlayerInteraction : MonoBehaviour
 
     /// <summary>
     /// Sets the ray, then checks to see if ray intersects interactable object
-    ///     If it intersects, then checks if interact button was pressed
+    ///     If it intersects, it sets then checks if interact button was pressed
     ///         If button is pressed, it interacts with object
+    ///     In either case, it makes sure UI reflects whether or not the player can interact with an object
     /// </summary>
     private void CheckForInteractable()
     {
         SetRaycast();
-        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach))
+        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach) && 
+            hit.collider.gameObject.TryGetComponent(out IPlayerInteractable interactableComponent))
         {
-            GiveInteractableFeedback(hit.collider.gameObject);
+            _interactableUI.SetInteractUIStatus(true);
             if (_interactInput.WasPerformedThisFrame())
             {
-                Interact(hit.collider.gameObject);
+                interactableComponent.OnInteractedByPlayer();
             }
+        }
+        else
+        {
+            _interactableUI.SetInteractUIStatus(false);
         }
     }
 
@@ -69,38 +75,6 @@ public class PlayerInteraction : MonoBehaviour
     private void SetRaycast()
     {
         _ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-    }
-
-    /// <summary>
-    /// checks if potentialInteractable can be interacted with
-    ///     If so, makes interactable text appear in HUD.  Otherwise disables text
-    /// </summary>
-    /// <param name="potentialInteractable">GameObject that can potentially be interacted with</param>
-    private void GiveInteractableFeedback(GameObject potentialInteractable)
-    {
-        if (potentialInteractable.TryGetComponent(out IPlayerInteractable interactable))
-        {
-            if (!_interactUI.activeInHierarchy)
-            {
-                _interactUI.SetActive(true);
-            }
-        }
-        else if (_interactUI.activeInHierarchy)
-        {
-            _interactUI.SetActive(false);
-        }
-    }
-
-    /// <summary>
-    /// Calls the interactable's OnInteractedByPlayer function if potentialInteractable is interactable
-    /// </summary>
-    /// <param name="potentialInteractable">GameObject that can potentially be interacted with</param>
-    private void Interact(GameObject potentialInteractable)
-    {
-        if (potentialInteractable.TryGetComponent(out IPlayerInteractable interactable))
-        {
-            interactable.OnInteractedByPlayer();
-        }
     }
 
     #region INPUT
