@@ -118,6 +118,10 @@ public class HarpoonGun : MonoBehaviour
 
     public static HarpoonGun Instance;
 
+    private GameObject _reticleObject;
+    private PlayerReticle _reticle;
+    private bool isReticle;
+
     #endregion
 
     #region Setup
@@ -132,6 +136,19 @@ public class HarpoonGun : MonoBehaviour
         SubscribeToEvents();
 
         StartCoroutine(HarpoonCameraOrientation());
+
+        _reticleObject = GameObject.Find("Reticle");
+        UnityEngine.Debug.Log("line 141");
+        if(_reticleObject != null)
+        {
+            UnityEngine.Debug.Log("line 144");
+            _reticle = _reticleObject.GetComponent<PlayerReticle>();
+            if(_reticle = null)
+            {
+                UnityEngine.Debug.Log("line 148");
+                isReticle = false;
+            }
+        }
     }
 
     /// <summary>
@@ -367,6 +384,7 @@ public class HarpoonGun : MonoBehaviour
     private void StartFocusingHarpoon()
     {
         _currentFocusState = EFocusState.Focusing;
+        _reticle.StartFocus();
 
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
@@ -380,6 +398,7 @@ public class HarpoonGun : MonoBehaviour
     private void StartUnfocusingHarpoon()
     {
         _currentFocusState = EFocusState.Unfocusing;
+        _reticle.StartUnfocus();
 
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(UnfocusProcess());
@@ -466,6 +485,7 @@ public class HarpoonGun : MonoBehaviour
         _focusProgress = 0;
         CalculateCurrentFocusAccuracy();
         _currentFocusState = EFocusState.None;
+        _reticle.ReticleFire();
     }
 
     /// <summary>

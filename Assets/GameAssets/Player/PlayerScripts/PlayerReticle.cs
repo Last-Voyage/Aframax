@@ -7,6 +7,7 @@
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -68,6 +69,41 @@ public class PlayerReticle : MonoBehaviour
 
         AdjustReticleAppearance();
 
+    }
+
+    public void StartFocus()
+    {
+        StopCoroutine(ReticleUnfocus());
+        StartCoroutine(ReticleFocus());
+    }
+
+    private IEnumerator ReticleFocus()
+    {
+        while(_newReticleSize > _minScopeSize ){
+            AdjustReticleSize();
+            AdjustReticleAppearance();
+        }
+        yield return null;
+    }
+
+    public void StartUnfocus()
+    {
+        StopCoroutine(ReticleFocus());
+        StartCoroutine(ReticleUnfocus());
+    }
+    public IEnumerator ReticleUnfocus()
+    {
+        while(_newReticleSize < _maxScopeSize){
+            AdjustReticleSize();
+            AdjustReticleAppearance();
+        }
+        yield return null;
+    }
+
+    public void ReticleFire()
+    {
+        _newReticleSize = _maxScopeSize;
+        AdjustReticleAppearance();
     }
 
     /// <summary>
