@@ -74,7 +74,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <param name="block"></param> what it collides against. 
     private void OnTriggerEnter(Collider block)
     {
-        if(!block.gameObject.TryGetComponent<WeakPoint>(out WeakPoint _unneeded))
+        if(!block.gameObject.TryGetComponent<WeakPoint>(out WeakPoint unneeded))
         {
             Destroy(this);
         }
