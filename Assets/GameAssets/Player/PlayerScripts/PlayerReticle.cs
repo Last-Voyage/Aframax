@@ -92,8 +92,9 @@ public class PlayerReticle : MonoBehaviour
 
         public void ReticleFire()
     {
-        //_newReticleSize = _maxScopeSize;
-        //AdjustReticleAppearance();
+        _newReticleSize = _maxScopeSize;
+        AdjustReticleSize();
+        AdjustReticleAppearance();
     }
 
     /// <summary>
