@@ -1,7 +1,17 @@
+/**********************************************************************************************************************
+// File Name :         InteractableUI.cs
+// Author :            Alex Kalscheur
+// Creation Date :     11/17/24
+// 
+// Brief Description : Controls when the UI appears for an interactable game object
+**********************************************************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the ui for interactable objects
+/// </summary>
 public class InteractableUI : MonoBehaviour
 {
     private GameObject _interactUI;
