@@ -88,7 +88,7 @@ public class StoryManagerEditor : Editor
         GUI.backgroundColor = DEFAULT_COLOR;
 
         // Make sure the changes actually saved
-        if (GUI.changed)
+        if (GUI.changed && !Application.isPlaying)
         {
             EditorUtility.SetDirty(GetStoryManager);
             EditorSceneManager.MarkSceneDirty(GetStoryManager.gameObject.scene);
@@ -171,6 +171,15 @@ public class StoryManagerEditor : Editor
 
         // Display the description of the currently selected beat
         GetStoryBeats[OpenStoryBeat].BeatDescription = EditorGUILayout.TextArea(GetStoryBeats[OpenStoryBeat].BeatDescription, textAreaStyle);
+
+        // Settings for triggering a story beat in the inspector
+        EditorGUILayout.BeginHorizontal();
+        GetStoryBeats[OpenStoryBeat].TriggerOnStart = EditorGUILayout.Toggle("Trigger on Start", GetStoryBeats[OpenStoryBeat].TriggerOnStart);
+        if (GUILayout.Button("Trigger Story Beat") && Application.isPlaying)
+        {
+            StoryManager.Instance.TriggerStoryBeat(GetStoryBeats[OpenStoryBeat]);
+        }
+        EditorGUILayout.EndHorizontal();
     }
 
     /// <summary>
