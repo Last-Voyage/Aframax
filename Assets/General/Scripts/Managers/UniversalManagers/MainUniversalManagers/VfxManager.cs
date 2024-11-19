@@ -80,6 +80,17 @@ public class VfxManager : MainUniversalManagerFramework
         StartCoroutine(specificVisualEffect.MoveObjectBackToPool(vfxObj.gameObject));
     }
 
+    /// <summary>
+    /// Reclaims all visual effects before a scene change happens so that they don't get destroyed on the scene change
+    /// </summary>
+    private void ReclaimAllVisualEffectsBeforeSceneChange()
+    {
+        foreach (SpecificVisualEffect vfx in _allVfxInGame)
+        {
+            vfx.MoveAllVfxBackToPool();
+        }
+    }
+
     #region Base Manager
     /// <summary>
     /// Establishes the instance of VfxManager
@@ -99,6 +110,23 @@ public class VfxManager : MainUniversalManagerFramework
         SetUpAllVisualEffectsInGame();
     }
 
+    /// <summary>
+    /// Subscribes the reclaiming vfx to the scene change
+    /// </summary>
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(ReclaimAllVisualEffectsBeforeSceneChange);
+    }
+
+    /// <summary>
+    /// Unsubscribes the reclaiming vfx to the scene change
+    /// </summary>
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(ReclaimAllVisualEffectsBeforeSceneChange);
+    }
     #endregion
 
     #region Getters
