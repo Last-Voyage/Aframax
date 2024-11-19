@@ -32,11 +32,6 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
         ApplyDamage(col.gameObject);
     }
 
-    protected void OnTriggerStay(Collider col)
-    {
-        ApplyDamage(col.gameObject);
-    }
-
     /// <summary>
     /// Applies damage amount to the receiving health script
     /// </summary>
@@ -50,7 +45,16 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
 
         if (damageRecipient.TryGetComponent<IBaseHealth>(out IBaseHealth health))
         {
-            health.TakeDamage(Damage, this);
+            ApplyDamageToHealth(health);
         }
+    }
+
+    /// <summary>
+    /// Applies damage taking in the health interface
+    /// </summary>
+    /// <param name="health"></param>
+    protected virtual void ApplyDamageToHealth(IBaseHealth health)
+    {
+        health.TakeDamage(Damage,this);
     }
 }
