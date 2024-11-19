@@ -83,15 +83,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         if (!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
         {
-            if (HarpoonGun.Instance.GetDoesHarpoonRemainsInObject())
-            {
-                StickHarpoon();
-            }
-            else
-            {
-                Destroy(this);
-            }
-
+            StickHarpoon();
         }
     }
 }
