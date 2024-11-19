@@ -16,6 +16,8 @@ using UnityEngine;
 /// </summary>
 public class HarpoonProjectileMovement : MonoBehaviour
 {
+
+    static private Vector3 movement;
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
     /// </summary>
@@ -38,25 +40,14 @@ public class HarpoonProjectileMovement : MonoBehaviour
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
         {
             // Calculate how far the harpoon should move in this frame
-            Vector3 movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
+            movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
 
             // If no collision, move the harpoon
             HarpoonFiredProjectileMovement(movement);
             travelDistance += movement.magnitude;
 
             yield return null;
-
-            // Cast a ray from the harpoon's current position forward by the amount it moves this frame
-            if (Physics.Raycast(transform.position, movement, out RaycastHit hit,
-                movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
-            {
-                transform.position = hit.point; // Snap the harpoon to the _hit point
-                break;
-            }
         }
-        //Either reached here because we hit something or because we have exceeded the max distance
-        //If the harpoon sticks in the object it remains enabled. Otherwise it disables it
-        gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
     }
 
     /// <summary>
@@ -66,5 +57,41 @@ public class HarpoonProjectileMovement : MonoBehaviour
     private void HarpoonFiredProjectileMovement(Vector3 movement)
     {
         transform.position += movement;
+    }
+
+    /// <summary>
+    /// sticks the harpoon in the object it hits
+    /// </summary>
+    private void StickHarpoon()
+    {
+            // Cast a ray from the harpoon's current position forward by the amount it moves this frame
+        if (Physics.Raycast(transform.position, movement, out RaycastHit hit,
+            movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
+        {
+            transform.position = hit.point; // Snap the harpoon to the _hit point
+        }
+        //Either reached here because we hit something or because we have exceeded the max distance
+        //If the harpoon sticks in the object it remains enabled. Otherwise it disables it
+        gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
+    }
+
+    /// <summary>
+    /// Used to destroy the harpoon projectile when it hits something in scene.
+    /// </summary>
+    /// <param name="block"></param> what it collides against. 
+    private void OnTriggerEnter(Collider block)
+    {
+        if (!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
+        {
+            if (HarpoonGun.Instance.GetDoesHarpoonRemainsInObject())
+            {
+                StickHarpoon();
+            }
+            else
+            {
+                Destroy(this);
+            }
+
+        }
     }
 }
