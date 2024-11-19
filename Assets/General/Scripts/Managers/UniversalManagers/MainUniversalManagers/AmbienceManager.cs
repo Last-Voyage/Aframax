@@ -164,6 +164,10 @@ public class AmbienceManager : AudioManager
 
     private void StartAmbienceOnObject(EventReference eventReference, GameObject audioObject)
     {
+        if (eventReference.IsNull)
+        {
+            return;
+        }
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         
         RuntimeManager.AttachInstanceToGameObject(eventInstance, audioObject.transform);
