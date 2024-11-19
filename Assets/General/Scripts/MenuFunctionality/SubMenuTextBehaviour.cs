@@ -15,24 +15,24 @@ using UnityEngine;
 /// </summary>
 public class SubMenuTextBehaviour : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> MenuElements;
+    [SerializeField] private List<GameObject> _menuElements;
 
     /// <summary>
     /// button functionality for turning on ui elements
     /// </summary>
-    /// <param name="MenuElementListID"></param>
-    public void EnableMenuElement(int MenuElementListID)
+    /// <param name="menuElementListID"></param>
+    public void EnableMenuElement(int menuElementListID)
     {
-        MenuElements[MenuElementListID].SetActive(true);
+        _menuElements[menuElementListID].SetActive(true);
     }
 
     /// <summary>
     /// button functionality for turning off ui elements
     /// </summary>
-    /// <param name="MenuElementListID"></param>
-    public void DisableMenuElement(int MenuElementListID)
+    /// <param name="menuElementListID"></param>
+    public void DisableMenuElement(int menuElementListID)
     {
-        MenuElements[MenuElementListID].SetActive(false);
+        _menuElements[menuElementListID].SetActive(false);
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour
 {
     private PlayerInputMap _playerInputControls;
 
-    [SerializeField] private Button BackArrow;
+    [SerializeField] private Button _backArrow;
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.Pause.performed += ctx => PressBackArrow();
 
-        BackArrow = GetComponent<Button>();
+        _backArrow = GetComponent<Button>();
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour
     /// </summary>
     private void PressBackArrow()
     {
-        BackArrow.onClick.Invoke();
+        _backArrow.onClick.Invoke();
     }
 
     private void OnEnable()
