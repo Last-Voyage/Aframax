@@ -42,7 +42,7 @@ public class BoatMover : MonoBehaviour
     [Tooltip("Arbitrary float for adjusting the speed of the boat")]
     [SerializeField] private float _speedModifier;
 
-    private void Start()
+    private void Awake()
     {
         EstablishInstance();
     }
