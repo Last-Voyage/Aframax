@@ -6,6 +6,7 @@ using UnityEngine;
 public class HarpoonAnimationManager : MonoBehaviour
 {
     private Animator _animator;
+
     private const string _FIRE_ANIM = "shoot";
     private const string _FOCUS_START_ANIM = "holdFocus";
     private const string _FOCUS_END_ANIM = "releaseFocus";
@@ -15,8 +16,6 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _DID_SHOOT_ANIM = "didShoot";
     private const string _NOT_WALL_ANIM = "notAtWall";
     private const string _AT_WALL_ANIM = "atWall";
-
-    private WaitForSeconds _sleep = new WaitForSeconds(1);
 
     private void Awake()
     {
@@ -89,10 +88,7 @@ public class HarpoonAnimationManager : MonoBehaviour
 
     private void ReloadFromEmptyAnimation(int unusedEventVar)
     {
-        if (_animator.GetBool(_AMMO_EMPTY_ANIM))
-        {
-            _animator.SetTrigger(_RELOAD_READY_ANIM);
-            print("reloading from empty");
-        }
+        _animator.SetTrigger(_RELOAD_READY_ANIM);
+        print("reloading from empty");
     }
 }
