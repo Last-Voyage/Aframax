@@ -14,7 +14,7 @@ using UnityEngine;
 public class TutorialObjectInteract : MonoBehaviour
 {
     [SerializeField]
-    string _objectTag;
+    private string _objectTag;
 
     /// <summary>
     /// This makes it so that, when the object with the correct tag interacts with this, it will advance the current
