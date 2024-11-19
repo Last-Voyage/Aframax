@@ -69,16 +69,4 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         transform.position += movement;
     }
-
-    /// <summary>
-    /// Used to destroy the harpoon projectile when it hits something in scene.
-    /// </summary>
-    /// <param name="block"></param> what it collides against. 
-    private void OnTriggerEnter(Collider block)
-    {
-        if(!block.gameObject.TryGetComponent<WeakPoint>(out WeakPoint unneeded))
-        {
-            Destroy(this);
-        }
-    }
 }
