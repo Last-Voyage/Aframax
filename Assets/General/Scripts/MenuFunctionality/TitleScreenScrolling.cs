@@ -17,6 +17,7 @@ public class TitleScreenScrolling : MonoBehaviour
 {
     [SerializeField] private Transform _movingDestination;
 
+    [Tooltip("how fast the screen scrolls when it is started")]
     [SerializeField] private float _screenScrollSpeed;
 
     [SerializeField] private Canvas _sceneCanvas;
