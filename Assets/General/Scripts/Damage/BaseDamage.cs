@@ -32,6 +32,10 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
         ApplyDamage(col.gameObject);
     }
 
+    protected void OnTriggerStay(Collider col)
+    {
+        ApplyDamage(col.gameObject);
+    }
 
     /// <summary>
     /// Applies damage amount to the receiving health script
