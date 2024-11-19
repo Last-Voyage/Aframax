@@ -41,7 +41,7 @@ public class VfxManager : MainUniversalManagerFramework
     /// <summary>
     /// Sets up the object pool of all vfx
     /// </summary>
-    private void SetUpAllVfxInGame()
+    private void SetUpAllVisualEffectsInGame()
     {
         foreach (SpecificVisualEffect vfx in _allVfxInGame)
         {
@@ -54,7 +54,7 @@ public class VfxManager : MainUniversalManagerFramework
     /// SpecificVisualEffects cannot do this as it isn't a monobehavior
     /// </summary>
     /// <param name="specificVisualEffect"></param>
-    public void CreateVFXInPool(SpecificVisualEffect specificVisualEffect)
+    public void CreateVisualEffectsInPool(SpecificVisualEffect specificVisualEffect)
     {
         //Spawn the vfx
         GameObject newVfx = Instantiate(specificVisualEffect.GetVFXObject());
@@ -75,7 +75,7 @@ public class VfxManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="specificVisualEffect">The specific visual effect the object belongs to</param>
     /// <param name="vfxObj">The object to be added back to the pool</param>
-    public void StartVFXDuration(SpecificVisualEffect specificVisualEffect, GeneralVfxFunctionality vfxObj)
+    public void StartVisualEffectsDuration(SpecificVisualEffect specificVisualEffect, GeneralVfxFunctionality vfxObj)
     {
         StartCoroutine(specificVisualEffect.MoveObjectBackToPool(vfxObj.gameObject));
     }
@@ -96,8 +96,9 @@ public class VfxManager : MainUniversalManagerFramework
     public override void SetUpMainManager()
     {
         base.SetUpMainManager();
-        SetUpAllVfxInGame();
+        SetUpAllVisualEffectsInGame();
     }
+
     #endregion
 
     #region Getters
@@ -158,7 +159,7 @@ public class SpecificVisualEffect
         for (int i = 0; i < _poolingAmount; i++)
         {
             //Spawns the vfx, disables it, and adds it to the pool
-            VfxManager.Instance.CreateVFXInPool(this);
+            VfxManager.Instance.CreateVisualEffectsInPool(this);
             _poolingCounter++;
         }
         _poolingCounter = 0;
@@ -213,7 +214,7 @@ public class SpecificVisualEffect
         //Starts the duration if the vfx has one
         if(_vfxDurationType != EVfxDurationType.Infinite)
         {
-            VfxManager.Instance.StartVFXDuration(this, _vfxPool[_poolingCounter]);
+            VfxManager.Instance.StartVisualEffectsDuration(this, _vfxPool[_poolingCounter]);
         }
 
         IterateVFXPool();
