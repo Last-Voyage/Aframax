@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// allows pressing escape to push a button that this script is attached to
+/// </summary>
 public class BackArrowEscapeBehaviour : MonoBehaviour
 {
     private PlayerInputMap _playerInputControls;

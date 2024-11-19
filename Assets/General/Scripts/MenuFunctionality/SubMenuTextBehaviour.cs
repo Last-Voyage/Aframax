@@ -10,6 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// button functionality for disabling and enabling ui elements, as well as disabling and enabling unpausing
+/// </summary>
 public class SubMenuTextBehaviour : MonoBehaviour
 {
     [SerializeField] private List<GameObject> MenuElements;
@@ -32,11 +35,17 @@ public class SubMenuTextBehaviour : MonoBehaviour
         MenuElements[MenuElementListID].SetActive(false);
     }
 
+    /// <summary>
+    /// turns off the ability to toggle pausing, used to prevent unpausing from submenus
+    /// </summary>
     public void DisablePauseToggle()
     {
         AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(true);
     }
 
+    /// <summary>
+    /// re-enables the ability to toggle pausing. make sure to do this back on if it is turned off!
+    /// </summary>
     public void EnablePauseToggle()
     {
         AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(false);
