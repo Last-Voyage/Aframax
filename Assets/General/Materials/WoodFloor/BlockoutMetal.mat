@@ -69,7 +69,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic:
-        m_Texture: {fileID: 2800000, guid: 9397418d1d7b12543bf27fb61b93bbea, type: 3}
+        m_Texture: {fileID: 10307, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -144,6 +144,9 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _TilingValue: 1
+    - _WindSway: 0
+    - _WindSwayFrequency: 10
+    - _WindSwaySpeed: 0.1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
@@ -152,12 +155,13 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MaskMapColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MetalBackground: {r: 0.43137258, g: 0.4823529, b: 0.5254902, a: 1}
-    - _MetalBaseColor: {r: 0.7490196, g: 0.7803922, b: 0.7843138, a: 1}
-    - _MetalHighlightColor: {r: 0.9490196, g: 0.9490196, b: 0.9490196, a: 1}
+    - _MetalBackground: {r: 0.2924528, g: 0.2719641, b: 0.2524475, a: 1}
+    - _MetalBaseColor: {r: 0.7169812, g: 0.6858669, b: 0.6391955, a: 1}
+    - _MetalHighlightColor: {r: 0.5377358, g: 0.53772026, b: 0.49968848, a: 1}
     - _PostTint: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _WindSwayIntensity: {r: 0.01, g: 0.01, b: 0.01, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6952445830532488011
 MonoBehaviour:
