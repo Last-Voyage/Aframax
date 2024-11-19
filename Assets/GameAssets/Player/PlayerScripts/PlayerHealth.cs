@@ -19,8 +19,9 @@ public class PlayerHealth : BaseHealth
     //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
 
+    [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
-    public bool _shouldTakeDamage = true;//Nabil made this change
+    public bool ShouldTakeDamage = true;//Nabil made this change
     
     [Tooltip ("Health point at which the heart beat sfx starts")]
     [SerializeField] private float _healthToStartHeartSfx;
@@ -87,7 +88,7 @@ public class PlayerHealth : BaseHealth
     /// <param name="damage"> amount to reduce health by </param>
     public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        if (_shouldTakeDamage)
+        if (ShouldTakeDamage)
         {
             base.TakeDamage(damage, null);
 
@@ -107,7 +108,7 @@ public class PlayerHealth : BaseHealth
     /// <returns></returns>
     private void StartIFrames()
     {
-        _shouldTakeDamage = false;
+        ShouldTakeDamage = false;
         PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
     }
 
@@ -116,7 +117,7 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     private void EndIFrames()
     {
-        _shouldTakeDamage = true;
+        ShouldTakeDamage = true;
     }
 
     /// <summary>
