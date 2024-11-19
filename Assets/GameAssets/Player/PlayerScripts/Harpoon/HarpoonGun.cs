@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
-// Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay
+// Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -118,6 +118,8 @@ public class HarpoonGun : MonoBehaviour
 
     public static HarpoonGun Instance;
 
+    private PlayerReticle _reticle;
+
     #endregion
 
     #region Setup
@@ -132,6 +134,8 @@ public class HarpoonGun : MonoBehaviour
         SubscribeToEvents();
 
         StartCoroutine(HarpoonCameraOrientation());
+
+        _reticle = GameObject.FindObjectOfType<PlayerReticle>();
     }
 
     /// <summary>
@@ -367,6 +371,7 @@ public class HarpoonGun : MonoBehaviour
     private void StartFocusingHarpoon()
     {
         _currentFocusState = EFocusState.Focusing;
+        _reticle.ChangeFocus();
 
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
@@ -380,6 +385,7 @@ public class HarpoonGun : MonoBehaviour
     private void StartUnfocusingHarpoon()
     {
         _currentFocusState = EFocusState.Unfocusing;
+        _reticle.ChangeFocus();
 
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(UnfocusProcess());
@@ -466,6 +472,7 @@ public class HarpoonGun : MonoBehaviour
         _focusProgress = 0;
         CalculateCurrentFocusAccuracy();
         _currentFocusState = EFocusState.None;
+        _reticle.ReticleFire();
     }
 
     /// <summary>
