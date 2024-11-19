@@ -207,8 +207,8 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 879391297189679386}
         m_TargetAssemblyTypeName: SubMenuTextBehaviour, Assembly-CSharp
-        m_MethodName: DisablePauseToggle
-        m_Mode: 1
+        m_MethodName: SetPauseToggle
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb751be93cc682a43a6aefe07779a15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuElements:
+  _menuElements:
   - {fileID: 412665280164010515}
   - {fileID: 3005499313075775780}
 --- !u!1 &391825581419431555
@@ -728,7 +728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6482704325034278035
 RectTransform:
   m_ObjectHideFlags: 0
@@ -748,9 +748,9 @@ RectTransform:
   - {fileID: 3471863546808436764}
   m_Father: {fileID: 5694538938486855085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2047060943014121623
@@ -2402,15 +2402,15 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 8670271777165987799}
         m_TargetAssemblyTypeName: SubMenuTextBehaviour, Assembly-CSharp
-        m_MethodName: EnablePauseToggle
-        m_Mode: 1
+        m_MethodName: SetPauseToggle
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &6310847783843854310
 MonoBehaviour:
@@ -2424,7 +2424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0d65fc30528b1479686b2fc61b6e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BackArrow: {fileID: 0}
+  _backArrow: {fileID: 0}
 --- !u!114 &8670271777165987799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2437,7 +2437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb751be93cc682a43a6aefe07779a15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuElements:
+  _menuElements:
   - {fileID: 412665280164010515}
   - {fileID: 3005499313075775780}
 --- !u!1 &6354843654476748526

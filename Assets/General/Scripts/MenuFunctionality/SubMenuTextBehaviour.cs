@@ -36,18 +36,10 @@ public class SubMenuTextBehaviour : MonoBehaviour
     }
 
     /// <summary>
-    /// turns off the ability to toggle pausing, used to prevent unpausing from submenus
+    /// changes the player's ability to pause/unpause, used to disable it during certain menus
     /// </summary>
-    public void DisablePauseToggle()
+    public void SetPauseToggle(bool canPause)
     {
-        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(true);
-    }
-
-    /// <summary>
-    /// re-enables the ability to toggle pausing. make sure to do this back on if it is turned off!
-    /// </summary>
-    public void EnablePauseToggle()
-    {
-        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(false);
+        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(canPause);
     }
 }

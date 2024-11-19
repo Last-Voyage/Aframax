@@ -936,9 +936,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb751be93cc682a43a6aefe07779a15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuElements:
-  - {fileID: 161330972}
+  _menuElements:
   - {fileID: 1906868}
+  - {fileID: 161330972}
   - {fileID: 1616860948}
 --- !u!1 &623735928
 GameObject:
@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movingDestination: {fileID: 324132671}
   _screenScrollSpeed: 30
-  _SceneCanvas: {fileID: 1668942281}
+  _sceneCanvas: {fileID: 1668942281}
 --- !u!1 &689632244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2863,9 +2863,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb751be93cc682a43a6aefe07779a15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuElements:
-  - {fileID: 161330972}
+  _menuElements:
   - {fileID: 1906868}
+  - {fileID: 161330972}
   - {fileID: 1616860948}
 --- !u!114 &1821713052
 MonoBehaviour:
@@ -2879,7 +2879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0d65fc30528b1479686b2fc61b6e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BackArrow: {fileID: 0}
+  _backArrow: {fileID: 0}
 --- !u!114 &1821713053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2926,12 +2926,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 446559033}
         m_TargetAssemblyTypeName: SubMenuTextBehaviour, Assembly-CSharp
-        m_MethodName: DisableMenuElement
+        m_MethodName: EnableMenuElement
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2950,12 +2950,12 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 446559033}
         m_TargetAssemblyTypeName: SubMenuTextBehaviour, Assembly-CSharp
-        m_MethodName: EnableMenuElement
+        m_MethodName: DisableMenuElement
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
