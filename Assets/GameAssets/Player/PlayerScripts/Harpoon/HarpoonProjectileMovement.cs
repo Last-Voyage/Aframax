@@ -17,7 +17,7 @@ using UnityEngine;
 public class HarpoonProjectileMovement : MonoBehaviour
 {
     //movement is a vector3 used for the harpoon's current velocity
-    static private Vector3 _movement;
+    private Vector3 _movement;
 
     private bool _isStuck;
     
