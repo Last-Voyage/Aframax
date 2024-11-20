@@ -18,6 +18,11 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     public bool CanGeneratorBeInteracted { get; set; }
     public bool DoesRequireSpanner { get; set; }
 
+    public void GeneratorStartsSmoking()
+    {
+        VfxManager.Instance.GetPlumeSmokeVfx().PlayNextVfxInPool(transform.position, transform.rotation);
+    }
+
     public void OnInteractedByPlayer()
     {
         if(!CanGeneratorBeInteracted)
