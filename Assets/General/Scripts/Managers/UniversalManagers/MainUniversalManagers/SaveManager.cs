@@ -123,28 +123,3 @@ public class SaveManager : MainUniversalManagerFramework
     public GameSaveData GetGameSaveData() => _gameSaveData;
     #endregion
 }
-
-/// <summary>
-/// Holds the data which is being saved
-/// Save data is read from text file and stored into Game Save Data
-/// </summary>
-[System.Serializable]
-public class GameSaveData
-{
-    public bool TempSaveBool;
-
-    #region Getters
-    
-    public bool GetTempBool() => TempSaveBool;
-    
-    #endregion
-
-    #region Setters
-    
-    public void SetTempBool(bool newTemp)
-    {
-        TempSaveBool = newTemp;
-    }
-    
-    #endregion
-}
