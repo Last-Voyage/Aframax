@@ -434,10 +434,16 @@ public class HarpoonGun : MonoBehaviour
         _focusProgress = 1;
         _currentFocusAccuracy = 0;
     }
-
+    /// <summary>
+    /// A getter for a function
+    /// allows you to enter what is 
+    /// basically an infinit focus mode
+    /// </summary>
     public void CallFocusMax()
     {
         FocusMax();
+        _currentFocusState = EFocusState.Focusing;
+        print(_currentFocusState);
     }
 
     /// <summary>
@@ -480,6 +486,10 @@ public class HarpoonGun : MonoBehaviour
         _reticle.ReticleFire();
     }
 
+    /// <summary>
+    /// A getter for a function
+    /// allows you to reset the focus
+    /// </summary>
     public void CallResetFocus() 
     {
 

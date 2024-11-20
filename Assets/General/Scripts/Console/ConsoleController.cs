@@ -43,7 +43,12 @@ public class ConsoleController : MonoBehaviour
 
     [Header("Infinite Focus References")]
     [SerializeField] private GameObject _infiniteFocusToggleButton;
-    
+
+
+    //false means not focus max and true is in max focus
+    private bool _isInfocusState = true;
+    private HarpoonGun _harpoonGun; //reference to harpoon gun
+
     private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
     //look cam mode
 
@@ -68,6 +73,7 @@ public class ConsoleController : MonoBehaviour
         _toggleGodModeButton.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
         _infiniteFocusToggleButton.GetComponent<Button>().onClick.AddListener(ToggleInfiniteFocus);
+        _harpoonGun = GameObject.FindObjectOfType<HarpoonGun>();
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -86,12 +92,14 @@ public class ConsoleController : MonoBehaviour
             _content.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
+            _harpoonGun.SubscribeInput();
         }
         else
         {
             _content.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0;
+            _harpoonGun.UnsubscribeInput();
         }
     }
 
@@ -221,6 +229,8 @@ public class ConsoleController : MonoBehaviour
     {
         FindObjectOfType<PlayerHealth>().ShouldTakeDamage = false;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
+
+        
     }
 
     /// <summary>
@@ -230,6 +240,8 @@ public class ConsoleController : MonoBehaviour
     {
         FindObjectOfType<PlayerHealth>().ShouldTakeDamage = true;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
+
+        
     }
 
     #endregion
@@ -237,31 +249,54 @@ public class ConsoleController : MonoBehaviour
 
     #region Infinite Focus
 
+    /// <summary>
+    /// puts you in and out of infinite focus mode
+    /// </summary>
     private void ToggleInfiniteFocus()
     {
-        //false means not focus max and true is in max focus
-        bool isInfocusState = false;
+        
 
-        if (isInfocusState)
-        {
-            EnterInfiniteFocus();
-        }
-        else if (!isInfocusState)
+        if (_isInfocusState)
         {
             ExitInfiniteFocus();
+            _isInfocusState = false;
+
+        }
+        else
+        {
+            EnterInfiniteFocus();
+            _isInfocusState = true;
+
         }
 
+
     }
 
+    /// <summary>
+    /// Puts you into infinite focus mode
+    /// </summary>
     private void EnterInfiniteFocus()
     {
+       
         GameObject.FindObjectOfType<HarpoonGun>().CallFocusMax();
+        _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Exit Infinite Focus";
+
+        
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(_harpoonGun.CallFocusMax);
     }
 
+    /// <summary>
+    /// takes you out of infinite focus mode
+    /// </summary>
     private void ExitInfiniteFocus()
     {
         GameObject.FindObjectOfType<HarpoonGun>().CallResetFocus();
+        _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Enter Infinite Focus";
+
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(_harpoonGun.CallFocusMax);
     }
+
+
     #endregion
 
     /// <summary>
