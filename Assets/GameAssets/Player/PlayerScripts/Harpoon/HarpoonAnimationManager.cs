@@ -22,7 +22,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AT_WALL_ANIM = "atWall";
 
     //Used to check to see if we are near a wall
-    private float _WALL_CHECK_DIST = 3;
+    private float _WALL_CHECK_DIST = 1;
 
     /// <summary>
     /// Called when the game starts
@@ -132,7 +132,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     {
         while(true)
         {
-            if (Physics.Raycast(transform.position, transform.forward, _WALL_CHECK_DIST))
+            if (Physics.Raycast(transform.position, transform.parent.forward, _WALL_CHECK_DIST))
             {
                 _animator.SetTrigger(_AT_WALL_ANIM);
                 _animator.ResetTrigger(_NOT_WALL_ANIM);
