@@ -72,14 +72,20 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position += movement;
     }
 
+    /// <summary>
+    /// Used to find out if the harpoon hits something or not. 
+    /// </summary>
+    /// <returns></returns> a bool as to whether or not the while loop should be broken
     private bool ShouldHarpoonStick()
     {
+        //checks if _stuck is true, if it is it ends the while loop
         if (_isStuck)
         {
             return _isStuck;
         }
             
         // Cast a ray from the harpoon's current position forward by the amount it moves this frame
+        //finds if the harpoon has hit something, if it has, it sticks the harpoon and ends the while loop
         if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit,
             movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
         {
@@ -88,19 +94,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
             _isStuck = true;
             return true;
         }
+        //if it got to here, the harpoon hasn't hit anything and can continue moving
         return false;
-    }
-
-    /// <summary>
-    /// Used to destroy the harpoon projectile when it hits something in scene.
-    /// </summary>
-    /// <param name="block"></param> what it collides against. 
-    private void OnTriggerEnter(Collider block)
-    {
-        if (!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
-        {
-            //StickHarpoon();
-        }
-        //Destroy(this);
     }
 }
