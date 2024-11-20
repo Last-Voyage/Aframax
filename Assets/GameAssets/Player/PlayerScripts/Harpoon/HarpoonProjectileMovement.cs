@@ -20,6 +20,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
     static private Vector3 _movement;
 
     private bool _isStuck;
+
+    private Transform _originPoint;
     
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
@@ -30,6 +32,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         transform.position = startLoc;
         transform.LookAt(transform.position + startDirection);
+        
+        _originPoint = HarpoonGun.Instance.gameObject.transform;
 
         StartCoroutine(HarpoonFireProcess());
         
@@ -44,17 +48,17 @@ public class HarpoonProjectileMovement : MonoBehaviour
         float travelDistance = 0f;
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
         {
+            if (ShouldHarpoonStick())
+            {
+                break;
+            }
+            
             // Calculate how far the harpoon should move in this frame
             _movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
 
             // If no collision, move the harpoon
             HarpoonFiredProjectileMovement(_movement);
             travelDistance += _movement.magnitude;
-
-            if (ShouldHarpoonStick())
-            {
-                break;
-            }
             
             yield return null;
         }
@@ -86,8 +90,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
             
         // Cast a ray from the harpoon's current position forward by the amount it moves this frame
         //finds if the harpoon has hit something, if it has, it sticks the harpoon and ends the while loop
-        if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit,
-            _movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
+        if (Physics.Raycast(_originPoint.position, _originPoint.forward, out RaycastHit hit,
+            100f, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
         {
             gameObject.transform.parent = hit.collider.transform;
             transform.position = hit.point; // Snap the harpoon to the _hit point
