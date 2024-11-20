@@ -565,6 +565,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFXMuzzleSmoke
       objectReference: {fileID: 0}
+    - target: {fileID: 7921928084009363462, guid: 5553f60587e67ec4db11da6e0a28e677,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -906,7 +911,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &960062091
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -987,7 +992,7 @@ Transform:
   m_GameObject: {fileID: 960062090}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.504}
+  m_LocalPosition: {x: 0, y: -0.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1080,7 +1085,7 @@ Transform:
   m_GameObject: {fileID: 1127536153}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.438}
+  m_LocalPosition: {x: 0, y: 0.281, z: -3.217}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1196,7 +1201,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: dc46e5d82e577e346bf974642bac702f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1456,6 +1461,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFXBloodSpatterColor
       objectReference: {fileID: 0}
+    - target: {fileID: 4004325593349421983, guid: c49d6c80236e52a4596db6b957588203,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5647949138283795737, guid: c49d6c80236e52a4596db6b957588203,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -1631,6 +1641,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFXHarpoonSplintersTree
       objectReference: {fileID: 0}
+    - target: {fileID: 2230600803907816891, guid: 77fe7083e42ac49458530e16ef04b970,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8754488521819954365, guid: 77fe7083e42ac49458530e16ef04b970,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1698,6 +1713,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VFXHarpoonSplintersDeck
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068631312327826608, guid: 6e3a6aa3db95b2d4f9fbfeaf30f7cc1d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3534484816514161111, guid: 6e3a6aa3db95b2d4f9fbfeaf30f7cc1d,
         type: 3}
@@ -1827,6 +1847,94 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e244cab9e76d99c479aafc1fc324d96d, type: 3}
+--- !u!1001 &4961820249203441606
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4996648773192465349, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_SortMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5370580235267376796, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544335786728863607, guid: 29c59d25c074ab144be794768677f2fc,
+        type: 3}
+      propertyPath: m_Name
+      value: VFXSmokePlume
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 29c59d25c074ab144be794768677f2fc, type: 3}
 --- !u!1001 &6007874757681595333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1927,6 +2035,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VFXBloodSpatter
+      objectReference: {fileID: 0}
+    - target: {fileID: 4004325593349421983, guid: c49d6c80236e52a4596db6b957588203,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5647949138283795737, guid: c49d6c80236e52a4596db6b957588203,
         type: 3}
@@ -2068,4 +2181,5 @@ SceneRoots:
   - {fileID: 6007874757681595333}
   - {fileID: 1835433226610218726}
   - {fileID: 1725098480004592126}
+  - {fileID: 4961820249203441606}
   - {fileID: 960062094}

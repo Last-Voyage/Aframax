@@ -120,8 +120,8 @@ public class LockdownAttackEnemyController : MonoBehaviour
         //Spawns the core
         _instantiatedCoreEnemy = 
             Instantiate(_coreEnemyPrefab, _patrolLocation.CoreSpawnPoint.position, Quaternion.identity,transform);
-        AmbienceManager.APlayAmbienceOnObject?.Invoke(FmodAmbienceEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
-        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);
+        /*AmbienceManager.APlayAmbienceOnObject?.Invoke(FmodAmbienceEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);*/
 
         //Gets the weak point handler from the core
         if (!_instantiatedCoreEnemy.TryGetComponent(out WeakPointHandler weakPointHandler))
