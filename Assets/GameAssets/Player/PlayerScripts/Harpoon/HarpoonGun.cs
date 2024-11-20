@@ -54,11 +54,17 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
     [Tooltip("The maximum amount of ammo that the harpoon may have")]
     [SerializeField] private int _maxAmmo = 3;
-
-    private static HarpoonProjectileMovement[] _harpoonSpearPool;
-    private int _harpoonPoolCounter;
+    [Tooltip("How much ammo the player has in reserve")]
     private int _currentReserveAmmo;
 
+    [Tooltip("The array of harpoon projectiles in the object pool")]
+    private static HarpoonProjectileMovement[] _harpoonSpearPool;
+    [Tooltip("Our current position in the object pool")]
+    private int _harpoonPoolCounter;
+    [Tooltip("The amount of harpoons in the object pool")]
+    private static readonly int _harpoonPoolingAmount = 5;
+
+    [Tooltip("The current state the harpoon firing is in")]
     private EHarpoonFiringState _harpoonFiringState;
 
     [Space]
@@ -73,13 +79,18 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The curve at which the accuracy increases while focusing")]
     [SerializeField] private AnimationCurve _focusCurve;
 
+    [Tooltip("If the button for focusing is currently held down")]
     private bool _isFocusButtonHeld;
 
+    [Tooltip("The current accuracy of the player")]
     private float _currentFocusAccuracy;
 
+    [Tooltip("Our progress of focusing or unfocusing")]
     private float _focusProgress;
+    [Tooltip("The current state of the weapon focusing")]
     private EFocusState _currentFocusState;
 
+    [Tooltip("The coroutine used for focusing or unfocusing")]
     private Coroutine _focusUnfocusCoroutine;
 
     [Space]
@@ -97,9 +108,6 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The input action for focusing")]
     [SerializeField] private InputActionReference _harpoonFocus;
 
-    [Tooltip("The amount of harpoons in the object pool")]
-    private static readonly int _harpoonPoolingAmount = 5;
-
     [Space]
     [Header("Camera Shake Values")]
     [Tooltip("Recoil Intensity Shake")]
@@ -113,8 +121,6 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private string _harpoonShootTrigger = "shoot";
     [Tooltip("name of retract animation")]
     [SerializeField] private string _harpoonRetractTrigger = "drawBack";
-
-    private PlayerInputMap _playerInputMap;
 
     public static HarpoonGun Instance;
 
@@ -135,7 +141,7 @@ public class HarpoonGun : MonoBehaviour
 
         StartCoroutine(HarpoonCameraOrientation());
 
-        _reticle = GameObject.FindObjectOfType<PlayerReticle>();
+        _reticle = FindObjectOfType<PlayerReticle>();
     }
 
     /// <summary>

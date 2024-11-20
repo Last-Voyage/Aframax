@@ -58,7 +58,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// Initializes _playerTransform
+    /// Initializes the value of _playerTransform to be the transform of the player
     /// </summary>
     private void InitializePlayerTransform()
     {
@@ -194,7 +194,9 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         _targetPoint = _patrolLocationData.WaypointTransforms.ElementAt(_currentTargetIndex);
     }
 
+    /// <summary>
     /// <returns> This enemies patrol data </returns>
+    /// <summary>
     public PatrolLocation GetPatrolLocationData()
     {
         return _patrolLocationData;

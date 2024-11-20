@@ -121,7 +121,10 @@ public class IterativeChunkLoad : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// Adds a chunk and removes chunks
+    /// Adds a new chunk to the front of the chunk path by taking the next chunbk in the queue of chunks to use
+    /// Removes the chunk at the end of the chunk path
+    /// Updates the pointers and positions of each chunk to move back one as a new one was just added to the front
+    /// Updates the current and next splines for the boat to travel
     /// </summary>
     private void ChunkChange()
     {
