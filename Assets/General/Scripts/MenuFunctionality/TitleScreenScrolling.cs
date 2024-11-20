@@ -39,7 +39,8 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <summary>
     /// moves the ui up to simulate the camera moving down
     /// </summary>
-    /// <param name="destination"></param> designated movement destination
+    /// <param name="destination"> The destination to move the title screen to </param>
+    /// <param name="scrollSpeed"> The speed to move the title screen at </param>
     /// <returns></returns>
     private IEnumerator ScrollingScreen(Vector3 destination, float scrollSpeed)
     {

@@ -122,8 +122,10 @@ public class SpecificVisualEffect
     /// Plays the next vfx in the object pool
     /// Takes in a Transform and sets it to be its parent
     /// </summary>
-    /// <param name="parent"></param>
-    /// <returns></returns>
+    /// <param name="parent"> The parent that we are setting the vfx to </param>
+    /// <param name="location"> The location that we are creating the vfx at </param>
+    /// <param name="rotation"> The rotation that we are creating the vfx at </param>
+    /// <returns> The vfx that we played </returns>
     public GeneralVfxFunctionality PlayNextVfxInPool(Transform parent, Vector3 location, Quaternion rotation)
     {
         GeneralVfxFunctionality currentVfx = PlayNextVfxInPool(location, rotation);
@@ -136,8 +138,8 @@ public class SpecificVisualEffect
     /// <summary>
     /// Moves a specific object back to the object pool
     /// </summary>
-    /// <param name="vfxObject"></param>
-    /// <returns></returns>
+    /// <param name="vfxObject"> The object to move back to the pool </param>
+    /// <returns> The delay between iteration </returns>
     public IEnumerator MoveObjectBackToPool(GameObject vfxObject)
     {
         yield return new WaitForSeconds(_particleDuration);
@@ -171,7 +173,7 @@ public class SpecificVisualEffect
     /// <summary>
     /// Disables the vfx object after adding it back to the pool
     /// </summary>
-    /// <param name="objectToHide"></param>
+    /// <param name="objectToHide"> The vfx gameobject to set disabled </param>
     private void HideVfx(GameObject objectToHide)
     {
         objectToHide.SetActive(false);

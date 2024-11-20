@@ -79,7 +79,7 @@ public class TimeManager : MainUniversalManagerFramework
     /// <summary>
     /// Toggles the game being paused or unpaused
     /// </summary>
-    /// <param name="isPaused"></param>
+    /// <param name="isPaused"> Toggle for if the game is paused or not </param>
     private void InvokeOnGamePauseToggle(bool isPaused)
     {
         _onGamePauseToggleEvent?.Invoke(isPaused);

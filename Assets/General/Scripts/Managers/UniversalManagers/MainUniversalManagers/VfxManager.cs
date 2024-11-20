@@ -53,7 +53,7 @@ public class VfxManager : MainUniversalManagerFramework
     /// Spawns the vfx to be added to the pool
     /// SpecificVisualEffects cannot do this as it isn't a monobehavior
     /// </summary>
-    /// <param name="specificVisualEffect"></param>
+    /// <param name="specificVisualEffect"> The visual effect that we are creating the pool for </param>
     public void CreateVisualEffectsInPool(SpecificVisualEffect specificVisualEffect)
     {
         //Spawn the vfx
