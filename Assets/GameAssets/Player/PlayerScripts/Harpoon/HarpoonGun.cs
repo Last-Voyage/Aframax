@@ -561,6 +561,7 @@ public class HarpoonGun : MonoBehaviour
     public LayerMask GetHarpoonExcludeLayers() => _excludeLayers;
     public bool GetDoesHarpoonRemainsInObject() => _doesHarpoonRemainInHitObject;
     public Transform GetHarpoonTip() => _harpoonTip;
+    public int GetMaxAmmo() => _maxAmmo;
     public int GetReserveAmmo() => _currentReserveAmmo;
 
     /// <summary>

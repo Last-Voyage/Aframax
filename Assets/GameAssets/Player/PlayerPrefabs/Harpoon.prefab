@@ -391,8 +391,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9037431801711115209}
   - component: {fileID: 8443930053281611201}
-  - component: {fileID: 8773793517040059629}
-  - component: {fileID: 8625449629396149424}
+  - component: {fileID: 788469961441525415}
+  - component: {fileID: 5185409107166823848}
   m_Layer: 0
   m_Name: Harpoon
   m_TagString: Untagged
@@ -475,9 +475,7 @@ MonoBehaviour:
     type: 3}
   _recoilCameraShakeIntensity: 5
   _recoilCameraShakeTime: 0.05
-  _harpoonShootTrigger: shoot
-  _harpoonRetractTrigger: drawBack
---- !u!114 &8773793517040059629
+--- !u!114 &788469961441525415
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -489,7 +487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9def28914e019c47b324bed6a3732aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &8625449629396149424
+--- !u!95 &5185409107166823848
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -500,7 +498,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: e44e357fc0a89554891cf245fb905c35, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
