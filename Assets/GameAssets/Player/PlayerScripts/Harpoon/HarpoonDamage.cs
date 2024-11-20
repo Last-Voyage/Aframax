@@ -24,6 +24,8 @@ public class HarpoonDamage : BaseDamage
         {
             return;
         }
+
         base.ApplyDamage(damageRecipient);
+        GetComponent<HarpoonProjectileMovement>().ShouldHarpoonStick(damageRecipient);
     }
 }

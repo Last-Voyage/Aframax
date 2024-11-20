@@ -20,8 +20,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
     static private Vector3 _movement;
 
     private bool _isStuck;
-
-    private Transform _originPoint;
     
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
@@ -32,8 +30,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         transform.position = startLoc;
         transform.LookAt(transform.position + startDirection);
-        
-        _originPoint = HarpoonGun.Instance.gameObject.transform;
 
         StartCoroutine(HarpoonFireProcess());
         
@@ -48,7 +44,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
         float travelDistance = 0f;
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
         {
-            if (ShouldHarpoonStick())
+            if (_isStuck)
             {
                 break;
             }
@@ -80,25 +76,17 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// Used to find out if the harpoon hits something or not. 
     /// </summary>
     /// <returns></returns> a bool as to whether or not the while loop should be broken
-    private bool ShouldHarpoonStick()
+    public bool ShouldHarpoonStick(GameObject objectToStickIn)
     {
         //checks if _stuck is true, if it is it ends the while loop
-        if (_isStuck)
+        if (!HarpoonGun.Instance.GetDoesHarpoonRemainsInObject())
         {
-            return _isStuck;
+            return false;
         }
-            
-        // Cast a ray from the harpoon's current position forward by the amount it moves this frame
-        //finds if the harpoon has hit something, if it has, it sticks the harpoon and ends the while loop
-        if (Physics.Raycast(_originPoint.position, _originPoint.forward, out RaycastHit hit,
-            100f, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
-        {
-            gameObject.transform.parent = hit.collider.transform;
-            transform.position = hit.point; // Snap the harpoon to the _hit point
-            _isStuck = true;
-            return true;
-        }
-        //if it got to here, the harpoon hasn't hit anything and can continue moving
-        return false;
+
+        gameObject.transform.parent = objectToStickIn.transform;
+        _isStuck = true;
+
+        return _isStuck;
     }
 }
