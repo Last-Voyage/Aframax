@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -180,9 +181,14 @@ public class WeakPointHandler : MonoBehaviour
         InvokeAllWeakPointsDestroyedEvent();
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, _parentGameObject.transform.position);
 
+        // Un-childs and disables the harpoons so they aren't destroyed 
+        foreach(HarpoonProjectileMovement harpoon in _parentGameObject.GetComponentsInChildren<HarpoonProjectileMovement>())
+        {
+            harpoon.transform.parent = null;
+            harpoon.gameObject.SetActive(false);
+        }
         Destroy(_parentGameObject);
     }
-
     #endregion
 
     #region Events
