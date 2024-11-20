@@ -19,8 +19,8 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     public bool CanGeneratorBeInteracted { get; set; }
     public bool DoesRequireSpanner { get; set; }
 
-    [Tooltip("Moves the sparks and smoke forwards")]
-    private Vector3 aBoost = new Vector3(0, 0, -1);
+    [Tooltip("Moves the sparks and smoke forwards, or elsewhere")]
+    private readonly Vector3 _vfxDisplacement = Vector3.back;
     
     /// <summary>
     /// This function spawns in the smoke for the generator
@@ -29,7 +29,7 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     {
         
         VfxManager.Instance.GetPlumeSmokeVfx().PlayNextVfxInPool
-            (transform.position + aBoost, transform.rotation);
+            (transform.position + _vfxDisplacement, transform.rotation);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     public void GeneratorSparks()
     {
         VfxManager.Instance.GetMetalSparksVfx().PlayNextVfxInPool
-            (transform.position + aBoost, transform.rotation);
+            (transform.position + _vfxDisplacement, transform.rotation);
     }
 
     public void OnInteractedByPlayer()
