@@ -435,6 +435,11 @@ public class HarpoonGun : MonoBehaviour
         _currentFocusAccuracy = 0;
     }
 
+    public void CallFocusMax()
+    {
+        FocusMax();
+    }
+
     /// <summary>
     /// The process of unfocusing the weapon
     /// </summary>
@@ -473,6 +478,13 @@ public class HarpoonGun : MonoBehaviour
         CalculateCurrentFocusAccuracy();
         _currentFocusState = EFocusState.None;
         _reticle.ReticleFire();
+    }
+
+    public void CallResetFocus() 
+    {
+
+        ResetFocus();
+
     }
 
     /// <summary>

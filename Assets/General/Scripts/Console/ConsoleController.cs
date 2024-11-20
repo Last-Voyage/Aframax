@@ -40,6 +40,9 @@ public class ConsoleController : MonoBehaviour
     [Header("Free look cam references")]
     [SerializeField] private GameObject _freeLookCam;
     [SerializeField] private GameObject _toggleFreeLookCamButton;
+
+    [Header("Infinite Focus References")]
+    [SerializeField] private GameObject _infiniteFocusToggleButton;
     
     private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
     //look cam mode
@@ -64,7 +67,7 @@ public class ConsoleController : MonoBehaviour
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
         _toggleGodModeButton.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
-
+        _infiniteFocusToggleButton.GetComponent<Button>().onClick.AddListener(ToggleInfiniteFocus);
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -228,7 +231,37 @@ public class ConsoleController : MonoBehaviour
         FindObjectOfType<PlayerHealth>().ShouldTakeDamage = true;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
     }
-    
+
+    #endregion
+
+
+    #region Infinite Focus
+
+    private void ToggleInfiniteFocus()
+    {
+        //false means not focus max and true is in max focus
+        bool isInfocusState = false;
+
+        if (isInfocusState)
+        {
+            EnterInfiniteFocus();
+        }
+        else if (!isInfocusState)
+        {
+            ExitInfiniteFocus();
+        }
+
+    }
+
+    private void EnterInfiniteFocus()
+    {
+        GameObject.FindObjectOfType<HarpoonGun>().CallFocusMax();
+    }
+
+    private void ExitInfiniteFocus()
+    {
+        GameObject.FindObjectOfType<HarpoonGun>().CallResetFocus();
+    }
     #endregion
 
     /// <summary>
@@ -242,6 +275,7 @@ public class ConsoleController : MonoBehaviour
         _playerTakeDamageButton.onClick.RemoveAllListeners();
         _toggleGodModeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
+        _infiniteFocusToggleButton.GetComponent<Button>().onClick.RemoveAllListeners();
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
