@@ -17,7 +17,7 @@ using UnityEngine;
 public class HarpoonProjectileMovement : MonoBehaviour
 {
     //movement is a vector3 used for the harpoon's current velocity
-    static private Vector3 movement;
+    static private Vector3 _movement;
 
     private bool _isStuck;
     
@@ -45,11 +45,11 @@ public class HarpoonProjectileMovement : MonoBehaviour
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
         {
             // Calculate how far the harpoon should move in this frame
-            movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
+            _movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
 
             // If no collision, move the harpoon
-            HarpoonFiredProjectileMovement(movement);
-            travelDistance += movement.magnitude;
+            HarpoonFiredProjectileMovement(_movement);
+            travelDistance += _movement.magnitude;
 
             if (ShouldHarpoonStick())
             {
@@ -87,7 +87,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
         // Cast a ray from the harpoon's current position forward by the amount it moves this frame
         //finds if the harpoon has hit something, if it has, it sticks the harpoon and ends the while loop
         if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit,
-            movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
+            _movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
         {
             gameObject.transform.parent = hit.collider.transform;
             transform.position = hit.point; // Snap the harpoon to the _hit point
