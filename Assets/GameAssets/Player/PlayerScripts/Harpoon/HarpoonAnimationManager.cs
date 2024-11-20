@@ -8,6 +8,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Class that assists the harpoon's animator's logic
+/// </summary>
 public class HarpoonAnimationManager : MonoBehaviour
 {
     private Animator _animator;
@@ -30,7 +33,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        GetAnimator();
         SubscribeToEvents();
         StartCoroutine(CheckForWall());
     }
@@ -42,6 +45,14 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeToEvents();
+    }
+
+    /// <summary>
+    /// Retrieves the Animator from the GameObject
+    /// </summary>
+    private void GetAnimator()
+    {
+        _animator = GetComponent<Animator>();
     }
 
     /// <summary>
