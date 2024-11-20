@@ -81,8 +81,8 @@ public class LockdownAttackPatrolRoom : MonoBehaviour
     /// <summary>
     /// Checks if the collision object is the player
     /// </summary>
-    /// <param name="collider"></param>
-    /// <returns></returns>
+    /// <param name="collider"> The collider that we are checking if it belongs to the play</param>
+    /// <returns> If the provided collider belongs to the player </returns>
     private bool IsColliderPlayer(Collider collider)
     {
         return collider.gameObject.GetComponent<PlayerCollision>();

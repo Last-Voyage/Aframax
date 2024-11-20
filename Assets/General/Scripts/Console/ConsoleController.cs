@@ -17,7 +17,7 @@ using UnityEngine.UI;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
 
 /// <summary>
-/// Controls the console onn a global scope,
+/// Controls the console on a global scope,
 /// for example the console being turned on and
 /// off. May contain functions for quick action with 
 /// buttons
@@ -61,7 +61,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        //linking player take damage button to corresponding methode
+        //linking player take damage button to corresponding method
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
         _toggleGodModeButton.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
