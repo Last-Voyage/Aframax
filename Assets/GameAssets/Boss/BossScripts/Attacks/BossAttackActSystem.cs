@@ -27,7 +27,7 @@ public struct Act
     /// <summary>
     /// Scene should only begin once. This is set to true when the act begins.
     /// </summary>
-    /// <param name="hasActBegun"></param>
+    /// <param name="hasActBegun"> Boolean for setting if the act has begun </param>
     public void SetHasActBegun(bool hasActBegun)
     {
         HasActBegun = hasActBegun;
@@ -49,7 +49,7 @@ public struct ActScene
     /// <summary>
     /// Scene should only begin once. This is set to true when the scene begins.
     /// </summary>
-    /// <param name="hasSceneBegun"></param>
+    /// <param name="hasSceneBegun"> Boolean for setting if the scene has begun </param>
     public void SetHasSceneBegun(bool hasSceneBegun)
     {
         HasSceneBegun = hasSceneBegun;

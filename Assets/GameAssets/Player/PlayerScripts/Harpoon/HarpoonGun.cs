@@ -211,14 +211,15 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFocus.action.started -= FocusButtonHeld;
         _harpoonFocus.action.canceled -= FocusButtonReleased;
     }
-    
+
     #endregion
 
     #region Harpoon Firing
-    
+
     /// <summary>
-    /// creates a harpoon, sets up the fire direction and everything else to begin the launch
+    /// Gets the next harpoon from the object pool and launches it in the target direction
     /// </summary>
+    /// <param name="context"> The input action being pressed to call this function </param>
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //Return when we can't shoot
@@ -346,7 +347,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Called when the focus button begins to be held down
     /// </summary>
-    /// <param name="context"></param>
+    /// <param name="context"> The input action being pressed to call this function </param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
         _isFocusButtonHeld = true;
@@ -360,7 +361,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Called when the focus button is released
     /// </summary>
-    /// <param name="context"></param>
+    /// <param name="context"> The input action being pressed to call this function </param>
     private void FocusButtonReleased(InputAction.CallbackContext context)
     {
         _isFocusButtonHeld = false;
