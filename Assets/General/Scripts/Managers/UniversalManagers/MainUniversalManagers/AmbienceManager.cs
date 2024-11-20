@@ -162,8 +162,18 @@ public class AmbienceManager : AudioManager
         eventInstance.release();
     }
 
+    /// <summary>
+    /// Plays an audio effect attached to a game object
+    /// </summary>
+    /// <param name="eventReference"> event ref for audio to be played </param>
+    /// <param name="audioObject"> object the audio effect will be attached to </param>
+    /// <returns></returns>
     private void StartAmbienceOnObject(EventReference eventReference, GameObject audioObject)
     {
+        if (eventReference.IsNull)
+        {
+            return;
+        }
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         
         RuntimeManager.AttachInstanceToGameObject(eventInstance, audioObject.transform);
