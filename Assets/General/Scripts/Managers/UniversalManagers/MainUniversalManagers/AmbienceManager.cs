@@ -10,7 +10,9 @@
 
 using FMOD.Studio;
 using FMODUnity;
+using System;
 using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
 
 /// <summary>
@@ -19,6 +21,9 @@ using UnityEngine;
 public class AmbienceManager : AudioManager
 {
     public static AmbienceManager Instance; 
+    
+    public static Action<EventReference, GameObject> APlayAmbienceOnObject;
+    
     private List<EventInstance> _allAmbientEvents;
 
     /// <summary>
@@ -28,6 +33,7 @@ public class AmbienceManager : AudioManager
     {
         base.SetUpMainManager();
         
+        SubscribeToActions(true);
         StartGameBackgroundAudio();
     }
 
@@ -43,7 +49,7 @@ public class AmbienceManager : AudioManager
         GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
         GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
     }
-
+                                     
     /// <summary>
     /// Establishes the instance for the ambience manager
     /// </summary>
@@ -51,9 +57,31 @@ public class AmbienceManager : AudioManager
     {
         base.SetUpInstance();
         Instance = this;
-
+        
         //Established the instance for the FmodAmbienceEvents
         GetComponent<FmodAmbienceEvents>().SetUpInstance();
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        SubscribeToActions(false);
+    }
+    
+    /// <summary>
+    /// Subscribes and unsubscribes from actions
+    /// </summary>
+    /// <param name="val"> if true, subscribes </param>
+    private void SubscribeToActions(bool val)
+    {
+        if (val)
+        {
+            APlayAmbienceOnObject += StartAmbienceOnObject;
+            
+            return;
+        }
+
+        APlayAmbienceOnObject -= StartAmbienceOnObject;
     }
 
     private void Awake()
@@ -128,8 +156,19 @@ public class AmbienceManager : AudioManager
     private void StartAmbience(EventReference eventReference)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        
         _allAmbientEvents.Add(eventInstance);
         eventInstance.start();
+        eventInstance.release();
+    }
+
+    private void StartAmbienceOnObject(EventReference eventReference, GameObject audioObject)
+    {
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        
+        RuntimeManager.AttachInstanceToGameObject(eventInstance, audioObject.transform);
+        eventInstance.start();
+        _allAmbientEvents.Add(eventInstance);
         eventInstance.release();
     }
 

@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonProjectileMovement.cs
 // Author :            Ryan Swanson
+// Contributors:       David Henvick
 // Creation Date :     10/28/2024
 //
 // Brief Description : Controls the movement of the harpoon projectile

@@ -1,6 +1,7 @@
 /*****************************************************************************
 // Name :           StoryManager.cs
 // Author :         Charlie Polonus
+// Contributer :    Ryan Swanson
 // Created :        11/6/2024
 // Description :    Handles the story beats and story beat events for during
                     the game
@@ -53,6 +54,22 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays as soon as Unity starts playing
+    /// </summary>
+    private void Start()
+    {
+        // Run through each story beat, triggering the first one that is set to play on start
+        foreach (StoryBeat curBeat in StoryBeats)
+        {
+            if (curBeat.TriggerOnStart)
+            {
+                TriggerStoryBeat(curBeat);
+                return;
+            }
+        }
+    }
+
 #if UNITY_EDITOR
     /// <summary>
     /// FOR TESTING ONLY
@@ -73,6 +90,24 @@ public class StoryManager : MonoBehaviour
     {
         TriggerStoryBeat(++_currentStoryIndex);
         print("I am now on act " + _currentStoryIndex);
+    }
+
+    /// <summary>
+    /// Trigger a story beat by object
+    /// </summary>
+    /// <param name="beat">The index of the story beat</param>
+    public void TriggerStoryBeat(StoryBeat beat)
+    {
+        // Edge case if the beat doesn't exist
+        if (beat == null)
+        {
+            return;
+        }
+
+        // Start the coroutine on the specific story beat
+        _beatEventsCoroutine = StartCoroutine(nameof(TriggerBeatEvents), beat.StoryBeatEvents);
+
+        _currentStoryIndex = StoryBeats.IndexOf(beat);
     }
 
     /// <summary>
@@ -138,6 +173,7 @@ public class StoryBeat
     // The name of the story beat
     public string BeatName;
     public string BeatDescription;
+    public bool TriggerOnStart;
 
     // The list of story beat events in the beat
     public List<StoryBeatEvent> StoryBeatEvents;
