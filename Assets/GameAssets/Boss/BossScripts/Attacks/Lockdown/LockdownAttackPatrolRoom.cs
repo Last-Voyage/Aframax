@@ -97,6 +97,7 @@ public class LockdownAttackPatrolRoom : MonoBehaviour
     {
         _onPlayerRoomEnter?.Invoke();
     }
+
     /// <summary>
     /// Invokes event for the player exiting the room
     /// </summary>
