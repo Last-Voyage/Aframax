@@ -25,17 +25,17 @@ public class IterativeChunkLoad : MonoBehaviour
 
     #region Pointers
     [Tooltip("Selects the next chunk in the queue")]
-    private int _chunkQueuePtrPtr;
+    private int _chunkQueuePointerPointer;
 
     [Tooltip("Queue of pointers for chunk order")]
-    private int[] _chunkQueuePtr = new int[0];
+    private int[] _chunkQueuePointer = new int[0];
 
     // Pointers for where the chunks are in the every chunk array
     // This is necessary to put chunks Back into the unused chunk landing area
-    private int _newFrontChunkPtr;
-    private int _frontChunkPtr;
-    private int _middleChunkPtr;
-    private int _backChunkPtr;
+    private int _newFrontChunkPointer;
+    private int _frontChunkPointer;
+    private int _middleChunkPointer;
+    private int _backChunkPointer;
 
     [Tooltip("Keeps track of which chunk get removed next")]
     private enum ChunkStates
@@ -68,16 +68,16 @@ public class IterativeChunkLoad : MonoBehaviour
     private void Awake()
     {
         EnvironmentManager.Instance.GetOnSendingOverChunks().AddListener(ReceiveChunkQueue);
-        EnvironmentManager.Instance.GetOnSendAllChunkObjects().AddListener(ReceiveEveryChunk); // STILL NEEDS TO BE IMPLEMENTED
+        EnvironmentManager.Instance.GetOnSendAllChunkObjects().AddListener(ReceiveEveryChunk); 
         EnvironmentManager.Instance.GetOnChangeTheChunk().AddListener(ChunkChange);
 
         _boatMover = GetComponent<BoatMover>();
 
         // THIS SHOULD BE CHANGED TO REPRESENT THE FIRST CHUNKS IN THE QUEUE INSTEAD OF EVERY CHUNK
-        _usedChunks[(int)ChunkStates.Back] = _everyChunk[_chunkQueuePtrPtr++];
-        _usedChunks[(int)ChunkStates.Middle] = _everyChunk[_chunkQueuePtrPtr++];
+        _usedChunks[(int)ChunkStates.Back] = _everyChunk[_chunkQueuePointerPointer++];
+        _usedChunks[(int)ChunkStates.Middle] = _everyChunk[_chunkQueuePointerPointer++];
         _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.Middle].GetComponentInChildren<BezierCurve>());
-        _usedChunks[(int)ChunkStates.Front] = _everyChunk[_chunkQueuePtrPtr++];
+        _usedChunks[(int)ChunkStates.Front] = _everyChunk[_chunkQueuePointerPointer++];
         _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.Front].GetComponentInChildren<BezierCurve>());
     }
 
@@ -87,7 +87,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// <param name="chunkQueued">The queue of chunks</param>
     private void ReceiveChunkQueue(int[] chunkQueued)
     {
-        _chunkQueuePtr = chunkQueued;
+        _chunkQueuePointer = chunkQueued;
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void ChunkChange()
     {
-        if (_chunkQueuePtr.Length == 0)
+        if (_chunkQueuePointer.Length == 0)
         {
             return;
         }
@@ -147,16 +147,17 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void AddChunk()
     {
-        _newFrontChunkPtr = _chunkQueuePtr[_chunkQueuePtrPtr];
+        _newFrontChunkPointer = _chunkQueuePointer[_chunkQueuePointerPointer];
 
-        _chunkQueuePtrPtr = (_chunkQueuePtrPtr + 1) % _chunkQueuePtr.Length;
+        _chunkQueuePointerPointer = (_chunkQueuePointerPointer + 1) % _chunkQueuePointer.Length;
 
-        _everyChunk[_newFrontChunkPtr].transform.position =
-            _usedChunks[(int)ChunkStates.Front].transform.position + new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_distanceBetweenChunks);
+        _everyChunk[_newFrontChunkPointer].transform.position =
+            _usedChunks[(int)ChunkStates.Front].transform.position + 
+            new Vector3(/*DistanceBetweenChunks*/0, 0, /*0*/_distanceBetweenChunks);
 
-        _everyChunk[_newFrontChunkPtr].SetActive(true);
+        _everyChunk[_newFrontChunkPointer].SetActive(true);
 
-        _usedChunks[(int)ChunkStates.NewFront] = _everyChunk[_newFrontChunkPtr];
+        _usedChunks[(int)ChunkStates.NewFront] = _everyChunk[_newFrontChunkPointer];
     }
 
     /// <summary>
@@ -168,7 +169,7 @@ public class IterativeChunkLoad : MonoBehaviour
         _usedChunks[(int)ChunkStates.Back].SetActive(false); // If causing errors, put at the bottom of the function
 
         _usedChunks[(int)ChunkStates.Back].transform.position =
-            _unusedChunkLandingArea + new Vector3(_distanceBetweenChunks * _backChunkPtr, 0, 0);
+            _unusedChunkLandingArea + new Vector3(_distanceBetweenChunks * _backChunkPointer, 0, 0);
     }
 
     /// <summary>
@@ -178,15 +179,15 @@ public class IterativeChunkLoad : MonoBehaviour
     private void SwapChunkStates()
     {
         _usedChunks[(int)ChunkStates.Back] = _usedChunks[(int)ChunkStates.Middle];
-        _backChunkPtr = _middleChunkPtr;
+        _backChunkPointer = _middleChunkPointer;
         _usedChunks[(int)ChunkStates.Middle] = _usedChunks[(int)ChunkStates.Front];
         _boatMover.SetCurrentSpline(_usedChunks[(int)ChunkStates.Middle].GetComponentInChildren<BezierCurve>());
 
-        _middleChunkPtr = _frontChunkPtr;
+        _middleChunkPointer = _frontChunkPointer;
         _usedChunks[(int)ChunkStates.Front] = _usedChunks[(int)ChunkStates.NewFront];
         _boatMover.SetNextSpline(_usedChunks[(int)ChunkStates.Front].GetComponentInChildren<BezierCurve>());
-        _frontChunkPtr = _newFrontChunkPtr;
-        _newFrontChunkPtr = 0; // This ptr is freed until a new chunk is going to be added
+        _frontChunkPointer = _newFrontChunkPointer;
+        _newFrontChunkPointer = 0; // This ptr is freed until a new chunk is going to be added
     }
     
     #endregion
