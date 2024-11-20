@@ -64,6 +64,7 @@ public class VfxManager : MainUniversalManagerFramework
 
         //Gets the GeneralVfxFunctionality which acts as a mini manager of that set of vfx
         GeneralVfxFunctionality generalVfxFunctionality = newVfx.GetComponent<GeneralVfxFunctionality>();
+        
         //Performs needed setup on the vfx
         generalVfxFunctionality.SetupChildParticleSystems();
         //Adds the created object to the pool
