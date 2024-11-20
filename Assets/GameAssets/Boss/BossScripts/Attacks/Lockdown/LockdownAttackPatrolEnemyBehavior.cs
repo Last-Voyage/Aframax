@@ -207,7 +207,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().AddListener(PlayerExitedRoom);
-        LockdownAttackController.DestroyAllEnemies.AddListener(DestroyEnemy);
+        LockdownAttackController.OnForceDestroyAllEnemies.AddListener(DestroyEnemy);
     }
 
     /// <summary>
@@ -217,6 +217,6 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().RemoveListener(PlayerExitedRoom);
-        LockdownAttackController.DestroyAllEnemies.RemoveListener(DestroyEnemy);
+        LockdownAttackController.OnForceDestroyAllEnemies.RemoveListener(DestroyEnemy);
     }
 }

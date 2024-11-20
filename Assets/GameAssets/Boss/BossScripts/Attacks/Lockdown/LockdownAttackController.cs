@@ -33,7 +33,7 @@ public class LockdownAttackController : BaseBossAttack
     /// <summary>
     /// Called when the attack ends to destroy all spawned enemies
     /// </summary>
-    public static UnityEvent DestroyAllEnemies {get; private set;} = new();
+    public static UnityEvent OnForceDestroyAllEnemies {get; private set;} = new();
 
     #region Enable & Action/Event Subscriptions
 
