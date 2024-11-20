@@ -51,13 +51,16 @@ public class HarpoonProjectileMovement : MonoBehaviour
             HarpoonFiredProjectileMovement(movement);
             travelDistance += movement.magnitude;
 
-            StickHarpoon();
+            if (ShouldHarpoonStick())
+            {
+                break;
+            }
             
             yield return null;
         }
         //Either reached here because we hit something or because we have exceeded the max distance
         //If the harpoon sticks in the object it remains enabled. Otherwise it disables it
-        //gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
+        gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
     }
 
     /// <summary>
@@ -69,25 +72,23 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position += movement;
     }
 
-    private void StickHarpoon()
+    private bool ShouldHarpoonStick()
     {
         if (_isStuck)
         {
-            return;
+            return _isStuck;
         }
             
         // Cast a ray from the harpoon's current position forward by the amount it moves this frame
         if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit,
             movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
         {
-            Debug.Log(hit.collider.gameObject.name);
-            Debug.Log(hit.point);
             gameObject.transform.parent = hit.collider.transform;
             transform.position = hit.point; // Snap the harpoon to the _hit point
             _isStuck = true;
+            return true;
         }
-        //If the harpoon sticks in the object it remains enabled. Otherwise it disables it
-        gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
+        return false;
     }
 
     /// <summary>
@@ -100,5 +101,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
         {
             //StickHarpoon();
         }
+        //Destroy(this);
     }
 }
