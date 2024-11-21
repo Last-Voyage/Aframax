@@ -25,7 +25,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AT_WALL_ANIM = "atWall";
 
     //Used to check to see if we are near a wall
-    private float _WALL_CHECK_DIST = 1;
+    //Currently unused until we get functionality for holstering
+    //private float _WALL_CHECK_DIST = 1;
 
     /// <summary>
     /// Called when the game starts
@@ -35,7 +36,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     {
         GetAnimator();
         SubscribeToEvents();
-        StartCoroutine(CheckForWall());
+        //Currently unused until we get functionality for holstering
+        //StartCoroutine(CheckForWall());
     }
 
     /// <summary>
@@ -138,8 +140,9 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// <summary>
     /// Coroutine that checks to see if the player is near a wall
     /// Used to start and stop the holstering animation
+    /// Currently unused until we get more functionality for holstering
     /// </summary>
-    private IEnumerator CheckForWall()
+    /*private IEnumerator CheckForWall()
     {
         while(true)
         {
@@ -156,5 +159,5 @@ public class HarpoonAnimationManager : MonoBehaviour
 
             yield return null;
         }
-    }
+    }*/
 }
