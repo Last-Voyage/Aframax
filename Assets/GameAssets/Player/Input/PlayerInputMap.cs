@@ -215,6 +215,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""ee2780e8-1efb-4ced-ae0a-abf5f4043adb"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterTitleScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""547f9354-7d69-49db-9e97-5715f84ccd9e"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
