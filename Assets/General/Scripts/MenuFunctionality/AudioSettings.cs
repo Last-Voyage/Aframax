@@ -13,10 +13,14 @@ using UnityEngine.UI;
 using FMOD.Studio;
 using System.IO;
 
+/// <summary>
+/// Allows the editing and applying of audio sliders in the settings window to the in-game audio
+/// </summary>
 public class AudioSettings : MonoBehaviour
 {
-    private VCA _vca;
+    private VCA _activeVca;
 
+    [Tooltip("The string representation of the file path to the audio settings save file")]
     [SerializeField] private string _audioSettingsFilePath;
 
     [SerializeField] private Slider _masterSlider;
@@ -68,10 +72,10 @@ public class AudioSettings : MonoBehaviour
     public void ChangeMaster()
     {
         // Set the VCA to the correct volume to change
-        _vca = FMODUnity.RuntimeManager.GetVCA("vca:/MasterVCA");
+        _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/MasterVCA");
         _masterVolume = _masterSlider.value;
         // Set the volume and save the data
-        _vca.setVolume(_masterVolume);
+        _activeVca.setVolume(_masterVolume);
         SaveData();
     }
 
@@ -81,10 +85,10 @@ public class AudioSettings : MonoBehaviour
     public void ChangeSfx()
     {
         // Set the VCA to the correct volume to change
-        _vca = FMODUnity.RuntimeManager.GetVCA("vca:/SFXVCA");
+        _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/SFXVCA");
         _sfxVolume = _sfxSlider.value;
         // Set the volume and save the data
-        _vca.setVolume(_sfxVolume);
+        _activeVca.setVolume(_sfxVolume);
         SaveData();
     }
 
@@ -94,10 +98,10 @@ public class AudioSettings : MonoBehaviour
     public void ChangeAmbience()
     {
         // Set the VCA to the correct volume to change
-        _vca = FMODUnity.RuntimeManager.GetVCA("vca:/AmbianceVCA");
+        _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/AmbianceVCA");
         _ambienceVolume = _ambienceSlider.value;
         // Set the volume and save the data
-        _vca.setVolume(_ambienceVolume);
+        _activeVca.setVolume(_ambienceVolume);
         SaveData();
     }
 
@@ -107,10 +111,10 @@ public class AudioSettings : MonoBehaviour
     public void ChangeVoice()
     {
         // Set the VCA to the correct volume to change
-        _vca = FMODUnity.RuntimeManager.GetVCA("vca:/DialogueVCA");
+        _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/DialogueVCA");
         _voiceVolume = _voiceSlider.value;
         // Set the volume and save the data
-        _vca.setVolume(_voiceVolume);
+        _activeVca.setVolume(_voiceVolume);
         SaveData();
     }
 
@@ -120,10 +124,10 @@ public class AudioSettings : MonoBehaviour
     public void ChangeMusic()
     {
         // Set the VCA to the correct volume to change
-        _vca = FMODUnity.RuntimeManager.GetVCA("vca:/MusicVCA");
+        _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/MusicVCA");
         _musicVolume = _musicSlider.value;
         // Set the volume and save the data
-        _vca.setVolume(_musicVolume);
+        _activeVca.setVolume(_musicVolume);
         SaveData();
     }
 
