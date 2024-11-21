@@ -144,23 +144,6 @@ public class BossAttackActSystem : MonoBehaviour
         GameStateManager.Instance.GetOnCompletedEntireTutorial().RemoveListener(BeginAct);
     }
 
-#if UNITY_EDITOR
-
-    /// <summary>
-    /// just for testing
-    /// </summary>
-    private void Update()
-    {
-        // Test begin interior attack until act system is properly connected to the start of the game / end
-        // of tutorial
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && !TimeManager.Instance.GetIsGamePaused())
-        {
-            BeginAct();
-        }
-    }
-    
-#endif
-
     #region Act Functions
 
     /// <summary>
