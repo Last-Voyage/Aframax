@@ -43,6 +43,8 @@ public class HarpoonBoltVfx : MonoBehaviour
         _materialVfxRefs.Add(_vfxCollisionMaterials[3], (uint)VFXType.TREEVFX);
         _materialVfxRefs.Add(_vfxCollisionMaterials[4], (uint)VFXType.TREEVFX);
         _materialVfxRefs.Add(_vfxCollisionMaterials[5], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[6], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[7], (uint)VFXType.TREEVFX);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -54,14 +56,16 @@ public class HarpoonBoltVfx : MonoBehaviour
             return;
         }
         Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward),
-            out RaycastHit hit, 2f);
+            out RaycastHit hit, 1f);
         if (hit.collider.IsUnityNull() || !hit.collider.gameObject.TryGetComponent<MeshCollider>
-                (out var freeza) || !freeza.gameObject.TryGetComponent<Renderer>(out var freezaRenderer))
+                (out var freeza) /*|| !freeza.gameObject.TryGetComponent<Renderer>(out var freezaRenderer)*/)
         {
             return;
         }
-        
-        Debug.Log(anotherCollider);
+
+        int farquad = 0;
+
+        Material[] objMaterials = anotherRenderer.sharedMaterials;
         
         _functionRef = (uint)VFXType.NOVFX;
         
@@ -69,8 +73,6 @@ public class HarpoonBoltVfx : MonoBehaviour
 
         Mesh theMesh = anotherCollider.sharedMesh;
         int howManyMeshes = theMesh.subMeshCount;
-        
-        /*MeshCollider funny = hit.collider as MeshCollider;*/
 
         int whichTriangle = hit.triangleIndex;
         
@@ -79,34 +81,19 @@ public class HarpoonBoltVfx : MonoBehaviour
         
         for (int i = 0; i < howManyMeshes; i++)
         {
+            Debug.Log(objMaterials[i] + "fake");
             SubMeshDescriptor subMesh = theMesh.GetSubMesh(i);
-            //Debug.log();
-            Debug.Log(subMesh.indexStart);
+
+            Debug.Log(subMesh.indexStart + " " + ++farquad + " " + subMesh);
             Debug.Log(subMesh.indexCount);
             if (whichTriangle > subMesh.indexStart && whichTriangle < subMesh.indexCount 
-            /*&& funny.TryGetComponent<Renderer>(out var subMeshRenderer)*/)
+                                                   && _materialVfxRefs.TryGetValue(objMaterials[i], out uint dogWater))
             {
-                _functionRef = _materialVfxRefs[freezaRenderer.sharedMaterial];
-                Debug.Log(freezaRenderer.sharedMaterial);
+                _functionRef = dogWater;
+                Debug.Log(objMaterials[i] + "real jk");
+                break;
             }
         }
-
-        /*int fakeInt = theMesh.GetSubMesh(0).indexCount;
-        
-        _materialsInCollision = null;
-
-        _materialsInCollision = anotherRenderer.sharedMaterials.ToList();
-
-        Debug.Log("has renderer");
-            
-        foreach (var material in _materialsInCollision)
-        { if (_materialVfxRefs.TryGetValue(material, out uint friend))
-            { 
-                _functionRef = friend;
-                break;
-            } 
-            print(material);
-        }*/
 
         if (_harpoonVisualEffects[_functionRef] != null)
         {
