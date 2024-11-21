@@ -16,7 +16,7 @@ using UnityEngine;
 public class FastIKFabric : MonoBehaviour
 {
     [SerializeField] private int _chainLength = 2;
-    [SerializeField] internal Transform Target;
+    public Transform Target { get; set; }
     [SerializeField] private Transform _pole;
 
     [Header("Solver Parameters")]
@@ -72,14 +72,6 @@ public class FastIKFabric : MonoBehaviour
         }
         _startRotationTarget = GetRotationRootSpace(Target);
 
-        GetFullLength();
-    }
-
-    /// <summary>
-    /// gets the full length from root to tip of the IK system
-    /// </summary>
-    private float GetFullLength()
-    {
         //init data
         var currentJoint = transform;
         _completeLength = 0;
@@ -102,7 +94,6 @@ public class FastIKFabric : MonoBehaviour
             }
             currentJoint = currentJoint.parent;
         }
-        return _completeLength;
     }
 
     /// <summary>
@@ -118,9 +109,15 @@ public class FastIKFabric : MonoBehaviour
     /// </summary>
     private void ResolveIK()
     {
-        if (Target == null) { return; }
+        if (Target == null) 
+        { 
+            return; 
+        }
 
-        if (_bonesLength.Length != _chainLength) { Init(); }
+        if (_bonesLength.Length != _chainLength) 
+        { 
+            Init(); 
+        }
 
         //Fabric
 
@@ -152,7 +149,8 @@ public class FastIKFabric : MonoBehaviour
         {
             for (int i = 0; i < _jointPositions.Length - 1; i++)
             {
-                _jointPositions[i + 1] = Vector3.Lerp(_jointPositions[i + 1], _jointPositions[i] + _startDirection[i], _snapBackStrength);
+                _jointPositions[i + 1] = Vector3.Lerp(_jointPositions[i + 1], 
+                    _jointPositions[i] + _startDirection[i], _snapBackStrength);
             }
 
             for (int iteration = 0; iteration < _iterations; iteration++)
@@ -167,18 +165,23 @@ public class FastIKFabric : MonoBehaviour
                     }
                     else
                     {
-                        _jointPositions[i] = _jointPositions[i + 1] + (_jointPositions[i] - _jointPositions[i + 1]).normalized * _bonesLength[i]; //set in line on distance
+                        _jointPositions[i] = _jointPositions[i + 1] + (_jointPositions[i] - 
+                            _jointPositions[i + 1]).normalized * _bonesLength[i]; //set in line on distance
                     }
                 }
 
                 //forward reaching IK iteration
                 for (int i = 1; i < _jointPositions.Length; i++)
                 {
-                    _jointPositions[i] = _jointPositions[i - 1] + (_jointPositions[i] - _jointPositions[i - 1]).normalized * _bonesLength[i - 1];
+                    _jointPositions[i] = _jointPositions[i - 1] + (_jointPositions[i] - 
+                        _jointPositions[i - 1]).normalized * _bonesLength[i - 1];
                 }
 
                 //check if the tip of the tendril is close enough to target
-                if ((_jointPositions[_jointPositions.Length - 1] - targetPosition).sqrMagnitude < _delta * _delta) { break; }
+                if ((_jointPositions[_jointPositions.Length - 1] - targetPosition).sqrMagnitude < _delta * _delta) 
+                { 
+                    break; 
+                }
             }
         }
 
@@ -191,8 +194,10 @@ public class FastIKFabric : MonoBehaviour
                 var plane = new Plane(_jointPositions[i + 1] - _jointPositions[i - 1], _jointPositions[i - 1]);
                 var projectedPole = plane.ClosestPointOnPlane(polePosition);
                 var projectedBone = plane.ClosestPointOnPlane(_jointPositions[i]);
-                var angleToRotate = Vector3.SignedAngle(projectedBone - _jointPositions[i - 1], projectedPole - _jointPositions[i - 1], plane.normal);
-                _jointPositions[i] = Quaternion.AngleAxis(angleToRotate, plane.normal) * (_jointPositions[i] - _jointPositions[i - 1]) + _jointPositions[i - 1];
+                var angleToRotate = Vector3.SignedAngle(projectedBone - _jointPositions[i - 1],
+                    projectedPole - _jointPositions[i - 1], plane.normal);
+                _jointPositions[i] = Quaternion.AngleAxis(angleToRotate, plane.normal) 
+                    * (_jointPositions[i] - _jointPositions[i - 1]) + _jointPositions[i - 1];
             }
         }
 
@@ -201,11 +206,13 @@ public class FastIKFabric : MonoBehaviour
         {
             if (i == _jointPositions.Length - 1)
             {
-                SetRotationRootSpace(_bones[i], Quaternion.Inverse(targetRotation) * _startRotationTarget * Quaternion.Inverse(_startRotationBone[i]));
+                SetRotationRootSpace(_bones[i], Quaternion.Inverse(targetRotation) 
+                    * _startRotationTarget * Quaternion.Inverse(_startRotationBone[i]));
             }
             else
             {
-                SetRotationRootSpace(_bones[i], Quaternion.FromToRotation(_startDirection[i], _jointPositions[i + 1] - _jointPositions[i]) * Quaternion.Inverse(_startRotationBone[i]));
+                SetRotationRootSpace(_bones[i], Quaternion.FromToRotation(_startDirection[i], 
+                    _jointPositions[i + 1] - _jointPositions[i]) * Quaternion.Inverse(_startRotationBone[i]));
             }
             SetPositionRootSpace(_bones[i], _jointPositions[i]);
         }
@@ -284,7 +291,9 @@ public class FastIKFabric : MonoBehaviour
         {
             //set size of the current bones gizmo
             var scale = Vector3.Distance(currentJoint.position, currentJoint.parent.position) * 0.1f;
-            Handles.matrix = Matrix4x4.TRS(currentJoint.position, Quaternion.FromToRotation(Vector3.up, currentJoint.parent.position - currentJoint.position), new Vector3(scale, Vector3.Distance(currentJoint.parent.position, currentJoint.position), scale));
+            Handles.matrix = Matrix4x4.TRS(currentJoint.position, Quaternion.FromToRotation(Vector3.up, 
+                currentJoint.parent.position - currentJoint.position),
+                new Vector3(scale, Vector3.Distance(currentJoint.parent.position, currentJoint.position), scale));
             Handles.color = Color.green;
             Handles.DrawWireCube(Vector3.up * 0.5f, Vector3.one);
             currentJoint = currentJoint.parent;

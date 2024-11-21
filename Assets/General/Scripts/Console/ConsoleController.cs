@@ -1,6 +1,7 @@
 /*****************************************************************************
 // Name: ConsoleController.CS
 // Author: Nabil Tagba
+// Creation Date : UNKNOWN
 // Overview: Handles the console being turned on and off
 // along with its hosting the methods the quick action buttons
 // in the console will use
@@ -16,7 +17,7 @@ using UnityEngine.UI;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
 
 /// <summary>
-/// Controls the console onn a global scope,
+/// Controls the console on a global scope,
 /// for example the console being turned on and
 /// off. May contain functions for quick action with 
 /// buttons
@@ -60,7 +61,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        //linking player take damage button to corresponding methode
+        //linking player take damage button to corresponding method
         _playerTakeDamageButton.onClick.AddListener(HurtPlayer);
         _toggleGodModeButton.GetComponent<Button>().onClick.AddListener(ToggleGodMode);
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
@@ -196,11 +197,11 @@ public class ConsoleController : MonoBehaviour
         try
         {
             //toggling between god mode
-            if (FindObjectOfType<PlayerHealth>().ShouldTakeDamage)
+            if (FindObjectOfType<PlayerHealth>().CanPlayerTakeDamage)
             {
                 EnterGodMode();
             }
-            else if (!FindObjectOfType<PlayerHealth>().ShouldTakeDamage)
+            else if (!FindObjectOfType<PlayerHealth>().CanPlayerTakeDamage)
             {
                 ExitGodMode();
             }
@@ -216,7 +217,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void EnterGodMode()
     {
-        FindObjectOfType<PlayerHealth>().ShouldTakeDamage = false;
+        FindObjectOfType<PlayerHealth>().CanPlayerTakeDamage = false;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
     }
 
@@ -225,7 +226,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void ExitGodMode() 
     {
-        FindObjectOfType<PlayerHealth>().ShouldTakeDamage = true;
+        FindObjectOfType<PlayerHealth>().CanPlayerTakeDamage = true;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
     }
     

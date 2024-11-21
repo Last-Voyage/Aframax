@@ -35,7 +35,7 @@ public class BaseBossDamage : BaseDamage
 
         //If the target is the player and can take damage deal damage
         //This is done to prevent multiple vfx/sfx on hit
-        if (damageRecipient.TryGetComponent(out PlayerHealth health) && health.ShouldTakeDamage)
+        if (damageRecipient.TryGetComponent(out PlayerHealth health) && health.CanPlayerTakeDamage)
         {
             //Calling this instead of the base ApplyDamage as that would do TryGetComponent again
             base.ApplyDamageToHealth(health);
