@@ -25,8 +25,10 @@ public class TutorialObjectInteract : MonoBehaviour
     {
         if(other.gameObject.CompareTag(_objectTag))
         {
+            //TODO: Re-implement the following commented out lines with the end of the tutorial
             // GameStateManager.Instance.GetOnCompletedTutorialSection()?.Invoke();
             //gameObject.SetActive(false);
+            
             AframaxSceneManager.Instance.LoadEndScene();
            
         }
