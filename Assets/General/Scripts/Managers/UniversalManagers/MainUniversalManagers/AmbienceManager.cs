@@ -48,6 +48,7 @@ public class AmbienceManager : AudioManager
     {
         GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
         GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnSceneChanged.RemoveListener(StartGameBackgroundAudio);
     }
                                      
     /// <summary>

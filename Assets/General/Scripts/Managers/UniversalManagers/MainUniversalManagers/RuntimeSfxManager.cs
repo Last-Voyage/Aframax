@@ -25,6 +25,8 @@ public class RuntimeSfxManager : AudioManager
 
     public static RuntimeSfxManager Instance;
 
+    private bool _shouldFootstepsPlay = true;
+
     #region Enable and Action Subscriptions
     /// <summary>
     /// Subscribes to any needed actions and initializes the footsteps
@@ -59,6 +61,8 @@ public class RuntimeSfxManager : AudioManager
         InitializeFootstepInstance();
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
+        GameStateManager.Instance.GetOnGamePaused().AddListener(PauseFootsteps);
+        GameStateManager.Instance.GetOnGameUnpaused().AddListener(ResumeFootsteps);
     }
 
     /// <summary>
@@ -69,6 +73,8 @@ public class RuntimeSfxManager : AudioManager
         base.UnsubscribeToGameplayEvents();
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+        GameStateManager.Instance.GetOnGamePaused().RemoveListener(PauseFootsteps);
+        GameStateManager.Instance.GetOnGameUnpaused().RemoveListener(ResumeFootsteps);
         
         ReleaseFootstepInstance();
     }
@@ -141,6 +147,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootSteps()
     { 
+        StopFootsteps();
         _footstepsCoroutine = StartCoroutine(LoopFootSteps());
     }
 
@@ -153,8 +160,25 @@ public class RuntimeSfxManager : AudioManager
         {
             return;
         }
+        
         StopCoroutine(_footstepsCoroutine);
         _footstepsCoroutine = null;
+    }
+
+    /// <summary>
+    /// Stops footstep audio during pause menu
+    /// </summary>
+    private void PauseFootsteps()
+    {
+        _shouldFootstepsPlay = false;
+    }
+    
+    /// <summary>
+    /// Resumes footstep sounds when game is unpaused
+    /// </summary>
+    private void ResumeFootsteps()
+    {
+        _shouldFootstepsPlay = true;
     }
 
     /// <summary>
@@ -162,7 +186,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootStep()
     {
-        if (PlayerMovementController.IsGrounded)
+        if (PlayerMovementController.IsGrounded && _shouldFootstepsPlay)
         {
             if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
             {
