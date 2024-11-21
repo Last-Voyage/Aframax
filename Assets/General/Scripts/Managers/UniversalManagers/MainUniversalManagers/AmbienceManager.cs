@@ -41,13 +41,14 @@ public class AmbienceManager : AudioManager
     {
         base.SubscribeToEvents();
         
-        AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopAllAmbience);
     }
 
-    protected override void SubscribeToGameplayEvents()
+    protected override void UnsubscribeToEvents()
     {
-        GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
-        GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopAllAmbience);
     }
                                      
     /// <summary>
