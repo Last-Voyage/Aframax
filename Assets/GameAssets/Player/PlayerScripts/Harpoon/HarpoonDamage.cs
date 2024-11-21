@@ -24,7 +24,6 @@ public class HarpoonDamage : BaseDamage
         {
             return;
         }
-        
         base.ApplyDamage(damageRecipient);
     }
 }

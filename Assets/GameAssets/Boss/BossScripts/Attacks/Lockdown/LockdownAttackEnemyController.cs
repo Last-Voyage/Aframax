@@ -120,6 +120,8 @@ public class LockdownAttackEnemyController : MonoBehaviour
         //Spawns the core
         _instantiatedCoreEnemy = 
             Instantiate(_coreEnemyPrefab, _patrolLocation.CoreSpawnPoint.position, Quaternion.identity,transform);
+        AmbienceManager.APlayAmbienceOnObject?.Invoke(FmodAmbienceEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);
 
         //Gets the weak point handler from the core
         if (!_instantiatedCoreEnemy.TryGetComponent(out WeakPointHandler weakPointHandler))
@@ -136,11 +138,20 @@ public class LockdownAttackEnemyController : MonoBehaviour
     /// <param name="handler"></param>
     private void CoreDestroyed(WeakPointHandler handler)
     {
+        //Invokes event for core destruction and removes its listeners
+        InvokeOnCoreDestroyed();
+        ForceDestroy();
+    }
+
+    /// <summary>
+    /// Called externally to forcibly destroy the lockdown attack
+    /// </summary>
+    public void ForceDestroy()
+    {
         //Destroys the patrol enemy and core
         Destroy(_instantiatedPatrolEnemy);
         Destroy(_instantiatedCoreEnemy);
-        //Invokes event for core destruction and removes its listeners
-        InvokeOnCoreDestroyed();
+
         _onCoreDestroyed.RemoveAllListeners();
     }
 

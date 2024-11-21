@@ -1,8 +1,7 @@
 /*****************************************************************************
 // File Name :         VineAttackController.cs
 // Author :            Tommy Roberts
-// Contributor :       Andrew Stapay
-//                     Ryan Swanson
+// Contributor :       Andrew Stapay, Ryan Swanson, Mark Hanson
 // Creation Date :     10/9/2024
 //
 // Brief Description : Controls the functionality of handling all vine attacks
@@ -23,7 +22,8 @@ public class VineAttackController : BaseBossAttack
     /// </summary>
     [SerializeField] private VineAttackGroup[] _attackOrder;
     [SerializeField] private float _attackInterval;
-
+    [Tooltip("rate at which the limp idle sfx should loop")]
+    [SerializeField] private float _loopRate;
     private VineAttack[] _vineAttackRooms;
 
     private List<VineAttack> _currentAttackingRooms;
@@ -140,14 +140,6 @@ public class VineAttackController : BaseBossAttack
         {
             vineAttack.StartAttackProcess();
         }
-    }
-
-    /// <summary>
-    /// Ends the attack
-    /// </summary>
-    protected override void EndAttack()
-    {
-        base.EndAttack();
     }
 
     /// <summary>

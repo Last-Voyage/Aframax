@@ -44,13 +44,13 @@ public class SubMenuSceneBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        AframaxSceneManager.Instance.ToggleSettingsSceneLoadedBool();
+        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(true);
         _playerInputControls.Enable();
     }
 
     private void OnDisable()
     {
-        AframaxSceneManager.Instance.ToggleSettingsSceneLoadedBool();
+        AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(false);
         _playerInputControls.Player.Pause.performed -= ctx => ExitScene();
         _playerInputControls.Disable();
     }

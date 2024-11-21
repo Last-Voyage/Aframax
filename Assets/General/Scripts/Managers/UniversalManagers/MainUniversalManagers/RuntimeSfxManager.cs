@@ -93,6 +93,7 @@ public class RuntimeSfxManager : AudioManager
 
     #region FMOD Audio Functionality
 
+    // ReSharper disable Unity.PerformanceAnalysis
     /// <summary>
     /// Plays an audio event at a specific position
     /// </summary>

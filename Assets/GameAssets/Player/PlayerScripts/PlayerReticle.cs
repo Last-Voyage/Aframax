@@ -1,12 +1,14 @@
 /*****************************************************************************
 // File Name :         PlayerReticle.cs
 // Author :            Adam Garwacki
+// Contributors:       David Henvick
 // Creation Date :     10/27/2024
 //
 // Brief Description : Allows for dynamic reticle control based on inputs.
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +46,8 @@ public class PlayerReticle : MonoBehaviour
     private readonly float _maxScopeSize = 1000;
     private readonly float _scopeScalar = 1000;
 
+    private bool _isFocusChanging;
+
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
     /// </summary>
@@ -52,22 +56,45 @@ public class PlayerReticle : MonoBehaviour
         ObtainReferences();
 
         InitializeReticle();
+
+        _isFocusChanging = false;
     }
 
     /// <summary>
-    /// Checks for inputs related to the harpoon gun and appropriately updates UI.
+    /// Called by the harpoon when the state of the reticle needs to change (focusing and unfocusing)
     /// </summary>
-    private void Update()
+    public void ChangeFocus()
     {
-        // Updates the sprite of the reticle if spread range is actively changing due to focus
-        if (_harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Focusing ||
-            _harpoonGunScript.GetCurrentFocusState() == HarpoonGun.EFocusState.Unfocusing)
-        {
-            AdjustReticleSize();
+        _isFocusChanging = true;
+        StartCoroutine(ChangingReticleFocus());
+    }
+
+    /// <summary>
+    /// Used to update the reticle appearance and size
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ChangingReticleFocus()
+    {
+        while (_isFocusChanging)
+        { 
+            if (_newReticleSize < _maxScopeSize || _newReticleSize > _minScopeSize)
+            {
+                yield return new WaitForFixedUpdate();
+                AdjustReticleSize();
+                AdjustReticleAppearance();
+            }
+            else
+            {
+                _isFocusChanging = false;
+            }
         }
+    }
 
+        public void ReticleFire()
+    {
+        _newReticleSize = _maxScopeSize;
+        AdjustReticleSize();
         AdjustReticleAppearance();
-
     }
 
     /// <summary>
