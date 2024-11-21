@@ -6,6 +6,8 @@
 // Description:     Handles any general functionality related to an object with particle systems
 ******************************************************************************/
 
+using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -21,6 +23,8 @@ public class GeneralVfxFunctionality : MonoBehaviour
     [Tooltip("The animation trigger used for all vfx animations")]
     private const string VFX_ANIMATION_TRIGGER = "PlayVfxAnim";
 
+    [SerializeField] private bool _isMoveableVfx = false;
+    
     /// <summary>
     /// Adds all particle systems attached to this to a list
     /// </summary>
@@ -46,7 +50,17 @@ public class GeneralVfxFunctionality : MonoBehaviour
             animator.SetTrigger(VFX_ANIMATION_TRIGGER);
         }
     }
-
+/// <summary>
+/// To move Vfx forward if need be
+/// </summary>
+    void Update()
+    {
+        if (_isMoveableVfx)
+        {
+            transform.position += ((transform.forward /2f) * Time.deltaTime);
+        }
+    }
+    
     /// <summary>
     /// Gets the longest duration of all particle systems this object has
     /// </summary>

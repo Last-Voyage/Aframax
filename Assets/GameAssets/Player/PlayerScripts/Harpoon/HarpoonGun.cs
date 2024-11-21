@@ -113,6 +113,8 @@ public class HarpoonGun : MonoBehaviour
 
     private PlayerReticle _reticle;
 
+    private Transform _smokeMovement;
+
     #endregion
 
     #region Setup
@@ -129,6 +131,8 @@ public class HarpoonGun : MonoBehaviour
         StartCoroutine(HarpoonCameraOrientation());
 
         _reticle = GameObject.FindObjectOfType<PlayerReticle>();
+
+        _smokeMovement = transform;
     }
 
     /// <summary>
@@ -222,9 +226,10 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
-        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform, 
-            transform.position, transform.rotation);
-
+        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
+            _smokeMovement.position, _smokeMovement.rotation);
+        
+        
         ResetFocus();
 
         // Personally I think the projectile should be the same as the object on the visual as the gun itself, 
@@ -241,7 +246,7 @@ public class HarpoonGun : MonoBehaviour
 
         StartReloadProcess();
     }
-    
+
     #endregion
 
     #region Reloading
