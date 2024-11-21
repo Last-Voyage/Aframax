@@ -47,6 +47,9 @@ public class BoatMover : MonoBehaviour
         EstablishInstance();
     }
 
+    /// <summary>
+    /// Creates the instance for the BoatMover script
+    /// </summary>
     private void EstablishInstance()
     {
         if(Instance == null)

@@ -14,8 +14,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Defines a patrol location. Contains the spawn point, room border information, and possible enemy waypoints
+/// </summary>
 [System.Serializable]
-[Tooltip("Defines a patrol location. Contains the spawn point, room border information, and possible enemy waypoints")]
 public struct PatrolLocation
 {
     [Tooltip("Where the patrol enemies spawn")]

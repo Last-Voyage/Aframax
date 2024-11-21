@@ -20,7 +20,7 @@ public class BezierCurveEditor : Editor
     private float _bezierLength;
 
     // Whether the inspector is in debug mode
-    private bool _debugMode;
+    private bool _isInDebugMode;
 
     // The ideal y value
     private float _yValue;
@@ -36,12 +36,12 @@ public class BezierCurveEditor : Editor
     /// </summary>
     public override void OnInspectorGUI()
     {
-        _debugMode = EditorGUILayout.Toggle("Debug Mode", _debugMode);
+        _isInDebugMode = EditorGUILayout.Toggle("Debug Mode", _isInDebugMode);
         ActiveBezier.Tweening = EditorGUILayout.Toggle("Tweening Mode", ActiveBezier.Tweening);
         GUILayout.Space(10);
 
         // Easier layout if not in debug mode
-        if (_debugMode)
+        if (_isInDebugMode)
         {
             base.OnInspectorGUI();
         }

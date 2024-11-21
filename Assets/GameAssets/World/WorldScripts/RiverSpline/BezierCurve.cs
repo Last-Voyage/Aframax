@@ -170,7 +170,8 @@ public class BezierCurve : MonoBehaviour
         // Iterate through every bezier point and combine all the points in between them
         for (int i = 0; i < BezierPoints.Length - 1; i++)
         {
-            Vector3[] curPoints = PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve, out float curLength);
+            Vector3[] curPoints = 
+                PointsBetweenBeziers(BezierPoints[i], BezierPoints[i + 1], segmentsPerCurve, out float curLength);
 
             // If it's the very first point, add it to the list
             if (i == 0)
@@ -274,7 +275,8 @@ public class BezierCurve : MonoBehaviour
                 Vector3 positionOnSegment = EvaluateBezierPoint(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
 
                 // Determine the derivative at the point along the line
-                Vector3 derivativeOnSegment = EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+                Vector3 derivativeOnSegment = 
+                    EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
                 forward = derivativeOnSegment;
 
                 // Account for 3D space
@@ -361,7 +363,8 @@ public class BezierCurve : MonoBehaviour
         }
 
         // Return the ratio of the way through the line segment
-        return ((float)(distance - indexDistances[minIndex]) / (indexDistances[maxIndex] - indexDistances[minIndex])) + (minIndex / (float)CurveSmoothness);
+        return ((float)(distance - indexDistances[minIndex]) / 
+            (indexDistances[maxIndex] - indexDistances[minIndex])) + (minIndex / (float)CurveSmoothness);
     }
 
     [System.Obsolete]
@@ -398,7 +401,8 @@ public class BezierCurve : MonoBehaviour
                 Vector3 positionOnSegment = EvaluateBezierPoint(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
 
                 // Determine the derivative at the point along the line
-                Vector3 derivativeOnSegment = EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
+                Vector3 derivativeOnSegment = 
+                    EvaluateBezierDerivative(BezierPoints[i], BezierPoints[i + 1], valueOnSegment);
                 forward = derivativeOnSegment;
 
                 // Account for 3D space

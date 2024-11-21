@@ -32,11 +32,10 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
         ApplyDamage(col.gameObject);
     }
 
-
     /// <summary>
     /// Applies damage amount to the receiving health script
     /// </summary>
-    /// <param name="damageRecipient"></param>
+    /// <param name="damageRecipient"> The target we are dealing damage to </param>
     public virtual void ApplyDamage(GameObject damageRecipient)
     {
         if (!CanApplyDamage)
@@ -46,7 +45,16 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
 
         if (damageRecipient.TryGetComponent<IBaseHealth>(out IBaseHealth health))
         {
-            health.TakeDamage(Damage, this);
+            ApplyDamageToHealth(health);
         }
+    }
+
+    /// <summary>
+    /// Applies damage taking in the health interface
+    /// </summary>
+    /// <param name="health"></param>
+    protected virtual void ApplyDamageToHealth(IBaseHealth health)
+    {
+        health.TakeDamage(Damage,this);
     }
 }
