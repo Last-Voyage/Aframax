@@ -21,11 +21,11 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
     /// </summary>
-    /// <param name="startLoc"></param>
-    /// <param name="startDirection"></param>
-    public void LaunchHarpoon(Vector3 startLoc, Vector3 startDirection)
+    /// <param name="startLocation"> The location that the harpoon begins at </param>
+    /// <param name="startDirection"> The direction the harpoon is fired in </param>
+    public void LaunchHarpoon(Vector3 startLocation, Vector3 startDirection)
     {
-        transform.position = startLoc;
+        transform.position = startLocation;
         transform.LookAt(transform.position + startDirection);
 
         StartCoroutine(HarpoonFireProcess());
@@ -34,6 +34,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <summary>
     /// coroutine to move the created harpoon to the target direction. starts the reel coroutine at the end
     /// </summary>
+    /// <returns> The delay till the next iteration </returns>
     private IEnumerator HarpoonFireProcess()
     {
         float travelDistance = 0f;
@@ -64,7 +65,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <summary>
     /// Moves the harpoon when its being fired out
     /// </summary>
-    /// <param name="movement"></param>
+    /// <param name="movement"> The change in position of the harpoon </param>
     private void HarpoonFiredProjectileMovement(Vector3 movement)
     {
         transform.position += movement;

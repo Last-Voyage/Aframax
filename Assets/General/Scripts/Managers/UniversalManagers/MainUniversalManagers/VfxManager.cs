@@ -43,7 +43,7 @@ public class VfxManager : MainUniversalManagerFramework
     /// <summary>
     /// Sets up the object pool of all vfx
     /// </summary>
-    private void SetUpAllVfxInGame()
+    private void SetUpAllVisualEffectsInGame()
     {
         foreach (SpecificVisualEffect vfx in _allVfxInGame)
         {
@@ -55,8 +55,8 @@ public class VfxManager : MainUniversalManagerFramework
     /// Spawns the vfx to be added to the pool
     /// SpecificVisualEffects cannot do this as it isn't a monobehavior
     /// </summary>
-    /// <param name="specificVisualEffect"></param>
-    public void CreateVFXInPool(SpecificVisualEffect specificVisualEffect)
+    /// <param name="specificVisualEffect"> The visual effect that we are creating the pool for </param>
+    public void CreateVisualEffectsInPool(SpecificVisualEffect specificVisualEffect)
     {
         //Spawn the vfx
         GameObject newVfx = Instantiate(specificVisualEffect.GetVFXObject());
@@ -78,9 +78,20 @@ public class VfxManager : MainUniversalManagerFramework
     /// </summary>
     /// <param name="specificVisualEffect">The specific visual effect the object belongs to</param>
     /// <param name="vfxObj">The object to be added back to the pool</param>
-    public void StartVFXDuration(SpecificVisualEffect specificVisualEffect, GeneralVfxFunctionality vfxObj)
+    public void StartVisualEffectsDuration(SpecificVisualEffect specificVisualEffect, GeneralVfxFunctionality vfxObj)
     {
         StartCoroutine(specificVisualEffect.MoveObjectBackToPool(vfxObj.gameObject));
+    }
+
+    /// <summary>
+    /// Reclaims all visual effects before a scene change happens so that they don't get destroyed on the scene change
+    /// </summary>
+    private void ReclaimAllVisualEffectsBeforeSceneChange()
+    {
+        foreach (SpecificVisualEffect vfx in _allVfxInGame)
+        {
+            vfx.MoveAllVfxBackToPool();
+        }
     }
 
     #region Base Manager
@@ -99,7 +110,25 @@ public class VfxManager : MainUniversalManagerFramework
     public override void SetUpMainManager()
     {
         base.SetUpMainManager();
-        SetUpAllVfxInGame();
+        SetUpAllVisualEffectsInGame();
+    }
+
+    /// <summary>
+    /// Subscribes the reclaiming vfx to the scene change
+    /// </summary>
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(ReclaimAllVisualEffectsBeforeSceneChange);
+    }
+
+    /// <summary>
+    /// Unsubscribes the reclaiming vfx to the scene change
+    /// </summary>
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(ReclaimAllVisualEffectsBeforeSceneChange);
     }
     #endregion
 
@@ -115,177 +144,5 @@ public class VfxManager : MainUniversalManagerFramework
     public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[PLUME_SMOKE_ID];
     #endregion
 
-    #endregion
-}
-
-/// <summary>
-/// Acts as the owner of a specific vfx
-/// Contains the object pool of that vfx
-/// </summary>
-[System.Serializable]
-public class SpecificVisualEffect
-{
-    [Tooltip("Name of the visual effect")]
-    [SerializeField] private string _vfxName;
-    
-    [Tooltip("The vfx that is created")]
-    [SerializeField] private GameObject _vfxObject;
-    [Tooltip("How large the object pool is for the object")]
-    [SerializeField] private int _poolingAmount;
-
-    [Space]
-    [Tooltip("The type of duration that the vfx has")]
-    [SerializeField] private EVfxDurationType _vfxDurationType;
-    [Tooltip("The fixed duration of the vfx if set to that duration type")]
-    [SerializeField] private float _fixedDuration;
-    private float _particleDuration;
-
-    private int _poolingCounter =0;
-
-    private GeneralVfxFunctionality[] _vfxPool;
-
-    /// <summary>
-    /// Performs all needed setup for the specific vfx
-    /// </summary>
-    public void SetupSpecificVisualEffect()
-    {
-        InitializeObjectPool();
-        CalculateParticleDuration();
-    }
-
-    /// <summary>
-    /// Sets up the object pool by spawning all needed objects
-    /// </summary>
-    private void InitializeObjectPool()
-    {
-        //Initializes the array
-        _vfxPool = new GeneralVfxFunctionality[_poolingAmount];
-        for (int i = 0; i < _poolingAmount; i++)
-        {
-            //Spawns the vfx, disables it, and adds it to the pool
-            VfxManager.Instance.CreateVFXInPool(this);
-            _poolingCounter++;
-        }
-        _poolingCounter = 0;
-    }
-
-    /// <summary>
-    /// Determines how long the duration of the particle system should last before being reclaimed by the pool
-    /// </summary>
-    private void CalculateParticleDuration()
-    {
-        switch(_vfxDurationType)
-        {
-            case (EVfxDurationType.ParticleSystemDuration):
-                if (_vfxPool.Length != 0)
-                {
-                    _particleDuration = _vfxPool[0].GetLongestParticleSystemDuration();
-                }
-                return;
-            case (EVfxDurationType.FixedDuration):
-                _particleDuration = _fixedDuration;
-                return;
-            case (EVfxDurationType.Infinite):
-                return;
-            default:
-                return;
-        }
-    }
-
-    /// <summary>
-    /// Adds the created vfx object to the pool
-    /// </summary>
-    /// <param name="generalVfxFunctionality">Which object is being added</param>
-    public void AddNewObjectToPool(GeneralVfxFunctionality generalVfxFunctionality)
-    {
-        _vfxPool[_poolingCounter] = generalVfxFunctionality;
-    }
-
-    /// <summary>
-    /// Plays the next vfx in the object pool
-    /// </summary>
-    /// <param name="location">Where to place the object</param>
-    /// <returns></returns>
-    public GeneralVfxFunctionality PlayNextVfxInPool(Vector3 location, Quaternion rotation)
-    {
-        int previousCounterValue = _poolingCounter;
-
-        _vfxPool[_poolingCounter].gameObject.SetActive(true);
-        _vfxPool[_poolingCounter].transform.position = location;
-        _vfxPool[_poolingCounter].transform.rotation = rotation;
-        _vfxPool[_poolingCounter].StartAllVfx();
-
-        //Starts the duration if the vfx has one
-        if(_vfxDurationType != EVfxDurationType.Infinite)
-        {
-            VfxManager.Instance.StartVFXDuration(this, _vfxPool[_poolingCounter]);
-        }
-
-        IterateVFXPool();
-
-        return _vfxPool[previousCounterValue];
-    }
-
-    /// <summary>
-    /// Plays the next vfx in the object pool
-    /// Takes in a Transform and sets it to be its parent
-    /// </summary>
-    /// <param name="parent"></param>
-    /// <returns></returns>
-    public GeneralVfxFunctionality PlayNextVfxInPool(Transform parent, Vector3 location, Quaternion rotation)
-    {
-        GeneralVfxFunctionality currentVfx = PlayNextVfxInPool(location,rotation);
-        currentVfx.gameObject.transform.SetParent(parent);
-        currentVfx.transform.position = location;
-        
-        return currentVfx;
-    }
-
-    /// <summary>
-    /// Moves a specific object back to the object pool
-    /// </summary>
-    /// <param name="vfxObject"></param>
-    /// <returns></returns>
-    public IEnumerator MoveObjectBackToPool(GameObject vfxObject)
-    {
-        yield return new WaitForSeconds(_particleDuration);
-        HideVfx(vfxObject);
-        ObjectPoolingParent.Instance.AddObjectAsChild(vfxObject);
-    }
-
-    /// <summary>
-    /// Moves all vfx back to being in the object pool
-    /// </summary>
-    public void MoveAllVfxBackToPool()
-    {
-        foreach(GeneralVfxFunctionality vfx in _vfxPool)
-        {
-            ObjectPoolingParent.Instance.AddObjectAsChild(vfx.gameObject);
-        }
-    }
-
-    /// <summary>
-    /// Iterates through the object pool counter
-    /// </summary>
-    private void IterateVFXPool()
-    {
-        _poolingCounter++;
-        if (_poolingCounter >= _poolingAmount)
-        {
-            _poolingCounter = 0;
-        }
-    }
-
-    /// <summary>
-    /// Disables the vfx object after adding it back to the pool
-    /// </summary>
-    /// <param name="objectToHide"></param>
-    private void HideVfx(GameObject objectToHide)
-    {
-        objectToHide.SetActive(false);
-    }
-
-    #region Getters
-    public GameObject GetVFXObject() => _vfxObject;
     #endregion
 }
