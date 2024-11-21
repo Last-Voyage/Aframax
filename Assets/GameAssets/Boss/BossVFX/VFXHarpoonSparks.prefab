@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8038583980693392836
 Transform:
   m_ObjectHideFlags: 0
@@ -90,7 +90,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.02e-43, y: 1e-45, z: 1.5266e-41, w: 9.949662e-29}
+  m_BoundingSphereOverride: {x: 6.5191e-41, y: 0, z: 0, w: -2.828858e-37}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 1478130885103550694}
   - component: {fileID: 2039147230041941879}
   - component: {fileID: 2076845392252303917}
+  - component: {fileID: -1991634316431891929}
   m_Layer: 0
   m_Name: VFXHarpoonSparks
   m_TagString: Untagged
@@ -286,8 +287,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 15, y: 15, z: 15}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8038583980693392836}
   - {fileID: 192126504949949425}
@@ -5148,3 +5149,15 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-1991634316431891929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5469250826509107533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2ecb38d543f7de49937a91c21b62c7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

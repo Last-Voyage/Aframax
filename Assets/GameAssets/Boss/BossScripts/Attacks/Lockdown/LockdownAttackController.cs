@@ -26,7 +26,7 @@ public class LockdownAttackController : BaseBossAttack
 
     [Space]
     [SerializeField] private int _numberOfRoomsToAttack;
-    private int _roomCoresDefeated=0;
+    private int _roomCoresDefeated = 0;
 
     private LockdownAttackEnemyController[] _lockdownEnemyControllers;
 
@@ -82,6 +82,7 @@ public class LockdownAttackController : BaseBossAttack
     private void InitializePatrolLocations()
     {
         _lockdownEnemyControllers = GetComponentsInChildren<LockdownAttackEnemyController>();
+        
         foreach (LockdownAttackEnemyController lockdownAttackEnemyController in _lockdownEnemyControllers)
         {
             lockdownAttackEnemyController.SetUpEnemyController(_patrolEnemyPrefab,_coreEnemyPrefab);
@@ -95,7 +96,6 @@ public class LockdownAttackController : BaseBossAttack
     {
         // This is a passive attack this ends when it's scene is over
         // This should only subscribe during its lifetime as it's waiting for it's scene to end
-        BossAttackActSystem.Instance.GetOnAttackCompleted().AddListener(EndAttack);
 
         base.BeginAttack();
 
@@ -135,12 +135,25 @@ public class LockdownAttackController : BaseBossAttack
     }
 
     /// <summary>
+    /// Kills any living attack controllers that may remain
+    /// </summary>
+    private void KillAnyLivingAttackControllers()
+    {
+        foreach(LockdownAttackEnemyController enemyController in _lockdownEnemyControllers)
+        {
+            enemyController.ForceDestroy();
+        }
+    }
+
+    /// <summary>
     /// Destroys all outstanding enemies and calls the endAttack event
     /// </summary>
-    protected override void EndAttack()
+    public override void EndAttack()
     {
         // This should only unsubscribe from it's scene if it began, this isn't in unsub from event
         BossAttackActSystem.Instance.GetOnAttackCompleted().RemoveListener(EndAttack);
+
+        KillAnyLivingAttackControllers();
 
         base.EndAttack();
     }

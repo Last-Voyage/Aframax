@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerManager.cs
 // Author:          Ryan Swanson
+// Contributors:    Andrew Stapay
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides other all other scripts with access to the player
@@ -28,8 +29,14 @@ public class PlayerManager : MainGameplayManagerFramework
 
     //When the projectile is fired
     private static readonly UnityEvent _onHarpoonFiredEvent = new();
+    //When the harpoon gun starts reloading
+    private static readonly UnityEvent _onHarpoonReloadStartEvent = new();
     //When the harpoon is reloaded
     private static readonly UnityEvent _onHarpoonReloadedEvent = new();
+    //When the harpoon's ammo is restocked
+    private static readonly UnityEvent<AmmoRackInteractable> _onHarpoonRestockEvent = new();
+    //When the harpoon's ammo restocking is complete
+    private static readonly UnityEvent<int> _onHarpoonRestockCompleteEvent = new();
 
     //When the player starts focusing
     private static readonly UnityEvent _onHarpoonFocusStartEvent = new();
@@ -97,11 +104,37 @@ public class PlayerManager : MainGameplayManagerFramework
     }
 
     /// <summary>
+    /// IInvokes event for when the harpoon starts reloading
+    /// </summary>
+    public void InvokeOnHarpoonStartReloadEvent()
+    {
+        _onHarpoonReloadStartEvent?.Invoke();
+    }
+
+    /// <summary>
     /// Invokes event for when the harpoon is reloaded
     /// </summary>
     public void InvokeOnHarpoonReloadedEvent()
     {
         _onHarpoonReloadedEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes event for when the harpoon restocks its ammo
+    /// </summary>
+    /// <param name="ammoRack"> The ammo rack where the ammo is taken from </param>
+    public void InvokeOnHarpoonRestockEvent(AmmoRackInteractable ammoRack)
+    {
+        _onHarpoonRestockEvent?.Invoke(ammoRack);
+    }
+
+    /// <summary>
+    /// Invokes event for when the harpoon is finished restocking
+    /// </summary>
+    /// <param name="numHarpoons"> the number of harpoons that were restocked </param>
+    public void InvokeOnHarpoonRestockCompleteEvent(int numHarpoons)
+    {
+        _onHarpoonRestockCompleteEvent?.Invoke(numHarpoons);
     }
 
     /// <summary>
@@ -192,7 +225,10 @@ public class PlayerManager : MainGameplayManagerFramework
     public UnityEvent GetOnMovementEndEvent() => _onMovementEndedEvent;
 
     public UnityEvent GetOnHarpoonFiredEvent() => _onHarpoonFiredEvent;
+    public UnityEvent GetOnHarpoonStartReloadEvent() => _onHarpoonReloadStartEvent;
     public UnityEvent GetOnHarpoonReloadedEvent() => _onHarpoonReloadedEvent;
+    public UnityEvent<AmmoRackInteractable> GetOnHarpoonRestockEvent() => _onHarpoonRestockEvent;
+    public UnityEvent<int> GetOnHarpoonRestockCompleteEvent() => _onHarpoonRestockCompleteEvent;
 
     public UnityEvent GetOnHarpoonFocusStartEvent() => _onHarpoonFocusStartEvent;
     public UnityEvent GetOnHarpoonFocusMaxEvent() => _onHarpoonFocusMaxEvent;

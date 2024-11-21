@@ -238,6 +238,24 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""FreeCamMoveRight"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""e1b4d9e2-c1f0-4ba9-8762-804963097b48"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FreeCamLookRight"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b6a40698-9dde-4acb-94c6-d9b9851e0858"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -251,11 +269,160 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""OpenCloseConsole"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""id"": ""a6a08539-d924-4f21-b576-6e477a664669"",
+                    ""path"": ""3DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""6389f561-4576-4010-87cf-06f1c16f4e90"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""86dbc300-ab87-40ed-9b59-074b624036a5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""43defc72-9534-4f82-a2bb-46c0724bc26a"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e7e6617b-5a17-4f8e-bfe7-9c930f151258"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""forward"",
+                    ""id"": ""c70a4c15-d541-4b8d-9dd2-c833fdb5d91f"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""backward"",
+                    ""id"": ""afde98fa-348a-42ee-9381-32ae17032ec6"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamMoveRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Look"",
+                    ""id"": ""ea89932d-ccbe-4640-b741-3c4840fadfad"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeCamLookRight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""51fd6ad9-d019-4646-a605-d4548c86becd"",
+                    ""path"": ""<Mouse>/delta/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamLookRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7ed5f78e-0288-4d57-846c-91578586f7fe"",
+                    ""path"": ""<Mouse>/delta/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamLookRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0b195d9e-1ff3-4670-b3cc-d26ac95940f6"",
+                    ""path"": ""<Mouse>/delta/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamLookRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""327ea4ad-a5bb-4783-a055-2f517450e574"",
+                    ""path"": ""<Mouse>/delta/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FreeCamLookRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Keyboard and Mouse"",
+            ""bindingGroup"": ""Keyboard and Mouse"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
@@ -269,6 +436,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
+        m_DebugConsole_FreeCamMoveRight = m_DebugConsole.FindAction("FreeCamMoveRight", throwIfNotFound: true);
+        m_DebugConsole_FreeCamLookRight = m_DebugConsole.FindAction("FreeCamLookRight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -425,11 +594,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_DebugConsole;
     private List<IDebugConsoleActions> m_DebugConsoleActionsCallbackInterfaces = new List<IDebugConsoleActions>();
     private readonly InputAction m_DebugConsole_OpenCloseConsole;
+    private readonly InputAction m_DebugConsole_FreeCamMoveRight;
+    private readonly InputAction m_DebugConsole_FreeCamLookRight;
     public struct DebugConsoleActions
     {
         private @PlayerInputMap m_Wrapper;
         public DebugConsoleActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @OpenCloseConsole => m_Wrapper.m_DebugConsole_OpenCloseConsole;
+        public InputAction @FreeCamMoveRight => m_Wrapper.m_DebugConsole_FreeCamMoveRight;
+        public InputAction @FreeCamLookRight => m_Wrapper.m_DebugConsole_FreeCamLookRight;
         public InputActionMap Get() { return m_Wrapper.m_DebugConsole; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -442,6 +615,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @OpenCloseConsole.started += instance.OnOpenCloseConsole;
             @OpenCloseConsole.performed += instance.OnOpenCloseConsole;
             @OpenCloseConsole.canceled += instance.OnOpenCloseConsole;
+            @FreeCamMoveRight.started += instance.OnFreeCamMoveRight;
+            @FreeCamMoveRight.performed += instance.OnFreeCamMoveRight;
+            @FreeCamMoveRight.canceled += instance.OnFreeCamMoveRight;
+            @FreeCamLookRight.started += instance.OnFreeCamLookRight;
+            @FreeCamLookRight.performed += instance.OnFreeCamLookRight;
+            @FreeCamLookRight.canceled += instance.OnFreeCamLookRight;
         }
 
         private void UnregisterCallbacks(IDebugConsoleActions instance)
@@ -449,6 +628,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @OpenCloseConsole.started -= instance.OnOpenCloseConsole;
             @OpenCloseConsole.performed -= instance.OnOpenCloseConsole;
             @OpenCloseConsole.canceled -= instance.OnOpenCloseConsole;
+            @FreeCamMoveRight.started -= instance.OnFreeCamMoveRight;
+            @FreeCamMoveRight.performed -= instance.OnFreeCamMoveRight;
+            @FreeCamMoveRight.canceled -= instance.OnFreeCamMoveRight;
+            @FreeCamLookRight.started -= instance.OnFreeCamLookRight;
+            @FreeCamLookRight.performed -= instance.OnFreeCamLookRight;
+            @FreeCamLookRight.canceled -= instance.OnFreeCamLookRight;
         }
 
         public void RemoveCallbacks(IDebugConsoleActions instance)
@@ -466,6 +651,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         }
     }
     public DebugConsoleActions @DebugConsole => new DebugConsoleActions(this);
+    private int m_KeyboardandMouseSchemeIndex = -1;
+    public InputControlScheme KeyboardandMouseScheme
+    {
+        get
+        {
+            if (m_KeyboardandMouseSchemeIndex == -1) m_KeyboardandMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard and Mouse");
+            return asset.controlSchemes[m_KeyboardandMouseSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -479,5 +673,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     public interface IDebugConsoleActions
     {
         void OnOpenCloseConsole(InputAction.CallbackContext context);
+        void OnFreeCamMoveRight(InputAction.CallbackContext context);
+        void OnFreeCamLookRight(InputAction.CallbackContext context);
     }
 }
