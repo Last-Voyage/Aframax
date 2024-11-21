@@ -21,12 +21,6 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _FOCUS_END_ANIM = "releaseFocus";
     private const string _RELOAD_READY_ANIM = "reloadReady";
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
-    private const string _NOT_WALL_ANIM = "notAtWall";
-    private const string _AT_WALL_ANIM = "atWall";
-
-    //Used to check to see if we are near a wall
-    //Currently unused until we get functionality for holstering
-    //private float _WALL_CHECK_DIST = 1;
 
     /// <summary>
     /// Called when the game starts
@@ -36,8 +30,6 @@ public class HarpoonAnimationManager : MonoBehaviour
     {
         GetAnimator();
         SubscribeToEvents();
-        //Currently unused until we get functionality for holstering
-        //StartCoroutine(CheckForWall());
     }
 
     /// <summary>
@@ -136,28 +128,4 @@ public class HarpoonAnimationManager : MonoBehaviour
             _animator.SetTrigger(_RELOAD_READY_ANIM);
         }
     }
-
-    /// <summary>
-    /// Coroutine that checks to see if the player is near a wall
-    /// Used to start and stop the holstering animation
-    /// Currently unused until we get more functionality for holstering
-    /// </summary>
-    /*private IEnumerator CheckForWall()
-    {
-        while(true)
-        {
-            if (Physics.Raycast(transform.position, transform.parent.forward, _WALL_CHECK_DIST))
-            {
-                _animator.SetTrigger(_AT_WALL_ANIM);
-                _animator.ResetTrigger(_NOT_WALL_ANIM);
-            }
-            else
-            {
-                _animator.SetTrigger(_NOT_WALL_ANIM);
-                _animator.ResetTrigger(_AT_WALL_ANIM);
-            }
-
-            yield return null;
-        }
-    }*/
 }
