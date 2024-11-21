@@ -3,7 +3,7 @@
 // Author:          Nick Rice
 // Creation Date:   November 17th, 2024
 //
-// Description:     Handles harpoon vfx spawning
+// Description:     Handles the harpoon projectile hit vfx spawning
 ******************************************************************************/
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 /// <summary>
-/// Handles harpoon vfx spawning
+/// Handles the harpoon projectile hit vfx spawning
 /// </summary>
 public class HarpoonProjectileVfx : MonoBehaviour
 {
@@ -39,21 +39,9 @@ public class HarpoonProjectileVfx : MonoBehaviour
 
     private void Awake()
     {
-        // Grabs all the referenceable vfx and puts it into an array
-        _harpoonVisualEffects[(uint)VFXType.NOVFX] = null;
-        _harpoonVisualEffects[(uint)VFXType.SPARKVFX] = VfxManager.Instance.GetMetalSparksVfx();
-        _harpoonVisualEffects[(uint)VFXType.DECKVFX] = VfxManager.Instance.GetWoodenSparksVfx();
-        _harpoonVisualEffects[(uint)VFXType.TREEVFX] = VfxManager.Instance.GetTreeSplintersVfx();
+        InitializeHarpoonVisualEffects();
         
-        // Adds the material to the vfx dictionary
-        _materialVfxRefs.Add(_vfxCollisionMaterials[0], (uint)VFXType.SPARKVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[1], (uint)VFXType.SPARKVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[2], (uint)VFXType.DECKVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[3], (uint)VFXType.TREEVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[4], (uint)VFXType.TREEVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[5], (uint)VFXType.TREEVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[6], (uint)VFXType.TREEVFX);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[7], (uint)VFXType.TREEVFX);
+        InitializeVisualEffectsDictionary();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,8 +55,8 @@ public class HarpoonProjectileVfx : MonoBehaviour
             return;
         }
         // Mesh reference & submesh count
-        Mesh theMesh = anotherCollider.sharedMesh;
-        int howManyMeshes = theMesh.subMeshCount;
+        Mesh theCollidedMesh = anotherCollider.sharedMesh;
+        int howManyMeshes = theCollidedMesh.subMeshCount;
         Material[] collidedObjectsMaterials = anotherRenderer.sharedMaterials;
         #endregion
 
@@ -92,14 +80,14 @@ public class HarpoonProjectileVfx : MonoBehaviour
         // Goes through each submesh to check if the raycast collided with an index within it's value range
         for (int i = 0; i < howManyMeshes; i++)
         {
-            SubMeshDescriptor subMesh = theMesh.GetSubMesh(i);
+            SubMeshDescriptor subMesh = theCollidedMesh.GetSubMesh(i);
 
             // If the index is in the value range,
             // that material/submesh needs to match a possible vfx in the dictionary
             if (whichTriangle > subMesh.indexStart && whichTriangle < subMesh.indexCount && 
-                _materialVfxRefs.TryGetValue(collidedObjectsMaterials[i], out uint dogWater))
+                _materialVfxRefs.TryGetValue(collidedObjectsMaterials[i], out uint usableVfxPointer))
             {
-                _whichVfxPointer = dogWater;
+                _whichVfxPointer = usableVfxPointer;
                 break;
             }
         }
@@ -118,5 +106,31 @@ public class HarpoonProjectileVfx : MonoBehaviour
     {
         _harpoonVisualEffects[_whichVfxPointer].PlayNextVfxInPool
             (gameObject.transform.position, Quaternion.Inverse(gameObject.transform.rotation));
+    }
+
+    /// <summary>
+    /// Grabs all the referenceable vfx and puts it into an array
+    /// </summary>
+    private void InitializeHarpoonVisualEffects()
+    {
+        _harpoonVisualEffects[(uint)VFXType.NOVFX] = null;
+        _harpoonVisualEffects[(uint)VFXType.SPARKVFX] = VfxManager.Instance.GetMetalSparksVfx();
+        _harpoonVisualEffects[(uint)VFXType.DECKVFX] = VfxManager.Instance.GetWoodenSparksVfx();
+        _harpoonVisualEffects[(uint)VFXType.TREEVFX] = VfxManager.Instance.GetTreeSplintersVfx();
+    }
+
+    /// <summary>
+    /// Adds the materials to the vfx dictionary
+    /// </summary>
+    private void InitializeVisualEffectsDictionary()
+    {
+        _materialVfxRefs.Add(_vfxCollisionMaterials[0], (uint)VFXType.SPARKVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[1], (uint)VFXType.SPARKVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[2], (uint)VFXType.DECKVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[3], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[4], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[5], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[6], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[7], (uint)VFXType.TREEVFX);
     }
 }
