@@ -15383,6 +15383,59 @@ Transform:
   - {fileID: 6109252694553691255}
   m_Father: {fileID: 3687905568650057921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7223929214536879071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8732654258128966485}
+  - component: {fileID: 6679290009266663008}
+  m_Layer: 0
+  m_Name: LadderCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8732654258128966485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7223929214536879071}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5679007854152837472}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6679290009266663008
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7223929214536879071}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.013264846, y: 0.008700689, z: 0.03588048}
+  m_Center: {x: -0.022326479, y: -0.058137063, z: 0.01787403}
 --- !u!1 &7290130593930241166
 GameObject:
   m_ObjectHideFlags: 0
@@ -26224,7 +26277,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6344112985587627445, guid: 9cb40ffef58dd214d8a78fd573e0574e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8732654258128966485}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7753454934223389862, guid: 9cb40ffef58dd214d8a78fd573e0574e,
         type: 3}
@@ -26310,6 +26367,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.07017765, y: 0.11030042, z: 0.043058947}
   m_Center: {x: -0.00043012618, y: 0.0015384438, z: 0.021844963}
+--- !u!4 &5679007854152837472 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6344112985587627445, guid: 9cb40ffef58dd214d8a78fd573e0574e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1640773337045687509}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6039618518466979701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4977669060282170272, guid: 9cb40ffef58dd214d8a78fd573e0574e,
