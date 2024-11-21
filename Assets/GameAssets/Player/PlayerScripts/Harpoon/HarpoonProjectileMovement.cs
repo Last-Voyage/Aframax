@@ -43,7 +43,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <returns> The delay till the next iteration </returns>
     private IEnumerator HarpoonFireProcess()
     {
-        Debug.Log("Firing Harpoon");
         CheckAimAtBoat();
         float travelDistance = 0f;
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
@@ -89,11 +88,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit) && RecursiveCheckForParent(hit.collider.transform,_movingObjects))
         {
             transform.parent = _movingObjects;
-            Debug.Log("Harpoon is now child of Moving Objects");
-        }
-        else
-        {
-            Debug.Log("Harpoon is moving in world space");
         }
     }
 
@@ -102,10 +96,10 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// </summary>
     /// <param name="child">lowest object we are looking for in the heirarchy</param>
     /// <param name="parent">Object we hope to find as the parent</param>
-    /// <returns></returns>
+    /// <returns>True if child is within parent in the hierarchy</returns>
     private bool RecursiveCheckForParent(Transform child, Transform parent)
     {
-        if (parent == null)
+        if (child.parent == null)
         {
             return false;
         }
