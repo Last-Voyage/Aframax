@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class HarpoonBoltVfx : MonoBehaviour
 {
@@ -11,80 +13,100 @@ public class HarpoonBoltVfx : MonoBehaviour
     
     private List<Material> _materialsInCollision;
 
-    private SpecificVisualEffect[] _harpoonVisualEffects;
+    private SpecificVisualEffect[] _harpoonVisualEffects = new SpecificVisualEffect[4];
 
     [SerializeField]
     private Material[] _vfxCollisionMaterials;
-    
+
+    private enum VFXType : uint
+    {
+        NOVFX,
+        SPARKVFX,
+        DECKVFX,
+        TREEVFX
+    }
+
     private uint _functionRef;
-    private const uint _noVFX = 0;
 
     private void Awake()
     {
         // Adds the vfx to the array for later referencing;
-        // 0 is null for preventing vfx
-        _harpoonVisualEffects = new []
-            {null, VfxManager.Instance.GetMetalSparksVfx(), 
-                VfxManager.Instance.GetDeckSplintersVfx(), VfxManager.Instance.GetTreeSplintersVfx()};
+        _harpoonVisualEffects[(uint)VFXType.NOVFX] = null;
+        _harpoonVisualEffects[(uint)VFXType.SPARKVFX] = VfxManager.Instance.GetMetalSparksVfx();
+        _harpoonVisualEffects[(uint)VFXType.DECKVFX] = VfxManager.Instance.GetWoodenSparksVfx();
+        _harpoonVisualEffects[(uint)VFXType.TREEVFX] = VfxManager.Instance.GetTreeSplintersVfx();
         
         // Adds the material to the vfx
-        _materialVfxRefs.Add(_vfxCollisionMaterials[0], 1);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[1], 1);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[2], 2);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[3], 3);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[4], 3);
-        _materialVfxRefs.Add(_vfxCollisionMaterials[5], 3);
-    }
-
-
-    private void OnTriggerExit(Collider other)
-    {
-        
+        _materialVfxRefs.Add(_vfxCollisionMaterials[0], (uint)VFXType.SPARKVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[1], (uint)VFXType.SPARKVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[2], (uint)VFXType.DECKVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[3], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[4], (uint)VFXType.TREEVFX);
+        _materialVfxRefs.Add(_vfxCollisionMaterials[5], (uint)VFXType.TREEVFX);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        /*if (other.gameObject.GetComponent<MeshRenderer>() == 
-            gameObject.GetComponentInChildren<MeshRenderer>())
+        // If the collided object does not have these components, it will exit this function
+        if (!other.gameObject.TryGetComponent<MeshCollider>(out var anotherCollider)
+            || !other.gameObject.TryGetComponent<MeshRenderer>(out var anotherRenderer))
         {
             return;
-        }*/
-        _functionRef = _noVFX;
-        
-        if (other.gameObject.TryGetComponent<MeshRenderer>(out var theRenderer))
-        {
-            _materialsInCollision = null;
-
-            _materialsInCollision = theRenderer.sharedMaterials.ToList();
-            
-            /*_materialsInCollision = other.gameObject.GetComponent<MeshRenderer>
-                ().materials.Where(addedMaterials => _materialVfxRefs.ContainsKey(addedMaterials)).ToList();*/
-
-            Debug.Log("gravy");
-            
-            foreach (var material in _materialsInCollision)
-            {
-                if (_materialVfxRefs[material] != null)
-                {
-                    _functionRef = _materialVfxRefs[material];
-                }
-                if (_materialVfxRefs.TryGetValue(material, out uint friend))
-                {
-                    _functionRef = friend;
-                    break;
-                }
-                print(material);
-            }
-            
-            /*if (/*_materialsInCollision != null &&#1# _materialsInCollision.Count > 0)
-            {
-                print("Firey2" + " " + _functionRef);
-                print(_materialVfxRefs.Count);
-                print(_materialsInCollision.Count);
-                _functionRef = _materialVfxRefs[_materialsInCollision[0]]; // What?
-                Debug.Log(_functionRef);
-            }*/
         }
+        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward),
+            out RaycastHit hit, 2f);
+        if (hit.collider.IsUnityNull() || !hit.collider.gameObject.TryGetComponent<MeshCollider>
+                (out var freeza) || !freeza.gameObject.TryGetComponent<Renderer>(out var freezaRenderer))
+        {
+            return;
+        }
+        
+        Debug.Log(anotherCollider);
+        
+        _functionRef = (uint)VFXType.NOVFX;
+        
+        _materialsInCollision = null;
+
+        Mesh theMesh = anotherCollider.sharedMesh;
+        int howManyMeshes = theMesh.subMeshCount;
+        
+        /*MeshCollider funny = hit.collider as MeshCollider;*/
+
+        int whichTriangle = hit.triangleIndex;
+        
+        Debug.Log(whichTriangle);
+        // Need the three rule; three indexes to get one triangle
+        
+        for (int i = 0; i < howManyMeshes; i++)
+        {
+            SubMeshDescriptor subMesh = theMesh.GetSubMesh(i);
+            //Debug.log();
+            Debug.Log(subMesh.indexStart);
+            Debug.Log(subMesh.indexCount);
+            if (whichTriangle > subMesh.indexStart && whichTriangle < subMesh.indexCount 
+            /*&& funny.TryGetComponent<Renderer>(out var subMeshRenderer)*/)
+            {
+                _functionRef = _materialVfxRefs[freezaRenderer.sharedMaterial];
+                Debug.Log(freezaRenderer.sharedMaterial);
+            }
+        }
+
+        /*int fakeInt = theMesh.GetSubMesh(0).indexCount;
+        
+        _materialsInCollision = null;
+
+        _materialsInCollision = anotherRenderer.sharedMaterials.ToList();
+
+        Debug.Log("has renderer");
+            
+        foreach (var material in _materialsInCollision)
+        { if (_materialVfxRefs.TryGetValue(material, out uint friend))
+            { 
+                _functionRef = friend;
+                break;
+            } 
+            print(material);
+        }*/
 
         if (_harpoonVisualEffects[_functionRef] != null)
         {
@@ -92,45 +114,10 @@ public class HarpoonBoltVfx : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        /*if (other.gameObject.GetComponent<MeshRenderer>() == 
-            gameObject.GetComponentInChildren<MeshRenderer>())
-        {
-            print("Firey");
-            return;
-        }
-        _functionRef = _noVFX;
-        
-        if (other.gameObject.GetComponent<MeshRenderer>() != null)
-        {
-            _materialsInCollision = null;
-
-            _materialsInCollision = other.gameObject.GetComponent<MeshRenderer>
-                ().materials.Where(addedMaterials => _materialVfxRefs.ContainsKey(addedMaterials)).ToList();
-
-            if (_materialsInCollision != null)
-            {
-                print("Firey2");
-                _functionRef = _materialVfxRefs[_materialsInCollision[0]];
-                Debug.Log(_functionRef);
-            }
-        }
-
-        if (_harpoonVisualEffects[_functionRef] != null)
-        {
-            SummonNewVfx(other.GetContact(0));
-        }*/
-    }
-
-    private void SummonNewVfx(ContactPoint pointOfCollision)
-    {
-        _harpoonVisualEffects[_functionRef].PlayNextVfxInPool(pointOfCollision.point,
-            pointOfCollision.thisCollider.transform.rotation);
-    }
-
     private void RealVfx()
     {
+        Debug.Log("Did vfx " + _functionRef);
+        Debug.Log(_harpoonVisualEffects[_functionRef].ToString());
         _harpoonVisualEffects[_functionRef].PlayNextVfxInPool
             (gameObject.transform.position, Quaternion.Inverse(gameObject.transform.rotation));
     }
