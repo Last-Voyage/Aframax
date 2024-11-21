@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       GeneralVfxFunctionality.cs
 // Author:          Ryan Swanson
+//Contributor:  Mark Hanson
 // Creation Date:   October 22nd, 2024
 //
 // Description:     Handles any general functionality related to an object with particle systems
@@ -22,8 +23,11 @@ public class GeneralVfxFunctionality : MonoBehaviour
 
     [Tooltip("The animation trigger used for all vfx animations")]
     private const string VFX_ANIMATION_TRIGGER = "PlayVfxAnim";
-
+    
+    [Tooltip("The trigger used for if vfx should move")]
     [SerializeField] private bool _isMoveableVfx = false;
+    [Tooltip("Speed of how fast the vfx moves (Number is used for division)")]
+    [SerializeField] private float _vfxSpeed = 2f;
     
     /// <summary>
     /// Adds all particle systems attached to this to a list
@@ -57,7 +61,7 @@ public class GeneralVfxFunctionality : MonoBehaviour
     {
         if (_isMoveableVfx)
         {
-            transform.position += ((transform.forward /2f) * Time.deltaTime);
+            transform.position += ((transform.forward / _vfxSpeed) * Time.deltaTime);
         }
     }
     
