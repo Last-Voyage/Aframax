@@ -54,17 +54,11 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
     [Tooltip("The maximum amount of ammo that the harpoon may have")]
     [SerializeField] private int _maxAmmo = 3;
-    [Tooltip("How much ammo the player has in reserve")]
+
+    private static HarpoonProjectileMovement[] _harpoonSpearPool;
+    private int _harpoonPoolCounter;
     private int _currentReserveAmmo;
 
-    [Tooltip("The array of harpoon projectiles in the object pool")]
-    private static HarpoonProjectileMovement[] _harpoonSpearPool;
-    [Tooltip("Our current position in the object pool")]
-    private int _harpoonPoolCounter;
-    [Tooltip("The amount of harpoons in the object pool")]
-    private static readonly int _harpoonPoolingAmount = 5;
-
-    [Tooltip("The current state the harpoon firing is in")]
     private EHarpoonFiringState _harpoonFiringState;
 
     [Space]
@@ -79,18 +73,13 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The curve at which the accuracy increases while focusing")]
     [SerializeField] private AnimationCurve _focusCurve;
 
-    [Tooltip("If the button for focusing is currently held down")]
     private bool _isFocusButtonHeld;
 
-    [Tooltip("The current accuracy of the player")]
     private float _currentFocusAccuracy;
 
-    [Tooltip("Our progress of focusing or unfocusing")]
     private float _focusProgress;
-    [Tooltip("The current state of the weapon focusing")]
     private EFocusState _currentFocusState;
 
-    [Tooltip("The coroutine used for focusing or unfocusing")]
     private Coroutine _focusUnfocusCoroutine;
 
     [Space]
@@ -108,6 +97,9 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The input action for focusing")]
     [SerializeField] private InputActionReference _harpoonFocus;
 
+    [Tooltip("The amount of harpoons in the object pool")]
+    private static readonly int _harpoonPoolingAmount = 5;
+
     [Space]
     [Header("Camera Shake Values")]
     [Tooltip("Recoil Intensity Shake")]
@@ -115,12 +107,7 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
 
-    [Space]
-    [Header("Animation")]
-    [Tooltip("name of shoot animation")]
-    [SerializeField] private string _harpoonShootTrigger = "shoot";
-    [Tooltip("name of retract animation")]
-    [SerializeField] private string _harpoonRetractTrigger = "drawBack";
+    private PlayerInputMap _playerInputMap;
 
     public static HarpoonGun Instance;
 
@@ -141,7 +128,7 @@ public class HarpoonGun : MonoBehaviour
 
         StartCoroutine(HarpoonCameraOrientation());
 
-        _reticle = FindObjectOfType<PlayerReticle>();
+        _reticle = GameObject.FindObjectOfType<PlayerReticle>();
     }
 
     /// <summary>
@@ -211,15 +198,14 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFocus.action.started -= FocusButtonHeld;
         _harpoonFocus.action.canceled -= FocusButtonReleased;
     }
-
+    
     #endregion
 
     #region Harpoon Firing
-
+    
     /// <summary>
-    /// Gets the next harpoon from the object pool and launches it in the target direction
+    /// creates a harpoon, sets up the fire direction and everything else to begin the launch
     /// </summary>
-    /// <param name="context"> The input action being pressed to call this function </param>
     private void FireHarpoon(InputAction.CallbackContext context)
     {
         //Return when we can't shoot
@@ -347,7 +333,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Called when the focus button begins to be held down
     /// </summary>
-    /// <param name="context"> The input action being pressed to call this function </param>
+    /// <param name="context"></param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
         _isFocusButtonHeld = true;
@@ -361,7 +347,7 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Called when the focus button is released
     /// </summary>
-    /// <param name="context"> The input action being pressed to call this function </param>
+    /// <param name="context"></param>
     private void FocusButtonReleased(InputAction.CallbackContext context)
     {
         _isFocusButtonHeld = false;
@@ -575,6 +561,7 @@ public class HarpoonGun : MonoBehaviour
     public LayerMask GetHarpoonExcludeLayers() => _excludeLayers;
     public bool GetDoesHarpoonRemainsInObject() => _doesHarpoonRemainInHitObject;
     public Transform GetHarpoonTip() => _harpoonTip;
+    public int GetMaxAmmo() => _maxAmmo;
     public int GetReserveAmmo() => _currentReserveAmmo;
 
     /// <summary>
