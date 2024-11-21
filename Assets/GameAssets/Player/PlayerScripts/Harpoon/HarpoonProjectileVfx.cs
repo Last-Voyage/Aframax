@@ -16,10 +16,10 @@ using UnityEngine.Rendering;
 public class HarpoonProjectileVfx : MonoBehaviour
 {
     [Tooltip("The dictionary for materials and vfx")]
-    private Dictionary<Material, uint> _materialVfxRefs = new();
+    private static Dictionary<Material, uint> _materialVfxRefs = new();
 
     [Tooltip("The array of vfx")]
-    private SpecificVisualEffect[] _harpoonVisualEffects = new SpecificVisualEffect[4];
+    private static SpecificVisualEffect[] _harpoonVisualEffects = new SpecificVisualEffect[4];
 
     [Tooltip("Materials that, when hit, cause a vfx effect")]
     [SerializeField]
@@ -39,9 +39,14 @@ public class HarpoonProjectileVfx : MonoBehaviour
 
     private void Awake()
     {
-        InitializeHarpoonVisualEffects();
+        if (_harpoonVisualEffects.Length == 0 || _harpoonVisualEffects.IsUnityNull()
+            || _materialVfxRefs.Count == 0 || _materialVfxRefs.IsUnityNull())
+        {
+            InitializeHarpoonVisualEffects();
         
-        InitializeVisualEffectsDictionary();
+            InitializeVisualEffectsDictionary();
+        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
