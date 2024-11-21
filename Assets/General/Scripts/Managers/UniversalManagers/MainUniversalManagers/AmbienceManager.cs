@@ -48,9 +48,19 @@ public class AmbienceManager : AudioManager
     {
         GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
         GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
         AframaxSceneManager.Instance.GetOnSceneChanged.RemoveListener(StartGameBackgroundAudio);
     }
-                                     
+
+    protected override void UnsubscribeToGameplayEvents()
+    {
+        GameStateManager.Instance.GetOnGamePaused().RemoveListener(StopAllAmbience);
+        GameStateManager.Instance.GetOnGameUnpaused().RemoveListener(StartGameBackgroundAudio);
+    }
+    
     /// <summary>
     /// Establishes the instance for the ambience manager
     /// </summary>
@@ -95,12 +105,15 @@ public class AmbienceManager : AudioManager
     /// </summary>
     private void StartGameBackgroundAudio()
     {
-        _allAmbientEvents = new List<EventInstance>();
-
+        if (_allAmbientEvents == null)
+        {
+            _allAmbientEvents = new List<EventInstance>();
+        }
+        
         // Stop any instances of music playing
         foreach (var sound in _allAmbientEvents)
         {
-            sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            sound.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         }
         
         // Ambience Manager should not play outside of game scenes
