@@ -14,7 +14,7 @@ using UnityEngine;
 public class TutorialObjectInteract : MonoBehaviour
 {
     [SerializeField]
-    string _objectTag;
+    private string _objectTag;
 
     /// <summary>
     /// This makes it so that, when the object with the correct tag interacts with this, it will advance the current
@@ -25,8 +25,12 @@ public class TutorialObjectInteract : MonoBehaviour
     {
         if(other.gameObject.CompareTag(_objectTag))
         {
-            GameStateManager.Instance.GetOnCompletedTutorialSection()?.Invoke();
-            gameObject.SetActive(false);
+            //TODO: Re-implement the following commented out lines with the end of the tutorial
+            // GameStateManager.Instance.GetOnCompletedTutorialSection()?.Invoke();
+            //gameObject.SetActive(false);
+            
+            AframaxSceneManager.Instance.LoadEndScene();
+           
         }
     }
 }

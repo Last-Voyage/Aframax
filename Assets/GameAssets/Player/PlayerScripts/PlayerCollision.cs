@@ -50,7 +50,7 @@ public class PlayerCollision : MonoBehaviour
     /// <summary>
     /// Checks if the player hit a killbox
     /// </summary>
-    /// <param name="other"></param>
+    /// <param name="other"> The object that we are checking for if it is a killbox </param>
     private void CheckForKillBoxContact(GameObject contact)
     {
         if(contact.CompareTag(KILLBOX_TAG))
@@ -62,7 +62,7 @@ public class PlayerCollision : MonoBehaviour
     /// <summary>
     /// Checks for if the player makes contact with an enemy
     /// </summary>
-    /// <param name="collision"></param>
+    /// <param name="collision"> The object that we are checking for if it is an enemy </param>
     private void CheckForEnemyContact(GameObject contact)
     {
         //TODO: Implement later

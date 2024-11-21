@@ -107,15 +107,6 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
 
-    [Space]
-    [Header("Animation")]
-    [Tooltip("name of shoot animation")]
-    [SerializeField] private string _harpoonShootTrigger = "shoot";
-    [Tooltip("name of retract animation")]
-    [SerializeField] private string _harpoonRetractTrigger = "drawBack";
-
-    private PlayerInputMap _playerInputMap;
-
     public static HarpoonGun Instance;
 
     private PlayerReticle _reticle;
@@ -568,6 +559,7 @@ public class HarpoonGun : MonoBehaviour
     public LayerMask GetHarpoonExcludeLayers() => _excludeLayers;
     public bool GetDoesHarpoonRemainsInObject() => _doesHarpoonRemainInHitObject;
     public Transform GetHarpoonTip() => _harpoonTip;
+    public int GetMaxAmmo() => _maxAmmo;
     public int GetReserveAmmo() => _currentReserveAmmo;
 
     /// <summary>
