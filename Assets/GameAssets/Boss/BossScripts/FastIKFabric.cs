@@ -16,7 +16,7 @@ using UnityEngine;
 public class FastIKFabric : MonoBehaviour
 {
     [SerializeField] private int _chainLength = 2;
-    [SerializeField] private Transform _target;
+    public Transform Target { get; set; }
     [SerializeField] private Transform _pole;
 
     [Header("Solver Parameters")]
@@ -65,12 +65,12 @@ public class FastIKFabric : MonoBehaviour
         }
 
         //init target
-        if (_target == null)
+        if (Target == null)
         {
-            _target = new GameObject(gameObject.name + " Target").transform;
-            SetPositionRootSpace(_target, GetPositionRootSpace(transform));
+            Target = new GameObject(gameObject.name + " Target").transform;
+            SetPositionRootSpace(Target, GetPositionRootSpace(transform));
         }
-        _startRotationTarget = GetRotationRootSpace(_target);
+        _startRotationTarget = GetRotationRootSpace(Target);
 
         //init data
         var currentJoint = transform;
@@ -83,7 +83,7 @@ public class FastIKFabric : MonoBehaviour
             if (i == _bones.Length - 1)
             {
                 //tip of system
-                _startDirection[i] = GetPositionRootSpace(_target) - GetPositionRootSpace(currentJoint);
+                _startDirection[i] = GetPositionRootSpace(Target) - GetPositionRootSpace(currentJoint);
             }
             else
             {
@@ -109,7 +109,7 @@ public class FastIKFabric : MonoBehaviour
     /// </summary>
     private void ResolveIK()
     {
-        if (_target == null) 
+        if (Target == null) 
         { 
             return; 
         }
@@ -131,8 +131,8 @@ public class FastIKFabric : MonoBehaviour
             _jointPositions[i] = GetPositionRootSpace(_bones[i]);
         }
 
-        var targetPosition = GetPositionRootSpace(_target);
-        var targetRotation = GetRotationRootSpace(_target);
+        var targetPosition = GetPositionRootSpace(Target);
+        var targetRotation = GetRotationRootSpace(Target);
 
         //1st is possible to reach?
         if ((targetPosition - GetPositionRootSpace(_bones[0])).sqrMagnitude >= _completeLength * _completeLength)
