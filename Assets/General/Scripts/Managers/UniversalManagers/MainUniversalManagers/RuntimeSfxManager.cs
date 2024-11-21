@@ -58,11 +58,14 @@ public class RuntimeSfxManager : AudioManager
     protected override void SubscribeToGameplayEvents()
     {
         base.SubscribeToGameplayEvents();
+        
         InitializeFootstepInstance();
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
         GameStateManager.Instance.GetOnGamePaused().AddListener(PauseFootsteps);
         GameStateManager.Instance.GetOnGameUnpaused().AddListener(ResumeFootsteps);
+
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopFootsteps);
     }
 
     /// <summary>
@@ -71,10 +74,12 @@ public class RuntimeSfxManager : AudioManager
     protected override void UnsubscribeToGameplayEvents()
     {
         base.UnsubscribeToGameplayEvents();
+        
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
         GameStateManager.Instance.GetOnGamePaused().RemoveListener(PauseFootsteps);
         GameStateManager.Instance.GetOnGameUnpaused().RemoveListener(ResumeFootsteps);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
         
         ReleaseFootstepInstance();
     }
