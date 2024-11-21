@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonProjectileMovement.cs
 // Author :            Ryan Swanson
-// Contributors:       David Henvick
+// Contributors:       David Henvick, Alex Kalscheur
 // Creation Date :     10/28/2024
 //
 // Brief Description : Controls the movement of the harpoon projectile
@@ -16,6 +16,14 @@ using UnityEngine;
 /// </summary>
 public class HarpoonProjectileMovement : MonoBehaviour
 {
+
+    private Transform _movingObjects;
+
+    private void OnEnable()
+    {
+        _movingObjects = FindObjectOfType<BoatMover>().gameObject.transform;
+    }
+
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
     /// </summary>
@@ -35,6 +43,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <returns> The delay till the next iteration </returns>
     private IEnumerator HarpoonFireProcess()
     {
+        Debug.Log("Firing Harpoon");
+        CheckAimAtBoat();
         float travelDistance = 0f;
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
         {
@@ -67,5 +77,43 @@ public class HarpoonProjectileMovement : MonoBehaviour
     private void HarpoonFiredProjectileMovement(Vector3 movement)
     {
         transform.position += movement;
+    }
+
+    /// <summary>
+    /// Handles the process for whether the player is aiming at the boat (or anything on it)
+    /// If the player is aiming at these objects, it will child the harpoon to the Moving Objects parent object
+    /// </summary>
+    private void CheckAimAtBoat()
+    {
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit) && RecursiveCheckForParent(hit.collider.transform,_movingObjects))
+        {
+            transform.parent = _movingObjects;
+            Debug.Log("Harpoon is now child of Moving Objects");
+        }
+        else
+        {
+            Debug.Log("Harpoon is moving in world space");
+        }
+    }
+
+    /// <summary>
+    /// Recursively checks if the child is a child, grandchild, etc. of the parent
+    /// </summary>
+    /// <param name="child">lowest object we are looking for in the heirarchy</param>
+    /// <param name="parent">Object we hope to find as the parent</param>
+    /// <returns></returns>
+    private bool RecursiveCheckForParent(Transform child, Transform parent)
+    {
+        if (parent == null)
+        {
+            return false;
+        }
+        if (child.parent == parent)
+        {
+            return true;
+        }
+        return RecursiveCheckForParent(child.parent, parent);
+
     }
 }
