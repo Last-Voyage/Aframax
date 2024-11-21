@@ -95,12 +95,13 @@ public class AmbienceManager : AudioManager
     /// </summary>
     private void StartGameBackgroundAudio()
     {
-        _allAmbientEvents = new List<EventInstance>();
-
-        // Stop any instances of music playing
-        foreach (var sound in _allAmbientEvents)
+        if (_allAmbientEvents == null)
         {
-            sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            _allAmbientEvents = new List<EventInstance>();
+        }
+        else
+        {
+            ClearAmbientAudio();
         }
         
         // Ambience Manager should not play outside of game scenes
@@ -120,6 +121,23 @@ public class AmbienceManager : AudioManager
         }
         
         PlayIntervalAudio();
+    }
+
+    /// <summary>
+    /// Stops all ambient audio and clears the list
+    /// </summary>
+    private void ClearAmbientAudio()
+    {
+        if(_allAmbientEvents.Capacity > 0)
+        {
+            // Stop any instances of music playing
+            foreach (var sound in _allAmbientEvents)
+            {
+                sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            }
+            
+            _allAmbientEvents.Clear();
+        }
     }
 
     #region Interval Ambience
