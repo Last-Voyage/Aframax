@@ -38,11 +38,7 @@ public class DialoguePopUps : MonoBehaviour
     /// </summary>
     private void BeginDisplayingText(ScriptableDialogueUI dialogueUI)
     {
-        if (!_playingDialogue.IsUnityNull())
-        {
-            StopCoroutine(_playingDialogue);
-            _playingDialogue = null;
-        }
+        StopDialogue();
 
         _playingDialogue = DisplayText(dialogueUI);
         StartCoroutine(_playingDialogue);
@@ -80,6 +76,15 @@ public class DialoguePopUps : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _textContainer.text = ""; 
         _playingDialogue = null;
+    }
+
+    public void StopDialogue()
+    {
+        if (!_playingDialogue.IsUnityNull())
+        {
+            StopCoroutine(_playingDialogue);
+            _playingDialogue = null;
+        }
     }
 
     /// <summary>
