@@ -74,7 +74,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
         //Either reached here because we hit something or because we have exceeded the max distance
         //If the harpoon sticks in the object it remains enabled. Otherwise it disables it
         gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
-        Debug.Log("No longer moving");
     }
 
     /// <summary>
@@ -86,10 +85,12 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position += movement;
     }
 
-
+    /// <summary>
+    /// On trigger Enter, activated once harpoon hits something. used to stop harpoon when it hits walls
+    /// </summary>
+    /// <param name="block"></param> the collider
     private void OnTriggerEnter(Collider block)
     {
-        Debug.Log(block.gameObject.name);
         if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
         {
             _isHit = true;
