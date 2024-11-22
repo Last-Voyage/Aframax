@@ -113,8 +113,6 @@ public class HarpoonGun : MonoBehaviour
 
     private PlayerReticle _reticle;
 
-    private Transform _smokeMovement;
-
     #endregion
 
     #region Setup
@@ -131,8 +129,6 @@ public class HarpoonGun : MonoBehaviour
         StartCoroutine(HarpoonCameraOrientation());
 
         _reticle = GameObject.FindObjectOfType<PlayerReticle>();
-
-        _smokeMovement = transform;
     }
 
     /// <summary>
@@ -227,7 +223,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
         VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
-            _smokeMovement.position, _smokeMovement.rotation);
+            transform.position, transform.rotation);
         
         
         ResetFocus();

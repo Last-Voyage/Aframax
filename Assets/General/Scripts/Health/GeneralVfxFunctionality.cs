@@ -57,7 +57,7 @@ public class GeneralVfxFunctionality : MonoBehaviour
 /// <summary>
 /// To move Vfx forward if need be
 /// </summary>
-    void Update()
+    private void Update()
     {
         if (_isMoveableVfx)
         {
