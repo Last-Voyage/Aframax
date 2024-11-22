@@ -19,7 +19,10 @@ public class HarpoonProjectileMovement : MonoBehaviour
 
     private Transform _movingObjects;
 
-    private void OnEnable()
+    /// <summary>
+    /// Instantiates _movingObjects 
+    /// </summary>
+    private void Awake()
     {
         _movingObjects = FindObjectOfType<BoatMover>().gameObject.transform;
     }
