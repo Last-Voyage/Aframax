@@ -35,7 +35,7 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
     /// <summary>
     /// Applies damage amount to the receiving health script
     /// </summary>
-    /// <param name="damageRecipient"></param>
+    /// <param name="damageRecipient"> The target we are dealing damage to </param>
     public virtual void ApplyDamage(GameObject damageRecipient)
     {
         if (!CanApplyDamage)

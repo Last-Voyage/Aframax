@@ -107,8 +107,6 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
 
-    private PlayerInputMap _playerInputMap;
-
     public static HarpoonGun Instance;
 
     private PlayerReticle _reticle;

@@ -91,9 +91,9 @@ public class PlayerHealthUI : MonoBehaviour
     /// </summary>
     private void TurnOffDamagedUI()
     {
-        foreach (Image I in _damagedUIImages)
+        foreach (Image currentImage in _damagedUIImages)
         {
-            I.gameObject.SetActive(false);
+            currentImage.gameObject.SetActive(false);
         }
     }
 
