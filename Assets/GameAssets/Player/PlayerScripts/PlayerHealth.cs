@@ -16,13 +16,14 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerHealth : BaseHealth
 {
-    //set up for iframe coruitine. _iFrame delay will be inputable in the prefab, so you can easily test and change what feels the best in each scenario
+    //Set up for iframe coroutine. _iFrame delay will be inputable in the prefab,
+    //so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
 
     [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
-    public bool ShouldTakeDamage = true;//Nabil made this change
-    
+    public bool CanPlayerTakeDamage { get; set; }
+
     [Tooltip ("Health point at which the heart beat sfx starts")]
     [SerializeField] private float _healthToStartHeartSfx;
     [Tooltip ("Health point at which the heart beat sfx ends")]
@@ -30,10 +31,11 @@ public class PlayerHealth : BaseHealth
     [SerializeField] private float _heartBeatRateSfx;
     private Coroutine _heartBeatCoroutine;
     
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         SubscribeToEvents();
+        CanPlayerTakeDamage = true;
     }
 
     private void OnDestroy()
@@ -88,7 +90,7 @@ public class PlayerHealth : BaseHealth
     /// <param name="damage"> amount to reduce health by </param>
     public override void TakeDamage(float damage, IBaseDamage damageSource)
     {
-        if (ShouldTakeDamage)
+        if (CanPlayerTakeDamage)
         {
             base.TakeDamage(damage, null);
 
@@ -108,7 +110,7 @@ public class PlayerHealth : BaseHealth
     /// <returns></returns>
     private void StartIFrames()
     {
-        ShouldTakeDamage = false;
+        CanPlayerTakeDamage = false;
         PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
     }
 
@@ -117,7 +119,7 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     private void EndIFrames()
     {
-        ShouldTakeDamage = true;
+        CanPlayerTakeDamage = true;
     }
 
     /// <summary>

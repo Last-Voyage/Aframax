@@ -33,7 +33,7 @@ public class LockdownAttackController : BaseBossAttack
     /// <summary>
     /// Called when the attack ends to destroy all spawned enemies
     /// </summary>
-    public static UnityEvent DestroyAllEnemies {get; private set;} = new();
+    public static UnityEvent OnForceDestroyAllEnemies {get; private set;} = new();
 
     #region Enable & Action/Event Subscriptions
 
@@ -151,7 +151,6 @@ public class LockdownAttackController : BaseBossAttack
     public override void EndAttack()
     {
         // This should only unsubscribe from it's scene if it began, this isn't in unsub from event
-        BossAttackActSystem.Instance.GetOnAttackCompleted().RemoveListener(EndAttack);
 
         KillAnyLivingAttackControllers();
 
