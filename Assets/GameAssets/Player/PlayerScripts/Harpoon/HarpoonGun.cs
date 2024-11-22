@@ -124,8 +124,6 @@ public class HarpoonGun : MonoBehaviour
 
         SubscribeToEvents();
 
-        StartCoroutine(HarpoonCameraOrientation());
-
         _reticle = GameObject.FindObjectOfType<PlayerReticle>();
     }
 
@@ -534,22 +532,6 @@ public class HarpoonGun : MonoBehaviour
         }
 
         return _harpoonSpearPool[previousPoolValue];
-    }
-    #endregion
-
-    #region General
-
-    /// <summary>
-    /// Maintains the orientation of the harpoon relative to camera direction
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator HarpoonCameraOrientation()
-    {
-        while(true)
-        {
-            transform.rotation = _playerLookDirection.rotation;
-            yield return null;
-        }
     }
     #endregion
 
