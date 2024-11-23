@@ -192,9 +192,13 @@ public class RuntimeSfxManager : AudioManager
     {
         float timer = 0.0f;
 
+        yield return new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay);
+
+        PlayFootStep();
+
         while (true)
         {
-            if (timer > FmodSfxEvents.Instance.FootstepSpeed)
+            if (timer >= FmodSfxEvents.Instance.FootstepDelay)
             {
                 PlayFootStep();
                 timer = 0.0f;
