@@ -45,7 +45,6 @@ public class ConsoleController : MonoBehaviour
     [Header("Infinite Focus References")]
     [SerializeField] private GameObject _infiniteFocusToggleButton;
 
-
     //false means not focus max and true is in max focus
     private bool _isInfocusState = true;
     private HarpoonGun _harpoonGun; //reference to harpoon gun
@@ -105,6 +104,7 @@ public class ConsoleController : MonoBehaviour
     }
 
     #region FreelookCam
+    
     /// <summary>
     /// The player unposseses the character
     /// and become a free look cam that can
@@ -230,8 +230,6 @@ public class ConsoleController : MonoBehaviour
     {
         FindObjectOfType<PlayerHealth>().CanPlayerTakeDamage = false;
         _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Exit God Mode";
-
-        
     }
 
     /// <summary>
@@ -240,9 +238,7 @@ public class ConsoleController : MonoBehaviour
     private void ExitGodMode() 
     {
         FindObjectOfType<PlayerHealth>().CanPlayerTakeDamage = true;
-        _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";
-
-        
+        _toggleGodModeButton.GetComponentInChildren<TMP_Text>().text = "Enter God Mode";   
     }
 
     #endregion
@@ -254,9 +250,7 @@ public class ConsoleController : MonoBehaviour
     /// puts you in and out of infinite focus mode
     /// </summary>
     private void ToggleInfiniteFocus()
-    {
-        
-
+    {     
         if (_isInfocusState)
         {
             ExitInfiniteFocus();
@@ -267,10 +261,7 @@ public class ConsoleController : MonoBehaviour
         {
             EnterInfiniteFocus();
             _isInfocusState = true;
-
         }
-
-
     }
 
     /// <summary>
@@ -282,7 +273,6 @@ public class ConsoleController : MonoBehaviour
         GameObject.FindObjectOfType<HarpoonGun>().CallFocusMax();
         _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Exit Infinite Focus";
 
-        
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(_harpoonGun.CallFocusMax);
     }
 
