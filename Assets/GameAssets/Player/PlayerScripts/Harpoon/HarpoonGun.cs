@@ -487,9 +487,7 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     public void CallResetFocus() 
     {
-
         ResetFocus();
-
     }
 
     /// <summary>
