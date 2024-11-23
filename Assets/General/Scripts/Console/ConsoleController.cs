@@ -269,7 +269,6 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void EnterInfiniteFocus()
     {
-       
         GameObject.FindObjectOfType<HarpoonGun>().CallFocusMax();
         _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Exit Infinite Focus";
 
