@@ -215,7 +215,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ee2780e8-1efb-4ced-ae0a-abf5f4043adb"",
+                    ""id"": ""0b1cd416-b721-49a6-b1b7-1f79159b30a1"",
                     ""path"": ""<Keyboard>/numpadEnter"",
                     ""interactions"": """",
                     ""processors"": """",
