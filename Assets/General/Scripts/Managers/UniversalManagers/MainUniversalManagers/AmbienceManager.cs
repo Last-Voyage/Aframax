@@ -12,7 +12,6 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections.Generic;
-using FMOD;
 using UnityEngine;
 
 /// <summary>
@@ -44,16 +43,17 @@ public class AmbienceManager : AudioManager
     {
         base.SubscribeToEvents();
         
-        AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopAllAmbience);
     }
 
     /// <summary>
-    /// Subscribes to gameplay specific events
+    /// Unsubscribes from general events
     /// </summary>
-    protected override void SubscribeToGameplayEvents()
+    protected override void UnsubscribeToEvents()
     {
-        GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
-        GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopAllAmbience);
     }
                                      
     /// <summary>
@@ -121,7 +121,7 @@ public class AmbienceManager : AudioManager
         
         PlayIntervalAudio();
     }
-    
+
     /// <summary>
     /// Stops all ambient audio and clears the list
     /// </summary>
