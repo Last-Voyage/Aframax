@@ -55,10 +55,15 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         CheckPlayerAlreadyInRoom();
         BeginPatrolling();
         InitializePlayerTransform();
+
+        Transform proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).transform;
+
+        proceduralAnimationObject.gameObject.SetActive(true);
+        proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
     }
 
     /// <summary>
-    /// Initializes _playerTransform
+    /// Initializes the value of _playerTransform to be the transform of the player
     /// </summary>
     private void InitializePlayerTransform()
     {
@@ -194,7 +199,9 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         _targetPoint = _patrolLocationData.WaypointTransforms.ElementAt(_currentTargetIndex);
     }
 
+    /// <summary>
     /// <returns> This enemies patrol data </returns>
+    /// <summary>
     public PatrolLocation GetPatrolLocationData()
     {
         return _patrolLocationData;
@@ -207,7 +214,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().AddListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().AddListener(PlayerExitedRoom);
-        LockdownAttackController.DestroyAllEnemies.AddListener(DestroyEnemy);
+        LockdownAttackController.OnForceDestroyAllEnemies.AddListener(DestroyEnemy);
     }
 
     /// <summary>
@@ -217,6 +224,6 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     {
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomEnterEvent().RemoveListener(PlayerEnteredRoom);
         _patrolLocationData.EnemyRoom.GetOnPlayerRoomExitEvent().RemoveListener(PlayerExitedRoom);
-        LockdownAttackController.DestroyAllEnemies.RemoveListener(DestroyEnemy);
+        LockdownAttackController.OnForceDestroyAllEnemies.RemoveListener(DestroyEnemy);
     }
 }

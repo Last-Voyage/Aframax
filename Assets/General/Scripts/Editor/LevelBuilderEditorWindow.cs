@@ -12,6 +12,9 @@ using System.Collections;
 using System;
 using System.Linq;
 
+/// <summary>
+/// Provides the functionality for the editor window for chunk-based level building
+/// </summary>
 public class LevelBuilderEditorWindow : EditorWindow
 {
     // Create the window if there isn't one already

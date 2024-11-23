@@ -28,7 +28,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
 
     #region Base Class
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         InitializeHealth(_maxHealth);
     }
