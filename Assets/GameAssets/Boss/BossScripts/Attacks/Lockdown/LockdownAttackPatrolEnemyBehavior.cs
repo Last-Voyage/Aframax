@@ -56,12 +56,10 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         BeginPatrolling();
         InitializePlayerTransform();
 
+        Transform proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).transform;
 
-        // child 4 is the rooms vine, set it active
-        transform.parent.GetChild(3).gameObject.SetActive(true);
-
-        //set ik target of vine to be the patrol transform (this), child 3 of the room should be the parent of the IK
-        transform.parent.GetChild(3).GetComponentInChildren<FastIKFabric>().Target = transform;
+        proceduralAnimationObject.gameObject.SetActive(true);
+        proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
     }
 
     /// <summary>
