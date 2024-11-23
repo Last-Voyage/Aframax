@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonProjectileMovement.cs
 // Author :            Ryan Swanson
-// Contributors:       David Henvick
+// Contributors:       David Henvick, Alex Kalscheur
 // Creation Date :     10/28/2024
 //
 // Brief Description : Controls the movement of the harpoon projectile
@@ -16,6 +16,19 @@ using UnityEngine;
 /// </summary>
 public class HarpoonProjectileMovement : MonoBehaviour
 {
+    //for hitting walls
+    private bool _isHit;
+
+    private Transform _movingObjects;
+
+    /// <summary>
+    /// Instantiates _movingObjects 
+    /// </summary>
+    private void Awake()
+    {
+        _movingObjects = FindObjectOfType<BoatMover>().gameObject.transform;
+    }
+
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
     /// </summary>
@@ -26,6 +39,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position = startLocation;
         transform.LookAt(transform.position + startDirection);
 
+        _isHit = false;
+
         StartCoroutine(HarpoonFireProcess());
     }
 
@@ -35,8 +50,9 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <returns> The delay till the next iteration </returns>
     private IEnumerator HarpoonFireProcess()
     {
+        CheckAimAtBoat();
         float travelDistance = 0f;
-        while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
+        while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance() && !_isHit)
         {
             // Calculate how far the harpoon should move in this frame
             Vector3 movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
@@ -67,5 +83,50 @@ public class HarpoonProjectileMovement : MonoBehaviour
     private void HarpoonFiredProjectileMovement(Vector3 movement)
     {
         transform.position += movement;
+    }
+
+    /// <summary>
+    /// On trigger Enter, activated once harpoon hits something. used to stop harpoon when it hits walls
+    /// </summary>
+    /// <param name="block"></param> the collider
+    private void OnTriggerEnter(Collider block)
+    {
+        if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
+        {
+            _isHit = true;
+        }
+    }
+
+    /// <summary>
+    /// Handles the process for whether the player is aiming at the boat (or anything on it)
+    /// If the player is aiming at these objects, it will child the harpoon to the Moving Objects parent object
+    /// </summary>
+    private void CheckAimAtBoat()
+    {
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit) && RecursiveCheckForParent(hit.collider.transform,_movingObjects))
+        {
+            transform.parent = _movingObjects;
+        }
+    }
+
+    /// <summary>
+    /// Recursively checks if the child is a child, grandchild, etc. of the parent
+    /// </summary>
+    /// <param name="child">lowest object we are looking for in the heirarchy</param>
+    /// <param name="parent">Object we hope to find as the parent</param>
+    /// <returns>True if child is within parent in the hierarchy</returns>
+    private bool RecursiveCheckForParent(Transform child, Transform parent)
+    {
+        if (child.parent == null)
+        {
+            return false;
+        }
+        if (child.parent == parent)
+        {
+            return true;
+        }
+        return RecursiveCheckForParent(child.parent, parent);
+
     }
 }
