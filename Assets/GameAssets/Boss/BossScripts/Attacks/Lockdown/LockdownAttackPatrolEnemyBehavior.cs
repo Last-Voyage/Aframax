@@ -43,6 +43,8 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
 
     private PatrolLocation _patrolLocationData;
 
+    private GameObject _proceduralAnimationObject;
+
     private Transform _playerTransform;
     private Coroutine _patrolCoroutine;
 
@@ -56,10 +58,10 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         BeginPatrolling();
         InitializePlayerTransform();
 
-        Transform proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).transform;
+        _proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).gameObject;
 
-        proceduralAnimationObject.gameObject.SetActive(true);
-        proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
+        _proceduralAnimationObject.SetActive(true);
+        _proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
     }
 
     /// <summary>
@@ -158,12 +160,12 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     /// <summary>
     /// Notifies that patrol enemy has died and destroys self
     /// </summary>
-    private void DestroyEnemy()
+    public void DestroyEnemy()
     {
-        
         // Destroys enemy
-        if (gameObject != null)
+        if (gameObject != null && _proceduralAnimationObject != null)
         {
+            Destroy(_proceduralAnimationObject);
             Destroy(gameObject);
         }
     }
