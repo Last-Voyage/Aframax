@@ -30,13 +30,18 @@ public class DialoguePopUps : MonoBehaviour
     [Tooltip("The pointer for which ui data is currently being used")]
     private int _dataPointer;
 
+    private IEnumerator _playingDialogue;
+
     /// <summary>
     /// The pass through function for actually displaying the dialogue
     /// Because events do not like coroutines
     /// </summary>
     private void BeginDisplayingText(ScriptableDialogueUI dialogueUI)
     {
-        StartCoroutine(DisplayText(dialogueUI));
+        StopDialogue();
+
+        _playingDialogue = DisplayText(dialogueUI);
+        StartCoroutine(_playingDialogue);
     }
 
     /// <summary>
@@ -70,6 +75,19 @@ public class DialoguePopUps : MonoBehaviour
         _dataPointer = 0;
         yield return new WaitForSeconds(2f);
         _textContainer.text = ""; 
+        _playingDialogue = null;
+    }
+
+    /// <summary>
+    /// Stops the dialogue that is currently playing, if it's playing
+    /// </summary>
+    public void StopDialogue()
+    {
+        if (!_playingDialogue.IsUnityNull())
+        {
+            StopCoroutine(_playingDialogue);
+            _playingDialogue = null;
+        }
     }
 
     /// <summary>

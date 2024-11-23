@@ -59,8 +59,8 @@ public class LockdownAttackEnemyController : MonoBehaviour
     /// <summary>
     /// Establishes all variables for the enemy controller
     /// </summary>
-    /// <param name="patrolEnemy"></param>
-    /// <param name="coreEnemy"></param>
+    /// <param name="patrolEnemy"> The patrol enemy to spawn </param>
+    /// <param name="coreEnemy"> The core enemy to spawn </param>
     public void SetUpEnemyController(GameObject patrolEnemy, GameObject coreEnemy)
     {
         _patrolEnemyPrefab = patrolEnemy;
@@ -102,7 +102,8 @@ public class LockdownAttackEnemyController : MonoBehaviour
     private void SpawnPatrolEnemy()
     {
         _instantiatedPatrolEnemy =
-            Instantiate(_patrolEnemyPrefab, _patrolLocation.PatrolSpawnPoint.position, Quaternion.identity,transform);
+            Instantiate(_patrolEnemyPrefab, _patrolLocation.PatrolSpawnPoint.position, 
+            Quaternion.identity,transform.parent);
 
         //Gets the patrol enemy behavior off of the patrol enemy
         if (!_instantiatedPatrolEnemy.TryGetComponent(out LockdownAttackPatrolEnemyBehavior patrolEnemyBehavior))
@@ -121,7 +122,8 @@ public class LockdownAttackEnemyController : MonoBehaviour
     {
         //Spawns the core
         _instantiatedCoreEnemy = 
-            Instantiate(_coreEnemyPrefab, _patrolLocation.CoreSpawnPoint.position, Quaternion.identity,transform);
+            Instantiate(_coreEnemyPrefab, _patrolLocation.CoreSpawnPoint.position, 
+            Quaternion.identity,transform.parent);
         AmbienceManager.APlayAmbienceOnObject?.Invoke(FmodAmbienceEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);
 
@@ -141,8 +143,8 @@ public class LockdownAttackEnemyController : MonoBehaviour
     private void CoreDestroyed(WeakPointHandler handler)
     {
         //Invokes event for core destruction and removes its listeners
-        InvokeOnCoreDestroyed();
         ForceDestroy();
+        InvokeOnCoreDestroyed();
     }
 
     /// <summary>
@@ -151,7 +153,7 @@ public class LockdownAttackEnemyController : MonoBehaviour
     public void ForceDestroy()
     {
         //Destroys the patrol enemy and core
-        Destroy(_instantiatedPatrolEnemy);
+        _instantiatedPatrolEnemy.GetComponent<LockdownAttackPatrolEnemyBehavior>().DestroyEnemy();
         Destroy(_instantiatedCoreEnemy);
 
         _onCoreDestroyed.RemoveAllListeners();
