@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       SpannerInteractable.cs
 // Author:          Ryan Swanson
+// Contributor:     Mark Hanson
 // Creation Date:   October 12th, 2024
 //
 // Description:     Contains the functionality for the spanner interactable
@@ -13,6 +14,12 @@ using UnityEngine;
 /// </summary>
 public class SpannerInteractable : MonoBehaviour, IPlayerInteractable
 {
+    public bool InteractEnabled { get; set; }
+
+    private void Awake()
+    {
+        InteractEnabled = true;
+    }
     /// <summary>
     /// Implements the OnInteractedByPlayer function from IPlayerInteractable
     /// Called when the player presses the interact key while looking at this object

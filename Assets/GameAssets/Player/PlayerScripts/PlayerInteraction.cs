@@ -54,14 +54,21 @@ public class PlayerInteraction : MonoBehaviour
     private void CheckForInteractable()
     {
         SetRaycast();
-        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach) && 
+        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach) &&
             hit.collider.gameObject.TryGetComponent(out IPlayerInteractable interactableComponent))
         {
-            _interactableUI.SetInteractUIStatus(true);
-            if (_interactInput.WasPerformedThisFrame())
+            if (interactableComponent.InteractEnabled)
             {
-                interactableComponent.OnInteractedByPlayer();
+                _interactableUI.SetInteractUIStatus(true);
+                if (_interactInput.WasPerformedThisFrame())
+                {
+                    interactableComponent.OnInteractedByPlayer();
+                }
             }
+            else
+                {
+                    _interactableUI.SetInteractUIStatus(false);
+                }
         }
         else
         {

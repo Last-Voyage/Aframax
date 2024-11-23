@@ -11,6 +11,8 @@
 /// </summary>
 public interface IPlayerInteractable
 {
+    
+    public bool InteractEnabled { get; set; }
     /// <summary>
     /// Will be called when interacted with by the player
     /// </summary>

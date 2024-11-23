@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         GeneratorInteractable.cs
 // Author :            Ryan Swanson
-// Contributors:       Nick Rice
+// Contributors:       Nick Rice, Mark Hanson
 // Creation Date :     11/14/24
 // 
 // Brief Description : Controls the functionality for the generator
@@ -22,6 +22,12 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     [Tooltip("Moves the sparks and smoke forwards, or elsewhere")]
     private readonly Vector3 _vfxDisplacement = Vector3.back;
     
+    public bool InteractEnabled { get; set; }
+
+    private void Awake()
+    {
+        InteractEnabled = true;
+    }
     /// <summary>
     /// This function spawns in the smoke for the generator
     /// </summary>

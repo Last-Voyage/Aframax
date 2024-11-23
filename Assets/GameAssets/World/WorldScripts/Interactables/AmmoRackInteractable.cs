@@ -1,6 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         AmmoRackInteractable.cs
 // Author :            Andrew Stapay
+// Contributors:    Mark Hanson
 // Creation Date :     11/13/2024
 //
 // Brief Description : Implements an ammo rack where the player can refill their ammo.
@@ -14,8 +15,9 @@ using UnityEngine;
 /// </summary>
 public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
 {
-    // The nuumber of harpoons that are currently on the rack
+    // The number of harpoons that are currently on the rack
     private int _currentHarpoons;
+    public bool InteractEnabled { get; set; }
 
     /// <summary>
     /// Called when the game starts
@@ -24,6 +26,8 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     private void Awake()
     {
         _currentHarpoons = transform.GetChild(0).childCount;
+        InteractEnabled = false;
+        OnSubscribeEvent();
     }
 
     /// <summary>
@@ -34,7 +38,35 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
         PlayerManager.Instance.InvokeOnHarpoonRestockEvent(this);
     }
 
-    /// <summary>
+    public void OnSubscribeEvent()
+    {
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(OnInteractTurnEnabled);
+        PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(OnInteractTurnDisabled);
+    }
+
+    public void OnUnsubscribeEvent()
+    {
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(OnInteractTurnEnabled);
+        PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(OnInteractTurnDisabled);
+    }
+
+    private void OnInteractTurnEnabled()
+    {
+        if (!InteractEnabled)
+        {
+            InteractEnabled = true;
+        }
+    }
+
+    private void OnInteractTurnDisabled(AmmoRackInteractable ammoRock)
+    {
+        if (InteractEnabled)
+        {
+            InteractEnabled = false;
+        }
+    }
+
+/// <summary>
     /// Removes a number of harpoons from the ammo rack
     /// </summary>
     /// <param name="numHarpoons"> the number of harpoons to remove </param>
