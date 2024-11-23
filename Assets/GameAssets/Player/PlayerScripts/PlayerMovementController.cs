@@ -1,6 +1,6 @@
 /******************************************************************************
 // File Name:       PlayerMovementController.cs
-// Author:          Andrew Stapay
+// Author:          Andrew Stapay, Miles Rogers
 // Creation Date:   September 15, 2024
 //
 // Description:     Implementation of the basic movement for a player character.
@@ -404,15 +404,15 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void ApplyGravity()
     {
-        // If no input and on the ground, zero all forces
+        // If no input and on the ground, don't allow the Rigidbody to move
         if (!_isMoving && IsGrounded)
         {
-            _playerRigidBody.isKinematic = true;
+            _playerRigidBody.constraints = RigidbodyConstraints.FreezeAll;
             return;
         }
         
-        // Ensure forces are not set to be zeroed
-        _playerRigidBody.isKinematic = false;
+        // Ensure the Rigidbody can move
+        _playerRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
         
         // Apply the downward gravity force
         _playerRigidBody.AddForce(
