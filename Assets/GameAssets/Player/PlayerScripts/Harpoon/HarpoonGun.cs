@@ -1,7 +1,8 @@
 /*****************************************************************************
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
-// Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick
+// Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick, 
+//                     Miles Rogers
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -124,8 +125,6 @@ public class HarpoonGun : MonoBehaviour
 
         SubscribeToEvents();
 
-        StartCoroutine(HarpoonCameraOrientation());
-
         _reticle = GameObject.FindObjectOfType<PlayerReticle>();
     }
 
@@ -220,9 +219,10 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
-        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform, 
+        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
             transform.position, transform.rotation);
-
+        
+        
         ResetFocus();
 
         // Personally I think the projectile should be the same as the object on the visual as the gun itself, 
@@ -239,7 +239,7 @@ public class HarpoonGun : MonoBehaviour
 
         StartReloadProcess();
     }
-    
+
     #endregion
 
     #region Reloading
@@ -555,22 +555,6 @@ public class HarpoonGun : MonoBehaviour
         }
 
         return _harpoonSpearPool[previousPoolValue];
-    }
-    #endregion
-
-    #region General
-
-    /// <summary>
-    /// Maintains the orientation of the harpoon relative to camera direction
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator HarpoonCameraOrientation()
-    {
-        while(true)
-        {
-            transform.rotation = _playerLookDirection.rotation;
-            yield return null;
-        }
     }
     #endregion
 

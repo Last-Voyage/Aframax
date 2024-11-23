@@ -25,6 +25,8 @@ public class RuntimeSfxManager : AudioManager
 
     public static RuntimeSfxManager Instance;
 
+    private bool _shouldFootstepsPlay = true;
+
     #region Enable and Action Subscriptions
     /// <summary>
     /// Subscribes to any needed actions and initializes the footsteps
@@ -56,9 +58,12 @@ public class RuntimeSfxManager : AudioManager
     protected override void SubscribeToGameplayEvents()
     {
         base.SubscribeToGameplayEvents();
+        
         InitializeFootstepInstance();
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
+
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopFootsteps);
     }
 
     /// <summary>
@@ -67,8 +72,11 @@ public class RuntimeSfxManager : AudioManager
     protected override void UnsubscribeToGameplayEvents()
     {
         base.UnsubscribeToGameplayEvents();
+        
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+        
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
         
         ReleaseFootstepInstance();
     }
@@ -141,6 +149,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootSteps()
     { 
+        StopFootsteps();
         _footstepsCoroutine = StartCoroutine(LoopFootSteps());
     }
 
@@ -153,6 +162,7 @@ public class RuntimeSfxManager : AudioManager
         {
             return;
         }
+        
         StopCoroutine(_footstepsCoroutine);
         _footstepsCoroutine = null;
     }
@@ -162,7 +172,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootStep()
     {
-        if (PlayerMovementController.IsGrounded)
+        if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
             if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
             {
