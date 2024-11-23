@@ -25,9 +25,6 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     [Tooltip("Speed at which enemy chases the player")]
     [SerializeField] private float _seekPlayerSpeed = 5f;
 
-    [Tooltip("How long the enemy patrols before despawning")]
-    [SerializeField] private float _attackDuration = 15f;
-
     [Tooltip("Adds a delay before starting to patrol the room")]
     [SerializeField] private float _timeToWaitBeforePatroling = .5f;
 
@@ -38,7 +35,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private Transform _targetPoint;
     
-    private bool _isPlayerInAttackRange = false;
+    private bool _isPlayerInAttackRange;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;

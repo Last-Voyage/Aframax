@@ -103,7 +103,7 @@ public class RuntimeSfxManager : AudioManager
     {
         if (eventReference.IsNull)
         {
-            Debug.LogWarning("FMOD Event is null - make sure it's assigned in the Audio Manager");
+            Debug.LogWarning("FMOD Event is null. Make sure it's assigned in the Audio Manager!");
             return;
         }
 
