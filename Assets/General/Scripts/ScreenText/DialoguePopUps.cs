@@ -78,6 +78,9 @@ public class DialoguePopUps : MonoBehaviour
         _playingDialogue = null;
     }
 
+    /// <summary>
+    /// Stops the dialogue that is currently playing, if it's playing
+    /// </summary>
     public void StopDialogue()
     {
         if (!_playingDialogue.IsUnityNull())
