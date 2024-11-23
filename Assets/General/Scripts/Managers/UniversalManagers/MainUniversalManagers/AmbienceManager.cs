@@ -12,7 +12,6 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections.Generic;
-using FMOD;
 using UnityEngine;
 
 /// <summary>
@@ -37,17 +36,24 @@ public class AmbienceManager : AudioManager
         StartGameBackgroundAudio();
     }
 
+    /// <summary>
+    /// Subscribes to general events
+    /// </summary>
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
         
-        AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopAllAmbience);
     }
 
-    protected override void SubscribeToGameplayEvents()
+    /// <summary>
+    /// Unsubscribes from general events
+    /// </summary>
+    protected override void UnsubscribeToEvents()
     {
-        GameStateManager.Instance.GetOnGamePaused().AddListener(StopAllAmbience);
-        GameStateManager.Instance.GetOnGameUnpaused().AddListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(StartGameBackgroundAudio);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopAllAmbience);
     }
                                      
     /// <summary>
@@ -60,12 +66,6 @@ public class AmbienceManager : AudioManager
         
         //Established the instance for the FmodAmbienceEvents
         GetComponent<FmodAmbienceEvents>().SetUpInstance();
-    }
-    
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        SubscribeToActions(false);
     }
     
     /// <summary>
@@ -94,12 +94,13 @@ public class AmbienceManager : AudioManager
     /// </summary>
     private void StartGameBackgroundAudio()
     {
-        _allAmbientEvents = new List<EventInstance>();
-
-        // Stop any instances of music playing
-        foreach (var sound in _allAmbientEvents)
+        if (_allAmbientEvents == null)
         {
-            sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            _allAmbientEvents = new List<EventInstance>();
+        }
+        else
+        {
+            ClearAmbientAudio();
         }
         
         // Ambience Manager should not play outside of game scenes
@@ -119,6 +120,29 @@ public class AmbienceManager : AudioManager
         }
         
         PlayIntervalAudio();
+    }
+
+    /// <summary>
+    /// Stops all ambient audio and clears the list
+    /// </summary>
+    private void ClearAmbientAudio()
+    {
+        if(_allAmbientEvents.Capacity > 0)
+        {
+            // Stop any instances of music playing
+            foreach (var sound in _allAmbientEvents)
+            {
+                sound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            }
+            
+            _allAmbientEvents.Clear();
+        }
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        SubscribeToActions(false);
     }
 
     #region Interval Ambience
