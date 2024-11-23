@@ -20,7 +20,7 @@ public class StoryManager : MonoBehaviour
     // The singleton StoryManager
     public static StoryManager Instance;
 
-    // References
+    // References to other scripts that will be used
     private DialoguePopUps _dialogueManager;
 
     // The StoryBeat and coroutine system
@@ -64,6 +64,7 @@ public class StoryManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        // Set up the reference for the dialogue manager
         _dialogueManager = FindObjectOfType<DialoguePopUps>();
 
         _beatEventsCoroutines = new();
@@ -81,19 +82,22 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handle any existing and unnecessary or pending coroutines
+    /// </summary>
     private void FixedUpdate()
     {
         PurgeEmptyCoroutines();
 
         StartPendingCoroutines();
-
-        print(_pendingStoryBeats.Count);
-        print(_activeStoryBeats.Count);
-        print(_beatEventsCoroutines.Count);
     }
 
+    /// <summary>
+    /// Check the pending list and start any ready to go beats
+    /// </summary>
     private void StartPendingCoroutines()
     {
+        // Run through each beat and check its status
         for (int i = 0; i < _pendingStoryBeats.Count; i++)
         {
             StoryBeat beat = _pendingStoryBeats[i];
@@ -105,13 +109,19 @@ public class StoryManager : MonoBehaviour
             _currentStoryIndex = StoryBeats.IndexOf(beat);
         }
 
+        // Purge the pending story beat list
         _pendingStoryBeats = new();
     }
 
+    /// <summary>
+    /// Check for any empty coroutines, and delete any that say they're empty
+    /// </summary>
     private void PurgeEmptyCoroutines()
     {
+        // Make a list for all the beats to delete
         List<int> indiciesToRemove = new();
 
+        // Add to the list each index that had a nonexistant coroutine
         for (int i = 0; i < _beatEventsCoroutines.Count; i++)
         {
             if (_beatEventsCoroutines[i] == null)
@@ -120,6 +130,7 @@ public class StoryManager : MonoBehaviour
             }
         }
 
+        // Remove each coroutine that was marked as null
         for (int i = 0; i < indiciesToRemove.Count; i++)
         {
             _beatEventsCoroutines.RemoveAt(i);
@@ -127,8 +138,12 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set all currently active beats to "outdated"
+    /// </summary>
     private void OutdateAllCoroutines()
     {
+        // For each active beat, tell it to set itself as outdated
         for (int i = 0; i < _beatEventsCoroutines.Count; i++)
         {
             _activeStoryBeats[i].Outdated = true;
@@ -207,8 +222,10 @@ public class StoryManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator TriggerBeatEvents(StoryBeat beat)
     {
-        List<StoryBeatEvent> events = beat.StoryBeatEvents;
+        // Stop dialogue from playing if there's already a beat playing dialogue
         _dialogueManager.StopDialogue();
+
+        List<StoryBeatEvent> events = beat.StoryBeatEvents;
 
         // Iterate through each event
         for (int i = 0; i < events.Count; i++)
@@ -218,8 +235,10 @@ public class StoryManager : MonoBehaviour
             // Trigger the event, then start a delay before triggering the next event
             events[i].TriggerEvent(beat.Outdated);
 
+            // Run through the events of the beat
             while (curDelayTime > 0)
             {
+                // If at any point the beat is considered outdated, immediately flash through every event at once
                 if (beat.Outdated)
                 {
                     break;
@@ -230,6 +249,7 @@ public class StoryManager : MonoBehaviour
             }
         }
 
+        // Tell the active beat list to stop considering this beat as playing
         _beatEventsCoroutines[_activeStoryBeats.IndexOf(beat)] = null;
     }
 }
@@ -240,11 +260,14 @@ public class StoryManager : MonoBehaviour
 [System.Serializable]
 public class StoryBeat
 {
-    // The name of the story beat
+    // The name and description of the story beat
     public string BeatName;
     public string BeatDescription;
+
+    // Whether or not the beat should trigger as soon as the game starts
     public bool TriggerOnStart;
 
+    // Whether or not the beat is outdated
     public bool Outdated = false;
 
     // The list of story beat events in the beat
