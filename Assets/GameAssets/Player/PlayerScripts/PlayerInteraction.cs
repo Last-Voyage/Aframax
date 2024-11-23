@@ -66,9 +66,9 @@ public class PlayerInteraction : MonoBehaviour
                 }
             }
             else
-                {
-                    _interactableUI.SetInteractUIStatus(false);
-                }
+            {
+                _interactableUI.SetInteractUIStatus(false);
+            }
         }
         else
         {
