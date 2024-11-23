@@ -62,8 +62,6 @@ public class RuntimeSfxManager : AudioManager
         InitializeFootstepInstance();
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
-        GameStateManager.Instance.GetOnGamePaused().AddListener(PauseFootsteps);
-        GameStateManager.Instance.GetOnGameUnpaused().AddListener(ResumeFootsteps);
 
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopFootsteps);
     }
@@ -77,8 +75,7 @@ public class RuntimeSfxManager : AudioManager
         
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
-        GameStateManager.Instance.GetOnGamePaused().RemoveListener(PauseFootsteps);
-        GameStateManager.Instance.GetOnGameUnpaused().RemoveListener(ResumeFootsteps);
+        
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
         
         ReleaseFootstepInstance();
@@ -171,27 +168,11 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
-    /// Stops footstep audio during pause menu
-    /// </summary>
-    private void PauseFootsteps()
-    {
-        _shouldFootstepsPlay = false;
-    }
-    
-    /// <summary>
-    /// Resumes footstep sounds when game is unpaused
-    /// </summary>
-    private void ResumeFootsteps()
-    {
-        _shouldFootstepsPlay = true;
-    }
-
-    /// <summary>
     /// Plays a single instance of the player footstep if the player is grounded
     /// </summary>
     private void PlayFootStep()
     {
-        if (PlayerMovementController.IsGrounded && _shouldFootstepsPlay)
+        if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
             if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
             {
