@@ -48,7 +48,7 @@ public class AmbienceManager : AudioManager
     protected override void UnsubscribeToEvents()
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(StartGameBackgroundAudio);
-        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopAllAmbience);
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopAllAmbience);
     }
                                      
     /// <summary>
