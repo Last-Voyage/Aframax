@@ -16,6 +16,8 @@ using UnityEngine;
 /// </summary>
 public class HarpoonProjectileMovement : MonoBehaviour
 {
+    //for hitting walls
+    private bool _isHit;
 
     private Transform _movingObjects;
 
@@ -37,6 +39,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position = startLocation;
         transform.LookAt(transform.position + startDirection);
 
+        _isHit = false;
+
         StartCoroutine(HarpoonFireProcess());
     }
 
@@ -48,7 +52,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         CheckAimAtBoat();
         float travelDistance = 0f;
-        while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance())
+        while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance() && !_isHit)
         {
             // Calculate how far the harpoon should move in this frame
             Vector3 movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
@@ -79,6 +83,18 @@ public class HarpoonProjectileMovement : MonoBehaviour
     private void HarpoonFiredProjectileMovement(Vector3 movement)
     {
         transform.position += movement;
+    }
+
+    /// <summary>
+    /// On trigger Enter, activated once harpoon hits something. used to stop harpoon when it hits walls
+    /// </summary>
+    /// <param name="block"></param> the collider
+    private void OnTriggerEnter(Collider block)
+    {
+        if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
+        {
+            _isHit = true;
+        }
     }
 
     /// <summary>

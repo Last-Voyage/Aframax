@@ -12,7 +12,6 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections.Generic;
-using FMOD;
 using UnityEngine;
 
 /// <summary>
@@ -37,6 +36,9 @@ public class AmbienceManager : AudioManager
         StartGameBackgroundAudio();
     }
 
+    /// <summary>
+    /// Subscribes to general events
+    /// </summary>
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
@@ -45,6 +47,9 @@ public class AmbienceManager : AudioManager
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopAllAmbience);
     }
 
+    /// <summary>
+    /// Unsubscribes from general events
+    /// </summary>
     protected override void UnsubscribeToEvents()
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(StartGameBackgroundAudio);
@@ -61,12 +66,6 @@ public class AmbienceManager : AudioManager
         
         //Established the instance for the FmodAmbienceEvents
         GetComponent<FmodAmbienceEvents>().SetUpInstance();
-    }
-    
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        SubscribeToActions(false);
     }
     
     /// <summary>
@@ -138,6 +137,12 @@ public class AmbienceManager : AudioManager
             
             _allAmbientEvents.Clear();
         }
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        SubscribeToActions(false);
     }
 
     #region Interval Ambience

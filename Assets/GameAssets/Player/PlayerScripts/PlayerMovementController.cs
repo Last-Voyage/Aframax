@@ -64,7 +64,7 @@ public class PlayerMovementController : MonoBehaviour
     private Transform _playerVisuals;
     public static bool IsGrounded { get; private set; } = false;
     private Transform _groundedCheckOrigin;
-    private bool _isMoving = false;
+    public static bool IsMoving { get; private set; }
 
     [Tooltip("Size of boxcast for the grounded check")]
     private Vector3 _groundedExtents = new Vector3(.05f, .05f, .05f);
@@ -267,7 +267,7 @@ public class PlayerMovementController : MonoBehaviour
         // Returns the movement direction times the speed and acceleration
         return newMovement * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration;
     }
-
+    
     /// <summary>
     /// Handles any needed vertical force
     /// </summary>
@@ -291,13 +291,13 @@ public class PlayerMovementController : MonoBehaviour
         if(_movementInput.WasPressedThisFrame())
         {
             DirectionalInputStarted();
-            _isMoving = true;
+            IsMoving = true;
         }
         //Check for if the input has ended
         else if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
-            _isMoving = false;
+            IsMoving = false;
         }
     }
 
@@ -405,7 +405,7 @@ public class PlayerMovementController : MonoBehaviour
     private void ApplyGravity()
     {
         // If no input and on the ground, don't allow the Rigidbody to move
-        if (!_isMoving && IsGrounded)
+        if (!IsMoving && IsGrounded)
         {
             _playerRigidBody.constraints = RigidbodyConstraints.FreezeAll;
             return;
