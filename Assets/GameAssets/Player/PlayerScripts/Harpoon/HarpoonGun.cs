@@ -38,6 +38,7 @@ public class HarpoonGun : MonoBehaviour
         Focusing,
         Unfocusing
     };
+    
     #endregion
 
     #region Variables
@@ -170,6 +171,7 @@ public class HarpoonGun : MonoBehaviour
     {
         UnsubscribeToEvents();
     }
+    
     #endregion
 
     #region Input
@@ -243,6 +245,7 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 
     #region Reloading
+    
     /// <summary>
     /// Start the process of reloading
     /// </summary>
@@ -425,6 +428,7 @@ public class HarpoonGun : MonoBehaviour
         _focusProgress = 1;
         _currentFocusAccuracy = 0;
     }
+    
     /// <summary>
     /// A getter for a function
     /// allows you to enter what is 
@@ -519,6 +523,7 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 
     #region Harpoon Object Pool
+    
     /// <summary>
     /// Creates all harpoon projectiles in the object pool to avoid needing to spawn more later
     /// </summary>
@@ -559,6 +564,7 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 
     #region Getters
+    
     //Getters for private variables
     public float GetHarpoonProjectileSpeed() => _fireSpeed;
     public float GetHarpoonMaxDistance() => _maxDistance;
