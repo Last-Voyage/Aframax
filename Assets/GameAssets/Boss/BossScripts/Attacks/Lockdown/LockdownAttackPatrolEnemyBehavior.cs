@@ -25,9 +25,6 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     [Tooltip("Speed at which enemy chases the player")]
     [SerializeField] private float _seekPlayerSpeed = 5f;
 
-    [Tooltip("How long the enemy patrols before despawning")]
-    [SerializeField] private float _attackDuration = 15f;
-
     [Tooltip("Adds a delay before starting to patrol the room")]
     [SerializeField] private float _timeToWaitBeforePatroling = .5f;
 
@@ -38,10 +35,12 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     /// </summary>
     private Transform _targetPoint;
     
-    private bool _isPlayerInAttackRange = false;
+    private bool _isPlayerInAttackRange;
     private int _currentTargetIndex;
 
     private PatrolLocation _patrolLocationData;
+
+    private GameObject _proceduralAnimationObject;
 
     private Transform _playerTransform;
     private Coroutine _patrolCoroutine;
@@ -56,10 +55,10 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         BeginPatrolling();
         InitializePlayerTransform();
 
-        Transform proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).transform;
+        _proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).gameObject;
 
-        proceduralAnimationObject.gameObject.SetActive(true);
-        proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
+        _proceduralAnimationObject.SetActive(true);
+        _proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().SetTarget(transform);
     }
 
     /// <summary>
@@ -78,6 +77,9 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         _patrolCoroutine = StartCoroutine(PatrolRoom());
     }
 
+    /// <summary>
+    /// when object is destoryed also destory the vine
+    /// </summary>
     private void OnDestroy()
     {
         StopCoroutine(_patrolCoroutine);
@@ -156,14 +158,25 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
+    /// this should get rid of the vines regardless of how the enemy is destoryed
+    /// </summary>
+    private void OnDisable() 
+    {
+        if(_proceduralAnimationObject != null)
+        {
+            Destroy(_proceduralAnimationObject);
+        }
+    }
+
+    /// <summary>
     /// Notifies that patrol enemy has died and destroys self
     /// </summary>
-    private void DestroyEnemy()
+    public void DestroyEnemy()
     {
-        
         // Destroys enemy
-        if (gameObject != null)
+        if (gameObject != null && _proceduralAnimationObject != null)
         {
+            Destroy(_proceduralAnimationObject);
             Destroy(gameObject);
         }
     }

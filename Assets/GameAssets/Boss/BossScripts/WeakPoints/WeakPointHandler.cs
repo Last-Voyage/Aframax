@@ -178,9 +178,8 @@ public class WeakPointHandler : MonoBehaviour
     private void MaxWeakPointsDestroyed()
     {
         InvokeAllWeakPointsDestroyedEvent();
-        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, _parentGameObject.transform.position);
-
-        Destroy(_parentGameObject);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
+            _parentGameObject.transform.position);
     }
 
     #endregion
