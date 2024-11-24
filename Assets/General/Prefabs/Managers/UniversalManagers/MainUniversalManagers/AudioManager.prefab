@@ -76,12 +76,6 @@ MonoBehaviour:
       Data3: 769542296
       Data4: 1680147946
     Path: event:/EngineSFX
-  - Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
   <LimbIdle>k__BackingField:
     Guid:
       Data1: -1669528487
@@ -91,7 +85,7 @@ MonoBehaviour:
     Path: event:/LimbIdleSFX
   <IntervalAmbientEvents>k__BackingField:
   - <MinTimeBetweenEvents>k__BackingField: 10
-    <MaxTimeBetweenEvents>k__BackingField: 250
+    <MaxTimeBetweenEvents>k__BackingField: 100
     <IntervalEvent>k__BackingField:
       Guid:
         Data1: -1605573080
@@ -99,6 +93,15 @@ MonoBehaviour:
         Data3: 1592997815
         Data4: 255010408
       Path: event:/WaterSplashSFX
+  - <MinTimeBetweenEvents>k__BackingField: 5
+    <MaxTimeBetweenEvents>k__BackingField: 50
+    <IntervalEvent>k__BackingField:
+      Guid:
+        Data1: 160232648
+        Data2: 1293426069
+        Data3: -270255731
+        Data4: 1087386556
+      Path: event:/SteamSFX
 --- !u!1 &6730670262102700080
 GameObject:
   m_ObjectHideFlags: 0
