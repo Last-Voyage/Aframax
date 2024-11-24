@@ -16,7 +16,7 @@ using UnityEngine;
 public class FastIKFabric : MonoBehaviour
 {
     [SerializeField] private int _chainLength = 2;
-    public Transform Target;
+    public Transform Target { get; private set; }
     [SerializeField] private Transform _pole;
 
     [Header("Solver Parameters")]
@@ -300,4 +300,13 @@ public class FastIKFabric : MonoBehaviour
         }
     }
     #endif
+
+    /// <summary>
+    /// Sets the transform of target
+    /// </summary>
+    /// <param name="targetTransform"></param>
+    public void SetTarget(Transform targetTransform)
+    {
+        Target = targetTransform;
+    }
 }

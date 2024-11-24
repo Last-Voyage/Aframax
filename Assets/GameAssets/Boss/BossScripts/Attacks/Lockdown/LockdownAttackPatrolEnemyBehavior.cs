@@ -58,7 +58,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         _proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).gameObject;
 
         _proceduralAnimationObject.SetActive(true);
-        _proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
+        _proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().SetTarget(transform);
     }
 
     /// <summary>
