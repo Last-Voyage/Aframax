@@ -1,6 +1,7 @@
 /***********************************************************************************************************************
 // Name: UniversalTabManager.CS
 // Author: Nabil Tagba
+// Creation Date : UNKNOWN
 // Overview: Seamlessly handles and manages the creation and
 //transitions of tabs and their corresponding pages
 ***********************************************************************************************************************/
@@ -33,8 +34,6 @@ public class UniversalTabManager : MonoBehaviour
 
         ChangeTab(0);
     }
-
-
 
     /// <summary>
     /// when a tab is pressed, this method is called 

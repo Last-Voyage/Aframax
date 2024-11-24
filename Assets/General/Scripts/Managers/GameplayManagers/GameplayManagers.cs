@@ -55,14 +55,15 @@ public class GameplayManagers : CoreManagersFramework
             mainManager.SetUpInstance();
         }
 
-        //Thens sets them up
-        //They are instanced first so that if any manager needs to access any other manager in it's setup
-        //  then the order doesn't matter
+        //Then sets them up
+        //The managers perform their set up after establishing the instance so that they can access all other managers
+        //For example subscribing to events from the other manager
         foreach (MainGameplayManagerFramework mainManager in _allMainGameplayManagers)
         {
             mainManager.SetUpMainManager();
         }
 
+        //Informs the scene manager that a gameplay scene was loaded
         AframaxSceneManager.Instance.InvokeOnGameplaySceneLoaded();
     }
 }

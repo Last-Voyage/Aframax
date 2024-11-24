@@ -17,7 +17,7 @@ public class SaveManager : MainUniversalManagerFramework
 {
     //Game Save Data variable MUST viewable in editor for Json, so either public or serialized
     [SerializeField] private GameSaveData _gameSaveData;
-    private string _path;
+    private string _saveDataFilePath;
 
     public static SaveManager Instance;
 
@@ -28,15 +28,15 @@ public class SaveManager : MainUniversalManagerFramework
     {
         //Checks to see if we're in editor, if so use data path instead of persistent data path
         //Needed so that saving works both in editor and build
-        _path = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
+        _saveDataFilePath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
         //Append /SaveData/ to said path
         //SaveData is the file is assets containing the save data
-        _path = _path + "/SaveData/";
+        _saveDataFilePath = _saveDataFilePath + "/SaveData/";
         //Check if we're in a build, check if the directory exists, if not
-        if (!Application.isEditor && !Directory.Exists(_path)) 
+        if (!Application.isEditor && !Directory.Exists(_saveDataFilePath)) 
         {
             //Creates the directory
-            Directory.CreateDirectory(_path); 
+            Directory.CreateDirectory(_saveDataFilePath); 
         }
     }
 
@@ -58,7 +58,7 @@ public class SaveManager : MainUniversalManagerFramework
         //Converts the Game Save Data class into a string
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
         //Saves the string into the text file
-        File.WriteAllText(_path + "Data.json", convertedJson);
+        File.WriteAllText(_saveDataFilePath + "Data.json", convertedJson);
     }
 
     /// <summary>
@@ -67,10 +67,10 @@ public class SaveManager : MainUniversalManagerFramework
     private void Load()
     {
         //Loads all variables in Json into the Game Save Data class
-        if (File.Exists(_path + "Data.json"))
+        if (File.Exists(_saveDataFilePath + "Data.json"))
         {
             //Converts the text file into a string
-            var json = File.ReadAllText(_path + "Data.json");
+            var json = File.ReadAllText(_saveDataFilePath + "Data.json");
             //Converts the string into the Game Save Data class
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
         }
@@ -121,30 +121,5 @@ public class SaveManager : MainUniversalManagerFramework
 
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
-    #endregion
-}
-
-/// <summary>
-/// Holds the data which is being saved
-/// Save data is read from text file and stored into Game Save Data
-/// </summary>
-[System.Serializable]
-public class GameSaveData
-{
-    public bool TempSaveBool;
-
-    #region Getters
-    
-    public bool GetTempBool() => TempSaveBool;
-    
-    #endregion
-
-    #region Setters
-    
-    public void SetTempBool(bool newTemp)
-    {
-        TempSaveBool = newTemp;
-    }
-    
     #endregion
 }
