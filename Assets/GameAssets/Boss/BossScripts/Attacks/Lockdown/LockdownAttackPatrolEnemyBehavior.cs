@@ -58,7 +58,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         _proceduralAnimationObject = _patrolLocationData.EnemyRoom.gameObject.transform.GetChild(3).gameObject;
 
         _proceduralAnimationObject.SetActive(true);
-        _proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().Target = transform;
+        _proceduralAnimationObject.GetComponentInChildren<FastIKFabric>().SetTarget(transform);
     }
 
     /// <summary>
@@ -77,6 +77,9 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         _patrolCoroutine = StartCoroutine(PatrolRoom());
     }
 
+    /// <summary>
+    /// when object is destoryed also destory the vine
+    /// </summary>
     private void OnDestroy()
     {
         StopCoroutine(_patrolCoroutine);
@@ -151,6 +154,17 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
             }
 
             yield return null;
+        }
+    }
+
+    /// <summary>
+    /// this should get rid of the vines regardless of how the enemy is destoryed
+    /// </summary>
+    private void OnDisable() 
+    {
+        if(_proceduralAnimationObject != null)
+        {
+            Destroy(_proceduralAnimationObject);
         }
     }
 
