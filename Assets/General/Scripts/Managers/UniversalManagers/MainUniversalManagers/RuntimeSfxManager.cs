@@ -27,6 +27,9 @@ public class RuntimeSfxManager : AudioManager
 
     private bool _shouldFootstepsPlay = true;
 
+    private WaitForSeconds footstepDelay;
+    private WaitForSeconds firstFootstepDelay;
+
     #region Enable and Action Subscriptions
     /// <summary>
     /// Subscribes to any needed actions and initializes the footsteps
@@ -97,6 +100,12 @@ public class RuntimeSfxManager : AudioManager
         APlayOneShotSfx -= PlayOneShotSFX;
     }
 
+    private void Start()
+    {
+        footstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FootstepDelay);
+        firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay);
+    }
+
     #endregion Enable and Action Subscriptions
 
     #region FMOD Audio Functionality
@@ -111,7 +120,7 @@ public class RuntimeSfxManager : AudioManager
     {
         if (eventReference.IsNull)
         {
-            Debug.LogWarning(eventReference + " is null.");
+            Debug.LogWarning("FMOD Event is null. Make sure it's assigned in the Audio Manager!");
             return;
         }
 
@@ -190,19 +199,15 @@ public class RuntimeSfxManager : AudioManager
     /// <returns></returns>
     private IEnumerator LoopFootSteps()
     {
-        float timer = 0.0f;
+        yield return firstFootstepDelay;
+
+        PlayFootStep();
 
         while (true)
         {
-            if (timer > FmodSfxEvents.Instance.FootstepSpeed)
-            {
-                PlayFootStep();
-                timer = 0.0f;
-            }
-
-            timer += Time.deltaTime;
-
-            yield return null;
+            PlayFootStep();
+            
+            yield return footstepDelay;
         }
     }
 
