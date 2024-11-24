@@ -20,6 +20,23 @@ public class SpannerInteractable : MonoBehaviour, IPlayerInteractable
     {
         InteractEnabled = true;
     }
+    
+    /// <summary>
+    /// Switch toggle for if interaction availability
+    /// </summary>
+    public void CanBeInteractedWith()
+    {
+        if (InteractEnabled)
+        {
+            InteractEnabled = false;
+        }
+
+        if (!InteractEnabled)
+        {
+            InteractEnabled = true;
+        }
+    }
+    
     /// <summary>
     /// Implements the OnInteractedByPlayer function from IPlayerInteractable
     /// Called when the player presses the interact key while looking at this object

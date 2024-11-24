@@ -30,7 +30,10 @@ public class PlayerHealth : BaseHealth
     [SerializeField] private float _healthToEndHeartSfx;
     [SerializeField] private float _heartBeatRateSfx;
     private Coroutine _heartBeatCoroutine;
-    
+
+    public  static int _currentHealth {get; private set;}
+    public static int _maxHealth { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();

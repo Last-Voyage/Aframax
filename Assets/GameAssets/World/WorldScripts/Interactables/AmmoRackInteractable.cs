@@ -8,6 +8,7 @@
 **********************************************************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -18,7 +19,6 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     // The number of harpoons that are currently on the rack
     private int _currentHarpoons;
     public bool InteractEnabled { get; set; }
-
     /// <summary>
     /// Called when the game starts
     /// Sets the number of harpoons to the number of game objects in the ammo rack in-engine
@@ -27,9 +27,13 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     {
         _currentHarpoons = transform.GetChild(0).childCount;
         InteractEnabled = false;
-        OnSubscribeEvent();
     }
 
+    private void Update()
+    {
+        CanBeInteractedWith();
+    }
+    
     /// <summary>
     /// Triggers when the ammo rack is interacted with
     /// </summary>
@@ -38,33 +42,22 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
         PlayerManager.Instance.InvokeOnHarpoonRestockEvent(this);
     }
 
-    public void OnSubscribeEvent()
+    /// <summary>
+    /// Switch toggle for if interaction availability
+    /// </summary>
+    public void CanBeInteractedWith()
     {
-        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(OnInteractTurnEnabled);
-        PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(OnInteractTurnDisabled);
-    }
-
-    public void OnUnsubscribeEvent()
-    {
-        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(OnInteractTurnEnabled);
-        PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(OnInteractTurnDisabled);
-    }
-
-    private void OnInteractTurnEnabled()
-    {
-        if (!InteractEnabled)
-        {
-            InteractEnabled = true;
-        }
-    }
-
-    private void OnInteractTurnDisabled(AmmoRackInteractable ammoRock)
-    {
-        if (InteractEnabled)
+        if (InteractEnabled && HarpoonGun.Instance.GetReserveAmmo() == HarpoonGun.Instance.GetMaxAmmo())
         {
             InteractEnabled = false;
         }
+        if (!InteractEnabled&& HarpoonGun.Instance.GetReserveAmmo() < HarpoonGun.Instance.GetMaxAmmo())
+        {
+            Debug.Log("Off");
+            InteractEnabled = true;
+        }
     }
+    
 
 /// <summary>
     /// Removes a number of harpoons from the ammo rack

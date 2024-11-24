@@ -28,6 +28,23 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     {
         InteractEnabled = true;
     }
+    
+    /// <summary>
+    /// Switch toggle for if interaction availability
+    /// </summary>
+    public void CanBeInteractedWith()
+    {
+        if (InteractEnabled)
+        {
+            InteractEnabled = false;
+        }
+
+        if (!InteractEnabled)
+        {
+            InteractEnabled = true;
+        }
+    }
+    
     /// <summary>
     /// This function spawns in the smoke for the generator
     /// </summary>
