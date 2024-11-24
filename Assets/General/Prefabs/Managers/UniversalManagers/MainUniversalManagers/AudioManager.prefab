@@ -64,14 +64,44 @@ MonoBehaviour:
       Data3: 840459650
       Data4: 1316730629
     Path: event:/AmbientBugNoisesSFX
+  - Guid:
+      Data1: -543787192
+      Data2: 1218943496
+      Data3: -634958945
+      Data4: 415344585
+    Path: event:/ForestSoundsSFX
+  - Guid:
+      Data1: 1455786165
+      Data2: 1153059876
+      Data3: 769542296
+      Data4: 1680147946
+    Path: event:/EngineSFX
   <LimbIdle>k__BackingField:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  <IntervalAmbientEvents>k__BackingField: []
+      Data1: -1669528487
+      Data2: 1228675635
+      Data3: -178548828
+      Data4: -1676255950
+    Path: event:/LimbIdleSFX
+  <IntervalAmbientEvents>k__BackingField:
+  - <MinTimeBetweenEvents>k__BackingField: 10
+    <MaxTimeBetweenEvents>k__BackingField: 100
+    <IntervalEvent>k__BackingField:
+      Guid:
+        Data1: -1605573080
+        Data2: 1124729832
+        Data3: 1592997815
+        Data4: 255010408
+      Path: event:/WaterSplashSFX
+  - <MinTimeBetweenEvents>k__BackingField: 5
+    <MaxTimeBetweenEvents>k__BackingField: 50
+    <IntervalEvent>k__BackingField:
+      Guid:
+        Data1: 160232648
+        Data2: 1293426069
+        Data3: -270255731
+        Data4: 1087386556
+      Path: event:/SteamSFX
 --- !u!1 &6730670262102700080
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,11 +235,11 @@ MonoBehaviour:
     Path: event:/CreatureCrySFX
   <LimbSpawn>k__BackingField:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 2086426834
+      Data2: 1167219180
+      Data3: -1274048875
+      Data4: -996416402
+    Path: event:/LimbAppearingSFX
   <HardSurfaceWalking>k__BackingField:
     Guid:
       Data1: -924465006
@@ -217,8 +247,7 @@ MonoBehaviour:
       Data3: 914098310
       Data4: 1914202771
     Path: event:/HardSurfaceWalkingSFX
-  <FootstepDelay>k__BackingField: 0.45
-  <FirstFootstepDelay>k__BackingField: 0.15
+  <FootstepSpeed>k__BackingField: 0.3
   <PlayerTookDamage>k__BackingField:
     Guid:
       Data1: -1523959944
@@ -228,11 +257,11 @@ MonoBehaviour:
     Path: event:/PlayerTakeDamageSFX
   <PlayerHeartBeat>k__BackingField:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1595948492
+      Data2: 1329318974
+      Data3: -332712009
+      Data4: 744416244
+    Path: event:/HeartBeatSFX
   <HarpoonShot>k__BackingField:
     Guid:
       Data1: 1125143964
@@ -256,11 +285,11 @@ MonoBehaviour:
     Path: event:/HarpoonHitSFX
   <HarpoonWaterSplash>k__BackingField:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1605573080
+      Data2: 1124729832
+      Data3: 1592997815
+      Data4: 255010408
+    Path: event:/WaterSplashSFX
 --- !u!1 &9016497912938786864
 GameObject:
   m_ObjectHideFlags: 0
