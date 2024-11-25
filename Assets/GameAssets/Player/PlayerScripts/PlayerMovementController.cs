@@ -1,6 +1,6 @@
 /******************************************************************************
 // File Name:       PlayerMovementController.cs
-// Author:          Andrew Stapay
+// Author:          Andrew Stapay, Miles Rogers
 // Creation Date:   September 15, 2024
 //
 // Description:     Implementation of the basic movement for a player character.
@@ -38,6 +38,8 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float _deccelerationTime;
     [Tooltip("The curve showing how the player accelerates after pressing a directional input")]
     [SerializeField] private AnimationCurve _accelerationCurve;
+    [Tooltip("The amount of gravity affecting the player (in m/s^2)")] 
+    [SerializeField] private float _playerGravity = 9.8F;
 
     private float _currentAcceleration = 0;
     private float _accelerationProgress = 0;
@@ -62,6 +64,7 @@ public class PlayerMovementController : MonoBehaviour
     private Transform _playerVisuals;
     public static bool IsGrounded { get; private set; } = false;
     private Transform _groundedCheckOrigin;
+    public static bool IsMoving { get; private set; }
 
     [Tooltip("Size of boxcast for the grounded check")]
     private Vector3 _groundedExtents = new Vector3(.05f, .05f, .05f);
@@ -213,6 +216,7 @@ public class PlayerMovementController : MonoBehaviour
             DetermineInputState();
             GroundedCheck();
             HandleMovement();
+            ApplyGravity();
             yield return null;
         }
     }
@@ -237,8 +241,6 @@ public class PlayerMovementController : MonoBehaviour
         //Checks for if the player is grounded based on a boxcast
         IsGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
             transform.up*-1, out _groundHit, Quaternion.identity,_groundedCheckLength,_walkableLayers);
-
-        _playerRigidBody.useGravity = !IsGrounded;
     }
 
     /// <summary>
@@ -265,7 +267,7 @@ public class PlayerMovementController : MonoBehaviour
         // Returns the movement direction times the speed and acceleration
         return newMovement * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration;
     }
-
+    
     /// <summary>
     /// Handles any needed vertical force
     /// </summary>
@@ -289,11 +291,13 @@ public class PlayerMovementController : MonoBehaviour
         if(_movementInput.WasPressedThisFrame())
         {
             DirectionalInputStarted();
+            IsMoving = true;
         }
         //Check for if the input has ended
         else if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
+            IsMoving = false;
         }
     }
 
@@ -391,6 +395,31 @@ public class PlayerMovementController : MonoBehaviour
             StopCoroutine(_deccelerationCoroutine);
         }
     }
+    #endregion
+    
+    #region Gravity
+
+    /// <summary>
+    /// Add a downward velocity vector to the player's Rigidbody
+    /// </summary>
+    private void ApplyGravity()
+    {
+        // If no input and on the ground, don't allow the Rigidbody to move
+        if (!IsMoving && IsGrounded)
+        {
+            _playerRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+            return;
+        }
+        
+        // Ensure the Rigidbody can move
+        _playerRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+        
+        // Apply the downward gravity force
+        _playerRigidBody.AddForce(
+            new Vector3(0.0F, -_playerGravity * Time.deltaTime, 0.0F)
+        );
+    }
+    
     #endregion
 
     #region Harpoon Slowdown

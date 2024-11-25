@@ -94,9 +94,6 @@ public class LockdownAttackController : BaseBossAttack
     /// </summary>
     protected override void BeginAttack()
     {
-        // This is a passive attack this ends when it's scene is over
-        // This should only subscribe during its lifetime as it's waiting for it's scene to end
-
         base.BeginAttack();
 
         AttackRandomRooms(_numberOfRoomsToAttack);

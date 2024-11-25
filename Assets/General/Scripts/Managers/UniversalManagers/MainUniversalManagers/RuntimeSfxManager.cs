@@ -25,6 +25,11 @@ public class RuntimeSfxManager : AudioManager
 
     public static RuntimeSfxManager Instance;
 
+    private bool _shouldFootstepsPlay = true;
+
+    private WaitForSeconds footstepDelay;
+    private WaitForSeconds firstFootstepDelay;
+
     #region Enable and Action Subscriptions
     /// <summary>
     /// Subscribes to any needed actions and initializes the footsteps
@@ -56,9 +61,12 @@ public class RuntimeSfxManager : AudioManager
     protected override void SubscribeToGameplayEvents()
     {
         base.SubscribeToGameplayEvents();
+        
         InitializeFootstepInstance();
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
+
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopFootsteps);
     }
 
     /// <summary>
@@ -67,8 +75,11 @@ public class RuntimeSfxManager : AudioManager
     protected override void UnsubscribeToGameplayEvents()
     {
         base.UnsubscribeToGameplayEvents();
+        
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+        
+        AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
         
         ReleaseFootstepInstance();
     }
@@ -89,6 +100,12 @@ public class RuntimeSfxManager : AudioManager
         APlayOneShotSfx -= PlayOneShotSFX;
     }
 
+    private void Start()
+    {
+        footstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FootstepDelay);
+        firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay);
+    }
+
     #endregion Enable and Action Subscriptions
 
     #region FMOD Audio Functionality
@@ -103,7 +120,7 @@ public class RuntimeSfxManager : AudioManager
     {
         if (eventReference.IsNull)
         {
-            Debug.LogWarning(eventReference + " is null.");
+            Debug.LogWarning("FMOD Event is null. Make sure it's assigned in the Audio Manager!");
             return;
         }
 
@@ -141,6 +158,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootSteps()
     { 
+        StopFootsteps();
         _footstepsCoroutine = StartCoroutine(LoopFootSteps());
     }
 
@@ -153,6 +171,7 @@ public class RuntimeSfxManager : AudioManager
         {
             return;
         }
+        
         StopCoroutine(_footstepsCoroutine);
         _footstepsCoroutine = null;
     }
@@ -162,7 +181,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootStep()
     {
-        if (PlayerMovementController.IsGrounded)
+        if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
             if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
             {
@@ -180,19 +199,15 @@ public class RuntimeSfxManager : AudioManager
     /// <returns></returns>
     private IEnumerator LoopFootSteps()
     {
-        float timer = 0.0f;
+        yield return firstFootstepDelay;
+
+        PlayFootStep();
 
         while (true)
         {
-            if (timer > FmodSfxEvents.Instance.FootstepSpeed)
-            {
-                PlayFootStep();
-                timer = 0.0f;
-            }
-
-            timer += Time.deltaTime;
-
-            yield return null;
+            PlayFootStep();
+            
+            yield return footstepDelay;
         }
     }
 

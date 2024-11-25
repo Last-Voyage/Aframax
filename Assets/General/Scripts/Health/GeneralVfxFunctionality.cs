@@ -1,11 +1,14 @@
 /******************************************************************************
 // File Name:       GeneralVfxFunctionality.cs
 // Author:          Ryan Swanson
+//Contributor:  Mark Hanson
 // Creation Date:   October 22nd, 2024
 //
 // Description:     Handles any general functionality related to an object with particle systems
 ******************************************************************************/
 
+using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -20,7 +23,12 @@ public class GeneralVfxFunctionality : MonoBehaviour
 
     [Tooltip("The animation trigger used for all vfx animations")]
     private const string VFX_ANIMATION_TRIGGER = "PlayVfxAnim";
-
+    
+    [Tooltip("The trigger used for if vfx should move")]
+    [SerializeField] private bool _isMoveableVfx = false;
+    [Tooltip("Speed of how fast the vfx moves (Number is used for division)")]
+    [SerializeField] private float _vfxSpeed = 2f;
+    
     /// <summary>
     /// Adds all particle systems attached to this to a list
     /// </summary>
@@ -46,7 +54,17 @@ public class GeneralVfxFunctionality : MonoBehaviour
             animator.SetTrigger(VFX_ANIMATION_TRIGGER);
         }
     }
-
+/// <summary>
+/// To move Vfx forward if need be
+/// </summary>
+    private void Update()
+    {
+        if (_isMoveableVfx)
+        {
+            transform.position += ((transform.forward / _vfxSpeed) * Time.deltaTime);
+        }
+    }
+    
     /// <summary>
     /// Gets the longest duration of all particle systems this object has
     /// </summary>

@@ -21,6 +21,8 @@ public class CreditsScrolling : MonoBehaviour
     [SerializeField] private float _screenScrollSpeed;
     [SerializeField] private float _scrollWaitTime;
 
+    [SerializeField] private Canvas _sceneCanvas;
+
     private bool _hasScrollingStarted = false;
 
     private void Awake()
@@ -47,7 +49,8 @@ public class CreditsScrolling : MonoBehaviour
             _hasScrollingStarted = true;
             while (transform.position != destination)
             {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, transform.position.z), scrollSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, transform.position.z),
+                    scrollSpeed * (_sceneCanvas.renderingDisplaySize.x / 100) * Time.deltaTime);
 
                 yield return null;
             }
