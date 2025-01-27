@@ -48,6 +48,7 @@ public class ConsoleController : MonoBehaviour
 
     //false means not focus max and true is in max focus
     private bool _isInfocusState = true;
+    public bool isInInfiniteFocusMode = false;
     private HarpoonGun _harpoonGun; //reference to harpoon gun
 
     private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
@@ -278,7 +279,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void EnterInfiniteFocus()
     {
-       
+       isInInfiniteFocusMode = true;
         GameObject.FindObjectOfType<HarpoonGun>().CallFocusMax();
         _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Exit Infinite Focus";
 
@@ -291,6 +292,7 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void ExitInfiniteFocus()
     {
+        isInInfiniteFocusMode = false;
         GameObject.FindObjectOfType<HarpoonGun>().CallResetFocus();
         _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Enter Infinite Focus";
 

@@ -327,19 +327,23 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 
     #region Focusing
-    
+
     /// <summary>
     /// Called when the focus button begins to be held down
     /// </summary>
     /// <param name="context"></param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
-        _isFocusButtonHeld = true;
-
-        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        if (!FindObjectOfType<ConsoleController>().isInInfiniteFocusMode)
         {
-            StartFocusingHarpoon();
+            _isFocusButtonHeld = true;
+
+            if (_harpoonFiringState == EHarpoonFiringState.Ready)
+            {
+                StartFocusingHarpoon();
+            }
         }
+       
     }
 
     /// <summary>
@@ -348,12 +352,18 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusButtonReleased(InputAction.CallbackContext context)
     {
-        _isFocusButtonHeld = false;
 
-        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        //dev console condition to stop exiting infinit focus using right click when in infinit focus mode
+        if (!FindObjectOfType<ConsoleController>().isInInfiniteFocusMode)
         {
-            StartUnfocusingHarpoon();
+            _isFocusButtonHeld = false;
+
+            if (_harpoonFiringState == EHarpoonFiringState.Ready)
+            {
+                StartUnfocusingHarpoon();
+            }
         }
+       
     }
 
     /// <summary>
@@ -434,6 +444,7 @@ public class HarpoonGun : MonoBehaviour
     {
         FocusMax();
         _currentFocusState = EFocusState.Focusing;
+        _reticle.ChangeFocus();
         print(_currentFocusState);
     }
 
@@ -485,6 +496,9 @@ public class HarpoonGun : MonoBehaviour
     {
 
         ResetFocus();
+        WeaponFullyUnfocused();
+        
+        
 
     }
 
