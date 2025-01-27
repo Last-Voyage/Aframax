@@ -334,7 +334,7 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
-        if (!FindObjectOfType<ConsoleController>().isInInfiniteFocusMode)
+        if (!ConsoleController.instance.IsInInfiniteFocusMode)
         {
             _isFocusButtonHeld = true;
 
@@ -354,7 +354,7 @@ public class HarpoonGun : MonoBehaviour
     {
 
         //dev console condition to stop exiting infinit focus using right click when in infinit focus mode
-        if (!FindObjectOfType<ConsoleController>().isInInfiniteFocusMode)
+        if (!ConsoleController.instance.IsInInfiniteFocusMode)
         {
             _isFocusButtonHeld = false;
 
@@ -489,8 +489,9 @@ public class HarpoonGun : MonoBehaviour
     }
 
     /// <summary>
-    /// A getter for a function
-    /// allows you to reset the focus
+    /// A function that calls 
+    /// another function. in this case
+    /// reset  focus
     /// </summary>
     public void CallResetFocus() 
     {
@@ -498,8 +499,6 @@ public class HarpoonGun : MonoBehaviour
         ResetFocus();
         WeaponFullyUnfocused();
         
-        
-
     }
 
     /// <summary>
