@@ -219,8 +219,15 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
-        VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
-            transform.position, transform.rotation);
+        if (BoatMover.Instance != null)
+        {
+            VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
+                transform.position, transform.rotation);
+        }
+        else
+        {
+            VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(transform.position,transform.rotation);
+        }
         
         
         ResetFocus();
