@@ -42,6 +42,8 @@ public class BoatMover : MonoBehaviour
     [Tooltip("Arbitrary float for adjusting the speed of the boat")]
     [SerializeField] private float _speedModifier;
 
+    private Coroutine _boatMoveCoroutine;
+
     private void Awake()
     {
         EstablishInstance();
@@ -96,8 +98,14 @@ public class BoatMover : MonoBehaviour
     /// <param name="moveTime">The amount of time it should take to change to the new speed</param>
     public void ChangeSpeed(float newSpeed, float moveTime)
     {
+        // If there's already a coroutine playing, stop it and instead overwrite it with the new one
+        if (_boatMoveCoroutine != null)
+        {
+            StopCoroutine(_boatMoveCoroutine);
+        }
+
         // Run the coroutine
-        StartCoroutine(LerpSpeed(newSpeed, moveTime));
+        _boatMoveCoroutine = StartCoroutine(LerpSpeed(newSpeed, moveTime));
 
         // The internal IEnumerator to actually lerp the speed
         IEnumerator LerpSpeed(float newSpeed, float moveTime)
@@ -113,6 +121,8 @@ public class BoatMover : MonoBehaviour
                 currentTime += Time.deltaTime;
                 yield return null;
             }
+
+            _boatMoveCoroutine = null;
         }
     }
 
