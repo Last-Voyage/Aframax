@@ -288,10 +288,10 @@ public class ConsoleController : MonoBehaviour
     private void EnterInfiniteFocus()
     {
        IsInInfiniteFocusMode = true;
-        _harpoonGun.CallFocusMax();
+        _harpoonGun.DebugEnterMaxFocus();
         _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Exit Infinite Focus";
         
-        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(_harpoonGun.CallFocusMax);
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(_harpoonGun.DebugEnterMaxFocus);
     }
 
     /// <summary>
@@ -300,10 +300,10 @@ public class ConsoleController : MonoBehaviour
     private void ExitInfiniteFocus()
     {
         IsInInfiniteFocusMode = false;
-        _harpoonGun.CallResetFocus();
+        _harpoonGun.DebugResetFocus();
         _infiniteFocusToggleButton.GetComponentInChildren<TMP_Text>().text = "Enter Infinite Focus";
 
-        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(_harpoonGun.CallFocusMax);
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(_harpoonGun.DebugEnterMaxFocus);
     }
 
 

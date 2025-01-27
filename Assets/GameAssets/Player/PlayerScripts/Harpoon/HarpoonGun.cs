@@ -438,14 +438,13 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// A getter for a function
     /// allows you to enter what is 
-    /// basically an infinit focus mode
+    /// basically an infinite focus mode
     /// </summary>
-    public void CallFocusMax()
+    public void DebugEnterMaxFocus()
     {
         FocusMax();
         _currentFocusState = EFocusState.Focusing;
         _reticle.ChangeFocus();
-        print(_currentFocusState);
     }
 
     /// <summary>
@@ -493,7 +492,7 @@ public class HarpoonGun : MonoBehaviour
     /// another function. in this case
     /// reset  focus
     /// </summary>
-    public void CallResetFocus() 
+    public void DebugResetFocus() 
     {
 
         ResetFocus();
