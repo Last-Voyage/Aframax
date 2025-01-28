@@ -221,12 +221,12 @@ public class HarpoonGun : MonoBehaviour
 
         if (!BoatMover.Instance)
         {
-            VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
+            VfxManager.Instance.GetMuzzleSmokeVfx()?.PlayNextVfxInPool(BoatMover.Instance.transform,
                 transform.position, transform.rotation);
         }
         else
         {
-            VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(transform.position,transform.rotation);
+            VfxManager.Instance.GetMuzzleSmokeVfx()?.PlayNextVfxInPool(transform.position,transform.rotation);
         }
         
         
