@@ -133,6 +133,9 @@ public class PlayerHealthUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Causes the heart to appear and disappear over designer specified durations
+    /// </summary>
     private IEnumerator HeartAppearance()
     {
         _heartAlphaParent.SetAlpha(0);
@@ -141,19 +144,12 @@ public class PlayerHealthUI : MonoBehaviour
         
         for (float i = .1f; i < 1.01f; i += .01f)
         {
-            Debug.Log("time " + i);
             _heartAlphaParent.SetAlpha(i);
             yield return _heartAppearTime;
         }
         
-        Debug.Log(_heartTimeToAppear);
-        
         // The heart is fully on screen for x seconds
-        Debug.Log(_heartAlphaParent.GetAlpha());
-        Debug.Log("Bro");
         yield return _heartScreenTime;
-        
-        Debug.Log(_heartScreenTime);
 
         for (float i = 1f; i > -.01f; i -= .01f)
         {
