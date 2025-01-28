@@ -54,6 +54,7 @@ public class CinemachineShake : MonoBehaviour
         
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
             _cinemachineVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
         //turns off the shake
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
     }

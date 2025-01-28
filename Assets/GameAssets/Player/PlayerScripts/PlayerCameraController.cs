@@ -10,6 +10,7 @@
 ******************************************************************************/
 using Cinemachine;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CinemachineVirtualCamera))]
@@ -24,12 +25,16 @@ public class PlayerCameraController : MonoBehaviour
 
     [SerializeField] private GameObject _playerVisuals;
 
-    // Variable for the Virtual Camera
+    // Variables for the Virtual Camera
     // Unused at the moment, but it'll be here when we eventually need it
     private CinemachineVirtualCamera _virtualCamera;
+    private Vector3 _initialCameraPos;
 
     // Variables that relate to the camera's coroutine
     private Coroutine _cameraCoroutine;
+
+    // Variables for boat sway
+    private float _currentSwayChange = 0f;
 
     /// <summary>
     /// This function is called before the first frame update.
@@ -65,17 +70,21 @@ public class PlayerCameraController : MonoBehaviour
     private void InitializeCamera()
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
+        _initialCameraPos = transform.position;
     }
 
     /// <summary>
     /// Camera coroutine
-    /// This will perpetually call the camera moving method until disabled
+    /// This will perpetually call camera-moving methods until disabled
     /// </summary>
     private IEnumerator MoveCamera()
     {
         while (true)
         {
             AdjustPlayerRotation();
+
+            Invoke(nameof(BoatSway), 1);
+
             yield return null;
         }
     }
@@ -88,7 +97,17 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+        _playerVisuals.transform.localEulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+    }
+
+    private void BoatSway()
+    {
+        _currentSwayChange += 0.005f;
+
+        CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        transposer.m_FollowOffset = new Vector3(0, Mathf.Sin(_currentSwayChange) / 2, 0);
+
+        _currentSwayChange = _currentSwayChange % (2 * Mathf.PI);
     }
 
     /// <summary>
