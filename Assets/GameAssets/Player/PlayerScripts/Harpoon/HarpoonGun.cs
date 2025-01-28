@@ -334,19 +334,23 @@ public class HarpoonGun : MonoBehaviour
     #endregion
 
     #region Focusing
-    
+
     /// <summary>
     /// Called when the focus button begins to be held down
     /// </summary>
     /// <param name="context"></param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
-        _isFocusButtonHeld = true;
-
-        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        if (!ConsoleController.instance.IsInInfiniteFocusMode)
         {
-            StartFocusingHarpoon();
+            _isFocusButtonHeld = true;
+
+            if (_harpoonFiringState == EHarpoonFiringState.Ready)
+            {
+                StartFocusingHarpoon();
+            }
         }
+       
     }
 
     /// <summary>
@@ -355,12 +359,18 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusButtonReleased(InputAction.CallbackContext context)
     {
-        _isFocusButtonHeld = false;
 
-        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        //dev console condition to stop exiting infinit focus using right click when in infinit focus mode
+        if (!ConsoleController.instance.IsInInfiniteFocusMode)
         {
-            StartUnfocusingHarpoon();
+            _isFocusButtonHeld = false;
+
+            if (_harpoonFiringState == EHarpoonFiringState.Ready)
+            {
+                StartUnfocusingHarpoon();
+            }
         }
+       
     }
 
     /// <summary>
@@ -432,6 +442,17 @@ public class HarpoonGun : MonoBehaviour
         _focusProgress = 1;
         _currentFocusAccuracy = 0;
     }
+    /// <summary>
+    /// A getter for a function
+    /// allows you to enter what is 
+    /// basically an infinite focus mode
+    /// </summary>
+    public void DebugEnterMaxFocus()
+    {
+        FocusMax();
+        _currentFocusState = EFocusState.Focusing;
+        _reticle.ChangeFocus();
+    }
 
     /// <summary>
     /// The process of unfocusing the weapon
@@ -471,6 +492,19 @@ public class HarpoonGun : MonoBehaviour
         CalculateCurrentFocusAccuracy();
         _currentFocusState = EFocusState.None;
         _reticle.ReticleFire();
+    }
+
+    /// <summary>
+    /// A function that calls 
+    /// another function. in this case
+    /// reset  focus
+    /// </summary>
+    public void DebugResetFocus() 
+    {
+
+        ResetFocus();
+        WeaponFullyUnfocused();
+        
     }
 
     /// <summary>
