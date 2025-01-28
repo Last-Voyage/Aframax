@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       AframaxSceneManager.cs
 // Author:          Ryan Swanson
-// Contributor:     Jeremiah Peters
+// Contributor:     Jeremiah Peters, Nick Rice
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides the framework to be used by the core managers
@@ -24,7 +24,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
 
-    [field: SerializeField] public int GameplaySceneIndex { get; private set; }
+    [field: SerializeField] public int BoatSceneIndex { get; private set; }
+    
+    [field: SerializeField] public int MazeSceneIndex { get; private set; }
 
     [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
 
@@ -77,10 +79,12 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <returns> True if currently in a game scene </returns>
     public bool IsGameScene()
     {
-        return !(SceneManager.GetActiveScene().buildIndex == MainMenuSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == DeathScreenSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == SettingsSceneIndex);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        return !(currentSceneIndex == MainMenuSceneIndex ||
+               currentSceneIndex == DeathScreenSceneIndex ||
+               currentSceneIndex == EndScreenSceneIndex ||
+               currentSceneIndex == SettingsSceneIndex ||
+               currentSceneIndex == MazeSceneIndex);
     }
 
     /// <summary>
@@ -142,7 +146,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         }
         
         //Starts loading the scene
-        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneID);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneID);
 
         //Can start the starting scene transition animation here
         //Will be implemented when scene transition work occurs
