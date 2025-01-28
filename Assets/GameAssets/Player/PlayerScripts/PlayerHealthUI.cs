@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealthUI.cs
 // Author :            Jeremiah Peters
-// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster
+// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster, Nick Rice
 // Creation Date :     9/16/24
 //
 // Brief Description : operates the health ui for the player
