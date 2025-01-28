@@ -24,6 +24,7 @@ using UnityEngine.UI;
 /// </summary>
 public class ConsoleController : MonoBehaviour
 {
+    #region variables
     [Header("Settings")]
     [SerializeField] private bool _isInDeveloperMode;
     private bool _isInFreeLookCamMode = false;
@@ -53,10 +54,16 @@ public class ConsoleController : MonoBehaviour
     private GameObject _spawnedFreeLookCam;//the free look cam that is spawned once the the player turns on free
     //look cam mode
 
+    //infinite ammo mode settings
+    private bool _isInInfiniteAmmoMode = false;
+    [SerializeField] private Button _infiniteAmmoModeButton;
+    public bool DoIHaveInifinteAmmo = false;
+    [SerializeField] private TMP_Text _infiniteAmmoFeedbackText;
+
     private PlayerInputMap _playerInput;
 
     public static ConsoleController instance;
-    
+    #endregion
     /// <summary>
     /// happens before the start of the game
     /// </summary>
@@ -86,6 +93,7 @@ public class ConsoleController : MonoBehaviour
         _playerInput.DebugConsole.OpenCloseConsole.performed += ctx => ToggleConsole();
         _infiniteFocusToggleButton.GetComponent<Button>().onClick.AddListener(ToggleInfiniteFocus);
         _harpoonGun = GameObject.FindObjectOfType<HarpoonGun>();
+        _infiniteAmmoModeButton.onClick.AddListener(ToggleInfiniteAmmo);
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -309,6 +317,36 @@ public class ConsoleController : MonoBehaviour
 
     #endregion
 
+    #region infinite ammo
+
+    private void ToggleInfiniteAmmo()
+    {
+        if (_isInInfiniteAmmoMode)
+        {
+            _isInInfiniteAmmoMode = false;
+            ExitInfiniteAmmoMode();
+        }
+        else if (!_isInInfiniteAmmoMode)
+        {
+            _isInInfiniteAmmoMode = true;
+            EnterInfiniteAmmoMode();
+        }
+    }
+
+    private void EnterInfiniteAmmoMode()
+    {
+        DoIHaveInifinteAmmo = true;
+        _infiniteAmmoFeedbackText.text = "Exit Infinite Ammo";
+    }
+
+    private void ExitInfiniteAmmoMode()
+    {
+        DoIHaveInifinteAmmo = false;
+        _infiniteAmmoFeedbackText.text = "Enter Infinite Ammo";
+    }
+
+    #endregion
+
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
@@ -321,6 +359,7 @@ public class ConsoleController : MonoBehaviour
         _toggleGodModeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _playerInput.Disable();
         _infiniteFocusToggleButton.GetComponent<Button>().onClick.RemoveAllListeners();
+        _infiniteAmmoModeButton.onClick.RemoveAllListeners();
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }

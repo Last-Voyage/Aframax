@@ -265,7 +265,8 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private IEnumerator ReloadHarpoon()
     {
-        if (_currentReserveAmmo > 0)
+        //nabii added infinite ammo functionality here
+        if (_currentReserveAmmo > 0 || ConsoleController.instance.DoIHaveInifinteAmmo)
         {
             PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
             float reloadTimeRemaining = _reloadTime;
@@ -275,7 +276,16 @@ public class HarpoonGun : MonoBehaviour
                 yield return null;
             }
 
-            _currentReserveAmmo--;
+            if (ConsoleController.instance.DoIHaveInifinteAmmo)
+            {
+                _currentReserveAmmo = 1;
+            }
+            else
+            {
+                //do normal game stuff here
+                _currentReserveAmmo--;
+            }
+            
 
             HarpoonFullyReloaded();
         }
