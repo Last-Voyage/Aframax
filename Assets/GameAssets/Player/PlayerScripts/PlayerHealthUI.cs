@@ -54,9 +54,7 @@ public class PlayerHealthUI : MonoBehaviour
     {
         InitializeAnimator();
 
-        _heartAppearTime = new WaitForSeconds(1/(90/_heartTimeToAppear));
-        _heartScreenTime = new WaitForSeconds(_heartTimeOnScreen);
-        _heartDisappearTime = new WaitForSeconds(1/(100/_heartTimeToDisappear));
+        InitializeWaitForSeconds();
 
         _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
         _heartAlphaParent.SetAlpha(0);
@@ -158,6 +156,16 @@ public class PlayerHealthUI : MonoBehaviour
         }
 
         _heartAppearanceCoroutine = null;
+    }
+
+    /// <summary>
+    /// Initializes the values for heart fade in/fade out
+    /// </summary>
+    private void InitializeWaitForSeconds()
+    {
+        _heartAppearTime = new WaitForSeconds(1/(90/_heartTimeToAppear));
+        _heartScreenTime = new WaitForSeconds(_heartTimeOnScreen);
+        _heartDisappearTime = new WaitForSeconds(1/(100/_heartTimeToDisappear));
     }
 
     /// <summary>
