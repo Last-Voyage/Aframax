@@ -2,7 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 // Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick, 
-//                     Miles Rogers
+//                     Miles Rogers, Nick Rice
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -219,7 +219,7 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
-        if (BoatMover.Instance != null)
+        if (!BoatMover.Instance)
         {
             VfxManager.Instance.GetMuzzleSmokeVfx().PlayNextVfxInPool(BoatMover.Instance.transform,
                 transform.position, transform.rotation);
