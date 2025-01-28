@@ -68,7 +68,7 @@ public class DialoguePopUps : MonoBehaviour
 
             //here's where it does text background
 
-            _textBackgroundContainer.text = "<mark=#000000aa padding=“10, 10, 0, 0”>" + dialogueInfo.GetText + "</mark>";
+            _textBackgroundContainer.text = "<mark=#000000aa padding=“20, 20, 0, 0”>" + dialogueInfo.GetText + "</mark>";
             //padding order is left, right, top, bottom.
             //first 6 digits of the hex color code is color ("000000" means black)
             //last 2 digits is opacity ("aa" is about 67% opacity)
@@ -80,10 +80,6 @@ public class DialoguePopUps : MonoBehaviour
 
             // Gets total length of text in characters, and gets the speed of the text display
             int totalLength = dialogueInfo.GetText.Length;
-
-            //debugging
-            Debug.Log("text " + _textContainer.text.Length);
-            Debug.Log("bg " + _textBackgroundContainer.text.Length);
 
             float typeSpeed = totalLength / (float)dialogueInfo.GetTimeToDisplay;
 
