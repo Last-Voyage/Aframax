@@ -7,6 +7,8 @@
 // Brief Description : operates the health ui for the player
 *****************************************************************************/
 
+using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +25,24 @@ public class PlayerHealthUI : MonoBehaviour
 
     [SerializeField] private GameObject _playerHeart;
 
+    [Header("Heart UI fading variables")] 
+    
+    [SerializeField]
+    private float _heartTimeToAppear;
+    private WaitForSeconds _heartAppearTime;
+    
+    [SerializeField]
+    private float _heartTimeOnScreen;
+    private WaitForSeconds _heartScreenTime;
+    
+    [SerializeField] 
+    private float _heartTimeToDisappear;
+    private WaitForSeconds _heartDisappearTime;
+
+    private IEnumerator _heartAppearanceCoroutine;
+
+    private CanvasRenderer _heartAlphaParent;
+
     private Animator _animator;
     
     private void Awake()
@@ -33,6 +53,13 @@ public class PlayerHealthUI : MonoBehaviour
     private void Start()
     {
         InitializeAnimator();
+
+        _heartAppearTime = new WaitForSeconds(1/(90/_heartTimeToAppear));
+        _heartScreenTime = new WaitForSeconds(_heartTimeOnScreen);
+        _heartDisappearTime = new WaitForSeconds(1/(100/_heartTimeToDisappear));
+
+        _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
+        _heartAlphaParent.SetAlpha(0);
     }
 
     /// <summary>
@@ -57,7 +84,16 @@ public class PlayerHealthUI : MonoBehaviour
     {
         //this updates the heart
         _animator.SetFloat("Health_Stage_Num", 4 * healthPercent);
-
+        
+        if (_heartAppearanceCoroutine != null)
+        {
+            StopCoroutine(_heartAppearanceCoroutine);
+            _heartAppearanceCoroutine = null;
+        }
+        
+        _heartAppearanceCoroutine = HeartAppearance();
+        StartCoroutine(_heartAppearanceCoroutine);
+        
         //this part does the blood around the edges of the screen
         switch (4 * healthPercent)
         {
@@ -95,6 +131,37 @@ public class PlayerHealthUI : MonoBehaviour
         {
             currentImage.gameObject.SetActive(false);
         }
+    }
+
+    private IEnumerator HeartAppearance()
+    {
+        _heartAlphaParent.SetAlpha(0);
+        
+        // Make the heart appear over time
+        
+        for (float i = .1f; i < 1.01f; i += .01f)
+        {
+            Debug.Log("time " + i);
+            _heartAlphaParent.SetAlpha(i);
+            yield return _heartAppearTime;
+        }
+        
+        Debug.Log(_heartTimeToAppear);
+        
+        // The heart is fully on screen for x seconds
+        Debug.Log(_heartAlphaParent.GetAlpha());
+        Debug.Log("Bro");
+        yield return _heartScreenTime;
+        
+        Debug.Log(_heartScreenTime);
+
+        for (float i = 1f; i > -.01f; i -= .01f)
+        {
+            _heartAlphaParent.SetAlpha(i);
+            yield return _heartDisappearTime;
+        }
+
+        _heartAppearanceCoroutine = null;
     }
 
     /// <summary>
