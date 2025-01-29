@@ -28,7 +28,23 @@ public class DialoguePopUps : MonoBehaviour
 
     [Tooltip("Controls whether or not the text will have a background")]
     [SerializeField]
-    private bool DoTextBackground;
+    private bool doTextBackground;
+
+    [Tooltip("background left padding")]
+    [SerializeField]
+    private float leftBackgroundPadding;
+
+    [Tooltip("background right padding")]
+    [SerializeField]
+    private float rightBackgroundPadding;
+
+    [Tooltip("background top padding")]
+    [SerializeField]
+    private float topBackgroundPadding;
+
+    [Tooltip("background bottom padding")]
+    [SerializeField]
+    private float bottomBackgroundPadding;
 
     // Temp variable used for testing
     [Tooltip("The data used in the UI element")]
@@ -66,9 +82,17 @@ public class DialoguePopUps : MonoBehaviour
             _textContainer.text = dialogueInfo.GetText;
             _textContainer.maxVisibleCharacters = 0;
 
+            //Debug.Log($"this string should be interpolated{leftBackgroundPadding}");
+
             //here's where it does text background
 
-            _textBackgroundContainer.text = "<mark=#000000aa padding=“20, 20, 0, 0”>" + dialogueInfo.GetText + "</mark>";
+            if (doTextBackground)
+            {
+
+                _textBackgroundContainer.text = "<mark=#000000aa padding=“10, 10, 0, 0”>" + dialogueInfo.GetText + "</mark>";
+                //_textBackgroundContainer.text = "$<mark=#000000aa padding=“{10}, 10, 0, 0”>" + dialogueInfo.GetText + "</mark>";
+                //_textBackgroundContainer.text = $"this string should be interpolated{leftBackgroundPadding}";
+            }
             //padding order is left, right, top, bottom.
             //first 6 digits of the hex color code is color ("000000" means black)
             //last 2 digits is opacity ("aa" is about 67% opacity)
