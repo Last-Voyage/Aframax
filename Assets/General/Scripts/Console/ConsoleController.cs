@@ -55,9 +55,9 @@ public class ConsoleController : MonoBehaviour
     //look cam mode
 
     //infinite ammo mode settings
-    private bool _isInInfiniteAmmoMode = false;
+    //
+    public bool IsInInfiniteAmmoMode = false;
     [SerializeField] private Button _infiniteAmmoModeButton;
-    public bool DoIHaveInifinteAmmo = false;
     [SerializeField] private TMP_Text _infiniteAmmoFeedbackText;
 
     private PlayerInputMap _playerInput;
@@ -318,30 +318,36 @@ public class ConsoleController : MonoBehaviour
     #endregion
 
     #region infinite ammo
-
+    /// <summary>
+    /// toggles in and out of infinite ammo
+    /// </summary>
     private void ToggleInfiniteAmmo()
     {
-        if (_isInInfiniteAmmoMode)
+        if (IsInInfiniteAmmoMode)
         {
-            _isInInfiniteAmmoMode = false;
+            IsInInfiniteAmmoMode = false;
             ExitInfiniteAmmoMode();
         }
-        else if (!_isInInfiniteAmmoMode)
+        else 
         {
-            _isInInfiniteAmmoMode = true;
+            IsInInfiniteAmmoMode = true;
             EnterInfiniteAmmoMode();
         }
     }
 
+    /// <summary>
+    /// puts the player in infinite ammo mode
+    /// </summary>
     private void EnterInfiniteAmmoMode()
     {
-        DoIHaveInifinteAmmo = true;
+        _harpoonGun.EditReserveAmmoToEnterInfiniteAmmoMode();
         _infiniteAmmoFeedbackText.text = "Exit Infinite Ammo";
     }
-
+    /// <summary>
+    /// takes the playrer out of infinite ammo mode
+    /// </summary>
     private void ExitInfiniteAmmoMode()
     {
-        DoIHaveInifinteAmmo = false;
         _infiniteAmmoFeedbackText.text = "Enter Infinite Ammo";
     }
 
