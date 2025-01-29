@@ -1,12 +1,14 @@
 /*****************************************************************************
 // File Name :         PlayerHealthUI.cs
 // Author :            Jeremiah Peters
-// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster
+// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster, Nick Rice
 // Creation Date :     9/16/24
 //
 // Brief Description : operates the health ui for the player
 *****************************************************************************/
 
+using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +25,24 @@ public class PlayerHealthUI : MonoBehaviour
 
     [SerializeField] private GameObject _playerHeart;
 
+    [Header("Heart UI fading variables")] 
+    
+    [SerializeField]
+    private float _heartTimeToAppear;
+    private WaitForSeconds _heartAppearTime;
+    
+    [SerializeField]
+    private float _heartTimeOnScreen;
+    private WaitForSeconds _heartScreenTime;
+    
+    [SerializeField] 
+    private float _heartTimeToDisappear;
+    private WaitForSeconds _heartDisappearTime;
+
+    private IEnumerator _heartAppearanceCoroutine;
+
+    private CanvasRenderer _heartAlphaParent;
+
     private Animator _animator;
     
     private void Awake()
@@ -33,6 +53,11 @@ public class PlayerHealthUI : MonoBehaviour
     private void Start()
     {
         InitializeAnimator();
+
+        InitializeWaitForSeconds();
+
+        _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
+        _heartAlphaParent.SetAlpha(0);
     }
 
     /// <summary>
@@ -57,7 +82,16 @@ public class PlayerHealthUI : MonoBehaviour
     {
         //this updates the heart
         _animator.SetFloat("Health_Stage_Num", 4 * healthPercent);
-
+        
+        if (_heartAppearanceCoroutine != null)
+        {
+            StopCoroutine(_heartAppearanceCoroutine);
+            _heartAppearanceCoroutine = null;
+        }
+        
+        _heartAppearanceCoroutine = HeartAppearance();
+        StartCoroutine(_heartAppearanceCoroutine);
+        
         //this part does the blood around the edges of the screen
         switch (4 * healthPercent)
         {
@@ -95,6 +129,43 @@ public class PlayerHealthUI : MonoBehaviour
         {
             currentImage.gameObject.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// Causes the heart to appear and disappear over designer specified durations
+    /// </summary>
+    private IEnumerator HeartAppearance()
+    {
+        _heartAlphaParent.SetAlpha(0);
+        
+        // Make the heart appear over time
+        
+        for (float i = .1f; i < 1.01f; i += .01f)
+        {
+            _heartAlphaParent.SetAlpha(i);
+            yield return _heartAppearTime;
+        }
+        
+        // The heart is fully on screen for x seconds
+        yield return _heartScreenTime;
+
+        for (float i = 1f; i > -.01f; i -= .01f)
+        {
+            _heartAlphaParent.SetAlpha(i);
+            yield return _heartDisappearTime;
+        }
+
+        _heartAppearanceCoroutine = null;
+    }
+
+    /// <summary>
+    /// Initializes the values for heart fade in/fade out
+    /// </summary>
+    private void InitializeWaitForSeconds()
+    {
+        _heartAppearTime = new WaitForSeconds(1/(90/_heartTimeToAppear));
+        _heartScreenTime = new WaitForSeconds(_heartTimeOnScreen);
+        _heartDisappearTime = new WaitForSeconds(1/(100/_heartTimeToDisappear));
     }
 
     /// <summary>
