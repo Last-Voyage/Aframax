@@ -46,7 +46,7 @@ public class PlayerCameraController : MonoBehaviour
     [Space]
     [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
     [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
-    private const float _BASE_MOVEMENT_SWAY_SPEED = 0.001f;
+    private const float _BASE_MOVEMENT_SWAY_SPEED = 0.0025f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.25f;
     private const float _MOVEMENT_SWAY_SPEED_LIMITER = 5f;
     private const float _MOVEMENT_SWAY_INTENSITY_LIMITER = 5f;
@@ -58,6 +58,12 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField, Range(0f, 10f)] private float _pullbackIntensity = 5f;
     private const float _PULLBACK_SPEED_LIMITER = 150f;
     private const float _PULLBACK_INTENSITY_LIMITER = 5f;
+
+    // Variables for camera shake
+    [Space]
+    [SerializeField] private float _cameraShakeTime = 5f;
+    [SerializeField, Range(0f, 10f)] private float _cameraShakeIntensity = 5f;
+
 
     // THIS IS TEMPORARY CODE THAT IS TO BE USED FOR TESTING PURPOSES
     // IF YOU ARE SEEING THIS MESSAGE, THEN STAPAY FORGOT TO REMOVE THIS
@@ -71,7 +77,7 @@ public class PlayerCameraController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.P))
         {
-            
+            CinemachineShake.Instance.ShakeCamera(_cameraShakeIntensity, _cameraShakeTime, true);
         }
     }
 
@@ -161,6 +167,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void StartWalkingSway(InputAction playerMovement)
     {
+        print("yuh");
         _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));
     }
 
