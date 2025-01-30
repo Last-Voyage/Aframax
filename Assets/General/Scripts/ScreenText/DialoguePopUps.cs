@@ -32,19 +32,19 @@ public class DialoguePopUps : MonoBehaviour
 
     [Tooltip("background left padding")]
     [SerializeField]
-    private float leftBackgroundPadding;
+    private float _leftBackgroundPadding;
 
     [Tooltip("background right padding")]
     [SerializeField]
-    private float rightBackgroundPadding;
+    private float _rightBackgroundPadding;
 
     [Tooltip("background top padding")]
     [SerializeField]
-    private float topBackgroundPadding;
+    private float _topBackgroundPadding;
 
     [Tooltip("background bottom padding")]
     [SerializeField]
-    private float bottomBackgroundPadding;
+    private float _bottomBackgroundPadding;
 
     // Temp variable used for testing
     [Tooltip("The data used in the UI element")]
@@ -86,7 +86,7 @@ public class DialoguePopUps : MonoBehaviour
 
             if (doTextBackground)
             {
-                _textBackgroundContainer.text = $"<mark=#000000aa padding=“{leftBackgroundPadding}, {rightBackgroundPadding}, {topBackgroundPadding}, {bottomBackgroundPadding}”>" + dialogueInfo.GetText + "</mark>";
+                _textBackgroundContainer.text = $"<mark=#000000aa padding=“{_leftBackgroundPadding}, {_rightBackgroundPadding}, {_topBackgroundPadding}, {_bottomBackgroundPadding}”>" + dialogueInfo.GetText + "</mark>";
             }
             //padding order is left, right, top, bottom.
             //first 6 digits of the hex color code is color ("000000" means black)
