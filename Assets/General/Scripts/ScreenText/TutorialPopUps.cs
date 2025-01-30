@@ -160,22 +160,7 @@ public class TutorialPopUps : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// This enables the event listener for getting the next tutorial
-    /// </summary>
-    private void OnEnable()
-    {
-        GameStateManager.Instance.GetOnCompletedTutorialSection().AddListener(NextTutorial);
-
-        _shootTutorialObject = GameObject.Find("TutorialShootObject");
-        _walkTutorialObject = GameObject.Find("TutorialWalkObject");
-
-        if (!_shootTutorialObject)
-        {
-            _walkTutorialObject.SetActive(false);
-            _shootTutorialObject.SetActive(false);
-        }
-    }
+    
 
     /// <summary>
     /// Removes any listeners if the game stops before the tutorial stops

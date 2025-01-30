@@ -28,6 +28,7 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for the Virtual Camera
     private CinemachineVirtualCamera _virtualCamera;
+    private CinemachineTransposer _transposer;
 
     // Variables that relate to the camera's coroutines
     private Coroutine _cameraCoroutine;
@@ -63,7 +64,6 @@ public class PlayerCameraController : MonoBehaviour
     [Space]
     [SerializeField] private float _cameraShakeTime = 5f;
     [SerializeField, Range(0f, 10f)] private float _cameraShakeIntensity = 5f;
-
 
     // THIS IS TEMPORARY CODE THAT IS TO BE USED FOR TESTING PURPOSES
     // IF YOU ARE SEEING THIS MESSAGE, THEN STAPAY FORGOT TO REMOVE THIS
@@ -115,6 +115,7 @@ public class PlayerCameraController : MonoBehaviour
     private void InitializeCamera()
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
+        _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
     }
 
     /// <summary>
@@ -140,7 +141,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        _playerVisuals.transform.localEulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+        _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
     }
 
     /// <summary>
@@ -154,10 +155,8 @@ public class PlayerCameraController : MonoBehaviour
             _currentBoatSwayChange += _BASE_BOAT_SWAY_SPEED * _boatSwaySpeed / _BOAT_SWAY_SPEED_LIMITER;
 
             // We'll move the camera based on a sine wave (starts at 0, oscillates between 1 and -1)
-            CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-            transposer.m_FollowOffset = new Vector3(transposer.m_FollowOffset.x,
-                Mathf.Sin(_currentBoatSwayChange) * _boatSwayIntensity / _BOAT_SWAY_INTENSITY_LIMITER,
-                transposer.m_FollowOffset.z);
+            float newY = Mathf.Sin(_currentBoatSwayChange) * _boatSwayIntensity / _BOAT_SWAY_INTENSITY_LIMITER;
+            _transposer.m_FollowOffset = new Vector3(_transposer.m_FollowOffset.x, newY, _transposer.m_FollowOffset.z);
 
             // We don't want our sway change to get insanely large
             // To fix this, we'll make sure it stays within the bounds [0, 2*pi]
@@ -185,7 +184,6 @@ public class PlayerCameraController : MonoBehaviour
         while (true)
         {
             Vector2 moveDir = playerMovement.ReadValue<Vector2>();
-            CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
             // We only really want to do movement sway if we are moving directly forward
             // If we don't do this, this could lead to visual bugs
@@ -200,25 +198,27 @@ public class PlayerCameraController : MonoBehaviour
                 // Movement Sway
                 if (_movementSwayRight)
                 {
-                    transposer.m_FollowOffset = new Vector3(transposer.m_FollowOffset.x + 
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER),
-                        transposer.m_FollowOffset.y, transposer.m_FollowOffset.z);
+                    float newX = _transposer.m_FollowOffset.x +
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER);
+                    _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y, 
+                        _transposer.m_FollowOffset.z);
                 }
                 else
                 {
-                    transposer.m_FollowOffset = new Vector3(transposer.m_FollowOffset.x - 
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER),
-                        transposer.m_FollowOffset.y, transposer.m_FollowOffset.z);
+                    float newX = _transposer.m_FollowOffset.x -
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER);
+                    _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y,
+                        _transposer.m_FollowOffset.z);
                 }
 
                 // If we reach the limit on our sway, switch directions
-                if (transposer.m_FollowOffset.x >= 
-                    (_BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity / _MOVEMENT_SWAY_INTENSITY_LIMITER))
+                float limit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity /
+                    _MOVEMENT_SWAY_INTENSITY_LIMITER;
+                if (_transposer.m_FollowOffset.x >= limit)
                 {
                     _movementSwayRight = false;
                 }
-                else if (transposer.m_FollowOffset.x <= 
-                    -(_BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity / _MOVEMENT_SWAY_INTENSITY_LIMITER))
+                else if (_transposer.m_FollowOffset.x <= -limit)
                 {
                     _movementSwayRight = true;
                 }
@@ -226,7 +226,7 @@ public class PlayerCameraController : MonoBehaviour
             else
             {
                 // If we aren't moving directly forward, let's just reset the camera
-                if (transposer.m_FollowOffset.x != 0)
+                if (_transposer.m_FollowOffset.x != 0)
                 {
                     stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
                 }
@@ -245,6 +245,7 @@ public class PlayerCameraController : MonoBehaviour
         if (_walkingSwayCoroutine != null)
         {
             StopCoroutine(_walkingSwayCoroutine);
+            _walkingSwayCoroutine = null;
         }
 
         // Return camera to original position
@@ -256,15 +257,14 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
-        CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-
         // We only really changed our X value in this code, so let's return it
-        while (transposer.m_FollowOffset.x != 0)
+        while (_transposer.m_FollowOffset.x != 0)
         {
-            Vector3 targetPos = new Vector3(0, transposer.m_FollowOffset.y, 0);
+            Vector3 targetPos = new Vector3(0, _transposer.m_FollowOffset.y, 0);
 
             // Slowly move the camera back to position
-            transposer.m_FollowOffset = Vector3.MoveTowards(transposer.m_FollowOffset, targetPos, _BASE_MOVEMENT_SWAY_SPEED);
+            _transposer.m_FollowOffset = Vector3.MoveTowards(_transposer.m_FollowOffset, targetPos, 
+                _BASE_MOVEMENT_SWAY_SPEED);
 
             yield return null;
         }
@@ -308,10 +308,10 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator Pullback()
     {
+        print(_playerVisuals.transform.forward);
         // Let's do this based on a sine wave like we did for the boat sway
         // We'll start at pi so that the camera will move backwards
         float pullbackChange = Mathf.PI;
-        CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
         while (pullbackChange < (2 * Mathf.PI))
         {
@@ -319,8 +319,11 @@ public class PlayerCameraController : MonoBehaviour
             pullbackChange += Mathf.PI * _pullbackSpeed / _PULLBACK_SPEED_LIMITER;
 
             // Do the thing
-            transposer.m_FollowOffset = new Vector3(transposer.m_FollowOffset.x, transposer.m_FollowOffset.y, 
-                Mathf.Sin(pullbackChange) * _pullbackIntensity / _PULLBACK_INTENSITY_LIMITER);
+            float newX = (Mathf.Sin(pullbackChange) * _pullbackIntensity / _PULLBACK_INTENSITY_LIMITER) * 
+                _playerVisuals.transform.forward.x;
+            float newZ = (Mathf.Sin(pullbackChange) * _pullbackIntensity / _PULLBACK_INTENSITY_LIMITER) * 
+                _playerVisuals.transform.forward.z;
+            _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y, newZ);
 
             yield return null;
         }
