@@ -63,22 +63,6 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float _cameraShakeTime = 5f;
     [SerializeField, Range(0f, 10f)] private float _cameraShakeIntensity = 5f;
 
-    // THIS IS TEMPORARY CODE THAT IS TO BE USED FOR TESTING PURPOSES
-    // IF YOU ARE SEEING THIS MESSAGE, THEN STAPAY FORGOT TO REMOVE THIS
-    // please remove it for me thanks :) - Stapay
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            CameraManager.Instance.InvokeOnJumpscare();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            CinemachineShake.Instance.ShakeCamera(_cameraShakeIntensity, _cameraShakeTime, true);
-        }
-    }
-
     /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized
