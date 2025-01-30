@@ -169,14 +169,10 @@ public class TutorialPopUps : MonoBehaviour
 
         _shootTutorialObject = GameObject.Find("TutorialShootObject");
         _walkTutorialObject = GameObject.Find("TutorialWalkObject");
-        
-        if (_walkTutorialObject != null )
+
+        if (!_shootTutorialObject)
         {
             _walkTutorialObject.SetActive(false);
-        }
-        
-        if (_shootTutorialObject != null )
-        {
             _shootTutorialObject.SetActive(false);
         }
     }
