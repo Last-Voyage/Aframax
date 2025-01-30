@@ -30,6 +30,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
     private bool _subscribedToInput;
 
+    public static PlayerFunctionalityCore Instance;
+
     /// <summary>
     /// Performs any set up before everything else
     /// </summary>
@@ -45,6 +47,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SetUpPlayer()
     {
+        Instance = this;
         // Sets needed variables in the player movement controller before movement begins
         _playerMovementController.SetUpMovementController();
     }
