@@ -82,16 +82,11 @@ public class DialoguePopUps : MonoBehaviour
             _textContainer.text = dialogueInfo.GetText;
             _textContainer.maxVisibleCharacters = 0;
 
-            //Debug.Log($"this string should be interpolated{leftBackgroundPadding}");
-
             //here's where it does text background
 
             if (doTextBackground)
             {
-
-                _textBackgroundContainer.text = "<mark=#000000aa padding=“10, 10, 0, 0”>" + dialogueInfo.GetText + "</mark>";
-                //_textBackgroundContainer.text = "$<mark=#000000aa padding=“{10}, 10, 0, 0”>" + dialogueInfo.GetText + "</mark>";
-                //_textBackgroundContainer.text = $"this string should be interpolated{leftBackgroundPadding}";
+                _textBackgroundContainer.text = $"<mark=#000000aa padding=“{leftBackgroundPadding}, {rightBackgroundPadding}, {topBackgroundPadding}, {bottomBackgroundPadding}”>" + dialogueInfo.GetText + "</mark>";
             }
             //padding order is left, right, top, bottom.
             //first 6 digits of the hex color code is color ("000000" means black)
