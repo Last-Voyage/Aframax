@@ -55,10 +55,8 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for pullback
     [Space]
-    [SerializeField, Range(0f, 10f)] private float _pullbackSpeed = 5f;
-    [SerializeField, Range(0f, 10f)] private float _pullbackIntensity = 5f;
-    private const float _PULLBACK_SPEED_LIMITER = 150f;
-    private const float _PULLBACK_INTENSITY_LIMITER = 5f;
+    private float _jumpscareTime = 0.1f;
+    [SerializeField, Range(0f, 10f)] private float _jumpscareIntensity = 5f;
 
     // Variables for camera shake
     [Space]
@@ -170,6 +168,13 @@ public class PlayerCameraController : MonoBehaviour
     /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
     private void StartWalkingSway(InputAction playerMovement)
     {
+        // Stop the camera returning coroutine
+        if (_walkingSwayCoroutine != null)
+        {
+            StopCoroutine(_walkingSwayCoroutine);
+        }
+
+        // Start the walking sway
         _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));
     }
 
@@ -196,31 +201,32 @@ public class PlayerCameraController : MonoBehaviour
                 }
 
                 // Movement Sway
+                float newX = 0;
+                float newZ = 0;
                 if (_movementSwayRight)
                 {
-                    float newX = _transposer.m_FollowOffset.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER);
-                    _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y, 
-                        _transposer.m_FollowOffset.z);
+                    newX = _transposer.m_FollowOffset.x +
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.x;
+                    newZ = _transposer.m_FollowOffset.z +
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.z;
                 }
                 else
                 {
-                    float newX = _transposer.m_FollowOffset.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER);
-                    _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y,
-                        _transposer.m_FollowOffset.z);
+                    newX = _transposer.m_FollowOffset.x -
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.x;
+                    newZ = _transposer.m_FollowOffset.z -
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.z;
                 }
+                _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y, newZ);
 
                 // If we reach the limit on our sway, switch directions
                 float limit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity /
                     _MOVEMENT_SWAY_INTENSITY_LIMITER;
-                if (_transposer.m_FollowOffset.x >= limit)
+                Vector3 origin = new Vector3(0, _transposer.m_FollowOffset.y, 0);
+                float distance = Vector3.Distance(_transposer.m_FollowOffset, origin);
+                if (distance >= limit)
                 {
-                    _movementSwayRight = false;
-                }
-                else if (_transposer.m_FollowOffset.x <= -limit)
-                {
-                    _movementSwayRight = true;
+                    _movementSwayRight = !_movementSwayRight;
                 }
             }
             else
@@ -245,11 +251,10 @@ public class PlayerCameraController : MonoBehaviour
         if (_walkingSwayCoroutine != null)
         {
             StopCoroutine(_walkingSwayCoroutine);
-            _walkingSwayCoroutine = null;
         }
 
         // Return camera to original position
-        StartCoroutine(ReturnCameraFromWalking());
+        _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
     }
 
     /// <summary>
@@ -271,6 +276,7 @@ public class PlayerCameraController : MonoBehaviour
 
         // I'm deciding that our main character is right footed
         _movementSwayRight = true;
+        _walkingSwayCoroutine = null;
     }
 
     /// <summary>
@@ -300,33 +306,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void JumpscarePullback()
     {
-        StartCoroutine(Pullback());
-    }
-
-    /// <summary>
-    /// Performs the jumpscare pullback camera motion
-    /// </summary>
-    private IEnumerator Pullback()
-    {
-        print(_playerVisuals.transform.forward);
-        // Let's do this based on a sine wave like we did for the boat sway
-        // We'll start at pi so that the camera will move backwards
-        float pullbackChange = Mathf.PI;
-
-        while (pullbackChange < (2 * Mathf.PI))
-        {
-            // Update our pullback distance
-            pullbackChange += Mathf.PI * _pullbackSpeed / _PULLBACK_SPEED_LIMITER;
-
-            // Do the thing
-            float newX = (Mathf.Sin(pullbackChange) * _pullbackIntensity / _PULLBACK_INTENSITY_LIMITER) * 
-                _playerVisuals.transform.forward.x;
-            float newZ = (Mathf.Sin(pullbackChange) * _pullbackIntensity / _PULLBACK_INTENSITY_LIMITER) * 
-                _playerVisuals.transform.forward.z;
-            _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y, newZ);
-
-            yield return null;
-        }
+        CinemachineShake.Instance.ShakeCamera(_jumpscareIntensity, _jumpscareTime, false);
     }
 
     /// <summary>
