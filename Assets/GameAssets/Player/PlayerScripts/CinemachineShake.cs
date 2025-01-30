@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         CinemachineShake.cs
 // Author :            Tommy Roberts
+// Contributors:       Andrew Stapay
 // Creation Date :     9/22/2024
 //
 // Brief Description : Shakes the camera ;)
@@ -33,6 +34,8 @@ public class CinemachineShake : MonoBehaviour
     /// </summary>
     /// <param name="intensity"> how intense the shake is </param>
     /// <param name="time"> duration of the shake </param>
+    /// <param name="decreasingIntensity"> true if the screen shake should slowly decrease over time, 
+    /// false otherwise </param>
     public void ShakeCamera(float intensity, float time, bool decreasingIntensity)
     {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = 
@@ -44,6 +47,12 @@ public class CinemachineShake : MonoBehaviour
         StartCoroutine(ResolveShaking(decreasingIntensity));
     }
 
+    /// <summary>
+    /// Resolves the screen shake based on input variables
+    /// </summary>
+    /// <param name="decreasingIntensity"> true if the screen shake should slowly decrease over time, 
+    /// false otherwise </param>
+    /// <returns></returns>
     private IEnumerator ResolveShaking(bool decreasingIntensity)
     {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
@@ -51,8 +60,10 @@ public class CinemachineShake : MonoBehaviour
 
         while (_shakeTimer > 0)
         {
+            // Decrease our timer
             _shakeTimer -= Time.deltaTime;
 
+            // If we are decreasing the intensity, do that too now
             if (decreasingIntensity)
             {
                 cinemachineBasicMultiChannelPerlin.m_AmplitudeGain =

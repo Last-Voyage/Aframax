@@ -165,12 +165,19 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts the walking sway coroutine
+    /// </summary>
+    /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
     private void StartWalkingSway(InputAction playerMovement)
     {
-        print("yuh");
         _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));
     }
 
+    /// <summary>
+    /// Simulates walking sway, going left and right periodically
+    /// </summary>
+    /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
     private IEnumerator WalkingSway(InputAction playerMovement)
     {
         Coroutine stopSwayCoroutine = null;
@@ -180,13 +187,17 @@ public class PlayerCameraController : MonoBehaviour
             Vector2 moveDir = playerMovement.ReadValue<Vector2>();
             CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
+            // We only really want to do movement sway if we are moving directly forward
+            // If we don't do this, this could lead to visual bugs
             if (moveDir.y > 0 && moveDir.x == 0)
             {
+                // Stop resetting the camera if we are
                 if (stopSwayCoroutine != null)
                 {
                     StopCoroutine(stopSwayCoroutine);
                 }
 
+                // Movement Sway
                 if (_movementSwayRight)
                 {
                     transposer.m_FollowOffset = new Vector3(transposer.m_FollowOffset.x + 
@@ -200,6 +211,7 @@ public class PlayerCameraController : MonoBehaviour
                         transposer.m_FollowOffset.y, transposer.m_FollowOffset.z);
                 }
 
+                // If we reach the limit on our sway, switch directions
                 if (transposer.m_FollowOffset.x >= 
                     (_BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity / _MOVEMENT_SWAY_INTENSITY_LIMITER))
                 {
@@ -213,6 +225,7 @@ public class PlayerCameraController : MonoBehaviour
             }
             else
             {
+                // If we aren't moving directly forward, let's just reset the camera
                 if (transposer.m_FollowOffset.x != 0)
                 {
                     stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
@@ -223,25 +236,40 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stops the walking sway coroutine and resets the camera
+    /// </summary>
     private void StopWalkingSway()
     {
-        StopCoroutine(_walkingSwayCoroutine);
+        // Stop walking sway
+        if (_walkingSwayCoroutine != null)
+        {
+            StopCoroutine(_walkingSwayCoroutine);
+        }
+
+        // Return camera to original position
         StartCoroutine(ReturnCameraFromWalking());
     }
 
+    /// <summary>
+    /// Returns the camera to its original position from the walking sway motion
+    /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
         CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
+        // We only really changed our X value in this code, so let's return it
         while (transposer.m_FollowOffset.x != 0)
         {
             Vector3 targetPos = new Vector3(0, transposer.m_FollowOffset.y, 0);
 
+            // Slowly move the camera back to position
             transposer.m_FollowOffset = Vector3.MoveTowards(transposer.m_FollowOffset, targetPos, _BASE_MOVEMENT_SWAY_SPEED);
 
             yield return null;
         }
 
+        // I'm deciding that our main character is right footed
         _movementSwayRight = true;
     }
 
@@ -267,20 +295,30 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts the jumpscare pullback camera motion
+    /// </summary>
     private void JumpscarePullback()
     {
         StartCoroutine(Pullback());
     }
 
+    /// <summary>
+    /// Performs the jumpscare pullback camera motion
+    /// </summary>
     private IEnumerator Pullback()
     {
+        // Let's do this based on a sine wave like we did for the boat sway
+        // We'll start at pi so that the camera will move backwards
         float pullbackChange = Mathf.PI;
         CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
         while (pullbackChange < (2 * Mathf.PI))
         {
+            // Update our pullback distance
             pullbackChange += Mathf.PI * _pullbackSpeed / _PULLBACK_SPEED_LIMITER;
 
+            // Do the thing
             transposer.m_FollowOffset = new Vector3(transposer.m_FollowOffset.x, transposer.m_FollowOffset.y, 
                 Mathf.Sin(pullbackChange) * _pullbackIntensity / _PULLBACK_INTENSITY_LIMITER);
 

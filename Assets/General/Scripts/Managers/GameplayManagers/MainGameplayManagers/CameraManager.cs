@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       CameraManager.cs
 // Author:          Ryan Swanson
+// Contributors:    Andrew Stapay
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides functionality to how the camera moves and interacts.

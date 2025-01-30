@@ -135,7 +135,7 @@ public class PlayerMovementController : MonoBehaviour
     public void UnsubscribeInput()
     {
         _playerInput = null;
-        StopCoroutine(ResolveMovement());
+        StopCoroutine(_movementCoroutine);
     }
     #endregion
 
