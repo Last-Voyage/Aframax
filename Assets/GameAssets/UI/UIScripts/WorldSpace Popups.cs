@@ -1,12 +1,24 @@
+/*****************************************************************************
+// File Name :         WorldSpacePopups.cs
+// Author :            Jeremiah Peters
+// Creation Date :     9/28/2024
+//
+// Brief Description : Manages the world space pop ups for interactable objects
+*****************************************************************************/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class WorldSpacePopups : MonoBehaviour
 {
     private Camera _playerCamera;
 
     private GameObject _playerReference;
+
+    [SerializeField]
+    private TextMeshProUGUI _popUpTextContainer;
 
     [SerializeField]
     private Sprite _farDistanceSprite;
@@ -16,6 +28,13 @@ public class WorldSpacePopups : MonoBehaviour
 
     [SerializeField]
     private float _playerDetectionProximity;
+
+    [SerializeField]
+    private string _farText;
+
+    [SerializeField]
+    private string _closeText;
+
 
     void Awake()
     {
@@ -40,14 +59,20 @@ public class WorldSpacePopups : MonoBehaviour
             if (Vector3.Distance(_playerReference.transform.position, transform.position) >= _playerDetectionProximity)
             {
                 GetComponent<SpriteRenderer>().sprite = _farDistanceSprite;
+                _popUpTextContainer.text = _farText;
             }
             else
             {
                 GetComponent<SpriteRenderer>().sprite = _closeDistanceSprite;
+                _popUpTextContainer.text = _closeText;
             }
         }
     }
 
+    /// <summary>
+    /// just getting references for the player. code is kinda ugly but idk another way
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator FindPlayer()
     {
         yield return new WaitForSeconds(0.1f);
