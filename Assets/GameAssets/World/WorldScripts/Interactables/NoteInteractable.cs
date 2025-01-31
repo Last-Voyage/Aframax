@@ -13,6 +13,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>
+/// The MonoBehaviour that manages anything that can be interacted with and read
+/// </summary>
 public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 {
     public static NoteInteractable ActiveNote = null;
