@@ -8,7 +8,9 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
+using System.Numerics;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Provides all other scripts with access to the player
@@ -23,7 +25,7 @@ public class PlayerManager : MainGameplayManagerFramework
     private static readonly UnityEvent<bool> _onPlayerInputToggled = new();
 
     //When the movement starts
-    private static readonly UnityEvent _onMovementStartedEvent = new();
+    private static readonly UnityEvent<InputAction> _onMovementStartedEvent = new();
     //When the movement stops
     private static readonly UnityEvent _onMovementEndedEvent = new();
 
@@ -82,9 +84,10 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes when the player movement starts
     /// </summary>
-    public void InvokeOnMovementStartedEvent()
+    /// <param name="playerMovement"> The InputAction associated with the player's movement </param>
+    public void InvokeOnMovementStartedEvent(InputAction playerMovement)
     {
-        _onMovementStartedEvent?.Invoke();
+        _onMovementStartedEvent?.Invoke(playerMovement);
     }
 
     /// <summary>
@@ -221,7 +224,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     public UnityEvent<bool> GetOnInputToggleEvent() => _onPlayerInputToggled;
 
-    public UnityEvent GetOnMovementStartEvent() => _onMovementStartedEvent;
+    public UnityEvent<InputAction> GetOnMovementStartEvent() => _onMovementStartedEvent;
     public UnityEvent GetOnMovementEndEvent() => _onMovementEndedEvent;
 
     public UnityEvent GetOnHarpoonFiredEvent() => _onHarpoonFiredEvent;
