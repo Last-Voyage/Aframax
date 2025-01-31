@@ -19,6 +19,8 @@ public class RuntimeSfxManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSfx;
 
+    public static Action<EventReference, GameObject> APlayOneShotSfxAttached;
+
     private EventInstance _hardSurfaceWalkingEventInstance;
 
     private Coroutine _footstepsCoroutine;
@@ -93,11 +95,13 @@ public class RuntimeSfxManager : AudioManager
         if (val)
         {
             APlayOneShotSfx += PlayOneShotSFX;
+            APlayOneShotSfxAttached += PlayOneShotSFXAttached;
             
             return;
         }
 
         APlayOneShotSfx -= PlayOneShotSFX;
+        APlayOneShotSfxAttached -= PlayOneShotSFXAttached;
     }
 
     private void Start()
@@ -118,13 +122,42 @@ public class RuntimeSfxManager : AudioManager
     /// <param name="worldPosition"> position where the sound plays in the world </param>
     private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
-        if (eventReference.IsNull)
+        if(CheckForNullSFX(eventReference))
         {
-            Debug.LogWarning("FMOD Event is null. Make sure it's assigned in the Audio Manager!");
             return;
         }
 
         RuntimeManager.PlayOneShot(eventReference, worldPosition);
+    }
+
+    /// <summary>
+    /// Plays an audio event on a specific object
+    /// </summary>
+    /// <param name="eventReference">reference to the FMOD SFX event</param>
+    /// <param name="attachedObject">object that the audio is playing attached to</param>
+    private void PlayOneShotSFXAttached(EventReference eventReference, GameObject attachedObject)
+    {
+        if (CheckForNullSFX(eventReference))
+        {
+            return;
+        }
+
+        RuntimeManager.PlayOneShotAttached(eventReference, attachedObject);
+    }
+
+    /// <summary>
+    /// Checks for if the audio is null before playing it
+    /// </summary>
+    /// <param name="eventReference">The EventReference we are checking is null</param>
+    /// <returns>Returns if the sfx are null or not</returns>
+    private bool CheckForNullSFX(EventReference eventReference)
+    {
+        if (eventReference.IsNull)
+        {
+            Debug.LogWarning("FMOD Event is null. Make sure it's assigned in the Audio Manager!");
+            return true;
+        }
+        return false;
     }
 
     #region Footsteps
