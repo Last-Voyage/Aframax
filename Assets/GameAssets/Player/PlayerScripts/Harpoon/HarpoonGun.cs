@@ -237,7 +237,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(false);
 
         //Camera shake
-        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
+        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime, false);
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
 

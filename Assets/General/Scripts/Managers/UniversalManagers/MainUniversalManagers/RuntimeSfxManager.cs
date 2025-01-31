@@ -11,6 +11,7 @@ using FMODUnity;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Handles all SFX during runtime and how / where they play.
@@ -156,7 +157,8 @@ public class RuntimeSfxManager : AudioManager
     /// <summary>
     /// Plays footsteps when the player moves
     /// </summary>
-    private void PlayFootSteps()
+    /// <param name="unused"> Unused parameter that was added as a consequence of UnityEvents </param>
+    private void PlayFootSteps(InputAction unused)
     { 
         StopFootsteps();
         _footstepsCoroutine = StartCoroutine(LoopFootSteps());

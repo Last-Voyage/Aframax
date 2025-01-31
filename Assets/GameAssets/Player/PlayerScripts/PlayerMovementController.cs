@@ -135,7 +135,7 @@ public class PlayerMovementController : MonoBehaviour
     public void UnsubscribeInput()
     {
         _playerInput = null;
-        StopCoroutine(ResolveMovement());
+        StopCoroutine(_movementCoroutine);
     }
     #endregion
 
@@ -290,7 +290,7 @@ public class PlayerMovementController : MonoBehaviour
         //Check for if the input was started
         if(_movementInput.WasPressedThisFrame())
         {
-            DirectionalInputStarted();
+            DirectionalInputStarted(_movementInput);
             IsMoving = true;
         }
         //Check for if the input has ended
@@ -304,9 +304,9 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// Called when the player begins an input
     /// </summary>
-    private void DirectionalInputStarted()
+    private void DirectionalInputStarted(InputAction playerMovement)
     {
-        PlayerManager.Instance.InvokeOnMovementStartedEvent();
+        PlayerManager.Instance.InvokeOnMovementStartedEvent(playerMovement);
 
         StopAccelerationDeccelerationCoroutines();
 
