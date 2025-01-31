@@ -15,7 +15,7 @@ public class WorldSpacePopups : MonoBehaviour
     private Sprite _closeDistanceSprite;
 
     [SerializeField]
-    private float playerDetectionProximity;
+    private float _playerDetectionProximity;
 
     void Awake()
     {
