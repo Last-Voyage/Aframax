@@ -35,7 +35,7 @@ float3 CalculateAdditionalLights_float(
             light.shadowAttenuation *
             light.distanceAttenuation;
 
-        Color += saturate(dot(Normal, light.direction) * radiance);
+        Color += (dot(Normal, light.direction) * radiance);
     }
 #endif
 #endif

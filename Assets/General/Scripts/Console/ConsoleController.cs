@@ -1,6 +1,7 @@
 /*****************************************************************************
 // Name: ConsoleController.CS
 // Author: Nabil Tagba
+// Contributers: Charlie Polonus
 // Creation Date : UNKNOWN
 // Overview: Handles the console being turned on and off
 // along with its hosting the methods the quick action buttons
@@ -110,6 +111,13 @@ public class ConsoleController : MonoBehaviour
         if (_content.activeSelf)
         {
             _content.SetActive(false);
+
+            // If there's currently a note open, don't free the mouse yet
+            if (NoteInteractable.ActiveNote != null)
+            {
+                return;
+            }
+
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
             _harpoonGun.SubscribeInput();
@@ -121,6 +129,15 @@ public class ConsoleController : MonoBehaviour
             Time.timeScale = 0;
             _harpoonGun.UnsubscribeInput();
         }
+    }
+
+    /// <summary>
+    /// A public getter for whether the console is currently active
+    /// </summary>
+    /// <returns>If the console is currently open in the scene</returns>
+    public bool ConsoleIsOpen()
+    {
+        return _content.activeSelf;
     }
 
     #region FreelookCam
