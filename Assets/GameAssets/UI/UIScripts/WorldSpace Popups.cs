@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class WorldSpacePopups : MonoBehaviour
 {
-    private Camera playerCamera;
+    private Camera _playerCamera;
 
-    private GameObject playerReference;
+    private GameObject _playerReference;
+
+    [SerializeField]
+    private Sprite _farDistanceSprite;
+
+    [SerializeField]
+    private Sprite _closeDistanceSprite;
 
     [SerializeField]
     private float playerDetectionProximity;
@@ -18,18 +24,27 @@ public class WorldSpacePopups : MonoBehaviour
 
     void LateUpdate()
     {
-        if (playerCamera != null)
+        if (_playerCamera != null)
         {
             //rotate to face the player camera
-            transform.LookAt(playerCamera.transform);
+            transform.LookAt(_playerCamera.transform);
             transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
             transform.Rotate(0, 180, 0);
         }
 
-        if (playerReference != null)
+        if (_playerReference != null)
         {
             //check proximity to player
-            Debug.Log(Vector3.Distance(playerReference.transform.position, transform.position));
+            //Debug.Log(Vector3.Distance(_playerReference.transform.position, transform.position));
+            //Debug.Log(_playerReference.transform.position);
+            if (Vector3.Distance(_playerReference.transform.position, transform.position) >= 5)
+            {
+                GetComponent<SpriteRenderer>().sprite = _farDistanceSprite;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().sprite = _closeDistanceSprite;
+            }
         }
     }
 
@@ -37,10 +52,9 @@ public class WorldSpacePopups : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        //I hope this line of code isn't gonna get me shot
-        playerCamera = PlayerFunctionalityCore.Instance.gameObject.transform.Find("PlayerCamera").transform.Find("Main Camera").GetComponent<Camera>();
-
-        playerReference = PlayerFunctionalityCore.Instance.gameObject;
+        //I hope this code isn't gonna get me shot
+        _playerCamera = PlayerFunctionalityCore.Instance.gameObject.transform.Find("PlayerCamera").transform.Find("Main Camera").GetComponent<Camera>();
+        _playerReference = PlayerFunctionalityCore.Instance.gameObject.transform.Find("Player").gameObject;
 
         yield return null;
     }
