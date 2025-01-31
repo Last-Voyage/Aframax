@@ -37,7 +37,7 @@ public class WorldSpacePopups : MonoBehaviour
             //check proximity to player
             //Debug.Log(Vector3.Distance(_playerReference.transform.position, transform.position));
             //Debug.Log(_playerReference.transform.position);
-            if (Vector3.Distance(_playerReference.transform.position, transform.position) >= 5)
+            if (Vector3.Distance(_playerReference.transform.position, transform.position) >= _playerDetectionProximity)
             {
                 GetComponent<SpriteRenderer>().sprite = _farDistanceSprite;
             }
