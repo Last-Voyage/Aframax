@@ -14,19 +14,22 @@ using System.Collections;
 /// </summary>
 public class RandomSmoothRotation : MonoBehaviour
 {
-    [SerializeField] private float rotationSpeed = 1f; // Speed of rotation
-    [SerializeField] private float maxRotationAngle = 45f; // Maximum rotation angle in either direction
-    [SerializeField] private float minAngleDifference = 15f; // Minimum angle difference between rotations
-    [SerializeField] private float waitTime = 2f; // Time to wait before rotating to a new direction
+    [SerializeField] private float _rotationSpeed = 1f; // Speed of rotation
+    [SerializeField] private float _maxRotationAngle = 45f; // Maximum rotation angle in either direction
+    [SerializeField] private float _minAngleDifference = 15f; // Minimum angle difference between rotations
+    [SerializeField] private float _waitTime = 2f; // Time to wait before rotating to a new direction
 
     private Quaternion _targetRotation; // Target rotation to smoothly rotate towards
     private Quaternion _previousRotation; // Stores the previous target rotation
+    private WaitForSeconds _waitTimeWait;
 
     /// <summary>
     /// Starts the random rotating when the gameobject is enabled
     /// </summary>
     private void Start()
     {
+        _waitTimeWait = new WaitForSeconds(_waitTime);
+
         // Initialize the previous rotation
         _previousRotation = transform.rotation;
 
@@ -46,17 +49,17 @@ public class RandomSmoothRotation : MonoBehaviour
             _targetRotation = GetRandomRotation();
 
             // Smoothly rotate towards the target rotation
-            float t = 0f;
+            float elapsedTime = 0f;
             Quaternion startRotation = transform.rotation;
-            while (t < 1f)
+            while (elapsedTime < 1f)
             {
-                t += Time.deltaTime * rotationSpeed;
-                transform.rotation = Quaternion.Slerp(startRotation, _targetRotation, t);
+                elapsedTime += Time.deltaTime * _rotationSpeed;
+                transform.rotation = Quaternion.Slerp(startRotation, _targetRotation, elapsedTime);
                 yield return null; // Wait until the next frame
             }
 
             // Wait for the specified time before rotating again
-            yield return new WaitForSeconds(waitTime);
+            yield return _waitTimeWait;
 
             // Update the previous rotation
             _previousRotation = _targetRotation;
@@ -75,8 +78,8 @@ public class RandomSmoothRotation : MonoBehaviour
         do
         {
             // Random angles for Y and Z axes within the specified range
-            float randomAngleY = Random.Range(-maxRotationAngle, maxRotationAngle);
-            float randomAngleZ = Random.Range(-maxRotationAngle, maxRotationAngle);
+            float randomAngleY = Random.Range(-_maxRotationAngle, _maxRotationAngle);
+            float randomAngleZ = Random.Range(-_maxRotationAngle, _maxRotationAngle);
 
             // Create a rotation that keeps the X-axis pointing down
             // while rotating around the Y and Z axes
@@ -85,7 +88,7 @@ public class RandomSmoothRotation : MonoBehaviour
             // Calculate the angle difference between the new rotation and the previous rotation
             angleDifference = Quaternion.Angle(_previousRotation, newRotation);
         }
-        while (angleDifference < minAngleDifference); // Repeat until the angle difference is large enough
+        while (angleDifference < _minAngleDifference); // Repeat until the angle difference is large enough
 
         return newRotation;
     }

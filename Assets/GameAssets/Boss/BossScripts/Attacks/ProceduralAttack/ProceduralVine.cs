@@ -18,21 +18,21 @@ using UnityEngine.Animations.Rigging;
 public class ProceduralVine : MonoBehaviour
 {
     [Header("Path Stuff")]
-    [SerializeField] private PathCreator pathCreator;
-    [SerializeField] private float speed = 5f;
-    private float _distance = 0;
+    [SerializeField] private PathCreator _pathCreator;
+    [SerializeField] private float _speed = 5f; // speed of idle path following movement
+    private float _distance = 0; //current distance along the path
     private bool _isAttacking = false;
 
     [Header("Attack stuff")]
-    [SerializeField] private Transform flowerHeadTransform;
-    [SerializeField] private Transform followTransform;
-    [SerializeField] private ChainIKConstraint chainIK;
-    [SerializeField] private RigBuilder rigBuilder;
-    [SerializeField] private float rearBackTime = 0.3f;
-    [SerializeField] private float rearBackDistance = 1f;
-    [SerializeField] private float waitAfterRearBackTime = .5f;
-    [SerializeField] private float lungeToPlayerDuration = .2f;
-    [SerializeField] private float moveBackAfterAttackTime = 2f;
+    [SerializeField] private Transform _flowerHeadTransform;
+    [SerializeField] private Transform _followTransform;
+    [SerializeField] private ChainIKConstraint _chainIK;
+    [SerializeField] private RigBuilder _rigBuilder;
+    [SerializeField] private float _rearBackTime = 0.3f;
+    [SerializeField] private float _rearBackDistance = 1f;
+    [SerializeField] private float _waitAfterRearBackTime = .5f;
+    [SerializeField] private float _lungeToPlayerDuration = .2f;
+    [SerializeField] private float _moveBackAfterAttackTime = 2f;
 
     /// <summary>
     /// Updates the vine movement only right now
@@ -51,8 +51,8 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void MoveAlongPath()
     {
-        _distance += Time.deltaTime * speed;
-        followTransform.position = pathCreator.path.GetPointAtDistance(_distance);
+        _distance += Time.deltaTime * _speed;
+        _followTransform.position = _pathCreator.path.GetPointAtDistance(_distance);
     }
 
     /// <summary>
@@ -65,28 +65,28 @@ public class ProceduralVine : MonoBehaviour
         _isAttacking = true;
 
         // Calculate the direction from the current object to the target object (X and Z only)
-        Vector3 direction = (playerPosition - followTransform.position).normalized;
-        followTransform.forward = direction;
+        Vector3 direction = (playerPosition - _followTransform.position).normalized;
+        _followTransform.forward = direction;
 
         //rear back and raise up a little
-        Vector3 posToRearBack = followTransform.position + -direction * rearBackDistance;
-        followTransform.DOJump(posToRearBack, -.5f, 1, rearBackTime, false).SetEase(Ease.InSine);
-        yield return new WaitForSeconds(rearBackTime);
-        posToRearBack = followTransform.position + direction * rearBackDistance;
-        followTransform.DOMove(posToRearBack, rearBackTime, false).SetEase(Ease.OutSine);
-        yield return new WaitForSeconds(rearBackTime + waitAfterRearBackTime);
+        Vector3 posToRearBack = _followTransform.position + -direction * _rearBackDistance;
+        _followTransform.DOJump(posToRearBack, -.5f, 1, _rearBackTime, false).SetEase(Ease.InSine);
+        yield return new WaitForSeconds(_rearBackTime);
+        posToRearBack = _followTransform.position + direction * _rearBackDistance;
+        _followTransform.DOMove(posToRearBack, _rearBackTime, false).SetEase(Ease.OutSine);
+        yield return new WaitForSeconds(_rearBackTime + _waitAfterRearBackTime);
 
         //redo direction from new position
-        direction = (playerPosition - followTransform.position).normalized;
-        var strikePos = followTransform.position + direction * Vector3.Distance(followTransform.position, playerPosition) + Vector3.up * .3f;
+        direction = (playerPosition - _followTransform.position).normalized;
+        var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, playerPosition) + Vector3.up * .3f;
 
         //snaps to player
-        followTransform.DOMove(strikePos, lungeToPlayerDuration, false).SetEase(Ease.OutBack);
-        yield return new WaitForSeconds(lungeToPlayerDuration);
+        _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
+        yield return new WaitForSeconds(_lungeToPlayerDuration);
 
         //move back to og position
-        followTransform.DOJump(pathCreator.path.GetPointAtDistance(_distance), .2f, 1, moveBackAfterAttackTime, false).SetEase(Ease.InSine);
-        yield return new WaitForSeconds(moveBackAfterAttackTime);
+        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_distance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
+        yield return new WaitForSeconds(_moveBackAfterAttackTime);
 
         // //attack done
         _isAttacking = false;
@@ -101,7 +101,6 @@ public class ProceduralVine : MonoBehaviour
         if(IsColliderPlayer(collider) && !_isAttacking)
         {
             //start attack
-            Debug.Log(collider.transform, collider.transform);
             StartCoroutine(Attack(collider.transform.position));
         }
     }
