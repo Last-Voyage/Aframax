@@ -20,7 +20,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     //Controls player health functionality
     [SerializeField] private PlayerHealth _playerHealthController;
     //Controls camera movement
-    [SerializeField] private PlayerCameraController _playerCamera;
+    [SerializeField] public PlayerCameraController _playerCamera;
     //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
     //Controls player interaction functionality

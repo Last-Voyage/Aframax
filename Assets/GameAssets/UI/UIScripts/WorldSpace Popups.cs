@@ -11,11 +11,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// runs the world space pop ups for interactable objects
+/// makes them look at the player and change depending on proximity
+/// </summary>
 public class WorldSpacePopups : MonoBehaviour
 {
     private Camera _playerCamera;
 
     private GameObject _playerReference;
+
+    private Sprite objectSpriteReference;
 
     [SerializeField]
     private TextMeshProUGUI _popUpTextContainer;
@@ -36,12 +42,12 @@ public class WorldSpacePopups : MonoBehaviour
     private string _closeText;
 
 
-    void Awake()
+    private void Awake()
     {
         StartCoroutine(FindPlayer());
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (_playerCamera != null)
         {
@@ -54,32 +60,31 @@ public class WorldSpacePopups : MonoBehaviour
         if (_playerReference != null)
         {
             //check proximity to player
-            //Debug.Log(Vector3.Distance(_playerReference.transform.position, transform.position));
-            //Debug.Log(_playerReference.transform.position);
             if (Vector3.Distance(_playerReference.transform.position, transform.position) >= _playerDetectionProximity)
             {
-                GetComponent<SpriteRenderer>().sprite = _farDistanceSprite;
+                objectSpriteReference = _farDistanceSprite;
                 _popUpTextContainer.text = _farText;
             }
             else
             {
-                GetComponent<SpriteRenderer>().sprite = _closeDistanceSprite;
+                objectSpriteReference = _closeDistanceSprite;
                 _popUpTextContainer.text = _closeText;
             }
         }
     }
 
     /// <summary>
-    /// just getting references for the player. code is kinda ugly but idk another way
+    /// just getting references for the player
     /// </summary>
     /// <returns></returns>
     private IEnumerator FindPlayer()
     {
         yield return new WaitForSeconds(0.1f);
 
-        //I hope this code isn't gonna get me shot
-        _playerCamera = PlayerFunctionalityCore.Instance.gameObject.transform.Find("PlayerCamera").transform.Find("Main Camera").GetComponent<Camera>();
-        _playerReference = PlayerFunctionalityCore.Instance.gameObject.transform.Find("Player").gameObject;
+        _playerCamera = PlayerFunctionalityCore.Instance._playerCamera.transform.Find("Main Camera").GetComponent<Camera>();
+        _playerReference = PlayerFunctionalityCore.Instance.transform.GetChild(1).gameObject;
+
+        objectSpriteReference = GetComponent<SpriteRenderer>().sprite;
 
         yield return null;
     }
