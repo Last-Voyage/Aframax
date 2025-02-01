@@ -20,7 +20,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     //Controls player health functionality
     [SerializeField] private PlayerHealth _playerHealthController;
     //Controls camera movement
-    [SerializeField] public PlayerCameraController _playerCamera;
+    public PlayerCameraController PlayerCamera;
     //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
     //Controls player interaction functionality
@@ -98,7 +98,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribeToCameraInput()
     {
-        _playerCamera.SubscribeInput();
+        PlayerCamera.SubscribeInput();
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToCameraInput()
     {
-        _playerCamera.UnsubscribeInput();
+        PlayerCamera.UnsubscribeInput();
     }
 
     /// <summary>

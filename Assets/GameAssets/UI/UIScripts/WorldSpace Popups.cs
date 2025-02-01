@@ -81,11 +81,9 @@ public class WorldSpacePopups : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        _playerCamera = PlayerFunctionalityCore.Instance._playerCamera.transform.Find("Main Camera").GetComponent<Camera>();
+        _playerCamera = PlayerFunctionalityCore.Instance.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
         _playerReference = PlayerFunctionalityCore.Instance.transform.GetChild(1).gameObject;
 
         objectSpriteReference = GetComponent<SpriteRenderer>().sprite;
-
-        yield return null;
     }
 }
