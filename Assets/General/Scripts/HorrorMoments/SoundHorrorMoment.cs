@@ -10,9 +10,13 @@ using UnityEngine;
 using FMODUnity;
 using System.Collections.Generic;
 
+/// <summary>
+/// plays a certain sound of the designers choice
+/// scare the player when they come
+//in contact with the trigger
+/// </summary>
 public class SoundHorrorMoment : MonoBehaviour
 {
-
     private bool _hasPlayedHorrorSound = false;
 
     [SerializeField] private List<EventReference> _horrorMomentSounds;
@@ -21,7 +25,7 @@ public class SoundHorrorMoment : MonoBehaviour
     /// happens when the player comes in contact with
     /// the collider
     /// </summary>
-    /// <param name="other"></param>
+    /// <param name="other"> reference to the other object colided with</param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player" && !_hasPlayedHorrorSound) 
