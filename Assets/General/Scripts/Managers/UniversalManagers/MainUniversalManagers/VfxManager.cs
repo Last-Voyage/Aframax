@@ -8,6 +8,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// How the vfx duration is set
@@ -38,6 +39,11 @@ public class VfxManager : MainUniversalManagerFramework
     private const int WOODEN_SPARKS_ID = 3;
     private const int METAL_SPARKS_ID = 4;
     private const int PLUME_SMOKE_ID = 5;
+
+    /// <summary>
+    /// Triggers the Light Shift Horror Moment
+    /// </summary>
+    private static readonly UnityEvent _onLightShift = new();
 
     /// <summary>
     /// Sets up the object pool of all vfx
@@ -131,6 +137,18 @@ public class VfxManager : MainUniversalManagerFramework
     }
     #endregion
 
+    #region Events
+
+    /// <summary>
+    /// Invokes the _onLightShift event
+    /// </summary>
+    public void InvokeOnLightShift()
+    {
+        _onLightShift?.Invoke();
+    }
+
+    #endregion
+
     #region Getters
 
     #region GetVfx
@@ -141,6 +159,8 @@ public class VfxManager : MainUniversalManagerFramework
     public SpecificVisualEffect GetWoodenSparksVfx() => _allVfxInGame[WOODEN_SPARKS_ID];
     public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[PLUME_SMOKE_ID];
     #endregion
+
+    public UnityEvent GetOnLightShiftEvent() => _onLightShift;
 
     #endregion
 }
