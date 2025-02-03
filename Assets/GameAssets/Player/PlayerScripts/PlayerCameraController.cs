@@ -236,7 +236,6 @@ public class PlayerCameraController : MonoBehaviour
         {
             StopCoroutine(_walkingSwayCoroutine);
         }
-
         // Return camera to original position
         _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
     }
@@ -260,6 +259,11 @@ public class PlayerCameraController : MonoBehaviour
 
         // I'm deciding that our main character is right footed
         _movementSwayRight = true;
+
+        if (_walkingSwayCoroutine != null)
+        {
+            StopCoroutine(_walkingSwayCoroutine);
+        }
         _walkingSwayCoroutine = null;
     }
 
