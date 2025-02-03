@@ -184,7 +184,7 @@ public class WeakPointHandler : MonoBehaviour
 
         if(_destroyOnAllWeakPointsDestroyed)
         {
-            Destroy(gameObject);
+            Destroy(gameObject.transform.parent.gameObject);
         }
     }
 
