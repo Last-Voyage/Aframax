@@ -15,10 +15,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class HatchSceneTransition : MonoBehaviour, IPlayerInteractable
 {
+    [SerializeField] private int _sceneToLoadIndex;
     [SerializeField] private int _sceneTransitionPointer;
     public void OnInteractedByPlayer()
     {
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID
-            (AframaxSceneManager.Instance.MazeSceneIndex, _sceneTransitionPointer);
+            (_sceneToLoadIndex, _sceneTransitionPointer);
     }
 }

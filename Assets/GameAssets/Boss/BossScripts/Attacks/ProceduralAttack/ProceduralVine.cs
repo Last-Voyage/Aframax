@@ -6,6 +6,8 @@
 // Brief Description : This script controls the procedural "room guarding movement" functionality
 //                     as well as the procedural "lunge attack"
 *****************************************************************************/
+using FMOD.Studio;
+using FMODUnity;
 using System.Collections;
 using UnityEngine;
 using PathCreation;
@@ -34,6 +36,14 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _lungeToPlayerDuration = .2f;
     [SerializeField] private float _moveBackAfterAttackTime = 2f;
 
+    private EventInstance _movementEventInstance;
+
+    private void Start()
+    {
+        CreateMovementAudio();
+        StartMovementAudio();
+    }
+
     /// <summary>
     /// Updates the vine movement only right now
     /// </summary>
@@ -56,6 +66,31 @@ public class ProceduralVine : MonoBehaviour
     }
 
     /// <summary>
+    /// Creates the initial instance of the movement audio
+    /// </summary>
+    private void CreateMovementAudio()
+    {
+        _movementEventInstance = RuntimeSfxManager.Instance.
+            CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, gameObject);
+    }
+
+    /// <summary>
+    /// Starts playing the movement audio
+    /// </summary>
+    private void StartMovementAudio()
+    {
+        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeInTime);
+    }
+
+    /// <summary>
+    /// Stops playing the movement audio
+    /// </summary>
+    private void StopMovementAudio()
+    {
+        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeOutTime);
+    }
+
+    /// <summary>
     /// does the movement for the wind up and lunge attack
     /// </summary>
     /// <param name="playerPosition"></param>
@@ -63,6 +98,7 @@ public class ProceduralVine : MonoBehaviour
     private IEnumerator Attack(Vector3 playerPosition)
     {
         _isAttacking = true;
+        StopMovementAudio();
 
         // Calculate the direction from the current object to the target object (X and Z only)
         Vector3 direction = (playerPosition - _followTransform.position).normalized;
@@ -82,6 +118,8 @@ public class ProceduralVine : MonoBehaviour
 
         //snaps to player
         _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
+        //Plays attack audio
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, gameObject);
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
         //move back to og position
@@ -90,6 +128,7 @@ public class ProceduralVine : MonoBehaviour
 
         // //attack done
         _isAttacking = false;
+        StartMovementAudio();
     }
 
     /// <summary>

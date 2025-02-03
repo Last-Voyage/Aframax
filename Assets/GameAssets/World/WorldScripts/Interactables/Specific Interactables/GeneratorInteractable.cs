@@ -27,7 +27,6 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void GeneratorStartsSmoking()
     {
-        
         VfxManager.Instance.GetPlumeSmokeVfx().PlayNextVfxInPool
             (transform.position + _vfxDisplacement, transform.rotation);
     }
@@ -41,6 +40,9 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
             (transform.position + _vfxDisplacement, transform.rotation);
     }
 
+    /// <summary>
+    /// When the generator is interacted with by the player pressing the interact key on it.
+    /// </summary>
     public void OnInteractedByPlayer()
     {
         if(!CanGeneratorBeInteracted)
@@ -48,11 +50,19 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
             return;
         }
 
-        if(DoesRequireSpanner && !PlayerInventory.Instance.DoesPlayerHaveSpanner)
+        if(DoesRequireSpanner)
         {
-            return;
+            if(PlayerInventory.Instance.DoesPlayerHaveSpanner)
+            {
+                StoryManager.Instance.ProgressNextStoryBeat();
+                RuntimeSfxManager.APlayOneShotSfxAttached?.Invoke(FmodSfxEvents.Instance.GeneratorFixed, gameObject);
+            }
+        }
+        else
+        {
+            StoryManager.Instance.ProgressNextStoryBeat();
         }
 
-        StoryManager.Instance.ProgressNextStoryBeat();
+        
     }
 }
