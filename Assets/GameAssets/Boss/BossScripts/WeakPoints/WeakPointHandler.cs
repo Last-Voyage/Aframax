@@ -53,7 +53,7 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private Coroutine _weakPointSpawnProcessCoroutine;
 
-    private readonly UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
+    public UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
 
     private void Awake()
     {
