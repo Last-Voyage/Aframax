@@ -3,7 +3,7 @@
 // Author:          Ryan Swanson
 // Creation Date:   February 2nd, 2025
 //
-// Description:     Manages sound effects during runtime.
+// Description:     A trigger that can be reused by design to progress story events
 ******************************************************************************/
 
 using UnityEngine;
