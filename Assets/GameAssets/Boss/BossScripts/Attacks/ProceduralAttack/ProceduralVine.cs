@@ -71,7 +71,7 @@ public class ProceduralVine : MonoBehaviour
     private void CreateMovementAudio()
     {
         _movementEventInstance = RuntimeSfxManager.Instance.
-            CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, gameObject);
+            CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, _flowerHeadTransform);
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public class ProceduralVine : MonoBehaviour
         //snaps to player
         _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
         //Plays attack audio
-        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, gameObject);
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform);
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
         //move back to og position
