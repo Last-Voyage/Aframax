@@ -9,6 +9,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -21,37 +22,29 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField]
     private float _maxLeftTurn;
 
-    private Transform _maxRightFanPosition;
-    private Transform _maxLeftFanPosition;
-
-    private Quaternion _newMaxRightFanPos = new Quaternion();
-    private Quaternion _newMaxLeftFanPos = new Quaternion();
+    private Vector3 _maxRightRotation;
+    private Vector3 _maxLeftRotation;
 
     [SerializeField]
     private GameObject topFan;
 
     private Transform makeRotate;
+
+    public float timerCounter = 0f;
     
     private void Start()
     {
         makeRotate = topFan.transform;
-        _maxRightFanPosition = makeRotate;
-        _maxLeftFanPosition = makeRotate;
-
-        _newMaxRightFanPos.eulerAngles = new Vector3(0,_maxRightTurn,0);
-        _newMaxLeftFanPos.eulerAngles = new Vector3(0,_maxLeftTurn,0);
-        
-        //_maxLeftFanPosition.eulerAngles = new Vector3(0,_maxLeftTurn,0);
-        //_maxRightFanPosition.eulerAngles = new Vector3(0,_maxRightTurn,0);
-
-        makeRotate.rotation = _newMaxLeftFanPos;
-        Debug.Log(makeRotate.rotation);
+        _maxRightRotation = new Vector3(0, _maxRightTurn, 0);
+        _maxLeftRotation = new Vector3(0, _maxLeftTurn, 0);
     }
 
-    private void Update()
+    /*private void Update()
     {
-        makeRotate.rotation = Quaternion.Lerp(_newMaxRightFanPos, _newMaxLeftFanPos, .5f);
-    }
+        makeRotate.eulerAngles = 
+            Vector3.Lerp(_maxRightRotation,_maxLeftRotation, (Mathf.Sin(.5f * timerCounter) +1)/2);
+        timerCounter += Time.deltaTime;
+    }*/
 
     public void OnInteractedByPlayer()
     {
@@ -71,11 +64,10 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
     {
         while (true)
         {
-            //Quaternion.Euler(topFan.transform.rotation);
-            
-            //topFan.transform.rotation.y = Mathf.Sin();
+            makeRotate.eulerAngles = 
+                Vector3.Lerp(_maxRightRotation,_maxLeftRotation, (Mathf.Sin(.5f * timerCounter) +1)/2);
+            timerCounter += Time.deltaTime;
             yield return null;
         }
-        
     }
 }
