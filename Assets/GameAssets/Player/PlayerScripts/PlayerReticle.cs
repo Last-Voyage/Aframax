@@ -30,6 +30,13 @@ public class PlayerReticle : MonoBehaviour
     [Tooltip("How much bigger the outer ring of the reticle is compared to the inner, dynamic one.")]
     [SerializeField] private float _scopePadding;
 
+    [Tooltip("The Y position of ammo icons on the screen.")]
+    [SerializeField] private float _ammoIconYPosition;
+
+    [Space]
+
+    [SerializeField] private GameObject _harpoonIcon;
+
     [Tooltip("The circle showing the potential deviation of harpoon shots")]
     private GameObject _reticleScope;
 
@@ -41,7 +48,11 @@ public class PlayerReticle : MonoBehaviour
     private Image _frameImage;
     private Image _scopeImage;
 
+    private List<GameObject> _ammoIconList = new();
+
     private float _newReticleSize = 0;
+    private float _gunMaxAmmo;
+
     [Tooltip("Scales reticle assets in relation to reticle inaccuracy. Adjusting this leads to inaccurate shown aim.")]
     private readonly float _maxScopeSize = 1000;
     private readonly float _scopeScalar = 1000;
@@ -56,6 +67,8 @@ public class PlayerReticle : MonoBehaviour
         ObtainReferences();
 
         InitializeReticle();
+
+        InitializeAmmoDisplay();
 
         _isFocusChanging = false;
     }
@@ -90,11 +103,16 @@ public class PlayerReticle : MonoBehaviour
         }
     }
 
-        public void ReticleFire()
+    /// <summary>
+    /// Resets the reticle to its original size once a harpoon is fired.
+    /// </summary>
+    public void ReticleFire()
     {
         _newReticleSize = _maxScopeSize;
         AdjustReticleSize();
         AdjustReticleAppearance();
+
+        // Maybe refresh the ammo icons here?
     }
 
     /// <summary>
@@ -111,6 +129,8 @@ public class PlayerReticle : MonoBehaviour
 
         _frameImage = gameObject.GetComponent<Image>();
         _scopeImage = _reticleScope.GetComponent<Image>();
+
+        _gunMaxAmmo = _harpoonGunScript.GetMaxAmmo();
 
         gameObject.GetComponent<Image>().color = _unfocusedColor;
     }
@@ -130,6 +150,26 @@ public class PlayerReticle : MonoBehaviour
         _outerRingRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize));
+    }
+
+    /// <summary>
+    /// Initialize ammo icons for each individual harpoon the player can possibly hold.
+    /// </summary>
+    private void InitializeAmmoDisplay()
+    {
+        // How much horizontal space exists between each ammo icon
+        float iconOffsetIncrement = 30;
+        // Initializes offset and ensures all icons will be horizontally centered on the screen
+        float iconPlaceOffset = -(iconOffsetIncrement * _gunMaxAmmo) / 2;
+        // Generates icons until the max ammo count is represented
+        for (int i = 0; i < _gunMaxAmmo; i++)
+        {
+            GameObject newIcon = Instantiate(_harpoonIcon, gameObject.transform);
+            newIcon.transform.position = new Vector2(transform.position.x + iconPlaceOffset, transform.position.y + _ammoIconYPosition);
+            newIcon.GetComponent<Image>().color = _focusedColor;
+            iconPlaceOffset += iconOffsetIncrement;
+            _ammoIconList.Add(newIcon);
+        }
     }
 
     /// <summary>
@@ -170,4 +210,42 @@ public class PlayerReticle : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// Unfocuses the ammo icon for the most recent harpoon fired.
+    /// </summary>
+    public void UpdateAmmoDisplay()
+    {
+        _ammoIconList[_harpoonGunScript.GetReserveAmmo()].GetComponent<Image>().color = _unfocusedColor;
+    }
+
+    /// <summary>
+    /// Visually shows all appropriate ammo icons as active.
+    /// </summary>
+    public void RestockAmmoIcons()
+    {
+        int i;
+        for (i = 0; i < _harpoonGunScript.GetReserveAmmo() + 1; i++)
+        {
+            _ammoIconList[i].GetComponent<Image>().color = _focusedColor;
+        }
+
+        while (i < _gunMaxAmmo)
+        {
+            _ammoIconList[i].GetComponent<Image>().color = _unfocusedColor;
+            i++;
+        }
+    }
+
+    /// <summary>
+    /// Toggles all ammo icons on or off.
+    /// </summary>
+    public void ToggleAmmoIcons()
+    {
+        foreach (GameObject icon in _ammoIconList)
+        {
+            icon.GetComponent<Image>().enabled = !icon.GetComponent<Image>().enabled;
+        }
+    }
+
 }
