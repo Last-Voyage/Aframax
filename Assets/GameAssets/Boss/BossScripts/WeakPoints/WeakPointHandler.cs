@@ -32,6 +32,7 @@ public class WeakPointHandler : MonoBehaviour
 
     [Tooltip("The number of weak points you need to kill to destroy this object")]
     [SerializeField] private float _numNeededToDestroy;
+    [SerializeField] private Transform _spawnLocation;
 
     private List<Transform> _possibleSpawnLocations;
     private GameObject _spawnedWeakPointsParent;
@@ -57,7 +58,7 @@ public class WeakPointHandler : MonoBehaviour
 
     private void Awake()
     {
-        _parentGameObject = transform.parent.gameObject;
+        //_parentGameObject = transform.parent.gameObject; commented out because I was getting a null error
         InitializeSpawnLocations();
     }
 
@@ -65,6 +66,14 @@ public class WeakPointHandler : MonoBehaviour
     void Start()
     {
         StartWeakPointSpawning(); 
+    }
+
+    /// <summary>
+    /// editor funciton because weak points disable themselves in my test scene and do not activate or spawn - Tommy
+    /// </summary>
+    public void SpawnWeakPointEditor()
+    {
+        StartWeakPointSpawning();
     }
 
     /// <summary>
@@ -124,11 +133,9 @@ public class WeakPointHandler : MonoBehaviour
         /* The weak point destroyed function is added as a listener to the spawns  weak points death event so the 
          * Handler can properly track its lifespan.
         */
-        WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc.position,
-            weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>();
+        WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, _spawnLocation, false).GetComponentInChildren<WeakPoint>();
 
         spawnedWeakPoint.HealthComponent.InitializeHealth(_weakPointHealth);
-        spawnedWeakPoint.transform.parent = _spawnedWeakPointsParent.transform;
 
         _weakPointSpawnCounter++;
         spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
@@ -184,7 +191,7 @@ public class WeakPointHandler : MonoBehaviour
 
         if(_destroyOnAllWeakPointsDestroyed)
         {
-            Destroy(gameObject.transform.parent.gameObject);
+            Destroy(gameObject);
         }
     }
 

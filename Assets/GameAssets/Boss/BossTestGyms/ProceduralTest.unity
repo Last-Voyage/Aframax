@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &27932559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,7 +653,7 @@ PrefabInstance:
     - target: {fileID: 2224731888663267205, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2561637397367177123, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -753,17 +753,17 @@ PrefabInstance:
     - target: {fileID: 5063909446730482435, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5063909446730482435, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5063909446730482435, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5392670372219114260, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -818,17 +818,17 @@ PrefabInstance:
     - target: {fileID: 8680412713963271995, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8680412713963271995, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8680412713963271995, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1289,8 +1289,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2634726881836143546, guid: 7663ac9099e96704fa54fc940fbc2e16,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1786934984561600148}
   m_SourcePrefab: {fileID: 100100000, guid: 7663ac9099e96704fa54fc940fbc2e16, type: 3}
+--- !u!1 &1786934984561600146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2634726881836143546, guid: 7663ac9099e96704fa54fc940fbc2e16,
+    type: 3}
+  m_PrefabInstance: {fileID: 1786934984561600145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1786934984561600147 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2261419022594733144, guid: 7663ac9099e96704fa54fc940fbc2e16,
+    type: 3}
+  m_PrefabInstance: {fileID: 1786934984561600145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1786934984561600148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786934984561600146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5268b2c91a0bee146a8862a8ded302c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayFirstSpawn: 0
+  _spawnInterval: 0
+  _destroyOnAllWeakPointsDestroyed: 0
+  _weakPointPrefab: {fileID: 7717971156621110341, guid: 1ca29d51decce974db16269dd060eee0,
+    type: 3}
+  _weakPointHealth: 1
+  _numNeededToDestroy: 1
+  _spawnLocation: {fileID: 1786934984561600147}
 --- !u!1001 &4927630973126932050
 PrefabInstance:
   m_ObjectHideFlags: 0
