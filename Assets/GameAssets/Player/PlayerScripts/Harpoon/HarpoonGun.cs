@@ -219,7 +219,7 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
-        if (!BoatMover.Instance)
+        if (BoatMover.Instance && BoatMover.Instance.gameObject != null)
         {
             VfxManager.Instance.GetMuzzleSmokeVfx()?.PlayNextVfxInPool(BoatMover.Instance.transform,
                 transform.position, transform.rotation);
@@ -237,7 +237,7 @@ public class HarpoonGun : MonoBehaviour
         _harpoonOnGun.SetActive(false);
 
         //Camera shake
-        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime);
+        CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime, false);
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
 

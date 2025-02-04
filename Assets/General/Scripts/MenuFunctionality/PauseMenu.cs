@@ -34,6 +34,13 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PauseToggle()
     {
+        // Exit the note instead of pausing
+        if (NoteInteractable.ActiveNote != null)
+        {
+            NoteInteractable.ExitActiveNote();
+            return;
+        }
+
         //don't unpause if the settings scene is loaded
         if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded)
         {

@@ -180,7 +180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6869213511603154909}
-  - component: {fileID: 4601761034493624336}
+  - component: {fileID: 5665590926665947756}
   - component: {fileID: 2392181975219894685}
   m_Layer: 0
   m_Name: SpannerInteractable
@@ -205,7 +205,7 @@ Transform:
   - {fileID: 3113868904892862643}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4601761034493624336
+--- !u!114 &5665590926665947756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,9 +214,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5797353358449267029}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 408c6088e21de2b409bbf4276c5f8f0b, type: 3}
+  m_Script: {fileID: 11500000, guid: d9c03d04d3aa0a549a2d7579be820328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemName: spanner
+  _destroyOnPickup: 1
+  _onpickupEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &2392181975219894685
 BoxCollider:
   m_ObjectHideFlags: 0
