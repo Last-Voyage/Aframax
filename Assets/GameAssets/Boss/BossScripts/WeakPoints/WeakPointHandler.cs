@@ -187,7 +187,7 @@ public class WeakPointHandler : MonoBehaviour
     {
         InvokeAllWeakPointsDestroyedEvent();
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
-            _parentGameObject.transform.position);
+            _spawnLocation.transform.position);
 
         if(_destroyOnAllWeakPointsDestroyed)
         {
