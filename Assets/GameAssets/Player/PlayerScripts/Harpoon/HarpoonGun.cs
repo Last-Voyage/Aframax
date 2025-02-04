@@ -113,6 +113,8 @@ public class HarpoonGun : MonoBehaviour
 
     private PlayerReticle _reticle;
 
+    private CinemachineImpulseSource _cinemachineImpulse;
+
     #endregion
 
     #region Setup
@@ -127,6 +129,8 @@ public class HarpoonGun : MonoBehaviour
         SubscribeToEvents();
 
         _reticle = GameObject.FindObjectOfType<PlayerReticle>();
+
+        _cinemachineImpulse = GetComponentInChildren<CinemachineImpulseSource>();
     }
 
     /// <summary>
@@ -241,7 +245,7 @@ public class HarpoonGun : MonoBehaviour
         CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime, false);
 
         // Shake the camera with recoil
-        GetComponentInChildren<CinemachineImpulseSource>().GenerateImpulse(Camera.main.transform.forward);
+        _cinemachineImpulse.GenerateImpulse(Camera.main.transform.forward);
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
 
