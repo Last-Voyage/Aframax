@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 420803575407819088}
   - component: {fileID: 8129012817311758055}
   - component: {fileID: 455909627139806492}
-  - component: {fileID: 3096286999594969260}
+  - component: {fileID: -353881657704901988}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -94.97971, y: -39.070393, z: -41.585358}
-  m_LocalScale: {x: 12.002802, y: 2.9565256, z: 3.7874181}
+  m_LocalScale: {x: 3, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1399748803305122545}
@@ -107,7 +107,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3096286999594969260
+--- !u!114 &-353881657704901988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,9 +116,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6952257969339963696}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bfa0b9bbb6ba8740adce79e42235a7d, type: 3}
+  m_Script: {fileID: 11500000, guid: bd4165b4377de5744b2c8a7a5808639f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canBeInteractedWith: 1
+  _requiredItems:
+  - spanner
+  _triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7398328640818135626
 GameObject:
   m_ObjectHideFlags: 0

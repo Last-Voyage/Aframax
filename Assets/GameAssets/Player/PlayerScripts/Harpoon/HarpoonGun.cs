@@ -219,7 +219,7 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
-        if (!BoatMover.Instance)
+        if (BoatMover.Instance && BoatMover.Instance.gameObject != null)
         {
             VfxManager.Instance.GetMuzzleSmokeVfx()?.PlayNextVfxInPool(BoatMover.Instance.transform,
                 transform.position, transform.rotation);
@@ -266,7 +266,7 @@ public class HarpoonGun : MonoBehaviour
     private IEnumerator ReloadHarpoon()
     {
         //nabii added infinite ammo functionality here
-        if (_currentReserveAmmo > 0 || ConsoleController.instance.IsInInfiniteAmmoMode)
+        if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
             PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
             float reloadTimeRemaining = _reloadTime;
@@ -276,7 +276,7 @@ public class HarpoonGun : MonoBehaviour
                 yield return null;
             }
 
-            if (ConsoleController.instance.IsInInfiniteAmmoMode)
+            if (ConsoleController.Instance.IsInInfiniteAmmoMode)
             {
                 _currentReserveAmmo = 1;
             }
@@ -364,7 +364,7 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
-        if (!ConsoleController.instance.IsInInfiniteFocusMode)
+        if (!ConsoleController.Instance.IsInInfiniteFocusMode)
         {
             _isFocusButtonHeld = true;
 
@@ -384,7 +384,7 @@ public class HarpoonGun : MonoBehaviour
     {
 
         //dev console condition to stop exiting infinit focus using right click when in infinit focus mode
-        if (!ConsoleController.instance.IsInInfiniteFocusMode)
+        if (!ConsoleController.Instance.IsInInfiniteFocusMode)
         {
             _isFocusButtonHeld = false;
 
