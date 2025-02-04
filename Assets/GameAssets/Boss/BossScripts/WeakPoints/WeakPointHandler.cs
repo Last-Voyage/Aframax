@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       WeakPointHandler.cs
 // Author:          Ryan Swanson
-// Contributors:    Andrea Swihart-DeCoster
+// Contributors:    Andrea Swihart-DeCoster, Tommy Roberts
 // Creation Date:   September 22, 2024
 //
 // Description:     Spawns the weak points on some part of the boss (tentacles, etc.)
@@ -55,7 +55,10 @@ public class WeakPointHandler : MonoBehaviour
     private Coroutine _weakPointSpawnProcessCoroutine;
 
     private readonly UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
-
+    
+    /// <summary>
+    /// initalizes spawn locations
+    /// </summary>
     private void Awake()
     {
         //_parentGameObject = transform.parent.gameObject; commented out because I was getting a null error
