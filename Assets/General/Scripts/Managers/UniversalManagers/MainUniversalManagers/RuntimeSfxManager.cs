@@ -154,6 +154,11 @@ public class RuntimeSfxManager : AudioManager
     /// <returns> The instance that was created </returns>
     public EventInstance CreateInstanceFromReference(EventReference eventReference, GameObject attachedObject)
     {
+        if(eventReference.IsNull)
+        {
+            return new EventInstance();
+        }
+
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedObject));
 

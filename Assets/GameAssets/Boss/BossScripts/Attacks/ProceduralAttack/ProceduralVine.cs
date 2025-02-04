@@ -79,6 +79,10 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void StartMovementAudio()
     {
+        if(!_movementEventInstance.isValid())
+        {
+            return;
+        }
         RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeInTime);
     }
 
@@ -87,6 +91,10 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void StopMovementAudio()
     {
+        if (!_movementEventInstance.isValid())
+        {
+            return;
+        }
         RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeOutTime);
     }
 
