@@ -13,10 +13,10 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Changes the scene for the player when they interact with the hatch
 /// </summary>
-public class HatchSceneTransition : MonoBehaviour, IPlayerInteractable
+public class HatchSceneTransition : MonoBehaviour
 {
     [SerializeField] private int _sceneTransitionPointer;
-    public void OnInteractedByPlayer()
+    public void EnterHatch()
     {
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID
             (AframaxSceneManager.Instance.MazeSceneIndex, _sceneTransitionPointer);
