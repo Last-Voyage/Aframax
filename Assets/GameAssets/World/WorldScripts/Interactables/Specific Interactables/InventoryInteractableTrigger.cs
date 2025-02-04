@@ -20,7 +20,7 @@ public class InventoryInteractableTrigger : MonoBehaviour, IPlayerInteractable
 {
     [SerializeField] private bool _canBeInteractedWith;
     [SerializeField] private List<string> _requiredItems = new();
-    [SerializeField] private UnityEvent _triggerEvent;
+    [SerializeField] private UnityEvent _onTriggerEvent;
 
     /// <summary>
     /// A virtual method for interacting with any object that requires an item to be in the inventory
@@ -35,7 +35,7 @@ public class InventoryInteractableTrigger : MonoBehaviour, IPlayerInteractable
         }
 
         // Successfully run the method
-        _triggerEvent?.Invoke();
+        _onTriggerEvent?.Invoke();
     }
 
     /// <summary>

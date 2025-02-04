@@ -18,8 +18,8 @@ using UnityEngine.Events;
 public class InventoryInteractableItem : MonoBehaviour, IPlayerInteractable
 {
     [SerializeField] private string _itemName;
-    [SerializeField] private bool _destoryOnPickup;
-    [SerializeField] private UnityEvent _pickupEvent;
+    [SerializeField] private bool _destroyOnPickup;
+    [SerializeField] private UnityEvent _onpickupEvent;
 
     /// <summary>
     /// A virtual method for picking up an item to be added to the inventory
@@ -30,10 +30,10 @@ public class InventoryInteractableItem : MonoBehaviour, IPlayerInteractable
         PlayerInventory.Instance.AddItem(_itemName);
 
         // Run the pickup events
-        _pickupEvent?.Invoke();
+        _onpickupEvent?.Invoke();
 
         // Destroy the object if it needs to be removed
-        if (_destoryOnPickup)
+        if (_destroyOnPickup)
         {
             Destroy(gameObject);
         }
