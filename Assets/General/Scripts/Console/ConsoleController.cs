@@ -14,8 +14,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//only works in engine or development builds
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+
 
 /// <summary>
 /// Controls the console on a global scope,
@@ -63,7 +62,7 @@ public class ConsoleController : MonoBehaviour
 
     private PlayerInputMap _playerInput;
 
-    public static ConsoleController instance;
+    public static ConsoleController Instance;
     #endregion
     /// <summary>
     /// happens before the start of the game
@@ -72,10 +71,20 @@ public class ConsoleController : MonoBehaviour
     {
         _playerInput = new PlayerInputMap();
         _playerInput.Enable();
-
-
-        instance = this;
+        Instance = this;
     }
+
+    /// <summary>
+    /// A public getter for whether the console is currently active
+    /// </summary>
+    /// <returns>If the console is currently open in the scene</returns>
+    public bool ConsoleIsOpen()
+    {
+        return _content.activeSelf;
+    }
+
+    //only works in engine or development builds
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
 
     /// <summary>
     /// happens when the game starts
@@ -129,15 +138,6 @@ public class ConsoleController : MonoBehaviour
             Time.timeScale = 0;
             _harpoonGun.UnsubscribeInput();
         }
-    }
-
-    /// <summary>
-    /// A public getter for whether the console is currently active
-    /// </summary>
-    /// <returns>If the console is currently open in the scene</returns>
-    public bool ConsoleIsOpen()
-    {
-        return _content.activeSelf;
     }
 
     #region FreelookCam
@@ -386,6 +386,7 @@ public class ConsoleController : MonoBehaviour
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
+    #endif
 }
 
-#endif
+
