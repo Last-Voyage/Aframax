@@ -78,6 +78,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         _currentPage = 0;
         ActiveNote = this;
         _noteView.SetActive(true);
+        ChangePage(_currentPage);
     }
 
     /// <summary>

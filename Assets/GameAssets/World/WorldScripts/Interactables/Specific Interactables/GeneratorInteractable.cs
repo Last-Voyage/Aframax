@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         GeneratorInteractable.cs
 // Author :            Ryan Swanson
-// Contributors:       Nick Rice
+// Contributors:       Nick Rice, Charlie Polonus
 // Creation Date :     11/14/24
 // 
 // Brief Description : Controls the functionality for the generator
@@ -14,11 +14,8 @@ using UnityEngine;
 /// <summary>
 /// Controls the functionality for the generator
 /// </summary>
-public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
+public class GeneratorInteractable : InventoryInteractableTrigger
 {
-    public bool CanGeneratorBeInteracted { get; set; }
-    public bool DoesRequireSpanner { get; set; }
-
     [Tooltip("Moves the sparks and smoke forwards, or elsewhere")]
     private readonly Vector3 _vfxDisplacement = Vector3.back;
     
@@ -40,29 +37,6 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
             (transform.position + _vfxDisplacement, transform.rotation);
     }
 
-    /// <summary>
-    /// When the generator is interacted with by the player pressing the interact key on it.
-    /// </summary>
-    public void OnInteractedByPlayer()
-    {
-        if(!CanGeneratorBeInteracted)
-        {
-            return;
-        }
-
-        if(DoesRequireSpanner)
-        {
-            if(PlayerInventory.Instance.DoesPlayerHaveSpanner)
-            {
-                StoryManager.Instance.ProgressNextStoryBeat();
-                RuntimeSfxManager.APlayOneShotSfxAttached?.Invoke(FmodSfxEvents.Instance.GeneratorFixed, gameObject);
-            }
-        }
-        else
-        {
-            StoryManager.Instance.ProgressNextStoryBeat();
-        }
-
-        
-    }
+    /// Note for future engineers: The method OnInteractedByPlayer() still exists, it just runs the base script
+    /// InventoryInteractableTrigger, if you want to override it you still can
 }

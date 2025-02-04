@@ -23,6 +23,8 @@ public class WeakPointHandler : MonoBehaviour
     [Tooltip("The time between spawning weak points")]
     [SerializeField] private float _spawnInterval;
 
+    [SerializeField] private bool _destroyOnAllWeakPointsDestroyed;
+
     [Header("Weak Point Options")]
     [SerializeField] private GameObject _weakPointPrefab;
     [Tooltip("Amount of health each weak point spawns with")]
@@ -156,7 +158,6 @@ public class WeakPointHandler : MonoBehaviour
     {
         //Adds to the counter of weak points destroyed
         _weakPointDestructionCounter++;
-
         CheckForMaxWeakPointsDestroyed();
     }
 
@@ -180,6 +181,11 @@ public class WeakPointHandler : MonoBehaviour
         InvokeAllWeakPointsDestroyedEvent();
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
             _parentGameObject.transform.position);
+
+        if(_destroyOnAllWeakPointsDestroyed)
+        {
+            Destroy(gameObject.transform.parent.gameObject);
+        }
     }
 
     #endregion
