@@ -12,6 +12,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Cinemachine;
 
 /// <summary>
 /// Provides the functionality for the harpoon weapon
@@ -238,6 +239,9 @@ public class HarpoonGun : MonoBehaviour
 
         //Camera shake
         CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime, false);
+
+        // Shake the camera with recoil
+        GetComponentInChildren<CinemachineImpulseSource>().GenerateImpulse(Camera.main.transform.forward);
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
 
