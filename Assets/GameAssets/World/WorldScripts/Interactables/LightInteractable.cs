@@ -48,7 +48,7 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     /// Checks if the light is currently on; if it is, it turns off
     /// Otherwise, it turns on the light
     /// </summary>
-    public void OnSoundChange()
+    public void OnInteractedByPlayer()
     {
         if (_causeLightFlicker != null)
         {

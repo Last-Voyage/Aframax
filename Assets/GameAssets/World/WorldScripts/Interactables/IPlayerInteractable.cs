@@ -14,5 +14,5 @@ public interface IPlayerInteractable
     /// <summary>
     /// Will be called when interacted with by the player
     /// </summary>
-    abstract void OnSoundChange();
+    abstract void OnInteractedByPlayer();
 }

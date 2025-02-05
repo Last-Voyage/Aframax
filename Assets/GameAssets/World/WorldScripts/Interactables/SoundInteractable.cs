@@ -52,7 +52,7 @@ public class SoundInteractable : MonoBehaviour, IPlayerInteractable
     /// if (!Playing Sound) {(Play Sound)}
     /// else {(Stop Playing Sound)}
     /// </summary>
-    public void OnSoundChange()
+    public void OnInteractedByPlayer()
     {
         if (!_playerCausedSilence.IsUnityNull())
         {
@@ -91,6 +91,6 @@ public class SoundInteractable : MonoBehaviour, IPlayerInteractable
     private IEnumerator Silence()
     {
         yield return _waitForRestarting;
-        OnSoundChange();
+        OnInteractedByPlayer();
     }
 }

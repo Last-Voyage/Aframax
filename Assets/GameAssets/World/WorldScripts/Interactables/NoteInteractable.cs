@@ -52,7 +52,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// Show the note through the UI when the player interacts with it
     /// </summary>
-    public void OnSoundChange()
+    public void OnInteractedByPlayer()
     {
         // Edge cases: There's no notes or something is already open
         if (ActiveNote != null

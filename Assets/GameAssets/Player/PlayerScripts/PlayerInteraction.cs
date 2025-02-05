@@ -60,7 +60,7 @@ public class PlayerInteraction : MonoBehaviour
             _interactableUI.SetInteractUIStatus(true);
             if (_interactInput.WasPerformedThisFrame())
             {
-                interactableComponent.OnSoundChange();
+                interactableComponent.OnInteractedByPlayer();
             }
         }
         else

@@ -49,7 +49,7 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// Turns the fan on or off; inverses what it currently is
     /// </summary>
-    public void OnSoundChange()
+    public void OnInteractedByPlayer()
     {
         if (turnTheFan == null)
         {

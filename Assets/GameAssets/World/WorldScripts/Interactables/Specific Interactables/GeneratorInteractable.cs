@@ -45,6 +45,6 @@ public class GeneratorInteractable : InventoryInteractableTrigger
         RuntimeSfxManager.APlayOneShotSfxAttached?.Invoke(FmodSfxEvents.Instance.GeneratorFixed, gameObject);
     }
 
-    /// Note for future engineers: The method OnSoundChange() still exists, it just runs the base script
+    /// Note for future engineers: The method OnInteractedByPlayer() still exists, it just runs the base script
     /// InventoryInteractableTrigger, if you want to override it you still can
 }

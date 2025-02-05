@@ -25,7 +25,7 @@ public class InventoryInteractableTrigger : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// A virtual method for interacting with any object that requires an item to be in the inventory
     /// </summary>
-    public virtual void OnSoundChange()
+    public virtual void OnInteractedByPlayer()
     {
         // Edge case: If the object can't be interacted with or player doesn't have all the items
         if (!_canBeInteractedWith

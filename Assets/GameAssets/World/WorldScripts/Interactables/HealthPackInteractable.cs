@@ -22,7 +22,7 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
     /// An inherited method that triggers when the object is interacted with.
     /// Heals the player for a certain amount of health
     /// </summary>
-    public void OnSoundChange()
+    public void OnInteractedByPlayer()
     {
         PlayerManager.Instance.InvokePlayerHealEvent(_healthRestored);
         _numUses--;
