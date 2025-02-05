@@ -19,7 +19,7 @@ public class LightController : MonoBehaviour
     private Animator _animator;
 
     // Light Shift Variables
-    [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.208f, 0.057f, 0);
+    [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
     [SerializeField] private float _lightShiftDuration = 20f;
 
     /// <summary>
@@ -103,25 +103,9 @@ public class LightController : MonoBehaviour
         _light.color = _originalColor;
     }
 
-    /// <summary>
-    /// Used to play the light flickering animation
-    /// Currently unused because I accidentally made this while doing another task lmao
-    /// </summary>
-    private IEnumerator PlayAnimation()
+    private void LightFlicker()
     {
-        _animator.enabled = true;
-
-        // Let's just ask how long the flickering animation lasts and wait for when it's supposed to end
-        float timer = _animator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
-
-        while (timer >= 0)
-        {
-            timer -= Time.deltaTime;
-            yield return null;
-        }
-
-        // Turn off the animator
-        _animator.enabled = false;
+        _animator.SetTrigger("PlayFlicker");
     }
 
     /// <summary>
@@ -131,6 +115,7 @@ public class LightController : MonoBehaviour
     private void OnEnable()
     {
         VfxManager.Instance.GetOnLightShiftEvent().AddListener(LightShift);
+        VfxManager.Instance.GetOnLightFlickerEvent().AddListener(LightFlicker);
     }
 
     /// <summary>
@@ -140,5 +125,6 @@ public class LightController : MonoBehaviour
     private void OnDisable()
     {
         VfxManager.Instance.GetOnLightShiftEvent().RemoveListener(LightShift);
+        VfxManager.Instance.GetOnLightFlickerEvent().RemoveListener(LightFlicker);
     }
 }
