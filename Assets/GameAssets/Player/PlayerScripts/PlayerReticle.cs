@@ -4,7 +4,9 @@
 // Contributors:       David Henvick
 // Creation Date :     10/27/2024
 //
-// Brief Description : Allows for dynamic reticle control based on inputs.
+// Brief Description : Allows a reticle scope to be displayed and controlled
+//                     by the player focusing the harpoon gun. Also displays
+//                     ammo icons representing the player's stock and max.
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -17,25 +19,27 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerReticle : MonoBehaviour
 {
-    [Tooltip("Reticle color while unfocused. Should be less prominent than the focused color.")]
+    [Tooltip("Reticle color while unfocused. Also ammo icons' colors while the player lacks them.")]
     [SerializeField] private Color _unfocusedColor;
-    [Tooltip("Reticle color while focused. Should be more prominent than the unfocused color.")]
+    [Tooltip("Reticle color while focused. Also ammo icons' colors while they are stocked.")]
     [SerializeField] private Color _focusedColor;
 
     [Space]
 
     [Tooltip("The minimum size of the reticle scope. Higher numbers increase visibility.")]
     [SerializeField] private float _minScopeSize;
-
     [Tooltip("How much bigger the outer ring of the reticle is compared to the inner, dynamic one.")]
     [SerializeField] private float _scopePadding;
 
-    [Tooltip("The Y position of ammo icons on the screen.")]
-    [SerializeField] private float _ammoIconYPosition;
-
     [Space]
 
+    [Tooltip("Prefab hosting a sprite for ammo icons. Will change colors to match the scope's sprite.")]
     [SerializeField] private GameObject _harpoonIcon;
+    [Tooltip("The Y position of ammo icons on the screen. Should be negative to nest beneath the scope.")]
+    [SerializeField] private float _ammoIconYPosition;
+    [Tooltip("How much horizontal spacing exists between each ammo icon.")]
+    [SerializeField] private float _ammoIconXSpacing;
+
 
     [Tooltip("The circle showing the potential deviation of harpoon shots")]
     private GameObject _reticleScope;
@@ -48,7 +52,7 @@ public class PlayerReticle : MonoBehaviour
     private Image _frameImage;
     private Image _scopeImage;
 
-    private List<GameObject> _ammoIconList = new();
+    private List<Image> _ammoIconList = new();
 
     private float _newReticleSize = 0;
     private float _gunMaxAmmo;
@@ -157,18 +161,16 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     private void InitializeAmmoDisplay()
     {
-        // How much horizontal space exists between each ammo icon
-        float iconOffsetIncrement = 30;
         // Initializes offset and ensures all icons will be horizontally centered on the screen
-        float iconPlaceOffset = -(iconOffsetIncrement * _gunMaxAmmo) / 2;
+        float iconPlaceOffset = -(_ammoIconXSpacing * _gunMaxAmmo) / 2;
         // Generates icons until the max ammo count is represented
         for (int i = 0; i < _gunMaxAmmo; i++)
         {
             GameObject newIcon = Instantiate(_harpoonIcon, gameObject.transform);
-            newIcon.transform.position = new Vector2(transform.position.x + iconPlaceOffset, transform.position.y + _ammoIconYPosition);
+            newIcon.GetComponent<RectTransform>().position = new Vector2(transform.position.x + iconPlaceOffset, transform.position.y + _ammoIconYPosition);
             newIcon.GetComponent<Image>().color = _focusedColor;
-            iconPlaceOffset += iconOffsetIncrement;
-            _ammoIconList.Add(newIcon);
+            iconPlaceOffset += _ammoIconXSpacing;
+            _ammoIconList.Add(newIcon.GetComponent<Image>());
         }
     }
 
@@ -216,7 +218,7 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     public void UpdateAmmoDisplay()
     {
-        _ammoIconList[_harpoonGunScript.GetReserveAmmo()].GetComponent<Image>().color = _unfocusedColor;
+        _ammoIconList[_harpoonGunScript.GetReserveAmmo()].color = _unfocusedColor;
     }
 
     /// <summary>
@@ -227,12 +229,12 @@ public class PlayerReticle : MonoBehaviour
         int i;
         for (i = 0; i < _harpoonGunScript.GetReserveAmmo() + 1; i++)
         {
-            _ammoIconList[i].GetComponent<Image>().color = _focusedColor;
+            _ammoIconList[i].color = _focusedColor;
         }
 
         while (i < _gunMaxAmmo)
         {
-            _ammoIconList[i].GetComponent<Image>().color = _unfocusedColor;
+            _ammoIconList[i].color = _unfocusedColor;
             i++;
         }
     }
@@ -242,9 +244,9 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     public void ToggleAmmoIcons()
     {
-        foreach (GameObject icon in _ammoIconList)
+        foreach (Image icon in _ammoIconList)
         {
-            icon.GetComponent<Image>().enabled = !icon.GetComponent<Image>().enabled;
+            icon.enabled = !icon.enabled;
         }
     }
 
