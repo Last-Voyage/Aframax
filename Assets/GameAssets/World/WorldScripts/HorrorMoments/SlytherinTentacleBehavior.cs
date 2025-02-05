@@ -12,6 +12,9 @@ using UnityEngine;
 /// </summary>
 public class SlytherinTentacleBehavior : MonoBehaviour
 {
+    // Animation trigger
+    private const string _TENTACLE_MOVE_TRIGGER = "MoveTentacle";
+
     /// <summary>
     /// Called to make the tentacle play its animation
     /// </summary>
@@ -20,7 +23,7 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         // Everything should already be set up, just play the animation
         Animator animator = GetComponent<Animator>();
 
-        animator.SetTrigger("MoveTentacle");
+        animator.SetTrigger(_TENTACLE_MOVE_TRIGGER);
     }
 
     /// <summary>

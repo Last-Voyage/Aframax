@@ -22,6 +22,9 @@ public class LightController : MonoBehaviour
     [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
     [SerializeField] private float _lightShiftDuration = 20f;
 
+    // Animation variables
+    private const string _LIGHT_FLICKER_TRIGGER = "PlayFlicker";
+
     /// <summary>
     /// Called on the first frame
     /// Used to set up variables
@@ -103,9 +106,12 @@ public class LightController : MonoBehaviour
         _light.color = _originalColor;
     }
 
+    /// <summary>
+    /// Begins the light flickering animation by setting the trigger
+    /// </summary>
     private void LightFlicker()
     {
-        _animator.SetTrigger("PlayFlicker");
+        _animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
     }
 
     /// <summary>
