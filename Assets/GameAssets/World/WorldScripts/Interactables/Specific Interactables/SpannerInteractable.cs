@@ -15,11 +15,11 @@ using UnityEngine;
 public class SpannerInteractable : InventoryInteractableItem
 {
     /// <summary>
-    /// Implements the OnInteractedByPlayer function from IPlayerInteractable
+    /// Implements the OnSoundChange function from IPlayerInteractable
     /// Called when the player presses the interact key while looking at this object
     /// </summary>
-    public override void OnInteractedByPlayer()
+    public override void OnSoundChange()
     {
-        base.OnInteractedByPlayer();
+        base.OnSoundChange();
     }
 }

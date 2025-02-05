@@ -46,7 +46,7 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
         timerCounter += Time.deltaTime;
     }*/
 
-    public void OnInteractedByPlayer()
+    public void OnSoundChange()
     {
         if (turnTheFan == null)
         {

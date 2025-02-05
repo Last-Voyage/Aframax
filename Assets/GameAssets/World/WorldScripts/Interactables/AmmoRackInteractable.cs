@@ -29,7 +29,7 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// Triggers when the ammo rack is interacted with
     /// </summary>
-    public void OnInteractedByPlayer()
+    public void OnSoundChange()
     {
         PlayerManager.Instance.InvokeOnHarpoonRestockEvent(this);
     }

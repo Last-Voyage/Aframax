@@ -24,7 +24,7 @@ public class InventoryInteractableItem : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// A virtual method for picking up an item to be added to the inventory
     /// </summary>
-    public virtual void OnInteractedByPlayer()
+    public virtual void OnSoundChange()
     {
         // Add the item to the player's inventory
         PlayerInventory.Instance.AddItem(_itemName);
