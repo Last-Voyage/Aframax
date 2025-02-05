@@ -22,7 +22,8 @@ public class RuntimeSfxManager : AudioManager
 
     public static Action<EventReference, GameObject> APlayOneShotSfxAttached;
 
-    private EventInstance _hardSurfaceWalkingEventInstance;
+    private EventInstance _walkingEventInstance;
+    private EventReference _currentWalkingSfx;
 
     private Coroutine _footstepsCoroutine;
 
@@ -64,8 +65,7 @@ public class RuntimeSfxManager : AudioManager
     protected override void SubscribeToGameplayEvents()
     {
         base.SubscribeToGameplayEvents();
-        
-        InitializeFootstepInstance();
+
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
 
@@ -78,12 +78,12 @@ public class RuntimeSfxManager : AudioManager
     protected override void UnsubscribeToGameplayEvents()
     {
         base.UnsubscribeToGameplayEvents();
-        
+
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
-        
+
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
-        
+
         ReleaseFootstepInstance();
     }
 
@@ -97,7 +97,7 @@ public class RuntimeSfxManager : AudioManager
         {
             APlayOneShotSfx += PlayOneShotSFX;
             APlayOneShotSfxAttached += PlayOneShotSFXAttached;
-            
+
             return;
         }
 
@@ -123,7 +123,7 @@ public class RuntimeSfxManager : AudioManager
     /// <param name="worldPosition"> position where the sound plays in the world </param>
     private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
-        if(CheckForNullSFX(eventReference))
+        if (CheckForNullSFX(eventReference))
         {
             return;
         }
@@ -147,6 +147,72 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
+    /// Creates a Fmod instance after being given an Fmod reference
+    /// </summary>
+    /// <param name="eventReference"> The reference to create the instance from </param>
+    /// <param name="attachedObject"> What the instance is attached to </param>
+    /// <returns> The instance that was created </returns>
+    public EventInstance CreateInstanceFromReference(EventReference eventReference, GameObject attachedObject)
+    {
+        if(eventReference.IsNull)
+        {
+            return new EventInstance();
+        }
+
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedObject));
+
+        return eventInstance;
+    }
+
+    /// <summary>
+    /// Fades in a sfx using an instance
+    /// </summary>
+    /// <param name="eventInstance"> The sfx to fade in </param>
+    /// <param name="fadeTime"> The time to fade in </param>
+    public void FadeInLoopingOneShot(EventInstance eventInstance, float fadeTime)
+    {
+        eventInstance.start();
+        //eventInstance.getVolume(out float vol);
+
+        StartCoroutine(FadeEventInstance(eventInstance, fadeTime,1));
+    }
+
+    /// <summary>
+    /// Fades out a sfx using an instance
+    /// </summary>
+    /// <param name="inst"> The sfx to fade out </param>
+    /// <param name="fadeTime"> The time to fade out </param>
+    public void FadeOutLoopingOneShot(EventInstance inst, float fadeTime)
+    {
+        StartCoroutine(FadeEventInstance(inst, fadeTime,0));
+    }
+
+    /// <summary>
+    /// Moves an instances volume from where it starts to an end
+    /// </summary>
+    /// <param name="eventInstance"> The instance to adjust the volume </param>
+    /// <param name="fadeTime"> The time to fade </param>
+    /// <param name="endVol"> The ending volume </param>
+    /// <returns></returns>
+    private IEnumerator FadeEventInstance(EventInstance eventInstance, float fadeTime, float endVol)
+    {
+        float progress = 0;
+        float currentVol;
+        eventInstance.getVolume(out float startingVol);
+        while(progress<1)
+        {
+            progress += Time.deltaTime / fadeTime;
+
+            currentVol = Mathf.Lerp(startingVol, endVol,progress);
+            currentVol = Mathf.Clamp(currentVol, 0, 1);
+
+            eventInstance.setVolume(currentVol);
+            yield return null;
+        }
+    }
+
+    /// <summary>
     /// Checks for if the audio is null before playing it
     /// </summary>
     /// <param name="eventReference">The EventReference we are checking is null</param>
@@ -166,13 +232,22 @@ public class RuntimeSfxManager : AudioManager
     /// <summary>
     /// Initializes the footstep instance
     /// </summary>
-    private void InitializeFootstepInstance()
+    public void InitializeFootstepInstance()
     {
-        if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
+        if(GameStateManager.Instance.IsPlayerAboveDeck())
+        {
+            _currentWalkingSfx = FmodSfxEvents.Instance.AboveDeckWalking;
+        }
+        else
+        {
+            _currentWalkingSfx = FmodSfxEvents.Instance.BelowDeckWalking;
+        }
+
+        if (_currentWalkingSfx.IsNull)
         {
             return;
         }
-        _hardSurfaceWalkingEventInstance = RuntimeManager.CreateInstance(FmodSfxEvents.Instance.HardSurfaceWalking);
+        _walkingEventInstance = RuntimeManager.CreateInstance(_currentWalkingSfx);
     }
 
     /// <summary>
@@ -180,11 +255,11 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void ReleaseFootstepInstance()
     {
-        if (!_hardSurfaceWalkingEventInstance.isValid())
+        if (!_walkingEventInstance.isValid())
         {
             return;
         }
-        _hardSurfaceWalkingEventInstance.release();
+        _walkingEventInstance.release();
     }
 
     /// <summary>
@@ -218,13 +293,13 @@ public class RuntimeSfxManager : AudioManager
     {
         if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
-            if (FmodSfxEvents.Instance.HardSurfaceWalking.IsNull)
+            if (_currentWalkingSfx.IsNull)
             {
                 return;
             }
 
-            _hardSurfaceWalkingEventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
-            _hardSurfaceWalkingEventInstance.start();
+            _walkingEventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
+            _walkingEventInstance.start();
         }
     }
 
