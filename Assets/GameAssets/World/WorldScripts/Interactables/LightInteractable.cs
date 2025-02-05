@@ -21,12 +21,19 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     private Light _realLightBulb;
 
     [SerializeField] 
-    private float _lastTimeBeforeTurningOff = 1f;
+    private float _lengthOfMaxFlickering;
+    [SerializeField]
+    private float _lengthOfMinFlickering;
 
     [SerializeField]
-    private float _baseIntensity = 10f;
+    private float _maxIntensity = 10f;
+
     [SerializeField] 
-    private float _lengthOfFlickering;
+    private float _minIntensity = .1f;
+    
+    [SerializeField]
+    [Tooltip("Time it takes after the flickering changes for the light to turn off")]
+    private float _lastTimeBeforeTurningOff = 1f;
 
     private IEnumerator _causeLightFlicker;
 
@@ -61,15 +68,16 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private IEnumerator Flickering()
     {
-        float randomTimeOn = Random.Range(2f, 7f);
+        float randomTimeOn = Random.Range(_lengthOfMinFlickering, _lengthOfMaxFlickering);
 
-        for (float i = 0; i < randomTimeOn-1f; i += Random.Range(randomTimeOn/5f, randomTimeOn/2f))
+        _realLightBulb.intensity = Random.Range(_minIntensity,_maxIntensity);
+        
+        // get max time and min time
+        
+        for (float i = 0; i < randomTimeOn-_lastTimeBeforeTurningOff; i++)
         {
-            _realLightBulb.intensity = Random.Range(.1f,_baseIntensity);
-            yield return new WaitForSeconds(i/2f);
-
-            _realLightBulb.intensity = _baseIntensity;
-            yield return new WaitForSeconds(i/2f);
+            yield return new WaitForSeconds(1f);
+            _realLightBulb.intensity = Random.Range(_minIntensity,_maxIntensity);
         }
         
         // Wait for 1 second at the end, then turn off the light
