@@ -5,9 +5,12 @@
 //
 // Brief Description : This is a light switch that can be interacted with
 *****************************************************************************/
+
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// This is a light switch that can be interacted with
@@ -17,6 +20,9 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField]
     private Light _realLightBulb;
 
+    [SerializeField] 
+    private float _lastTimeBeforeTurningOff = 1f;
+
     [SerializeField]
     private float _baseIntensity = 10f;
     [SerializeField] 
@@ -24,7 +30,12 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
 
     private IEnumerator _causeLightFlicker;
 
-    private WaitForSeconds lastSecondBeforeTurnOff = new WaitForSeconds(1f);
+    private WaitForSeconds _waitBeforeTurnOff;
+
+    private void Start()
+    {
+        _waitBeforeTurnOff = new WaitForSeconds(_lastTimeBeforeTurningOff);
+    }
 
     /// <summary>
     /// Checks if the light is currently on; if it is, it turns off
@@ -63,7 +74,7 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
         
         // Wait for 1 second at the end, then turn off the light
         
-        yield return lastSecondBeforeTurnOff;
+        yield return _waitBeforeTurnOff;
 
         _causeLightFlicker = null;
 
