@@ -8,6 +8,7 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
+using UnityEngine;
 using Unity.VisualScripting;
 using UnityEngine.Events;
 
@@ -56,16 +57,37 @@ public class GameStateManager : MainGameplayManagerFramework
         if(Instance == null)
         {
             Instance = this;
+            GetLocationState();
         }
         else
         {
             Destroy(this);  
         }
     }
-
     #endregion
 
+    /// <summary>
+    /// Determines if you are above or below deck
+    /// Changes the state and updates the footstep audio
+    /// </summary>
+    private void GetLocationState()
+    {
+        if (AframaxSceneManager.Instance.IsAboveDeck())
+        {
+            _currentGameplayState = EGameplayState.AboveDeck;
+        }
+        else if (AframaxSceneManager.Instance.IsBelowDeck())
+        {
+            _currentGameplayState = EGameplayState.BelowDeck;
+        }
+        RuntimeSfxManager.Instance.InitializeFootstepInstance();
+    }
+
     #region Getters
+    public bool IsPlayerAboveDeck()
+    {
+        return _currentGameplayState != EGameplayState.BelowDeck;
+    }
 
     public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
 
@@ -74,7 +96,6 @@ public class GameStateManager : MainGameplayManagerFramework
     public UnityEvent GetOnGameUnpaused() => _onGameUnpaused;
     
     public UnityEvent<ScriptableDialogueUI> GetOnNewDialogueChain() => _onNewDialogueChain;
-
     #endregion
 }
 
@@ -83,5 +104,7 @@ public class GameStateManager : MainGameplayManagerFramework
 /// </summary>
 public enum EGameplayState
 {
-    TempState
-}
+    AboveDeck,
+    BelowDeck,
+    Ending
+};

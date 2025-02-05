@@ -5,19 +5,44 @@
 //
 // Brief Description : This is a light switch that can be interacted with
 *****************************************************************************/
+
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
+/// <summary>
+/// This is a light switch that can be interacted with
+/// </summary>
 public class LightInteractable : MonoBehaviour, IPlayerInteractable
 {
     [SerializeField]
-    private Light realLightBulb;
+    private Light _realLightBulb;
 
-    private float baseIntensity = 10f;
+    [SerializeField] 
+    private float _lengthOfMaxFlickering;
+    [SerializeField]
+    private float _lengthOfMinFlickering;
 
-    private IEnumerator causeLightFlicker;
+    [SerializeField]
+    private float _maxIntensity = 10f;
 
-    private WaitForSeconds lastSecondBeforeTurnOff = new WaitForSeconds(1f);
+    [SerializeField] 
+    private float _minIntensity = .1f;
+    
+    [SerializeField]
+    [Tooltip("Time it takes after the flickering changes for the light to turn off")]
+    private float _lastTimeBeforeTurningOff = 1f;
+
+    private IEnumerator _causeLightFlicker;
+
+    private WaitForSeconds _waitBeforeTurnOff;
+
+    private void Start()
+    {
+        _waitBeforeTurnOff = new WaitForSeconds(_lastTimeBeforeTurningOff);
+    }
 
     /// <summary>
     /// Checks if the light is currently on; if it is, it turns off
@@ -25,16 +50,16 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void OnInteractedByPlayer()
     {
-        if (causeLightFlicker != null)
+        if (_causeLightFlicker != null)
         {
-            realLightBulb.intensity = 0f;
-            StopCoroutine(causeLightFlicker);
-            causeLightFlicker = null;
+            _realLightBulb.intensity = 0f;
+            StopCoroutine(_causeLightFlicker);
+            _causeLightFlicker = null;
         }
         else
         {
-            causeLightFlicker = Flickering();
-            StartCoroutine(causeLightFlicker);
+            _causeLightFlicker = Flickering();
+            StartCoroutine(_causeLightFlicker);
         }
     }
 
@@ -43,23 +68,24 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private IEnumerator Flickering()
     {
-        float randomTimeOn = Random.Range(2f, 7f);
+        float randomTimeOn = Random.Range(_lengthOfMinFlickering, _lengthOfMaxFlickering);
 
-        for (float i = 0; i < randomTimeOn-1f; i += Random.Range(randomTimeOn/5f, randomTimeOn/2f))
+        _realLightBulb.intensity = Random.Range(_minIntensity,_maxIntensity);
+        
+        // get max time and min time
+        
+        for (float i = 0; i < randomTimeOn-_lastTimeBeforeTurningOff; i++)
         {
-            realLightBulb.intensity = Random.Range(.1f,baseIntensity);
-            yield return new WaitForSeconds(i/2f);
-
-            realLightBulb.intensity = baseIntensity;
-            yield return new WaitForSeconds(i/2f);
+            yield return new WaitForSeconds(1f);
+            _realLightBulb.intensity = Random.Range(_minIntensity,_maxIntensity);
         }
         
         // Wait for 1 second at the end, then turn off the light
         
-        yield return lastSecondBeforeTurnOff;
+        yield return _waitBeforeTurnOff;
 
-        causeLightFlicker = null;
+        _causeLightFlicker = null;
 
-        realLightBulb.intensity = 0f;
+        _realLightBulb.intensity = 0f;
     }
 }

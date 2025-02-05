@@ -88,6 +88,28 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// Checks if you are currently above deck
+    /// </summary>
+    /// <returns> True if in an above deck scene </returns>
+    public bool IsAboveDeck()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        return (currentSceneIndex == BoatSceneIndex);
+    }
+
+    /// <summary>
+    /// Checks if you are currently below deck
+    /// </summary>
+    /// <returns> True if in a below deck scene </returns>
+    public bool IsBelowDeck()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        return (currentSceneIndex == MazeSceneIndex);
+    }
+
+    /// <summary>
     /// Starts loading the specified scene id using the specified scene transition
     /// </summary>
     /// <param name="sceneID">The specific scene in the build index to load</param>
