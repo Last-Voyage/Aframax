@@ -13,11 +13,18 @@ using UnityEngine;
 /// </summary>
 public class PlayerSpawnPoint : MonoBehaviour
 {
+    [Header("Spawn Settings")]
+    public bool CanSpawnWithMovement = true;
+
+    [Space]
     [SerializeField] private GameObject _playerPrefab;
+
+    public static PlayerSpawnPoint Instance;
 
     // Start is called before the first frame update
     void Awake()
     {
+        Instance = this;
         SpawnPlayer();
     }
 
