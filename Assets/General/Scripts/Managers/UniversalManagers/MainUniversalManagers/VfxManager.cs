@@ -46,6 +46,11 @@ public class VfxManager : MainUniversalManagerFramework
     private static readonly UnityEvent _onLightShift = new();
 
     /// <summary>
+    /// Triggers light flickering for the Slytherin Horror Moment
+    /// </summary>
+    private static readonly UnityEvent _onLightFlicker = new();
+
+    /// <summary>
     /// Sets up the object pool of all vfx
     /// </summary>
     private void SetUpAllVisualEffectsInGame()
@@ -147,6 +152,11 @@ public class VfxManager : MainUniversalManagerFramework
         _onLightShift?.Invoke();
     }
 
+    public void InvokeOnLightFlicker()
+    {
+        _onLightFlicker?.Invoke();
+    }
+
     #endregion
 
     #region Getters
@@ -160,7 +170,15 @@ public class VfxManager : MainUniversalManagerFramework
     public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[PLUME_SMOKE_ID];
     #endregion
 
+    /// <summary>
+    /// Returns the light shift event
+    /// </summary>
     public UnityEvent GetOnLightShiftEvent() => _onLightShift;
+
+    /// <summary>
+    /// Returns the light flicker event
+    /// </summary>
+    public UnityEvent GetOnLightFlickerEvent() => _onLightFlicker;
 
     #endregion
 }
