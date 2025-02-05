@@ -2,7 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 // Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick, 
-//                     Miles Rogers, Nick Rice
+//                     Miles Rogers, Nick Rice, Charlie Polonus
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
