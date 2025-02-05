@@ -7,15 +7,22 @@
 *****************************************************************************/
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+/// <summary>
+/// This is a light switch that can be interacted with
+/// </summary>
 public class LightInteractable : MonoBehaviour, IPlayerInteractable
 {
     [SerializeField]
-    private Light realLightBulb;
+    private Light _realLightBulb;
 
-    private float baseIntensity = 10f;
+    [SerializeField]
+    private float _baseIntensity = 10f;
+    [SerializeField] 
+    private float _lengthOfFlickering;
 
-    private IEnumerator causeLightFlicker;
+    private IEnumerator _causeLightFlicker;
 
     private WaitForSeconds lastSecondBeforeTurnOff = new WaitForSeconds(1f);
 
@@ -25,16 +32,16 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void OnInteractedByPlayer()
     {
-        if (causeLightFlicker != null)
+        if (_causeLightFlicker != null)
         {
-            realLightBulb.intensity = 0f;
-            StopCoroutine(causeLightFlicker);
-            causeLightFlicker = null;
+            _realLightBulb.intensity = 0f;
+            StopCoroutine(_causeLightFlicker);
+            _causeLightFlicker = null;
         }
         else
         {
-            causeLightFlicker = Flickering();
-            StartCoroutine(causeLightFlicker);
+            _causeLightFlicker = Flickering();
+            StartCoroutine(_causeLightFlicker);
         }
     }
 
@@ -47,10 +54,10 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
 
         for (float i = 0; i < randomTimeOn-1f; i += Random.Range(randomTimeOn/5f, randomTimeOn/2f))
         {
-            realLightBulb.intensity = Random.Range(.1f,baseIntensity);
+            _realLightBulb.intensity = Random.Range(.1f,_baseIntensity);
             yield return new WaitForSeconds(i/2f);
 
-            realLightBulb.intensity = baseIntensity;
+            _realLightBulb.intensity = _baseIntensity;
             yield return new WaitForSeconds(i/2f);
         }
         
@@ -58,8 +65,8 @@ public class LightInteractable : MonoBehaviour, IPlayerInteractable
         
         yield return lastSecondBeforeTurnOff;
 
-        causeLightFlicker = null;
+        _causeLightFlicker = null;
 
-        realLightBulb.intensity = 0f;
+        _realLightBulb.intensity = 0f;
     }
 }
