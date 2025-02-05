@@ -3,7 +3,7 @@
 // Author:          Nick Rice
 // Creation Date:   February 4th, 2025
 //
-// Description:     This radio plays 
+// Description:     This object will play a sound and can be temporarily turned off
 ******************************************************************************/
 using System;
 using System.Collections;
@@ -14,6 +14,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+/// <summary>
+/// This object will play a sound and can be temporarily turned off
+/// </summary>
 public class SoundInteractable : MonoBehaviour, IPlayerInteractable
 {
     [SerializeField]

@@ -13,6 +13,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+/// <summary>
+/// A fan oscillates back and forth, can be turned off, and plays sfx
+/// </summary>
 public class FanInteractable : MonoBehaviour, IPlayerInteractable
 {
     private IEnumerator turnTheFan;
@@ -32,6 +35,10 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
 
     public float timerCounter = 0f;
     
+    /// <summary>
+    /// Grabs the transform of the turning part of the fan
+    /// Initializes the vectors for where the fan is supposed to turn to
+    /// </summary>
     private void Start()
     {
         makeRotate = topFan.transform;
@@ -39,13 +46,9 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
         _maxLeftRotation = new Vector3(0, _maxLeftTurn, 0);
     }
 
-    /*private void Update()
-    {
-        makeRotate.eulerAngles = 
-            Vector3.Lerp(_maxRightRotation,_maxLeftRotation, (Mathf.Sin(.5f * timerCounter) +1)/2);
-        timerCounter += Time.deltaTime;
-    }*/
-
+    /// <summary>
+    /// Turns the fan on or off; inverses what it currently is
+    /// </summary>
     public void OnSoundChange()
     {
         if (turnTheFan == null)
@@ -60,6 +63,9 @@ public class FanInteractable : MonoBehaviour, IPlayerInteractable
         }
     }
 
+    /// <summary>
+    /// This turns the fan
+    /// </summary>
     private IEnumerator FanTurning()
     {
         while (true)
