@@ -34,6 +34,14 @@ public class FmodSfxEvents : MonoBehaviour
 
     #endregion Boss
 
+    #region Interactables
+
+    [field: Header("Interactable")]
+    
+    [field: SerializeField] public EventReference RadioSong { get; private set; }
+
+    #endregion
+    
     #region Player
 
     [field: Header("Player")]
