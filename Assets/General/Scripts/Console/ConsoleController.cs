@@ -387,13 +387,13 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void Forward()
     {
-        if (SceneManager.GetActiveScene().buildIndex == SceneManager.sceneCountInBuildSettings -1)
+        if (SceneManager.GetActiveScene().buildIndex == 4)
         {
             AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(0,0);
         }
         else
         {
-            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex + 1,0);
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex + 1, 0);
         }
         
     }
@@ -404,11 +404,11 @@ public class ConsoleController : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.sceneCountInBuildSettings-1,0);
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(4,0);
         }
         else
         {
-            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex - 1,0);
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex -1,0);
         }
     }
 
@@ -422,7 +422,7 @@ public class ConsoleController : MonoBehaviour
         //if its a number
         if (int.TryParse(indexAsString, out index))
         {
-            if (index >= 0 && index <= SceneManager.sceneCountInBuildSettings)
+            if (index >= 0 && index <= 4)
             {
                 //load the scene
                 AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(index, 0);
