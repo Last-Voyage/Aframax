@@ -70,10 +70,10 @@ public class ProceduralVine : MonoBehaviour
         {
             Retracting();
         }
-        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _isRetracting){
+        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _isRetracting)
+        {
             _isRetracting = false;
             _baseOfVine.parent.gameObject.SetActive(false);
-            Debug.Log("done retracting");
         }
     }
 
