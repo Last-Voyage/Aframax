@@ -16,15 +16,6 @@ public class FmodSfxEvents : MonoBehaviour
 {
     public static FmodSfxEvents Instance;
 
-    #region ui
-
-    [field: Header("UI")]
-    [field: SerializeField] public EventReference MasterVolumeSettingsChanged { get; private set; }
-    [field: SerializeField] public EventReference SfxVolumeSettingsChanged { get; private set; }
-    [field: SerializeField] public EventReference AmbienceVolumeSettingsChanged { get; private set; }
-
-    #endregion
-
     #region Boss
 
     [field: Header("Boss")]
