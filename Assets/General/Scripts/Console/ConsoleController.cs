@@ -12,6 +12,7 @@ using Cinemachine;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -60,6 +61,12 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private Button _infiniteAmmoModeButton;
     [SerializeField] private TMP_Text _infiniteAmmoFeedbackText;
 
+    //scene skiping
+    [SerializeField] private TMP_InputField _sceneIndex;
+    [SerializeField] private Button _moveToSceneButton;
+    [SerializeField] private Button _moveSceneForwardButton;
+    [SerializeField] private Button _moveSceneBackwardButton;
+
     private PlayerInputMap _playerInput;
 
     public static ConsoleController Instance;
@@ -104,6 +111,9 @@ public class ConsoleController : MonoBehaviour
         _infiniteFocusToggleButton.GetComponent<Button>().onClick.AddListener(ToggleInfiniteFocus);
         _harpoonGun = GameObject.FindObjectOfType<HarpoonGun>();
         _infiniteAmmoModeButton.onClick.AddListener(ToggleInfiniteAmmo);
+        _moveSceneBackwardButton.onClick.AddListener(Back);
+        _moveSceneForwardButton.onClick.AddListener(Forward);
+        _moveToSceneButton.onClick.AddListener(MoveToScene);
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -370,6 +380,58 @@ public class ConsoleController : MonoBehaviour
 
     #endregion
 
+    #region Scene Skiping
+
+    /// <summary>
+    /// moves the player forward a scene
+    /// </summary>
+    private void Forward()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 4)
+        {
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(0,0);
+        }
+        else
+        {
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex + 1, 0);
+        }
+        
+    }
+    /// <summary>
+    /// moves the player backwards a scene
+    /// </summary>
+    private void Back()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(4,0);
+        }
+        else
+        {
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex -1,0);
+        }
+    }
+
+    /// <summary>
+    /// moves the player to a specific scene
+    /// </summary>
+    private void MoveToScene()
+    {
+        string indexAsString = _sceneIndex.text;
+        int index = 0;
+        //if its a number
+        if (int.TryParse(indexAsString, out index))
+        {
+            if (index >= 0 && index <= 4)
+            {
+                //load the scene
+                AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(index, 0);
+            }
+        }
+    }
+
+    #endregion
+
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
@@ -383,6 +445,9 @@ public class ConsoleController : MonoBehaviour
         _playerInput.Disable();
         _infiniteFocusToggleButton.GetComponent<Button>().onClick.RemoveAllListeners();
         _infiniteAmmoModeButton.onClick.RemoveAllListeners();
+        _moveSceneBackwardButton.onClick.RemoveAllListeners();
+        _moveSceneForwardButton.onClick.RemoveAllListeners();
+        _moveToSceneButton.onClick.RemoveAllListeners();
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
