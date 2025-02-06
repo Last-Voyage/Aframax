@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       WeakPointHandler.cs
 // Author:          Ryan Swanson
-// Contributors:    Andrea Swihart-DeCoster, Tommy Roberts
+// Contributors:    Andrea Swihart-DeCoster
 // Creation Date:   September 22, 2024
 //
 // Description:     Spawns the weak points on some part of the boss (tentacles, etc.)
@@ -23,7 +23,7 @@ public class WeakPointHandler : MonoBehaviour
     [Tooltip("The time between spawning weak points")]
     [SerializeField] private float _spawnInterval;
 
-    [SerializeField] private bool _retractOnWeakPointsKilled;
+    [SerializeField] private bool _destroyOnAllWeakPointsDestroyed;
 
     [Header("Weak Point Options")]
     [SerializeField] private GameObject _weakPointPrefab;
@@ -37,7 +37,7 @@ public class WeakPointHandler : MonoBehaviour
     private List<Transform> _possibleSpawnLocations;
     private GameObject _spawnedWeakPointsParent;
 
-    private ProceduralVine _proceduralVine;
+    private GameObject _parentGameObject;
 
     /// <summary>
     /// Num of weak points spawned
@@ -54,15 +54,12 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private Coroutine _weakPointSpawnProcessCoroutine;
 
-    private readonly UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
-    
-    /// <summary>
-    /// initalizes spawn locations
-    /// </summary>
+    public UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
+
     private void Awake()
     {
+        //_parentGameObject = transform.parent.gameObject; commented out because I was getting a null error
         InitializeSpawnLocations();
-        _proceduralVine = GetComponentInChildren<ProceduralVine>();
     }
 
     // Start is called before the first frame update
@@ -192,9 +189,9 @@ public class WeakPointHandler : MonoBehaviour
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
             _spawnLocation.transform.position);
 
-        if(_retractOnWeakPointsKilled)
+        if(_destroyOnAllWeakPointsDestroyed)
         {
-            _proceduralVine.StartRetract();
+            Destroy(gameObject);
         }
     }
 
