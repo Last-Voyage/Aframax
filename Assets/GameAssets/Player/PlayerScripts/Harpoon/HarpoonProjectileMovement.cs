@@ -91,9 +91,31 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <param name="block"></param> the collider
     private void OnTriggerEnter(Collider block)
     {
+        Debug.Log(block.gameObject);
         if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
         {
-            _isHit = true;
+            //only stop if the trigger is enemy or environment
+            if(block.CompareTag("Enemy") || block.CompareTag("Environment"))
+            {
+                _isHit = true;
+            }  
+        }
+    }
+
+    /// <summary>
+    /// On trigger Enter, activated once harpoon hits something. used to stop harpoon when it hits walls
+    /// </summary>
+    /// <param name="block"></param> the collider
+    private void OnCollisionEnter(Collision block)
+    {
+        Debug.Log(block.gameObject);
+        if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
+        {
+            //only stop if the trigger is enemy or environment
+            if(block.collider.CompareTag("Enemy") || block.collider.CompareTag("Environment"))
+            {
+                _isHit = true;
+            }  
         }
     }
 
