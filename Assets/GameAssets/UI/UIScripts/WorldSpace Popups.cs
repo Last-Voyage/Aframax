@@ -86,4 +86,14 @@ public class WorldSpacePopups : MonoBehaviour
 
         objectSpriteReference = GetComponent<SpriteRenderer>();
     }
+
+    public void DisablePopUp()
+    {
+        objectSpriteReference.enabled = false;
+    }
+
+    public void EnablePopUp()
+    {
+        objectSpriteReference.enabled = true;
+    }
 }
