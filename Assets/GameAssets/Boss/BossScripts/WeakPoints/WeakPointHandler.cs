@@ -38,6 +38,7 @@ public class WeakPointHandler : MonoBehaviour
     private GameObject _spawnedWeakPointsParent;
 
     private GameObject _parentGameObject;
+    private ProceduralVine _proceduralVine;
 
     /// <summary>
     /// Num of weak points spawned
@@ -63,6 +64,7 @@ public class WeakPointHandler : MonoBehaviour
     {
         //_parentGameObject = transform.parent.gameObject; commented out because I was getting a null error
         InitializeSpawnLocations();
+        _proceduralVine = GetComponentInChildren<ProceduralVine>();
     }
 
     // Start is called before the first frame update
@@ -194,7 +196,7 @@ public class WeakPointHandler : MonoBehaviour
 
         if(_destroyOnAllWeakPointsDestroyed)
         {
-            Destroy(gameObject);
+            _proceduralVine.StartRetract();
         }
     }
 
