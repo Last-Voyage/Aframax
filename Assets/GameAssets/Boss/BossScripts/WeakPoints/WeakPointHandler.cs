@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       WeakPointHandler.cs
 // Author:          Ryan Swanson
-// Contributors:    Andrea Swihart-DeCoster
+// Contributors:    Andrea Swihart-DeCoster, Tommy Roberts
 // Creation Date:   September 22, 2024
 //
 // Description:     Spawns the weak points on some part of the boss (tentacles, etc.)
@@ -23,7 +23,7 @@ public class WeakPointHandler : MonoBehaviour
     [Tooltip("The time between spawning weak points")]
     [SerializeField] private float _spawnInterval;
 
-    [SerializeField] private bool _destroyOnAllWeakPointsDestroyed;
+    [SerializeField] private bool _retractOnWeakPointsKilled;
 
     [Header("Weak Point Options")]
     [SerializeField] private GameObject _weakPointPrefab;
@@ -32,11 +32,12 @@ public class WeakPointHandler : MonoBehaviour
 
     [Tooltip("The number of weak points you need to kill to destroy this object")]
     [SerializeField] private float _numNeededToDestroy;
+    [SerializeField] private Transform _spawnLocation;
 
     private List<Transform> _possibleSpawnLocations;
     private GameObject _spawnedWeakPointsParent;
 
-    private GameObject _parentGameObject;
+    private ProceduralVine _proceduralVine;
 
     /// <summary>
     /// Num of weak points spawned
@@ -54,17 +55,28 @@ public class WeakPointHandler : MonoBehaviour
     private Coroutine _weakPointSpawnProcessCoroutine;
 
     private readonly UnityEvent<WeakPointHandler> _onAllWeakPointsDestroyedEvent = new();
-
+    
+    /// <summary>
+    /// initalizes spawn locations
+    /// </summary>
     private void Awake()
     {
-        _parentGameObject = transform.parent.gameObject;
         InitializeSpawnLocations();
+        _proceduralVine = GetComponentInChildren<ProceduralVine>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         StartWeakPointSpawning(); 
+    }
+
+    /// <summary>
+    /// editor funciton because weak points disable themselves in my test scene and do not activate or spawn - Tommy
+    /// </summary>
+    public void SpawnWeakPointEditor()
+    {
+        StartWeakPointSpawning();
     }
 
     /// <summary>
@@ -124,11 +136,9 @@ public class WeakPointHandler : MonoBehaviour
         /* The weak point destroyed function is added as a listener to the spawns  weak points death event so the 
          * Handler can properly track its lifespan.
         */
-        WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, weakPointSpawnLoc.position,
-            weakPointSpawnLoc.rotation).GetComponentInChildren<WeakPoint>();
+        WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, _spawnLocation, false).GetComponentInChildren<WeakPoint>();
 
         spawnedWeakPoint.HealthComponent.InitializeHealth(_weakPointHealth);
-        spawnedWeakPoint.transform.parent = _spawnedWeakPointsParent.transform;
 
         _weakPointSpawnCounter++;
         spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
@@ -180,11 +190,11 @@ public class WeakPointHandler : MonoBehaviour
     {
         InvokeAllWeakPointsDestroyedEvent();
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
-            _parentGameObject.transform.position);
+            _spawnLocation.transform.position);
 
-        if(_destroyOnAllWeakPointsDestroyed)
+        if(_retractOnWeakPointsKilled)
         {
-            Destroy(gameObject.transform.parent.gameObject);
+            _proceduralVine.StartRetract();
         }
     }
 

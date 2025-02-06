@@ -37,6 +37,14 @@ public class GeneratorInteractable : InventoryInteractableTrigger
             (transform.position + _vfxDisplacement, transform.rotation);
     }
 
+    /// <summary>
+    /// This function plays the audio when repaired
+    /// </summary>
+    public void GeneratorRepair()
+    {
+        RuntimeSfxManager.APlayOneShotSfxAttached?.Invoke(FmodSfxEvents.Instance.GeneratorFixed, gameObject);
+    }
+
     /// Note for future engineers: The method OnInteractedByPlayer() still exists, it just runs the base script
     /// InventoryInteractableTrigger, if you want to override it you still can
 }

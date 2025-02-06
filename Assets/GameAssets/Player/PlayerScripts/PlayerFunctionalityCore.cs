@@ -90,7 +90,10 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribeToMovementInput()
     {
-        _playerMovementController.SubscribeInput();
+        if(PlayerSpawnPoint.Instance.CanSpawnWithMovement)
+        {
+            _playerMovementController.SubscribeInput();
+        }
     }
 
     /// <summary>
