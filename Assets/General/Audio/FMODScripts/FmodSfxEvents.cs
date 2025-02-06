@@ -24,13 +24,21 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference LimbAttack { get; private set; }
     [field: SerializeField] public EventReference SceneStart { get; private set; }
     [field: SerializeField] public EventReference LimbSpawn { get; private set; }
+    [field: SerializeField] public EventReference LimbMove { get; private set; }
+
+    [field: Tooltip("Time to fade in the limb movement")]
+    [field: SerializeField] public float LimbMoveFadeInTime { get; private set; }
+
+    [field: Tooltip("Time to fade out the limb movement")]
+    [field: SerializeField] public float LimbMoveFadeOutTime { get; private set; }
 
     #endregion Boss
 
     #region Player
 
     [field: Header("Player")]
-    [field: SerializeField] public EventReference HardSurfaceWalking { get; private set; }
+    [field: SerializeField] public EventReference AboveDeckWalking { get; private set; }
+    [field: SerializeField] public EventReference BelowDeckWalking { get; private set; }
     [field: Tooltip("Time between each footstep")]
     [field: SerializeField] public float FootstepDelay { get; private set; } = 0.3f;
     [field: Tooltip("Time between each footstep")]
@@ -47,11 +55,16 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference HarpoonReload { get; private set; }
     [field: SerializeField] public EventReference HarpoonHitBoat { get; private set; }
     [field: SerializeField] public EventReference HarpoonWaterSplash { get; private set; }
-    
+
 
     #endregion Harpoon
 
     #endregion Player
+
+    #region Environment
+    [field: Header("Environment")]
+    [field: SerializeField] public EventReference GeneratorFixed { get; private set; }
+    #endregion
 
     public void SetUpInstance()
     {
