@@ -87,13 +87,12 @@ public class WorldSpacePopups : MonoBehaviour
         objectSpriteReference = GetComponent<SpriteRenderer>();
     }
 
-    public void DisablePopUp()
+    /// <summary>
+    /// used to make objects that turn on or turn off the visuals of this object
+    /// </summary>
+    /// <param name="isTurnedOn"></param>
+    public void TogglePopUpSprite(bool isTurnedOn)
     {
-        objectSpriteReference.enabled = false;
-    }
-
-    public void EnablePopUp()
-    {
-        objectSpriteReference.enabled = true;
+        objectSpriteReference.enabled = isTurnedOn;
     }
 }
