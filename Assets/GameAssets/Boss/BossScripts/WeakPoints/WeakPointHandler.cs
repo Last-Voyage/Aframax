@@ -61,7 +61,6 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        //_parentGameObject = transform.parent.gameObject; commented out because I was getting a null error
         InitializeSpawnLocations();
         _proceduralVine = GetComponentInChildren<ProceduralVine>();
     }
