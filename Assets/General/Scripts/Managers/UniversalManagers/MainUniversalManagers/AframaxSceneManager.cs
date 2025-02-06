@@ -170,8 +170,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         
         
 
-        //Can start the starting scene transition animation here
-        //Will be implemented when scene transition work occurs
+        //start the starting scene transition animation here
         SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionIntroAnimTrigger);
 
         //turn off buttons
@@ -192,8 +191,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
         InvokeOnSceneChangedEvent();
 
-        //Can start the ending scene transition animation here
-        //Will be implemented when scene transition work occurs
+        //start the ending scene transition animation here
         SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionExitAnimTrigger);
 
         //Sets the coroutine to null to allow for new scene loading to occur
