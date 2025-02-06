@@ -21,5 +21,6 @@ public class PottyBreak : MonoBehaviour
     public void SpawnTentacle()
     {
         Instantiate(_tentacle, transform.position, Quaternion.identity);
+        CameraManager.Instance.InvokeOnJumpscare();
     }
 }
