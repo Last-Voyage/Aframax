@@ -6,6 +6,7 @@
 // Brief Description : This script controls the procedural "room guarding movement" functionality
 //                     as well as the procedural "lunge attack"
 *****************************************************************************/
+using FMOD.Studio;
 using System.Collections;
 using UnityEngine;
 using PathCreation;
@@ -27,6 +28,8 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private Transform _flowerHeadTransform;
     [SerializeField] private Transform _followTransform;
     [SerializeField] private ChainIKConstraint _chainIK;
+    [SerializeField] private Rig _dampedTransformRig;
+    [SerializeField] private Rig _chainIKRig;
     [SerializeField] private RigBuilder _rigBuilder;
     [SerializeField] private float _rearBackTime = 0.3f;
     [SerializeField] private float _rearBackDistance = 1f;
@@ -34,17 +37,47 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _lungeToPlayerDuration = .2f;
     [SerializeField] private float _moveBackAfterAttackTime = 2f;
 
+    [Header("Retract stuff")]
+    [SerializeField] private PathCreator _retractPath; // The target to move toward
+    [SerializeField] private Transform _baseOfVine;
+    [SerializeField] private float _retractSpeed = 5f; // Speed of movement
+    [SerializeField] private float _retractDistance = 0;
+
+    private bool _isRetracting = false;
+    private EventInstance _movementEventInstance;
+    
     /// <summary>
-    /// Updates the vine movement only right now
+    /// Initialize audio
+    /// </summary>
+    private void Start()
+    {
+        CreateMovementAudio();
+        StartMovementAudio();
+    }
+
+    /// <summary>
+    /// Updates the vine movement only right now and also retracts and disables vine when told to
     /// </summary>
     private void Update() 
     {
-        if(!_isAttacking)
+        if(!_isAttacking && !_isRetracting)
         {
             //move along path
             MoveAlongPath();
         }
+
+        if(_isRetracting && _retractPath.path.length > _retractDistance)
+        {
+            Retracting();
+        }
+        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _isRetracting)
+        {
+            _isRetracting = false;
+            _baseOfVine.parent.gameObject.SetActive(false);
+        }
     }
+
+    #region Attack
 
     /// <summary>
     /// Moves the vine along the given path
@@ -56,6 +89,39 @@ public class ProceduralVine : MonoBehaviour
     }
 
     /// <summary>
+    /// Creates the initial instance of the movement audio
+    /// </summary>
+    private void CreateMovementAudio()
+    {
+        _movementEventInstance = RuntimeSfxManager.Instance.
+            CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, _flowerHeadTransform.gameObject);
+    }
+
+    /// <summary>
+    /// Starts playing the movement audio
+    /// </summary>
+    private void StartMovementAudio()
+    {
+        if(!_movementEventInstance.isValid())
+        {
+            return;
+        }
+        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeInTime);
+    }
+
+    /// <summary>
+    /// Stops playing the movement audio
+    /// </summary>
+    private void StopMovementAudio()
+    {
+        if (!_movementEventInstance.isValid())
+        {
+            return;
+        }
+        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeOutTime);
+    }
+
+    /// <summary>
     /// does the movement for the wind up and lunge attack
     /// </summary>
     /// <param name="playerPosition"></param>
@@ -63,6 +129,7 @@ public class ProceduralVine : MonoBehaviour
     private IEnumerator Attack(Vector3 playerPosition)
     {
         _isAttacking = true;
+        StopMovementAudio();
 
         // Calculate the direction from the current object to the target object (X and Z only)
         Vector3 direction = (playerPosition - _followTransform.position).normalized;
@@ -82,6 +149,8 @@ public class ProceduralVine : MonoBehaviour
 
         //snaps to player
         _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
+        //Plays attack audio
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
         //move back to og position
@@ -90,6 +159,7 @@ public class ProceduralVine : MonoBehaviour
 
         // //attack done
         _isAttacking = false;
+        StartMovementAudio();
     }
 
     /// <summary>
@@ -114,4 +184,32 @@ public class ProceduralVine : MonoBehaviour
     {
         return collider.gameObject.GetComponent<PlayerCollision>();
     }
+
+    #endregion
+
+    #region Retract
+
+    /// <summary>
+    /// starts the vine retract
+    /// </summary>
+    public void StartRetract()
+    {
+        _isRetracting = true;
+        _chainIKRig.weight = 0;
+        _dampedTransformRig.weight = 1;
+    }
+
+    /// <summary>
+    /// retracts the vine
+    /// </summary>
+    private void Retracting()
+    {
+        _retractDistance += Time.deltaTime * _retractSpeed;
+        _baseOfVine.position = _retractPath.path.GetPointAtDistance(_retractDistance);
+        _baseOfVine.right = _retractPath.path.GetDirectionAtDistance(_retractDistance);
+    }
+
+    #endregion
+
+
 }
