@@ -404,7 +404,7 @@ public class ConsoleController : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.sceneCountInBuildSettings,0);
+            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(SceneManager.sceneCountInBuildSettings-1,0);
         }
         else
         {
