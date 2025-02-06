@@ -233,7 +233,8 @@ public class HarpoonGun : MonoBehaviour
         {
             VfxManager.Instance.GetMuzzleSmokeVfx()?.PlayNextVfxInPool(transform.position,transform.rotation);
         }
-        
+
+        _reticle.UpdateAmmoDisplay();
         
         ResetFocus();
 
@@ -276,7 +277,10 @@ public class HarpoonGun : MonoBehaviour
         //nabii added infinite ammo functionality here
         if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
+            _reticle.ToggleAmmoIcons();
+
             PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
+
             float reloadTimeRemaining = _reloadTime;
             while (reloadTimeRemaining > 0)
             {
@@ -293,7 +297,8 @@ public class HarpoonGun : MonoBehaviour
                 //do normal game stuff here
                 _currentReserveAmmo--;
             }
-            
+
+            _reticle.ToggleAmmoIcons();
 
             HarpoonFullyReloaded();
         }
@@ -328,6 +333,8 @@ public class HarpoonGun : MonoBehaviour
             StartFocusingHarpoon();
         }
 
+        _reticle.RestockAmmoIcons();
+
         PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
     }
 
@@ -351,6 +358,8 @@ public class HarpoonGun : MonoBehaviour
 
         _currentReserveAmmo += targetAmmo;
         ammoRack.RemoveHarpoons(targetAmmo);
+
+        _reticle.RestockAmmoIcons();
 
         PlayerManager.Instance.InvokeOnHarpoonRestockCompleteEvent(targetAmmo);
     }
