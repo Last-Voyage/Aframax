@@ -1,22 +1,9 @@
-/******************************************************************************
-// File Name:       WeakPointEditor.cs
-// Author:          Tommy Roberts
-// Creation Date:   Feburary 4, 2025
-//
-// Description:     Lets player spawn weakpoints from editor
-******************************************************************************/
 using UnityEngine;
 using UnityEditor;
 
-/// <summary>
-/// Custom editor class for the weakPointHandler
-/// </summary>
 [CustomEditor(typeof(WeakPointHandler))]
 public class WeakPointEditor : Editor
 {
-    /// <summary>
-    /// basic override for OnInspectorGUI and added a button for spawning a point
-    /// </summary>
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
