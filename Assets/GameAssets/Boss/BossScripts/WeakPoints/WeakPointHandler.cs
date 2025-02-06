@@ -23,7 +23,7 @@ public class WeakPointHandler : MonoBehaviour
     [Tooltip("The time between spawning weak points")]
     [SerializeField] private float _spawnInterval;
 
-    [SerializeField] private bool _destroyOnAllWeakPointsDestroyed;
+    [SerializeField] private bool _retractOnWeakPointsKilled;
 
     [Header("Weak Point Options")]
     [SerializeField] private GameObject _weakPointPrefab;
@@ -37,7 +37,7 @@ public class WeakPointHandler : MonoBehaviour
     private List<Transform> _possibleSpawnLocations;
     private GameObject _spawnedWeakPointsParent;
 
-    private GameObject _parentGameObject;
+    private ProceduralVine _proceduralVine;
 
     /// <summary>
     /// Num of weak points spawned
@@ -63,6 +63,7 @@ public class WeakPointHandler : MonoBehaviour
     {
         //_parentGameObject = transform.parent.gameObject; commented out because I was getting a null error
         InitializeSpawnLocations();
+        _proceduralVine = GetComponentInChildren<ProceduralVine>();
     }
 
     // Start is called before the first frame update
@@ -192,9 +193,9 @@ public class WeakPointHandler : MonoBehaviour
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
             _spawnLocation.transform.position);
 
-        if(_destroyOnAllWeakPointsDestroyed)
+        if(_retractOnWeakPointsKilled)
         {
-            Destroy(gameObject);
+            _proceduralVine.StartRetract();
         }
     }
 
