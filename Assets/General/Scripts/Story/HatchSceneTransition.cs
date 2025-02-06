@@ -15,10 +15,11 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class HatchSceneTransition : MonoBehaviour
 {
+    [SerializeField] private int _sceneToLoadIndex;
     [SerializeField] private int _sceneTransitionPointer;
     public void EnterHatch()
     {
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID
-            (AframaxSceneManager.Instance.MazeSceneIndex, _sceneTransitionPointer);
+            (_sceneToLoadIndex, _sceneTransitionPointer);
     }
 }

@@ -45,6 +45,7 @@ public class PlayerMovementController : MonoBehaviour
     private float _accelerationProgress = 0;
     private Coroutine _accelerationCoroutine;
     private Coroutine _deccelerationCoroutine;
+    private bool _isInputSubscribed;
 
     [Space]
     [Header("Focusing Movement")]
@@ -120,6 +121,11 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
+        if (_isInputSubscribed)
+        {
+            return;
+        }
+
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
@@ -127,6 +133,8 @@ public class PlayerMovementController : MonoBehaviour
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
+
+        _isInputSubscribed = true;
     }
 
     /// <summary>
@@ -134,8 +142,13 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     public void UnsubscribeInput()
     {
+        if (!_isInputSubscribed)
+        {
+            return;
+        }
         _playerInput = null;
         StopCoroutine(_movementCoroutine);
+        _isInputSubscribed = false;
     }
     #endregion
 

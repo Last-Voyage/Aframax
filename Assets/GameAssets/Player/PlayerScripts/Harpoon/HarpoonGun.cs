@@ -2,7 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 // Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick, 
-//                     Miles Rogers, Nick Rice
+//                     Miles Rogers, Nick Rice, Charlie Polonus
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -12,6 +12,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Cinemachine;
 
 /// <summary>
 /// Provides the functionality for the harpoon weapon
@@ -112,6 +113,8 @@ public class HarpoonGun : MonoBehaviour
 
     private PlayerReticle _reticle;
 
+    private CinemachineImpulseSource _cinemachineImpulse;
+
     #endregion
 
     #region Setup
@@ -126,6 +129,8 @@ public class HarpoonGun : MonoBehaviour
         SubscribeToEvents();
 
         _reticle = GameObject.FindObjectOfType<PlayerReticle>();
+
+        _cinemachineImpulse = GetComponentInChildren<CinemachineImpulseSource>();
     }
 
     /// <summary>
@@ -239,6 +244,9 @@ public class HarpoonGun : MonoBehaviour
 
         //Camera shake
         CinemachineShake.Instance.ShakeCamera(_recoilCameraShakeIntensity, _recoilCameraShakeTime, false);
+
+        // Shake the camera with recoil
+        _cinemachineImpulse.GenerateImpulse(Camera.main.transform.forward);
 
         PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
 
