@@ -35,6 +35,8 @@ public class AudioSettings : MonoBehaviour
     private float _voiceVolume;
     private float _musicVolume;
 
+    private bool _hasSceneLoaded = false;
+
     /// <summary>
     /// When the script is enabled, set the relative sliders to the correct values
     /// </summary>
@@ -64,6 +66,9 @@ public class AudioSettings : MonoBehaviour
         {
             _musicSlider.value = volumes[4];
         }
+
+        //so the sfx don't play before the scene is done loading
+        _hasSceneLoaded = true;
     }
 
     /// <summary>
@@ -76,6 +81,12 @@ public class AudioSettings : MonoBehaviour
         _masterVolume = _masterSlider.value;
         // Set the volume and save the data
         _activeVca.setVolume(_masterVolume);
+
+        if (_hasSceneLoaded)
+        {
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.MasterVolumeSettingsChanged, Vector3.zero);
+        }
+
         SaveData();
     }
 
@@ -89,6 +100,12 @@ public class AudioSettings : MonoBehaviour
         _sfxVolume = _sfxSlider.value;
         // Set the volume and save the data
         _activeVca.setVolume(_sfxVolume);
+
+        if (_hasSceneLoaded)
+        {
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.SfxVolumeSettingsChanged, Vector3.zero);
+        }
+
         SaveData();
     }
 
@@ -102,6 +119,12 @@ public class AudioSettings : MonoBehaviour
         _ambienceVolume = _ambienceSlider.value;
         // Set the volume and save the data
         _activeVca.setVolume(_ambienceVolume);
+
+        if (_hasSceneLoaded)
+        {
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.AmbienceVolumeSettingsChanged, Vector3.zero);
+        }
+
         SaveData();
     }
 
