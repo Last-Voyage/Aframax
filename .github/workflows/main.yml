@@ -81,15 +81,6 @@ jobs:
               message: " "
               avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
               username: GitHub
-
-        # Upload to Drive
-      - name: Upload build folder to Google Drive
-        uses: Jodebu/upload-to-drive@master
-        id: driveUpload
-        with:
-              target: build
-              credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
-              folder: ${{ secrets.DRIVE_UPLOAD_ID }}
         
        # Send Discord message
       - name: Send link to file
