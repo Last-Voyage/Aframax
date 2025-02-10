@@ -29,11 +29,7 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
 
     protected virtual void OnTriggerEnter(Collider col)
     {
-        if(col.CompareTag("Enemy"))
-        {
-            ApplyDamage(col.gameObject);
-        }
-        
+        ApplyDamage(col.gameObject);
     }
 
     /// <summary>

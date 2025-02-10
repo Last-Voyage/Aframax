@@ -1,7 +1,6 @@
 /*********************************************************************************************************************
 // File Name :         HarpoonDamage.cs
 // Author :            Andrea Swihart-DeCoster
-// Contributer :       Tommy Roberts
 // Creation Date :     10/24/24
 //
 // Brief Description : Controls the harpoon damage functionality
@@ -25,11 +24,6 @@ public class HarpoonDamage : BaseDamage
         {
             return;
         }
-        
-        if(damageRecipient.CompareTag("Enemy"))
-        {
-            base.ApplyDamage(damageRecipient);
-        }
-        
+        base.ApplyDamage(damageRecipient);
     }
 }
