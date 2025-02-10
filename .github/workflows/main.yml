@@ -17,7 +17,7 @@ jobs:
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-            title: "Build Started on ${{ github.ref }}"
+            title: "Build Started on ${{ github.ref_name }}"
             message: " "
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
@@ -67,7 +67,7 @@ jobs:
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-            title: "Build Succeeded"
+            title: "Build Succeeded on ${{ github.ref_name }}"
             message: "Artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
@@ -77,7 +77,7 @@ jobs:
         uses: stegzilla/discord-notify@v4
         with:
               webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              title: "Build Failed on ${{ github.ref }}"
+              title: "Build Failed on ${{ github.ref_name }}"
               message: " "
               avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
               username: GitHub
