@@ -1,11 +1,6 @@
 name: Build project
 
-on:
-  workflow_dispatch:
-  pull_request:
-    types:
-      - opened
-      - reopened
+on: [pull_request]
 
 jobs:
   buildForAllSupportedPlatforms:
