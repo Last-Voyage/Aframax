@@ -87,13 +87,12 @@ public class WorldSpacePopups : MonoBehaviour
         _objectSpriteReference = GetComponent<SpriteRenderer>();
     }
 
-    public void DisablePopUp()
+    /// <summary>
+    /// changes whether the object's popup is enabled or not according to the taken bool
+    /// </summary>
+    /// <param name="doesHavePopup"></param>
+    public void TogglePopUp(bool doesHavePopup)
     {
-        _objectSpriteReference.enabled = false;
-    }
-
-    public void EnablePopUp()
-    {
-        _objectSpriteReference.enabled = true;
+        _objectSpriteReference.enabled = doesHavePopup;
     }
 }
