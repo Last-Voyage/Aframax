@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Provides the functionality for scenes to be loaded
@@ -166,15 +167,18 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         {
             InvokeOnLeavingGameplayScene();
         }
-        
-        //Starts loading the scene
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneID);
 
-        //Can start the starting scene transition animation here
-        //Will be implemented when scene transition work occurs
-        
+        //start the starting scene transition animation here
+        SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionIntroAnimTrigger);
+
+        //turn off buttons to prevent doing stuff during transition
+        GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
+
+        //Starts loading the scene
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneID);
 
         //Wait until the asynchronous scene fully loads
         //This exists to hide any screen freeze from loading an intense scene
@@ -185,8 +189,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
         InvokeOnSceneChangedEvent();
 
-        //Can start the ending scene transition animation here
-        //Will be implemented when scene transition work occurs
+        //start the ending scene transition animation here
+        SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionExitAnimTrigger);
 
         //Sets the coroutine to null to allow for new scene loading to occur
         _sceneLoadingCoroutine = null;
@@ -328,8 +332,8 @@ public struct SceneTransition
     /// Strings for animation triggers
     /// </summary>
     [Space]
-    [SerializeField] private string _sceneTransitionIntroAnimTrigger;
-    [SerializeField] private string _sceneTransitionExitAnimTrigger;
+    public string SceneTransitionIntroAnimTrigger;
+    public string SceneTransitionExitAnimTrigger;
 
     #region Getters
     public string GetSceneTransitionName() => _sceneTransitionName;
