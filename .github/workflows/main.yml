@@ -1,10 +1,11 @@
 name: Build project
 
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - main
+  workflow_dispatch:
+  pull_request:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - 'development**'
 
 jobs:
   buildForAllSupportedPlatforms:
@@ -21,7 +22,7 @@ jobs:
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-            title: "Build Started"
+            title: "Build Started on ${{ github.ref_name }}"
             message: " "
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
@@ -71,7 +72,7 @@ jobs:
         uses: stegzilla/discord-notify@v4
         with:
             webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-            title: "Build Succeeded"
+            title: "Build Succeeded on ${{ github.ref_name }}"
             message: "Artifact: ${{ steps.artifact-upload-step.outputs.artifact-url }}"
             avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
             username: GitHub
@@ -81,26 +82,7 @@ jobs:
         uses: stegzilla/discord-notify@v4
         with:
               webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              title: "Build Failed"
+              title: "Build Failed on ${{ github.ref_name }}"
               message: " "
-              avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-              username: GitHub
-
-        # Upload to Drive
-      - name: Upload build folder to Google Drive
-        uses: Jodebu/upload-to-drive@master
-        id: driveUpload
-        with:
-              target: build
-              credentials: ${{ secrets.SERVICEACCOUNT_KEY }}
-              folder: ${{ secrets.DRIVE_UPLOAD_ID }}
-        
-       # Send Discord message
-      - name: Send link to file
-        uses: stegzilla/discord-notify@v4
-        with:
-              webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              title: "Build Report"
-              message: "File uploaded to ${{ steps.driveUpload.outputs.link }}"
               avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
               username: GitHub
