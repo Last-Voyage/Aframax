@@ -3,8 +3,6 @@ name: Build project
 on:
   workflow_dispatch:
     pull_request:
-      branches:
-        - development-alpha
 
 jobs:
   buildForAllSupportedPlatforms:
