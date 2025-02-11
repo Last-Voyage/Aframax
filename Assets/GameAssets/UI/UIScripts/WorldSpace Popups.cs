@@ -21,7 +21,7 @@ public class WorldSpacePopups : MonoBehaviour
 
     private GameObject _playerReference;
 
-    private Sprite objectSpriteReference;
+    private SpriteRenderer _objectSpriteReference;
 
     [SerializeField]
     private TextMeshProUGUI _popUpTextContainer;
@@ -62,12 +62,12 @@ public class WorldSpacePopups : MonoBehaviour
             //check proximity to player
             if (Vector3.Distance(_playerReference.transform.position, transform.position) >= _playerDetectionProximity)
             {
-                objectSpriteReference = _farDistanceSprite;
+                _objectSpriteReference.sprite = _farDistanceSprite;
                 _popUpTextContainer.text = _farText;
             }
             else
             {
-                objectSpriteReference = _closeDistanceSprite;
+                _objectSpriteReference.sprite = _closeDistanceSprite;
                 _popUpTextContainer.text = _closeText;
             }
         }
@@ -84,6 +84,15 @@ public class WorldSpacePopups : MonoBehaviour
         _playerCamera = PlayerFunctionalityCore.Instance.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
         _playerReference = PlayerFunctionalityCore.Instance.transform.GetChild(1).gameObject;
 
-        objectSpriteReference = GetComponent<SpriteRenderer>().sprite;
+        _objectSpriteReference = GetComponent<SpriteRenderer>();
+    }
+
+    /// <summary>
+    /// changes whether the object's popup is enabled or not according to the taken bool
+    /// </summary>
+    /// <param name="doesHavePopup"></param>
+    public void TogglePopUp(bool doesHavePopup)
+    {
+        _objectSpriteReference.enabled = doesHavePopup;
     }
 }
