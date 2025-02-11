@@ -278,7 +278,7 @@ public class PlayerMovementController : MonoBehaviour
         }
         
         // Returns the movement direction times the speed and acceleration
-        return newMovement * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration;
+        return newMovement * (_playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration);
     }
     
     /// <summary>
