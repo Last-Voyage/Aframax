@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Cinemachine;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Provides the functionality for the harpoon weapon
@@ -288,7 +289,7 @@ public class HarpoonGun : MonoBehaviour
                 yield return null;
             }
 
-            if (ConsoleController.Instance.IsInInfiniteAmmoMode)
+            if (!ConsoleController.Instance.IsUnityNull() && ConsoleController.Instance.IsInInfiniteAmmoMode)
             {
                 _currentReserveAmmo = 1;
             }
@@ -381,16 +382,16 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusButtonHeld(InputAction.CallbackContext context)
     {
-        if (!ConsoleController.Instance.IsInInfiniteFocusMode)
+        if (!ConsoleController.Instance.IsUnityNull() && ConsoleController.Instance.IsInInfiniteFocusMode)
         {
-            _isFocusButtonHeld = true;
-
-            if (_harpoonFiringState == EHarpoonFiringState.Ready)
-            {
-                StartFocusingHarpoon();
-            }
+            return;
         }
-       
+        
+        _isFocusButtonHeld = true;
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            StartFocusingHarpoon();
+        }
     }
 
     /// <summary>
@@ -399,18 +400,17 @@ public class HarpoonGun : MonoBehaviour
     /// <param name="context"></param>
     private void FocusButtonReleased(InputAction.CallbackContext context)
     {
-
-        //dev console condition to stop exiting infinit focus using right click when in infinit focus mode
-        if (!ConsoleController.Instance.IsInInfiniteFocusMode)
+        if (ConsoleController.Instance != null && ConsoleController.Instance.IsInInfiniteFocusMode)
         {
+            return;
+        }
+        //dev console condition to stop exiting infinit focus using right click when in infinit focus mode
             _isFocusButtonHeld = false;
 
             if (_harpoonFiringState == EHarpoonFiringState.Ready)
             {
                 StartUnfocusingHarpoon();
             }
-        }
-       
     }
 
     /// <summary>

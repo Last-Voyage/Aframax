@@ -93,7 +93,10 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
         {
-            _isHit = true;
+            if(block.CompareTag("Enemy") || block.CompareTag("Environment"))
+            {
+                _isHit = true;
+            }
         }
     }
 
