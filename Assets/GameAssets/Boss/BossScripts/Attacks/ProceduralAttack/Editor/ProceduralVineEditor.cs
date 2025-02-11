@@ -13,6 +13,9 @@ using UnityEngine;
 [CustomEditor(typeof(ProceduralVine))]
 public class ProceduralVineEditor : Editor
 {
+    /// <summary>
+    /// draws the inspector with an extra test button
+    /// </summary>
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
