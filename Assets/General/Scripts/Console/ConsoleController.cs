@@ -87,6 +87,7 @@ public class ConsoleController : MonoBehaviour
     /// <returns>If the console is currently open in the scene</returns>
     public bool ConsoleIsOpen()
     {
+        //test
         return _content.activeSelf;
     }
 
