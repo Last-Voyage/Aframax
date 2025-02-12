@@ -8,14 +8,9 @@ on:
       - 'development**'
 
 jobs:
-  buildForAllSupportedPlatforms:
-    name: ForcedApproval
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+    
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
