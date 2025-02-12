@@ -25,6 +25,7 @@ public class UniversalManagers : CoreManagersFramework
 
     private ObjectPoolingParent _objectPoolingParent;
     private FmodSfxEvents _fModSfxEvents;
+    private SceneTransitionBehaviour _transitionsBehaviour;
 
     /// <summary>
     /// Sets up the singleton
@@ -61,6 +62,7 @@ public class UniversalManagers : CoreManagersFramework
     {
         SetupObjectPoolingParent();
         SetUpFModSfxEvents();
+        SetUpSceneTransitions();
 
         //Instances all managers
         foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
@@ -93,6 +95,16 @@ public class UniversalManagers : CoreManagersFramework
         _fModSfxEvents = GetComponentInChildren<FmodSfxEvents>();
         _fModSfxEvents.SetUpInstance();
     }
+
+    /// <summary>
+    /// sets up necessary things for scene transitions
+    /// </summary>
+    private void SetUpSceneTransitions()
+    {
+        _transitionsBehaviour = GetComponentInChildren<SceneTransitionBehaviour>();
+        _transitionsBehaviour.Setup();
+    }
+
 
     #region Getters
     public MainUniversalManagerFramework[] GetAllUniversalManagers() => _allMainManagers;

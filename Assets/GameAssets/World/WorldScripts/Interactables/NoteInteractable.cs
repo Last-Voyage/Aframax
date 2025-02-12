@@ -25,6 +25,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
+    [SerializeField] private TMP_Text _leftArrow;
+    [SerializeField] private TMP_Text _rightArrow;
     private int _currentPage;
 
     /// <summary>
@@ -47,6 +49,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         // Clamp the page to the bounds of the note, then assign the text
         _currentPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
         _noteTextField.text = _pageTexts[_currentPage];
+
+        _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
+        _rightArrow.color = _currentPage == _pageTexts.Length - 1 ? Color.clear : Color.white;
     }
 
     /// <summary>
