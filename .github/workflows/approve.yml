@@ -1,3 +1,21 @@
 name: ForceApprove
 
+on:
+  workflow_dispatch:
+  pull_request:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - 'development**'
+
+jobs:
+  buildForAllSupportedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+    steps:
+      - uses: actions/checkout@v4
 
