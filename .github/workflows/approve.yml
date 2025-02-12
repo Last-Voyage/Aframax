@@ -17,7 +17,5 @@ jobs:
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
     steps:
-      - name: EmptyTest
-        if: always()
-        
+      - uses: actions/checkout@v4
 
