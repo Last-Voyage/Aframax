@@ -38,6 +38,11 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _lungeToPlayerDuration = .2f;
     [SerializeField] private float _moveBackAfterAttackTime = 2f;
 
+    [Header("Attack CD")]
+    [Tooltip("after the vine gets back to the path post attacking this is how long it waits before triggers another")]
+    [SerializeField] private float cdToAttackAfterMoveBackToPath = .2f; // after the vine gets back to the path post attacking this is how long it waits before triggers another
+    private float currentAttackCD;
+
     [Header("Retract stuff")]
     [SerializeField] private PathCreator _retractPath; // The target to move toward
     [SerializeField] private Transform _baseOfVine;
@@ -59,12 +64,16 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void Update() 
     {
-        if(!_isAttacking)
         if(!_isAttacking && !_isRetracting)
         {
             //move along path
             MoveAlongPath();
+            if(currentAttackCD > 0)
+            {
+               currentAttackCD -= Time.deltaTime; 
+            }    
         }
+
         if(_isRetracting && _retractPath.path.length > _retractDistance)
         {
             Retracting();
@@ -126,6 +135,7 @@ public class ProceduralVine : MonoBehaviour
     private IEnumerator Attack(Vector3 playerPosition)
     {
         _isAttacking = true;
+        currentAttackCD = cdToAttackAfterMoveBackToPath;
         StopMovementAudio();
 
         // Calculate the direction from the current object to the target object (X and Z only)
@@ -163,9 +173,9 @@ public class ProceduralVine : MonoBehaviour
     /// the original way we detected if the player was entering the room
     /// </summary>
     /// <param name="collider"></param>
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
-        if(IsColliderPlayer(collider) && !_isAttacking)
+        if(IsColliderPlayer(collider) && !_isAttacking && currentAttackCD <= 0)
         {
             //start attack
             StartCoroutine(Attack(collider.transform.position));
