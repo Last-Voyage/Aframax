@@ -16,6 +16,6 @@ jobs:
           files: ".gitignore"
 
       - name: File exists
-        run: steps.check_files.outputs.files_exists
+        if: steps.check_files.outputs.files_exists
           exit 0
           
