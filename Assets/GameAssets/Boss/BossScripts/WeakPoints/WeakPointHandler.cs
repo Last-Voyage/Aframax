@@ -192,7 +192,14 @@ public class WeakPointHandler : MonoBehaviour
 
         if(_retractOnAllWeakPointsDestroyed)
         {
-            _proceduralVine.StartRetract();
+            if (_proceduralVine != null)
+            {
+                _proceduralVine.StartRetract();
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
