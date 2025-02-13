@@ -2,10 +2,6 @@ name: ForceApprove
 
 on:
   workflow_dispatch:
-  pull_request:
-    # Sequence of patterns matched against refs/heads
-    branches:
-      - 'development**'
 
 jobs:
   buildForAllSupportedPlatforms:
@@ -17,5 +13,13 @@ jobs:
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
     steps:
-      - uses: actions/checkout@v4
+      - name: Notify Discord
+        if: always()
+        uses: stegzilla/discord-notify@v4
+        with:
+            webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+            title: "Approval Of Build"
+            message: " "
+            avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+            username: GitHub
 
