@@ -16,7 +16,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerCollision : MonoBehaviour
 {
-    private const string KILLBOX_TAG = "Killbox";
+    private const string _KILLBOX_TAG = "Killbox";
 
     #region Trigger Contact
 
@@ -53,7 +53,7 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="other"> The object that we are checking for if it is a killbox </param>
     private void CheckForKillBoxContact(GameObject contact)
     {
-        if(contact.CompareTag(KILLBOX_TAG))
+        if(contact.CompareTag(_KILLBOX_TAG))
         {
             PlayerManager.Instance.InvokeOnPlayerDeath();
         }

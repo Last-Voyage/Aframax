@@ -22,7 +22,7 @@ public class GeneralVfxFunctionality : MonoBehaviour
     private Animator[] _vfxAnimators;
 
     [Tooltip("The animation trigger used for all vfx animations")]
-    private const string VFX_ANIMATION_TRIGGER = "PlayVfxAnim";
+    private const string _VFX_ANIMATION_TRIGGER = "PlayVfxAnim";
     
     [Tooltip("The trigger used for if vfx should move")]
     [SerializeField] private bool _isMoveableVfx = false;
@@ -51,7 +51,7 @@ public class GeneralVfxFunctionality : MonoBehaviour
         //Play all animations
         foreach (Animator animator in _vfxAnimators)
         {
-            animator.SetTrigger(VFX_ANIMATION_TRIGGER);
+            animator.SetTrigger(_VFX_ANIMATION_TRIGGER);
         }
     }
 /// <summary>

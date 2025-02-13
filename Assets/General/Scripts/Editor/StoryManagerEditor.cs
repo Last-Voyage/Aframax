@@ -18,15 +18,15 @@ public class StoryManagerEditor : Editor
 {
     // Settings for the editor specifically
     private bool _isInDebugMode;
-    private static Color DEFAULT_COLOR;
+    private static Color _DEFAULT_COLOR;
 
     // Getters for the StoryManager and the StoryBeats list
-    StoryManager GetStoryManager => (StoryManager)target;
-    List<StoryBeat> GetStoryBeats => GetStoryManager.StoryBeats;
-    int OpenStoryBeat
+    private StoryManager GetStoryManager() => (StoryManager)target;
+    private List<StoryBeat> GetStoryBeats() => GetStoryManager().StoryBeats;
+    public int OpenStoryBeat
     {
-        get { return GetStoryManager.OpenStoryBeat; }
-        set { GetStoryManager.OpenStoryBeat = value; }
+        get { return GetStoryManager().OpenStoryBeat; }
+        set { GetStoryManager().OpenStoryBeat = value; }
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public class StoryManagerEditor : Editor
     /// </summary>
     private void OnEnable()
     {
-        DEFAULT_COLOR = GUI.backgroundColor;
+        _DEFAULT_COLOR = GUI.backgroundColor;
     }
 
     /// <summary>
@@ -43,11 +43,11 @@ public class StoryManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         // Edge cases if the list of story beats doesn't exist
-        if (GetStoryBeats == null
-            || GetStoryBeats.Count == 0)
+        if (GetStoryBeats() == null
+            || GetStoryBeats().Count == 0)
         {
-            GetStoryManager.StoryBeats = new();
-            GetStoryBeats.Add(new());
+            GetStoryManager().StoryBeats = new();
+            GetStoryBeats().Add(new());
         }
 
         // Debug mode option for those without fear
@@ -62,7 +62,7 @@ public class StoryManagerEditor : Editor
         DisplayStoryBeatControls();
 
         // Show the currently selected story beat
-        DisplayStoryBeat(GetStoryBeats, OpenStoryBeat);
+        DisplayStoryBeat(GetStoryBeats(), OpenStoryBeat);
 
         // Editor spacing
         EditorGUILayout.Space(8);
@@ -74,24 +74,24 @@ public class StoryManagerEditor : Editor
         if (GUILayout.Button("Create New Event"))
         {
             // Change the currently open story beat, in case it got moved around
-            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat, 0, GetStoryBeats.Count - 1);
+            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat, 0, GetStoryBeats().Count - 1);
 
             // Edge case if the story beat events list doesn't exist
-            if (GetStoryBeats[OpenStoryBeat].StoryBeatEvents == null)
+            if (GetStoryBeats()[OpenStoryBeat].StoryBeatEvents == null)
             {
-                GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents = new();
+                GetStoryManager().StoryBeats[OpenStoryBeat].StoryBeatEvents = new();
             }
 
             // Add a new story beat event to the end of all the events
-            GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents.Add(new StoryBeatEvent());
+            GetStoryManager().StoryBeats[OpenStoryBeat].StoryBeatEvents.Add(new StoryBeatEvent());
         }
-        GUI.backgroundColor = DEFAULT_COLOR;
+        GUI.backgroundColor = _DEFAULT_COLOR;
 
         // Make sure the changes actually saved
         if (GUI.changed && !Application.isPlaying)
         {
-            EditorUtility.SetDirty(GetStoryManager);
-            EditorSceneManager.MarkSceneDirty(GetStoryManager.gameObject.scene);
+            EditorUtility.SetDirty(GetStoryManager());
+            EditorSceneManager.MarkSceneDirty(GetStoryManager().gameObject.scene);
         }
     }
 
@@ -101,9 +101,9 @@ public class StoryManagerEditor : Editor
     private void DisplayStoryBeatControls()
     {
         // Edge case if the current open story beat doesn't exist
-        if (GetStoryBeats[OpenStoryBeat].StoryBeatEvents == null)
+        if (GetStoryBeats()[OpenStoryBeat].StoryBeatEvents == null)
         {
-            GetStoryManager.StoryBeats[OpenStoryBeat].StoryBeatEvents = new();
+            GetStoryManager().StoryBeats[OpenStoryBeat].StoryBeatEvents = new();
         }
 
         EditorGUILayout.BeginHorizontal();
@@ -112,25 +112,25 @@ public class StoryManagerEditor : Editor
         if (GUILayout.Button("+"))
         {
             // Add a story beat before the current and select the new one
-            GetStoryManager.StoryBeats.Insert(OpenStoryBeat, new());
+            GetStoryManager().StoryBeats.Insert(OpenStoryBeat, new());
         }
-        GUI.backgroundColor = DEFAULT_COLOR;
+        GUI.backgroundColor = _DEFAULT_COLOR;
 
         // The button to move to the previous story beat
         if (GUILayout.Button("<"))
         {
-            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat - 1, 0, GetStoryBeats.Count - 1);
+            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat - 1, 0, GetStoryBeats().Count - 1);
         }
 
         // Draw the label for the currently active story beat
         GUIStyle labelStyle = new(GUI.skin.label);
         labelStyle.alignment = TextAnchor.MiddleCenter;
-        GUILayout.Label(OpenStoryBeat + " / " + (GetStoryBeats.Count - 1), labelStyle);
+        GUILayout.Label(OpenStoryBeat + " / " + (GetStoryBeats().Count - 1), labelStyle);
 
         // The button to move to the next story beat
         if (GUILayout.Button(">"))
         {
-            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat + 1, 0, GetStoryBeats.Count - 1);
+            OpenStoryBeat = Mathf.Clamp(OpenStoryBeat + 1, 0, GetStoryBeats().Count - 1);
         }
 
         // The button to add a beat after the current one
@@ -138,31 +138,31 @@ public class StoryManagerEditor : Editor
         if (GUILayout.Button("+"))
         {
             // Add a story beat after the current and select the new one
-            GetStoryManager.StoryBeats.Insert(OpenStoryBeat + 1, new());
+            GetStoryManager().StoryBeats.Insert(OpenStoryBeat + 1, new());
             OpenStoryBeat++;
         }
-        GUI.backgroundColor = DEFAULT_COLOR;
+        GUI.backgroundColor = _DEFAULT_COLOR;
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space(16);
 
         EditorGUILayout.BeginHorizontal();
         // Display the name of the currently selected beat
-        GetStoryBeats[OpenStoryBeat].BeatName = EditorGUILayout.TextField(GetStoryBeats[OpenStoryBeat].BeatName);
+        GetStoryBeats()[OpenStoryBeat].BeatName = EditorGUILayout.TextField(GetStoryBeats()[OpenStoryBeat].BeatName);
 
         // Allow the current beat to be deleted
         GUI.backgroundColor = new(1f, 0.25f, 0.25f, 1);
         if (GUILayout.Button("Delete Beat"))
         {
             // Make sure there are actually beats to delete
-            if (GetStoryBeats.Count > 1)
+            if (GetStoryBeats().Count > 1)
             {
                 // Fix variables to correctly match the new range
-                GetStoryBeats.RemoveAt(OpenStoryBeat);
-                OpenStoryBeat = Mathf.Clamp(OpenStoryBeat, 0, GetStoryBeats.Count - 1);
+                GetStoryBeats().RemoveAt(OpenStoryBeat);
+                OpenStoryBeat = Mathf.Clamp(OpenStoryBeat, 0, GetStoryBeats().Count - 1);
             }
         }
-        GUI.backgroundColor = DEFAULT_COLOR;
+        GUI.backgroundColor = _DEFAULT_COLOR;
         EditorGUILayout.EndHorizontal();
 
         // Allow the description to be word wrapped
@@ -170,14 +170,16 @@ public class StoryManagerEditor : Editor
         textAreaStyle.wordWrap = true;
 
         // Display the description of the currently selected beat
-        GetStoryBeats[OpenStoryBeat].BeatDescription = EditorGUILayout.TextArea(GetStoryBeats[OpenStoryBeat].BeatDescription, textAreaStyle);
+        GetStoryBeats()[OpenStoryBeat].BeatDescription
+            = EditorGUILayout.TextArea(GetStoryBeats()[OpenStoryBeat].BeatDescription, textAreaStyle);
 
         // Settings for triggering a story beat in the inspector
         EditorGUILayout.BeginHorizontal();
-        GetStoryBeats[OpenStoryBeat].TriggerOnStart = EditorGUILayout.Toggle("Trigger on Start", GetStoryBeats[OpenStoryBeat].TriggerOnStart);
+        GetStoryBeats()[OpenStoryBeat].TriggerOnStart
+            = EditorGUILayout.Toggle("Trigger on Start", GetStoryBeats()[OpenStoryBeat].TriggerOnStart);
         if (GUILayout.Button("Trigger Story Beat") && Application.isPlaying)
         {
-            StoryManager.Instance.TriggerStoryBeat(GetStoryBeats[OpenStoryBeat]);
+            StoryManager.Instance.TriggerStoryBeat(GetStoryBeats()[OpenStoryBeat]);
         }
         EditorGUILayout.EndHorizontal();
     }
@@ -225,7 +227,7 @@ public class StoryManagerEditor : Editor
     private void DisplayStoryBeatEvent(List<StoryBeatEvent> storyBeatEvents, int beatIndex, int eventIndex)
     {
         // Setting up the serialized objects/properties for the story manager
-        SerializedObject serializedStoryManager = new(GetStoryManager);
+        SerializedObject serializedStoryManager = new(GetStoryManager());
         SerializedProperty storyBeatsProperty = serializedStoryManager.FindProperty("StoryBeats");
 
         // Setting up the serialized objects/properties for the selected beat
@@ -287,12 +289,12 @@ public class StoryManagerEditor : Editor
             if (storyBeatEvents.Count == 0)
             {
                 // Restting editor settings
-                GUI.backgroundColor = DEFAULT_COLOR;
+                GUI.backgroundColor = _DEFAULT_COLOR;
                 GUILayout.EndHorizontal();
                 return;
             }
         }
-        GUI.backgroundColor = DEFAULT_COLOR;
+        GUI.backgroundColor = _DEFAULT_COLOR;
         GUILayout.EndHorizontal();
 
         // If the event is minimized or doesn't exist anymore, don't display the event
@@ -319,7 +321,7 @@ public class StoryManagerEditor : Editor
                 storyBeatEvents[eventIndex].EventType = (StoryBeatEvent.EBeatEventType)i;
             }
 
-            GUI.backgroundColor = DEFAULT_COLOR;
+            GUI.backgroundColor = _DEFAULT_COLOR;
         }
         GUILayout.EndHorizontal();
 
@@ -330,13 +332,19 @@ public class StoryManagerEditor : Editor
             // If it's dialogue, show the dialogue settings
             case StoryBeatEvent.EBeatEventType.Dialogue:
                 // TODO: Implement dialogue line things
-                storyBeatEvents[eventIndex].Dialogue = (ScriptableDialogueUI)EditorGUILayout.ObjectField(storyBeatEvents[eventIndex].Dialogue, typeof(ScriptableDialogueUI), true);
+                storyBeatEvents[eventIndex].Dialogue
+                    = (ScriptableDialogueUI)EditorGUILayout.ObjectField(
+                        storyBeatEvents[eventIndex].Dialogue,
+                        typeof(ScriptableDialogueUI),
+                        true);
                 break;
 
             // If it's boat speed change, show the boat speed settings
             case StoryBeatEvent.EBeatEventType.BoatSpeed:
-                storyBeatEvents[eventIndex].BoatSpeed = EditorGUILayout.FloatField("Boat Speed", storyBeatEvents[eventIndex].BoatSpeed);
-                storyBeatEvents[eventIndex].SpeedChangeTime = EditorGUILayout.FloatField("Change Time", storyBeatEvents[eventIndex].SpeedChangeTime);
+                storyBeatEvents[eventIndex].BoatSpeed
+                    = EditorGUILayout.FloatField("Boat Speed", storyBeatEvents[eventIndex].BoatSpeed);
+                storyBeatEvents[eventIndex].SpeedChangeTime
+                    = EditorGUILayout.FloatField("Change Time", storyBeatEvents[eventIndex].SpeedChangeTime);
                 break;
 
             // If it's a boss attack, show the boss attack settings
@@ -368,7 +376,8 @@ public class StoryManagerEditor : Editor
 
         GUILayout.BeginHorizontal();
         // Display the settings for the delay on the beat event
-        storyBeatEvents[eventIndex].DelayTime = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[eventIndex].DelayTime);
+        storyBeatEvents[eventIndex].DelayTime
+            = EditorGUILayout.FloatField("Delay Time", storyBeatEvents[eventIndex].DelayTime);
 
         if (storyBeatEvents[eventIndex].EventType == StoryBeatEvent.EBeatEventType.Dialogue)
         {
