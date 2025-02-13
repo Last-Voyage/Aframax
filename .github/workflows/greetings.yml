@@ -9,4 +9,5 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      run: exit 0
+      gh run cancel ${{ github.run_id }}
+      exit 0
