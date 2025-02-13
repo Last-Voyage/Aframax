@@ -1,13 +1,13 @@
-name: Greetings
+name: PR Status Check
 
 on: [pull_request]
 
 jobs:
-  greeting:
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
     steps:
-      gh run cancel ${{ github.run_id }}
-      exit 0
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
