@@ -17,5 +17,5 @@ jobs:
 
       - name: File exists
         if: steps.check_files.outputs.files_exists
-          exit 0
+        run: echo "All files exist!"
           
