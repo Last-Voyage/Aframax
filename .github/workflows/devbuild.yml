@@ -2,9 +2,9 @@ name: Build project
 
 on:
   workflow_dispatch:
-    push:
-        branches:
-            - development-alpha
+  push:
+      branches:
+          - 'development-**
 
 jobs:
   buildForAllSupportedPlatforms:
