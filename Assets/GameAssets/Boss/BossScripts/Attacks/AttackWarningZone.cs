@@ -28,8 +28,8 @@ public class AttackWarningZone : MonoBehaviour
     [SerializeField] private float _endBlinkInterval = .1f;
     [Tooltip("How long the indicator will blink for")]
     [SerializeField] private float _blinkDuration = 3f;
-    [Tooltip("How long the actual attack will stay covering the room")]
-    [SerializeField] private float _hitBoxAppearDuration = 1f;
+    // [Tooltip("How long the actual attack will stay covering the room")]
+    // [SerializeField] private float _hitBoxAppearDuration = 1f;                    // commented out because it was not being used
 
     [Space]
     //Left serialized as this may be used on multiple attacks and as

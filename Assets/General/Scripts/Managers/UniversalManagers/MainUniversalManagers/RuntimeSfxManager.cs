@@ -29,7 +29,7 @@ public class RuntimeSfxManager : AudioManager
 
     public static RuntimeSfxManager Instance;
 
-    private bool _shouldFootstepsPlay = true;
+    // private bool _shouldFootstepsPlay = true;              // commented out because it was not being used
 
     private WaitForSeconds footstepDelay;
     private WaitForSeconds firstFootstepDelay;
