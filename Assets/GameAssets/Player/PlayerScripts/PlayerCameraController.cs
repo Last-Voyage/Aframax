@@ -58,11 +58,6 @@ public class PlayerCameraController : MonoBehaviour
     private float _jumpscareTime = 0.1f;
     [SerializeField, Range(0f, 10f)] private float _jumpscareIntensity = 5f;
 
-    // // Variables for camera shake
-    // [Space]
-    // [SerializeField] private float _cameraShakeTime = 5f;                       ///These were commented out because they were not being used
-    // [SerializeField, Range(0f, 10f)] private float _cameraShakeIntensity = 5f;
-
     /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized
