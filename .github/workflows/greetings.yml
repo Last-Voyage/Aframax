@@ -13,7 +13,7 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v3
         with:
-          files: "main.yml"
+          files: ".gitignore"
 
       - name: File exists
         run: steps.check_files.outputs.files_exists == 'true'
