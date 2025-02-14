@@ -29,8 +29,6 @@ public class RuntimeSfxManager : AudioManager
 
     public static RuntimeSfxManager Instance;
 
-    private bool _shouldFootstepsPlay = true;
-
     private WaitForSeconds footstepDelay;
     private WaitForSeconds firstFootstepDelay;
 
