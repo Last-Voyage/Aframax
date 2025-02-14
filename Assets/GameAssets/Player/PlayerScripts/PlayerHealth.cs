@@ -131,11 +131,17 @@ public class PlayerHealth : BaseHealth
         PlayerManager.Instance.OnInvokePlayerDeath();
     }
 
+    /// <summary>
+    /// Subscribes the chosen functions to the unity events
+    /// </summary>
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(IncreaseHealth);
     }
 
+    /// <summary>
+    /// Unsubscribes the chosen functions to the unity events
+    /// </summary>
     private void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(IncreaseHealth);
