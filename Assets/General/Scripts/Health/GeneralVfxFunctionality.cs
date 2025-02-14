@@ -54,9 +54,10 @@ public class GeneralVfxFunctionality : MonoBehaviour
             animator.SetTrigger(_VFX_ANIMATION_TRIGGER);
         }
     }
-/// <summary>
-/// To move Vfx forward if need be
-/// </summary>
+
+    /// <summary>
+    /// To move Vfx forward if need be
+    /// </summary>
     private void Update()
     {
         if (_isMoveableVfx)

@@ -78,7 +78,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// when object is destoryed also destory the vine
+    /// when object is destoryed also destroy the vine
     /// </summary>
     private void OnDestroy()
     {
@@ -158,7 +158,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// this should get rid of the vines regardless of how the enemy is destoryed
+    /// this should get rid of the vines regardless of how the enemy is destroyed
     /// </summary>
     private void OnDisable() 
     {
@@ -189,7 +189,8 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
         // Move the GameObject towards the target point at a constant speed
         if(_targetPoint != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
+            transform.position
+                = Vector3.MoveTowards(transform.position, _targetPoint.position, _patrolSpeed * Time.deltaTime);
         }
     }
 
@@ -199,7 +200,8 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     private void MoveToPlayer()
     {
         // Move the GameObject towards the target point at a constant speed
-        transform.position = Vector3.MoveTowards(transform.position, _playerTransform.position, _seekPlayerSpeed * Time.deltaTime);
+        transform.position
+            = Vector3.MoveTowards(transform.position, _playerTransform.position, _seekPlayerSpeed * Time.deltaTime);
     }
 
     /// <summary>
