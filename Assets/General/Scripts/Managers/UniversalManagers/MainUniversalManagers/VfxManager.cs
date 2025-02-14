@@ -69,7 +69,7 @@ public class VfxManager : MainUniversalManagerFramework
     public void CreateVisualEffectsInPool(SpecificVisualEffect specificVisualEffect)
     {
         //Spawn the vfx
-        GameObject newVfx = Instantiate(specificVisualEffect.GetVFXObject());
+        GameObject newVfx = Instantiate(specificVisualEffect.GetVfxObject());
         newVfx.SetActive(false);
         ObjectPoolingParent.Instance.InitiallyAddObjectToPool(newVfx);
 

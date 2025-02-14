@@ -333,9 +333,9 @@ public class StoryManagerEditor : Editor
             case StoryBeatEvent.EBeatEventType.Dialogue:
                 // TODO: Implement dialogue line things
                 storyBeatEvents[eventIndex].Dialogue
-                    = (ScriptableDialogueUI)EditorGUILayout.ObjectField(
+                    = (ScriptableDialogueUi)EditorGUILayout.ObjectField(
                         storyBeatEvents[eventIndex].Dialogue,
-                        typeof(ScriptableDialogueUI),
+                        typeof(ScriptableDialogueUi),
                         true);
                 break;
 

@@ -292,7 +292,7 @@ public class StoryBeatEvent
     public float DelayTime;
 
     // Dialogue settings
-    public ScriptableDialogueUI Dialogue;
+    public ScriptableDialogueUi Dialogue;
 
     // Boat speed settings
     public float BoatSpeed;
