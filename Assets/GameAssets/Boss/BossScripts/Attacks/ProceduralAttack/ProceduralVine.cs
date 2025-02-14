@@ -40,8 +40,8 @@ public class ProceduralVine : MonoBehaviour
 
     [Header("Attack CD")]
     [Tooltip("after the vine gets back to the path post attacking this is how long it waits before triggers another")]
-    [SerializeField] private float cdToAttackAfterMoveBackToPath = .2f; // after the vine gets back to the path post attacking this is how long it waits before triggers another
-    private float currentAttackCD;
+    [SerializeField] private float _cooldownToAttackAfterMoveBackToPath = .2f; // after the vine gets back to the path post attacking this is how long it waits before triggers another
+    private float _currentAttackCD;
 
     [Header("Retract stuff")]
     [SerializeField] private PathCreator _retractPath; // The target to move toward
@@ -68,9 +68,9 @@ public class ProceduralVine : MonoBehaviour
         {
             //move along path
             MoveAlongPath();
-            if(currentAttackCD > 0)
+            if(_currentAttackCD > 0)
             {
-               currentAttackCD -= Time.deltaTime; 
+               _currentAttackCD -= Time.deltaTime; 
             }    
         }
 
@@ -135,7 +135,7 @@ public class ProceduralVine : MonoBehaviour
     private IEnumerator Attack(Vector3 playerPosition)
     {
         _isAttacking = true;
-        currentAttackCD = cdToAttackAfterMoveBackToPath;
+        _currentAttackCD = _cooldownToAttackAfterMoveBackToPath;
         StopMovementAudio();
 
         // Calculate the direction from the current object to the target object (X and Z only)
@@ -175,7 +175,7 @@ public class ProceduralVine : MonoBehaviour
     /// <param name="collider"></param>
     private void OnTriggerStay(Collider collider)
     {
-        if(IsColliderPlayer(collider) && !_isAttacking && currentAttackCD <= 0)
+        if(IsColliderPlayer(collider) && !_isAttacking && _currentAttackCD <= 0)
         {
             //start attack
             StartCoroutine(Attack(collider.transform.position));
