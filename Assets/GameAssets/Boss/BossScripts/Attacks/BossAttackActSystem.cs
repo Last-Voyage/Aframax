@@ -229,7 +229,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
         {
-            baseBossAttack.InvokeAttackBegin();
+            baseBossAttack.OnInvokeAttackBegin();
         }
         OnInvokeBeginSceneEvent();
         _currentScene.SetHasSceneBegun(true);

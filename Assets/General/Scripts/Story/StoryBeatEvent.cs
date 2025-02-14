@@ -64,7 +64,7 @@ public class StoryBeatEvent
             case EBeatEventType.BossAttack:
                 foreach (BaseBossAttack currentAttack in BossAttacks)
                 {
-                    currentAttack.InvokeAttackBegin();
+                    currentAttack.OnInvokeAttackBegin();
                 }
                 break;
 

@@ -55,7 +55,7 @@ public class PlayerCollision : MonoBehaviour
     {
         if(contact.CompareTag(_KILLBOX_TAG))
         {
-            PlayerManager.Instance.InvokeOnPlayerDeath();
+            PlayerManager.Instance.OnInvokePlayerDeath();
         }
     }
 
