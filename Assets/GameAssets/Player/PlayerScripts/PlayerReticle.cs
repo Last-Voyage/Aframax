@@ -35,7 +35,7 @@ public class PlayerReticle : MonoBehaviour
 
     [Tooltip("Prefab hosting a sprite for ammo icons. Will change colors to match the scope's sprite.")]
     [SerializeField] private GameObject _harpoonIcon;
-    [Tooltip("The Y position of ammo icons on the screen. Should be negative to nest beneath the scope.")]
+    [Tooltip("The Y position of ammo icons on the screen relative to the scope.")]
     [SerializeField] private float _ammoIconYPosition;
     [Tooltip("How much horizontal spacing exists between each ammo icon.")]
     [SerializeField] private float _ammoIconXSpacing;
@@ -161,13 +161,15 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     private void InitializeAmmoDisplay()
     {
+        Camera cam = Camera.main;
+
         // Initializes offset and ensures all icons will be horizontally centered on the screen
         float iconPlaceOffset = -(_ammoIconXSpacing * _gunMaxAmmo) / 2;
         // Generates icons until the max ammo count is represented
         for (int i = 0; i < _gunMaxAmmo; i++)
         {
             GameObject newIcon = Instantiate(_harpoonIcon, gameObject.transform);
-            newIcon.GetComponent<RectTransform>().position = new Vector2(transform.position.x + iconPlaceOffset, transform.position.y + _ammoIconYPosition);
+            newIcon.GetComponent<RectTransform>().position = cam.ViewportToScreenPoint(new(0.5f, 0.55f));
             newIcon.GetComponent<Image>().color = _focusedColor;
             iconPlaceOffset += _ammoIconXSpacing;
             _ammoIconList.Add(newIcon.GetComponent<Image>());
