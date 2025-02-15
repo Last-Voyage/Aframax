@@ -78,7 +78,7 @@ public class LockdownAttackPatrolEnemyBehavior : MonoBehaviour
     }
 
     /// <summary>
-    /// when object is destoryed also destroy the vine
+    /// when object is destroyed also destroy the vine
     /// </summary>
     private void OnDestroy()
     {
