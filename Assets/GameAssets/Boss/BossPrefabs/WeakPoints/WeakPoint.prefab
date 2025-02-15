@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6642669769206943224}
   - component: {fileID: 7038937634937232616}
   - component: {fileID: 2121949755945095394}
-  - component: {fileID: 6122806561773992166}
+  - component: {fileID: -27814061537787058}
   m_Layer: 8
   m_Name: WeakPoint
   m_TagString: Enemy
@@ -58,9 +58,9 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 2
 --- !u!114 &7038937634937232616
 MonoBehaviour:
@@ -87,8 +87,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 1
---- !u!135 &6122806561773992166
-SphereCollider:
+--- !u!65 &-27814061537787058
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,9 +102,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.2
+  m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
