@@ -19,7 +19,7 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     // The nuumber of harpoons that are currently on the rack
     private int _currentHarpoons;
 
-    [SerializeField] private UnityEvent _onAmmoDepletedEvent;
+    [SerializeField] public UnityEvent OnAmmoDepletedEvent;
 
     /// <summary>
     /// Called when the game starts
@@ -39,7 +39,7 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
         if (_currentHarpoons == 0)
         {
             //disable interact prompt
-            _onAmmoDepletedEvent?.Invoke();
+            OnAmmoDepletedEvent?.Invoke();
         }
     }
 
