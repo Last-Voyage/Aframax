@@ -307,7 +307,7 @@ public class PlayerMovementController : MonoBehaviour
             IsMoving = true;
         }
         //Check for if the input has ended
-        else if (_movementInput.WasReleasedThisFrame())
+        if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
             IsMoving = false;
