@@ -57,6 +57,18 @@ public class PlayerHealth : BaseHealth
     }
 
     /// <summary>
+    /// Collision for enemy contact
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(_damageToTakeFromEnemy, null);
+        }
+    }
+
+    /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
