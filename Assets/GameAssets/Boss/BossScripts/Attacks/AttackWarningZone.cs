@@ -101,7 +101,8 @@ public class AttackWarningZone : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < _blinkDuration)
         {
-            float currentBlinkInterval = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
+            float currentBlinkInterval
+                = Mathf.Lerp(_startBlinkInterval, _endBlinkInterval, elapsedTime / _blinkDuration);
             _warningMeshRenderer.enabled = true;
             yield return new WaitForSeconds(currentBlinkInterval);
             _warningMeshRenderer.enabled = false;
@@ -120,7 +121,7 @@ public class AttackWarningZone : MonoBehaviour
     private void WarningComplete()
     {
         _warningZoneCoroutine = null;
-        InvokeOnWarningEnd();
+        OnInvokeWarningEnd();
         if(_doesDestroyOnWarningEnd)
         {
             Destroy(gameObject);
@@ -130,7 +131,7 @@ public class AttackWarningZone : MonoBehaviour
     /// <summary>
     /// Invokes event for when the warning has concluded
     /// </summary>
-    private void InvokeOnWarningEnd()
+    private void OnInvokeWarningEnd()
     {
         _onWarningEnd?.Invoke();
     }

@@ -15,7 +15,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Contains the functionality for all health UI
 /// </summary>
-public class PlayerHealthUI : MonoBehaviour
+public class PlayerHealthUi : MonoBehaviour
 {
     [Header("Player Damaged")]
 

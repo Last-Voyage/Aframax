@@ -35,7 +35,7 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void OnInteractedByPlayer()
     {
-        PlayerManager.Instance.InvokeOnHarpoonRestockEvent(this);
+        PlayerManager.Instance.OnInvokeHarpoonRestockEvent(this);
         if (_currentHarpoons == 0)
         {
             //disable interact prompt

@@ -76,7 +76,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    private const string MOVEMENT_INPUT_NAME = "Movement";
+    private const string _MOVEMENT_INPUT_NAME = "Movement";
 
     private Rigidbody _playerRigidBody;
 
@@ -129,7 +129,7 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
-        _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
+        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
@@ -319,7 +319,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void DirectionalInputStarted(InputAction playerMovement)
     {
-        PlayerManager.Instance.InvokeOnMovementStartedEvent(playerMovement);
+        PlayerManager.Instance.OnInvokeMovementStartedEvent(playerMovement);
 
         StopAccelerationDeccelerationCoroutines();
 
@@ -331,7 +331,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void DirectionalInputStopped()
     {
-        PlayerManager.Instance.InvokeOnMovementEndedEvent();
+        PlayerManager.Instance.OnInvokeMovementEndedEvent();
 
         StopAccelerationDeccelerationCoroutines();
 
