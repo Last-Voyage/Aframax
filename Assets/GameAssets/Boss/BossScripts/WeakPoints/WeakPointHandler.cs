@@ -129,7 +129,7 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private void SpawnWeakPoint()
     {
-        Transform weakPointSpawnLoc = DetermineWeakPointSpawnLocation();
+        Transform weakPointSpawnLocation = DetermineWeakPointSpawnLocation();
 
         /* The weak point destroyed function is added as a listener to the spawns  weak points death event so the 
          * Handler can properly track its lifespan.
@@ -142,7 +142,7 @@ public class WeakPointHandler : MonoBehaviour
         spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
 
         //Removes the option to spawn successive weak points at the same location.
-        _possibleSpawnLocations.Remove(weakPointSpawnLoc);
+        _possibleSpawnLocations.Remove(weakPointSpawnLocation);
     }
 
     /// <summary>
@@ -186,7 +186,7 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private void MaxWeakPointsDestroyed()
     {
-        InvokeAllWeakPointsDestroyedEvent();
+        OnInvokeAllWeakPointsDestroyedEvent();
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbDestroyed, 
             _spawnLocation.transform.position);
 
@@ -210,7 +210,7 @@ public class WeakPointHandler : MonoBehaviour
     /// <summary>
     /// Calls the weak destroyed event
     /// </summary>
-    private void InvokeAllWeakPointsDestroyedEvent()
+    private void OnInvokeAllWeakPointsDestroyedEvent()
     {
         _onAllWeakPointsDestroyedEvent?.Invoke(this);
     }
