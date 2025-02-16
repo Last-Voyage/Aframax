@@ -80,7 +80,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         SubscribeToHarpoonInput();
         SubscribeToPlayerInteraction();
 
-        PlayerManager.Instance.InvokeOnPlayerInputToggle(true);
+        PlayerManager.Instance.OnInvokePlayerInputToggle(true);
 
         _subscribedToInput = true;
     }
@@ -168,7 +168,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
         _playerInputMap.Disable();
 
-        PlayerManager.Instance.InvokeOnPlayerInputToggle(false);
+        PlayerManager.Instance.OnInvokePlayerInputToggle(false);
 
         _subscribedToInput = false;
     }
