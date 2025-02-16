@@ -36,6 +36,10 @@ public class WorldSpacePopups : MonoBehaviour
     private float _playerDetectionProximity;
 
     [SerializeField]
+    private float _visibilityProximity;
+    //should be larger than _playerDetectionProximity
+
+    [SerializeField]
     private string _farText;
 
     [SerializeField]
@@ -60,7 +64,13 @@ public class WorldSpacePopups : MonoBehaviour
         if (_playerReference != null)
         {
             //check proximity to player
-            if (Vector3.Distance(_playerReference.transform.position, transform.position) >= _playerDetectionProximity)
+            float playerProximity = Vector3.Distance(_playerReference.transform.position, transform.position);
+            if (playerProximity >= _visibilityProximity)
+            {
+                _objectSpriteReference.sprite = null;
+                _popUpTextContainer.text = null;
+            }
+            else if (playerProximity >= _playerDetectionProximity)
             {
                 _objectSpriteReference.sprite = _farDistanceSprite;
                 _popUpTextContainer.text = _farText;
