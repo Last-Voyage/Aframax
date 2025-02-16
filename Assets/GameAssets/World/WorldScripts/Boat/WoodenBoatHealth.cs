@@ -25,7 +25,7 @@ public class WoodenBoatHealth : BaseHealth
         {
             if (damageSource is HarpoonDamage)
             {
-                PlayOnHitVFX();
+                PlayOnHitVfx();
             }
         }
     }
@@ -33,7 +33,7 @@ public class WoodenBoatHealth : BaseHealth
     /// <summary>
     ///  Plays the on Hit VFX if hit by the harpoon
     /// </summary>
-    private void PlayOnHitVFX()
+    private void PlayOnHitVfx()
     {
         VfxManager.Instance.GetWoodenSparksVfx()
             .PlayNextVfxInPool(BoatMover.Instance.transform, transform.position, transform.rotation);

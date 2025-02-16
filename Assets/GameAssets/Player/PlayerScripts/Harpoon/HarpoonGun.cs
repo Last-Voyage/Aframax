@@ -254,7 +254,7 @@ public class HarpoonGun : MonoBehaviour
         // Shake the camera with recoil
         _cinemachineImpulse.GenerateImpulse(Camera.main.transform.forward);
 
-        PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFiredEvent();
 
         RuntimeSfxManager.APlayOneShotSfx?
             .Invoke(FmodSfxEvents.Instance.HarpoonShot, gameObject.transform.position);
@@ -285,7 +285,7 @@ public class HarpoonGun : MonoBehaviour
         {
             _reticle.ToggleAmmoIcons();
 
-            PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
+            PlayerManager.Instance.OnInvokeHarpoonStartReloadEvent();
 
             Tween.Delay(this, _reloadAudioDelay, PlayReloadAudio);
 
@@ -350,7 +350,7 @@ public class HarpoonGun : MonoBehaviour
 
         _reticle.RestockAmmoIcons();
 
-        PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
+        PlayerManager.Instance.OnInvokeHarpoonReloadedEvent();
     }
 
     /// <summary>
@@ -376,7 +376,7 @@ public class HarpoonGun : MonoBehaviour
 
         _reticle.RestockAmmoIcons();
 
-        PlayerManager.Instance.InvokeOnHarpoonRestockCompleteEvent(targetAmmo);
+        PlayerManager.Instance.OnInvokeHarpoonRestockCompleteEvent(targetAmmo);
     }
 
     private void ReloadAfterRestocking(int ammoRestored)
@@ -438,7 +438,7 @@ public class HarpoonGun : MonoBehaviour
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
 
-        PlayerManager.Instance.InvokeOnHarpoonFocusStartEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFocusStartEvent();
     }
 
     /// <summary>
@@ -452,7 +452,7 @@ public class HarpoonGun : MonoBehaviour
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(UnfocusProcess());
 
-        PlayerManager.Instance.InvokeOnHarpoonFocusEndEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFocusEndEvent();
     }
 
     /// <summary>
@@ -491,7 +491,7 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void FocusMax()
     {
-        PlayerManager.Instance.InvokeOnHarpoonFocusMaxEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFocusMaxEvent();
 
         _focusProgress = 1;
         _currentFocusAccuracy = 0;
