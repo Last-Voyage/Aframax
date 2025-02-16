@@ -230,6 +230,11 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
+        if (!Gamepad.current.IsUnityNull())
+        {
+            StartCoroutine(HarpoonRumble());
+        }
+
         if (BoatMover.Instance && BoatMover.Instance.gameObject != null)
         {
             VfxManager.Instance.GetMuzzleSmokeVfx()?.PlayNextVfxInPool(BoatMover.Instance.transform,
@@ -260,6 +265,13 @@ public class HarpoonGun : MonoBehaviour
             .Invoke(FmodSfxEvents.Instance.HarpoonShot, gameObject.transform.position);
 
         StartReloadProcess();
+    }
+
+    private IEnumerator HarpoonRumble()
+    {
+        Gamepad.current.SetMotorSpeeds(.25f,.75f);
+        yield return new WaitForSeconds(.5f);
+        Gamepad.current.SetMotorSpeeds(0,0);
     }
 
     #endregion
