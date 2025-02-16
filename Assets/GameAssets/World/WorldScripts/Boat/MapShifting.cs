@@ -42,15 +42,15 @@ public class MapShifting : MonoBehaviour
     {
         if (Keyboard.current.oKey.wasPressedThisFrame)
         {
-            InvokeOnMapShifting();    
+            OnInvokeMapShifting();    
         }
         if (Keyboard.current.pKey.wasPressedThisFrame)
         {
-            InvokeOnMapPrevious();
+            OnInvokeMapPrevious();
         }
         if (Keyboard.current.iKey.wasPressedThisFrame)
         {
-            InvokeOnMapReset();
+            OnInvokeMapReset();
         }
     }
     
@@ -135,7 +135,7 @@ public class MapShifting : MonoBehaviour
     /// <summary>
     /// For map shifting to be used outside this script
     /// </summary>
-    private void InvokeOnMapShifting()
+    private void OnInvokeMapShifting()
     {
         _onMapShifting?.Invoke();
     }
@@ -143,12 +143,15 @@ public class MapShifting : MonoBehaviour
     /// <summary>
     ///  For map resetting to be used outside this script
     /// </summary>
-    private void InvokeOnMapReset()
+    private void OnInvokeMapReset()
     {
         _onMapReset?.Invoke();
     }
 
-    private void InvokeOnMapPrevious()
+    /// <summary>
+    /// For map shifting to be used outside this script
+    /// </summary>
+    private void OnInvokeMapPrevious()
     {
         _onMapPrevious?.Invoke();
     }

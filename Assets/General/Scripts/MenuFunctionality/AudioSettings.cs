@@ -84,7 +84,8 @@ public class AudioSettings : MonoBehaviour
 
         if (_hasSceneLoaded)
         {
-            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.MasterVolumeSettingsChanged, Vector3.zero);
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(
+                FmodSfxEvents.Instance.MasterVolumeSettingsChanged, Vector3.zero);
         }
 
         SaveData();
@@ -122,7 +123,8 @@ public class AudioSettings : MonoBehaviour
 
         if (_hasSceneLoaded)
         {
-            RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.AmbienceVolumeSettingsChanged, Vector3.zero);
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(
+                FmodSfxEvents.Instance.AmbienceVolumeSettingsChanged, Vector3.zero);
         }
 
         SaveData();
@@ -162,7 +164,8 @@ public class AudioSettings : MonoBehaviour
     {
         // Create an array and populate it with the volumes as strings
         float[] volumeArray = new float[5];
-        string[] volumeStrings = File.ReadAllLines(Application.streamingAssetsPath + _audioSettingsFilePath)[0].Split(" ");
+        string[] volumeStrings = File.ReadAllLines(
+            Application.streamingAssetsPath + _audioSettingsFilePath)[0].Split(" ");
 
         // Iterate through each string and convert it to a float
         for (int i = 0; i < volumeArray.Length; i++)

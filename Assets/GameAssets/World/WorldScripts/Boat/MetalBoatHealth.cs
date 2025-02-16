@@ -25,7 +25,7 @@ public class MetalBoatHealth : BaseHealth
         {
             if (damageSource is HarpoonDamage)
             {
-                PlayOnHitVFX();
+                PlayOnHitVfx();
             }
         }
     }
@@ -33,7 +33,7 @@ public class MetalBoatHealth : BaseHealth
     /// <summary>
     ///  Plays the on Hit VFX if hit by the harpoon
     /// </summary>
-    private void PlayOnHitVFX()
+    private void PlayOnHitVfx()
     {
         VfxManager.Instance.GetMetalSparksVfx()
             .PlayNextVfxInPool(BoatMover.Instance.transform, transform.position, transform.rotation);

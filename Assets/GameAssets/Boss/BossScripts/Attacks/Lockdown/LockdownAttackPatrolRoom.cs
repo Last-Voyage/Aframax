@@ -60,7 +60,7 @@ public class LockdownAttackPatrolRoom : MonoBehaviour
     {
         if(_playerCollisionCounter == 0)
         {
-            InvokeOnPlayerRoomEnter();
+            OnInvokePlayerRoomEnter();
         }
         _playerCollisionCounter++;
     }
@@ -74,7 +74,7 @@ public class LockdownAttackPatrolRoom : MonoBehaviour
         _playerCollisionCounter--;
         if(_playerCollisionCounter ==0)
         {
-            InvokeOnPlayerRoomExit();
+            OnInvokePlayerRoomExit();
         }
     }
 
@@ -93,7 +93,7 @@ public class LockdownAttackPatrolRoom : MonoBehaviour
     /// <summary>
     /// Invokes event for the player entering the room
     /// </summary>
-    private void InvokeOnPlayerRoomEnter()
+    private void OnInvokePlayerRoomEnter()
     {
         _onPlayerRoomEnter?.Invoke();
     }
@@ -101,7 +101,7 @@ public class LockdownAttackPatrolRoom : MonoBehaviour
     /// <summary>
     /// Invokes event for the player exiting the room
     /// </summary>
-    private void InvokeOnPlayerRoomExit()
+    private void OnInvokePlayerRoomExit()
     {
         _onPlayerRoomExit?.Invoke();
     }
