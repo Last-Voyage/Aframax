@@ -113,7 +113,7 @@ public class SpecificVisualEffect
             VfxManager.Instance.StartVisualEffectsDuration(this, _vfxPool[_poolingCounter]);
         }
 
-        IterateVFXPool();
+        IterateVfxPool();
 
         return _vfxPool[previousCounterValue];
     }
@@ -161,7 +161,7 @@ public class SpecificVisualEffect
     /// <summary>
     /// Iterates through the object pool counter
     /// </summary>
-    private void IterateVFXPool()
+    private void IterateVfxPool()
     {
         _poolingCounter++;
         if (_poolingCounter >= _poolingAmount)
@@ -180,6 +180,6 @@ public class SpecificVisualEffect
     }
 
     #region Getters
-    public GameObject GetVFXObject() => _vfxObject;
+    public GameObject GetVfxObject() => _vfxObject;
     #endregion
 }
