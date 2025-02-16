@@ -57,7 +57,7 @@ public class PlayerHealth : BaseHealth
     }
 
     /// <summary>
-    /// Collision for enemy contact
+    /// Collision for enemy contact test
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
