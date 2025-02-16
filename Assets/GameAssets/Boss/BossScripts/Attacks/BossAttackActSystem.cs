@@ -4,8 +4,8 @@
 // Contributor:        Andrea Swihart-DeCoster, Nick Rice, Ryan Swanson
 // Creation Date :     10/22/2024
 //
-// Brief Description : The system to manage what act the boss is on and also switch between them along with which attack
-//                     comes out
+// Brief Description : The system to manage what act the boss is on and also
+//                     switch between them along with which attack comes out
 *****************************************************************************/
 
 using UnityEngine;
@@ -169,7 +169,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         ResetSceneVariables();
         BeginScene();
-        InvokeBeginActEvent();
+        OnInvokeBeginActEvent();
 
         _currentAct.SetHasActBegun(true);
         _currentActNum++;
@@ -199,7 +199,7 @@ public class BossAttackActSystem : MonoBehaviour
 
         BeginAct();
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(3, 0);
-        InvokeActEndEvent();
+        OnInvokeActEndEvent();
     }
 
     #endregion Act Functions
@@ -229,9 +229,9 @@ public class BossAttackActSystem : MonoBehaviour
 
         foreach (BaseBossAttack baseBossAttack in _currentScene.SceneAttacks)
         {
-            baseBossAttack.InvokeAttackBegin();
+            baseBossAttack.OnInvokeAttackBegin();
         }
-        InvokeBeginSceneEvent();
+        OnInvokeBeginSceneEvent();
         _currentScene.SetHasSceneBegun(true);
         _currentSceneNum++;
     }
@@ -261,7 +261,7 @@ public class BossAttackActSystem : MonoBehaviour
         _currentScene = _currentAct.Scenes[_currentSceneNum];
         // Begin next scene
         BeginScene();
-        InvokeSceneEndEvent();
+        OnInvokeSceneEndEvent();
     }
 
     /// <summary>
@@ -270,10 +270,11 @@ public class BossAttackActSystem : MonoBehaviour
     /// </summary>
     public void ForceEndAllAttacks()
     {
-        //I bet you are asking why are not just going through all attacks in the "current combat scenes"
-        //Based on how the story manager is set up I'm assuming that "combat scenes are older functionality being 
-        // removed so this is the alternative. Can't get the attacks in the current combat scene if there is no combat scene
-        //TODO rework the "Combat Scenes" functionality
+        // I bet you are asking why are not just going through all attacks in the "current combat scenes"
+        // Based on how the story manager is set up I'm assuming that "combat scenes are older functionality being 
+        // removed so this is the alternative. Can't get the attacks in the current combat scene if there is no
+        // combat scene
+        // TODO rework the "Combat Scenes" functionality
         BaseBossAttack[] allAttacks = GetComponentsInChildren<BaseBossAttack>();
         foreach(BaseBossAttack attack in allAttacks)
         {
@@ -339,7 +340,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// <summary>
     /// Act beginning for attack
     /// </summary>
-    private void InvokeBeginActEvent()
+    private void OnInvokeBeginActEvent()
     {
         _onActBegin?.Invoke();
     }
@@ -348,7 +349,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// A way for other scripts to see the act ending
     /// If needed something can listen to those from another script to do something
     /// </summary>
-    private void InvokeActEndEvent()
+    private void OnInvokeActEndEvent()
     {
         _onActEnd?.Invoke();
     }
@@ -356,7 +357,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// <summary>
     /// Scene beginning for attack
     /// </summary>
-    private void InvokeBeginSceneEvent()
+    private void OnInvokeBeginSceneEvent()
     {
         _onSceneBegin?.Invoke();
         RuntimeSfxManager.APlayOneShotSfx?.Invoke
@@ -367,7 +368,7 @@ public class BossAttackActSystem : MonoBehaviour
     /// A way for other scripts to see the act ending
     /// If needed something can listen to those from another script to do something
     /// </summary>
-    private void InvokeSceneEndEvent()
+    private void OnInvokeSceneEndEvent()
     {
         _onSceneEnd?.Invoke();
     }

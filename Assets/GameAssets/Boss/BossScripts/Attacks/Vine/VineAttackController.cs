@@ -30,7 +30,7 @@ public class VineAttackController : BaseBossAttack
 
     private Coroutine _attackProcessCoroutine;
 
-    WaitForSeconds _attackIntervalDelay;
+    private WaitForSeconds _attackIntervalDelay;
 
     private void Start()
     {
@@ -173,14 +173,4 @@ public class VineAttackController : BaseBossAttack
     {
         UnsubscribeToEvents();
     }
-}
-
-/// <summary>
-/// Contains an array of vine attacks
-/// Can contain additional functionality as needed
-/// </summary>
-[System.Serializable]
-public class VineAttackGroup
-{
-    [field:SerializeField] public VineAttack[] VineAttacksThisGroup { get; private set; }
 }

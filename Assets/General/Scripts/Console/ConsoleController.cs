@@ -183,10 +183,22 @@ public class ConsoleController : MonoBehaviour
 
         CinemachineVirtualCamera _playerVirtualCam = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
 
-        //spawn free look cam
-        GameObject _tempFreeLookCam = Instantiate(_freeLookCam,
-            Camera.main.transform.position, Quaternion.identity,
-            GameObject.FindObjectOfType<BoatMover>().transform);
+
+        GameObject _tempFreeLookCam;
+
+        if (SceneManager.GetActiveScene().name != "GameScene")
+        {
+            //spawn free look cam 
+            _tempFreeLookCam = Instantiate(_freeLookCam,
+                Camera.main.transform.position, Quaternion.identity);
+        }
+        else 
+        {
+            //spawn free look cam inside of the boat
+            _tempFreeLookCam = Instantiate(_freeLookCam,
+                Camera.main.transform.position, Quaternion.identity,
+                GameObject.FindObjectOfType<BoatMover>().transform);
+        }
 
         //stop actual player from moving
         

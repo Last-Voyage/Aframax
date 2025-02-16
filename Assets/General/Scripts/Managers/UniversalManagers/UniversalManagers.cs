@@ -90,6 +90,9 @@ public class UniversalManagers : CoreManagersFramework
         _objectPoolingParent.SetupInstance();
     }
 
+    /// <summary>
+    /// Sets up the FMod sound effects by establishing its instance
+    /// </summary>
     private void SetUpFModSfxEvents()
     {
         _fModSfxEvents = GetComponentInChildren<FmodSfxEvents>();
