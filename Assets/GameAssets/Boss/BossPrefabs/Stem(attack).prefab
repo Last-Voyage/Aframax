@@ -186,6 +186,7 @@ MonoBehaviour:
   _waitAfterRearBackTime: 0.5
   _lungeToPlayerDuration: 0.2
   _moveBackAfterAttackTime: 2
+  _cooldownToAttackAfterMoveBackToPath: 0.2
   _retractPath: {fileID: 6340779402294488897}
   _baseOfVine: {fileID: 3153097890142724557}
   _retractSpeed: 3
@@ -1560,17 +1561,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 63fef950a3ae7dd43b9cce658d9f9713,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.6
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63fef950a3ae7dd43b9cce658d9f9713,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.6000001
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63fef950a3ae7dd43b9cce658d9f9713,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.6000001
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63fef950a3ae7dd43b9cce658d9f9713,
         type: 3}
@@ -1834,6 +1835,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.71398926
+      objectReference: {fileID: 0}
+    - target: {fileID: 8967500332399174266, guid: d528ebbb942bd28449fe47cbc7e51cae,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8967500332399174266, guid: d528ebbb942bd28449fe47cbc7e51cae,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8967500332399174266, guid: d528ebbb942bd28449fe47cbc7e51cae,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
