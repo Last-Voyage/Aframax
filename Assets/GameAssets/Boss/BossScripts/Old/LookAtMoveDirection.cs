@@ -12,9 +12,9 @@ using UnityEngine;
 /// </summary>
 public class LookAtMoveDirection : MonoBehaviour
 {
-    private Vector3 lastPosition; // Store the last frame's position
+    private Vector3 _lastPosition; // Store the last frame's position
     [Tooltip("Speed at which the object rotates")]
-    [SerializeField] private float rotationSpeed = 10f; // Speed at which the object rotates
+    [SerializeField] private float _rotationSpeed = 10f; // Speed at which the object rotates
 
     /// <summary>
     /// sets first previous position
@@ -22,7 +22,7 @@ public class LookAtMoveDirection : MonoBehaviour
     private void Start()
     {
         // Initialize the last position
-        lastPosition = transform.position;
+        _lastPosition = transform.position;
     }
 
     /// <summary>
@@ -31,10 +31,10 @@ public class LookAtMoveDirection : MonoBehaviour
     private void Update()
     {
         // Calculate the velocity (difference in position over time)
-        Vector3 velocity = (transform.position - lastPosition) / Time.deltaTime;
+        Vector3 velocity = (transform.position - _lastPosition) / Time.deltaTime;
 
         // Update the last position for the next frame
-        lastPosition = transform.position;
+        _lastPosition = transform.position;
 
         // Check if the object is moving
         if (velocity.sqrMagnitude > 0.01f) // Ignore very small movements
@@ -43,7 +43,7 @@ public class LookAtMoveDirection : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(velocity.normalized, Vector3.forward);
 
             // Smoothly rotate towards the target rotation
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
         }
     }
 }

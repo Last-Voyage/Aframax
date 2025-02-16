@@ -24,7 +24,7 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void OnInteractedByPlayer()
     {
-        PlayerManager.Instance.InvokePlayerHealEvent(_healthRestored);
+        PlayerManager.Instance.OnInvokePlayerHealEvent(_healthRestored);
         _numUses--;
 
         if (_numUses == 0)

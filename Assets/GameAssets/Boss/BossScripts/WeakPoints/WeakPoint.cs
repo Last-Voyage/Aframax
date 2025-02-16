@@ -27,7 +27,10 @@ public class WeakPoint : MonoBehaviour
     /// </summary>
     private void InitializeHealthComponent()
     {
-        if (!TryGetComponent(out WeakPointHealth weakPointHealth)) return;
+        if (!TryGetComponent(out WeakPointHealth weakPointHealth))
+        {
+            return;
+        }
         HealthComponent = weakPointHealth;
         HealthComponent.GetOnDeathEvent().AddListener(PlayDeathSfx);
     }

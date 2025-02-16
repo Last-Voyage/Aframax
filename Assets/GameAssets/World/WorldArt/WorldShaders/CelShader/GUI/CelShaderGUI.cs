@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Rendering;
 
-public class CelShaderGUI : ShaderGUI
+public class CelShaderGui : ShaderGUI
 {
     // Foldout states
     private bool _showTilingFoldout = true;

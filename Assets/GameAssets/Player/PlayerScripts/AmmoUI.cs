@@ -13,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// Controls the UI for the ammo count
 /// </summary>
-public class AmmoUI : MonoBehaviour
+public class AmmoUi : MonoBehaviour
 {
     private TMP_Text _ammoText;
 
