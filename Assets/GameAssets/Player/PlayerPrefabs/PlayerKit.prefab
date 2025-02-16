@@ -293,6 +293,7 @@ GameObject:
   - component: {fileID: 798902588594118983}
   - component: {fileID: 1043067514979856355}
   - component: {fileID: 417643722659837913}
+  - component: {fileID: 2329313409841057912}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -374,8 +375,6 @@ MonoBehaviour:
   _movementSwaySpeed: 5
   _movementSwayIntensity: 5
   _jumpscareIntensity: 5
-  _cameraShakeTime: 5
-  _cameraShakeIntensity: 5
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,6 +434,22 @@ MonoBehaviour:
     m_FrequencyGain: 1
     m_Duration: 1
     m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &2329313409841057912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7194dc27b9df64c8beca7482ee8e0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerIndex: -1
+  AutoEnableInputs: 1
+  XYAxis: {fileID: 6846761872953345231, guid: a9035e5084fec0e4a81fdaa78201ec2c, type: 3}
+  ZAxis: {fileID: 6846761872953345231, guid: a9035e5084fec0e4a81fdaa78201ec2c, type: 3}
 --- !u!1 &3991142726110527397
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,11 +642,11 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
+  m_UpdateMethod: 1
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 2
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -709,9 +724,9 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0.05
-    m_DecelTime: 0.05
+    m_MaxSpeed: 150
+    m_AccelTime: 0.4
+    m_DecelTime: 0.075
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
@@ -733,9 +748,9 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0.05
-    m_DecelTime: 0.05
+    m_MaxSpeed: 125
+    m_AccelTime: 0.075
+    m_DecelTime: 0.075
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
     m_InvertInput: 0

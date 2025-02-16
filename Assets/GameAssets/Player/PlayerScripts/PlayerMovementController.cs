@@ -78,6 +78,9 @@ public class PlayerMovementController : MonoBehaviour
     private InputAction _movementInput;
     private const string MOVEMENT_INPUT_NAME = "Movement";
 
+    private Vector2 _playerMovementPartial;
+    private Vector3 _playerMovementFull;
+
     private Rigidbody _playerRigidBody;
 
     /// <summary>
@@ -205,6 +208,11 @@ public class PlayerMovementController : MonoBehaviour
     private void OnEnable()
     {
         SubscribeToEvents();
+
+        _movementInput.performed += ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.canceled += ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.performed += ctx => IsMoving = true;
+        _movementInput.canceled += ctx => IsMoving = false;
     }
 
     /// <summary>
@@ -214,6 +222,11 @@ public class PlayerMovementController : MonoBehaviour
     private void OnDisable()
     {
         UnsubscribeToEvents();
+
+        _movementInput.performed -= ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.canceled -= ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.performed -= ctx => IsMoving = true;
+        _movementInput.canceled -= ctx => IsMoving = false;
     }
     #endregion
 
@@ -262,13 +275,13 @@ public class PlayerMovementController : MonoBehaviour
     private Vector3 DirectionalInputMovement()
     {
         // Read the movement input
-        Vector2 moveDir = _movementInput.ReadValue<Vector2>();
+        //Vector2 moveDir = _movementInput.ReadValue<Vector2>();
 
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (_playerVisuals.right * moveDir.x +
-            _playerVisuals.forward * moveDir.y);
+        Vector3 newMovement = (_playerVisuals.right * _playerMovementPartial.x +
+            _playerVisuals.forward * _playerMovementPartial.y);
         
         if(IsGrounded)
         {
@@ -304,13 +317,13 @@ public class PlayerMovementController : MonoBehaviour
         if(_movementInput.WasPressedThisFrame())
         {
             DirectionalInputStarted(_movementInput);
-            IsMoving = true;
+            //IsMoving = true;
         }
         //Check for if the input has ended
         else if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
-            IsMoving = false;
+            //IsMoving = false;
         }
     }
 
