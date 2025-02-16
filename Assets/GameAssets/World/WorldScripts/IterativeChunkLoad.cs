@@ -67,7 +67,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        EnvironmentManager.Instance.GetOnSendingOverChunks().AddListener(ReceiveChunkQueue);
+        EnvironmentManager.Instance.OnGetSendingOverChunks().AddListener(ReceiveChunkQueue);
         EnvironmentManager.Instance.GetOnSendAllChunkObjects().AddListener(ReceiveEveryChunk); 
         EnvironmentManager.Instance.GetOnChangeTheChunk().AddListener(ChunkChange);
 
@@ -104,7 +104,7 @@ public class IterativeChunkLoad : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        EnvironmentManager.Instance.GetOnSendingOverChunks().RemoveListener(ReceiveChunkQueue);
+        EnvironmentManager.Instance.OnGetSendingOverChunks().RemoveListener(ReceiveChunkQueue);
         EnvironmentManager.Instance.GetOnSendAllChunkObjects().RemoveListener(ReceiveEveryChunk);
         EnvironmentManager.Instance.GetOnChangeTheChunk().RemoveListener(ChunkChange);
     }

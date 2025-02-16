@@ -13,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// Fabrik IK Solver
 /// </summary>
-public class FastIKFabric : MonoBehaviour
+public class FastIkFabric : MonoBehaviour
 {
     [SerializeField] private int _chainLength = 2;
     public Transform Target { get; private set; }

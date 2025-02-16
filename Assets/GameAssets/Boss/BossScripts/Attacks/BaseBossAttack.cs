@@ -68,7 +68,7 @@ public class BaseBossAttack : MonoBehaviour
         }
 
         _isAttackActive = false;
-        InvokeAttackEnd();
+        OnInvokeAttackEnd();
     }
     
     #region Events
@@ -76,7 +76,7 @@ public class BaseBossAttack : MonoBehaviour
     /// <summary>
     /// Invokes this attack's _attackBegin event
     /// </summary>
-    public void InvokeAttackBegin()
+    public void OnInvokeAttackBegin()
     {
         _onBeginAttack?.Invoke();
     }
@@ -84,7 +84,7 @@ public class BaseBossAttack : MonoBehaviour
     /// <summary>
     /// Invokes this attack's _attackEnd event
     /// </summary>
-    public void InvokeAttackEnd()
+    public void OnInvokeAttackEnd()
     {
         _onAttackEnd?.Invoke();
     }

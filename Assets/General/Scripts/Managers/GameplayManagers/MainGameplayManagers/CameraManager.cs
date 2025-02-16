@@ -44,7 +44,7 @@ public class CameraManager : MainGameplayManagerFramework
     {
         base.SubscribeToEvents();
         //Disables camera movement on game pause
-        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(InvokeOnCameraMovementToggle);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(OnInvokeCameraMovementToggle);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public class CameraManager : MainGameplayManagerFramework
     protected override void UnsubscribeToEvents()
     {
         base.UnsubscribeToEvents();
-        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(InvokeOnCameraMovementToggle);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(OnInvokeCameraMovementToggle);
     }
     
     #endregion
@@ -64,7 +64,7 @@ public class CameraManager : MainGameplayManagerFramework
     /// Invokes the _onCameraMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    public void InvokeOnCameraMovementToggle(bool toggle)
+    public void OnInvokeCameraMovementToggle(bool toggle)
     {
         _onCameraMovementToggled?.Invoke(!toggle);
     }

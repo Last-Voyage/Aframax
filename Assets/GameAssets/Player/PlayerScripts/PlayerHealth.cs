@@ -51,7 +51,7 @@ public class PlayerHealth : BaseHealth
     {
         base.IncreaseHealth(heal);
 
-        PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+        PlayerManager.Instance.OnInvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
         PlayHeartBeatSfx();
     }
     
@@ -94,8 +94,8 @@ public class PlayerHealth : BaseHealth
         {
             base.TakeDamage(damage, null);
 
-            PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
-            PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+            PlayerManager.Instance.OnInvokePlayerDamagedEvent(damage);
+            PlayerManager.Instance.OnInvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
 
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
@@ -128,14 +128,20 @@ public class PlayerHealth : BaseHealth
     public override void OnDeath()
     {
         base.OnDeath();
-        PlayerManager.Instance.InvokeOnPlayerDeath();
+        PlayerManager.Instance.OnInvokePlayerDeath();
     }
 
+    /// <summary>
+    /// Subscribes the chosen functions to the unity events
+    /// </summary>
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(IncreaseHealth);
     }
 
+    /// <summary>
+    /// Unsubscribes the chosen functions to the unity events
+    /// </summary>
     private void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(IncreaseHealth);
