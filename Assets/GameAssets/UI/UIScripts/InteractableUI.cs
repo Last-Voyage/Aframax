@@ -12,7 +12,7 @@ using UnityEngine;
 /// <summary>
 /// Controls the ui for interactable objects
 /// </summary>
-public class InteractableUI : MonoBehaviour
+public class InteractableUi : MonoBehaviour
 {
     private GameObject _interactUI;
 

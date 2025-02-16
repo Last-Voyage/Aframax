@@ -33,7 +33,7 @@ public class EnvironmentManager : MainGameplayManagerFramework
     /// <param name="theQueue">The int array representing the queue of chunks</param>
     public void SendOutChunks(int[] theQueue)
     {
-        GetOnSendingOverChunks()?.Invoke(theQueue);
+        OnGetSendingOverChunks()?.Invoke(theQueue);
     }
 
     #region Base Manager
@@ -49,7 +49,7 @@ public class EnvironmentManager : MainGameplayManagerFramework
     #endregion
 
     #region Getters
-    public UnityEvent<int[]> GetOnSendingOverChunks() => _onSendingOverChunks;
+    public UnityEvent<int[]> OnGetSendingOverChunks() => _onSendingOverChunks;
 
     public UnityEvent<GameObject[]> GetOnSendAllChunkObjects() => _onSendAllChunkObjects;
 

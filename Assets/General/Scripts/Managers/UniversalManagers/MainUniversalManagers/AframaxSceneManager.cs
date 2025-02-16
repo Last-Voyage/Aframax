@@ -149,7 +149,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// </summary>
     public void LoadEndScene()
     {
-        InvokeEndOfGameScene();
+        OnInvokeEndOfGameScene();
         StartAsyncSceneLoadViaID(EndScreenSceneIndex, 0);
     }
 
@@ -161,11 +161,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <returns></returns>
     private IEnumerator AsyncSceneLoadingProcess(int sceneID, SceneTransition sceneTransition)
     {
-        InvokeOnBeforeSceneChangeEvent();
+        OnInvokeBeforeSceneChangeEvent();
 
         if (_isGameplaySceneLoaded)
         {
-            InvokeOnLeavingGameplayScene();
+            OnInvokeLeavingGameplayScene();
         }
 
         //start the starting scene transition animation here
@@ -187,7 +187,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             yield return null;
         }
 
-        InvokeOnSceneChangedEvent();
+        OnInvokeSceneChangedEvent();
 
         //start the ending scene transition animation here
         SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionExitAnimTrigger);
@@ -205,7 +205,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         UpdateLastScene();
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
-        InvokeOnSceneAdditiveLoadAddEvent();
+        OnInvokeSceneAdditiveLoadAddEvent();
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         SceneManager.UnloadSceneAsync(sceneID);
 
-        InvokeOnSceneAdditiveLoadRemoveEvent();
+        OnInvokeSceneAdditiveLoadRemoveEvent();
     }
 
     /// <summary>
@@ -248,7 +248,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes event for just before a scene changes
     /// </summary>
-    private void InvokeOnBeforeSceneChangeEvent()
+    private void OnInvokeBeforeSceneChangeEvent()
     {
         _onBeforeSceneChange?.Invoke();
     }
@@ -256,7 +256,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes event for after a scene changes
     /// </summary>
-    private void InvokeOnSceneChangedEvent()
+    private void OnInvokeSceneChangedEvent()
     {
         _onSceneChanged?.Invoke();
     }
@@ -265,7 +265,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// Invokes event for when a gameplay scene is loaded
     /// A gameplay scene is a scene with gameplay managers
     /// </summary>
-    public void InvokeOnGameplaySceneLoaded()
+    public void OnInvokeGameplaySceneLoaded()
     {
         _onGameplaySceneLoaded?.Invoke();
     }
@@ -273,7 +273,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes event for when leaving a gameplay scene
     /// </summary>
-    public void InvokeOnLeavingGameplayScene()
+    public void OnInvokeLeavingGameplayScene()
     {
         _onLeavingGameplayScene?.Invoke();
     }
@@ -281,7 +281,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes an event for when a scene is additively loaded
     /// </summary>
-    private void InvokeOnSceneAdditiveLoadAddEvent()
+    private void OnInvokeSceneAdditiveLoadAddEvent()
     {
         _onAdditiveLoadAddedEvent?.Invoke();
     }
@@ -289,7 +289,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes an event for when an additively loaded scene is removed
     /// </summary>
-    private void InvokeOnSceneAdditiveLoadRemoveEvent()
+    private void OnInvokeSceneAdditiveLoadRemoveEvent()
     {
         _onAdditiveLoadRemovedEvent?.Invoke();
     }
@@ -297,7 +297,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// For Boss Attacks Act System to end the game
     /// </summary>
-    public void InvokeEndOfGameScene()
+    public void OnInvokeEndOfGameScene()
     {
         _onEndOfGameScene?.Invoke();
     }
