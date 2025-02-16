@@ -19,6 +19,7 @@ public class PlayerHealth : BaseHealth
     //Set up for iframe coroutine. _iFrame delay will be inputable in the prefab,
     //so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
+    [SerializeField] private float _damageToTakeFromEnemy =25f;
 
     [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
@@ -41,6 +42,30 @@ public class PlayerHealth : BaseHealth
     private void OnDestroy()
     {
         UnsubscribeToEvents();
+    }
+
+    /// <summary>
+    /// simple collision to take damage when tag is enemy without using 2 or 3 other scripts
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("Enemy"))
+        {
+            TakeDamage(_damageToTakeFromEnemy, null);
+        }
+    }
+
+    /// <summary>
+    /// Collision for enemy contact
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(_damageToTakeFromEnemy, null);
+        }
     }
 
     /// <summary>

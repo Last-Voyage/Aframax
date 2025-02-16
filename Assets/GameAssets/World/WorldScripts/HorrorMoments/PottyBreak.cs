@@ -20,7 +20,7 @@ public class PottyBreak : MonoBehaviour
     /// </summary>
     public void SpawnTentacle()
     {
-        Instantiate(_tentacle, transform.position, Quaternion.identity);
+        Instantiate(_tentacle, transform.position, _tentacle.transform.rotation);
         CameraManager.Instance.InvokeOnJumpscare();
     }
 }
