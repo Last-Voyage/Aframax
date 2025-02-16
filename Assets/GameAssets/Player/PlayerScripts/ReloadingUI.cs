@@ -16,7 +16,7 @@ using TMPro;
 /// <summary>
 /// Temporary script holding the reloading ui until the WeaponUI script holding the reticle functionality is in
 /// </summary>
-public class ReloadingUI : MonoBehaviour
+public class ReloadingUi : MonoBehaviour
 {
     private TMP_Text _reloadingText;
 

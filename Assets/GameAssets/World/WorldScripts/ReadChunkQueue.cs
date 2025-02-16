@@ -17,7 +17,7 @@ using System.IO;
 /// </summary>
 public class ReadChunkQueue : MonoBehaviour
 {
-    private const string THE_LINE_OF_CHUNKS = "/ChunkQueue.txt";
+    private const string _THE_LINE_OF_CHUNKS = "/ChunkQueue.txt";
 
     private int[] _realChunks;
 
@@ -31,7 +31,7 @@ public class ReadChunkQueue : MonoBehaviour
     /// </summary>
     private void GetChunkQueue()
     {
-        string[] allChunkers = File.ReadAllLines(Application.streamingAssetsPath + THE_LINE_OF_CHUNKS);
+        string[] allChunkers = File.ReadAllLines(Application.streamingAssetsPath + _THE_LINE_OF_CHUNKS);
         TurnQueueToInt(allChunkers);
     }
 
