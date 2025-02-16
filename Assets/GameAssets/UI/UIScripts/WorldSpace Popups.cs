@@ -64,7 +64,7 @@ public class WorldSpacePopups : MonoBehaviour
         if (_playerReference != null)
         {
             //check proximity to player
-            var playerProximity = Vector3.Distance(_playerReference.transform.position, transform.position);
+            float playerProximity = Vector3.Distance(_playerReference.transform.position, transform.position);
             if (playerProximity >= _visibilityProximity)
             {
                 _objectSpriteReference.sprite = null;
