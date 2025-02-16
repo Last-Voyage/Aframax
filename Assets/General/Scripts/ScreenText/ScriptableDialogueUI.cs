@@ -16,7 +16,7 @@ using UnityEngine;
 /// The scriptable object for dialogue text and timing
 /// </summary>
 [CreateAssetMenu(menuName = "UI Data Object/DialogueData")]
-public class ScriptableDialogueUI : ScriptableObject
+public class ScriptableDialogueUi : ScriptableObject
 {
     [Tooltip("Dialogue text and time variables")]
     [SerializeField]

@@ -95,7 +95,7 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
     /// <summary>
     /// Death event to kill gameObject from the object
     /// </summary>
-    public void InvokeDeathEvent()
+    public void OnInvokeDeathEvent()
     {
         _onDeathEvent?.Invoke();
     }
