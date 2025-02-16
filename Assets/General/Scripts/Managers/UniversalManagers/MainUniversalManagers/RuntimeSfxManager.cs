@@ -93,14 +93,14 @@ public class RuntimeSfxManager : AudioManager
     {
         if (val)
         {
-            APlayOneShotSfx += PlayOneShotSFX;
-            APlayOneShotSfxAttached += PlayOneShotSFXAttached;
+            APlayOneShotSfx += PlayOneShotSfx;
+            APlayOneShotSfxAttached += PlayOneShotSfxAttached;
 
             return;
         }
 
-        APlayOneShotSfx -= PlayOneShotSFX;
-        APlayOneShotSfxAttached -= PlayOneShotSFXAttached;
+        APlayOneShotSfx -= PlayOneShotSfx;
+        APlayOneShotSfxAttached -= PlayOneShotSfxAttached;
     }
 
     private void Start()
@@ -119,9 +119,9 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     /// <param name="eventReference">reference to the FMOD SFX event </param>
     /// <param name="worldPosition"> position where the sound plays in the world </param>
-    private void PlayOneShotSFX(EventReference eventReference, Vector3 worldPosition = new Vector3())
+    private void PlayOneShotSfx(EventReference eventReference, Vector3 worldPosition = new Vector3())
     {
-        if (CheckForNullSFX(eventReference))
+        if (CheckForNullSfx(eventReference))
         {
             return;
         }
@@ -134,9 +134,9 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     /// <param name="eventReference">reference to the FMOD SFX event</param>
     /// <param name="attachedObject">object that the audio is playing attached to</param>
-    private void PlayOneShotSFXAttached(EventReference eventReference, GameObject attachedObject)
+    private void PlayOneShotSfxAttached(EventReference eventReference, GameObject attachedObject)
     {
-        if (CheckForNullSFX(eventReference))
+        if (CheckForNullSfx(eventReference))
         {
             return;
         }
@@ -215,7 +215,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     /// <param name="eventReference">The EventReference we are checking is null</param>
     /// <returns>Returns if the sfx are null or not</returns>
-    private bool CheckForNullSFX(EventReference eventReference)
+    private bool CheckForNullSfx(EventReference eventReference)
     {
         if (eventReference.IsNull)
         {

@@ -20,8 +20,7 @@ public class FreeLookCamController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Rigidbody _body;
-    [HideInInspector]
-    public Transform _cam;
+    [HideInInspector] public Transform Cam;
 
     /// <summary>
     /// happens on awake
@@ -38,7 +37,7 @@ public class FreeLookCamController : MonoBehaviour
     private void Start()
     {
         //assign cam
-        _cam = Camera.main.gameObject.transform;
+        Cam = Camera.main.gameObject.transform;
     }
     
     /// <summary>
@@ -59,7 +58,7 @@ public class FreeLookCamController : MonoBehaviour
     /// <param name="body"></param>
     private void Move(Vector3 value, Rigidbody body)
     {
-        Vector3 dir = (_cam.right * value.x) + (_cam.up * value.y) +  (_cam.forward * value.z);
+        Vector3 dir = (Cam.right * value.x) + (Cam.up * value.y) +  (Cam.forward * value.z);
         body.velocity = dir.normalized * _moveSpeed * Time.deltaTime;// dir * speed * delta time
     }
 
