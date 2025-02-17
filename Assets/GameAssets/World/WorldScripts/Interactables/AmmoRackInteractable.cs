@@ -1,6 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         AmmoRackInteractable.cs
 // Author :            Andrew Stapay
+// Contributors:       Jeremiah Peters
 // Creation Date :     11/13/2024
 //
 // Brief Description : Implements an ammo rack where the player can refill their ammo.
@@ -8,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// A class that implements the interaction with the ammo rack
@@ -16,6 +18,8 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
 {
     // The nuumber of harpoons that are currently on the rack
     private int _currentHarpoons;
+
+    [SerializeField] public UnityEvent OnAmmoDepletedEvent;
 
     /// <summary>
     /// Called when the game starts
@@ -31,7 +35,12 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void OnInteractedByPlayer()
     {
-        PlayerManager.Instance.InvokeOnHarpoonRestockEvent(this);
+        PlayerManager.Instance.OnInvokeHarpoonRestockEvent(this);
+        if (_currentHarpoons == 0)
+        {
+            //disable interact prompt
+            OnAmmoDepletedEvent?.Invoke();
+        }
     }
 
     /// <summary>

@@ -44,7 +44,7 @@ public interface IBaseHealth
     /// <summary>
     /// Calls the Death event
     /// </summary>
-    abstract void InvokeDeathEvent();
+    abstract void OnInvokeDeathEvent();
 
     #endregion
 
