@@ -27,7 +27,7 @@ public class WaterHealth : BaseHealth
         {
             if (damageSource is HarpoonDamage)
             {
-                PlayOnHitSFX();
+                PlayOnHitSfx();
             }
         }
     }
@@ -35,7 +35,7 @@ public class WaterHealth : BaseHealth
     /// <summary>
     /// Plays the onHit sfx if hit by the harpoon
     /// </summary>
-    private void PlayOnHitSFX()
+    private void PlayOnHitSfx()
     {
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.HarpoonWaterSplash, transform.position);
     }

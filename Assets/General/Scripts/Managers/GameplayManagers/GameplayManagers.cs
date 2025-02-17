@@ -64,6 +64,6 @@ public class GameplayManagers : CoreManagersFramework
         }
 
         //Informs the scene manager that a gameplay scene was loaded
-        AframaxSceneManager.Instance.InvokeOnGameplaySceneLoaded();
+        AframaxSceneManager.Instance.OnInvokeGameplaySceneLoaded();
     }
 }
