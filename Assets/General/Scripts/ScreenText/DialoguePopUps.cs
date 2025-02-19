@@ -49,7 +49,7 @@ public class DialoguePopUps : MonoBehaviour
     // Temp variable used for testing
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    private ScriptableDialogueUI _uIData;
+    private ScriptableDialogueUi _uiData;
 
     [Tooltip("The pointer for which ui data is currently being used")]
     private int _dataPointer;
@@ -60,11 +60,11 @@ public class DialoguePopUps : MonoBehaviour
     /// The pass through function for actually displaying the dialogue
     /// Because events do not like coroutines
     /// </summary>
-    private void BeginDisplayingText(ScriptableDialogueUI dialogueUI)
+    private void BeginDisplayingText(ScriptableDialogueUi dialogueUi)
     {
         StopDialogue();
 
-        _playingDialogue = DisplayText(dialogueUI);
+        _playingDialogue = DisplayText(dialogueUi);
         StartCoroutine(_playingDialogue);
     }
 
@@ -72,7 +72,7 @@ public class DialoguePopUps : MonoBehaviour
     /// This takes the text, makes it invisible, then slowly makes it visible by x characters a second
     /// </summary>
     /// <returns></returns>
-    private IEnumerator DisplayText(ScriptableDialogueUI moreDialogue)
+    private IEnumerator DisplayText(ScriptableDialogueUi moreDialogue)
     {
         foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer())
         {

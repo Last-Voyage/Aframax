@@ -23,7 +23,7 @@ public class TutorialPopUps : MonoBehaviour
 
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    private ScriptableDialogueUI[] _uIData;
+    private ScriptableDialogueUi[] _uIData;
 
     [Tooltip("The collider the player has to walk into")]
     private GameObject _walkTutorialObject;

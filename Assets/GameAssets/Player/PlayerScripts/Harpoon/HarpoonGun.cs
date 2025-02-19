@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Cinemachine;
 using Unity.VisualScripting;
+using PrimeTween;
 
 /// <summary>
 /// Provides the functionality for the harpoon weapon
@@ -109,6 +110,10 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private float _recoilCameraShakeIntensity = 5f;
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
+
+    [Space]
+    [Header("Other")]
+    [SerializeField] private float _reloadAudioDelay;
 
     public static HarpoonGun Instance;
 
@@ -249,7 +254,7 @@ public class HarpoonGun : MonoBehaviour
         // Shake the camera with recoil
         _cinemachineImpulse.GenerateImpulse(Camera.main.transform.forward);
 
-        PlayerManager.Instance.InvokeOnHarpoonFiredEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFiredEvent();
 
         RuntimeSfxManager.APlayOneShotSfx?
             .Invoke(FmodSfxEvents.Instance.HarpoonShot, gameObject.transform.position);
@@ -280,7 +285,9 @@ public class HarpoonGun : MonoBehaviour
         {
             _reticle.ToggleAmmoIcons();
 
-            PlayerManager.Instance.InvokeOnHarpoonStartReloadEvent();
+            PlayerManager.Instance.OnInvokeHarpoonStartReloadEvent();
+
+            Tween.Delay(this, _reloadAudioDelay, PlayReloadAudio);
 
             float reloadTimeRemaining = _reloadTime;
             while (reloadTimeRemaining > 0)
@@ -306,6 +313,15 @@ public class HarpoonGun : MonoBehaviour
     }
 
     /// <summary>
+    /// Plays the audio associated with the reload
+    /// </summary>
+    private void PlayReloadAudio()
+    {
+        RuntimeSfxManager.APlayOneShotSfx?
+            .Invoke(FmodSfxEvents.Instance.HarpoonReload, gameObject.transform.position);
+    }
+
+    /// <summary>
     /// increments reserve ammo to an acceptable state to enter
     /// infinite ammo mode
     /// </summary>
@@ -326,8 +342,6 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
-        RuntimeSfxManager.APlayOneShotSfx?
-            .Invoke(FmodSfxEvents.Instance.HarpoonReload, gameObject.transform.position);
 
         if (_isFocusButtonHeld)
         {
@@ -336,7 +350,7 @@ public class HarpoonGun : MonoBehaviour
 
         _reticle.RestockAmmoIcons();
 
-        PlayerManager.Instance.InvokeOnHarpoonReloadedEvent();
+        PlayerManager.Instance.OnInvokeHarpoonReloadedEvent();
     }
 
     /// <summary>
@@ -362,7 +376,7 @@ public class HarpoonGun : MonoBehaviour
 
         _reticle.RestockAmmoIcons();
 
-        PlayerManager.Instance.InvokeOnHarpoonRestockCompleteEvent(targetAmmo);
+        PlayerManager.Instance.OnInvokeHarpoonRestockCompleteEvent(targetAmmo);
     }
 
     private void ReloadAfterRestocking(int ammoRestored)
@@ -424,7 +438,7 @@ public class HarpoonGun : MonoBehaviour
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
 
-        PlayerManager.Instance.InvokeOnHarpoonFocusStartEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFocusStartEvent();
     }
 
     /// <summary>
@@ -438,7 +452,7 @@ public class HarpoonGun : MonoBehaviour
         StopCurrentFocusCoroutine();
         _focusUnfocusCoroutine = StartCoroutine(UnfocusProcess());
 
-        PlayerManager.Instance.InvokeOnHarpoonFocusEndEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFocusEndEvent();
     }
 
     /// <summary>
@@ -477,7 +491,7 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void FocusMax()
     {
-        PlayerManager.Instance.InvokeOnHarpoonFocusMaxEvent();
+        PlayerManager.Instance.OnInvokeHarpoonFocusMaxEvent();
 
         _focusProgress = 1;
         _currentFocusAccuracy = 0;
