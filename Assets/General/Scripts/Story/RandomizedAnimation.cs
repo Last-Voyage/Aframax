@@ -52,6 +52,8 @@ public class RandomizedAnimation : MonoBehaviour
     /// </summary>
     private void StartRandomDelay()
     {
+        if (!gameObject.activeInHierarchy) return;
+
         Tween.Delay(this, Random.Range(_minAnimationDelay, _maxAnimationDelay), DetermineNextAnimation);
     }
 
