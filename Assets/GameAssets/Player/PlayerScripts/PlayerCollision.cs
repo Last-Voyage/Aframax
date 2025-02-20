@@ -29,6 +29,10 @@ public class PlayerCollision : MonoBehaviour
         CheckForKillBoxContact(other.gameObject);
 
         CheckForEnemyContact(other.gameObject);
+
+        CheckForStartVineChaseTrigger(other);
+
+        CheckForChaseDamageTrigger(other);
     }
 
     #endregion
@@ -66,6 +70,45 @@ public class PlayerCollision : MonoBehaviour
     private void CheckForEnemyContact(GameObject contact)
     {
         //TODO: Implement later
+    }
+
+    /// <summary>
+    /// Checks for trigger to activate chase sequence
+    /// </summary>
+    /// <param name="contact"></param>
+    private void CheckForStartVineChaseTrigger(Collider contact)
+    {
+        if(contact.CompareTag("ChaseTrigger"))
+        {
+            ChaseVineGroup chaseVineGroup = contact.GetComponent<ChaseVineGroup>();
+            if(chaseVineGroup != null && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
+            {
+                chaseVineGroup.ActivateThisGroupOfVines();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks for the trigger to damage player in chase sequence
+    /// </summary>
+    /// <param name="contact"></param>
+    private void CheckForChaseDamageTrigger(Collider contact)
+    {
+        if(contact.CompareTag("ChaseDamageTrigger"))
+        {
+            ChaseVineGroup chaseVineGroup = contact.GetComponentInParent<ChaseVineGroup>();
+            if(chaseVineGroup != null)
+            {
+                if(chaseVineGroup.IsSupposedToKillInstant())
+                {
+                    PlayerManager.Instance.OnInvokePlayerDeath();
+                }
+                else
+                {
+                    PlayerFunctionalityCore.Instance.GetPlayerHealth().TakeDamage(chaseVineGroup.GetPlayerDamageAmount(), null);
+                }
+            }
+        }
     }
     
     #endregion

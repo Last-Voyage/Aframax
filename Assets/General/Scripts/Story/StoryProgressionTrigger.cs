@@ -21,7 +21,12 @@ public class StoryProgressionTrigger : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            StoryManager.Instance.ProgressNextStoryBeat();
+            //null check added for testing
+            StoryManager storyManager = StoryManager.Instance;
+            if(storyManager !=null)
+            {
+                storyManager.ProgressNextStoryBeat();
+            }
 
             Destroy(gameObject);
         }
