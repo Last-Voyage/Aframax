@@ -48,6 +48,7 @@ public class WorldSpacePopups : MonoBehaviour
 
     private void Awake()
     {
+        _objectSpriteReference = GetComponent<SpriteRenderer>();
         StartCoroutine(FindPlayer());
     }
 
