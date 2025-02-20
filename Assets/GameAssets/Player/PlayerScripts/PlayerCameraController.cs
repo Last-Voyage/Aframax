@@ -46,6 +46,7 @@ public class PlayerCameraController : MonoBehaviour
     // Variables for movement sway
     [Space]
     [SerializeField] private GameObject _harpoonGun;
+    private Animator _harpoonAnimator;
     [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
     [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
     private const string _TARGET_ANIMATION = "harpoonIdle";
@@ -93,6 +94,8 @@ public class PlayerCameraController : MonoBehaviour
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+
+        _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -164,7 +167,6 @@ public class PlayerCameraController : MonoBehaviour
     private IEnumerator WalkingSway(InputAction playerMovement)
     {
         Coroutine stopSwayCoroutine = null;
-        Animator _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
 
         while (true)
         {
@@ -196,9 +198,9 @@ public class PlayerCameraController : MonoBehaviour
                 _harpoonGun.transform.localPosition = new Vector3(newX, 0, 0);
 
                 // If we reach the limit on our sway, switch directions
-                float limit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
-                float distance = Vector3.Distance(_harpoonGun.transform.localPosition, Vector3.zero);
-                if (distance >= limit)
+                float swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
+                float currentSwayDistance = Vector3.Distance(_harpoonGun.transform.localPosition, Vector3.zero);
+                if (currentSwayDistance >= swayDistanceLimit)
                 {
                     _movementSwayRight = !_movementSwayRight;
                 }
