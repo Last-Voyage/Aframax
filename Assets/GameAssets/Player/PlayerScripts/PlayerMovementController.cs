@@ -79,7 +79,6 @@ public class PlayerMovementController : MonoBehaviour
     private const string _MOVEMENT_INPUT_NAME = "Movement";
 
     private Vector2 _playerMovementPartial;
-    private Vector3 _playerMovementFull;
 
     private Rigidbody _playerRigidBody;
 
@@ -317,13 +316,11 @@ public class PlayerMovementController : MonoBehaviour
         if(_movementInput.WasPressedThisFrame())
         {
             DirectionalInputStarted(_movementInput);
-            //IsMoving = true;
         }
         //Check for if the input has ended
         if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
-            //IsMoving = false;
         }
     }
 

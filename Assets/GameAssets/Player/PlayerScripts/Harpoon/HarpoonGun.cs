@@ -111,6 +111,11 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
 
+    [Space] [Header("Rumble")] [SerializeField]
+    private float _rightSideRumble = .5f;
+    private float _leftSideRumble = .25f;
+    private float _rumbleLength = .5f;
+    
     [Space]
     [Header("Other")]
     [SerializeField] private float _reloadAudioDelay;
@@ -267,10 +272,13 @@ public class HarpoonGun : MonoBehaviour
         StartReloadProcess();
     }
 
+    /// <summary>
+    /// This function will make the controller rumble
+    /// </summary>
     private IEnumerator HarpoonRumble()
     {
-        Gamepad.current.SetMotorSpeeds(.25f,.75f);
-        yield return new WaitForSeconds(.5f);
+        Gamepad.current.SetMotorSpeeds(_leftSideRumble,_rightSideRumble);
+        yield return new WaitForSeconds(_rumbleLength);
         Gamepad.current.SetMotorSpeeds(0,0);
     }
 
