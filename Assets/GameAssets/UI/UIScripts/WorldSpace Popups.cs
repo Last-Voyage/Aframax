@@ -48,6 +48,7 @@ public class WorldSpacePopups : MonoBehaviour
 
     private void Awake()
     {
+        _objectSpriteReference = GetComponent<SpriteRenderer>();
         StartCoroutine(FindPlayer());
     }
 
@@ -91,8 +92,13 @@ public class WorldSpacePopups : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        _playerCamera = PlayerFunctionalityCore.Instance.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
-        _playerReference = PlayerFunctionalityCore.Instance.transform.GetChild(1).gameObject;
+        //added check for PlayerFunctionality to get rid of null error
+        PlayerFunctionalityCore pfc = PlayerFunctionalityCore.Instance;
+        if(pfc != null)
+        {
+            _playerCamera = pfc.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
+            _playerReference = pfc.transform.GetChild(1).gameObject;
+        }
 
         _objectSpriteReference = GetComponent<SpriteRenderer>();
     }
