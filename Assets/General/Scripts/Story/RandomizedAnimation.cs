@@ -37,6 +37,8 @@ public class RandomizedAnimation : MonoBehaviour
     [Space]
     [Tooltip("Determines if the animation to play is random from the array or in the order of the array")]
     [SerializeField] private ERandomizedAnimationType _randomAnimType;
+
+    private Tween _delayTween;
     
     private Animator _animator;
 
@@ -52,7 +54,9 @@ public class RandomizedAnimation : MonoBehaviour
     /// </summary>
     private void StartRandomDelay()
     {
-        Tween.Delay(this, Random.Range(_minAnimationDelay, _maxAnimationDelay), DetermineNextAnimation);
+        if (!gameObject.activeInHierarchy) return;
+
+        _delayTween = Tween.Delay(this, Random.Range(_minAnimationDelay, _maxAnimationDelay), DetermineNextAnimation);
     }
 
     /// <summary>
@@ -88,5 +92,16 @@ public class RandomizedAnimation : MonoBehaviour
     {
         _animator.SetTrigger(_animationNameList[animPos]);
         StartRandomDelay();
+    }
+
+    /// <summary>
+    /// Stop the tween if it is active while this is destroyed
+    /// </summary>
+    private void OnDestroy()
+    {
+        if(_delayTween.isAlive)
+        {
+            _delayTween.Stop();
+        }
     }
 }

@@ -55,7 +55,7 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for pullback
     [Space]
-    private float _jumpscareTime = 0.1f;
+    [SerializeField] private float _jumpscareTime = 0.1f;
     [SerializeField, Range(0f, 10f)] private float _jumpscareIntensity = 5f;
 
     /// <summary>
