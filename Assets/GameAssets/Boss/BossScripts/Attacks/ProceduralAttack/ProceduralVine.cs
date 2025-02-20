@@ -99,7 +99,13 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void CreateMovementAudio()
     {
-        _movementEventInstance = RuntimeSfxManager.Instance.
+        //return statement added so as not to throw a thousand nulls in logs
+        if(RuntimeSfxManager.Instance == null || FmodSfxEvents.Instance == null)
+        {
+            return;
+        }
+
+            _movementEventInstance = RuntimeSfxManager.Instance.
             CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, _flowerHeadTransform.gameObject);
     }
 
