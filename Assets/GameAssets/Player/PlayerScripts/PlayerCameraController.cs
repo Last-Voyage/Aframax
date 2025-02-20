@@ -49,7 +49,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
     [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
     private const string _TARGET_ANIMATION = "harpoonIdle";
-    private const float _BASE_MOVEMENT_SWAY_SPEED = 0.0001f;
+    private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
 
@@ -183,26 +183,17 @@ public class PlayerCameraController : MonoBehaviour
 
                 // Movement Sway
                 float newX = 0;
-                float newZ = 0;
                 if (_movementSwayRight)
                 {
                     newX = _harpoonGun.transform.localPosition.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * 
-                        _playerVisuals.transform.right.x;
-                    newZ = _harpoonGun.transform.localPosition.z +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * 
-                        _playerVisuals.transform.right.z;
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
                 }
                 else
                 {
                     newX = _harpoonGun.transform.localPosition.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * 
-                        _playerVisuals.transform.right.x;
-                    newZ = _harpoonGun.transform.localPosition.z -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * 
-                        _playerVisuals.transform.right.z;
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
                 }
-                _harpoonGun.transform.localPosition = new Vector3(newX, 0, newZ);
+                _harpoonGun.transform.localPosition = new Vector3(newX, 0, 0);
 
                 // If we reach the limit on our sway, switch directions
                 float limit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
@@ -247,8 +238,8 @@ public class PlayerCameraController : MonoBehaviour
         while (_harpoonGun.transform.localPosition != Vector3.zero)
         {
             // Slowly move the harpoon back to position
-            _harpoonGun.transform.localPosition = Vector3.MoveTowards(_harpoonGun.transform.localPosition, Vector3.zero, 
-                _BASE_MOVEMENT_SWAY_SPEED);
+            _harpoonGun.transform.localPosition = Vector3.MoveTowards(_harpoonGun.transform.localPosition, 
+                Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED);
 
             yield return null;
         }
