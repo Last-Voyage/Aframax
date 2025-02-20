@@ -208,5 +208,6 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
     #region Getters
     //TODO as needed
+    public PlayerHealth GetPlayerHealth() => _playerHealthController;
     #endregion
 }
