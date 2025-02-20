@@ -26,7 +26,6 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         CheckForKillBoxContact(other.gameObject);
 
         CheckForEnemyContact(other.gameObject);

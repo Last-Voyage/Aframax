@@ -16,7 +16,7 @@ public class ChaseVineGroup : MonoBehaviour
     [SerializeField] private float _chaseSpeed = 3f;
     [SerializeField] private Transform _chaseCollider;
     [SerializeField] private bool _isTriggeredByPlayerWalkingBy = true;
-    [SerializeField] private bool _killPlayerInstantly = true;
+    [SerializeField] private bool _doeskillPlayerInstantly = true;
     [SerializeField] private float _damageToPlayer = 50f;
     private ChaseSequenceVine[] _chaseSequenceVines;
     private Transform _colliderFollow;
@@ -44,7 +44,9 @@ public class ChaseVineGroup : MonoBehaviour
     private void Update()
     {
         if(_colliderFollow != null)
+        {
             _chaseCollider.position = _colliderFollow.position;
+        }   
     }
 
     /// <summary>
@@ -69,6 +71,6 @@ public class ChaseVineGroup : MonoBehaviour
     }
 
     public bool IsTriggeredByPlayerWalkThrough() => _isTriggeredByPlayerWalkingBy;
-    public bool IsSupposedToKillInstant() => _killPlayerInstantly;
+    public bool IsSupposedToKillInstant() => _doeskillPlayerInstantly;
     public float GetPlayerDamageAmount() => _damageToPlayer;
 }
