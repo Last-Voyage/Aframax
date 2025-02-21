@@ -89,6 +89,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Looking"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""cc7ee0d5-2767-4b74-a902-4e6c37c4dbe9"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -149,8 +158,30 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""595523d3-0fe5-41c7-9f0d-5f2e3ca7234d"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""30b55e33-ea3f-421c-ae27-6f49bd3466ee"",
                     ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a5d74c7-a258-47ae-9063-1cb54ec63abd"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -182,6 +213,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""daecdb79-8f2f-4640-bd54-1d7e708cfec1"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FocusHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -193,8 +235,30 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""c1de372d-034c-416c-a7bc-abdc29b7930b"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReelHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""bc9785c1-07f6-46e5-8895-7ab3d10af51c"",
                     ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6698357b-3946-42d0-ad9e-0a9dbdd76f6b"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -226,12 +290,56 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""ed627943-05ea-4137-8f4a-1de44956ea71"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterTitleScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""547f9354-7d69-49db-9e97-5715f84ccd9e"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e663f56-7ff1-4f83-b370-f69791677eb9"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ec06dd1-aad8-4fcb-9854-89852b7da2b9"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d121193f-de14-4db2-8fab-8a958d3ce917"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -432,6 +540,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Controller"",
+            ""bindingGroup"": ""Controller"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -444,6 +563,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -517,6 +637,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_EnterTitleScreen;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Looking;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -528,6 +649,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Looking => m_Wrapper.m_Player_Looking;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -558,6 +680,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Looking.started += instance.OnLooking;
+            @Looking.performed += instance.OnLooking;
+            @Looking.canceled += instance.OnLooking;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -583,6 +708,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Looking.started -= instance.OnLooking;
+            @Looking.performed -= instance.OnLooking;
+            @Looking.canceled -= instance.OnLooking;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -671,6 +799,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyboardandMouseSchemeIndex];
         }
     }
+    private int m_ControllerSchemeIndex = -1;
+    public InputControlScheme ControllerScheme
+    {
+        get
+        {
+            if (m_ControllerSchemeIndex == -1) m_ControllerSchemeIndex = asset.FindControlSchemeIndex("Controller");
+            return asset.controlSchemes[m_ControllerSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -680,6 +817,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnEnterTitleScreen(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnLooking(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {
