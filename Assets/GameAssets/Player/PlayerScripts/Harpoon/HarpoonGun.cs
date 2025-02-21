@@ -111,9 +111,12 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
 
-    [Space] [Header("Rumble")] [SerializeField]
+    [Space] [Header("Rumble")] 
+    [SerializeField]
     private float _rightSideRumble = .5f;
+    [SerializeField]
     private float _leftSideRumble = .25f;
+    [SerializeField]
     private float _rumbleLength = .5f;
     
     [Space]
