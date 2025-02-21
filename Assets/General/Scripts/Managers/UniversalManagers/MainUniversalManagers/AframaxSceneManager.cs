@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Provides the functionality for scenes to be loaded
@@ -168,7 +169,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             OnInvokeLeavingGameplayScene();
         }
 
-        //start the starting scene transition animation here
+        //start the scene transition animation here
+        SceneTransitionBehaviour.Instance.GetComponent<Image>().enabled = true;
         SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionIntroAnimTrigger);
 
         //turn off buttons to prevent doing stuff during transition
