@@ -45,17 +45,18 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for movement sway
     [Space]
+    [SerializeField] private GameObject _harpoonGun;
+    private Animator _harpoonAnimator;
     [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
     [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
-    private const float _BASE_MOVEMENT_SWAY_SPEED = 0.0025f;
-    private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.25f;
-    private const float _MOVEMENT_SWAY_SPEED_LIMITER = 5f;
-    private const float _MOVEMENT_SWAY_INTENSITY_LIMITER = 5f;
+    private const string _TARGET_ANIMATION = "harpoonIdle";
+    private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
+    private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
 
     // Variables for pullback
     [Space]
-    private float _jumpscareTime = 0.1f;
+    [SerializeField] private float _jumpscareTime = 0.1f;
     [SerializeField, Range(0f, 10f)] private float _jumpscareIntensity = 5f;
 
     /// <summary>
@@ -93,6 +94,8 @@ public class PlayerCameraController : MonoBehaviour
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+
+        _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -126,7 +129,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void BoatSway()
     {
-        if (_virtualCamera != null)
+        if (!_virtualCamera.IsUnityNull())
         {
             // Update our change from the original camera position
             _currentBoatSwayChange += _BASE_BOAT_SWAY_SPEED * _boatSwaySpeed / _BOAT_SWAY_SPEED_LIMITER;
@@ -169,9 +172,10 @@ public class PlayerCameraController : MonoBehaviour
         {
             Vector2 moveDir = playerMovement.ReadValue<Vector2>();
 
-            // We only really want to do movement sway if we are moving directly forward
+            // We only really want to do movement sway if we are moving directly forward and the harpoon is idle
             // If we don't do this, this could lead to visual bugs
-            if (moveDir.y > 0 && moveDir.x == 0)
+            if (moveDir.y > 0 && moveDir.x == 0 && 
+                _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _TARGET_ANIMATION)
             {
                 // Stop resetting the camera if we are
                 if (stopSwayCoroutine != null)
@@ -181,29 +185,22 @@ public class PlayerCameraController : MonoBehaviour
 
                 // Movement Sway
                 float newX = 0;
-                float newZ = 0;
                 if (_movementSwayRight)
                 {
-                    newX = _transposer.m_FollowOffset.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.x;
-                    newZ = _transposer.m_FollowOffset.z +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.z;
+                    newX = _harpoonGun.transform.localPosition.x +
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
                 }
                 else
                 {
-                    newX = _transposer.m_FollowOffset.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.x;
-                    newZ = _transposer.m_FollowOffset.z -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed / _MOVEMENT_SWAY_SPEED_LIMITER) * _playerVisuals.transform.right.z;
+                    newX = _harpoonGun.transform.localPosition.x -
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
                 }
-                _transposer.m_FollowOffset = new Vector3(newX, _transposer.m_FollowOffset.y, newZ);
+                _harpoonGun.transform.localPosition = new Vector3(newX, 0, 0);
 
                 // If we reach the limit on our sway, switch directions
-                float limit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity /
-                    _MOVEMENT_SWAY_INTENSITY_LIMITER;
-                Vector3 origin = new Vector3(0, _transposer.m_FollowOffset.y, 0);
-                float distance = Vector3.Distance(_transposer.m_FollowOffset, origin);
-                if (distance >= limit)
+                float swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
+                float currentSwayDistance = Vector3.Distance(_harpoonGun.transform.localPosition, Vector3.zero);
+                if (currentSwayDistance >= swayDistanceLimit)
                 {
                     _movementSwayRight = !_movementSwayRight;
                 }
@@ -240,14 +237,11 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
-        // We only really changed our X value in this code, so let's return it
-        while (_transposer.m_FollowOffset.x != 0)
+        while (_harpoonGun.transform.localPosition != Vector3.zero)
         {
-            Vector3 targetPos = new Vector3(0, _transposer.m_FollowOffset.y, 0);
-
-            // Slowly move the camera back to position
-            _transposer.m_FollowOffset = Vector3.MoveTowards(_transposer.m_FollowOffset, targetPos, 
-                _BASE_MOVEMENT_SWAY_SPEED);
+            // Slowly move the harpoon back to position
+            _harpoonGun.transform.localPosition = Vector3.MoveTowards(_harpoonGun.transform.localPosition, 
+                Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED);
 
             yield return null;
         }
