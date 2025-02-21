@@ -129,7 +129,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void BoatSway()
     {
-        if (_virtualCamera != null)
+        if (!_virtualCamera.IsUnityNull())
         {
             // Update our change from the original camera position
             _currentBoatSwayChange += _BASE_BOAT_SWAY_SPEED * _boatSwaySpeed / _BOAT_SWAY_SPEED_LIMITER;
