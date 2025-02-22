@@ -7,6 +7,8 @@
 *****************************************************************************/
 using PathCreation;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Events;
 
 /// <summary>
 /// This class controls an individual vine in a chase group
@@ -14,31 +16,12 @@ using UnityEngine;
 public class ChaseSequenceVine : MonoBehaviour
 {
     private float _chaseDistance;
-    [SerializeField] private Transform _head;
+    public Transform Head;
     private float _chaseSpeed;
     [SerializeField] private PathCreator _chasePath;
     private bool _isChasing = false;
 
-    /// <summary>
-    /// Update calls the chase function when appropriate
-    /// </summary>
-    private void Update()
-    {
-        if( _isChasing && _chasePath.path.length > _chaseDistance + .3f) //added buffer number
-        {
-            Chasing();
-        }
-    }
-
-    /// <summary>
-    /// Follows the chase path
-    /// </summary>
-    private void Chasing()
-    {
-        _chaseDistance += Time.deltaTime * _chaseSpeed;
-        _head.position = _chasePath.path.GetPointAtDistance(_chaseDistance);
-        _head.right = _chasePath.path.GetDirectionAtDistance(_chaseDistance);
-    }
+    internal UnityEvent OnChaseEnd = new();
 
     /// <summary>
     /// Starts the chase of this vine
@@ -48,5 +31,39 @@ public class ChaseSequenceVine : MonoBehaviour
     {
         _chaseSpeed = speed;
         _isChasing = true;
+
+        StartCoroutine(MoveProcess());
+    }
+
+    /// <summary>
+    /// Coroutine that handles the process of the movement during the chase sequence
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator MoveProcess()
+    {
+        while (_isChasing && _chasePath.path.length > _chaseDistance + .3f) //added buffer number
+        {
+            Chasing();
+            yield return null;
+        }
+        ChaseEnd();
+    }
+
+    /// <summary>
+    /// Follows the chase path
+    /// </summary>
+    private void Chasing()
+    {
+        _chaseDistance += Time.deltaTime * _chaseSpeed;
+        Head.position = _chasePath.path.GetPointAtDistance(_chaseDistance);
+        Head.right = _chasePath.path.GetDirectionAtDistance(_chaseDistance);
+    }
+
+    /// <summary>
+    /// Function called when the chase sequence reaches its end point
+    /// </summary>
+    private void ChaseEnd()
+    {
+        OnChaseEnd?.Invoke();
     }
 }

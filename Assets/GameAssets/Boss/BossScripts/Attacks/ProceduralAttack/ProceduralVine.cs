@@ -105,7 +105,7 @@ public class ProceduralVine : MonoBehaviour
             return;
         }
 
-            _movementEventInstance = RuntimeSfxManager.Instance.
+        _movementEventInstance = RuntimeSfxManager.Instance.
             CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, _flowerHeadTransform.gameObject);
     }
 
