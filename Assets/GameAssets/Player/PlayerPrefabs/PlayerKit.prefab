@@ -376,6 +376,7 @@ MonoBehaviour:
   _harpoonGun: {fileID: 5197215059468236605}
   _movementSwaySpeed: 5
   _movementSwayIntensity: 5
+  _jumpscareTime: 0.1
   _jumpscareIntensity: 5
 --- !u!114 &7573169614060137600
 MonoBehaviour:
@@ -584,8 +585,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 1
+  m_RequiresOpaqueTextureOption: 1
   m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1
@@ -595,7 +596,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
