@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerReticle.cs
 // Author :            Adam Garwacki
-// Contributors:       David Henvick
+// Contributors:       David Henvick, Ryan Swanson
 // Creation Date :     10/27/2024
 //
 // Brief Description : Allows a reticle scope to be displayed and controlled

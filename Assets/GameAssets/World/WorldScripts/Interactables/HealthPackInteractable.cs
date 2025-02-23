@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HealthPackInteractable.cs
 // Author :            Andrew Stapay
+// Contributors :      Ryan Swanson
 // Creation Date :     11/12/24
 //
 // Brief Description : Controls an interactable health pack in scene. When

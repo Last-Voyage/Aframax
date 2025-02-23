@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         AmmoRackInteractable.cs
 // Author :            Andrew Stapay
-// Contributors:       Jeremiah Peters
+// Contributors:       Jeremiah Peters, Ryan Swanson
 // Creation Date :     11/13/2024
 //
 // Brief Description : Implements an ammo rack where the player can refill their ammo.
