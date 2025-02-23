@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SceneTransitionBehaviour : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class SceneTransitionBehaviour : MonoBehaviour
     /// <param name="animationTrigger"></param>
     public void PlayTransition(string animationTrigger)
     {
+        gameObject.GetComponent<Image>().enabled = true;
         _sceneTransitionAnimator.SetTrigger(animationTrigger);
     }
 }

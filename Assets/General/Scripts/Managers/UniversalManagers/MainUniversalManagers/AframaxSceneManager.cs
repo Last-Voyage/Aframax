@@ -13,7 +13,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 /// <summary>
 /// Provides the functionality for scenes to be loaded
@@ -170,8 +169,10 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         }
 
         //start the scene transition animation here
-        SceneTransitionBehaviour.Instance.GetComponent<Image>().enabled = true;
-        SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionIntroAnimTrigger);
+        if (sceneTransition.SceneTransitionIntroAnimTrigger != "")
+        {
+            SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionIntroAnimTrigger);
+        }
 
         //turn off buttons to prevent doing stuff during transition
         GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
@@ -192,7 +193,10 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         OnInvokeSceneChangedEvent();
 
         //start the ending scene transition animation here
-        SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionExitAnimTrigger);
+        if (sceneTransition.SceneTransitionIntroAnimTrigger != "")
+        {
+            SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionExitAnimTrigger);
+        }
 
         //Sets the coroutine to null to allow for new scene loading to occur
         _sceneLoadingCoroutine = null;

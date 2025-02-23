@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// runs at the end of the scene transition animation to turn off the image component
+/// </summary>
 public class SceneTransitionDisableImage : StateMachineBehaviour
 {
     /// <summary>
