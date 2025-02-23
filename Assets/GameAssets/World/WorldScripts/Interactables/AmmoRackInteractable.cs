@@ -1,20 +1,19 @@
 /**********************************************************************************************************************
 // File Name :         AmmoRackInteractable.cs
 // Author :            Andrew Stapay
-// Contributors:       Jeremiah Peters
+// Contributors:       Jeremiah Peters, Ryan Swanson
 // Creation Date :     11/13/2024
 //
 // Brief Description : Implements an ammo rack where the player can refill their ammo.
 **********************************************************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
 /// A class that implements the interaction with the ammo rack
 /// </summary>
-public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
+public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
 {
     // The nuumber of harpoons that are currently on the rack
     private int _currentHarpoons;
@@ -31,10 +30,33 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
+    /// Subscribes to events of when the ammo changes
+    /// </summary>
+    protected override void SubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(UpdateInteractability);
+        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(UpdateInteractability);
+    }
+
+    /// <summary>
+    /// Unsubscribes to all subscribed events
+    /// </summary>
+    protected override void UnsubscribeToEvents()
+    {
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(UpdateInteractability);
+        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(UpdateInteractability);
+    }
+
+    /// <summary>
     /// Triggers when the ammo rack is interacted with
     /// </summary>
     public void OnInteractedByPlayer()
     {
+        if(!_canInteract)
+        {
+            return;
+        }
+
         PlayerManager.Instance.OnInvokeHarpoonRestockEvent(this);
         if (_currentHarpoons == 0)
         {
@@ -54,6 +76,24 @@ public class AmmoRackInteractable : MonoBehaviour, IPlayerInteractable
             _currentHarpoons--;
             DestroyImmediate(transform.GetChild(0).GetChild(0).gameObject);
         }
+    }
+
+    /// <summary>
+    /// Updates if the harpoon ammo rack is interactable
+    /// </summary>
+    private void UpdateInteractability()
+    {
+        _canInteract = !HarpoonGun.Instance.IsAtMaxAmmo();
+        UpdateInteractablePopupToggle();
+    }
+
+    /// <summary>
+    /// Second function for subscribing to the event for restocking ammo. It passes in an int so I needed 2 of these.
+    /// </summary>
+    /// <param name="ammo"> The number of harpoons restocked </param>
+    private void UpdateInteractability(int ammo)
+    {
+        UpdateInteractability();
     }
 
     /// <summary>
