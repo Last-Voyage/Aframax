@@ -19,8 +19,15 @@ public class HarpoonDamage : BaseDamage
     /// <param name="damageRecipient"></param>
     public override void ApplyDamage(GameObject damageRecipient)
     {
+        //Checks if its an object to spawn vfx on
+        if (damageRecipient.TryGetComponent<HarpoonHitVfxSpawner>(out HarpoonHitVfxSpawner harpoonHitVfx))
+        {
+            harpoonHitVfx.HarpoonHit(transform);
+        }
+
         // Avoids damaging the player
-        if (damageRecipient.TryGetComponent<PlayerHealth>(out PlayerHealth playerHealth) || !damageRecipient.CompareTag("Enemy"))
+        if (damageRecipient.TryGetComponent<PlayerHealth>(out PlayerHealth playerHealth)
+            || !damageRecipient.CompareTag("Enemy")) 
         {
             return;
         }
