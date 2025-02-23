@@ -49,10 +49,14 @@ MonoBehaviour:
     _minimumScreenTransitionTime: 0.5
     SceneTransitionIntroAnimTrigger: 
     SceneTransitionExitAnimTrigger: 
-  - _sceneTransitionName: Fade Transition
+  - _sceneTransitionName: FadetoWhiteSceneTransition
     _minimumScreenTransitionTime: 0.5
-    SceneTransitionIntroAnimTrigger: Fade In
-    SceneTransitionExitAnimTrigger: Fade Out
+    SceneTransitionIntroAnimTrigger: FadeWhiteStart
+    SceneTransitionExitAnimTrigger: FadeWhiteEnd
+  - _sceneTransitionName: FadetoClearSceneTransition
+    _minimumScreenTransitionTime: 0.5
+    SceneTransitionIntroAnimTrigger: FadeClearStart
+    SceneTransitionExitAnimTrigger: FadeClearEnd
   <MainMenuSceneIndex>k__BackingField: 0
   <BoatSceneIndex>k__BackingField: 1
   <MazeSceneIndex>k__BackingField: 8
