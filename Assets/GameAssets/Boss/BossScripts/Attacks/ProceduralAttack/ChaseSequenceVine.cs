@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         ChaseSequenceVine.cs
 // Author :            Tommy Roberts
+// Contributor:        Ryan Swanson
 // Creation Date :     2/19/2025
 //
 // Brief Description : This script controls an individual vine in the chase groups

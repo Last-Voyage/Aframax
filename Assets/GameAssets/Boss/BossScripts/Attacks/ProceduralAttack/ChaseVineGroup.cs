@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         ChaseVineGroup.cs
 // Author :            Tommy Roberts
+// Contributor:        Ryan Swanson
 // Creation Date :     2/19/2025
 //
 // Brief Description : This script controls the chase vine group
@@ -30,6 +31,7 @@ public class ChaseVineGroup : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private bool _doesPlayStartAudioEveryChase;
+    [Tooltip("The instance of the audio that is started for the looping audio")]
     private EventInstance _chaseEventInstance;
 
     /// <summary>
@@ -121,7 +123,6 @@ public class ChaseVineGroup : MonoBehaviour
 
         //Play the looping audio
         RuntimeSfxManager.Instance.FadeInLoopingOneShot(_chaseEventInstance, FmodSfxEvents.Instance.ChaseLoopFadeInTime);
-        print("Start Audio");
     }
 
     /// <summary>
@@ -134,7 +135,6 @@ public class ChaseVineGroup : MonoBehaviour
             return;
         }
         RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_chaseEventInstance, FmodSfxEvents.Instance.ChaseLoopFadeOutTime);
-        print("Stop Audio");
     }
     #endregion
 
