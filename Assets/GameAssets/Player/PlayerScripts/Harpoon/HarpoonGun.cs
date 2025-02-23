@@ -111,6 +111,14 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("Recoil time Shake")]
     [SerializeField] private float _recoilCameraShakeTime = 0.05f;
 
+    [Space] [Header("Rumble")] 
+    [SerializeField]
+    private float _rightSideRumble = .5f;
+    [SerializeField]
+    private float _leftSideRumble = .25f;
+    [SerializeField]
+    private float _rumbleLength = .5f;
+    
     [Space]
     [Header("Other")]
     [SerializeField] private float _reloadAudioDelay;
@@ -192,7 +200,7 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed += FireHarpoon;
 
-        _harpoonFocus.action.started += FocusButtonHeld;
+        _harpoonFocus.action.performed += FocusButtonHeld;
         _harpoonFocus.action.canceled += FocusButtonReleased;
     }
 
@@ -203,7 +211,7 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed -= FireHarpoon;
 
-        _harpoonFocus.action.started -= FocusButtonHeld;
+        _harpoonFocus.action.performed -= FocusButtonHeld;
         _harpoonFocus.action.canceled -= FocusButtonReleased;
     }
     
@@ -229,6 +237,11 @@ public class HarpoonGun : MonoBehaviour
         currentHarpoon.LaunchHarpoon(_harpoonTip.transform.position, GetHarpoonDirectionWithFocus());
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
+
+        if (!Gamepad.current.IsUnityNull())
+        {
+            StartCoroutine(HarpoonRumble());
+        }
 
         if (BoatMover.Instance && BoatMover.Instance.gameObject != null)
         {
@@ -260,6 +273,16 @@ public class HarpoonGun : MonoBehaviour
             .Invoke(FmodSfxEvents.Instance.HarpoonShot, gameObject.transform.position);
 
         StartReloadProcess();
+    }
+
+    /// <summary>
+    /// This function will make the controller rumble
+    /// </summary>
+    private IEnumerator HarpoonRumble()
+    {
+        Gamepad.current.SetMotorSpeeds(_leftSideRumble,_rightSideRumble);
+        yield return new WaitForSeconds(_rumbleLength);
+        Gamepad.current.SetMotorSpeeds(0,0);
     }
 
     #endregion
