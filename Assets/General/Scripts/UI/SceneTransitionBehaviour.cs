@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// plays scene transition animations
+/// </summary>
 public class SceneTransitionBehaviour : MonoBehaviour
 {
     private Animator _sceneTransitionAnimator;
