@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerReticle.cs
 // Author :            Adam Garwacki
-// Contributors:       David Henvick
+// Contributors:       David Henvick, Ryan Swanson
 // Creation Date :     10/27/2024
 //
 // Brief Description : Allows a reticle scope to be displayed and controlled
@@ -229,6 +229,13 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     public void RestockAmmoIcons()
     {
+        //As this function is called after reloading we don't need it running twice at the same time
+        //Also prevents an error that can occur if reloading at the same time as restocking
+        if (_harpoonGunScript.GetHarpoonFiringState() == HarpoonGun.EHarpoonFiringState.Reloading)
+        {
+            return;
+        }
+
         int i;
         for (i = 0; i < _harpoonGunScript.GetReserveAmmo() + 1; i++)
         {
