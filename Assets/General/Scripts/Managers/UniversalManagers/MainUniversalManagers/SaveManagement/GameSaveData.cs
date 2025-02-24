@@ -24,11 +24,14 @@ public class GameSaveData
     [Tooltip("A list of strings containing the players inventory")]
     public List<string> PlayerInventory;
 
+    public int CurrentStoryBeat;
+
     #region Getters
 
     public bool GetTempBool() => TempSaveBool;
     public int GetCurrentCheckPoint() => CurrentCheckpoint;
     public List<string> GetCurrentInventory() => PlayerInventory;
+    public int GetCurrentStoryBeat() => CurrentStoryBeat;
 
     #endregion
 
@@ -47,6 +50,11 @@ public class GameSaveData
     public void SetPlayerInventory(List<string> newInventory)
     {
         PlayerInventory = newInventory;
+    }
+
+    public void SetCurrentStoryBeat(int newStoryBeat)
+    {
+        CurrentStoryBeat = newStoryBeat;
     }
 
     #endregion

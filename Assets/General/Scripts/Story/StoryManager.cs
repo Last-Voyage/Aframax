@@ -7,6 +7,7 @@
                     the game
 *****************************************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -250,5 +251,30 @@ public class StoryManager : MonoBehaviour
 
         // Tell the active beat list to stop considering this beat as playing
         _beatEventsCoroutines[_activeStoryBeats.IndexOf(beat)] = null;
+    }
+
+    /// <summary>
+    /// This saves the current story beat when a new checkpoint is hit
+    /// </summary>
+    private void SaveData()
+    {
+        SaveManager.Instance.GetGameSaveData().SetCurrentStoryBeat(_currentStoryIndex);
+    }
+
+    private void LoadData()
+    {
+        _currentStoryIndex = SaveManager.Instance.GetGameSaveData().GetCurrentStoryBeat();
+    }
+
+    private void OnEnable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.AddListener(SaveData);
+        SaveManager.Instance.GetOnLoadSaveData()?.AddListener(LoadData);
+    }
+
+    private void OnDisable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.RemoveListener(SaveData);
+        SaveManager.Instance.GetOnLoadSaveData()?.RemoveListener(LoadData);
     }
 }

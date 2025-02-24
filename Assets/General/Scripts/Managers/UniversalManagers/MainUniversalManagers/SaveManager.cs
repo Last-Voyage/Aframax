@@ -24,6 +24,7 @@ public class SaveManager : MainUniversalManagerFramework
     public static SaveManager Instance;
 
     private readonly UnityEvent _newCheckpoint = new();
+    private readonly UnityEvent _loadSaveData = new();
 
     /// <summary>
     /// Sets the path to create the save file
@@ -125,8 +126,8 @@ public class SaveManager : MainUniversalManagerFramework
 
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
-
     public UnityEvent GetOnNewCheckpoint() => _newCheckpoint;
+    public UnityEvent GetOnLoadSaveData() => _loadSaveData;
 
     #endregion
 }

@@ -94,18 +94,28 @@ public class PlayerInventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds listener to save inventory when player reaches a new checkpoint
+    /// Loads in the players inventory from saved data
+    /// </summary>
+    private void LoadInventory()
+    {
+        _allItems = SaveManager.Instance.GetGameSaveData().GetCurrentInventory();
+    }
+
+    /// <summary>
+    /// Adds listeners for saving and loading data
     /// </summary>
     private void OnEnable()
     {
         SaveManager.Instance.GetOnNewCheckpoint()?.AddListener(SaveInventory);
+        SaveManager.Instance.GetOnLoadSaveData()?.AddListener(LoadInventory);
     }
 
     /// <summary>
-    /// Removes the listener from OnEnable
+    /// Removes listeners for saving and loading data
     /// </summary>
     private void OnDisable()
     {
         SaveManager.Instance.GetOnNewCheckpoint()?.RemoveListener(SaveInventory);
+        SaveManager.Instance.GetOnLoadSaveData()?.RemoveListener(LoadInventory);
     }
 }
