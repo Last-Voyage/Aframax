@@ -8,19 +8,22 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// sets the health, focus level, and speed for the dev ui
+/// </summary>
 public class DevUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text healthText;
-    [SerializeField] private TMP_Text speedText;
-    [SerializeField] private TMP_Text focusText;
+    [SerializeField] private TMP_Text _healthText;
+    [SerializeField] private TMP_Text _speedText;
+    [SerializeField] private TMP_Text _focusText;
     /// <summary>
     /// happens every frame
     /// </summary>
     private void Update()
     {
 
-        healthText.text = "HP: " + FindObjectOfType<PlayerHealth>().GetCurrentHealth().ToString();
-        speedText.text = "Speed: " + FindObjectOfType<PlayerMovementController>().GetPlayerSpeed().ToString();
-        focusText.text = "Focus: " + FindObjectOfType<HarpoonGun>().GetFocusAccuracy();
+        _healthText.text = "HP: " + FindObjectOfType<PlayerHealth>().GetCurrentHealth().ToString();
+        _speedText.text = "Speed: " + FindObjectOfType<PlayerMovementController>().GetPlayerSpeed().ToString();
+        _focusText.text = "Focus: " + FindObjectOfType<HarpoonGun>().GetFocusAccuracy();
     }
 }

@@ -8,11 +8,20 @@
 *****************************************************************************/
 using UnityEngine;
 
+/// <summary>
+/// Keeps track of the player proximity, and if
+/// IsInDevUiMode is enabled. when both conditions are met, the pop up is enabled
+/// </summary>
 public class DevUiPopUp : MonoBehaviour
 {
 
     [SerializeField] private GameObject _devUiObject;
-    
+    private GameObject _player;
+
+    private void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player");
+    }
 
     /// <summary>
     /// happens at a fix rate over time
@@ -32,9 +41,8 @@ public class DevUiPopUp : MonoBehaviour
 
         if (_devUiObject.activeSelf)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
             //make sure the ui faces the player
-            _devUiObject.transform.LookAt(player.transform, Vector3.up);
+            _devUiObject.transform.LookAt(_player.transform, Vector3.up);
         }
     }
 
@@ -45,15 +53,14 @@ public class DevUiPopUp : MonoBehaviour
     private bool IsPlayerWithinProximity()
     {
         bool isPlayerCloseEnough = false;
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         // is player close enough
-        if (Vector3.Distance(player.transform.position, transform.position) < 10)
+        if (Vector3.Distance(_player.transform.position, transform.position) < 10)
         {
             isPlayerCloseEnough = true;
         }
         // not close enough
-        else if (Vector3.Distance(player.transform.position, transform.position) > 10)
+        else if (Vector3.Distance(_player.transform.position, transform.position) > 10)
         {
             isPlayerCloseEnough = false;
         }
@@ -67,7 +74,7 @@ public class DevUiPopUp : MonoBehaviour
     /// <returns></returns>
     private bool IsPlayerInDevUiMode()
     {
-        return FindObjectOfType<ConsoleController>().isInDevUiMode;
+        return ConsoleController.Instance.IsInDevUiMode;
     }
 
     /// <summary>

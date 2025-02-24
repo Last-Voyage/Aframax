@@ -3,21 +3,24 @@
 // Author :            Nabil Tagba
 // Creation Date :     2/23/2025
 //
-// Brief Description : determins what the dev ui text should display
+// Brief Description : determines what the dev ui text should display
 *****************************************************************************/
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// determines what the dev ui text should display
+/// </summary>
 public class DevUiText : MonoBehaviour
 {
-    enum DevUITextType
+    enum EDevUITextType
     {
         none,
         medkitUses,
         harpoonUses
     }
 
-    [SerializeField] private DevUITextType _devUITextType;
+    [SerializeField] private EDevUITextType _devUITextType;
     [SerializeField] private GameObject _owningObject;
 
     /// <summary>
@@ -27,13 +30,13 @@ public class DevUiText : MonoBehaviour
     {
         switch (_devUITextType)
         {
-            case DevUITextType.medkitUses:
+            case EDevUITextType.medkitUses:
                 if (_owningObject.TryGetComponent<HealthPackInteractable>(out HealthPackInteractable h))
                 {
                     GetComponent<TMP_Text>().text = h.GetNumOfUses().ToString();
                 }
                 break;
-            case DevUITextType.harpoonUses:
+            case EDevUITextType.harpoonUses:
                 if (_owningObject.TryGetComponent<AmmoRackInteractable>(out AmmoRackInteractable a))
                 {
                     GetComponent<TMP_Text>().text = a.GetNumHarpoons().ToString();

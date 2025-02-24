@@ -68,7 +68,7 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private Button _moveSceneBackwardButton;
 
     //Dev ui mode
-    public bool isInDevUiMode;
+    public bool IsInDevUiMode;
     [SerializeField] private Button _devUiModeButton;
     [SerializeField] private TMP_Text _devUiModeText;
     [SerializeField] private GameObject _devUi;
@@ -452,18 +452,22 @@ public class ConsoleController : MonoBehaviour
     #endregion
 
     #region Dev Ui Mode
+
+    /// <summary>
+    /// Turns dev ui on and off
+    /// </summary>
     private void ToggleDevUiMode()
     {
-        if (isInDevUiMode == true)
+        if (IsInDevUiMode)
         {
-            isInDevUiMode = false;
-            _devUi.SetActive(isInDevUiMode);
+            IsInDevUiMode = false;
+            _devUi.SetActive(IsInDevUiMode);
             _devUiModeText.text = "Enter Dev Ui Mode";
         }
-        else if (isInDevUiMode == false)
+        else
         {
-            isInDevUiMode = true;
-            _devUi.SetActive(isInDevUiMode);
+            IsInDevUiMode = true;
+            _devUi.SetActive(IsInDevUiMode);
             _devUiModeText.text = "Exit Dev Ui Mode";
         }
     }
