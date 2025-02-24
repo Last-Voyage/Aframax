@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         DialoguePopUps.cs
 // Author :            Nick Rice
-// Contributer :       Charlie Polonus, Jeremiah Peters
+// Contributers :       Charlie Polonus, Jeremiah Peters
 //                     
 // Creation Date :     11/12/24
 //
@@ -86,13 +86,19 @@ public class DialoguePopUps : MonoBehaviour
 
             if (doTextBackground)
             {
-                _textBackgroundContainer.text = $"<mark=#000000aa padding=“{_leftBackgroundPadding}, {_rightBackgroundPadding}, {_topBackgroundPadding}, {_bottomBackgroundPadding}”>" + dialogueInfo.GetText + "</mark>";
+                _textBackgroundContainer.text =
+                    $"<mark=#000000aa padding=“{_leftBackgroundPadding}," +
+                    $"{_rightBackgroundPadding}, {_topBackgroundPadding}," +
+                    $"{_bottomBackgroundPadding}”>" + dialogueInfo.GetText + "</mark>";
             }
             //padding order is left, right, top, bottom.
             //first 6 digits of the hex color code is color ("000000" means black)
             //last 2 digits is opacity ("aa" is about 67% opacity)
 
             _textBackgroundContainer.maxVisibleCharacters = 0;
+
+            // Play the voiceline sound effect provided by the dialogue object
+            RuntimeSfxManager.APlayOneShotSfx(dialogueInfo.GetAudio, transform.position);
 
             //format for background
             //<mark=#000000aa padding=“10, 10, 0, 0”>text is highlighted</mark>
