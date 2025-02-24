@@ -87,6 +87,17 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private Coroutine _movementCoroutine;
 
+    #region dev console
+    /// <summary>
+    /// returns the player speed
+    /// </summary>
+    public float GetPlayerSpeed() 
+    {
+        return _playerMovementSpeed;
+    }
+
+    #endregion
+
     #region Setup
     /// <summary>
     /// Used to initialized any variables

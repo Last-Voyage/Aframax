@@ -48,6 +48,15 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
+    /// returns the number of uses
+    /// </summary>
+    /// <returns></returns>
+    public int GetNumOfUses()
+    {
+        return _numUses;
+    }
+
+    /// <summary>
     /// Subscribes to any needed events
     /// </summary>
     private void SubscribeToEvents()

@@ -67,6 +67,12 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private Button _moveSceneForwardButton;
     [SerializeField] private Button _moveSceneBackwardButton;
 
+    //Dev ui mode
+    public bool isInDevUiMode;
+    [SerializeField] private Button _devUiModeButton;
+    [SerializeField] private TMP_Text _devUiModeText;
+    [SerializeField] private GameObject _devUi;
+
     private PlayerInputMap _playerInput;
 
     public static ConsoleController Instance;
@@ -114,6 +120,7 @@ public class ConsoleController : MonoBehaviour
         _moveSceneBackwardButton.onClick.AddListener(Back);
         _moveSceneForwardButton.onClick.AddListener(Forward);
         _moveToSceneButton.onClick.AddListener(MoveToScene);
+        _devUiModeButton.onClick.AddListener(ToggleDevUiMode);
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -444,6 +451,26 @@ public class ConsoleController : MonoBehaviour
 
     #endregion
 
+    #region Dev Ui Mode
+    private void ToggleDevUiMode()
+    {
+        if (isInDevUiMode == true)
+        {
+            isInDevUiMode = false;
+            _devUi.SetActive(isInDevUiMode);
+            _devUiModeText.text = "Enter Dev Ui Mode";
+        }
+        else if (isInDevUiMode == false)
+        {
+            isInDevUiMode = true;
+            _devUi.SetActive(isInDevUiMode);
+            _devUiModeText.text = "Exit Dev Ui Mode";
+        }
+    }
+
+
+    #endregion
+
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
@@ -460,6 +487,7 @@ public class ConsoleController : MonoBehaviour
         _moveSceneBackwardButton.onClick.RemoveAllListeners();
         _moveSceneForwardButton.onClick.RemoveAllListeners();
         _moveToSceneButton.onClick.RemoveAllListeners();
+        _devUiModeButton.onClick.RemoveAllListeners();
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
