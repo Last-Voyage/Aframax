@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         HealthPackInteractable.cs
 // Author :            Andrew Stapay
+// Contributors :      Ryan Swanson
 // Creation Date :     11/12/24
 //
 // Brief Description : Controls an interactable health pack in scene. When
@@ -11,41 +12,12 @@ using UnityEngine;
 /// <summary>
 /// The class that contains the necessary methods to control the health pack
 /// </summary>
-public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
+public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
 {
     // Variables to store the amount of health restored
     // and the number of uses before this object is destroyed
     [SerializeField] private int _healthRestored = 20;
     [SerializeField] private int _numUses = 3;
-
-    private WorldSpacePopups _interactPopup;
-    private bool _canInteract = false;
-
-    /// <summary>
-    /// Performs initial setup
-    /// </summary>
-    private void Start()
-    {
-        SubscribeToEvents();
-        SetInitialVariables();
-    }
-
-    /// <summary>
-    /// Cleans up anything after destruction
-    /// </summary>
-    private void OnDestroy()
-    {
-        UnsubscribeToEvents();
-    }
-
-    /// <summary>
-    /// Sets any variables to what they should be on start
-    /// </summary>
-    private void SetInitialVariables()
-    {
-        _interactPopup = GetComponentInChildren<WorldSpacePopups>();
-        UpdateInteractablePopupToggle();
-    }
 
     /// <summary>
     /// returns the number of uses
@@ -59,7 +31,7 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// Subscribes to any needed events
     /// </summary>
-    private void SubscribeToEvents()
+    protected override void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateInteractability);
     }
@@ -67,7 +39,7 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
     /// <summary>
     /// Unsubscribes to any subscribed events
     /// </summary>
-    private void UnsubscribeToEvents()
+    protected override void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateInteractability);
     }
@@ -101,13 +73,5 @@ public class HealthPackInteractable : MonoBehaviour, IPlayerInteractable
     {
         _canInteract = percentHealth < 1;
         UpdateInteractablePopupToggle();
-    }
-
-    /// <summary>
-    /// Updates the status of the interactable popup
-    /// </summary>
-    private void UpdateInteractablePopupToggle()
-    {
-        _interactPopup.TogglePopUp(_canInteract);
     }
 }

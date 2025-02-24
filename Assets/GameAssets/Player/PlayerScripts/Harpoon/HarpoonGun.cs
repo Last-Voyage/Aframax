@@ -676,6 +676,7 @@ public class HarpoonGun : MonoBehaviour
     public Transform GetHarpoonTip() => _harpoonTip;
     public int GetMaxAmmo() => _maxAmmo;
     public int GetReserveAmmo() => _currentReserveAmmo;
+    public bool IsAtMaxAmmo() => _currentReserveAmmo == _maxAmmo;
 
     /// <summary>
     /// The focus accuracy (or potential deviation) of the harpoon.

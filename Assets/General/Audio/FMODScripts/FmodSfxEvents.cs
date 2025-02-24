@@ -41,6 +41,15 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Tooltip("Time to fade out the limb movement")]
     [field: SerializeField] public float LimbMoveFadeOutTime { get; private set; }
 
+    [field: SerializeField] public EventReference ChaseSequenceStart { get; private set; }
+    [field: SerializeField] public EventReference ChaseSequenceLoop { get; private set; }
+
+    [field: Tooltip("Time to fade in the limb movement")]
+    [field: SerializeField] public float ChaseLoopFadeInTime { get; private set; }
+
+    [field: Tooltip("Time to fade out the limb movement")]
+    [field: SerializeField] public float ChaseLoopFadeOutTime { get; private set; }
+
     #endregion Boss
 
     #region Interactables
