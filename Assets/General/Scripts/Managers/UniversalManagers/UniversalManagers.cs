@@ -33,6 +33,8 @@ public class UniversalManagers : CoreManagersFramework
     /// <returns></returns>
     protected override bool EstablishInstance()
     {
+        PlayMusicOnSceneChange();
+
         //If no other version exists
         if (Instance == null)
         {
@@ -45,6 +47,14 @@ public class UniversalManagers : CoreManagersFramework
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Plays the music in this new scene
+    /// </summary>
+    private void PlayMusicOnSceneChange()
+    {
+        GetComponentInChildren<SceneAudioSwapper>().SwapToSceneAudio();
     }
 
     /// <summary>
