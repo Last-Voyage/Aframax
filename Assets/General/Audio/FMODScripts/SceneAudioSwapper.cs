@@ -13,12 +13,16 @@ public class SceneAudioSwapper : MonoBehaviour
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
     [SerializeField] private int _sceneMusicID;
 
+    public void AudioSwapperSetUp()
+    {
+        transform.parent = null;
+    }
+
     /// <summary>
     /// Plays the audio associated with a scene
     /// </summary>
     public void SwapToSceneAudio()
     {
-        transform.parent = null;
         PersistentAudioManager.Instance.StartMusicByID(_sceneMusicID);
         Destroy(gameObject);
     }
