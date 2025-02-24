@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       SaveManager.cs
 // Author:          Ryan Swanson
+// Contributor:     Nick Rice
 // Creation Date:   September 14, 2024
 //
 // Description:     Contains the functionality to set up and get access to save data
@@ -9,6 +10,7 @@
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -20,6 +22,8 @@ public class SaveManager : MainUniversalManagerFramework
     private string _saveDataFilePath;
 
     public static SaveManager Instance;
+
+    private readonly UnityEvent _newCheckpoint = new();
 
     /// <summary>
     /// Sets the path to create the save file
@@ -121,5 +125,8 @@ public class SaveManager : MainUniversalManagerFramework
 
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
+
+    public UnityEvent GetOnNewCheckpoint() => _newCheckpoint;
+
     #endregion
 }

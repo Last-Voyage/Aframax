@@ -1,14 +1,14 @@
 /**********************************************************************************************************************
 // File Name :         PlayerInventory.cs
 // Author :            Ryan Swanson
-// Contributer :       Charlie Polonus
+// Contributer :       Charlie Polonus, Nick Rice
 // Creation Date :     11/12/24
 // 
 // Brief Description : Stores any items held by the player
 **********************************************************************************************************************/
 
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -83,5 +83,29 @@ public class PlayerInventory : MonoBehaviour
 
         // Succesfully return that the player has the item
         return true;
+    }
+
+    /// <summary>
+    /// Saves the players inventory
+    /// </summary>
+    private void SaveInventory()
+    {
+        SaveManager.Instance.GetGameSaveData().SetPlayerInventory(_allItems);
+    }
+
+    /// <summary>
+    /// Adds listener to save inventory when player reaches a new checkpoint
+    /// </summary>
+    private void OnEnable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.AddListener(SaveInventory);
+    }
+
+    /// <summary>
+    /// Removes the listener from OnEnable
+    /// </summary>
+    private void OnDisable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.RemoveListener(SaveInventory);
     }
 }
