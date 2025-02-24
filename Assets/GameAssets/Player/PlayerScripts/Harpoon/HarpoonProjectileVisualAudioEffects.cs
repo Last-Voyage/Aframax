@@ -85,19 +85,22 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
 
         // Sets the vfx to null; if there isn't an associated vfx with what was hit, then, nothing happens
         _whichVfxPointer = (uint)HarpoonVFXType.NOVFX;
-
         // Goes through each submesh to check if the raycast collided with an index within it's value range
         for (int i = 0; i < howManyMeshes; i++)
         {
             SubMeshDescriptor subMesh = theCollidedMesh.GetSubMesh(i);
 
-            // If the index is in the value range,
-            // that material/submesh needs to match a possible vfx in the dictionary
-            if (whichTriangle > subMesh.indexStart && whichTriangle < subMesh.indexCount &&
-                _materialVfxRefs.TryGetValue(collidedObjectsMaterials[i], out uint usableVfxPointer))
+            // In the event that the triangle check fails but we still get the correct collision object
+            // This is working even for objects with multiple different materials attached
+            if(_materialVfxRefs.TryGetValue(collidedObjectsMaterials[i], out uint usableVfxPointer))
             {
                 _whichVfxPointer = usableVfxPointer;
-                break;
+                // If the index is in the value range,
+                // that material/submesh needs to match a possible vfx in the dictionary
+                if (whichTriangle >= subMesh.indexStart && whichTriangle <= subMesh.indexCount)
+                {
+                    break;
+                }    
             }
         }
 
