@@ -79,10 +79,7 @@ public class PlayerHealthUi : MonoBehaviour
     /// <param name="healthPercent"> current health percentage </param>
     /// <param name="currentHealth"> current health value </param>
     private void UpdateHealthUI(float healthPercent,float currentHealth)
-    {
-        //this updates the heart
-        _animator.SetFloat("Health_Stage_Num", 4 * healthPercent);
-        
+    {        
         if (_heartAppearanceCoroutine != null)
         {
             StopCoroutine(_heartAppearanceCoroutine);
@@ -91,31 +88,33 @@ public class PlayerHealthUi : MonoBehaviour
         
         _heartAppearanceCoroutine = HeartAppearance();
         StartCoroutine(_heartAppearanceCoroutine);
-        
+
         //this part does the blood around the edges of the screen
-        switch (4 * healthPercent)
+        switch (healthPercent)
         {
-            case 4:
+            case >=1f:
                 TurnOffDamagedUI();
+                _animator.SetFloat("Health_Stage_Num",4);
                 break;
-            case >3:
+            case >.75f:
                 TurnOffDamagedUI();
                 _damagedUIImages[3].gameObject.SetActive(true);
+                _animator.SetFloat("Health_Stage_Num", 3);
                 break;
-            case >2:
+            case >.5f:
                 TurnOffDamagedUI();
                 _damagedUIImages[2].gameObject.SetActive(true);
+                _animator.SetFloat("Health_Stage_Num", 2);
                 break;
-            case >1:
+            case >.25f:
                 TurnOffDamagedUI();
                 _damagedUIImages[1].gameObject.SetActive(true);
-                break;
-            case <1:
-                TurnOffDamagedUI();
-                _damagedUIImages[0].gameObject.SetActive(true);
+                _animator.SetFloat("Health_Stage_Num", 1);
                 break;
             default:
-                Debug.LogWarning("this shouldn't happen");
+                TurnOffDamagedUI();
+                _damagedUIImages[0].gameObject.SetActive(true);
+                _animator.SetFloat("Health_Stage_Num", 0);
                 break;
         }
     }
