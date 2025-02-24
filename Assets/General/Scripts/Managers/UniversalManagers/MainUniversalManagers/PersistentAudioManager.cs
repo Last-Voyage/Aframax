@@ -243,7 +243,7 @@ public class PersistentAudioManager : AudioManager
     public void StartMusicByID(int id)
     {
         // Prevents out of bounds ids
-        if(FmodPersistentAudioEvents.Instance.MusicInGame.Length < id || id < 0)
+        if(FmodPersistentAudioEvents.Instance.MusicInGame.Length <= id || id < 0)
         {
             return;
         }
