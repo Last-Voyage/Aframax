@@ -103,10 +103,26 @@ public class RuntimeSfxManager : AudioManager
         APlayOneShotSfxAttached -= PlayOneShotSfxAttached;
     }
 
+    /// <summary>
+    /// Preset variables at the start of the game
+    /// </summary>
     private void Start()
     {
         footstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FootstepDelay);
         firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay);
+    }
+
+    /// <summary>
+    /// Update variables to more accurately represent the current values
+    /// </summary>
+    private void FixedUpdate()
+    {
+        float currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier;
+
+        footstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FootstepDelay
+            * (1 + (1 - currentSpeedMultiplier)));
+        firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay
+            * (1 + (1 - currentSpeedMultiplier)));
     }
 
     #endregion Enable and Action Subscriptions
