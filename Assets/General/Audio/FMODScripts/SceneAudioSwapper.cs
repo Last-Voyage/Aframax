@@ -13,6 +13,9 @@ public class SceneAudioSwapper : MonoBehaviour
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
     [SerializeField] private int _sceneMusicID;
 
+    /// <summary>
+    /// Performs any needed set up for the audio swapper
+    /// </summary>
     public void AudioSwapperSetUp()
     {
         transform.parent = null;
