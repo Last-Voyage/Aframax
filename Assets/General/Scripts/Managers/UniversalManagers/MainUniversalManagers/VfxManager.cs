@@ -32,6 +32,8 @@ public class VfxManager : MainUniversalManagerFramework
 
     [SerializeField] private SpecificVisualEffect[] _allVfxInGame;
 
+    [SerializeField] private HarpoonVisualAudioEffectsBank[] _visualAudioEffectBank;
+
     //Personally don't like to have to use ids. Let me know if you have a better solution
     private const int _MUZZLE_SMOKE_ID = 0;
     private const int _ENEMY_BLOOD_ID = 1;
@@ -168,6 +170,8 @@ public class VfxManager : MainUniversalManagerFramework
     public SpecificVisualEffect GetMetalSparksVfx() => _allVfxInGame[_METAL_SPARKS_ID];
     public SpecificVisualEffect GetWoodenSparksVfx() => _allVfxInGame[_WOODEN_SPARKS_ID];
     public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[_PLUME_SMOKE_ID];
+
+    public HarpoonVisualAudioEffectsBank[] GetHarpoonVisualArray() => _visualAudioEffectBank;
     #endregion
 
     /// <summary>
