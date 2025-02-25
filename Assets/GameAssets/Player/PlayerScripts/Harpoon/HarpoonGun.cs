@@ -131,6 +131,17 @@ public class HarpoonGun : MonoBehaviour
 
     #endregion
 
+    #region dev console
+
+    /// <summary>
+    /// returns the focus accuracy
+    /// </summary>
+    /// <returns></returns>
+    public float GetFocusAccuracy() => _focusProgress;
+    
+
+    #endregion
+
     #region Setup
     private void Awake()
     {
