@@ -27,6 +27,7 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
 
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
     [field: SerializeField] private int _musicID;
+
     [Tooltip("The volume to switch to")]
     [field: SerializeField] [Range(0,1)] private float _newVolume;
 
