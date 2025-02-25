@@ -58,6 +58,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Interactable")]
     
     [field: SerializeField] public EventReference RadioSong { get; private set; }
+    [field: SerializeField] private EventReference[] _pickupSoundEffects;
 
     #endregion
     
@@ -92,6 +93,29 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Environment")]
     [field: SerializeField] public EventReference GeneratorFixed { get; private set; }
     #endregion
+
+    /// <summary>
+    /// Gets the item pickup sound based on the id of the sound effect
+    /// </summary>
+    /// <param name="pickupSoundId"> The id of the sound effect </param>
+    /// <returns> The sound effect recieved from the id </returns>
+    public EventReference GetItemPickupSound(int pickupSoundId)
+    {
+        // Edge case: the id is too high or the list doesn't exist
+        if (_pickupSoundEffects == null || pickupSoundId >= _pickupSoundEffects.Length)
+        {
+            return new();
+        }
+
+        // Edge case: the sound effect doesn't exist
+        if (_pickupSoundEffects[pickupSoundId].IsNull)
+        {
+            return new();
+        }
+
+        // Return the sound effect
+        return _pickupSoundEffects[pickupSoundId];
+    }
 
     public void SetUpInstance()
     {
