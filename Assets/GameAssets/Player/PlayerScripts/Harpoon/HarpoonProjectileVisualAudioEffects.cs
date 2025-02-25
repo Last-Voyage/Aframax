@@ -39,6 +39,8 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     [Tooltip("The pointer that reflects the vfx type")]
     private uint _whichVfxPointer;
 
+    private HarpoonProjectileMovement _associatedMovement;
+
     /// <summary>
     /// Performs set up for the harpoon effects
     /// </summary>
@@ -52,6 +54,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
 
             InitializeVisualEffectsDictionary();
         }
+        SetStartingValues();
     }
 
     /// <summary>
@@ -114,6 +117,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
         {
             SpawnProjectileVfx();
             StartProjectileImpactSfx();
+            _associatedMovement.IsHit = true;
         }
     }
 
@@ -152,6 +156,14 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
         _harpoonAudioEffects[(uint)HarpoonCollisionType.NOVFX] = FmodSfxEvents.Instance.HarpoonHitGeneral;
         _harpoonAudioEffects[(uint)HarpoonCollisionType.SPARKVFX] = FmodSfxEvents.Instance.HarpoonHitMetal;
         _harpoonAudioEffects[(uint)HarpoonCollisionType.DECKVFX] = FmodSfxEvents.Instance.HarpoonHitWood;
+    }
+
+    /// <summary>
+    /// Sets any values needed for start
+    /// </summary>
+    private void SetStartingValues()
+    {
+        TryGetComponent(out _associatedMovement);
     }
 
     /// <summary>
