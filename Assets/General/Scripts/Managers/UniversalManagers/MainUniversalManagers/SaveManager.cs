@@ -108,7 +108,6 @@ public class SaveManager : MainUniversalManagerFramework
 
     private void OnEnable()
     {
-        Debug.Log("This should only happen once");
         GetOnNewCheckpoint()?.AddListener(SaveText);
     }
 
