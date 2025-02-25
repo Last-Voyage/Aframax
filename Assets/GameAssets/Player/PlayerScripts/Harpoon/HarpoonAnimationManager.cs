@@ -6,6 +6,7 @@
 // Description:     Assists with the logic of the harpoon's animations.
 ******************************************************************************/
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -23,8 +24,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
     private const string _NOT_WALL_ANIM = "notAtWall";
     private const string _AT_WALL_ANIM = "atWall";
-
-    //Used to check to see if we are near a wall
+    
+    // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
 
     /// <summary>
@@ -45,6 +46,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeToEvents();
+        StopAllCoroutines();
     }
 
     /// <summary>
