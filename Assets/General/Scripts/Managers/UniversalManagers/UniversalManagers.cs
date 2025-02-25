@@ -26,6 +26,7 @@ public class UniversalManagers : CoreManagersFramework
     private ObjectPoolingParent _objectPoolingParent;
     private FmodSfxEvents _fModSfxEvents;
     private SceneTransitionBehaviour _transitionsBehaviour;
+    private SceneAudioSwapper _audioSwapper;
 
     /// <summary>
     /// Sets up the singleton
@@ -44,7 +45,17 @@ public class UniversalManagers : CoreManagersFramework
             DontDestroyOnLoad(gameObject);
             return true;
         }
+        SetUpAudioSwapper();
+        PlayInitialAudio();
         return false;
+    }
+
+    /// <summary>
+    /// Plays the music in this new scene
+    /// </summary>
+    private void PlayInitialAudio()
+    {
+        _audioSwapper.SwapToSceneAudio();
     }
 
     /// <summary>
@@ -63,6 +74,7 @@ public class UniversalManagers : CoreManagersFramework
         SetupObjectPoolingParent();
         SetUpFModSfxEvents();
         SetUpSceneTransitions();
+        SetUpAudioSwapper();
 
         //Instances all managers
         foreach (MainUniversalManagerFramework mainManager in _allMainManagers)
@@ -78,6 +90,12 @@ public class UniversalManagers : CoreManagersFramework
             mainManager.SetUpMainManager();
         }
         _objectPoolingParent.SubscribeToEvents();
+        PlayInitialAudio();
+    }
+
+    private void SetUpAudioSwapper()
+    {
+        _audioSwapper = GetComponentInChildren<SceneAudioSwapper>();
     }
 
     /// <summary>
