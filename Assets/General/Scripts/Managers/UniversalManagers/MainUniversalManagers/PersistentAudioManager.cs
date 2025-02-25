@@ -325,5 +325,14 @@ public class PersistentAudioManager : AudioManager
             yield return null;
         }
     }
+
+    /// <summary>
+    /// Changes the current music volume specifically
+    /// </summary>
+    /// <param name="endMusicVolume"> The end volume </param>
+    public void ChangeCurrentMusicVolume(float endMusicVolume)
+    {
+        StartCoroutine(ChangeMusicVolume(_currentMusicInstance, endMusicVolume));
+    }
     #endregion
 }
