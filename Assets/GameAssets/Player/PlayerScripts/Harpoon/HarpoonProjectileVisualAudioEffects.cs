@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       HarpoonProjectileVisualAudioEffects.cs
 // Author:          Nick Rice
+// Contributors:    Ryan Swanson
 // Creation Date:   November 17th, 2024
 //
 // Description:     Handles the harpoon projectile hit vfx spawning
