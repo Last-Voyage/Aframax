@@ -38,7 +38,6 @@ public class SceneLoadingButtons : MonoBehaviour
     /// </summary>
     public void LoadSavedScene()
     {
-        //Debug.Log(SaveManager.Instance.GetGameSaveData().GetCurrentSceneIndex());
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID
             (SaveManager.Instance.GetGameSaveData().GetCurrentSceneIndex(),_sceneTransitionID);
     }

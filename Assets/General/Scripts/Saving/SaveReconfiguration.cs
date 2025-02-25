@@ -9,6 +9,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles where the player spawns on scene entering
+/// </summary>
 public class SaveReconfiguration : MonoBehaviour
 {
     [SerializeField]

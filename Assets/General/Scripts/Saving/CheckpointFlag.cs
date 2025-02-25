@@ -10,6 +10,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// This script sends an event when a new checkpoint is reached
+/// </summary>
 public class CheckpointFlag : MonoBehaviour
 {
 
@@ -41,6 +44,11 @@ public class CheckpointFlag : MonoBehaviour
         StartCoroutine(StartSavingFunctionality());
     }
 
+    /// <summary>
+    /// This function will save the players checkpoint and build index
+    /// And it will invoke an event to make other scripts save their data
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator StartSavingFunctionality()
     {
         yield return new WaitForSeconds(.5f);

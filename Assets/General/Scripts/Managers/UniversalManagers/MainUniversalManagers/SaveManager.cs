@@ -24,8 +24,8 @@ public class SaveManager : MainUniversalManagerFramework
 
     public static SaveManager Instance;
 
-    private readonly UnityEvent _newCheckpoint = new();
-    private readonly UnityEvent _loadSaveData = new();
+    private readonly UnityEvent _onNewCheckpoint = new();
+    private readonly UnityEvent _onLoadSaveData = new();
 
     /// <summary>
     /// Sets the path to create the save file
@@ -62,7 +62,6 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void SaveText()
     {
-        Debug.Log("Saving private data");
         //Converts the Game Save Data class into a string
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
         //Saves the string into the text file
@@ -106,11 +105,17 @@ public class SaveManager : MainUniversalManagerFramework
         SaveText();
     }
 
+    /// <summary>
+    /// When the player reaches a checkpoint the data will be saved
+    /// </summary>
     private void OnEnable()
     {
         GetOnNewCheckpoint()?.AddListener(SaveText);
     }
 
+    /// <summary>
+    /// Removes the listener, preventing a memory leak
+    /// </summary>
     private void OnDisable()
     {
         GetOnNewCheckpoint()?.RemoveListener(SaveText);
@@ -139,8 +144,8 @@ public class SaveManager : MainUniversalManagerFramework
 
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
-    public UnityEvent GetOnNewCheckpoint() => _newCheckpoint;
-    public UnityEvent GetOnLoadSaveData() => _loadSaveData;
+    public UnityEvent GetOnNewCheckpoint() => _onNewCheckpoint;
+    public UnityEvent GetOnLoadSaveData() => _onLoadSaveData;
 
     #endregion
 }

@@ -266,12 +266,19 @@ public class StoryManager : MonoBehaviour
         _currentStoryIndex = SaveManager.Instance.GetGameSaveData().GetCurrentStoryBeat();
     }
 
+    /// <summary>
+    /// This will save data when a new checkpoint is reached; and it will load in save data
+    /// (when the player returns to a scene they died in or left)
+    /// </summary>
     private void OnEnable()
     {
         SaveManager.Instance.GetOnNewCheckpoint()?.AddListener(SaveData);
         SaveManager.Instance.GetOnLoadSaveData()?.AddListener(LoadData);
     }
 
+    /// <summary>
+    /// Disables listeners to prevent memory leaks
+    /// </summary>
     private void OnDisable()
     {
         SaveManager.Instance.GetOnNewCheckpoint()?.RemoveListener(SaveData);
