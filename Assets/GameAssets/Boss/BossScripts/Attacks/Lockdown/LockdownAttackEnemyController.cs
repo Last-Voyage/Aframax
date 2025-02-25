@@ -124,7 +124,7 @@ public class LockdownAttackEnemyController : MonoBehaviour
         _instantiatedCoreEnemy = 
             Instantiate(_coreEnemyPrefab, _patrolLocation.CoreSpawnPoint.position, 
             Quaternion.identity,transform.parent);
-        AmbienceManager.APlayAmbienceOnObject?.Invoke(FmodAmbienceEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
+        PersistentAudioManager.APlayPersistentAudioOnObject?.Invoke(FmodPersistentAudioEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(
             FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);
 

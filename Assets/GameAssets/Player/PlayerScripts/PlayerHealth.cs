@@ -10,6 +10,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using PrimeTween;
 
 /// <summary>
 /// Controls the player health functionality
@@ -20,6 +21,8 @@ public class PlayerHealth : BaseHealth
     //so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
     [SerializeField] private float _damageToTakeFromEnemy =25f;
+
+    private Tween _iFrameTween;
 
     [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
@@ -136,7 +139,7 @@ public class PlayerHealth : BaseHealth
     private void StartIFrames()
     {
         CanPlayerTakeDamage = false;
-        PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
+        _iFrameTween =Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
     }
 
     /// <summary>
@@ -152,6 +155,10 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     public override void OnDeath()
     {
+        if(_iFrameTween.isAlive)
+        {
+            _iFrameTween.Stop();
+        }
         base.OnDeath();
         PlayerManager.Instance.OnInvokePlayerDeath();
     }
