@@ -20,6 +20,15 @@ public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
     [SerializeField] private int _numUses = 3;
 
     /// <summary>
+    /// returns the number of uses
+    /// </summary>
+    /// <returns></returns>
+    public int GetNumOfUses()
+    {
+        return _numUses;
+    }
+
+    /// <summary>
     /// Subscribes to any needed events
     /// </summary>
     protected override void SubscribeToEvents()

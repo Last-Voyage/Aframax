@@ -11,6 +11,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using FMODUnity;
 
 /// <summary>
 /// The scriptable object for dialogue text and timing
@@ -77,11 +78,12 @@ public struct TextAndTimerData
     #region Text/Time
     #region Constructor
     [Tooltip("Data for on screen tutorial text")]
-    public TextAndTimerData(string screenGetText, uint timeUntilNextWords, uint timeToDisplay)
+    public TextAndTimerData(string screenGetText, uint timeUntilNextWords, uint timeToDisplay, EventReference audioReference)
     {
         _displayedText = screenGetText;
         _getTimeBeforeTextDisplays = timeUntilNextWords;
         _getTimeToDisplay = timeToDisplay;
+        _audioReference = audioReference;
     }
     #endregion
 
@@ -98,6 +100,8 @@ public struct TextAndTimerData
     public uint GetTimeToDisplay 
     { get => _getTimeToDisplay; private set => _getTimeToDisplay = value; }
 
+    public EventReference GetAudio => _audioReference;
+
     #endregion
 
     #region Private Variables
@@ -113,6 +117,8 @@ public struct TextAndTimerData
     [Range(2, 8)]
     [SerializeField]
     private uint _getTimeToDisplay;
+
+    [SerializeField] private EventReference _audioReference;
 
     #endregion
 
