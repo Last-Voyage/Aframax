@@ -9,7 +9,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
+/// <summary>
+/// plays scene transition animations
+/// </summary>
 public class SceneTransitionBehaviour : MonoBehaviour
 {
     private Animator _sceneTransitionAnimator;
@@ -31,6 +35,7 @@ public class SceneTransitionBehaviour : MonoBehaviour
     /// <param name="animationTrigger"></param>
     public void PlayTransition(string animationTrigger)
     {
+        gameObject.GetComponent<Image>().enabled = true;
         _sceneTransitionAnimator.SetTrigger(animationTrigger);
     }
 }

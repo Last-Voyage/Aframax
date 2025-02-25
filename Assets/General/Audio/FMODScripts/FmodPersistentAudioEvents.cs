@@ -1,10 +1,10 @@
 /*********************************************************************************************************************
-// File Name :         FmodAmbienceEvents
+// File Name :         FmodPersistentAudioEvents
 // Author :            Andrea Swihart-DeCoster
 // Contributors :      Ryan Swanson
 // Creation Date :     10/23/24
 //
-// Brief Description : Stores all ambient sounds.
+// Brief Description : Stores all persistent sounds.
 *********************************************************************************************************************/
 
 using System.Collections;
@@ -12,7 +12,7 @@ using FMODUnity;
 using UnityEngine;
 
 /// <summary>
-/// Handler of random ambient sound effects at random times
+/// Handler of random persistent sound effects at random times
 /// </summary>
 [System.Serializable]
 public class IntervalFMODEvent
@@ -30,7 +30,7 @@ public class IntervalFMODEvent
     /// The Coroutine to loops through the array with different timers per sound call
     /// </summary>
     /// <returns></returns>
-    public IEnumerator RandomAmbienceLoop()
+    public IEnumerator RandomPersistentAudioLoop()
     {
         if (IntervalEvent.IsNull)
         {
@@ -49,21 +49,25 @@ public class IntervalFMODEvent
 }
 
 /// <summary>
-/// Stores all FMOD ambient / background audio events
+/// Stores all FMOD ambient / background / music audio events
 /// </summary>
-public class FmodAmbienceEvents : MonoBehaviour
+public class FmodPersistentAudioEvents : MonoBehaviour
 {
-    public static FmodAmbienceEvents Instance;
+    public static FmodPersistentAudioEvents Instance;
 
-    [field: Header("Ambient Background Audio")]
+    [field: Header("Ambient Persistent Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game")]
-    [field: SerializeField] public EventReference[] AmbientGameBackgroundSounds { get; private set; }
+    [field: SerializeField] public EventReference[] PersistentGameBackgroundSounds { get; private set; }
     [field: SerializeField] public EventReference LimbIdle { get; private set; }
     
-    [field: Header("Random Interval Ambience")]
+    [field: Header("Random Interval Looping Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game at random intervals")]
-    [field: SerializeField] public IntervalFMODEvent[] IntervalAmbientEvents { get; private set; }
+    [field: SerializeField] public IntervalFMODEvent[] IntervalPersistentEvents { get; private set; }
 
+    [field: Header("Music")]
+    [field: SerializeField] public EventReference[] MusicInGame { get; private set; }
+    [field: SerializeField] public float MusicFadeOutTime { get; private set; }
+    [field: SerializeField] public float MusicFadeInTime { get; private set; }
     public void SetUpInstance()
     {
         Instance = this;

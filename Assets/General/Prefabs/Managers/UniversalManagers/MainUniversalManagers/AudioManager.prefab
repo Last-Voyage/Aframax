@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2279586950690668366}
   - component: {fileID: 5853790819556739120}
   m_Layer: 0
-  m_Name: AmbienceManager
+  m_Name: PersistentAudioManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25300d6117e68a4291efb2eb20a4524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <AmbientGameBackgroundSounds>k__BackingField:
+  <PersistentGameBackgroundSounds>k__BackingField:
   - Guid:
       Data1: -1855679205
       Data2: 1226079920
@@ -66,12 +66,15 @@ MonoBehaviour:
     Path: event:/AmbientBugNoisesSFX
   <LimbIdle>k__BackingField:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  <IntervalAmbientEvents>k__BackingField: []
+      Data1: 1422967212
+      Data2: 1189090460
+      Data3: 51789702
+      Data4: 1267664235
+    Path: event:/LimbSlitherSFX
+  <IntervalPersistentEvents>k__BackingField: []
+  <MusicInGame>k__BackingField: []
+  <MusicFadeOutTime>k__BackingField: 2
+  <MusicFadeInTime>k__BackingField: 2
 --- !u!1 &6730670262102700080
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,6 +243,22 @@ MonoBehaviour:
     Path: event:/LimbSlitherSFX
   <LimbMoveFadeInTime>k__BackingField: 3
   <LimbMoveFadeOutTime>k__BackingField: 2
+  <ChaseSequenceStart>k__BackingField:
+    Guid:
+      Data1: -776193466
+      Data2: 1323933284
+      Data3: 1306389638
+      Data4: 1417873818
+    Path: event:/CreatureCrySFX
+  <ChaseSequenceLoop>k__BackingField:
+    Guid:
+      Data1: -1100199938
+      Data2: 1086835539
+      Data3: 1601766818
+      Data4: -514344299
+    Path: event:/GeneratorBreakSFX
+  <ChaseLoopFadeInTime>k__BackingField: 1.5
+  <ChaseLoopFadeOutTime>k__BackingField: 1.5
   <RadioSong>k__BackingField:
     Guid:
       Data1: 0
