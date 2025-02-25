@@ -28,7 +28,9 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
     [field: SerializeField] private int _musicID;
     [Tooltip("The volume to switch to")]
-    [field: SerializeField] private float _newVolume;
+    [field: SerializeField] [Range(0,1)] private float _newVolume;
+
+    [field: SerializeField] private bool _destroyOnContact;
 
     /// <summary>
     /// Called when the player contacts this
@@ -43,6 +45,11 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         {
             //Using an Else If just in case we end up adding more EMusicTriggerTypes
             SwapVolume();
+        }
+
+        if(_destroyOnContact)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -59,6 +66,6 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     /// </summary>
     private void SwapVolume()
     {
-        //TODO: This falls into a seperate tasks which I will do after this PR is through.
+        PersistentAudioManager.Instance.ChangeCurrentMusicVolume(_newVolume);
     }
 }
