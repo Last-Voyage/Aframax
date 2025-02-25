@@ -10,12 +10,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using FMODUnity;
 
 /// <summary>
 /// The types of objects that the harpoon collides with
 /// </summary>
 [Tooltip("Which VFX will be spawned")]
-public enum HarpoonVFXType : uint
+public enum HarpoonCollisionType : uint
 {
     NOVFX,
     SPARKVFX,
@@ -33,6 +34,8 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     [Tooltip("The array of vfx")]
     private static SpecificVisualEffect[] _harpoonVisualEffects = new SpecificVisualEffect[4];
 
+    private static EventReference[] _harpoonAudioEffects = new EventReference[4];
+
     [Tooltip("The pointer that reflects the vfx type")]
     private uint _whichVfxPointer;
 
@@ -45,6 +48,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
             || _materialVfxRefs.Count == 0 || _materialVfxRefs.IsUnityNull())
         {
             InitializeHarpoonVisualEffects();
+            InitializeHarpoonAudioEffects();
 
             InitializeVisualEffectsDictionary();
         }
@@ -85,7 +89,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
         #endregion
 
         // Sets the vfx to null; if there isn't an associated vfx with what was hit, then, nothing happens
-        _whichVfxPointer = (uint)HarpoonVFXType.NOVFX;
+        _whichVfxPointer = (uint)HarpoonCollisionType.NOVFX;
         // Goes through each submesh to check if the raycast collided with an index within it's value range
         for (int i = 0; i < howManyMeshes; i++)
         {
@@ -109,6 +113,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
         if (_harpoonVisualEffects[_whichVfxPointer] != null)
         {
             SpawnProjectileVfx();
+            StartProjectileImpactSfx();
         }
     }
 
@@ -122,13 +127,31 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     }
 
     /// <summary>
+    /// Plays a sfx where the harpoon hit
+    /// </summary>
+    private void StartProjectileImpactSfx()
+    {
+        RuntimeSfxManager.APlayOneShotSfx.Invoke(_harpoonAudioEffects[_whichVfxPointer], gameObject.transform.position);
+    }
+
+    /// <summary>
     /// Grabs all the referenceable vfx and puts it into an array
     /// </summary>
     private void InitializeHarpoonVisualEffects()
     {
-        _harpoonVisualEffects[(uint)HarpoonVFXType.NOVFX] = null;
-        _harpoonVisualEffects[(uint)HarpoonVFXType.SPARKVFX] = VfxManager.Instance.GetMetalSparksVfx();
-        _harpoonVisualEffects[(uint)HarpoonVFXType.DECKVFX] = VfxManager.Instance.GetWoodenSparksVfx();
+        _harpoonVisualEffects[(uint)HarpoonCollisionType.NOVFX] = null;
+        _harpoonVisualEffects[(uint)HarpoonCollisionType.SPARKVFX] = VfxManager.Instance.GetMetalSparksVfx();
+        _harpoonVisualEffects[(uint)HarpoonCollisionType.DECKVFX] = VfxManager.Instance.GetWoodenSparksVfx();
+    }
+
+    /// <summary>
+    /// Grabs all the referenceable sfx and puts it in an array
+    /// </summary>
+    private void InitializeHarpoonAudioEffects()
+    {
+        _harpoonAudioEffects[(uint)HarpoonCollisionType.NOVFX] = FmodSfxEvents.Instance.HarpoonHitGeneral;
+        _harpoonAudioEffects[(uint)HarpoonCollisionType.SPARKVFX] = FmodSfxEvents.Instance.HarpoonHitMetal;
+        _harpoonAudioEffects[(uint)HarpoonCollisionType.DECKVFX] = FmodSfxEvents.Instance.HarpoonHitWood;
     }
 
     /// <summary>
@@ -138,11 +161,11 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     {
         foreach(HarpoonVisualAudioEffectsBank bank in VfxManager.Instance.GetHarpoonVisualArray())
         {
-            if(bank._associatedMaterial == null)
+            if(bank.AssociatedMaterial == null)
             {
                 continue;
             }
-            _materialVfxRefs.Add(bank._associatedMaterial, (uint)bank._vfxType);
+            _materialVfxRefs.Add(bank.AssociatedMaterial, (uint)bank.CollisionType);
         }
     }
 }
