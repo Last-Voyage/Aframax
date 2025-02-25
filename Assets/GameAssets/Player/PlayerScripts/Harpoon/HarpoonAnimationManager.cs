@@ -24,15 +24,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
     private const string _NOT_WALL_ANIM = "notAtWall";
     private const string _AT_WALL_ANIM = "atWall";
-    private const string _SPECIAL_IDLE_ANIM = "specialIdle";
-
-    // Idle animation name to search for the special idle
-    private const string _IDLE_ANIM = "harpoonIdle";
-
-    // Variables for the idle animation
-    [SerializeField, Range(8, 16)] private float _minIdleAnimationPlayTime = 8f;
-    [SerializeField, Range(8, 16)] private float _maxIdleAnimationPlayTime = 16f;
-
+    
     // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
 
@@ -44,7 +36,6 @@ public class HarpoonAnimationManager : MonoBehaviour
     {
         GetAnimator();
         SubscribeToEvents();
-        StartCoroutine(TimeSpecialIdleAnim());
         StartCoroutine(CheckForWall());
     }
 
@@ -88,41 +79,6 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StartFiringAnimation);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(ReloadHarpoonAnimation);
-    }
-
-    private IEnumerator TimeSpecialIdleAnim()
-    {
-        float waitTime = -1;
-        float currentTime = 0;
-
-        while (true)
-        {
-            if (!_animator.IsUnityNull())
-            {
-                if (_animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIM)
-                {
-                    if (waitTime == -1)
-                    {
-                        waitTime = Random.Range(_minIdleAnimationPlayTime, _maxIdleAnimationPlayTime);
-                    }
-
-                    currentTime += Time.deltaTime;
-
-                    if (currentTime >= waitTime)
-                    {
-                        _animator.SetBool(_SPECIAL_IDLE_ANIM, true);
-                    }
-                }
-                else
-                {
-                    waitTime = -1;
-                    currentTime = 0;
-                    _animator.SetBool(_SPECIAL_IDLE_ANIM, false);
-                }
-            }
-            
-            yield return null;
-        }
     }
 
     /// <summary>
