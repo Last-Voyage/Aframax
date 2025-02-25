@@ -7,8 +7,6 @@
 // Brief Description : Controls the functionality for collisions
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -23,16 +21,18 @@ public class PlayerCollision : MonoBehaviour
     /// <summary>
     /// Checks for the start of trigger contact
     /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
+    /// <param name="contact"> The collider we just hit</param>
+    private void OnTriggerEnter(Collider contact)
     {
-        CheckForKillBoxContact(other.gameObject);
+        CheckForKillBoxContact(contact.gameObject);
 
-        CheckForEnemyContact(other.gameObject);
+        CheckForEnemyContact(contact.gameObject);
 
-        CheckForStartVineChaseTrigger(other);
+        CheckForStartVineChaseTrigger(contact);
 
-        CheckForChaseDamageTrigger(other);
+        CheckForChaseDamageTrigger(contact);
+
+        CheckForMusicTrigger(contact);
     }
 
     #endregion
@@ -91,7 +91,7 @@ public class PlayerCollision : MonoBehaviour
     /// <summary>
     /// Checks for the trigger to damage player in chase sequence
     /// </summary>
-    /// <param name="contact"></param>
+    /// <param name="contact">The collider we contacted</param>
     private void CheckForChaseDamageTrigger(Collider contact)
     {
         if(contact.CompareTag("ChaseDamageTrigger"))
@@ -108,6 +108,18 @@ public class PlayerCollision : MonoBehaviour
                     PlayerFunctionalityCore.Instance.GetPlayerHealth().TakeDamage(chaseVineGroup.GetPlayerDamageAmount(), null);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Checks for the trigger to change the music
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForMusicTrigger(Collider contact)
+    {
+        if(contact.gameObject.TryGetComponent(out MusicSwapPlayerTrigger musicSwapPlayerTrigger))
+        {
+            musicSwapPlayerTrigger.PlayerContact();
         }
     }
     
