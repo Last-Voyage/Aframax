@@ -7,6 +7,7 @@
 ******************************************************************************/
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CheckpointFlag : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class CheckpointFlag : MonoBehaviour
             return;
         }
         SaveManager.Instance.GetGameSaveData().SetCurrentCheckPoint((int)_whichCheckpoint);
+        SaveManager.Instance.GetGameSaveData().SetCurrentSceneIndex(SceneManager.GetActiveScene().buildIndex);
         SaveManager.Instance.GetOnNewCheckpoint()?.Invoke();
     }
 }

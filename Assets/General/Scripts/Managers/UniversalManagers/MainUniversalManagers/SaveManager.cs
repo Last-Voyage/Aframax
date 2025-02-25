@@ -52,7 +52,8 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void StartingValues()
     {
-        
+        // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
+        Instance.GetGameSaveData().SetCurrentSceneIndex(1);
     }
 
     /// <summary>

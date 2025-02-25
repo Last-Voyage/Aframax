@@ -25,6 +25,7 @@ public class GameSaveData
     public List<string> PlayerInventory;
 
     public int CurrentStoryBeat;
+    public int CurrentSceneIndex;
 
     #region Getters
 
@@ -32,6 +33,7 @@ public class GameSaveData
     public int GetCurrentCheckPoint() => CurrentCheckpoint;
     public List<string> GetCurrentInventory() => PlayerInventory;
     public int GetCurrentStoryBeat() => CurrentStoryBeat;
+    public int GetCurrentSceneIndex() => CurrentSceneIndex;
 
     #endregion
 
@@ -55,6 +57,11 @@ public class GameSaveData
     public void SetCurrentStoryBeat(int newStoryBeat)
     {
         CurrentStoryBeat = newStoryBeat;
+    }
+
+    public void SetCurrentSceneIndex(int newSceneIndex)
+    {
+        CurrentSceneIndex = newSceneIndex;
     }
 
     #endregion

@@ -34,6 +34,16 @@ public class SceneLoadingButtons : MonoBehaviour
     }
 
     /// <summary>
+    /// This loads the last saved scene
+    /// </summary>
+    public void LoadSavedScene()
+    {
+        //Debug.Log(SaveManager.Instance.GetGameSaveData().GetCurrentSceneIndex());
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID
+            (SaveManager.Instance.GetGameSaveData().GetCurrentSceneIndex(),_sceneTransitionID);
+    }
+
+    /// <summary>
     /// Quits the game
     /// </summary>
     public void QuitGame()
