@@ -161,25 +161,6 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
-    /// Creates a Fmod instance after being given an Fmod reference
-    /// </summary>
-    /// <param name="eventReference"> The reference to create the instance from </param>
-    /// <param name="attachedObject"> What the instance is attached to </param>
-    /// <returns> The instance that was created </returns>
-    public EventInstance CreateInstanceFromReference(EventReference eventReference, GameObject attachedObject)
-    {
-        if(eventReference.IsNull)
-        {
-            return new EventInstance();
-        }
-
-        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
-        eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(attachedObject));
-
-        return eventInstance;
-    }
-
-    /// <summary>
     /// Fades in a sfx using an instance
     /// </summary>
     /// <param name="eventInstance"> The sfx to fade in </param>
