@@ -6,6 +6,7 @@
 // Description:     This script sends an event for any new checkpoint that has been reached
 ******************************************************************************/
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,6 +37,13 @@ public class CheckpointFlag : MonoBehaviour
         {
             return;
         }
+        
+        StartCoroutine(StartSavingFunctionality());
+    }
+
+    private IEnumerator StartSavingFunctionality()
+    {
+        yield return new WaitForSeconds(.5f);
         SaveManager.Instance.GetGameSaveData().SetCurrentCheckPoint((int)_whichCheckpoint);
         SaveManager.Instance.GetGameSaveData().SetCurrentSceneIndex(SceneManager.GetActiveScene().buildIndex);
         SaveManager.Instance.GetOnNewCheckpoint()?.Invoke();

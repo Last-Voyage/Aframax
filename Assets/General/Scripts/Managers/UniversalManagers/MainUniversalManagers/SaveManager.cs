@@ -7,6 +7,7 @@
 // Description:     Contains the functionality to set up and get access to save data
 ******************************************************************************/
 
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
@@ -61,6 +62,7 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void SaveText()
     {
+        Debug.Log("Saving private data");
         //Converts the Game Save Data class into a string
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
         //Saves the string into the text file
@@ -102,6 +104,17 @@ public class SaveManager : MainUniversalManagerFramework
 
         //Saves the changes into the text file
         SaveText();
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("This should only happen once");
+        GetOnNewCheckpoint()?.AddListener(SaveText);
+    }
+
+    private void OnDisable()
+    {
+        GetOnNewCheckpoint()?.RemoveListener(SaveText);
     }
 
     #region BaseManager
