@@ -137,7 +137,7 @@ public class HarpoonGun : MonoBehaviour
     /// returns the focus accuracy
     /// </summary>
     /// <returns></returns>
-    public float GetFocusAccuracy() => _currentFocusAccuracy;
+    public float GetFocusAccuracy() => _focusProgress;
     
 
     #endregion

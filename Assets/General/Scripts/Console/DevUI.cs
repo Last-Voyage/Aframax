@@ -19,11 +19,11 @@ public class DevUI : MonoBehaviour
     /// <summary>
     /// happens every frame
     /// </summary>
-    private void Update()
+    private void FixedUpdate()
     {
 
         _healthText.text = "HP: " + FindObjectOfType<PlayerHealth>().GetCurrentHealth().ToString();
-        _speedText.text = "Speed: " + FindObjectOfType<PlayerMovementController>().GetPlayerSpeed().ToString();
-        _focusText.text = "Focus: " + FindObjectOfType<HarpoonGun>().GetFocusAccuracy();
+        _speedText.text = "Speed: " + PlayerMovementController.Instance.GetPlayerSpeed().ToString();
+        _focusText.text = "Focus: " + HarpoonGun.Instance.GetFocusAccuracy();
     }
 }

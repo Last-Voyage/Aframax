@@ -18,6 +18,9 @@ public class DevUiPopUp : MonoBehaviour
     [SerializeField] private GameObject _devUiObject;
     private GameObject _player;
 
+    /// <summary>
+    /// happens when the game starts
+    /// </summary>
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");

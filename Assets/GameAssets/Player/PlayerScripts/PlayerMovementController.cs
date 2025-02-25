@@ -91,10 +91,8 @@ public class PlayerMovementController : MonoBehaviour
     /// <summary>
     /// returns the player speed
     /// </summary>
-    public float GetPlayerSpeed() 
-    {
-        return _playerMovementSpeed;
-    }
+    public float GetPlayerSpeed() => _playerRigidBody.velocity.magnitude;
+    
 
     #endregion
 
