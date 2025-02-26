@@ -30,7 +30,6 @@ public class InventoryInteractableItem : MonoBehaviour, IPlayerInteractable
     {
         // Add the item to the player's inventory
         PlayerInventory.Instance.AddItem(_itemName);
-
         // Run the pickup events
         _onpickupEvent?.Invoke();
 
