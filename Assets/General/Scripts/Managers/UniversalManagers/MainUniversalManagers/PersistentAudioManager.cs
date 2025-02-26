@@ -259,11 +259,10 @@ public class PersistentAudioManager : AudioManager
     public void StartMusicByReference(EventReference reference)
     {
         // Returns if we are trying to play the music we are already playing
-        if(reference.Path == _currentMusicReference.Path)
+        if (!_currentMusicReference.IsNull && reference.Guid == _currentMusicReference.Guid)
         {
             return;
         }
-
         StartCoroutine(StartMusicProcess(reference));
     }
 
