@@ -62,7 +62,7 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for harpoon turning
     [SerializeField, Range(0f, 10f)] private float _harpoonFollowSpeed = 5f;
-    private const float _BASE_FOLLOW_SPEED = 0.02f;
+    private const float _BASE_FOLLOW_SPEED = 0.01f;
     private float _harpoonHoriTurningVelo;
     private float _harpoonVertTurningVelo;
 
