@@ -17,7 +17,7 @@ using UnityEngine;
 public class HarpoonProjectileMovement : MonoBehaviour
 {
     //for hitting walls
-    private bool _isHit;
+    internal bool IsHit;
 
     private Transform _movingObjects;
 
@@ -39,7 +39,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
         transform.position = startLocation;
         transform.LookAt(transform.position + startDirection);
 
-        _isHit = false;
+        IsHit = false;
 
         StartCoroutine(HarpoonFireProcess());
     }
@@ -52,7 +52,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         CheckAimAtBoat();
         float travelDistance = 0f;
-        while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance() && !_isHit)
+        while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance() && !IsHit)
         {
             // Calculate how far the harpoon should move in this frame
             Vector3 movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
@@ -93,9 +93,9 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         if(!block.gameObject.TryGetComponent<PlayerHealth>(out PlayerHealth unneeded))
         {
-            if(block.CompareTag("Enemy") || block.CompareTag("Environment"))
+            if (block.CompareTag("Enemy") || block.CompareTag("Environment"))
             {
-                _isHit = true;
+                IsHit = true;
             }
         }
     }

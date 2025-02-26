@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Holds the data which is being saved
@@ -17,19 +18,43 @@ using UnityEngine;
 [System.Serializable]
 public class GameSaveData
 {
-    public bool TempSaveBool;
+    [Tooltip("Number keeping track of the player checkpoint")]
+    public int CurrentCheckpoint;
+    [Tooltip("A list of strings containing the players inventory")]
+    public List<string> PlayerInventory;
+
+    public int CurrentStoryBeat;
+    public int CurrentSceneIndex;
 
     #region Getters
-
-    public bool GetTempBool() => TempSaveBool;
+    
+    public int GetCurrentCheckPoint() => CurrentCheckpoint;
+    public List<string> GetCurrentInventory() => PlayerInventory;
+    public int GetCurrentStoryBeat() => CurrentStoryBeat;
+    public int GetCurrentSceneIndex() => CurrentSceneIndex;
 
     #endregion
 
     #region Setters
 
-    public void SetTempBool(bool newTemp)
+    public void SetCurrentCheckPoint(int newCheckpoint)
     {
-        TempSaveBool = newTemp;
+        CurrentCheckpoint = newCheckpoint;
+    }
+
+    public void SetPlayerInventory(List<string> newInventory)
+    {
+        PlayerInventory = newInventory;
+    }
+
+    public void SetCurrentStoryBeat(int newStoryBeat)
+    {
+        CurrentStoryBeat = newStoryBeat;
+    }
+
+    public void SetCurrentSceneIndex(int newSceneIndex)
+    {
+        CurrentSceneIndex = newSceneIndex;
     }
 
     #endregion

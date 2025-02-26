@@ -180,6 +180,7 @@ public class SpecificVisualEffect
     }
 
     #region Getters
+    public string GetVfxName() => _vfxName;
     public GameObject GetVfxObject() => _vfxObject;
     #endregion
 }
