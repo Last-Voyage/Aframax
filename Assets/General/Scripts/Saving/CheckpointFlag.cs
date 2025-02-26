@@ -15,20 +15,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class CheckpointFlag : MonoBehaviour
 {
-
-    /// <summary>
-    /// The different spawns the player can have
-    /// </summary>
-    private enum TheCheckpoints
-    {
-        TopOfBoat,
-        Maze1,
-        Maze2,
-        Maze3
-    }
-    
+    [Tooltip("Represents how far the player is into the game, further checkpoint = higher number")]
     [SerializeField] 
-    private TheCheckpoints _whichCheckpoint;
+    private uint _whichCheckpoint;
 
     /// <summary>
     /// When this object is enabled, it will try to change the player's current check point
