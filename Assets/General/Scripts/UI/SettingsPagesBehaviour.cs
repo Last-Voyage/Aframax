@@ -3,7 +3,7 @@
 // Author:          Jeremiah Peters
 // Creation Date:   February 24, 2025
 //
-// Description:     used to change the page of settings
+// Description:     used to change the page of settings and update buttons accordingly
 ******************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// class comment placeholder
+/// operates setting pages and their respective buttons
 /// </summary>
 public class SettingsPagesBehaviour : MonoBehaviour
 {
@@ -33,6 +33,10 @@ public class SettingsPagesBehaviour : MonoBehaviour
         _notFocusedColors = _videoButton.colors;
     }
 
+    /// <summary>
+    /// changes active state of menu elements and button colors when a button is pressed
+    /// </summary>
+    /// <param name="pageToEnable"></param>
     public void SwitchSettingsPage(int pageToEnable)
     {
         //switch one on and the others off
@@ -42,22 +46,23 @@ public class SettingsPagesBehaviour : MonoBehaviour
         }
         _settingsPages[pageToEnable].SetActive(true);
 
+        //for changing buttons colors
         switch (pageToEnable)
         {
             case 0:
-                //audio
+                //audio settings button pressed
                 _audioButton.colors = _yesFocusedColors;
                 _videoButton.colors = _notFocusedColors;
                 _gameplayButton.colors = _notFocusedColors;
                 break;
             case 1:
-                //video
+                //video settings button pressed
                 _audioButton.colors = _notFocusedColors;
                 _videoButton.colors = _yesFocusedColors;
                 _gameplayButton.colors = _notFocusedColors;
                 break;
             case 2:
-                //gameplay
+                //gameplay settings button pressed
                 _audioButton.colors = _notFocusedColors;
                 _videoButton.colors = _notFocusedColors;
                 _gameplayButton.colors = _yesFocusedColors;
