@@ -17,7 +17,21 @@ public class SettingsPagesBehaviour : MonoBehaviour
 {
     [SerializeField] private GameObject[] _settingsPages = new GameObject[3];
 
-    public Button thetestbuttonname;
+    [SerializeField] private Button _audioButton;
+
+    [SerializeField] private Button _videoButton;
+
+    [SerializeField] private Button _gameplayButton;
+
+    private ColorBlock _notFocusedColors;
+
+    private ColorBlock _yesFocusedColors;
+
+    private void Start()
+    {
+        _yesFocusedColors = _audioButton.colors;
+        _notFocusedColors = _videoButton.colors;
+    }
 
     public void SwitchSettingsPage(int pageToEnable)
     {
@@ -28,8 +42,29 @@ public class SettingsPagesBehaviour : MonoBehaviour
         }
         _settingsPages[pageToEnable].SetActive(true);
 
-        //Button.
-        //Debug.Log(thetestbuttonname.spriteState.pressedSprite);
-        //Debug.Log(thetestbuttonname.spriteState = thetestbuttonname.spriteState.pressedSprite);
+        switch (pageToEnable)
+        {
+            case 0:
+                //audio
+                _audioButton.colors = _yesFocusedColors;
+                _videoButton.colors = _notFocusedColors;
+                _gameplayButton.colors = _notFocusedColors;
+                break;
+            case 1:
+                //video
+                _audioButton.colors = _notFocusedColors;
+                _videoButton.colors = _yesFocusedColors;
+                _gameplayButton.colors = _notFocusedColors;
+                break;
+            case 2:
+                //gameplay
+                _audioButton.colors = _notFocusedColors;
+                _videoButton.colors = _notFocusedColors;
+                _gameplayButton.colors = _yesFocusedColors;
+                break;
+            default:
+                //this should not happen
+                break;
+        }
     }
 }
