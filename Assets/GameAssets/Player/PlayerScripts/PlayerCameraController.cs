@@ -138,6 +138,8 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
             {
+                _harpoonGun.transform.SetParent(this.transform, true);
+
                 float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
                     Camera.main.transform.localEulerAngles.y, ref _harpoonHoriTurningVelo, 
                     _harpoonFollowSpeed * _BASE_FOLLOW_SPEED);
@@ -147,6 +149,11 @@ public class PlayerCameraController : MonoBehaviour
                     _harpoonFollowSpeed * _BASE_FOLLOW_SPEED);
 
                 _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
+            }
+            else
+            {
+                _harpoonGun.transform.SetParent(Camera.main.transform, true);
+                _harpoonGun.transform.localRotation = Quaternion.identity;
             }
         }
     }
