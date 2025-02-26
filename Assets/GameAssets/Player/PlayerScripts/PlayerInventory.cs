@@ -88,7 +88,7 @@ public class PlayerInventory : MonoBehaviour
     /// <summary>
     /// Saves the players inventory
     /// </summary>
-    private void SaveInventory()
+    public void SaveInventory()
     {
         SaveManager.Instance.GetGameSaveData().SetPlayerInventory(_allItems);
     }
@@ -96,7 +96,7 @@ public class PlayerInventory : MonoBehaviour
     /// <summary>
     /// Loads in the players inventory from saved data
     /// </summary>
-    private void LoadInventory()
+    public void LoadInventory()
     {
         _allItems = SaveManager.Instance.GetGameSaveData().GetCurrentInventory();
     }
