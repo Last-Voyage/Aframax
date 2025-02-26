@@ -27,6 +27,9 @@ public class SettingsPagesBehaviour : MonoBehaviour
 
     private ColorBlock _yesFocusedColors;
 
+    /// <summary>
+    /// setup references
+    /// </summary>
     private void Start()
     {
         _yesFocusedColors = _audioButton.colors;
