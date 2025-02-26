@@ -1,6 +1,7 @@
 /*********************************************************************************************************************
 // File Name :         FmodSfxEvents
 // Author :            Andrea Swihart-DeCoster
+// Contributers :      Charlie Polonus
 // Creation Date :     10/18/24
 //
 // Brief Description : Stores all the SFX
@@ -57,6 +58,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Interactable")]
     
     [field: SerializeField] public EventReference RadioSong { get; private set; }
+    [field: SerializeField] private EventReference[] _pickupSoundEffects;
 
     #endregion
     
@@ -79,10 +81,12 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Harpoon")]
     [field: SerializeField] public EventReference HarpoonShot { get; private set; }
     [field: SerializeField] public EventReference HarpoonReload { get; private set; }
-    [field: SerializeField] public EventReference HarpoonHitBoat { get; private set; }
+    [field: Header("Harpoon Collisions")]
+    [field: SerializeField] public EventReference HarpoonHitGeneral { get; private set; }
+    [field: SerializeField] public EventReference HarpoonHitWood { get; private set; }
+    [field: SerializeField] public EventReference HarpoonHitMetal { get; private set; }
     [field: SerializeField] public EventReference HarpoonWaterSplash { get; private set; }
-
-
+    
     #endregion Harpoon
 
     #endregion Player
@@ -91,6 +95,29 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Environment")]
     [field: SerializeField] public EventReference GeneratorFixed { get; private set; }
     #endregion
+
+    /// <summary>
+    /// Gets the item pickup sound based on the id of the sound effect
+    /// </summary>
+    /// <param name="pickupSoundId"> The id of the sound effect </param>
+    /// <returns> The sound effect recieved from the id </returns>
+    public EventReference GetItemPickupSound(int pickupSoundId)
+    {
+        // Edge case: the id is too high or the list doesn't exist
+        if (_pickupSoundEffects == null || pickupSoundId >= _pickupSoundEffects.Length)
+        {
+            return new();
+        }
+
+        // Edge case: the sound effect doesn't exist
+        if (_pickupSoundEffects[pickupSoundId].IsNull)
+        {
+            return new();
+        }
+
+        // Return the sound effect
+        return _pickupSoundEffects[pickupSoundId];
+    }
 
     public void SetUpInstance()
     {

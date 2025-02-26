@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using FMODUnity;
 
 /// <summary>
 /// The MonoBehaviour handling items being added to the players inventory
@@ -20,6 +21,7 @@ public class InventoryInteractableItem : MonoBehaviour, IPlayerInteractable
     [SerializeField] private string _itemName;
     [SerializeField] private bool _destroyOnPickup;
     [SerializeField] private UnityEvent _onpickupEvent;
+    [SerializeField] private int _pickupSoundEffectId;
 
     /// <summary>
     /// A virtual method for picking up an item to be added to the inventory
@@ -28,9 +30,11 @@ public class InventoryInteractableItem : MonoBehaviour, IPlayerInteractable
     {
         // Add the item to the player's inventory
         PlayerInventory.Instance.AddItem(_itemName);
-
         // Run the pickup events
         _onpickupEvent?.Invoke();
+
+        // Play the attached sound effect if the object has one
+        RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.GetItemPickupSound(_pickupSoundEffectId), transform.position);
 
         // Destroy the object if it needs to be removed
         if (_destroyOnPickup)
