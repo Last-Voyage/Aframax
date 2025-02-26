@@ -61,8 +61,8 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField, Range(0f, 10f)] private float _jumpscareIntensity = 5f;
 
     // Variables for harpoon turning
-    [SerializeField, Range(0f, 10f)] private float _harpoonFollowSpeed = 5f;
-    private const float _BASE_FOLLOW_SPEED = 0.01f;
+    [SerializeField, Range(0f, 10f)] private float _harpoonFollowTime = 5f;
+    private const float _BASE_FOLLOW_TIME = 0.01f;
     private float _harpoonHoriTurningVelo;
     private float _harpoonVertTurningVelo;
 
@@ -142,11 +142,11 @@ public class PlayerCameraController : MonoBehaviour
 
                 float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
                     Camera.main.transform.localEulerAngles.y, ref _harpoonHoriTurningVelo, 
-                    _harpoonFollowSpeed * _BASE_FOLLOW_SPEED);
+                    _harpoonFollowTime* _BASE_FOLLOW_TIME);
 
                 float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
                     Camera.main.transform.localEulerAngles.x, ref _harpoonVertTurningVelo, 
-                    _harpoonFollowSpeed * _BASE_FOLLOW_SPEED);
+                    _harpoonFollowTime * _BASE_FOLLOW_TIME);
 
                 _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
             }
