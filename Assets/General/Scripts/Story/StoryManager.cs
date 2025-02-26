@@ -36,17 +36,9 @@ public class StoryManager : MonoBehaviour
     private int _currentStoryIndex = -1;
 
     /// <summary>
-    /// Run initialization functions on the StoryManager
-    /// </summary>
-    private void Awake()
-    {
-        DefineSingleton();
-    }
-
-    /// <summary>
     /// Defines the Instance singleton variable
     /// </summary>
-    private void DefineSingleton()
+    public void DefineSingleton()
     {
         // Only sets it as the singleton if there isn't one already
         if (Instance == null)
@@ -256,12 +248,15 @@ public class StoryManager : MonoBehaviour
     /// <summary>
     /// This saves the current story beat when a new checkpoint is hit
     /// </summary>
-    private void SaveData()
+    public void SaveData()
     {
         SaveManager.Instance.GetGameSaveData().SetCurrentStoryBeat(_currentStoryIndex);
     }
 
-    private void LoadData()
+    /// <summary>
+    /// Loads the current story beat
+    /// </summary>
+    public void LoadData()
     {
         _currentStoryIndex = SaveManager.Instance.GetGameSaveData().GetCurrentStoryBeat();
     }
