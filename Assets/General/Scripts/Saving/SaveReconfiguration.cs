@@ -14,37 +14,40 @@ using UnityEngine;
 /// </summary>
 public class SaveReconfiguration : MonoBehaviour
 {
-    [SerializeField]
-    private List<Transform> _spawnLocations;
+    [SerializeField] private SavePoint[] _savePoints;
 
-    [SerializeField] 
-    private List<GameObject> _mapChunks;
-
-    // Not an elegant solution, but one that works
-    [SerializeField] 
-    private GameObject _thePlayer;
-    
     /// <summary>
-    /// When this object is enabled, it will move the player based on their checkpoint
-    /// If at all
+    /// Loads all data in the scene
     /// </summary>
-    private void OnEnable()
+    public void LoadSave()
     {
-        switch (SaveManager.Instance.GetGameSaveData().GetCurrentCheckPoint())
+        //Gets the player gameobject
+        GameObject thePlayer = PlayerSpawnPoint.Instance.transform.GetChild(0).gameObject;
+
+        //Gets the current save point
+        SavePoint currentSavePoint = _savePoints[SaveManager.Instance.GetGameSaveData().GetCurrentCheckPoint()];
+
+
+        if(currentSavePoint == null)
         {
-            case 2:
-                _mapChunks[1].SetActive(true);
-                _mapChunks[0].SetActive(false);
-                _thePlayer.transform.position = _spawnLocations[1].position;
-                break;
-            case 3:
-                _mapChunks[2].SetActive(true);
-                _mapChunks[0].SetActive(false);
-                _thePlayer.transform.position = _spawnLocations[2].position;
-                break;
-                default:
-                    Debug.Log("There should be no changes in the spawn");
-                break;
+            currentSavePoint = _savePoints[0];
+            Debug.LogWarning("Couldn't find save point at ID " + 
+                SaveManager.Instance.GetGameSaveData().GetCurrentCheckPoint());
         }
+
+        //Sets the player location to the saved location
+        thePlayer.transform.position = currentSavePoint.SavePointTrigger.transform.position;
+
+        //Enable all map chunks for this save
+        foreach (GameObject mapChunks in currentSavePoint.MapChunksEnabled)
+        {
+            mapChunks.SetActive(true);
+        }
+
+        //Loads the player inventory
+        PlayerInventory.Instance.LoadInventory();
+
+        //Loads the current story beat
+        StoryManager.Instance.LoadData();
     }
 }
