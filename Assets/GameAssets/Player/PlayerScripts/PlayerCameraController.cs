@@ -13,6 +13,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 
@@ -49,7 +50,7 @@ public class PlayerCameraController : MonoBehaviour
     private Animator _harpoonAnimator;
     [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
     [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
-    private const string _TARGET_ANIMATION = "harpoonIdle";
+    private const string _IDLE_ANIMATION = "harpoonIdle";
     private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
@@ -58,6 +59,12 @@ public class PlayerCameraController : MonoBehaviour
     [Space]
     [SerializeField] private float _jumpscareTime = 0.1f;
     [SerializeField, Range(0f, 10f)] private float _jumpscareIntensity = 5f;
+
+    // Variables for harpoon turning
+    [SerializeField, Range(0f, 10f)] private float _harpoonFollowSpeed = 5f;
+    private const float _BASE_FOLLOW_SPEED = 0.02f;
+    private float _harpoonHoriTurningVelo;
+    private float _harpoonVertTurningVelo;
 
     /// <summary>
     /// This function is called before the first frame update.
@@ -107,6 +114,7 @@ public class PlayerCameraController : MonoBehaviour
         while (true)
         {
             AdjustPlayerRotation();
+            AdjustHarpoonRotation();
             BoatSway();
 
             yield return null;
@@ -122,6 +130,25 @@ public class PlayerCameraController : MonoBehaviour
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
         _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+    }
+
+    private void AdjustHarpoonRotation()
+    {
+        if (!_harpoonAnimator.IsUnityNull())
+        {
+            if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
+            {
+                float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
+                    Camera.main.transform.localEulerAngles.y, ref _harpoonHoriTurningVelo, 
+                    _harpoonFollowSpeed * _BASE_FOLLOW_SPEED);
+
+                float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
+                    Camera.main.transform.localEulerAngles.x, ref _harpoonVertTurningVelo, 
+                    _harpoonFollowSpeed * _BASE_FOLLOW_SPEED);
+
+                _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
+            }
+        }
     }
 
     /// <summary>
@@ -175,7 +202,7 @@ public class PlayerCameraController : MonoBehaviour
             // We only really want to do movement sway if we are moving directly forward and the harpoon is idle
             // If we don't do this, this could lead to visual bugs
             if (moveDir.y > 0 && moveDir.x == 0 && 
-                _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _TARGET_ANIMATION)
+                _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
             {
                 // Stop resetting the camera if we are
                 if (stopSwayCoroutine != null)
@@ -268,7 +295,7 @@ public class PlayerCameraController : MonoBehaviour
         if (change)
         {
             _cameraCoroutine = StartCoroutine(MoveCamera());
-            Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
@@ -276,7 +303,7 @@ public class PlayerCameraController : MonoBehaviour
             {
                 StopCoroutine(_cameraCoroutine);
             }
-            Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
         }
     }
 
