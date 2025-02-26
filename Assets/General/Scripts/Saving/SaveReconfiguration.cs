@@ -27,6 +27,14 @@ public class SaveReconfiguration : MonoBehaviour
         //Gets the current save point
         SavePoint currentSavePoint = _savePoints[SaveManager.Instance.GetGameSaveData().GetCurrentCheckPoint()];
 
+
+        if(currentSavePoint == null)
+        {
+            currentSavePoint = _savePoints[0];
+            Debug.LogWarning("Couldn't find save point at ID " + 
+                SaveManager.Instance.GetGameSaveData().GetCurrentCheckPoint());
+        }
+
         //Sets the player location to the saved location
         thePlayer.transform.position = currentSavePoint.SavePointTrigger.transform.position;
 
