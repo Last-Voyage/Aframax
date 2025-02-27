@@ -57,28 +57,32 @@ public class ConsoleController : MonoBehaviour
 
     //infinite ammo mode settings
     //
-    public bool IsInInfiniteAmmoMode = false;
+    [Header("infinite ammo Mode")]
     [SerializeField] private Button _infiniteAmmoModeButton;
     [SerializeField] private TMP_Text _infiniteAmmoFeedbackText;
+    public bool IsInInfiniteAmmoMode = false;
 
     //scene skiping
+    [Header("scene skiping")]
     [SerializeField] private TMP_InputField _sceneIndex;
     [SerializeField] private Button _moveToSceneButton;
     [SerializeField] private Button _moveSceneForwardButton;
     [SerializeField] private Button _moveSceneBackwardButton;
 
     //Dev ui mode
-    public bool IsInDevUiMode;
+    [Header("Dev ui Mode")]
     [SerializeField] private Button _devUiModeButton;
     [SerializeField] private TMP_Text _devUiModeText;
     [SerializeField] private GameObject _devUi;
+    public bool IsInDevUiMode;
 
 
     //trailer mode
-    private bool _isInTrailerMode = false;
+    [Header("Trailer Mode")]
     [SerializeField] private Button _toggleTrailerModeButton;
     [SerializeField] private TMP_Text _trailerModeButtonText;
     private GameObject _playerHud;
+    private bool _isInTrailerMode = false;
 
     private PlayerInputMap _playerInput;
 
@@ -493,17 +497,15 @@ public class ConsoleController : MonoBehaviour
     /// </summary>
     private void ToggleTrailerMode() 
     {
+        
+        _playerHud.SetActive(_isInTrailerMode);
         if (_isInTrailerMode)
         {
-            //turn player hud off
-            _playerHud.SetActive(true);
             _trailerModeButtonText.text = "Enter Trailer Mode";
             _isInTrailerMode = false;
         }
         else 
         {
-            //turn player hud on
-            _playerHud.SetActive(false);
             _trailerModeButtonText.text = "Exit Trailer Mode";
             _isInTrailerMode = true;
         }
