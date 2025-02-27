@@ -147,10 +147,11 @@ public class PlayerCameraController : MonoBehaviour
                 _harpoonGun.transform.SetParent(this.transform, true);
 
                 // Get new angles for the harpoon
+                // We do this by getting the current rotation for the harpoon and putting it through this
+                // SmoothDampAngle function, which is super intuitive and makes the movement clean
                 float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
                     Camera.main.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
-                    _harpoonFollowTime* _BASE_FOLLOW_TIME);
-
+                    _harpoonFollowTime * _BASE_FOLLOW_TIME);
                 float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
                     Camera.main.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
                     _harpoonFollowTime * _BASE_FOLLOW_TIME);
