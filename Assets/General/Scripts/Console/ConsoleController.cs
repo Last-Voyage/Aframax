@@ -57,21 +57,32 @@ public class ConsoleController : MonoBehaviour
 
     //infinite ammo mode settings
     //
-    public bool IsInInfiniteAmmoMode = false;
+    [Header("infinite ammo Mode")]
     [SerializeField] private Button _infiniteAmmoModeButton;
     [SerializeField] private TMP_Text _infiniteAmmoFeedbackText;
+    public bool IsInInfiniteAmmoMode = false;
 
     //scene skiping
+    [Header("scene skiping")]
     [SerializeField] private TMP_InputField _sceneIndex;
     [SerializeField] private Button _moveToSceneButton;
     [SerializeField] private Button _moveSceneForwardButton;
     [SerializeField] private Button _moveSceneBackwardButton;
 
     //Dev ui mode
-    public bool IsInDevUiMode;
+    [Header("Dev ui Mode")]
     [SerializeField] private Button _devUiModeButton;
     [SerializeField] private TMP_Text _devUiModeText;
     [SerializeField] private GameObject _devUi;
+    public bool IsInDevUiMode;
+
+
+    //trailer mode
+    [Header("Trailer Mode")]
+    [SerializeField] private Button _toggleTrailerModeButton;
+    [SerializeField] private TMP_Text _trailerModeButtonText;
+    private GameObject _playerHud;
+    private bool _isInTrailerMode = false;
 
     private PlayerInputMap _playerInput;
 
@@ -121,6 +132,9 @@ public class ConsoleController : MonoBehaviour
         _moveSceneForwardButton.onClick.AddListener(Forward);
         _moveToSceneButton.onClick.AddListener(MoveToScene);
         _devUiModeButton.onClick.AddListener(ToggleDevUiMode);
+        _toggleTrailerModeButton.onClick.AddListener(ToggleTrailerMode);
+        _playerHud = GameObject.FindGameObjectWithTag("PlayerHud");
+
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -475,6 +489,29 @@ public class ConsoleController : MonoBehaviour
 
     #endregion
 
+
+    #region trailer Mode
+    /// <summary>
+    /// turns trailer mode on and off,
+    /// trailer mode means no ui
+    /// </summary>
+    private void ToggleTrailerMode() 
+    {
+        
+        _playerHud.SetActive(_isInTrailerMode);
+        if (_isInTrailerMode)
+        {
+            _trailerModeButtonText.text = "Enter Trailer Mode";
+            _isInTrailerMode = false;
+        }
+        else 
+        {
+            _trailerModeButtonText.text = "Exit Trailer Mode";
+            _isInTrailerMode = true;
+        }
+    }
+    #endregion
+
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
@@ -492,6 +529,7 @@ public class ConsoleController : MonoBehaviour
         _moveSceneForwardButton.onClick.RemoveAllListeners();
         _moveToSceneButton.onClick.RemoveAllListeners();
         _devUiModeButton.onClick.RemoveAllListeners();
+        _toggleTrailerModeButton.onClick.RemoveAllListeners();
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
