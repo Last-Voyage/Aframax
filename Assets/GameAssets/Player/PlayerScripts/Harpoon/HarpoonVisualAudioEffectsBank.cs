@@ -14,6 +14,6 @@ using UnityEngine;
 [System.Serializable]
 public class HarpoonVisualAudioEffectsBank
 {
-    public Material _associatedMaterial;
-    public HarpoonVFXType _vfxType;
+    public Material AssociatedMaterial;
+    public HarpoonCollisionType CollisionType;
 }

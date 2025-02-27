@@ -7,6 +7,7 @@
                     the game
 *****************************************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,17 +36,9 @@ public class StoryManager : MonoBehaviour
     private int _currentStoryIndex = -1;
 
     /// <summary>
-    /// Run initialization functions on the StoryManager
-    /// </summary>
-    private void Awake()
-    {
-        DefineSingleton();
-    }
-
-    /// <summary>
     /// Defines the Instance singleton variable
     /// </summary>
-    private void DefineSingleton()
+    public void DefineSingleton()
     {
         // Only sets it as the singleton if there isn't one already
         if (Instance == null)
@@ -250,5 +243,40 @@ public class StoryManager : MonoBehaviour
 
         // Tell the active beat list to stop considering this beat as playing
         _beatEventsCoroutines[_activeStoryBeats.IndexOf(beat)] = null;
+    }
+
+    /// <summary>
+    /// This saves the current story beat when a new checkpoint is hit
+    /// </summary>
+    public void SaveData()
+    {
+        SaveManager.Instance.GetGameSaveData().SetCurrentStoryBeat(_currentStoryIndex);
+    }
+
+    /// <summary>
+    /// Loads the current story beat
+    /// </summary>
+    public void LoadData()
+    {
+        _currentStoryIndex = SaveManager.Instance.GetGameSaveData().GetCurrentStoryBeat();
+    }
+
+    /// <summary>
+    /// This will save data when a new checkpoint is reached; and it will load in save data
+    /// (when the player returns to a scene they died in or left)
+    /// </summary>
+    private void OnEnable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.AddListener(SaveData);
+        SaveManager.Instance.GetOnLoadSaveData()?.AddListener(LoadData);
+    }
+
+    /// <summary>
+    /// Disables listeners to prevent memory leaks
+    /// </summary>
+    private void OnDisable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.RemoveListener(SaveData);
+        SaveManager.Instance.GetOnLoadSaveData()?.RemoveListener(LoadData);
     }
 }

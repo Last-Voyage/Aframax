@@ -1,14 +1,14 @@
 /**********************************************************************************************************************
 // File Name :         PlayerInventory.cs
 // Author :            Ryan Swanson
-// Contributer :       Charlie Polonus
+// Contributer :       Charlie Polonus, Nick Rice
 // Creation Date :     11/12/24
 // 
 // Brief Description : Stores any items held by the player
 **********************************************************************************************************************/
 
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -83,5 +83,39 @@ public class PlayerInventory : MonoBehaviour
 
         // Succesfully return that the player has the item
         return true;
+    }
+
+    /// <summary>
+    /// Saves the players inventory
+    /// </summary>
+    public void SaveInventory()
+    {
+        SaveManager.Instance.GetGameSaveData().SetPlayerInventory(_allItems);
+    }
+
+    /// <summary>
+    /// Loads in the players inventory from saved data
+    /// </summary>
+    public void LoadInventory()
+    {
+        _allItems = SaveManager.Instance.GetGameSaveData().GetCurrentInventory();
+    }
+
+    /// <summary>
+    /// Adds listeners for saving and loading data
+    /// </summary>
+    private void OnEnable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.AddListener(SaveInventory);
+        SaveManager.Instance.GetOnLoadSaveData()?.AddListener(LoadInventory);
+    }
+
+    /// <summary>
+    /// Removes listeners for saving and loading data
+    /// </summary>
+    private void OnDisable()
+    {
+        SaveManager.Instance.GetOnNewCheckpoint()?.RemoveListener(SaveInventory);
+        SaveManager.Instance.GetOnLoadSaveData()?.RemoveListener(LoadInventory);
     }
 }

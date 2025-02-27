@@ -33,6 +33,8 @@ public class PlayerCollision : MonoBehaviour
         CheckForChaseDamageTrigger(contact);
 
         CheckForMusicTrigger(contact);
+
+        CheckForSavePointTrigger(contact);
     }
 
     #endregion
@@ -123,5 +125,16 @@ public class PlayerCollision : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Checks for the trigger to save the game
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForSavePointTrigger(Collider contact)
+    {
+        if (contact.gameObject.TryGetComponent(out SavePointTrigger savePlayerTrigger))
+        {
+            savePlayerTrigger.PlayerContact();
+        }
+    }
     #endregion
 }
