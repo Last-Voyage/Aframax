@@ -195,6 +195,12 @@ public class WeakPointHandler : MonoBehaviour
             if (_proceduralVine != null)
             {
                 _proceduralVine.StartRetract();
+
+                //disable player colliding with weakpoint when retracting
+                foreach(var collider in GetComponentsInChildren<Collider>())
+                {
+                    collider.enabled = false;
+                }
             }
             else
             {

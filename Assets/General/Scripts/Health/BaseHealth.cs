@@ -90,6 +90,13 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
         }
     }
 
+    /// <summary>
+    /// Returns the current health
+    /// </summary>
+    public float GetCurrentHealth()
+    {
+        return _currentHealth;
+    }
     #region Events
 
     /// <summary>
