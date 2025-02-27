@@ -516,7 +516,7 @@ GameObject:
   - component: {fileID: 294942536}
   - component: {fileID: 294942535}
   - component: {fileID: 294942534}
-  - component: {fileID: 294942533}
+  - component: {fileID: 294942537}
   m_Layer: 5
   m_Name: Reset Save Data
   m_TagString: Untagged
@@ -544,20 +544,6 @@ RectTransform:
   m_AnchoredPosition: {x: 80, y: -95.1185}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &294942533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 294942531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sceneToLoad: 5
-  _sceneTransitionID: 0
 --- !u!114 &294942534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,9 +588,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 294942533}
-        m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: LoadDesiredSceneButtonAdditive
+      - m_Target: {fileID: 294942537}
+        m_TargetAssemblyTypeName: SaveResetButton, Assembly-CSharp
+        m_MethodName: ResetButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -652,6 +638,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294942531}
   m_CullTransparentMesh: 1
+--- !u!114 &294942537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294942531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e2702e5fd5f7a4bbfbf131f10ae262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &324132670
 GameObject:
   m_ObjectHideFlags: 0
