@@ -289,8 +289,6 @@ public class ProceduralVine : MonoBehaviour
             return;
         }
 
-        Debug.Log("appeared");
-
         //shift the rig to used the dampedTransform instead of IK
         _appearDistance = 0;
         _currentState = EVineState.appearing;
