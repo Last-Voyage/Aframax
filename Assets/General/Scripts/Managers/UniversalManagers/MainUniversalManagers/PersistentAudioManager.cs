@@ -259,11 +259,10 @@ public class PersistentAudioManager : AudioManager
     public void StartMusicByReference(EventReference reference)
     {
         // Returns if we are trying to play the music we are already playing
-        if(reference.Path == _currentMusicReference.Path)
+        if (!_currentMusicReference.IsNull && reference.Guid == _currentMusicReference.Guid)
         {
             return;
         }
-
         StartCoroutine(StartMusicProcess(reference));
     }
 
@@ -324,6 +323,15 @@ public class PersistentAudioManager : AudioManager
             instance.setVolume(Mathf.Lerp(startMusicVolume, endMusicVolume, timeElapsed));
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Changes the current music volume specifically
+    /// </summary>
+    /// <param name="endMusicVolume"> The end volume </param>
+    public void ChangeCurrentMusicVolume(float endMusicVolume)
+    {
+        StartCoroutine(ChangeMusicVolume(_currentMusicInstance, endMusicVolume));
     }
     #endregion
 }

@@ -1,14 +1,17 @@
 /******************************************************************************
 // File Name:       SaveManager.cs
 // Author:          Ryan Swanson
+// Contributor:     Nick Rice
 // Creation Date:   September 14, 2024
 //
 // Description:     Contains the functionality to set up and get access to save data
 ******************************************************************************/
 
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -20,6 +23,9 @@ public class SaveManager : MainUniversalManagerFramework
     private string _saveDataFilePath;
 
     public static SaveManager Instance;
+
+    private readonly UnityEvent _onNewCheckpoint = new();
+    private readonly UnityEvent _onLoadSaveData = new();
 
     /// <summary>
     /// Sets the path to create the save file
@@ -47,7 +53,8 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void StartingValues()
     {
-        
+        // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
+        Instance.GetGameSaveData().SetCurrentSceneIndex(1);
     }
 
     /// <summary>
@@ -98,6 +105,22 @@ public class SaveManager : MainUniversalManagerFramework
         SaveText();
     }
 
+    /// <summary>
+    /// When the player reaches a checkpoint the data will be saved
+    /// </summary>
+    private void OnEnable()
+    {
+        GetOnNewCheckpoint()?.AddListener(SaveText);
+    }
+
+    /// <summary>
+    /// Removes the listener, preventing a memory leak
+    /// </summary>
+    private void OnDisable()
+    {
+        GetOnNewCheckpoint()?.RemoveListener(SaveText);
+    }
+
     #region BaseManager
     /// <summary>
     /// Establishes the instance for the save manager
@@ -121,5 +144,8 @@ public class SaveManager : MainUniversalManagerFramework
 
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
+    public UnityEvent GetOnNewCheckpoint() => _onNewCheckpoint;
+    public UnityEvent GetOnLoadSaveData() => _onLoadSaveData;
+
     #endregion
 }

@@ -284,13 +284,20 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
-        while (_harpoonGun.transform.localPosition != Vector3.zero)
+        if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _TARGET_ANIMATION)
         {
-            // Slowly move the harpoon back to position
-            _harpoonGun.transform.localPosition = Vector3.MoveTowards(_harpoonGun.transform.localPosition, 
-                Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED);
+            while (_harpoonGun.transform.localPosition != Vector3.zero)
+            {
+                // Slowly move the harpoon back to position
+                _harpoonGun.transform.localPosition = Vector3.MoveTowards(_harpoonGun.transform.localPosition,
+                    Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
 
-            yield return null;
+                yield return null;
+            }
+        }
+        else
+        {
+            _harpoonGun.transform.localPosition = Vector3.zero;
         }
 
         // I'm deciding that our main character is right footed
