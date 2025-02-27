@@ -284,7 +284,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
-        if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _TARGET_ANIMATION)
+        if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
         {
             while (_harpoonGun.transform.localPosition != Vector3.zero)
             {
