@@ -113,7 +113,7 @@ public class ProceduralVine : MonoBehaviour
     private IEnumerator JumpBackToPath(float timeToGetToPath)
     {
         _distance = 0;
-        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_distance), .2f, 1, timeToGetToPath, false).SetEase(Ease.InOutQuad);
+        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_distance), .2f, 1, timeToGetToPath, false).SetEase(Ease.OutQuad);
         Vector3 direction = (_pathCreator.path.GetPointAtDistance(_distance) - _followTransform.position).normalized;
         _followTransform.forward = direction;
         yield return new WaitForSeconds(timeToGetToPath);
@@ -263,10 +263,11 @@ public class ProceduralVine : MonoBehaviour
     public void StartAppear()
     {
         _appearDistance = 0;
-        _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
         _isAppearing = true;
         _chainIKRig.weight = 0;
         _dampedTransformRig.weight = 1;
+        /*_rigBuilder.Build();*/
+        _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
     }
     /// <summary>
     ///  the vine appears!
