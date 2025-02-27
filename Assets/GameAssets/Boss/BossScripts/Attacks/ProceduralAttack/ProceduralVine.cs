@@ -51,6 +51,15 @@ public class ProceduralVine : MonoBehaviour
 
     private bool _isRetracting = false;
 
+    [Header("Appear Stuff")]
+    [SerializeField] private PathCreator _appearPath; // The target to move toward
+    [SerializeField] private float _appearSpeed = 5f; // Speed of movement
+    [SerializeField] private float _appearDistance = 0;
+
+    private bool _isAppearing = false;
+    private bool _isShftingBack = false;
+    [SerializeField] private float _moveBackToPathDuration = .3f;
+
     private EventInstance _movementEventInstance;
 
     private void Start()
@@ -64,7 +73,7 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void Update() 
     {
-        if(!_isAttacking && !_isRetracting)
+        if(!_isAttacking && !_isRetracting && !_isAppearing && !_isShftingBack)
         {
             //move along path
             MoveAlongPath();
@@ -74,15 +83,41 @@ public class ProceduralVine : MonoBehaviour
             }    
         }
 
-        if(_isRetracting && _retractPath.path.length > _retractDistance)
+        //retracting
+        if(_isRetracting && _retractPath.path.length > _retractDistance +.1f)
         {
             Retracting();
         }
         else if(_baseOfVine.parent.gameObject.activeInHierarchy && _isRetracting)
         {
             _isRetracting = false;
-            _baseOfVine.parent.gameObject.SetActive(false);
         }
+
+        //appearing
+        if (_isAppearing && _appearPath.path.length > _appearDistance +.1f)
+        {
+            Appearing();
+        }
+        else if (_isAppearing)
+        {
+            _isAppearing = false;
+            _dampedTransformRig.weight = 0f;
+            _chainIKRig.weight = 1f;
+            _rigBuilder.Build();
+            _isShftingBack = true;
+            _followTransform.position = _flowerHeadTransform.position;
+            StartCoroutine(JumpBackToPath(_moveBackToPathDuration));
+        }
+    }
+
+    private IEnumerator JumpBackToPath(float timeToGetToPath)
+    {
+        _distance = 0;
+        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_distance), .2f, 1, timeToGetToPath, false).SetEase(Ease.InOutQuad);
+        Vector3 direction = (_pathCreator.path.GetPointAtDistance(_distance) - _followTransform.position).normalized;
+        _followTransform.forward = direction;
+        yield return new WaitForSeconds(timeToGetToPath);
+        _isShftingBack = false;
     }
 
     /// <summary>
@@ -204,6 +239,7 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     public void StartRetract()
     {
+        _retractDistance = 0;
         _isRetracting = true;
         _chainIKRig.weight = 0;
         _dampedTransformRig.weight = 1;
@@ -216,6 +252,30 @@ public class ProceduralVine : MonoBehaviour
         _retractDistance += Time.deltaTime * _retractSpeed;
         _baseOfVine.position = _retractPath.path.GetPointAtDistance(_retractDistance);
         _baseOfVine.right = _retractPath.path.GetDirectionAtDistance(_retractDistance);
+    }
+    #endregion
+
+
+    #region Appear
+    /// <summary>
+    /// starts the vine appear
+    /// </summary>
+    public void StartAppear()
+    {
+        _appearDistance = 0;
+        _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
+        _isAppearing = true;
+        _chainIKRig.weight = 0;
+        _dampedTransformRig.weight = 1;
+    }
+    /// <summary>
+    ///  the vine appears!
+    /// </summary>
+    private void Appearing()
+    {
+        _appearDistance += Time.deltaTime * _appearSpeed;
+        _baseOfVine.position = _appearPath.path.GetPointAtDistance(_appearDistance);
+        _baseOfVine.right = -_appearPath.path.GetDirectionAtDistance(_appearDistance);
     }
     #endregion
 }
