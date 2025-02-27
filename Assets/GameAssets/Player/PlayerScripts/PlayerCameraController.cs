@@ -63,8 +63,8 @@ public class PlayerCameraController : MonoBehaviour
     // Variables for harpoon turning
     [SerializeField, Range(0f, 10f)] private float _harpoonFollowTime = 5f;
     private const float _BASE_FOLLOW_TIME = 0.01f;
-    private float _harpoonHoriTurningVelo;
-    private float _harpoonVertTurningVelo;
+    private float _harpoonHorizontalVelocity;
+    private float _harpoonVerticalVelocity;
 
     /// <summary>
     /// This function is called before the first frame update.
@@ -132,27 +132,39 @@ public class PlayerCameraController : MonoBehaviour
         _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
     }
 
+    /// <summary>
+    /// Adjusts the harpoon's rotation such that it follows the camera movement
+    /// Readjusts the harpoon for animations as well.
+    /// </summary>
     private void AdjustHarpoonRotation()
     {
         if (!_harpoonAnimator.IsUnityNull())
         {
             if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
             {
+                // Let's make sure the harpoon is set to the PlayerCamera as its parent
+                // This is because we want to ignore the Main Camera's current rotation so we can just do it ourselves
                 _harpoonGun.transform.SetParent(this.transform, true);
 
+                // Get new angles for the harpoon
                 float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
-                    Camera.main.transform.localEulerAngles.y, ref _harpoonHoriTurningVelo, 
+                    Camera.main.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
                     _harpoonFollowTime* _BASE_FOLLOW_TIME);
 
                 float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
-                    Camera.main.transform.localEulerAngles.x, ref _harpoonVertTurningVelo, 
+                    Camera.main.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
                     _harpoonFollowTime * _BASE_FOLLOW_TIME);
 
+                // Set new angles for the harpoon
                 _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
             }
             else
             {
+                // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
+                // to keep its rotation when it's not idle
                 _harpoonGun.transform.SetParent(Camera.main.transform, true);
+
+                // Let's reset the rotation too, just in case
                 _harpoonGun.transform.localRotation = Quaternion.identity;
             }
         }
