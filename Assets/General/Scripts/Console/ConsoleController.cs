@@ -73,6 +73,13 @@ public class ConsoleController : MonoBehaviour
     [SerializeField] private TMP_Text _devUiModeText;
     [SerializeField] private GameObject _devUi;
 
+
+    //trailer mode
+    private bool _isInTrailerMode = false;
+    [SerializeField] private Button _toggleTrailerModeButton;
+    [SerializeField] private TMP_Text _trailerModeButtonText;
+    private GameObject _playerHud;
+
     private PlayerInputMap _playerInput;
 
     public static ConsoleController Instance;
@@ -121,6 +128,9 @@ public class ConsoleController : MonoBehaviour
         _moveSceneForwardButton.onClick.AddListener(Forward);
         _moveToSceneButton.onClick.AddListener(MoveToScene);
         _devUiModeButton.onClick.AddListener(ToggleDevUiMode);
+        _toggleTrailerModeButton.onClick.AddListener(ToggleTrailerMode);
+        _playerHud = GameObject.FindGameObjectWithTag("PlayerHud");
+
         if (_toggleFreeLookCamButton == null) return;
         //free look cam
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.AddListener(ToggleFreeLookCam);
@@ -475,6 +485,31 @@ public class ConsoleController : MonoBehaviour
 
     #endregion
 
+
+    #region trailer Mode
+    /// <summary>
+    /// turns trailer mode on and off,
+    /// trailer mode means no ui
+    /// </summary>
+    private void ToggleTrailerMode() 
+    {
+        if (_isInTrailerMode)
+        {
+            //turn player hud off
+            _playerHud.SetActive(true);
+            _trailerModeButtonText.text = "Enter Trailer Mode";
+            _isInTrailerMode = false;
+        }
+        else 
+        {
+            //turn player hud on
+            _playerHud.SetActive(false);
+            _trailerModeButtonText.text = "Exit Trailer Mode";
+            _isInTrailerMode = true;
+        }
+    }
+    #endregion
+
     /// <summary>
     /// called when the object is destroyed.
     /// removes all listener to lower chances
@@ -492,6 +527,7 @@ public class ConsoleController : MonoBehaviour
         _moveSceneForwardButton.onClick.RemoveAllListeners();
         _moveToSceneButton.onClick.RemoveAllListeners();
         _devUiModeButton.onClick.RemoveAllListeners();
+        _toggleTrailerModeButton.onClick.RemoveAllListeners();
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
