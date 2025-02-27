@@ -98,6 +98,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UIBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e9646e31-349e-464a-8fc3-133c0ef4bde6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -342,6 +351,28 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""947d9b71-b319-489d-a00a-d39cc49c93e2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e7ed5f5-8051-4842-9b12-73afd2a6901a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UIBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -564,6 +595,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
+        m_Player_UIBack = m_Player.FindAction("UIBack", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -638,6 +670,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_EnterTitleScreen;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Looking;
+    private readonly InputAction m_Player_UIBack;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -650,6 +683,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Looking => m_Wrapper.m_Player_Looking;
+        public InputAction @UIBack => m_Wrapper.m_Player_UIBack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -683,6 +717,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Looking.started += instance.OnLooking;
             @Looking.performed += instance.OnLooking;
             @Looking.canceled += instance.OnLooking;
+            @UIBack.started += instance.OnUIBack;
+            @UIBack.performed += instance.OnUIBack;
+            @UIBack.canceled += instance.OnUIBack;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -711,6 +748,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Looking.started -= instance.OnLooking;
             @Looking.performed -= instance.OnLooking;
             @Looking.canceled -= instance.OnLooking;
+            @UIBack.started -= instance.OnUIBack;
+            @UIBack.performed -= instance.OnUIBack;
+            @UIBack.canceled -= instance.OnUIBack;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -818,6 +858,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnEnterTitleScreen(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnLooking(InputAction.CallbackContext context);
+        void OnUIBack(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {
