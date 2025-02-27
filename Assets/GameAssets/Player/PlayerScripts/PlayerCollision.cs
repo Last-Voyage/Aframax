@@ -147,7 +147,11 @@ public class PlayerCollision : MonoBehaviour
             //the component should always be on the 3rd child of the vine base
             if (contact.transform.parent.GetChild(2).TryGetComponent(out ProceduralVine proceduralVine))
             {
-                proceduralVine.StartAppear();
+                if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
+                {
+                    proceduralVine.StartAppear();
+                }
+                
             }
         }
     }

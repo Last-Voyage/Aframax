@@ -57,7 +57,7 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _moveBackToPathDuration = .3f;
 
     //state stuff
-    private enum EVineState
+    public enum EVineState
     {
         attacking,
         retracting,
@@ -314,4 +314,5 @@ public class ProceduralVine : MonoBehaviour
 
 
     public bool GetIsAppeared() => _isAppeared;
+    public EVineState GetVineState() => _currentState;
 }
