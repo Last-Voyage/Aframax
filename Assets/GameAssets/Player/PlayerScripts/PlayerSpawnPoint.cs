@@ -21,8 +21,10 @@ public class PlayerSpawnPoint : MonoBehaviour
 
     public static PlayerSpawnPoint Instance;
 
-    // Start is called before the first frame update
-    void Awake()
+    /// <summary>
+    /// Performs any needed set up of the spawn point
+    /// </summary>
+    public void SetUp()
     {
         Instance = this;
         SpawnPlayer();
