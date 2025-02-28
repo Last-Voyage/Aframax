@@ -538,7 +538,7 @@ public class PlayerMovementController : MonoBehaviour
         // Calculate the lerp value between the non-focus and focused speed
         float moveSpeedLerpValue = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
 
-        // Set the speed to the lerped value from the non-focused and focused speed
+        // Set the ratio value from 1 to the max speed ratio
         _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 1 - moveSpeedLerpValue);
     }
 
