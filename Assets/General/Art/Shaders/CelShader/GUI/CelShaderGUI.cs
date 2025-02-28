@@ -6,26 +6,20 @@
 // Brief Description :  Custom editor GUI for our Cel Shader.
 **************************************************************************/
 
-// Exclude script from build
-#if UNITY_EDITOR
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Rendering;
+using UnityEngine;
 
-public class CelShaderGui : ShaderGUI
+public class CelShaderGUI : ShaderGUI
 {
     // Foldout states
-    private bool _showTilingFoldout = true;
     private bool _showColorsFoldout = true;
     private bool _showNormalFoldout = true;
     private bool _showMetallicFoldout = false;
     private bool _showEmissionFoldout = false;
-    private bool _showPomFoldout = false;
-    private bool _showVertexPaintFoldout = false;
-    private bool _showVertexSwayFoldout = false;
     private bool _showPostFoldout = false;
     
     // When the ShaderGUI is drawn (immediate-mode)
@@ -35,24 +29,6 @@ public class CelShaderGui : ShaderGUI
         EditorGUILayout.LabelField("LV Cel Shader (Standard)", EditorStyles.boldLabel);
         EditorGUILayout.Space();
         CoreEditorUtils.DrawSplitter();
-        
-        // Render the Tiling Foldout
-        _showTilingFoldout = CoreEditorUtils.DrawHeaderFoldout(
-            "Tiling",
-            _showTilingFoldout,
-            false,
-            (Func<bool>)null,
-            null
-        );
-        DrawProperties(
-            _showTilingFoldout,
-            new Dictionary<string, string> {
-                { "_TilingValue", "Tiling Values"},
-                { "_TextureOffset", "Texture Offset" }
-            },
-            properties,
-            materialEditor
-        );
         
         // Render the Base Color foldout
         _showColorsFoldout = CoreEditorUtils.DrawHeaderFoldout(
@@ -128,64 +104,6 @@ public class CelShaderGui : ShaderGUI
             materialEditor
         );
         
-        // Render the POM (Parallax Occlusion Mapping) Foldout
-        _showPomFoldout = CoreEditorUtils.DrawHeaderFoldout(
-            "Parallax Occlusion Mapping",
-            _showPomFoldout,
-            false,
-            (Func<bool>)null,
-            null
-        );
-        DrawProperties(
-            _showPomFoldout,
-            new Dictionary<string, string> {
-                { "_Heightmap", "Height Map (Texture)"},
-                { "_HeightAmplitude", "Amplitude" }
-            },
-            properties,
-            materialEditor
-        );
-        
-        // Render the Vertex Paint Foldout
-        _showVertexPaintFoldout = CoreEditorUtils.DrawHeaderFoldout(
-            "Vertex Paint",
-            _showVertexPaintFoldout,
-            false,
-            (Func<bool>)null,
-            null
-        );
-        DrawProperties(
-            _showVertexPaintFoldout,
-            new Dictionary<string, string> {
-                { "_MaskMapColor", "Color"},
-                { "_MaskMapTexture", "Mask Map (Texture)" },
-                { "_MaskMapIntensity", "Intensity" },
-                { "_MaskMapContrast", "Contrast" }
-            },
-            properties,
-            materialEditor
-        );
-        
-        // Render the Wind Sway Foldout
-        _showVertexSwayFoldout = CoreEditorUtils.DrawHeaderFoldout(
-            "Wind Sway",
-            _showVertexSwayFoldout,
-            false,
-            (Func<bool>)null,
-            null
-        );
-        DrawProperties(
-            _showVertexSwayFoldout,
-            new Dictionary<string, string> {
-                { "_WindSway", "Enable Wind Sway"},
-                { "_WindSwayIntensity", "Wind Sway Intensity" },
-                { "_WindSwayFrequency", "Wind Sway Frequency" },
-                { "_WindSwaySpeed", "Wind Sway Speed" }
-            },
-            properties,
-            materialEditor
-        );
-        
         // Render the Post Processing foldout
         _showPostFoldout = CoreEditorUtils.DrawHeaderFoldout(
             "Post-Processing",
@@ -249,5 +167,3 @@ public class CelShaderGui : ShaderGUI
         CoreEditorUtils.DrawSplitter();
     }
 }
-
-#endif
