@@ -33,6 +33,10 @@ public class PlayerCollision : MonoBehaviour
         CheckForChaseDamageTrigger(contact);
 
         CheckForMusicTrigger(contact);
+
+        CheckForSavePointTrigger(contact);
+
+        CheckForAppearTrigger(contact);
     }
 
     #endregion
@@ -123,5 +127,33 @@ public class PlayerCollision : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Checks for the trigger to save the game
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForSavePointTrigger(Collider contact)
+    {
+        if (contact.gameObject.TryGetComponent(out SavePointTrigger savePlayerTrigger))
+        {
+            savePlayerTrigger.PlayerContact();
+        }
+    }
+
+    private void CheckForAppearTrigger(Collider contact)
+    {
+        if(contact.CompareTag("AppearTrigger"))
+        {
+            //the component should always be on the 3rd child of the vine base
+            if (contact.transform.parent.GetChild(2).TryGetComponent(out ProceduralVine proceduralVine))
+            {
+                if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
+                {
+                    proceduralVine.StartAppear();
+                }
+                
+            }
+        }
+    }
+
     #endregion
 }
