@@ -17,7 +17,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour
 {
     private PlayerInputMap _playerInputControls;
 
-    [SerializeField] private Button _backArrow;
+    private Button _backArrow;
 
     private void Awake()
     {
