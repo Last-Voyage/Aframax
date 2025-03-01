@@ -27,6 +27,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private TMP_Text _noteTextField;
     [SerializeField] private TMP_Text _leftArrow;
     [SerializeField] private TMP_Text _rightArrow;
+    [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
     private int _currentPage;
 
     /// <summary>
@@ -106,6 +107,11 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         // Deactivate the note
         ActiveNote = null;
         _noteView.SetActive(false);
+
+        if (_dialogueOnExit != null)
+        {
+            GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogueOnExit);
+        }
     }
 
     /// <summary>
