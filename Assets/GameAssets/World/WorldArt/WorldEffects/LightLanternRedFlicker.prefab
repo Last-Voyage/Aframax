@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 1369909191895347719}
   - component: {fileID: -7952829496287797239}
   - component: {fileID: 9106511425818624991}
+  - component: {fileID: 8904900270500683016}
   m_Layer: 0
-  m_Name: LightLanternRed
+  m_Name: LightLanternRedFlicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,3 +157,20 @@ MonoBehaviour:
   _canLightFlicker: 0
   _lightShiftTargetColor: {r: 0, g: 0.3962264, b: 0.113207586, a: 0}
   _lightShiftDuration: 20
+--- !u!114 &8904900270500683016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4293570479838498698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecc0dbea6871eea4bae2b346602df542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minAnimationDelay: 8
+  _maxAnimationDelay: 16
+  _animationNameList:
+  - PlayFlicker
+  _randomAnimType: 0
