@@ -11,16 +11,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// operates video settings, currently just brightness but probably more to come
 /// </summary>
 public class VideoSettingsBehaviour : MonoBehaviour
 {
-    private VolumeProfile volumeProfile;
-    private UnityEngine.Rendering.Universal.ColorAdjustments colorAdjustmentsName;
+    private VolumeProfile _volumeProfile;
+    private ColorAdjustments _colorAdjustmentsName;
 
     [Tooltip("Should not be higher than like 5 or some visuals kinda break")]
+    [Range(0.2f, 5)]
     [SerializeField] private float _maximumBrightness;
 
     /// <summary>
@@ -28,10 +30,13 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        _volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
 
         //even though this line is just an error check, everything breaks without it.
-        if (!volumeProfile.TryGet(out colorAdjustmentsName)) throw new System.NullReferenceException(nameof(colorAdjustmentsName));
+        if (!_volumeProfile.TryGet(out _colorAdjustmentsName))
+        {
+            throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
+        }
     }
 
     /// <summary>
@@ -39,7 +44,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     public void ChangeBrightness(Slider BrightnessSlider)
     {
-        colorAdjustmentsName.postExposure.Override(BrightnessSlider.value * _maximumBrightness);
+        _colorAdjustmentsName.postExposure.Override(BrightnessSlider.value * _maximumBrightness);
         //needs something with save data to keep slider position
     }
 }
