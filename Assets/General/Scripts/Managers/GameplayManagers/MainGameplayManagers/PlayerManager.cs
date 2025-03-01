@@ -17,6 +17,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class PlayerManager : MainGameplayManagerFramework
 {
+    public PlayerSpawnPoint _spawnPoint;
+
     public static PlayerManager Instance;
 
     /// <summary>
@@ -67,6 +69,15 @@ public class PlayerManager : MainGameplayManagerFramework
     {
         base.SetUpInstance();
         Instance = this;
+    }
+
+    /// <summary>
+    /// Overrides the base class by also setting up the spawn point
+    /// </summary>
+    public override void SetUpMainManager()
+    {
+        base.SetUpMainManager();
+        _spawnPoint.SetUp();
     }
 
     #endregion

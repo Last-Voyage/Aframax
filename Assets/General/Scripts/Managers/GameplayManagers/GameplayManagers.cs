@@ -65,5 +65,19 @@ public class GameplayManagers : CoreManagersFramework
 
         //Informs the scene manager that a gameplay scene was loaded
         AframaxSceneManager.Instance.OnInvokeGameplaySceneLoaded();
+
+        //If the scene has a story manager define it's singleton
+        StoryManager storyManager = FindObjectOfType<StoryManager>();
+        if(storyManager != null)
+        {
+            storyManager.DefineSingleton();
+        }
+
+        //If the scene has any saved data load the data
+        SaveReconfiguration saveReconfiguration = FindObjectOfType<SaveReconfiguration>();
+        if(saveReconfiguration != null)
+        {
+            saveReconfiguration.LoadSave();
+        }
     }
 }
