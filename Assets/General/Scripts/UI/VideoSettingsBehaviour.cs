@@ -3,7 +3,7 @@
 // Author :            Jeremiah Peters
 // Creation Date :     2/28/2025
 // 
-// Brief Description : Handles the video settings and applying them (presently just brightness)
+// Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
 
 using System.Collections;
@@ -12,15 +12,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// operates video settings, currently just brightness but probably more to come
+/// </summary>
 public class VideoSettingsBehaviour : MonoBehaviour
 {
-    //public UnityEngine.Rendering.Universal.ColorAdjustments thename;
-
-    private UnityEngine.Rendering.Volume volume;
-    private UnityEngine.Rendering.VolumeProfile volumeProfile;
+    private VolumeProfile volumeProfile;
     private UnityEngine.Rendering.Universal.ColorAdjustments colorAdjustmentsName;
 
-    [Tooltip("Should not be higher than like 5 at most or visuals break")]
+    [Tooltip("Should not be higher than like 5 or some visuals kinda break")]
     [SerializeField] private float _maximumBrightness;
 
     /// <summary>
@@ -28,7 +28,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        volume = GameObject.Find("GlobalVolumePostProcessing").GetComponent<Volume>();
         volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
 
         //even though this line is just an error check, everything breaks without it.
@@ -41,6 +40,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     public void ChangeBrightness(Slider BrightnessSlider)
     {
         colorAdjustmentsName.postExposure.Override(BrightnessSlider.value * _maximumBrightness);
-        //something with save data to keep slider position?
+        //needs something with save data to keep slider position
     }
 }
