@@ -154,6 +154,14 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// Reloads the current scene
+    /// </summary>
+    public void ReloadCurrentScene()
+    {
+        StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
+    }
+
+    /// <summary>
     /// The process by which a new scene is async loaded
     /// </summary>
     /// <param name="sceneID">The specific scene in the build index to load</param>
