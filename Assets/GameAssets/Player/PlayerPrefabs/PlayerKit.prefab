@@ -128,7 +128,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0.5
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -138,6 +138,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _maxFocusMoveSpeedRatio: 0.3
   _groundedCheckLength: 0.2
   _walkableLayers:
     serializedVersion: 2
@@ -317,6 +318,7 @@ Transform:
   m_Children:
   - {fileID: 333117514302688926}
   - {fileID: 4974042138453322927}
+  - {fileID: 1747720261229169481}
   m_Father: {fileID: 1597342954707975798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6591845243418425275
@@ -371,12 +373,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerVisuals: {fileID: 3991142726110527397}
-  _boatSwaySpeed: 8.5
-  _boatSwayIntensity: 1.5
+  _boatSwaySpeed: 5
+  _boatSwayIntensity: 0.6
   _harpoonGun: {fileID: 5197215059468236605}
   _movementSwaySpeed: 5
   _movementSwayIntensity: 5
+  _jumpscareTime: 0.1
   _jumpscareIntensity: 5
+  _harpoonFollowTime: 5
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,8 +520,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1747720261229169481}
+  m_Children: []
   m_Father: {fileID: 8080776813772587216}
   m_LocalEulerAnglesHint: {x: -89.42, y: 92.26, z: 0}
 --- !u!20 &3262127005595780260
@@ -584,8 +587,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 1
+  m_RequiresOpaqueTextureOption: 1
   m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1
@@ -595,7 +598,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -916,83 +919,18 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 333117514302688926}
+    m_TransformParent: {fileID: 8080776813772587216}
     m_Modifications:
-    - target: {fileID: 263656960614271445, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 868130121539051626, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2538986390306804482, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3127624576787642536, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 3245540113063888829, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: m_Name
       value: Harpoon
-      objectReference: {fileID: 0}
-    - target: {fileID: 4388331321570957484, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4968774709907754663, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5193909547269669202, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6629707868117031412, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonGunOffset.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: _playerLookDirection
       value: 
       objectReference: {fileID: 333117514302688926}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonMoveSmoothing
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonFollowSmoothing
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonRotationSmoothing
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8473538795549226789, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9037431801711115209, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1043,14 +981,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9197357737968571092, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 1791221125701350206, guid: 244fb0e576bfedc43aaf54ff18534b2f, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 244fb0e576bfedc43aaf54ff18534b2f, type: 3}
