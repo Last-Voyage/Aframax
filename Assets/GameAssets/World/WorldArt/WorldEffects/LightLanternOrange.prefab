@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7286787910827412035}
   - component: {fileID: 4340994275587320083}
   - component: {fileID: 2905260808401260641}
-  - component: {fileID: 3200105234173911711}
   - component: {fileID: -2995986586517204447}
   - component: {fileID: 6244370045723044232}
   m_Layer: 0
@@ -144,23 +143,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3200105234173911711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7000896417516716597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecc0dbea6871eea4bae2b346602df542, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minAnimationDelay: 8
-  _maxAnimationDelay: 16
-  _animationNameList:
-  - PlayFlicker
-  _randomAnimType: 0
 --- !u!114 &-2995986586517204447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8c95ce3a974bc4fa8b4496592469eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canLightFlicker: 0
   _lightShiftTargetColor: {r: 0, g: 0.3056603, b: 0.08650762, a: 0}
   _lightShiftDuration: 20
 --- !u!114 &6244370045723044232
