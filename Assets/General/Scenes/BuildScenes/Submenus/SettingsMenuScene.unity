@@ -628,10 +628,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1649006932}
+    m_SelectOnDown: {fileID: 993517086}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -1055,6 +1055,7 @@ GameObject:
   - component: {fileID: 249282348}
   - component: {fileID: 249282347}
   - component: {fileID: 249282351}
+  - component: {fileID: 249282352}
   m_Layer: 5
   m_Name: Main Settings Canvas
   m_TagString: Untagged
@@ -1165,6 +1166,22 @@ MonoBehaviour:
   _audioButton: {fileID: 1649006932}
   _videoButton: {fileID: 747759407}
   _gameplayButton: {fileID: 1151058226}
+  _topAudioSlider: {fileID: 160020289}
+  _topGameplayToggle: {fileID: 1087139967}
+  _topVideoToggle: {fileID: 408195108}
+--- !u!114 &249282352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249282346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 1649006927}
 --- !u!1 &285085429
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,8 +1750,8 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 747759407}
+    m_SelectOnDown: {fileID: 747759407}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -2018,10 +2035,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1005305375}
+    m_SelectOnDown: {fileID: 1151058226}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -3713,12 +3730,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnDown: {fileID: 160020289}
+    m_SelectOnLeft: {fileID: 1649006932}
+    m_SelectOnRight: {fileID: 1151058226}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -5104,10 +5121,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 160020289}
+    m_SelectOnDown: {fileID: 1962204734}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -5192,10 +5209,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1087139967}
+    m_SelectOnDown: {fileID: 488020074}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -5735,10 +5752,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 1151058226}
+    m_SelectOnDown: {fileID: 1005305375}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -6083,10 +6100,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: -1
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 160020289}
     m_SelectOnLeft: {fileID: 747759407}
     m_SelectOnRight: {fileID: 1649006932}
   m_Transition: 1
@@ -6452,6 +6469,7 @@ GameObject:
   - component: {fileID: 1174419108}
   - component: {fileID: 1174419107}
   - component: {fileID: 1174419106}
+  - component: {fileID: 1174419109}
   m_Layer: 5
   m_Name: AudioSettingsCanvas
   m_TagString: Untagged
@@ -6542,6 +6560,22 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!114 &1174419109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174419104}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5aa6109f60dcd4aa8614a306416543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameplayButton: {fileID: 0}
+  _audioButton: {fileID: 0}
+  _videoButton: {fileID: 0}
+  _lowerButton: {fileID: 0}
 --- !u!1 &1184729656
 GameObject:
   m_ObjectHideFlags: 0
@@ -8394,12 +8428,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnDown: {fileID: 160020289}
+    m_SelectOnLeft: {fileID: 1151058226}
+    m_SelectOnRight: {fileID: 747759407}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
