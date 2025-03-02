@@ -6,8 +6,6 @@
 // Brief Description : Resets the save data on a button
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -15,12 +13,16 @@ using UnityEngine;
 /// </summary>
 public class SaveResetButton : MonoBehaviour
 {
+    [SerializeField] private bool _doesReloadCurrentScene;
     /// <summary>
     /// Called when the button is pressed
     /// </summary>
     public void ResetButtonPressed()
     {
         SaveManager.Instance.ResetSaveData();
-        AframaxSceneManager.Instance.ReloadCurrentScene();
+        if(_doesReloadCurrentScene)
+        {
+            AframaxSceneManager.Instance.ReloadCurrentScene();
+        }
     }
 }
