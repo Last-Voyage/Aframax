@@ -8,6 +8,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Makes UI buttons selected when a new UI screen pops up from gameplay
+/// </summary>
 public class InGameMenuSwap : MonoBehaviour
 {
     [SerializeField]
@@ -15,6 +18,9 @@ public class InGameMenuSwap : MonoBehaviour
     
     private EventSystem _eventSystem;
     
+    /// <summary>
+    /// Makes UI buttons selected when a new UI screen pops up from gameplay
+    /// </summary>
     private void OnEnable()
     {
         _eventSystem = FindObjectOfType<EventSystem>();
