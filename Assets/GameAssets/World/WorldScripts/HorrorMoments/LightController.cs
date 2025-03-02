@@ -18,6 +18,9 @@ public class LightController : MonoBehaviour
     private Color _originalColor;
     private Animator _animator;
 
+    // Toggle for turning on and off light flickering
+    [SerializeField] private bool _canLightFlicker;
+
     // Light Shift Variables
     [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
     [SerializeField] private float _lightShiftDuration = 20f;
@@ -111,7 +114,10 @@ public class LightController : MonoBehaviour
     /// </summary>
     private void LightFlicker()
     {
-        _animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
+        if (_canLightFlicker)
+        {
+            _animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
+        }
     }
 
     /// <summary>
