@@ -3,27 +3,33 @@
 // Author :            Jeremiah Peters
 // Creation Date :     3/2/25
 //
-// Brief Description : 
+// Brief Description : handles the player hud inventory icons for held items
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// used for enabling and disabling held item hud
+/// </summary>
 public class HudInventoryManager : MonoBehaviour
 {
     [SerializeField] private Image[] _hudInventoryIcons;
 
     /// <summary>
-    /// 
+    /// enables a held item icon
     /// </summary>
-    public void setInventoryImage(int desiredIconIndex)
+    public void SetInventoryImage(int desiredIconIndex)
     {
-        disableInventoryImages();
+        DisableInventoryImages();
         _hudInventoryIcons[desiredIconIndex].gameObject.SetActive(true);
     }
 
-    public void disableInventoryImages()
+    /// <summary>
+    /// disables all held item icons
+    /// </summary>
+    public void DisableInventoryImages()
     {
         foreach (Image icons in _hudInventoryIcons)
         {
