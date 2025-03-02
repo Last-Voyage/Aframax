@@ -23,12 +23,6 @@ public class QuitButtonUITransfer : MonoBehaviour
     [SerializeField]
     private GameObject _noButton;
 
-    /*private void OnEnable()
-    {
-        _eventSystem = FindObjectOfType<EventSystem>();
-        _eventSystem.SetSelectedGameObject(_noButton);
-    }*/
-
     /// <summary>
     /// Selects UI buttons when the quit UI closes
     /// </summary>

@@ -48,11 +48,11 @@ public class SettingsPagesBehaviour : MonoBehaviour
         _notFocusedColors = _videoButton.colors;
 
         _audioNavigation = _audioButton.navigation;
-        _audioNavigation.mode = Navigation.Mode.Explicit;//_audioButton.navigation;
+        _audioNavigation.mode = Navigation.Mode.Explicit;
         _videoNavigation = _videoButton.navigation;
-        _videoNavigation.mode = Navigation.Mode.Explicit;//_videoButton.navigation;
+        _videoNavigation.mode = Navigation.Mode.Explicit;
         _gameplayNavigation = _gameplayButton.navigation;
-        _gameplayNavigation.mode = Navigation.Mode.Explicit; //_gameplayButton.navigation;
+        _gameplayNavigation.mode = Navigation.Mode.Explicit; 
 
     }
 
