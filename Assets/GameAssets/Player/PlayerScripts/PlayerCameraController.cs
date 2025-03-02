@@ -27,6 +27,11 @@ public class PlayerCameraController : MonoBehaviour
 
     [SerializeField] private GameObject _playerVisuals;
 
+    // Variables for zooming in relation to harpoon gun focus
+    [SerializeField] private float _fullyZoomedFOV;
+    private float _defaultFOV;
+    private float _rangeOfFOV;
+
     // Variables for the Virtual Camera
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineTransposer _transposer;
@@ -77,6 +82,8 @@ public class PlayerCameraController : MonoBehaviour
 
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
+
+        InitializeFOVDiff();
     }
 
     /// <summary>
@@ -103,6 +110,17 @@ public class PlayerCameraController : MonoBehaviour
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
         _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
+    }
+
+    /// <summary>
+    /// Initializes the differences between the camera's base FOV and the FOV it
+    /// should have when fully focused.
+    /// </summary>
+    private void InitializeFOVDiff()
+    {
+        _defaultFOV = _virtualCamera.m_Lens.FieldOfView;
+        print(_defaultFOV);
+        _rangeOfFOV = _defaultFOV - _fullyZoomedFOV;
     }
 
     /// <summary>
@@ -340,6 +358,15 @@ public class PlayerCameraController : MonoBehaviour
     private void JumpscarePullback()
     {
         CinemachineShake.Instance.ShakeCamera(_jumpscareIntensity, _jumpscareTime, false);
+    }
+
+    /// <summary>
+    /// Adjusts the zoom of the harpoon gun in relation to the player's focus inputs.
+    /// </summary>
+    /// <param name="focusProgress">As a percentage, how much the player has focused. 0 is 0%, 1 is 100%.</param>
+    public void AdjustZoom(float focusProgress)
+    {
+        _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
     }
 
     /// <summary>
