@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerCameraController.cs
 // Author:          Andrew Stapay
-// Contributor      Ryan Swanson
+// Contributor      Ryan Swanson, Adam Garwacki
 // Creation Date:   September 19, 2024
 //
 // Description:     Implementation of the basic camera control for a player 
