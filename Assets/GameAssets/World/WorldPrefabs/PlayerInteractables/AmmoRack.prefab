@@ -329,7 +329,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnAmmoDepletedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8312126835652033637}
+        m_TargetAssemblyTypeName: WorldSpacePopups, Assembly-CSharp
+        m_MethodName: TogglePopUp
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &175757419624779227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -790,3 +802,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8294779803256406750}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8312126835652033637 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 19810011729968827, guid: 5a4c9b72e4a02a844a616e46e7324a52,
+    type: 3}
+  m_PrefabInstance: {fileID: 8294779803256406750}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16492e1cd012e7044aad02f894ed0866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
