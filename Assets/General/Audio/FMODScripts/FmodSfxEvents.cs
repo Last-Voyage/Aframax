@@ -94,6 +94,7 @@ public class FmodSfxEvents : MonoBehaviour
     #region Environment
     [field: Header("Environment")]
     [field: SerializeField] public EventReference GeneratorFixed { get; private set; }
+    [field: SerializeField] public EventReference WaterDrip { get; private set; }
     #endregion
 
     /// <summary>
