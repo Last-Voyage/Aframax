@@ -28,6 +28,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private GameObject _playerVisuals;
 
     // Variables for zooming in relation to harpoon gun focus
+    [Tooltip("The camera's FOV at a full zoom, derived from focusing all the way.")]
     [SerializeField] private float _fullyZoomedFOV;
     private float _defaultFOV;
     private float _rangeOfFOV;
@@ -83,7 +84,7 @@ public class PlayerCameraController : MonoBehaviour
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
 
-        InitializeFOVDiff();
+        InitializeFOVDifference();
     }
 
     /// <summary>
@@ -116,10 +117,9 @@ public class PlayerCameraController : MonoBehaviour
     /// Initializes the differences between the camera's base FOV and the FOV it
     /// should have when fully focused.
     /// </summary>
-    private void InitializeFOVDiff()
+    private void InitializeFOVDifference()
     {
         _defaultFOV = _virtualCamera.m_Lens.FieldOfView;
-        print(_defaultFOV);
         _rangeOfFOV = _defaultFOV - _fullyZoomedFOV;
     }
 
