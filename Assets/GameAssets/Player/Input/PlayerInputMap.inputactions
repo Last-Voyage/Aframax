@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UIBack",
+                    "type": "Button",
+                    "id": "e9646e31-349e-464a-8fc3-133c0ef4bde6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -139,7 +148,7 @@
                     "id": "595523d3-0fe5-41c7-9f0d-5f2e3ca7234d",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone(min=0.05)",
                     "groups": "",
                     "action": "Movement",
                     "isComposite": false,
@@ -269,7 +278,7 @@
                 {
                     "name": "",
                     "id": "ed627943-05ea-4137-8f4a-1de44956ea71",
-                    "path": "<Gamepad>/select",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -304,7 +313,7 @@
                     "id": "6ec06dd1-aad8-4fcb-9854-89852b7da2b9",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone(min=0.05)",
                     "groups": "",
                     "action": "Looking",
                     "isComposite": false,
@@ -318,6 +327,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Looking",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "947d9b71-b319-489d-a00a-d39cc49c93e2",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UIBack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e7ed5f5-8051-4842-9b12-73afd2a6901a",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "UIBack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
