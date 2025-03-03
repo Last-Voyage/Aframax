@@ -39,6 +39,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void Awake()
     {
+	_noteView.transform.parent = null;
+	_noteView.transform.rotation = Quaternion.identity;
         if (_activeConsole == null)
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
