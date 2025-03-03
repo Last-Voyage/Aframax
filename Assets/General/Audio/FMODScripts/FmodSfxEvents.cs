@@ -86,7 +86,14 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference HarpoonHitWood { get; private set; }
     [field: SerializeField] public EventReference HarpoonHitMetal { get; private set; }
     [field: SerializeField] public EventReference HarpoonWaterSplash { get; private set; }
-    
+    [field: Header("Harpoon Misc.")]
+    [field: SerializeField] public EventReference HarpoonShiftingMovement { get; private set; }
+    [field: Tooltip("Time to fade in the harpoon movement")]
+    [field: SerializeField] public float HarpoonShiftFadeInTime { get; private set; }
+
+    [field: Tooltip("Time to fade out the harpoon movement")]
+    [field: SerializeField] public float HarpoonShiftFadeOutTime { get; private set; }
+
     #endregion Harpoon
 
     #endregion Player
