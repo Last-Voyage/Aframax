@@ -23,6 +23,8 @@ public class PlayerReticle : MonoBehaviour
     [SerializeField] private Color _unfocusedColor;
     [Tooltip("Reticle color while focused. Also ammo icons' colors while they are stocked.")]
     [SerializeField] private Color _focusedColor;
+    [Tooltip("Ammo icon color while the player is fully out of ammo.")]
+    [SerializeField] private Color _outOfAmmoIconColor;
 
     [Space]
 
@@ -164,8 +166,7 @@ public class PlayerReticle : MonoBehaviour
         Camera cam = Camera.main;
 
         // Initializes offset and ensures all icons will be horizontally centered on the screen
-        float iconPlaceOffset = 0.5f - (_ammoIconXSpacing * _gunMaxAmmo / 2) ;
-
+        float iconPlaceOffset = 0.5f - (_ammoIconXSpacing * _gunMaxAmmo / 2) + (_ammoIconXSpacing / 2);
         // Generates icons until the max ammo count is represented
         for (int i = 0; i < _gunMaxAmmo; i++)
         {
@@ -221,7 +222,28 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     public void UpdateAmmoDisplay()
     {
-        _ammoIconList[_harpoonGunScript.GetReserveAmmo()].color = _unfocusedColor;
+        switch (_harpoonGunScript.GetReserveAmmo())
+        {
+            case 0:
+                OutOfAmmoIconUpdate();
+                break;
+            default:
+                _ammoIconList[_harpoonGunScript.GetReserveAmmo()].color = _unfocusedColor;
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// Updates ammo icons to a new color when the player has no ammo left.
+    /// </summary>
+    private void OutOfAmmoIconUpdate()
+    {
+        foreach(Image icon in _ammoIconList)
+        {
+            icon.color = _outOfAmmoIconColor;
+        }
+        
     }
 
     /// <summary>
@@ -229,8 +251,8 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     public void RestockAmmoIcons()
     {
-        //As this function is called after reloading we don't need it running twice at the same time
-        //Also prevents an error that can occur if reloading at the same time as restocking
+        // As this function is called after reloading we don't need it running twice at the same time
+        // Also prevents an error that can occur if reloading at the same time as restocking
         if (_harpoonGunScript.GetHarpoonFiringState() == HarpoonGun.EHarpoonFiringState.Reloading)
         {
             return;
