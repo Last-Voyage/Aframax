@@ -166,7 +166,6 @@ public class PlayerReticle : MonoBehaviour
         Camera cam = Camera.main;
 
         // Initializes offset and ensures all icons will be horizontally centered on the screen
-        // Math is a little odd here, but it seems to work
         float iconPlaceOffset = 0.5f - (_ammoIconXSpacing * _gunMaxAmmo / 2) + (_ammoIconXSpacing / 2);
         // Generates icons until the max ammo count is represented
         for (int i = 0; i < _gunMaxAmmo; i++)
