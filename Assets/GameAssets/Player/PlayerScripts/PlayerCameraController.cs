@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerCameraController.cs
 // Author:          Andrew Stapay
-// Contributor      Ryan Swanson
+// Contributor      Ryan Swanson, Adam Garwacki
 // Creation Date:   September 19, 2024
 //
 // Description:     Implementation of the basic camera control for a player 
@@ -26,6 +26,12 @@ public class PlayerCameraController : MonoBehaviour
     public static PlayerCameraController Instance;
 
     [SerializeField] private GameObject _playerVisuals;
+
+    // Variables for zooming in relation to harpoon gun focus
+    [Tooltip("The camera's FOV at a full zoom, derived from focusing all the way.")]
+    [SerializeField] private float _fullyZoomedFOV;
+    private float _defaultFOV;
+    private float _rangeOfFOV;
 
     // Variables for the Virtual Camera
     private CinemachineVirtualCamera _virtualCamera;
@@ -77,6 +83,8 @@ public class PlayerCameraController : MonoBehaviour
 
         // Get the Virtual Camera component and start the coroutine
         InitializeCamera();
+
+        InitializeFOVDifference();
     }
 
     /// <summary>
@@ -103,6 +111,16 @@ public class PlayerCameraController : MonoBehaviour
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
         _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
+    }
+
+    /// <summary>
+    /// Initializes the differences between the camera's base FOV and the FOV it
+    /// should have when fully focused.
+    /// </summary>
+    private void InitializeFOVDifference()
+    {
+        _defaultFOV = _virtualCamera.m_Lens.FieldOfView;
+        _rangeOfFOV = _defaultFOV - _fullyZoomedFOV;
     }
 
     /// <summary>
@@ -340,6 +358,15 @@ public class PlayerCameraController : MonoBehaviour
     private void JumpscarePullback()
     {
         CinemachineShake.Instance.ShakeCamera(_jumpscareIntensity, _jumpscareTime, false);
+    }
+
+    /// <summary>
+    /// Adjusts the zoom of the harpoon gun in relation to the player's focus inputs.
+    /// </summary>
+    /// <param name="focusProgress">As a percentage, how much the player has focused. 0 is 0%, 1 is 100%.</param>
+    public void AdjustZoom(float focusProgress)
+    {
+        _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
     }
 
     /// <summary>
