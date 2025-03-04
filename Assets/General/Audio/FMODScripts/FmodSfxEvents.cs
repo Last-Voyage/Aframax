@@ -84,6 +84,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Harpoon")]
     [field: SerializeField] public EventReference HarpoonShot { get; private set; }
     [field: SerializeField] public EventReference HarpoonReload { get; private set; }
+    [field: SerializeField] public EventReference HarpoonAmmoRestock { get; private set; }
     [field: Header("Harpoon Collisions")]
     [field: SerializeField] public EventReference HarpoonHitGeneral { get; private set; }
     [field: SerializeField] public EventReference HarpoonHitWood { get; private set; }
