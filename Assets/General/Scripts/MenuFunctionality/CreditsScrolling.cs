@@ -10,7 +10,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// functionality for moving the camera on the title screen
@@ -59,7 +58,7 @@ public class CreditsScrolling : MonoBehaviour
         }
 
         // Once credits are over, loads the main menu
-        SceneManager.LoadScene(AframaxSceneManager.Instance.MainMenuSceneIndex);
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
     }
 
 }
