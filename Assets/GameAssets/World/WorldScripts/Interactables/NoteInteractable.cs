@@ -1,17 +1,15 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
+// Contributor:        Nick Rice
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
                        interacted with, it opens the note view prefab.
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
@@ -32,6 +30,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private bool _hasPlayed;
     private int _currentPage;
 
+    private PlayerInputMap _playerInputMap;
+
     public bool HasPlayed => _hasPlayed;
 
     /// <summary>
@@ -45,6 +45,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
         }
+
+        _playerInputMap = new PlayerInputMap();
     }
 
     /// <summary>
@@ -130,5 +132,36 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public static void ExitActiveNote()
     {
         ActiveNote.HideNote();
+    }
+
+    /// <summary>
+    /// Allows the player to use arrow keys or bumpers to change the note page
+    /// </summary>
+    private void OnEnable()
+    {
+        _playerInputMap.Enable();
+        
+        _playerInputMap.Player.UICycling.performed += ctx =>
+        {
+            if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
+            {
+                ChangePage((int)ctx.ReadValue<float>());
+            }
+        };
+    }
+
+    /// <summary>
+    /// Prevents memory leaks
+    /// </summary>
+    private void OnDisable()
+    {
+        _playerInputMap.Player.UICycling.performed -= ctx =>
+        {
+            if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
+            {
+                ChangePage((int)ctx.ReadValue<float>());
+            }
+        };
+        _playerInputMap.Disable();
     }
 }
