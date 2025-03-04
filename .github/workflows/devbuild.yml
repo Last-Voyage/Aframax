@@ -3,7 +3,7 @@ name: Build project
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 9,18 * * *'
+    - cron: '0 6 * * *'
 
 jobs:
   buildForAllSupportedPlatforms:
