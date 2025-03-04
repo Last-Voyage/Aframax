@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// functionality for moving the camera on the title screen
@@ -21,6 +22,8 @@ public class TitleScreenScrolling : MonoBehaviour
     [SerializeField] private float _screenScrollSpeed;
 
     [SerializeField] private Canvas _sceneCanvas;
+
+    [SerializeField] private EventSystem _setUpPlayerControls;
 
     private PlayerInputMap _playerInputControls;
 
@@ -59,6 +62,7 @@ public class TitleScreenScrolling : MonoBehaviour
                 //this fixes that
                 if (Mathf.Approximately(transform.position.y, destination.y))
                 {
+                    _setUpPlayerControls.gameObject.SetActive(true);
                     yield break;
                 }
                 

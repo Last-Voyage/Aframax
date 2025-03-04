@@ -80,6 +80,8 @@ public class PlayerHealth : BaseHealth
         base.IncreaseHealth(heal);
 
         PlayerManager.Instance.OnInvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.PlayerHealed, gameObject);
+
         PlayHeartBeatSfx();
     }
     

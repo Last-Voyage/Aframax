@@ -2,9 +2,8 @@ name: Build project
 
 on:
   workflow_dispatch:
-  push:
-      branches:
-          - 'development-**'
+  schedule:
+    - cron: '0 9,18 * * *'
 
 jobs:
   buildForAllSupportedPlatforms:
