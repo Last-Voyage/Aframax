@@ -409,6 +409,7 @@ public class HarpoonGun : MonoBehaviour
         }
 
         int numHarpoons = ammoRack.GetNumHarpoons();
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.HarpoonAmmoRestock,gameObject);
 
         // The ternary operator is useful for assigning a value without going into an if statement
         // targetAmmo will become the lesser of numHarpoons and missingAmmo
