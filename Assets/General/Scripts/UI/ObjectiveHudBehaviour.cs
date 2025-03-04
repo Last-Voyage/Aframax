@@ -12,10 +12,9 @@ using UnityEngine.UI;
 
 public class ObjectiveHudBehaviour : MonoBehaviour
 {
-    private GameObject _objectiveHudBackground;
-    private GameObject _objectiveHudIcon;
+    [SerializeField] private float _objectiveLingerTime;
+    private Animator _objectiveHudAnimator;
     private Text _objectiveHudText;
-
     private Text _objectivePauseText;
 
     /// <summary>
@@ -24,15 +23,26 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     private void Awake()
     {
         //set references
+        _objectiveHudAnimator = GetComponent<Animator>();
     }
 
     /// <summary>
-    /// run the objective animation for the player's current objective
+    /// slides the objective onto screen with the corresponding text
     /// </summary>
-    /// <param name="objectiveTextString"></param>
-    private void activateObjectiveHud(string objectiveTextString) 
+    /// <param name="objectiveHudTextString"></param>
+    private void activateObjectiveHud(string objectiveHudTextString) 
     {
-        
+        _objectiveHudText.text = objectiveHudTextString;
+        _objectiveHudAnimator.SetTrigger("SlideIn");
+        StartCoroutine(waitForAnimation());
+    }
+
+    /// <summary>
+    /// slides the objective back off screen
+    /// </summary>
+    private void deactivateObjectiveHud()
+    {
+        _objectiveHudAnimator.SetTrigger("SlideOut");
     }
 
     /// <summary>
@@ -50,6 +60,7 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// <returns></returns>
     private IEnumerator waitForAnimation()
     {
-        yield return null;
+        yield return new WaitForSeconds(_objectiveLingerTime);
+        deactivateObjectiveHud();
     }
 }
