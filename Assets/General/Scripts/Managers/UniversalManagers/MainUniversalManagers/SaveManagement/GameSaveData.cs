@@ -26,12 +26,15 @@ public class GameSaveData
     public int CurrentStoryBeat;
     public int CurrentSceneIndex;
 
+    public float CurrentBrightness;
+
     #region Getters
     
     public int GetCurrentCheckPoint() => CurrentCheckpoint;
     public List<string> GetCurrentInventory() => PlayerInventory;
     public int GetCurrentStoryBeat() => CurrentStoryBeat;
     public int GetCurrentSceneIndex() => CurrentSceneIndex;
+    public float GetBrightness() => CurrentBrightness;
 
     #endregion
 
@@ -55,6 +58,11 @@ public class GameSaveData
     public void SetCurrentSceneIndex(int newSceneIndex)
     {
         CurrentSceneIndex = newSceneIndex;
+    }
+
+    public void SetBrightness(float newBrightness)
+    {
+        CurrentBrightness = newBrightness;
     }
 
     #endregion

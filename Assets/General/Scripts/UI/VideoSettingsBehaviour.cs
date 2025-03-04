@@ -1,13 +1,11 @@
 /**********************************************************************************************************************
 // File Name :         VideoSettingsBehaviour.cs
 // Author :            Jeremiah Peters
+// Contributors :      Andrew Stapay
 // Creation Date :     2/28/2025
 // 
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -23,6 +21,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
     [Tooltip("Should not be higher than like 5 or some visuals kinda break")]
     [SerializeField] private float _maximumBrightness;
 
+    [SerializeField] private Slider _brightnessSlider;
+
     /// <summary>
     /// set up references
     /// </summary>
@@ -31,15 +31,21 @@ public class VideoSettingsBehaviour : MonoBehaviour
         volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
 
         //even though this line is just an error check, everything breaks without it.
-        if (!volumeProfile.TryGet(out colorAdjustmentsName)) throw new System.NullReferenceException(nameof(colorAdjustmentsName));
+        if (!volumeProfile.TryGet(out colorAdjustmentsName))
+        {
+            throw new System.NullReferenceException(nameof(colorAdjustmentsName));
+        }
+
+        _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
     }
 
     /// <summary>
     /// change brightness value to match slider
     /// </summary>
-    public void ChangeBrightness(Slider BrightnessSlider)
+    public void ChangeBrightness()
     {
-        colorAdjustmentsName.postExposure.Override(BrightnessSlider.value * _maximumBrightness);
-        //needs something with save data to keep slider position
+        colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _maximumBrightness);
+        
+        SaveManager.Instance.GetGameSaveData().SetBrightness(_brightnessSlider.value);
     }
 }
