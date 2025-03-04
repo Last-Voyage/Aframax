@@ -15,6 +15,7 @@ using UnityEngine.Serialization;
 using Cinemachine;
 using Unity.VisualScripting;
 using PrimeTween;
+using FMOD.Studio;
 
 /// <summary>
 /// Provides the functionality for the harpoon weapon
@@ -123,6 +124,8 @@ public class HarpoonGun : MonoBehaviour
     [Header("Other")]
     [SerializeField] private float _reloadAudioDelay;
 
+    private EventInstance _movementEventInstance;
+
     public static HarpoonGun Instance;
 
     private PlayerReticle _reticle;
@@ -150,6 +153,8 @@ public class HarpoonGun : MonoBehaviour
         CheckSingletonInstance();
 
         CreateInitialHarpoonPool();
+
+        CreateMovementAudio();
 
         SubscribeToEvents();
 
@@ -179,6 +184,8 @@ public class HarpoonGun : MonoBehaviour
     private void SubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(StartUnfocusingHarpoon);
+        PlayerManager.Instance.GetOnMovementStartEvent().AddListener(StartShiftingMovementAudio);
+        PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopShiftingMovementAudio);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(RestockHarpoons);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadAfterRestocking);
     }
@@ -189,6 +196,8 @@ public class HarpoonGun : MonoBehaviour
     private void UnsubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(StartUnfocusingHarpoon);
+        PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(StartShiftingMovementAudio);
+        PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopShiftingMovementAudio);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(RestockHarpoons);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadAfterRestocking);
     }
@@ -400,6 +409,7 @@ public class HarpoonGun : MonoBehaviour
         }
 
         int numHarpoons = ammoRack.GetNumHarpoons();
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.HarpoonAmmoRestock,gameObject);
 
         // The ternary operator is useful for assigning a value without going into an if statement
         // targetAmmo will become the lesser of numHarpoons and missingAmmo
@@ -473,6 +483,7 @@ public class HarpoonGun : MonoBehaviour
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
 
         PlayerManager.Instance.OnInvokeHarpoonFocusStartEvent();
+
     }
 
     /// <summary>
@@ -607,6 +618,7 @@ public class HarpoonGun : MonoBehaviour
 
         //Sets the current focus based on the animation graph and inaccuracy scalar
         _currentFocusAccuracy = _focusCurve.Evaluate(_focusProgress) * _focusStartingInaccuracy;
+        PlayerCameraController.Instance.AdjustZoom(_focusProgress);
     }
 
     /// <summary>
@@ -622,7 +634,50 @@ public class HarpoonGun : MonoBehaviour
         //Multiplies the direction the player is looking by a random variance scaled by current focus
         return endDir + Random.insideUnitSphere * _currentFocusAccuracy;
     }
-    
+
+    #endregion
+
+    #region Weapon Shifting Audio
+    /// <summary>
+    /// Creates the initial instance of the shifting movement audio
+    /// </summary>
+    private void CreateMovementAudio()
+    {
+        //return statement added so as not to throw a thousand nulls in logs
+        if (RuntimeSfxManager.Instance == null || FmodSfxEvents.Instance == null)
+        {
+            return;
+        }
+
+        _movementEventInstance = RuntimeSfxManager.Instance.
+            CreateInstanceFromReference(FmodSfxEvents.Instance.HarpoonShiftingMovement, gameObject);
+    }
+
+    /// <summary>
+    /// Starts playing the shifting movement audio
+    /// </summary>
+    private void StartShiftingMovementAudio(InputAction action)
+    {
+        if (!_movementEventInstance.isValid())
+        {
+            return;
+        }
+        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, 
+            FmodSfxEvents.Instance.HarpoonShiftFadeInTime);
+    }
+
+    /// <summary>
+    /// Stops playing the shifting movement audio
+    /// </summary>
+    private void StopShiftingMovementAudio()
+    {
+        if (!_movementEventInstance.isValid())
+        {
+            return;
+        }
+        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, 
+            FmodSfxEvents.Instance.HarpoonShiftFadeOutTime);
+    }
     #endregion
 
     #region Harpoon Object Pool
