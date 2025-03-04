@@ -19,8 +19,7 @@ public class QuitButtonUITransfer : MonoBehaviour
     private Button _firstSelectedButton;
     
     private EventSystem _eventSystem;
-
-    [SerializeField]
+    
     private GameObject _noButton;
 
     /// <summary>
