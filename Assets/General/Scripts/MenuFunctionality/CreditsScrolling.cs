@@ -56,6 +56,9 @@ public class CreditsScrolling : MonoBehaviour
                 yield return null;
             }
         }
+
+        // Once credits are over, loads the main menu
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
     }
 
 }
