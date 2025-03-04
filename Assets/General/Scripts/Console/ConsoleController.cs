@@ -152,8 +152,9 @@ public class ConsoleController : MonoBehaviour
         {
             _content.SetActive(false);
 
-            // If there's currently a note open, don't free the mouse yet
-            if (NoteInteractable.ActiveNote != null)
+            // If there's currently a note/tutorial open, don't free the mouse yet
+            if (NoteInteractable.ActiveNote != null
+                || TutorialPopUp.ActiveTutorial != null)
             {
                 return;
             }

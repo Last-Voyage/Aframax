@@ -34,6 +34,12 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PauseToggle()
     {
+        if (TutorialPopUp.ActiveTutorial != null)
+        {
+            TutorialPopUp.ExitActivePopUp();
+            return;
+        }
+
         // Exit the note instead of pausing
         if (NoteInteractable.ActiveNote != null)
         {
