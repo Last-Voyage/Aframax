@@ -169,7 +169,8 @@ public class ProceduralVine : MonoBehaviour
         {
             return;
         }
-        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeInTime);
+        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, 
+            FmodSfxEvents.Instance.LimbMoveFadeInTime);
     }
 
     /// <summary>
@@ -181,7 +182,8 @@ public class ProceduralVine : MonoBehaviour
         {
             return;
         }
-        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeOutTime);
+        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, 
+            FmodSfxEvents.Instance.LimbMoveFadeOutTime);
     }
 
     /// <summary>
