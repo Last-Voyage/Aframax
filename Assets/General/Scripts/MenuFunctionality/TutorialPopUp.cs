@@ -13,6 +13,9 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// A collection of pages for a popup tutorial
+/// </summary>
 public class TutorialPopUp : MonoBehaviour
 {
     public static TutorialPopUp ActiveTutorial = null;
@@ -25,18 +28,9 @@ public class TutorialPopUp : MonoBehaviour
     private int _currentPage;
     private bool _hasRead;
 
-    private void Start()
-    {
-        StartCoroutine(DelayStart());
-    }
-
-    private IEnumerator DelayStart()
-    {
-        yield return new WaitForSeconds(15);
-
-        OpenTutorialPopUp();
-    }
-
+    /// <summary>
+    /// Open the tutorial pop up and go to page one
+    /// </summary>
     public void OpenTutorialPopUp()
     {
         _ui.enabled = true;
@@ -52,28 +46,42 @@ public class TutorialPopUp : MonoBehaviour
         ChangePage(_currentPage);
     }
 
+    /// <summary>
+    /// Change the currently open page
+    /// </summary>
+    /// <param name="value">The value to change the page by</param>
     public void ChangePage(int value)
     {
+        // Stop the currently active page from playing
         StopPage(_pages[_currentPage]);
 
         // Clamp the page to the bounds of the note, then assign the text
         _currentPage = Mathf.Clamp(_currentPage + value, 0, _pages.Length - 1);
 
+        // Set the visibility of each page based on the current active page
         for (int i = 0; i < _pages.Length; i++)
         {
             _pages[i].SetActive(i == _currentPage);
         }
 
+        // Start the newly active page playing
         StartPage(_pages[_currentPage]);
 
+        // Update the arrows to look the correct color
         _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
         _rightArrow.color = _currentPage == _pages.Length - 1 ? Color.clear : Color.white;
     }
 
+    /// <summary>
+    /// Cancel the page's video from playing
+    /// </summary>
+    /// <param name="page">The selected page</param>
     private void StopPage(GameObject page)
     {
+        // Find the video in the page
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
 
+        // Stop the video if there is one
         if (pageVideo.clip != null)
         {
             pageVideo.time = 0;
@@ -81,12 +89,16 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Start the page's video playing
+    /// </summary>
+    /// <param name="page">The selected page</param>
     private void StartPage(GameObject page)
     {
+        // Find the video in the page
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
-        RawImage pageVideoImage = page.GetComponentInChildren<RawImage>();
-        Image pageImage = page.GetComponentInChildren<Image>();
 
+        // Play the video if there is one
         if (pageVideo.clip != null)
         {
             pageVideo.targetCamera = Camera.current;
@@ -95,19 +107,24 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Close the popup of the current tutorial object
+    /// </summary>
     private void CloseTutorialPopUp()
     {
+        // Set the page to inactive and read
         ActiveTutorial = null;
         _hasRead = true;
+        _ui.enabled = false;
 
+        // Stop the currently open page
         StopPage(_pages[_currentPage]);
 
+        // Set all the pages to off
         for (int i = 0; i < _pages.Length; i++)
         {
             _pages[i].SetActive(false);
         }
-
-        _ui.enabled = false;
 
         // Free the mouse and freeze the game
         Cursor.lockState = CursorLockMode.Locked;
@@ -115,6 +132,9 @@ public class TutorialPopUp : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    /// <summary>
+    /// Exit the currently active tutorial pop up
+    /// </summary>
     public static void ExitActivePopUp()
     {
         ActiveTutorial.CloseTutorialPopUp();
