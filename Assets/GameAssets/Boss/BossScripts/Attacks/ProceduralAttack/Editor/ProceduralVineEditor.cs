@@ -20,9 +20,15 @@ public class ProceduralVineEditor : Editor
     {
         base.OnInspectorGUI();
         ProceduralVine proceduralVine= (ProceduralVine)target;
+
         if(GUILayout.Button("Start Retract Test"))
         {
             proceduralVine.StartRetract();
+        }
+
+        if (GUILayout.Button("Start Appear Test"))
+        {
+            proceduralVine.StartAppear();
         }
     }
 }

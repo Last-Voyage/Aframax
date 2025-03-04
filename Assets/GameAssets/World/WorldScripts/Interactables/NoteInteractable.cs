@@ -27,13 +27,20 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private TMP_Text _noteTextField;
     [SerializeField] private TMP_Text _leftArrow;
     [SerializeField] private TMP_Text _rightArrow;
+    [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
+    [SerializeField] private bool _onlyPlayOnce = true;
+    private bool _hasPlayed;
     private int _currentPage;
+
+    public bool HasPlayed => _hasPlayed;
 
     /// <summary>
     /// Attempt to find the console manager in the scene if it hasn't been assigned already
     /// </summary>
     private void Awake()
     {
+	_noteView.transform.parent = null;
+	_noteView.transform.rotation = Quaternion.identity;
         if (_activeConsole == null)
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
@@ -106,6 +113,15 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         // Deactivate the note
         ActiveNote = null;
         _noteView.SetActive(false);
+
+        if (_dialogueOnExit != null)
+        {
+            if (!_onlyPlayOnce || !_hasPlayed)
+            {
+                GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogueOnExit);
+                _hasPlayed = true;
+            }
+        }
     }
 
     /// <summary>

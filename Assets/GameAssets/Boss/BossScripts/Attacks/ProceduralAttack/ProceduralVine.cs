@@ -22,8 +22,7 @@ public class ProceduralVine : MonoBehaviour
     [Header("Path Stuff")]
     [SerializeField] private PathCreator _pathCreator;
     [SerializeField] private float _speed = 5f; // speed of idle path following movement
-    private float _distance = 0; //current distance along the path
-    private bool _isAttacking = false;
+    private float _idleMoveDistance = 0; //current distance along the path
 
     [Header("Attack stuff")]
     [SerializeField] private Transform _flowerHeadTransform;
@@ -49,7 +48,25 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _retractSpeed = 5f; // Speed of movement
     [SerializeField] private float _retractDistance = 0;
 
-    private bool _isRetracting = false;
+    [Header("Appear Stuff")]
+    [SerializeField] private PathCreator _appearPath; // The target to move toward
+    [SerializeField] private float _appearSpeed = 5f; // Speed of movement
+    [SerializeField] private float _appearDistance = 0;
+    [SerializeField] private bool _isAppeared = false;
+
+    [SerializeField] private float _moveBackToPathDuration = .3f;
+
+    //state stuff
+    public enum EVineState
+    {
+        attacking,
+        retracting,
+        appearing,
+        shifting,
+        none
+    }
+
+    private EVineState _currentState;
 
     private EventInstance _movementEventInstance;
 
@@ -57,6 +74,7 @@ public class ProceduralVine : MonoBehaviour
     {
         CreateMovementAudio();
         StartMovementAudio();
+        _currentState = EVineState.none;
     }
 
     /// <summary>
@@ -64,7 +82,7 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void Update() 
     {
-        if(!_isAttacking && !_isRetracting)
+        if(_currentState == EVineState.none)
         {
             //move along path
             MoveAlongPath();
@@ -74,15 +92,48 @@ public class ProceduralVine : MonoBehaviour
             }    
         }
 
-        if(_isRetracting && _retractPath.path.length > _retractDistance)
+        //retracting
+        if(_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance +.1f)
         {
             Retracting();
         }
-        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _isRetracting)
+        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _currentState == EVineState.retracting)
         {
-            _isRetracting = false;
-            _baseOfVine.parent.gameObject.SetActive(false);
+            _currentState = EVineState.none;
         }
+
+        //appearing
+        if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance +.1f)
+        {
+            Appearing();
+        }
+        else if (_currentState == EVineState.appearing)
+        {
+            StartCoroutine(JumpBackToPath(_moveBackToPathDuration));
+        }
+    }
+
+    /// <summary>
+    /// After the vine appears fully, this function makes the head lean down toward the center of the path
+    /// </summary>
+    /// <param name="timeToGetToPath"></param>
+    /// <returns></returns>
+    private IEnumerator JumpBackToPath(float timeToGetToPath)
+    {
+        _currentState = EVineState.shifting;
+        yield return new WaitForSeconds(.5f);
+        //change rig to use chainIK
+        _dampedTransformRig.weight = 0f;
+        _chainIKRig.weight = 1f;
+        _followTransform.position = _flowerHeadTransform.position;
+        _rigBuilder.Build();
+        _idleMoveDistance = 0;
+        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, timeToGetToPath, false).SetEase(Ease.OutQuad);
+        Vector3 direction = (_pathCreator.path.GetPointAtDistance(_idleMoveDistance) - _followTransform.position).normalized;
+        _followTransform.forward = direction;
+        yield return new WaitForSeconds(timeToGetToPath);
+        _currentState = EVineState.none;
+        _isAppeared = true;
     }
 
     /// <summary>
@@ -90,8 +141,8 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void MoveAlongPath()
     {
-        _distance += Time.deltaTime * _speed;
-        _followTransform.position = _pathCreator.path.GetPointAtDistance(_distance);
+        _idleMoveDistance += Time.deltaTime * _speed;
+        _followTransform.position = _pathCreator.path.GetPointAtDistance(_idleMoveDistance);
     }
 
     /// <summary>
@@ -118,7 +169,8 @@ public class ProceduralVine : MonoBehaviour
         {
             return;
         }
-        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeInTime);
+        RuntimeSfxManager.Instance.FadeInLoopingOneShot(_movementEventInstance, 
+            FmodSfxEvents.Instance.LimbMoveFadeInTime);
     }
 
     /// <summary>
@@ -130,7 +182,8 @@ public class ProceduralVine : MonoBehaviour
         {
             return;
         }
-        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, FmodSfxEvents.Instance.LimbMoveFadeOutTime);
+        RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, 
+            FmodSfxEvents.Instance.LimbMoveFadeOutTime);
     }
 
     /// <summary>
@@ -140,7 +193,7 @@ public class ProceduralVine : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Attack(Vector3 playerPosition)
     {
-        _isAttacking = true;
+        _currentState = EVineState.attacking;
         _currentAttackCD = _cooldownToAttackAfterMoveBackToPath;
         StopMovementAudio();
 
@@ -167,11 +220,11 @@ public class ProceduralVine : MonoBehaviour
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
         //move back to og position
-        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_distance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
+        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
         yield return new WaitForSeconds(_moveBackAfterAttackTime);
 
         // //attack done
-        _isAttacking = false;
+        _currentState = EVineState.none;
         StartMovementAudio();
     }
 
@@ -181,7 +234,7 @@ public class ProceduralVine : MonoBehaviour
     /// <param name="collider"></param>
     private void OnTriggerStay(Collider collider)
     {
-        if(IsColliderPlayer(collider) && !_isAttacking && _currentAttackCD <= 0)
+        if(IsColliderPlayer(collider) && _currentState != EVineState.attacking && _currentAttackCD <= 0 && _isAppeared)
         {
             //start attack
             StartCoroutine(Attack(collider.transform.position));
@@ -199,23 +252,67 @@ public class ProceduralVine : MonoBehaviour
     }
 
     #region Retract
+
     /// <summary>
     /// starts the vine retract
     /// </summary>
     public void StartRetract()
     {
-        _isRetracting = true;
+        //shift the rig to use the dampedTransform rather than the chainIK
+        _retractDistance = 0;
+        _currentState = EVineState.retracting;
         _chainIKRig.weight = 0;
         _dampedTransformRig.weight = 1;
     }
+
     /// <summary>
     /// retracts the vine
     /// </summary>
     private void Retracting()
     {
+        //makes base of vine move down the retract path
         _retractDistance += Time.deltaTime * _retractSpeed;
         _baseOfVine.position = _retractPath.path.GetPointAtDistance(_retractDistance);
         _baseOfVine.right = _retractPath.path.GetDirectionAtDistance(_retractDistance);
     }
     #endregion
+
+
+    #region Appear
+
+    /// <summary>
+    /// starts the vine appear
+    /// </summary>
+    public void StartAppear()
+    {
+        //skip if already appearing or appeared
+        if(_currentState == EVineState.appearing || _isAppeared)
+        {
+            return;
+        }
+
+        //shift the rig to used the dampedTransform instead of IK
+        _appearDistance = 0;
+        _currentState = EVineState.appearing;
+        _chainIKRig.weight = 0;
+        _dampedTransformRig.weight = 1;
+        _rigBuilder.Build();
+        _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
+    }
+
+    /// <summary>
+    ///  the vine appears!
+    /// </summary>
+    private void Appearing()
+    {
+        //makes the base of the vine start moving up, cannot make system follow the head(it doesn't work)
+        _appearDistance += Time.deltaTime * _appearSpeed;
+        _baseOfVine.position = _appearPath.path.GetPointAtDistance(_appearDistance);
+        _baseOfVine.right = -_appearPath.path.GetDirectionAtDistance(_appearDistance);
+    }
+    #endregion
+
+
+    public bool GetIsAppeared() => _isAppeared;
+    public EVineState GetVineState() => _currentState;
 }
