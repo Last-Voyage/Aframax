@@ -26,7 +26,7 @@ public class GameSaveData
     public int CurrentStoryBeat;
     public int CurrentSceneIndex;
 
-    public float CurrentBrightness;
+    public float CurrentBrightness = 0.5f;
 
     #region Getters
     

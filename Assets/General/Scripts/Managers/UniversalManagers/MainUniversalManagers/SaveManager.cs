@@ -55,6 +55,9 @@ public class SaveManager : MainUniversalManagerFramework
     {
         // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
         Instance.GetGameSaveData().SetCurrentSceneIndex(1);
+
+        // We'll go ahead and reset that brightness value too
+        Instance.GetGameSaveData().SetBrightness(0.5f);
     }
 
     /// <summary>
