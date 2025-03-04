@@ -474,6 +474,7 @@ public class HarpoonGun : MonoBehaviour
         _focusUnfocusCoroutine = StartCoroutine(FocusProcess());
 
         PlayerManager.Instance.OnInvokeHarpoonFocusStartEvent();
+
     }
 
     /// <summary>
@@ -608,6 +609,7 @@ public class HarpoonGun : MonoBehaviour
 
         //Sets the current focus based on the animation graph and inaccuracy scalar
         _currentFocusAccuracy = _focusCurve.Evaluate(_focusProgress) * _focusStartingInaccuracy;
+        PlayerCameraController.Instance.AdjustZoom(_focusProgress);
     }
 
     /// <summary>
