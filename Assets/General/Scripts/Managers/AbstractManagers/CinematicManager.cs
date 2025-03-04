@@ -3,7 +3,7 @@
 // Author :            Charlie Polonus
 // Creation Date :     3/2/25
 //
-// Brief Description : Manages the different cutscenes that play throughout
+// Brief Description : Manages the different cinematics that play throughout
                        the game
 *****************************************************************************/
 
@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
+/// <summary>
+/// Manages all the cinematics that play
+/// </summary>
 public class CinematicManager : MonoBehaviour
 {
     [Header("References")]
@@ -19,45 +22,45 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private Canvas _cinematicCanvas;
 
     [Header("Settings")]
-    [SerializeField] private Cinematic[] _cinematics;
+    [SerializeField] private int _sceneId;
+    [SerializeField] private int _sceneTransitionId;
+    private bool _cinematicPlaying;
 
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Starts the cinematic
+    /// </summary>
+    private void Start()
     {
-        
+        StartVideo();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Checks to see if the video is done and loads the next scene
+    /// </summary>
     void Update()
     {
-        _cinematicCanvas.enabled = _videoPlayer.isPlaying;
-    }
-
-    public void PlayCinematic(string cinematicName)
-    {
-        foreach (Cinematic curCinematic in _cinematics)
+        // Is the cinematic playing, has it started, and is it far enough through that it doesn't immediately stop?
+        if (!_videoPlayer.isPlaying && _cinematicPlaying && _videoPlayer.time > _videoPlayer.clip.length / 2f)
         {
-            if (curCinematic.Name == cinematicName)
-            {
-                StartVideo(curCinematic.Clip);
-                return;
-            }
+            LoadNextScene();
         }
     }
 
-    private void StartVideo(VideoClip clip)
+    /// <summary>
+    /// Plays the video, making sure everything is correct to reset the video
+    /// </summary>
+    private void StartVideo()
     {
-        _videoPlayer.clip = clip;
+        _cinematicPlaying = true;
+        _videoPlayer.time = 0;
         _videoPlayer.Play();
     }
-}
 
-[System.Serializable]
-public struct Cinematic
-{
-    [SerializeField] private VideoClip _clip;
-    [SerializeField] private string _name;
-
-    public VideoClip Clip => _clip;
-    public string Name => _name;
+    /// <summary>
+    /// Finish the cinematic, so load the next scene
+    /// </summary>
+    private void LoadNextScene()
+    {
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneId, _sceneTransitionId);
+    }
 }
