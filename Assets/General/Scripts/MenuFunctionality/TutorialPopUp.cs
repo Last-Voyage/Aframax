@@ -21,7 +21,7 @@ public class TutorialPopUp : MonoBehaviour
     public static TutorialPopUp ActiveTutorial = null;
 
     [Header("References")]
-    [SerializeField] private Canvas _ui;
+    [SerializeField] private Canvas _popupCanvas;
     [SerializeField] private GameObject[] _pages;
     [SerializeField] private TMP_Text _leftArrow;
     [SerializeField] private TMP_Text _rightArrow;
@@ -33,7 +33,7 @@ public class TutorialPopUp : MonoBehaviour
     /// </summary>
     public void OpenTutorialPopUp()
     {
-        _ui.enabled = true;
+        _popupCanvas.enabled = true;
 
         // Free the mouse and freeze the game
         Cursor.lockState = CursorLockMode.None;
@@ -49,14 +49,14 @@ public class TutorialPopUp : MonoBehaviour
     /// <summary>
     /// Change the currently open page
     /// </summary>
-    /// <param name="value">The value to change the page by</param>
-    public void ChangePage(int value)
+    /// <param name="pageChangeAmount">The value to change the page by</param>
+    public void ChangePage(int pageChangeAmount)
     {
         // Stop the currently active page from playing
         StopPage(_pages[_currentPage]);
 
         // Clamp the page to the bounds of the note, then assign the text
-        _currentPage = Mathf.Clamp(_currentPage + value, 0, _pages.Length - 1);
+        _currentPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
 
         // Set the visibility of each page based on the current active page
         for (int i = 0; i < _pages.Length; i++)
@@ -115,7 +115,7 @@ public class TutorialPopUp : MonoBehaviour
         // Set the page to inactive and read
         ActiveTutorial = null;
         _hasRead = true;
-        _ui.enabled = false;
+        _popupCanvas.enabled = false;
 
         // Stop the currently open page
         StopPage(_pages[_currentPage]);
