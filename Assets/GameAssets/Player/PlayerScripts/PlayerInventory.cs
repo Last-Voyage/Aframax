@@ -99,6 +99,10 @@ public class PlayerInventory : MonoBehaviour
     public void LoadInventory()
     {
         _allItems = SaveManager.Instance.GetGameSaveData().GetCurrentInventory();
+        if(_allItems == null)
+        {
+            _allItems = new();
+        }
     }
 
     /// <summary>
