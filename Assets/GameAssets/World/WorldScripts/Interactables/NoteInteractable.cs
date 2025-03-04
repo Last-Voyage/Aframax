@@ -118,14 +118,15 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         ActiveNote = null;
         _noteView.SetActive(false);
 
-        if (_dialogueOnExit != null)
+        if (!_onlyPlayOnce || !_hasPlayed)
         {
-            if (!_onlyPlayOnce || !_hasPlayed)
+            if (_dialogueOnExit != null)
             {
                 GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogueOnExit);
-                _onDialogueExit?.Invoke();
+                
                 _hasPlayed = true;
             }
+            _onDialogueExit?.Invoke();
         }
     }
 
