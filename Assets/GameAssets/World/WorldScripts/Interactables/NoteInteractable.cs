@@ -153,13 +153,13 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
         _playerInputMap.Enable();
         
-        _playerInputMap.Player.UICycling.performed += ctx =>
-        {
+        _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        /*{
             if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
             {
-                ChangePage((int)ctx.ReadValue<float>());
+                
             }
-        };
+        };*/
     }
 
     /// <summary>
@@ -167,13 +167,13 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void OnDisable()
     {
-        _playerInputMap.Player.UICycling.performed -= ctx =>
-        {
+        _playerInputMap.Player.UICycling.performed -= ctx =>ChangePage((int)ctx.ReadValue<float>());
+        /*{
             if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
             {
-                ChangePage((int)ctx.ReadValue<float>());
+                
             }
-        };
+        };*/
         _playerInputMap.Disable();
     }
 }
