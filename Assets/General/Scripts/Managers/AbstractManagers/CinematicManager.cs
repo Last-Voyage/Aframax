@@ -24,6 +24,8 @@ public class CinematicManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int _sceneId;
     [SerializeField] private int _sceneTransitionId;
+    [Tooltip("The ID of the cinematic audio to play from the FmodSfxEvents under the universal managers")]
+    [SerializeField] private int _cinematicAudioID;
     private bool _cinematicPlaying;
 
     /// <summary>
@@ -32,6 +34,7 @@ public class CinematicManager : MonoBehaviour
     private void Start()
     {
         StartVideo();
+        StartCinematicAudio();
     }
 
     /// <summary>
@@ -54,6 +57,15 @@ public class CinematicManager : MonoBehaviour
         _cinematicPlaying = true;
         _videoPlayer.time = 0;
         _videoPlayer.Play();
+    }
+
+    /// <summary>
+    /// Plays the audio for the cinematic
+    /// </summary>
+    private void StartCinematicAudio()
+    {
+        RuntimeSfxManager.APlayOneShotSfxAttached
+            (FmodSfxEvents.Instance.CinematicArray[_cinematicAudioID], gameObject);
     }
 
     /// <summary>
