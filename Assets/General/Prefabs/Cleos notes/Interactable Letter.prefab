@@ -526,6 +526,9 @@ MonoBehaviour:
   _leftArrow: {fileID: 5906042090919108038}
   _rightArrow: {fileID: 4615545174542268803}
   _dialogueOnExit: {fileID: 0}
+  _onDialogueExit:
+    m_PersistentCalls:
+      m_Calls: []
   _onlyPlayOnce: 1
 --- !u!65 &287783848974716843
 BoxCollider:
@@ -659,7 +662,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 450, y: 0}
+  m_AnchoredPosition: {x: 500, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3335489803228176621
@@ -1321,7 +1324,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 0}
+  m_AnchoredPosition: {x: -500, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2674075003349297280
@@ -1452,8 +1455,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6, y: 18}
-  m_SizeDelta: {x: 626, y: 510}
+  m_AnchoredPosition: {x: 6, y: 0}
+  m_SizeDelta: {x: 626, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4697885672500168191
 CanvasRenderer:
@@ -1520,11 +1523,11 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 15
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
