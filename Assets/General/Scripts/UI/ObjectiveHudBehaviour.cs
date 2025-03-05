@@ -9,28 +9,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
+/// <summary>
+/// runs the objective text for hud and pause menu as well as triggering the animation for the hud
+/// </summary>
 public class ObjectiveHudBehaviour : MonoBehaviour
 {
     [SerializeField] private float _objectiveLingerTime;
-    private Animator _objectiveHudAnimator;
-    private Text _objectiveHudText;
-    private Text _objectivePauseText;
-
-    /// <summary>
-    /// set references
-    /// </summary>
-    private void Awake()
-    {
-        //set references
-        _objectiveHudAnimator = GetComponent<Animator>();
-    }
+    [SerializeField] private Animator _objectiveHudAnimator;
+    [SerializeField] private TextMeshProUGUI _objectiveHudText;
+    [SerializeField] private TextMeshProUGUI _objectivePauseText;
 
     /// <summary>
     /// slides the objective onto screen with the corresponding text
     /// </summary>
     /// <param name="objectiveHudTextString"></param>
-    private void activateObjectiveHud(string objectiveHudTextString) 
+    public void ActivateObjectiveHud(string objectiveHudTextString) 
     {
         _objectiveHudText.text = objectiveHudTextString;
         _objectiveHudAnimator.SetTrigger("SlideIn");
@@ -49,7 +44,7 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// set the objective text in the pause menu
     /// </summary>
     /// <param name="objectivePauseTextString"></param>
-    private void setPauseMenuObjective(string objectivePauseTextString)
+    public void SetPauseMenuObjective(string objectivePauseTextString)
     {
         _objectivePauseText.text = objectivePauseTextString;
     }
