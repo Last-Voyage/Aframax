@@ -296,6 +296,7 @@ GameObject:
   - component: {fileID: 1043067514979856355}
   - component: {fileID: 417643722659837913}
   - component: {fileID: 2329313409841057912}
+  - component: {fileID: 8865071389336690928}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -457,6 +458,19 @@ MonoBehaviour:
   AutoEnableInputs: 1
   XYAxis: {fileID: 6846761872953345231, guid: a9035e5084fec0e4a81fdaa78201ec2c, type: 3}
   ZAxis: {fileID: 6846761872953345231, guid: a9035e5084fec0e4a81fdaa78201ec2c, type: 3}
+--- !u!114 &8865071389336690928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe5baa3f4a28f24eb390f8394645708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _GameplaySettingFilePath: /GameplaySettings.txt
 --- !u!1 &3991142726110527397
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +531,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -754,8 +768,8 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 125
-    m_AccelTime: 0.075
+    m_MaxSpeed: 150
+    m_AccelTime: 0.4
     m_DecelTime: 0.075
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
