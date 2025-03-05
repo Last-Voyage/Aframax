@@ -28,7 +28,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<Volume>()?.sharedProfile;
 
         //even though this line is just an error check, everything breaks without it.
         if (!volumeProfile.TryGet(out colorAdjustmentsName))
