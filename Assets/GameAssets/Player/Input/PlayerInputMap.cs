@@ -98,6 +98,24 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UIBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e9646e31-349e-464a-8fc3-133c0ef4bde6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UICycling"",
+                    ""type"": ""Button"",
+                    ""id"": ""05be2813-c0c4-4442-84b1-8c4ee5eff398"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -161,7 +179,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""id"": ""595523d3-0fe5-41c7-9f0d-5f2e3ca7234d"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.05)"",
                     ""groups"": """",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
@@ -291,7 +309,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ed627943-05ea-4137-8f4a-1de44956ea71"",
-                    ""path"": ""<Gamepad>/select"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -326,7 +344,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""id"": ""6ec06dd1-aad8-4fcb-9854-89852b7da2b9"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.05)"",
                     ""groups"": """",
                     ""action"": ""Looking"",
                     ""isComposite"": false,
@@ -342,6 +360,127 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""947d9b71-b319-489d-a00a-d39cc49c93e2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e7ed5f5-8051-4842-9b12-73afd2a6901a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UIBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Arrow Keys"",
+                    ""id"": ""a7b879d6-aa63-4ccd-b1e6-709d7fe7f358"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3285b107-39e0-4e4e-8361-00ba33ff1a09"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""267f55b6-2038-4df0-a52f-7f7c6814ca30"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AD Keys"",
+                    ""id"": ""00837ee6-6f18-4e49-9cab-bdfe4cc951ca"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""867af3ce-2134-47da-aeea-8c32ee9e2b15"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""5e476da0-efde-4be3-b209-1acb08c67f14"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Triggers"",
+                    ""id"": ""5fa2f6cf-d3b4-4d90-aa9f-4a94533f407f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c6da403a-2578-44e5-bca2-eeed4b74c5b6"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""1228089a-6ef2-418b-b183-dc56b5b72445"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -564,6 +703,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
+        m_Player_UIBack = m_Player.FindAction("UIBack", throwIfNotFound: true);
+        m_Player_UICycling = m_Player.FindAction("UICycling", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -638,6 +779,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_EnterTitleScreen;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Looking;
+    private readonly InputAction m_Player_UIBack;
+    private readonly InputAction m_Player_UICycling;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -650,6 +793,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Looking => m_Wrapper.m_Player_Looking;
+        public InputAction @UIBack => m_Wrapper.m_Player_UIBack;
+        public InputAction @UICycling => m_Wrapper.m_Player_UICycling;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -683,6 +828,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Looking.started += instance.OnLooking;
             @Looking.performed += instance.OnLooking;
             @Looking.canceled += instance.OnLooking;
+            @UIBack.started += instance.OnUIBack;
+            @UIBack.performed += instance.OnUIBack;
+            @UIBack.canceled += instance.OnUIBack;
+            @UICycling.started += instance.OnUICycling;
+            @UICycling.performed += instance.OnUICycling;
+            @UICycling.canceled += instance.OnUICycling;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -711,6 +862,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Looking.started -= instance.OnLooking;
             @Looking.performed -= instance.OnLooking;
             @Looking.canceled -= instance.OnLooking;
+            @UIBack.started -= instance.OnUIBack;
+            @UIBack.performed -= instance.OnUIBack;
+            @UIBack.canceled -= instance.OnUIBack;
+            @UICycling.started -= instance.OnUICycling;
+            @UICycling.performed -= instance.OnUICycling;
+            @UICycling.canceled -= instance.OnUICycling;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -818,6 +975,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnEnterTitleScreen(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnLooking(InputAction.CallbackContext context);
+        void OnUIBack(InputAction.CallbackContext context);
+        void OnUICycling(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {

@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerMovementController.cs
 // Author:          Andrew Stapay, Miles Rogers
+// Contributers:    Charlie Polonus
 // Creation Date:   September 15, 2024
 //
 // Description:     Implementation of the basic movement for a player character.
@@ -52,6 +53,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float _focusSpeedSlowTime;
     [SerializeField] private float _unfocusSpeedSlowTime;
     [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+    [SerializeField] private float _maxFocusMoveSpeedRatio;
 
     private float _currentFocusMoveSpeedMultiplier = 1;
     private float _currentFocusMoveSpeedProgress = 0;
@@ -533,7 +535,11 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void CalculateCurrentFocusSpeedMultiplier()
     {
-        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
+        // Calculate the lerp value between the non-focus and focused speed
+        float moveSpeedLerpValue = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
+
+        // Set the ratio value from 1 to the max speed ratio
+        _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 1 - moveSpeedLerpValue);
     }
 
     #endregion
@@ -541,6 +547,9 @@ public class PlayerMovementController : MonoBehaviour
     #endregion
 
     #region  Getters
+
+    // Getter for the current movement ratio
+    public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
     #endregion Getters
 }

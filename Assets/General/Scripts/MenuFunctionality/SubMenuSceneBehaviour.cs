@@ -23,7 +23,7 @@ public class SubMenuSceneBehaviour : MonoBehaviour
     {
         //initialize input
         _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.Pause.performed += ctx => ExitScene();
+        _playerInputControls.Player.UIBack.performed += ctx => ExitScene();
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class SubMenuSceneBehaviour : MonoBehaviour
     private void OnDisable()
     {
         AframaxSceneManager.Instance.SetSubMenuSceneLoadedBool(false);
-        _playerInputControls.Player.Pause.performed -= ctx => ExitScene();
+        _playerInputControls.Player.UIBack.performed -= ctx => ExitScene();
         _playerInputControls.Disable();
     }
 }

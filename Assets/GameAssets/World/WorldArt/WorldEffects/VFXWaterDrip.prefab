@@ -4899,6 +4899,7 @@ GameObject:
   - component: {fileID: 6038813692941113119}
   - component: {fileID: 4638158866208370376}
   - component: {fileID: 1308677873815821090}
+  - component: {fileID: 4864010952087683160}
   m_Layer: 0
   m_Name: VFXWaterDrip
   m_TagString: Untagged
@@ -4937,7 +4938,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -9719,3 +9720,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &4864010952087683160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124488706728900880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d4c7b88b80804842b05304181b50432, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minVfxDelay: 4
+  _maxVfxDelay: 5
+  _audioDelay: 0.1
