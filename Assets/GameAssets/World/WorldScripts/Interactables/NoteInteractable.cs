@@ -152,14 +152,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private void OnEnable()
     {
         _playerInputMap.Enable();
-        
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
-        /*{
-            if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
-            {
-                
-            }
-        };*/
     }
 
     /// <summary>
@@ -168,12 +161,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private void OnDisable()
     {
         _playerInputMap.Player.UICycling.performed -= ctx =>ChangePage((int)ctx.ReadValue<float>());
-        /*{
-            if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
-            {
-                
-            }
-        };*/
         _playerInputMap.Disable();
     }
 }
