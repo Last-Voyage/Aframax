@@ -24,18 +24,18 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// <summary>
     /// slides the objective onto screen with the corresponding text
     /// </summary>
-    /// <param name="objectiveHudTextString"></param>
+    /// <param name="objectiveHudTextString">the text that goes on the ui</param>
     public void ActivateObjectiveHud(string objectiveHudTextString) 
     {
         _objectiveHudText.text = objectiveHudTextString;
         _objectiveHudAnimator.SetTrigger("SlideIn");
-        StartCoroutine(waitForAnimation());
+        StartCoroutine(WaitForAnimation());
     }
 
     /// <summary>
     /// slides the objective back off screen
     /// </summary>
-    private void deactivateObjectiveHud()
+    private void DeactivateObjectiveHud()
     {
         _objectiveHudAnimator.SetTrigger("SlideOut");
     }
@@ -43,7 +43,7 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// <summary>
     /// set the objective text in the pause menu
     /// </summary>
-    /// <param name="objectivePauseTextString"></param>
+    /// <param name="objectivePauseTextString">the text that goes on the pause menu</param>
     public void SetPauseMenuObjective(string objectivePauseTextString)
     {
         _objectivePauseText.text = objectivePauseTextString;
@@ -53,9 +53,9 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// used for timing the wait between sliding in and out the objective hud
     /// </summary>
     /// <returns></returns>
-    private IEnumerator waitForAnimation()
+    private IEnumerator WaitForAnimation()
     {
         yield return new WaitForSeconds(_objectiveLingerTime);
-        deactivateObjectiveHud();
+        DeactivateObjectiveHud();
     }
 }
