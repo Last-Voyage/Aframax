@@ -11,6 +11,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
@@ -24,8 +25,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
-    [SerializeField] private TMP_Text _leftArrow;
-    [SerializeField] private TMP_Text _rightArrow;
+    [SerializeField] private Image _leftArrow;
+    [SerializeField] private Image _rightArrow;
     [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
     [SerializeField] private UnityEvent _onDialogueExit;
     [SerializeField] private bool _onlyPlayOnce = true;
