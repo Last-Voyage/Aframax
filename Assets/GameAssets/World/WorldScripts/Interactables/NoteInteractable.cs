@@ -9,6 +9,7 @@
 *****************************************************************************/
 
 using UnityEngine;
+using UnityEngine.Events;
 using TMPro;
 
 /// <summary>
@@ -26,6 +27,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private TMP_Text _leftArrow;
     [SerializeField] private TMP_Text _rightArrow;
     [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
+    [SerializeField] private UnityEvent _onDialogueExit;
     [SerializeField] private bool _onlyPlayOnce = true;
     private bool _hasPlayed;
     private int _currentPage;
@@ -116,14 +118,24 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         ActiveNote = null;
         _noteView.SetActive(false);
 
-        if (_dialogueOnExit != null)
+        if (!_onlyPlayOnce || !_hasPlayed)
         {
-            if (!_onlyPlayOnce || !_hasPlayed)
+            if (_dialogueOnExit != null)
             {
                 GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogueOnExit);
+                
                 _hasPlayed = true;
             }
+            _onDialogueExit?.Invoke();
         }
+    }
+
+    /// <summary>
+    /// Removes the listeners to the event
+    /// </summary>
+    private void OnDestroy()
+    {
+        _onDialogueExit?.RemoveAllListeners();
     }
 
     /// <summary>
