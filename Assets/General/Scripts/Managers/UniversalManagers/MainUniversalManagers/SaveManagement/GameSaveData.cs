@@ -19,17 +19,27 @@ using UnityEngine.Serialization;
 public class GameSaveData
 {
     [Tooltip("Number keeping track of the player checkpoint")]
-    public int CurrentCheckpoint;
+    public int CurrentCheckpoint { get; set; }
     [Tooltip("A list of strings containing the players inventory")]
-    public List<string> PlayerInventory;
+    public List<string> PlayerInventory { get; set; }
 
-    public int CurrentStoryBeat;
-    public int CurrentSceneIndex;
+    public int CurrentStoryBeat { get; set; }
+    public int CurrentSceneIndex { get; set; }
 
-    public float CurrentBrightness = 0.5f;
+    #region Audio Settings
+    public float CurrentMasterVolume { get; set; }
+    public float CurrentSfxVolume { get; set; }
+    public float CurrentAmbienceVolume { get; set; }
+    public float CurrentVoiceVolume { get; set; }
+    public float CurrentMusicVolume { get; set; }
+    #endregion
+
+    #region Gameplay Settings
+    public float CurrentBrightness { get; set; } = 0.5f;
+    #endregion
 
     #region Getters
-    
+
     public int GetCurrentCheckPoint() => CurrentCheckpoint;
     public List<string> GetCurrentInventory() => PlayerInventory;
     public int GetCurrentStoryBeat() => CurrentStoryBeat;
