@@ -88,7 +88,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
         // Free the mouse and freeze the game
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
         Time.timeScale = 0;
 
         // Reset the page counter to the first page and activate the note
@@ -112,7 +111,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
         // Lock the mouse and unfreeze the game
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         Time.timeScale = 1;
 
         // Deactivate the note
