@@ -35,6 +35,11 @@ public class SaveReconfiguration : MonoBehaviour
                 SaveManager.Instance.GetGameSaveData().GetCurrentCheckPoint());
         }
 
+        if(currentSavePoint.SavePointTrigger == null)
+        {
+            return;
+        }
+
         //Sets the player location to the saved location
         thePlayer.transform.position = currentSavePoint.SavePointTrigger.transform.position;
 
