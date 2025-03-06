@@ -110,6 +110,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void SubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(GamePaused);
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().AddListener(GameUnpaused);
     }
 
@@ -119,6 +120,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(GamePaused);
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().RemoveListener(GameUnpaused);
     }
 
