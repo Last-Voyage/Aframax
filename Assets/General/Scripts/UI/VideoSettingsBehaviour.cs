@@ -15,11 +15,11 @@ using UnityEngine.Rendering;
 /// </summary>
 public class VideoSettingsBehaviour : MonoBehaviour
 {
-    private VolumeProfile volumeProfile;
-    private UnityEngine.Rendering.Universal.ColorAdjustments colorAdjustmentsName;
+    private VolumeProfile _volumeProfile;
+    private UnityEngine.Rendering.Universal.ColorAdjustments _colorAdjustmentsName;
 
     [Tooltip("Should not be higher than like 5 or some visuals kinda break")]
-    [SerializeField] private float _maximumBrightness;
+    [SerializeField] private float _brightnessMultiplier = 3;
 
     [SerializeField] private Slider _brightnessSlider;
 
@@ -28,15 +28,16 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<Volume>()?.sharedProfile;
+        _volumeProfile = GameObject.Find("GlobalVolumePostProcessing").GetComponent<Volume>()?.sharedProfile;
 
         //even though this line is just an error check, everything breaks without it.
-        if (!volumeProfile.TryGet(out colorAdjustmentsName))
+        if (!_volumeProfile.TryGet(out _colorAdjustmentsName))
         {
-            throw new System.NullReferenceException(nameof(colorAdjustmentsName));
+            throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
+        _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
     }
 
     /// <summary>
@@ -44,7 +45,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     public void ChangeBrightness()
     {
-        colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _maximumBrightness);
+        _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
         
         SaveManager.Instance.GetGameSaveData().SetBrightness(_brightnessSlider.value);
     }
