@@ -110,6 +110,11 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference WaterDrip { get; private set; }
     #endregion
 
+    #region Cinematics
+    [field: Header("Cinematics")]
+    [field: SerializeField] public EventReference[] CinematicArray { get; private set; }
+    #endregion
+
     /// <summary>
     /// Gets the item pickup sound based on the id of the sound effect
     /// </summary>
