@@ -29,12 +29,6 @@ public class AudioSettings : MonoBehaviour
     [SerializeField] private Slider _voiceSlider;
     [SerializeField] private Slider _musicSlider;
 
-    private float _masterVolume;
-    private float _sfxVolume;
-    private float _ambienceVolume;
-    private float _voiceVolume;
-    private float _musicVolume;
-
     private bool _hasSceneLoaded = false;
 
     /// <summary>
@@ -42,29 +36,26 @@ public class AudioSettings : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        // Get all the volumes from the save file
-        float[] volumes = LoadData();
-
         // For each of the individual sliders, if they exist, set the values
         if (_masterSlider != null)
         {
-            _masterSlider.value = volumes[0];
+            _masterSlider.value = SaveManager.Instance.GetGameSaveData().CurrentMasterVolume;
         }
         if (_sfxSlider != null)
         {
-            _sfxSlider.value = volumes[1];
+            _sfxSlider.value = SaveManager.Instance.GetGameSaveData().CurrentSfxVolume;
         }
         if (_ambienceSlider != null)
         {
-            _ambienceSlider.value = volumes[2];
+            _ambienceSlider.value = SaveManager.Instance.GetGameSaveData().CurrentAmbienceVolume;
         }
         if (_voiceSlider != null)
         {
-            _voiceSlider.value = volumes[3];
+            _voiceSlider.value = SaveManager.Instance.GetGameSaveData().CurrentVoiceVolume;
         }
         if (_musicSlider != null)
         {
-            _musicSlider.value = volumes[4];
+            _musicSlider.value = SaveManager.Instance.GetGameSaveData().CurrentMusicVolume;
         }
 
         //so the sfx don't play before the scene is done loading
@@ -78,9 +69,9 @@ public class AudioSettings : MonoBehaviour
     {
         // Set the VCA to the correct volume to change
         _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/MasterVCA");
-        _masterVolume = _masterSlider.value;
+        float masterVolume = _masterSlider.value;
         // Set the volume and save the data
-        _activeVca.setVolume(_masterVolume);
+        _activeVca.setVolume(masterVolume);
 
         if (_hasSceneLoaded)
         {
@@ -88,7 +79,9 @@ public class AudioSettings : MonoBehaviour
                 FmodSfxEvents.Instance.MasterVolumeSettingsChanged, Vector3.zero);
         }
 
-        SaveData();
+        //Saves the audio changes
+        SaveManager.Instance.GetGameSaveData().CurrentMasterVolume = masterVolume;
+        SaveManager.Instance.SaveText();
     }
 
     /// <summary>
@@ -98,16 +91,18 @@ public class AudioSettings : MonoBehaviour
     {
         // Set the VCA to the correct volume to change
         _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/SFXVCA");
-        _sfxVolume = _sfxSlider.value;
+        float sfxVolume = _sfxSlider.value;
         // Set the volume and save the data
-        _activeVca.setVolume(_sfxVolume);
+        _activeVca.setVolume(sfxVolume);
 
         if (_hasSceneLoaded)
         {
             RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.SfxVolumeSettingsChanged, Vector3.zero);
         }
 
-        SaveData();
+        //Saves the audio changes
+        SaveManager.Instance.GetGameSaveData().CurrentSfxVolume = sfxVolume;
+        SaveManager.Instance.SaveText();
     }
 
     /// <summary>
@@ -117,9 +112,9 @@ public class AudioSettings : MonoBehaviour
     {
         // Set the VCA to the correct volume to change
         _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/AmbianceVCA");
-        _ambienceVolume = _ambienceSlider.value;
+        float ambienceVolume = _ambienceSlider.value;
         // Set the volume and save the data
-        _activeVca.setVolume(_ambienceVolume);
+        _activeVca.setVolume(ambienceVolume);
 
         if (_hasSceneLoaded)
         {
@@ -127,7 +122,9 @@ public class AudioSettings : MonoBehaviour
                 FmodSfxEvents.Instance.AmbienceVolumeSettingsChanged, Vector3.zero);
         }
 
-        SaveData();
+        //Saves the audio changes
+        SaveManager.Instance.GetGameSaveData().CurrentAmbienceVolume = ambienceVolume;
+        SaveManager.Instance.SaveText();
     }
 
     /// <summary>
@@ -137,10 +134,19 @@ public class AudioSettings : MonoBehaviour
     {
         // Set the VCA to the correct volume to change
         _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/DialogueVCA");
-        _voiceVolume = _voiceSlider.value;
+        float voiceVolume = _voiceSlider.value;
         // Set the volume and save the data
-        _activeVca.setVolume(_voiceVolume);
-        SaveData();
+        _activeVca.setVolume(voiceVolume);
+
+        if (_hasSceneLoaded)
+        {
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(
+                FmodSfxEvents.Instance.VoiceVolumeSettingsChanged, Vector3.zero);
+        }
+
+        //Saves the audio changes
+        SaveManager.Instance.GetGameSaveData().CurrentVoiceVolume = voiceVolume;
+        SaveManager.Instance.SaveText();
     }
 
     /// <summary>
@@ -150,50 +156,18 @@ public class AudioSettings : MonoBehaviour
     {
         // Set the VCA to the correct volume to change
         _activeVca = FMODUnity.RuntimeManager.GetVCA("vca:/MusicVCA");
-        _musicVolume = _musicSlider.value;
+        float musicVolume = _musicSlider.value;
         // Set the volume and save the data
-        _activeVca.setVolume(_musicVolume);
-        SaveData();
-    }
+        _activeVca.setVolume(musicVolume);
 
-    /// <summary>
-    /// Load the save data from the file, converting it to an array
-    /// </summary>
-    /// <returns>The array of all volumes</returns>
-    private float[] LoadData()
-    {
-        // Create an array and populate it with the volumes as strings
-        float[] volumeArray = new float[5];
-        string[] volumeStrings = File.ReadAllLines(
-            Application.streamingAssetsPath + _audioSettingsFilePath)[0].Split(" ");
-
-        // Iterate through each string and convert it to a float
-        for (int i = 0; i < volumeArray.Length; i++)
+        if (_hasSceneLoaded)
         {
-            // If the string is possible to convert to a float, do so
-            try
-            {
-                volumeArray[i] = float.Parse(volumeStrings[i]);
-            }
-            catch
-            {
-                volumeArray[i] = 1;
-            }
+            RuntimeSfxManager.APlayOneShotSfx?.Invoke(
+                FmodSfxEvents.Instance.MusicVolumeSettingsChanged, Vector3.zero);
         }
 
-        return volumeArray;
-    }
-
-    /// <summary>
-    /// Save the volumes to the save file
-    /// </summary>
-    private void SaveData()
-    {
-        // Convert the volumes to a string
-        string volumeSaveFile = _masterVolume + " " + _sfxVolume + " " + _ambienceVolume
-            + " " + _voiceVolume + " " + _musicVolume;
-
-        // Write the text to the file
-        File.WriteAllText(Application.streamingAssetsPath + _audioSettingsFilePath, volumeSaveFile);
+        //Saves the audio changes
+        SaveManager.Instance.GetGameSaveData().CurrentMusicVolume = musicVolume;
+        SaveManager.Instance.SaveText();
     }
 }
