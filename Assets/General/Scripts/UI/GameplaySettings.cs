@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         GamepleySettings.cs
+// File Name :         GameplaySettings.cs
 // Author :            Nabil Tagba
 // Creation Date :     2/27/2025
 //
@@ -27,9 +27,11 @@ public class GameplaySettings : MonoBehaviour
 
     /// <summary>
     /// happens when the game object is enabled
+    /// save changes when values are changed
     /// </summary>
     private void OnEnable()
     {
+        //save data when the values are changed
         _sensitivitySlider.onValueChanged.AddListener(delegate { SaveData(); });
         _invertX.onValueChanged.AddListener(delegate { SaveData(); });
         _invertY.onValueChanged.AddListener(delegate { SaveData(); });
@@ -43,7 +45,7 @@ public class GameplaySettings : MonoBehaviour
 
         try
         {
-            FindObjectOfType<CamSettings>().wasSettingsChanged = true;
+            FindObjectOfType<CameraSettings>().WasSettingsChanged = true;
         }
         catch (Exception e)
         {
@@ -53,15 +55,18 @@ public class GameplaySettings : MonoBehaviour
 
     /// <summary>
     /// happens when the game object is disabled
+    /// save changes and remove listeners
     /// </summary>
     private void OnDisable()
     {
+        //save data one last time
+        SaveData();
+        //remove listeners
         _sensitivitySlider.onValueChanged.RemoveAllListeners();
         _invertX.onValueChanged.RemoveAllListeners();
         _invertY.onValueChanged.RemoveAllListeners();
     }
 
-  
 
     /// <summary>
     /// Save the volumes to the save file
@@ -74,11 +79,6 @@ public class GameplaySettings : MonoBehaviour
         // Write the text to the file
         File.WriteAllText(Application.streamingAssetsPath + _GameplaySettingFilePath, _settings);
     }
-
-
-
-
-
 
 
 }
