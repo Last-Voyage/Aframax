@@ -43,14 +43,7 @@ public class GameplaySettings : MonoBehaviour
         _invertX.isOn = bool.Parse(camSettings[1]);
         _invertY.isOn = bool.Parse(camSettings[2]);
 
-        try
-        {
-            FindObjectOfType<CameraSettings>().WasSettingsChanged = true;
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning(e);
-        }
+        
     }
 
     /// <summary>
@@ -61,6 +54,14 @@ public class GameplaySettings : MonoBehaviour
     {
         //save data one last time
         SaveData();
+        try
+        {
+            CameraSettings.WasSettingsChanged?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
+        }
         //remove listeners
         _sensitivitySlider.onValueChanged.RemoveAllListeners();
         _invertX.onValueChanged.RemoveAllListeners();

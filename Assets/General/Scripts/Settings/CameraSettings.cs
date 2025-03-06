@@ -6,6 +6,7 @@
 // Brief Description : Gets the sensitivity settings and applys it to the camera
 *****************************************************************************/
 using Cinemachine;
+using System;
 using System.IO;
 using UnityEngine;
 
@@ -15,29 +16,26 @@ using UnityEngine;
 public class CameraSettings : MonoBehaviour
 {
     [SerializeField] private string _gameplaySettingFilePath;
-    public bool WasSettingsChanged = true;
+
+    public static Action WasSettingsChanged;
+
+    /// <summary>
+    /// happens when script instance is loaded
+    /// subscibe to was settings changed action
+    /// </summary>
+    private void Awake()
+    {
+        WasSettingsChanged += UpdateSettings;
+    }
 
     /// <summary>
     /// happens when the game starts
     /// </summary>
     private void Start()
     {
-        UpdateSettings();
+        WasSettingsChanged.Invoke();
     }
 
-    /// <summary>
-    /// happens at a fixed frame rate
-    /// </summary>
-    private void FixedUpdate()
-    {
-        //only happens when the settings are changed
-        if (WasSettingsChanged)
-        {
-            UpdateSettings();
-            WasSettingsChanged = false;
-        }
-        
-    }
 
     /// <summary>
     /// Gets the sensitivity settings and applys it to the camera
@@ -76,5 +74,14 @@ public class CameraSettings : MonoBehaviour
             }
         }
 
+    }
+
+    /// <summary>
+    /// called when the script is destroyed
+    /// unsubscribe to was settings changed action
+    /// </summary>
+    private void OnDestroy()
+    {
+        WasSettingsChanged -= UpdateSettings;
     }
 }
