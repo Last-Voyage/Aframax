@@ -29,6 +29,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private Image _rightArrow;
     [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
     [SerializeField] private UnityEvent _onDialogueExit;
+    [SerializeField] private SpriteRenderer _interactablePopUp;
     [SerializeField] private bool _onlyPlayOnce = true;
     private bool _hasPlayed;
     private int _currentPage;
@@ -96,6 +97,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         ActiveNote = this;
         _noteView.SetActive(true);
         ChangePage(_currentPage);
+
+        // Hide the interaction popup
+        _interactablePopUp.enabled = false;
     }
 
     /// <summary>
@@ -129,6 +133,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
             }
             _onDialogueExit?.Invoke();
         }
+
+        // Show the interaction popup
+        _interactablePopUp.enabled = true;
     }
 
     /// <summary>
