@@ -8,7 +8,8 @@
 *****************************************************************************/
 
 using System.Collections;
-using System.Collections.Generic;
+
+using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -24,7 +25,11 @@ public class CinematicManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int _sceneId;
     [SerializeField] private int _sceneTransitionId;
+    [Tooltip("The ID of the cinematic audio to play from the FmodSfxEvents under the universal managers")]
+    [SerializeField] private int _cinematicAudioID;
     private bool _cinematicPlaying;
+
+    private EventInstance _cinematicAudio;
 
     /// <summary>
     /// Starts the cinematic
@@ -32,6 +37,7 @@ public class CinematicManager : MonoBehaviour
     private void Start()
     {
         StartVideo();
+        StartCinematicAudio();
     }
 
     /// <summary>
@@ -57,10 +63,30 @@ public class CinematicManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Plays the audio for the cinematic
+    /// </summary>
+    private void StartCinematicAudio()
+    {
+        _cinematicAudio = RuntimeSfxManager.Instance.CreateInstanceFromReference
+            (FmodSfxEvents.Instance.CinematicArray[_cinematicAudioID]);
+
+        if(_cinematicAudio.isValid())
+        {
+            _cinematicAudio.start();
+        }
+    }
+
+    /// <summary>
     /// Finish the cinematic, so load the next scene
     /// </summary>
     private void LoadNextScene()
     {
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneId, _sceneTransitionId);
+
+        if (_cinematicAudio.isValid())
+        {
+            _cinematicAudio.stop(STOP_MODE.IMMEDIATE);
+            _cinematicAudio.release();
+        }
     }
 }
