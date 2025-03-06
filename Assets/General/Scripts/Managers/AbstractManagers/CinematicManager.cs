@@ -79,7 +79,7 @@ public class CinematicManager : MonoBehaviour
     /// <summary>
     /// Finish the cinematic, so load the next scene
     /// </summary>
-    private void LoadNextScene()
+    public void LoadNextScene()
     {
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneId, _sceneTransitionId);
 
