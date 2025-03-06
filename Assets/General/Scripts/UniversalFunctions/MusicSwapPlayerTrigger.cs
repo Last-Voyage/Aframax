@@ -31,13 +31,19 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     [Tooltip("The volume to switch to")]
     [field: SerializeField] [Range(0,1)] private float _newVolume;
 
+    [field: SerializeField] private bool _detachOnStart = true;
     [field: SerializeField] private bool _destroyOnContact;
 
+    /// <summary>
+    /// Removes the parent associate with this. That way it can be safely attached to other prefabs.
+    /// </summary>
     private void Start()
     {
-        transform.SetParent(null);
+        if(_detachOnStart)
+        {
+            transform.SetParent(null);
+        }
     }
-
 
     /// <summary>
     /// Called when the player contacts this
