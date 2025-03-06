@@ -33,6 +33,12 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
 
     [field: SerializeField] private bool _destroyOnContact;
 
+    private void Start()
+    {
+        transform.SetParent(null);
+    }
+
+
     /// <summary>
     /// Called when the player contacts this
     /// </summary>
