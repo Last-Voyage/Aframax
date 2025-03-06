@@ -46,7 +46,10 @@ public class PostProcessingManager : MonoBehaviour
     public void BlurCamera(float endBlurValue, float time)
     {
         // Stop all other attempts to change the blur, and start the coroutine
-        StopAllCoroutines();
+        if (_blurCoroutine != null)
+        {
+            StopCoroutine(_blurCoroutine);
+        }
         _blurCoroutine = StartCoroutine(ChangeCameraBlurOverTime(endBlurValue, time));
     }
 
@@ -65,7 +68,7 @@ public class PostProcessingManager : MonoBehaviour
     /// <param name="time">The time taken to get to no blur</param>
     public void RemoveBlurOverTime(float time)
     {
-        BlurCamera(0, time);
+        BlurCamera(0f, time);
     }
 
     /// <summary>
@@ -87,8 +90,8 @@ public class PostProcessingManager : MonoBehaviour
             float timeRatio = curTime / time;
 
             // Blurs the camera according to the start and end blurs, and the time needed
-            _blurPercentage = Mathf.Lerp(startBlur, endBlur, timeRatio);
-            SetCameraBlur(_blurPercentage);
+            float currentBlur = Mathf.Lerp(startBlur, endBlur, timeRatio);
+            SetCameraBlur(currentBlur);
             yield return null;
         }
         // Sets it to the final value and removes itself from the coroutine
@@ -99,7 +102,7 @@ public class PostProcessingManager : MonoBehaviour
     /// <summary>
     /// Sets the camera blur to certain values based on the percentage
     /// </summary>
-    /// <param name="blurValue"></param>
+    /// <param name="blurValue">The value to be set to</param>
     private void SetCameraBlur(float blurValue)
     {
         // Clamps the blur percentage
@@ -111,7 +114,9 @@ public class PostProcessingManager : MonoBehaviour
         depthOfField.gaussianMaxRadius.value = Mathf.Lerp(1, 1.5f, _blurPercentage);
     }
 
-    // Remove all blur settings when the game is closed
+    /// <summary>
+    /// Remove all blur settings when the game is closed
+    /// </summary>
     private void OnApplicationQuit()
     {
         SetCameraBlur(0);
