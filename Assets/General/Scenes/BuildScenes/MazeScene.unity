@@ -1455,7 +1455,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 78072048217288069, guid: 77cff5bf0e82bc348ab3d53461c3f6be,
         type: 3}
-      insertIndex: 19
+      insertIndex: -1
       addedObject: {fileID: 1159560337}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77cff5bf0e82bc348ab3d53461c3f6be, type: 3}
@@ -4863,6 +4863,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
+      propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
+        type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
@@ -4884,7 +4889,7 @@ PrefabInstance:
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ProgressNextStoryBeat
+      value: TriggerStoryBeat
       objectReference: {fileID: 0}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
@@ -4900,6 +4905,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: HudInventoryManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
+        type: 3}
+      propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
@@ -4994,7 +5004,7 @@ PrefabInstance:
     - target: {fileID: 7771719610162328181, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onpickupEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7771719610162328181, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
@@ -5019,7 +5029,7 @@ PrefabInstance:
     - target: {fileID: 7771719610162328181, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onpickupEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: TriggerStoryBeat
+      value: ProgressNextStoryBeat
       objectReference: {fileID: 0}
     - target: {fileID: 7771719610162328181, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
@@ -7173,7 +7183,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: OpenStoryBeat
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -7414,7 +7424,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].DelayTime
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
