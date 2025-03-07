@@ -250,17 +250,22 @@ public class PlayerCameraController : MonoBehaviour
 
                 // Movement Sway
                 float newX = 0;
+                float newZ = 0;
                 if (_movementSwayRight)
                 {
                     newX = _harpoonGun.transform.localPosition.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * _harpoonGun.transform.right.x;
+                    newZ = _harpoonGun.transform.localPosition.z +
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * _harpoonGun.transform.right.z;
                 }
                 else
                 {
                     newX = _harpoonGun.transform.localPosition.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * _harpoonGun.transform.right.x;
+                    newZ = _harpoonGun.transform.localPosition.z -
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * _harpoonGun.transform.right.z;
                 }
-                _harpoonGun.transform.localPosition = new Vector3(newX, 0, 0);
+                _harpoonGun.transform.localPosition = new Vector3(newX, 0, newZ);
 
                 // If we reach the limit on our sway, switch directions
                 float swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
