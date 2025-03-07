@@ -36,14 +36,14 @@ public class SwapControlsPage : MonoBehaviour
     /// </summary>
     public void ChangePage(int value)
     {
-        if (value == 1)
+        if (value == -1)
         {
             _keyboard.SetActive(false);
             _controller.SetActive(true);
             _leftButton.color = Color.clear;
             _rightButton.color = Color.white;
         }
-        else if (value == -1)
+        else if (value == 1)
         {
             _keyboard.SetActive(true);
             _controller.SetActive(false);
