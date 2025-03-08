@@ -523,9 +523,13 @@ MonoBehaviour:
   - 
   _noteView: {fileID: 6458563179318953849}
   _noteTextField: {fileID: 6260992914342017818}
-  _leftArrow: {fileID: 5906042090919108038}
-  _rightArrow: {fileID: 4615545174542268803}
+  _leftArrow: {fileID: 0}
+  _rightArrow: {fileID: 0}
   _dialogueOnExit: {fileID: 0}
+  _onDialogueExit:
+    m_PersistentCalls:
+      m_Calls: []
+  _interactablePopUp: {fileID: 2790065263168388671}
   _onlyPlayOnce: 1
 --- !u!65 &287783848974716843
 BoxCollider:
@@ -659,7 +663,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 450, y: 0}
+  m_AnchoredPosition: {x: 500, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3335489803228176621
@@ -1321,7 +1325,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -450, y: 0}
+  m_AnchoredPosition: {x: -500, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2674075003349297280
@@ -1452,8 +1456,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6, y: 18}
-  m_SizeDelta: {x: 626, y: 510}
+  m_AnchoredPosition: {x: 6, y: 0}
+  m_SizeDelta: {x: 626, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4697885672500168191
 CanvasRenderer:
@@ -1520,11 +1524,11 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 15
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1642,6 +1646,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a4c9b72e4a02a844a616e46e7324a52, type: 3}
+--- !u!212 &2790065263168388671 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8910410000646508621, guid: 5a4c9b72e4a02a844a616e46e7324a52,
+    type: 3}
+  m_PrefabInstance: {fileID: 6705982151408578162}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5663119908040607264 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1407127157958076498, guid: 5a4c9b72e4a02a844a616e46e7324a52,

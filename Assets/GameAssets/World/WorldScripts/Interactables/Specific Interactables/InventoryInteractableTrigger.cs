@@ -36,6 +36,7 @@ public class InventoryInteractableTrigger : MonoBehaviour, IPlayerInteractable
 
         // Successfully run the method
         _onTriggerEvent?.Invoke();
+        _onTriggerEvent?.Invoke();
     }
 
     /// <summary>
