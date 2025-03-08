@@ -37,7 +37,6 @@ public class TutorialPopUp : MonoBehaviour
 
         // Free the mouse and freeze the game
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
         Time.timeScale = 0;
 
         // Reset the page counter to the first page and activate the note
@@ -128,7 +127,6 @@ public class TutorialPopUp : MonoBehaviour
 
         // Free the mouse and freeze the game
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         Time.timeScale = 1;
     }
 
