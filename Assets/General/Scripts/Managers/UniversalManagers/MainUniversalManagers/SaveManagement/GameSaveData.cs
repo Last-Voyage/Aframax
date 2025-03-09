@@ -34,7 +34,7 @@ public class GameSaveData
     public float CurrentMusicVolume { get; set; }
     #endregion
 
-    #region Gameplay Settings
+    #region Video Settings
     public float CurrentBrightness { get; set; } = 0.5f;
     #endregion
 
