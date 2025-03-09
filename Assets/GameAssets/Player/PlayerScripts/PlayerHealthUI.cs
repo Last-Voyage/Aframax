@@ -54,8 +54,6 @@ public class PlayerHealthUi : MonoBehaviour
     {
         InitializeAnimator();
 
-        InitializeWaitForSeconds();
-
         _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
         _heartAlphaParent.SetAlpha(0);
     }
@@ -135,36 +133,43 @@ public class PlayerHealthUi : MonoBehaviour
     /// </summary>
     private IEnumerator HeartAppearance()
     {
-        _heartAlphaParent.SetAlpha(0);
-        
-        // Make the heart appear over time
-        
-        for (float i = .1f; i < 1.01f; i += .01f)
-        {
-            _heartAlphaParent.SetAlpha(i);
-            yield return _heartAppearTime;
-        }
-        
-        // The heart is fully on screen for x seconds
-        yield return _heartScreenTime;
+        // Make sure the heart doesn't blink
+        float startAlpha = _heartAlphaParent.GetAlpha();
 
-        for (float i = 1f; i > -.01f; i -= .01f)
+        // Lerp to completely visible
+        float appearTime = 0;
+        while (appearTime < _heartTimeToAppear)
         {
-            _heartAlphaParent.SetAlpha(i);
-            yield return _heartDisappearTime;
+            appearTime += Time.deltaTime;
+
+            // Get the ratio of time, lerp the alpha
+            float alphaValueRatio = appearTime / _heartTimeToAppear;
+            _heartAlphaParent.SetAlpha(Mathf.Lerp(startAlpha, 1, alphaValueRatio));
+
+            yield return null;
         }
+        // Safeguard: Make sure that it's visible at the end
+        _heartAlphaParent.SetAlpha(1);
+
+        // Keep the heart on screen for some time
+        yield return new WaitForSeconds(_heartTimeOnScreen);
+
+        // Lerp to completely hidden
+        appearTime = 0;
+        while (appearTime < _heartTimeToDisappear)
+        {
+            appearTime += Time.deltaTime;
+
+            // Get the ratio of time, lerp the alpha
+            float alphaValueRatio = appearTime / _heartTimeToDisappear;
+            _heartAlphaParent.SetAlpha(Mathf.Lerp(1, 0, alphaValueRatio));
+
+            yield return null;
+        }
+        // Safeguard: Make sure that it's hidden at the end
+        _heartAlphaParent.SetAlpha(0);
 
         _heartAppearanceCoroutine = null;
-    }
-
-    /// <summary>
-    /// Initializes the values for heart fade in/fade out
-    /// </summary>
-    private void InitializeWaitForSeconds()
-    {
-        _heartAppearTime = new WaitForSeconds(1/(90/_heartTimeToAppear));
-        _heartScreenTime = new WaitForSeconds(_heartTimeOnScreen);
-        _heartDisappearTime = new WaitForSeconds(1/(100/_heartTimeToDisappear));
     }
 
     /// <summary>
