@@ -29,15 +29,12 @@ public class PlayerHealthUi : MonoBehaviour
     
     [SerializeField]
     private float _heartTimeToAppear;
-    private WaitForSeconds _heartAppearTime;
     
     [SerializeField]
     private float _heartTimeOnScreen;
-    private WaitForSeconds _heartScreenTime;
     
     [SerializeField] 
     private float _heartTimeToDisappear;
-    private WaitForSeconds _heartDisappearTime;
 
     private IEnumerator _heartAppearanceCoroutine;
 
