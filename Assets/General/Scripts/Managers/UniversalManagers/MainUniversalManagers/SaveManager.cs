@@ -12,6 +12,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine.Events;
+using FMOD.Studio;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -111,6 +112,8 @@ public class SaveManager : MainUniversalManagerFramework
             var json = File.ReadAllText(_saveDataFilePath + "Data.json");
             //Converts the string into the Game Save Data class
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
+
+            LoadInitialVolumes();
         }
         else
         {
@@ -119,6 +122,18 @@ public class SaveManager : MainUniversalManagerFramework
             //Saves the initial values
             SaveText();
         }
+    }
+
+    /// <summary>
+    /// Loads the volumes to what they should be on start
+    /// </summary>
+    private void LoadInitialVolumes()
+    {
+        FMODUnity.RuntimeManager.GetVCA("vca:/MasterVCA").setVolume(GetGameSaveData().CurrentMasterVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/SFXVCA").setVolume(GetGameSaveData().CurrentSfxVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/AmbianceVCA").setVolume(GetGameSaveData().CurrentAmbienceVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/DialogueVCA").setVolume(GetGameSaveData().CurrentVoiceVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/MusicVCA").setVolume(GetGameSaveData().CurrentMusicVolume);
     }
 
     /// <summary>
