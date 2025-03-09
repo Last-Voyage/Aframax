@@ -24,6 +24,8 @@ public class PlaceholderTutorialBehaviour : MonoBehaviour
     [SerializeField] private Image _leftArrow;
     [SerializeField] private Image _rightArrow;
 
+    [SerializeField] private bool _isSingleUse;
+
     public static PlaceholderTutorialBehaviour ActivePlaceholderTutorial = null;
 
     private PlayerInputMap _playerInputMap;
@@ -89,6 +91,11 @@ public class PlaceholderTutorialBehaviour : MonoBehaviour
 
         // Deactivate the note
         _tutorialPagesContainer.SetActive(false);
+
+        if (_isSingleUse)
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
