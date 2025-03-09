@@ -55,15 +55,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ReelHarpoon"",
-                    ""type"": ""Button"",
-                    ""id"": ""46123ba1-202e-49de-a560-ebd47b8d6d5c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""fe01f416-f239-4edd-b4bf-89803f8eebdd"",
@@ -136,7 +127,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -147,7 +138,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -158,7 +149,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -169,7 +160,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -180,7 +171,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": ""StickDeadzone(min=0.05)"",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -191,7 +182,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""FireHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -202,7 +193,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""FireHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -213,7 +204,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""FocusHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -224,7 +215,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""FocusHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -235,30 +226,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""FocusHarpoon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ReelHarpoon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c1de372d-034c-416c-a7bc-abdc29b7930b"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ReelHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -268,7 +237,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -279,7 +248,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -290,7 +259,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""EnterTitleScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -301,7 +270,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/numpadEnter"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""EnterTitleScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -312,7 +281,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""EnterTitleScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -323,7 +292,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -334,7 +303,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -345,7 +314,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": ""StickDeadzone(min=0.05)"",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -356,7 +325,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -367,7 +336,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""UIBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -400,7 +369,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -411,7 +380,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -433,7 +402,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -444,7 +413,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -466,7 +435,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -477,7 +446,40 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""D-Pad"",
+                    ""id"": ""7d3a37c3-537a-4e63-a90f-243cecd543f3"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""53e2151c-c6e1-4a04-b7f1-c0329764195d"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""07d6a395-6c10-4f56-8cff-a4c864514016"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -698,7 +700,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
-        m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
@@ -774,7 +775,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_FireHarpoon;
     private readonly InputAction m_Player_FocusHarpoon;
-    private readonly InputAction m_Player_ReelHarpoon;
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_EnterTitleScreen;
     private readonly InputAction m_Player_Interact;
@@ -788,7 +788,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @FireHarpoon => m_Wrapper.m_Player_FireHarpoon;
         public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
-        public InputAction @ReelHarpoon => m_Wrapper.m_Player_ReelHarpoon;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
@@ -813,9 +812,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @FocusHarpoon.started += instance.OnFocusHarpoon;
             @FocusHarpoon.performed += instance.OnFocusHarpoon;
             @FocusHarpoon.canceled += instance.OnFocusHarpoon;
-            @ReelHarpoon.started += instance.OnReelHarpoon;
-            @ReelHarpoon.performed += instance.OnReelHarpoon;
-            @ReelHarpoon.canceled += instance.OnReelHarpoon;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
@@ -847,9 +843,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @FocusHarpoon.started -= instance.OnFocusHarpoon;
             @FocusHarpoon.performed -= instance.OnFocusHarpoon;
             @FocusHarpoon.canceled -= instance.OnFocusHarpoon;
-            @ReelHarpoon.started -= instance.OnReelHarpoon;
-            @ReelHarpoon.performed -= instance.OnReelHarpoon;
-            @ReelHarpoon.canceled -= instance.OnReelHarpoon;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
@@ -970,7 +963,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnFireHarpoon(InputAction.CallbackContext context);
         void OnFocusHarpoon(InputAction.CallbackContext context);
-        void OnReelHarpoon(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnEnterTitleScreen(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
