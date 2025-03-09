@@ -248,19 +248,28 @@ public class PlayerCameraController : MonoBehaviour
                     StopCoroutine(stopSwayCoroutine);
                 }
 
+                // We would like to get the angle at which that camera is facing
+                // So that we can move the harpoon accurately when the player turns
+                float angle = Camera.main.transform.localEulerAngles.y * Mathf.PI / 180f;
+
                 // Movement Sway
                 float newX = 0;
+                float newZ = 0;
                 if (_movementSwayRight)
                 {
                     newX = _harpoonGun.transform.localPosition.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Cos(angle);
+                    newZ = _harpoonGun.transform.localPosition.z +
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Sin(angle);
                 }
                 else
                 {
                     newX = _harpoonGun.transform.localPosition.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Cos(angle);
+                    newZ = _harpoonGun.transform.localPosition.z -
+                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Sin(angle);
                 }
-                _harpoonGun.transform.localPosition = new Vector3(newX, 0, 0);
+                _harpoonGun.transform.localPosition = new Vector3(newX, 0, newZ);
 
                 // If we reach the limit on our sway, switch directions
                 float swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
