@@ -20,7 +20,7 @@ public enum HarpoonCollisionType : uint
 {
     NOVFX,
     SPARKVFX,
-    DECKVFX,
+    WOODVFX,
 }
 
 /// <summary>
@@ -64,17 +64,44 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         #region Checks and variables for the collision
-        // If the collided object does not have these components, it will exit this function
-        // If it does, the rest of the script can use the "out"put variable
-        if (!other.gameObject.TryGetComponent<MeshCollider>(out var anotherCollider)
-            || !other.gameObject.TryGetComponent<MeshRenderer>(out var anotherRenderer))
+        //Check if what we hit has a mesh renderer and collider
+        // and therefore requires more specific checks for the material
+        if (other.gameObject.TryGetComponent<MeshCollider>(out var anotherCollider)
+            && other.gameObject.TryGetComponent<MeshRenderer>(out var anotherRenderer))
+        {
+            HarpoonMeshCollision(anotherCollider, anotherRenderer);
+        }
+        //Otherwise use the regular collision check
+        else if (other.gameObject.TryGetComponent<Renderer>(out var contactRenderer))
+        {
+            HarpoonGeneralCollision(contactRenderer);
+        }
+        //We hit something without a renderer so there is no point playing vfx
+        else
         {
             return;
         }
+
+        // Checks if the harpoon hit a material that would cause a Vfx to spawn
+        if (_harpoonVisualEffects[_whichVfxPointer] != null)
+        {
+            SpawnProjectileVfx();
+            StartProjectileImpactSfx();
+            _associatedMovement.IsHit = true;
+        }
+    }
+
+    /// <summary>
+    /// Performs a check of an object with a mesh collider to determine what material we are hitting
+    /// </summary>
+    /// <param name="meshCollider">The collider it hit</param>
+    /// <param name="meshRenderer">The renderer object attached to what it hit</param>
+    private void HarpoonMeshCollision(MeshCollider meshCollider, MeshRenderer meshRenderer)
+    {
         // Mesh reference & submesh count
-        Mesh theCollidedMesh = anotherCollider.sharedMesh;
+        Mesh theCollidedMesh = meshCollider.sharedMesh;
         int howManyMeshes = theCollidedMesh.subMeshCount;
-        Material[] collidedObjectsMaterials = anotherRenderer.sharedMaterials;
+        Material[] collidedObjectsMaterials = meshRenderer.sharedMaterials;
         #endregion
 
         #region Checks and variables for the raycast
@@ -100,7 +127,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
 
             // In the event that the triangle check fails but we still get the correct collision object
             // This is working even for objects with multiple different materials attached
-            if(_materialVfxRefs.TryGetValue(collidedObjectsMaterials[i], out uint usableVfxPointer))
+            if (_materialVfxRefs.TryGetValue(collidedObjectsMaterials[i], out uint usableVfxPointer))
             {
                 _whichVfxPointer = usableVfxPointer;
                 // If the index is in the value range,
@@ -108,16 +135,26 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
                 if (whichTriangle >= subMesh.indexStart && whichTriangle <= subMesh.indexCount)
                 {
                     break;
-                }    
+                }
             }
         }
+    }
 
-        // Checks if the harpoon hit a material that would cause a Vfx to spawn
-        if (_harpoonVisualEffects[_whichVfxPointer] != null)
+    /// <summary>
+    /// Performs a check of an object to determine what material we hit
+    /// </summary>
+    /// <param name="renderer"> The renderer of the object we hit </param>
+    private void HarpoonGeneralCollision(Renderer renderer)
+    {
+        // Iterates through each material
+        foreach (Material mat in renderer.sharedMaterials)
         {
-            SpawnProjectileVfx();
-            StartProjectileImpactSfx();
-            _associatedMovement.IsHit = true;
+            //Checks if that material has a hit vfx associated
+            if (_materialVfxRefs.TryGetValue(mat, out uint usableVfxPointer))
+            {
+                _whichVfxPointer = usableVfxPointer;
+                return;
+            }
         }
     }
 
@@ -145,7 +182,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     {
         _harpoonVisualEffects[(uint)HarpoonCollisionType.NOVFX] = null;
         _harpoonVisualEffects[(uint)HarpoonCollisionType.SPARKVFX] = VfxManager.Instance.GetMetalSparksVfx();
-        _harpoonVisualEffects[(uint)HarpoonCollisionType.DECKVFX] = VfxManager.Instance.GetWoodenSparksVfx();
+        _harpoonVisualEffects[(uint)HarpoonCollisionType.WOODVFX] = VfxManager.Instance.GetWoodenSparksVfx();
     }
 
     /// <summary>
@@ -155,7 +192,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     {
         _harpoonAudioEffects[(uint)HarpoonCollisionType.NOVFX] = FmodSfxEvents.Instance.HarpoonHitGeneral;
         _harpoonAudioEffects[(uint)HarpoonCollisionType.SPARKVFX] = FmodSfxEvents.Instance.HarpoonHitMetal;
-        _harpoonAudioEffects[(uint)HarpoonCollisionType.DECKVFX] = FmodSfxEvents.Instance.HarpoonHitWood;
+        _harpoonAudioEffects[(uint)HarpoonCollisionType.WOODVFX] = FmodSfxEvents.Instance.HarpoonHitWood;
     }
 
     /// <summary>
@@ -171,9 +208,9 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     /// </summary>
     private void InitializeVisualEffectsDictionary()
     {
-        foreach(HarpoonVisualAudioEffectsBank bank in VfxManager.Instance.GetHarpoonVisualArray())
+        foreach (HarpoonVisualAudioEffectsBank bank in VfxManager.Instance.GetHarpoonVisualArray())
         {
-            if(bank.AssociatedMaterial == null)
+            if (bank.AssociatedMaterial == null)
             {
                 continue;
             }
