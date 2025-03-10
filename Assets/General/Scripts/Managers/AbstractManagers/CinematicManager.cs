@@ -57,6 +57,10 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void StartVideo()
     {
+        // Turns the sound off
+        FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out VCA masterVCA);
+        masterVCA.setVolume(0);
+
         _cinematicPlaying = true;
         _videoPlayer.time = 0;
         _videoPlayer.Play();
@@ -81,6 +85,10 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     public void LoadNextScene()
     {
+        // Turns the sound back on
+        FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out VCA masterVCA);
+        masterVCA.setVolume(1);
+
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneId, _sceneTransitionId);
 
         if (_cinematicAudio.isValid())
