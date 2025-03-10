@@ -96,13 +96,19 @@ public class MazeSubSceneManager : MonoBehaviour
     // Coroutine for PreLoadMazeScene()
     private IEnumerator StartSubscenePreLoadOperation(int mazeId, int sceneId)
     {
+        // Check if scene is already preloaded
+        if (_asyncOpList.ContainsKey(mazeId))
+        {
+            yield break;
+        }
+
         // Start async operation
         _asyncOpList.Add(mazeId, SceneManager.LoadSceneAsync(
             sceneId,
             LoadSceneMode.Additive
         ));
         Debug.Assert(_asyncOpList[mazeId] != null, nameof(List<AsyncOperation>) + " != null");
-        
+
         // Make sure the scene isn't shown until LoadMazeAdditive() is called
         _asyncOpList[mazeId].allowSceneActivation = false;
 
