@@ -36,8 +36,7 @@ public class TutorialPopUp : MonoBehaviour
         _popupCanvas.enabled = true;
 
         // Free the mouse and freeze the game
-        Cursor.lockState = CursorLockMode.None;
-        Time.timeScale = 0;
+        TimeManager.Instance.GetOnGamePauseEvent();
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -126,8 +125,7 @@ public class TutorialPopUp : MonoBehaviour
         }
 
         // Free the mouse and freeze the game
-        Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1;
+        TimeManager.Instance.GetOnGameUnpauseEvent();
     }
 
     /// <summary>
