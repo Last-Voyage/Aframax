@@ -30,6 +30,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
     [SerializeField] private UnityEvent _onDialogueExit;
     [SerializeField] private bool _onlyPlayOnce = true;
+    private SpriteRenderer _interactablePopUp;
     private bool _hasPlayed;
     private int _currentPage;
 
@@ -42,14 +43,17 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void Awake()
     {
-	_noteView.transform.parent = null;
-	_noteView.transform.rotation = Quaternion.identity;
+	    _noteView.transform.parent = null;
+	    _noteView.transform.rotation = Quaternion.identity;
         if (_activeConsole == null)
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
         }
 
         _playerInputMap = new PlayerInputMap();
+
+        // Sets the interactable popup to the childed sprite
+        _interactablePopUp = GetComponentInChildren<SpriteRenderer>();
     }
 
     /// <summary>
@@ -88,7 +92,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
         // Free the mouse and freeze the game
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
         Time.timeScale = 0;
 
         // Reset the page counter to the first page and activate the note
@@ -96,6 +99,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         ActiveNote = this;
         _noteView.SetActive(true);
         ChangePage(_currentPage);
+
+        // Hide the interaction popup
+        _interactablePopUp.enabled = false;
     }
 
     /// <summary>
@@ -112,7 +118,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
         // Lock the mouse and unfreeze the game
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
         Time.timeScale = 1;
 
         // Deactivate the note
@@ -129,6 +134,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
             }
             _onDialogueExit?.Invoke();
         }
+
+        // Show the interaction popup
+        _interactablePopUp.enabled = true;
     }
 
     /// <summary>
