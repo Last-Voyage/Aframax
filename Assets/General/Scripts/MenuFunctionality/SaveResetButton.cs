@@ -19,7 +19,7 @@ public class SaveResetButton : MonoBehaviour
     /// </summary>
     public void ResetButtonPressed()
     {
-        SaveManager.Instance.ResetSaveData();
+        SaveManager.Instance.ResetGameplaySaveData();
         if(_doesReloadCurrentScene)
         {
             AframaxSceneManager.Instance.ReloadCurrentScene();

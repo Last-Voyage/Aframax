@@ -23,6 +23,8 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference MasterVolumeSettingsChanged { get; private set; }
     [field: SerializeField] public EventReference SfxVolumeSettingsChanged { get; private set; }
     [field: SerializeField] public EventReference AmbienceVolumeSettingsChanged { get; private set; }
+    [field: SerializeField] public EventReference VoiceVolumeSettingsChanged { get; private set; }
+    [field: SerializeField] public EventReference MusicVolumeSettingsChanged { get; private set; }
 
     #endregion
 
@@ -106,6 +108,11 @@ public class FmodSfxEvents : MonoBehaviour
     [field: Header("Environment")]
     [field: SerializeField] public EventReference GeneratorFixed { get; private set; }
     [field: SerializeField] public EventReference WaterDrip { get; private set; }
+    #endregion
+
+    #region Cinematics
+    [field: Header("Cinematics")]
+    [field: SerializeField] public EventReference[] CinematicArray { get; private set; }
     #endregion
 
     /// <summary>

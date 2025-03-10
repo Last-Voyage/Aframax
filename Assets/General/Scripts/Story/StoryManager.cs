@@ -242,7 +242,11 @@ public class StoryManager : MonoBehaviour
         }
 
         // Tell the active beat list to stop considering this beat as playing
-        _beatEventsCoroutines[_activeStoryBeats.IndexOf(beat)] = null;
+        if(_beatEventsCoroutines.Count > _activeStoryBeats.IndexOf(beat) && _activeStoryBeats.IndexOf(beat) > 0)
+        {
+            _beatEventsCoroutines[_activeStoryBeats.IndexOf(beat)] = null;
+        }
+        
     }
 
     /// <summary>

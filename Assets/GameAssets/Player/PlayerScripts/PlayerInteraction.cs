@@ -1,6 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         PlayerInteraction.cs
 // Author :            Alex Kalscheur
+// Contributers :      Charlie Polonus
 // Creation Date :     11/10/24
 // 
 // Brief Description : Controls the interaction system on the player side
@@ -66,6 +67,24 @@ public class PlayerInteraction : MonoBehaviour
         else
         {
             _interactableUi.SetInteractUIStatus(false);
+        }
+    }
+
+    /// <summary>
+    /// Checks to see if the player is currently able to interact with something
+    /// </summary>
+    /// <returns>The object the player is currently able to interact with</returns>
+    public GameObject CurrentInteractable()
+    {
+        SetRaycast();
+        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach) &&
+            hit.collider.gameObject.TryGetComponent(out IPlayerInteractable interactableComponent))
+        {
+            return hit.collider.gameObject;
+        }
+        else
+        {
+            return null;
         }
     }
 

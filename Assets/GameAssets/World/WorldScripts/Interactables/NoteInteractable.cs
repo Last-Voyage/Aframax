@@ -11,6 +11,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
@@ -24,11 +25,12 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
-    [SerializeField] private TMP_Text _leftArrow;
-    [SerializeField] private TMP_Text _rightArrow;
+    [SerializeField] private Image _leftArrow;
+    [SerializeField] private Image _rightArrow;
     [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
     [SerializeField] private UnityEvent _onDialogueExit;
     [SerializeField] private bool _onlyPlayOnce = true;
+    private SpriteRenderer _interactablePopUp;
     private bool _hasPlayed;
     private int _currentPage;
 
@@ -41,14 +43,17 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void Awake()
     {
-	_noteView.transform.parent = null;
-	_noteView.transform.rotation = Quaternion.identity;
+	    _noteView.transform.parent = null;
+	    _noteView.transform.rotation = Quaternion.identity;
         if (_activeConsole == null)
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
         }
 
         _playerInputMap = new PlayerInputMap();
+
+        // Sets the interactable popup to the childed sprite
+        _interactablePopUp = GetComponentInChildren<SpriteRenderer>();
     }
 
     /// <summary>
@@ -86,15 +91,20 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private void ShowNote()
     {
         // Free the mouse and freeze the game
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        Time.timeScale = 0;
+        TimeManager.Instance.GetOnGamePauseEvent();
+        
+        // Enables a/d, arrow keys, and shoulder button controls
+        _playerInputMap.Enable();
+        _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
         ActiveNote = this;
         _noteView.SetActive(true);
         ChangePage(_currentPage);
+
+        // Hide the interaction popup
+        _interactablePopUp.enabled = false;
     }
 
     /// <summary>
@@ -110,9 +120,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         }
 
         // Lock the mouse and unfreeze the game
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        Time.timeScale = 1;
+        TimeManager.Instance.GetOnGameUnpauseEvent();
 
         // Deactivate the note
         ActiveNote = null;
@@ -128,6 +136,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
             }
             _onDialogueExit?.Invoke();
         }
+
+        // Show the interaction popup
+        _interactablePopUp.enabled = true;
     }
 
     /// <summary>
@@ -147,33 +158,11 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
-    /// Allows the player to use arrow keys or bumpers to change the note page
-    /// </summary>
-    private void OnEnable()
-    {
-        _playerInputMap.Enable();
-        
-        _playerInputMap.Player.UICycling.performed += ctx =>
-        {
-            if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
-            {
-                ChangePage((int)ctx.ReadValue<float>());
-            }
-        };
-    }
-
-    /// <summary>
     /// Prevents memory leaks
     /// </summary>
     private void OnDisable()
     {
-        _playerInputMap.Player.UICycling.performed -= ctx =>
-        {
-            if (_currentPage < _currentPage + (int)ctx.ReadValue<float>() || _currentPage+(int)ctx.ReadValue<float>() <= 0)
-            {
-                ChangePage((int)ctx.ReadValue<float>());
-            }
-        };
+        _playerInputMap.Player.UICycling.performed -= ctx =>ChangePage((int)ctx.ReadValue<float>());
         _playerInputMap.Disable();
     }
 }
