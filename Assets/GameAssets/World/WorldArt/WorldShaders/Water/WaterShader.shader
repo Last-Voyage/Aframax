@@ -925,10 +925,10 @@ Shader "Custom/WaterShader"
                 const float3 reflectDir = reflect(-L, -N);
 
                 // Specular contribution
-                const float specular = CalculateSpecular(
+                const float specular = saturate(CalculateSpecular(
                     input.normalWS,
                     GetWorldSpaceNormalizeViewDir(input.positionWS)
-                );
+                ));
 
                 // Depth Fog
                 const float edgeFoam = ObjectSurroundingFoam(
@@ -950,14 +950,15 @@ Shader "Custom/WaterShader"
                 );
 
                 // Adding all the colors together
-                float3 finalColor = (
+                float3 finalColor = saturate((
                     _WaterColor *
                     _WaterTint *
                     NdotL *
                     gradient) +
                         specular +
                         underwaterColor +
-                        edgeFoam;
+                        edgeFoam
+                );
 
                 // Pixel color output
                 return float4(
