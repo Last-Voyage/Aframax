@@ -69,7 +69,6 @@ public class ProceduralVine : MonoBehaviour
     private EVineState _currentState;
 
     private EventInstance _movementEventInstance;
-    private EventInstance _spawnEventInstance;
 
     private void Start()
     {
@@ -157,9 +156,6 @@ public class ProceduralVine : MonoBehaviour
 
         _movementEventInstance = RuntimeSfxManager.Instance.
             CreateInstanceFromReference(FmodSfxEvents.Instance.LimbMove, _flowerHeadTransform.gameObject);
-
-        _spawnEventInstance = RuntimeSfxManager.Instance.
-            CreateInstanceFromReference(FmodSfxEvents.Instance.LimbSpawn, _flowerHeadTransform.gameObject);
     }
 
     /// <summary>
@@ -197,7 +193,7 @@ public class ProceduralVine : MonoBehaviour
         {
             return;
         }
-        RuntimeSfxManager.Instance.PlayOneShotEventInstance(_spawnEventInstance);
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbSpawn,_flowerHeadTransform.gameObject);
     }
 
     /// <summary>
