@@ -97,10 +97,6 @@ public class ProceduralVine : MonoBehaviour
         {
             Retracting();
         }
-        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _currentState == EVineState.retracting)
-        {
-            _currentState = EVineState.none;
-        }
 
         //appearing
         if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance +.1f)
@@ -234,7 +230,7 @@ public class ProceduralVine : MonoBehaviour
     /// <param name="collider"></param>
     private void OnTriggerStay(Collider collider)
     {
-        if(IsColliderPlayer(collider) && _currentState != EVineState.attacking && _currentAttackCD <= 0 && _isAppeared)
+        if(IsColliderPlayer(collider) && _currentState != EVineState.attacking && _currentState != EVineState.retracting && _currentAttackCD <= 0 && _isAppeared)
         {
             //start attack
             StartCoroutine(Attack(collider.transform.position));
