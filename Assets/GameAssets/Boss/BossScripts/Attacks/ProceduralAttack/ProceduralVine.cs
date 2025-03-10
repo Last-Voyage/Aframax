@@ -82,7 +82,14 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void Update() 
     {
-        if(_currentState == EVineState.none)
+        //retracting
+        if (_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance + .1f)
+        {
+            Retracting();
+            return;
+        }
+
+        if (_currentState == EVineState.none)
         {
             //move along path
             MoveAlongPath();
@@ -90,12 +97,6 @@ public class ProceduralVine : MonoBehaviour
             {
                _currentAttackCD -= Time.deltaTime; 
             }    
-        }
-
-        //retracting
-        if(_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance +.1f)
-        {
-            Retracting();
         }
 
         //appearing
