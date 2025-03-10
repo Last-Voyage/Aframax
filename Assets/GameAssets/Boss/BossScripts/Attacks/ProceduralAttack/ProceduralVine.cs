@@ -72,8 +72,6 @@ public class ProceduralVine : MonoBehaviour
 
     private void Start()
     {
-        CreateMovementAudio();
-        StartMovementAudio();
         _currentState = EVineState.none;
     }
 
@@ -184,6 +182,18 @@ public class ProceduralVine : MonoBehaviour
         }
         RuntimeSfxManager.Instance.FadeOutLoopingOneShot(_movementEventInstance, 
             FmodSfxEvents.Instance.LimbMoveFadeOutTime);
+    }
+
+    /// <summary>
+    /// Plays audio on spawn
+    /// </summary>
+    private void PlaySpawnAudio()
+    {
+        if (!_spawnEventInstance.isValid())
+        {
+            return;
+        }
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbSpawn,_flowerHeadTransform.gameObject);
     }
 
     /// <summary>
@@ -298,6 +308,11 @@ public class ProceduralVine : MonoBehaviour
         _dampedTransformRig.weight = 1;
         _rigBuilder.Build();
         _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
+
+        //play sfx
+        CreateMovementAudio();
+        StartMovementAudio();
+        PlaySpawnAudio();
     }
 
     /// <summary>
