@@ -287,7 +287,7 @@ public class PlayerCameraController : MonoBehaviour
                     // NO DUPLICATING COROUTINES
                     if (stopSwayCoroutine == null)
                     {
-                        stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(playerMovement));
+                        //stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(playerMovement));
                     }
                 }
             }
