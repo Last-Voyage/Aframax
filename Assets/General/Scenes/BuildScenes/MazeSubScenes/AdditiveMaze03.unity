@@ -501,12 +501,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 376571957}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 376571957}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -515,17 +515,22 @@ PrefabInstance:
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: TriggerStoryBeat
+      value: StoryManagerTriggerStoryBeat
       objectReference: {fileID: 0}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: DisableInventoryImages
+      value: HudInventoryDisableImages
+      objectReference: {fileID: 0}
+    - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
+        type: 3}
+      propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MazeInteractableHelper, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
       propertyPath: _onTriggerEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: HudInventoryManager, Assembly-CSharp
+      value: MazeInteractableHelper, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4780920110104550515, guid: af80e909c848a7546b5ce7c76365e151,
         type: 3}
@@ -700,7 +705,11 @@ PrefabInstance:
         type: 3}
       insertIndex: 2
       addedObject: {fileID: 1004780531}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 905561444461653870, guid: af80e909c848a7546b5ce7c76365e151,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 376571957}
   m_SourcePrefab: {fileID: 100100000, guid: af80e909c848a7546b5ce7c76365e151, type: 3}
 --- !u!4 &376571955 stripped
 Transform:
@@ -708,6 +717,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 376571954}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &376571956 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 905561444461653870, guid: af80e909c848a7546b5ce7c76365e151,
+    type: 3}
+  m_PrefabInstance: {fileID: 376571954}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &376571957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376571956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd19339fc64270646945fe435e0f3978, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &573045262
 Mesh:
   m_ObjectHideFlags: 0

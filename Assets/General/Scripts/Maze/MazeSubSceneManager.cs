@@ -24,10 +24,6 @@ public class MazeSubSceneManager : MonoBehaviour
     /// </summary>
     [SerializeField] private int _firstMazeIndex = 0;
 
-    [SerializeField] private int _mazeAmount = 5;
-    
-    private AframaxSceneManager _sceneManager;
-
     /// <summary>
     /// Struct that holds the current state of the preloaded
     /// scene.
@@ -38,9 +34,9 @@ public class MazeSubSceneManager : MonoBehaviour
         public bool LoadingComplete;
     }
 
+    private AframaxSceneManager _sceneManager;
     private LoadSceneState _loadSceneState;
-
-    private Dictionary<int, AsyncOperation> _mutexList = new();
+    private Dictionary<int, AsyncOperation> _asyncOpList = new();
     
     private void Start()
     {
@@ -61,10 +57,11 @@ public class MazeSubSceneManager : MonoBehaviour
         StartCoroutine(StartAsyncSceneLoadOperation(mazeId, sceneId));
     }
 
+    // Coroutine for LoadMazeAdditive()
     private IEnumerator StartAsyncSceneLoadOperation(int mazeId, int sceneId)
     {
         // Error if no scene is preloaded
-        if (_mutexList[mazeId] == null)
+        if (_asyncOpList[mazeId] == null)
         {
             throw new NullReferenceException(
                 "Scene '" + SceneManager.GetSceneByBuildIndex(sceneId).name + 
@@ -75,7 +72,7 @@ public class MazeSubSceneManager : MonoBehaviour
         }
         
         // Enable scene in level
-        _mutexList[mazeId].allowSceneActivation = true;
+        _asyncOpList[mazeId].allowSceneActivation = true;
         
         yield break;
     }
@@ -83,7 +80,7 @@ public class MazeSubSceneManager : MonoBehaviour
     /// <summary>
     /// Load the desired maze SubScene and disable it until it is ready to be used
     /// </summary>
-    /// <param name="mazeId">The maze index to be loaded.</param>
+    /// <param name="mazeId">The maze index to be preloaded.</param>
     public void PreLoadMazeScene(int mazeId)
     {
         // (Re)initialize scene loading state
@@ -96,20 +93,21 @@ public class MazeSubSceneManager : MonoBehaviour
         StartCoroutine(StartSubscenePreLoadOperation(mazeId, _loadSceneState.SceneBuildID));
     }
 
+    // Coroutine for PreLoadMazeScene()
     private IEnumerator StartSubscenePreLoadOperation(int mazeId, int sceneId)
     {
         // Start async operation
-        _mutexList.Add(mazeId, SceneManager.LoadSceneAsync(
+        _asyncOpList.Add(mazeId, SceneManager.LoadSceneAsync(
             sceneId,
             LoadSceneMode.Additive
         ));
-        Debug.Assert(_mutexList[mazeId] != null, nameof(List<AsyncOperation>) + " != null");
+        Debug.Assert(_asyncOpList[mazeId] != null, nameof(List<AsyncOperation>) + " != null");
         
         // Make sure the scene isn't shown until LoadMazeAdditive() is called
-        _mutexList[mazeId].allowSceneActivation = false;
+        _asyncOpList[mazeId].allowSceneActivation = false;
 
         // Await scene loading
-        while (_mutexList[mazeId] is { isDone: false })
+        while (_asyncOpList[mazeId] is { isDone: false })
         {
             yield return null;
         }
@@ -121,51 +119,29 @@ public class MazeSubSceneManager : MonoBehaviour
         _loadSceneState.LoadingComplete = true;
     }
 
+    /// <summary>
+    /// Destroy maze/unload data context
+    /// </summary>
+    /// <param name="mazeId">The maze index to be destroyed.</param>
     public void DestroyMaze(int mazeId)
     {
         int sceneId = _sceneManager.MazeAdditiveSceneIndices[mazeId];
         StartCoroutine(StartDestroySceneOperation(sceneId));
     }
 
+    // Coroutine for DestroyMaze()
     private IEnumerator StartDestroySceneOperation(int sceneId)
     {
         var sceneRef = SceneManager.GetSceneByBuildIndex(sceneId);
         
-        AsyncOperation unloadMutex = SceneManager.UnloadSceneAsync(
+        AsyncOperation unloadAsyncOp = SceneManager.UnloadSceneAsync(
             sceneRef
         );
         
         // Wait for scene to unload
-        while (unloadMutex is { isDone: false })
+        while (unloadAsyncOp is { isDone: false })
         {
             yield return null;
         }
-    }
-
-    private GameObject FindSceneMazeRoot(int mazeId, int sceneId)
-    {
-        var sceneRef = SceneManager.GetSceneByBuildIndex(sceneId);
-        GameObject[] rootObjects = sceneRef.GetRootGameObjects();
-
-        GameObject mazeRoot = null;
-
-        // A very evil, horrible search pattern (It'll be looking through
-        // only a few objects so it's probably fine)
-        var searchKey = "MAZE_" + (mazeId + 1) + "_ROOT";
-        
-        foreach (var rootObject in rootObjects)
-        {
-            if (string.Equals(rootObject.name, searchKey))
-            {
-                mazeRoot = rootObject;
-            }
-        }
-
-        if (!mazeRoot)
-        {
-            throw new NullReferenceException("Could not find maze root!");
-        }
-
-        return mazeRoot;
     }
 }
