@@ -284,7 +284,11 @@ public class PlayerCameraController : MonoBehaviour
                 // If we aren't moving directly forward, let's just reset the camera
                 if (_harpoonGun.transform.localPosition.x != 0 || _harpoonGun.transform.localPosition.z != 0)
                 {
-                    stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(playerMovement));
+                    // NO DUPLICATING COROUTINES
+                    if (stopSwayCoroutine == null)
+                    {
+                        stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(playerMovement));
+                    }
                 }
             }
 
