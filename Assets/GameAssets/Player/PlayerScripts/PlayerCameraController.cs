@@ -282,9 +282,13 @@ public class PlayerCameraController : MonoBehaviour
             else
             {
                 // If we aren't moving directly forward, let's just reset the camera
-                if (_transposer.m_FollowOffset.x != 0)
+                if (_harpoonGun.transform.localPosition.x != 0 || _harpoonGun.transform.localPosition.z != 0)
                 {
-                    stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
+                    // NO DUPLICATING COROUTINES
+                    if (stopSwayCoroutine == null)
+                    {
+                        stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(playerMovement));
+                    }
                 }
             }
 
@@ -302,14 +306,15 @@ public class PlayerCameraController : MonoBehaviour
         {
             StopCoroutine(_walkingSwayCoroutine);
         }
+
         // Return camera to original position
-        _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
+        _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(null));
     }
 
     /// <summary>
     /// Returns the camera to its original position from the walking sway motion
     /// </summary>
-    private IEnumerator ReturnCameraFromWalking()
+    private IEnumerator ReturnCameraFromWalking(InputAction playerMovement)
     {
         if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
         {
@@ -330,13 +335,17 @@ public class PlayerCameraController : MonoBehaviour
         // I'm deciding that our main character is right footed
         _movementSwayRight = true;
 
-        //Prevents camera sway from getting duplicated
+        // Prevents camera sway from getting duplicated
         if (_walkingSwayCoroutine != null)
         {
             StopCoroutine(_walkingSwayCoroutine);
         }
 
-        _walkingSwayCoroutine = null;
+        // But wait, if we're still in motion, then we want to restart the walking sway
+        if (playerMovement != null && playerMovement.ReadValue<Vector2>() != Vector2.zero)
+        {
+            _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));
+        }
     }
 
     /// <summary>
