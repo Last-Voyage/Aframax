@@ -91,8 +91,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private void ShowNote()
     {
         // Free the mouse and freeze the game
-        //Cursor.lockState = CursorLockMode.None;
-        //Time.timeScale = 0;
         TimeManager.Instance.GetOnGamePauseEvent();
         
         // Enables a/d, arrow keys, and shoulder button controls
@@ -122,8 +120,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         }
 
         // Lock the mouse and unfreeze the game
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Time.timeScale = 1;
         TimeManager.Instance.GetOnGameUnpauseEvent();
 
         // Deactivate the note
@@ -159,14 +155,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public static void ExitActiveNote()
     {
         ActiveNote.HideNote();
-    }
-
-    /// <summary>
-    /// Allows the player to use arrow keys or bumpers to change the note page
-    /// </summary>
-    private void OnEnable()
-    {
-        
     }
 
     /// <summary>
