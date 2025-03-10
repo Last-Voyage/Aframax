@@ -91,8 +91,13 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private void ShowNote()
     {
         // Free the mouse and freeze the game
-        Cursor.lockState = CursorLockMode.None;
-        Time.timeScale = 0;
+        //Cursor.lockState = CursorLockMode.None;
+        //Time.timeScale = 0;
+        TimeManager.Instance.GetOnGamePauseEvent();
+        
+        // Enables a/d, arrow keys, and shoulder button controls
+        _playerInputMap.Enable();
+        _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -117,8 +122,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         }
 
         // Lock the mouse and unfreeze the game
-        Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Time.timeScale = 1;
+        TimeManager.Instance.GetOnGameUnpauseEvent();
 
         // Deactivate the note
         ActiveNote = null;
@@ -160,8 +166,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void OnEnable()
     {
-        _playerInputMap.Enable();
-        _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        
     }
 
     /// <summary>
