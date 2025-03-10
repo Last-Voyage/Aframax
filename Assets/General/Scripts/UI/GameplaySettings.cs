@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         GameplaySettings.cs
 // Author :            Nabil Tagba
+// Contributor :       Ryan Swanson
 // Creation Date :     2/27/2025
 //
 // Brief Description : take care of all game play setting functionalities.
@@ -17,7 +18,6 @@ using UnityEngine.UI;
 /// </summary>
 public class GameplaySettings : MonoBehaviour
 {
-    private GameObject _camera;
     [SerializeField] private Slider _sensitivitySlider;
     [SerializeField] private Toggle _invertX;
     [SerializeField] private Toggle _invertY;
