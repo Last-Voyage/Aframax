@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         WorldSpacePopups.cs
 // Author :            Jeremiah Peters
+// Contributers :      Charlie Polonus
 // Creation Date :     9/28/2024
 //
 // Brief Description : Manages the world space pop ups for interactable objects
@@ -22,6 +23,10 @@ public class WorldSpacePopups : MonoBehaviour
     private GameObject _playerReference;
 
     private SpriteRenderer _objectSpriteReference;
+
+    private PlayerInteraction _playerInteractor;
+
+    private GameObject _interactableObject;
 
     [SerializeField]
     private TextMeshProUGUI _popUpTextContainer;
@@ -50,6 +55,12 @@ public class WorldSpacePopups : MonoBehaviour
     {
         _objectSpriteReference = GetComponent<SpriteRenderer>();
         StartCoroutine(FindPlayer());
+
+        // Get the interactable object this popup is tied to
+        if (transform.GetComponentInParent<IPlayerInteractable>() != null)
+        {
+            _interactableObject = transform.parent.gameObject;
+        }
     }
 
     private void LateUpdate()
@@ -66,20 +77,25 @@ public class WorldSpacePopups : MonoBehaviour
         {
             //check proximity to player
             float playerProximity = Vector3.Distance(_playerReference.transform.position, transform.position);
-            if (playerProximity >= _visibilityProximity)
+
+            // If the player is in range and is currently looking at the interactable
+            if (playerProximity < _playerDetectionProximity
+                && _playerInteractor.CurrentInteractable() == _interactableObject)
             {
-                _objectSpriteReference.sprite = null;
-                _popUpTextContainer.text = null;
+                _objectSpriteReference.sprite = _closeDistanceSprite;
+                _popUpTextContainer.text = _closeText;
             }
-            else if (playerProximity >= _playerDetectionProximity)
+            // The player is in range to see it
+            else if (playerProximity < _visibilityProximity)
             {
                 _objectSpriteReference.sprite = _farDistanceSprite;
                 _popUpTextContainer.text = _farText;
             }
+            // The player is nowhere near the interactable
             else
             {
-                _objectSpriteReference.sprite = _closeDistanceSprite;
-                _popUpTextContainer.text = _closeText;
+                _objectSpriteReference.sprite = null;
+                _popUpTextContainer.text = null;
             }
         }
     }
@@ -98,6 +114,7 @@ public class WorldSpacePopups : MonoBehaviour
         {
             _playerCamera = pfc.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
             _playerReference = pfc.transform.GetChild(1).gameObject;
+            _playerInteractor = pfc.GetComponentInChildren<PlayerInteraction>();
         }
 
         _objectSpriteReference = GetComponent<SpriteRenderer>();

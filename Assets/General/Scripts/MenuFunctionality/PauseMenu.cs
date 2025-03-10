@@ -47,6 +47,12 @@ public class PauseMenu : MonoBehaviour
             return;
         }
 
+        if (PlaceholderTutorialBehaviour.ActivePlaceholderTutorial != null)
+        {
+            PlaceholderTutorialBehaviour.ExitActiveTutorial();
+            return;
+        }
+
         //don't unpause if the settings scene is loaded
         if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded)
         {
