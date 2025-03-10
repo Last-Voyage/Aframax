@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PauseMenu.cs
 // Author :            Jeremiah Peters
-//                     Ryan Swanson
+// Contributers :      Ryan Swanson, Charlie Polonu
 // Creation Date :     9/28/24
 //
 // Brief Description : operates pausing the game and the pause menu buttons
@@ -71,10 +71,18 @@ public class PauseMenu : MonoBehaviour
         if (isVisible)
         {
             GameStateManager.Instance.GetOnGamePaused()?.Invoke();
+
+            // Mutes all audio
+            FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out FMOD.Studio.VCA masterVCA);
+            masterVCA.setVolume(0);
         }
         else
         {
             GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();
+
+            // Resumes all audio
+            FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out FMOD.Studio.VCA masterVCA);
+            masterVCA.setVolume(1);
         }
     }
 
