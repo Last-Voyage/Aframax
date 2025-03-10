@@ -80,7 +80,14 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void Update() 
     {
-        if(_currentState == EVineState.none)
+        //retracting
+        if (_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance + .1f)
+        {
+            Retracting();
+            return;
+        }
+
+        if (_currentState == EVineState.none)
         {
             //move along path
             MoveAlongPath();
@@ -88,16 +95,6 @@ public class ProceduralVine : MonoBehaviour
             {
                _currentAttackCD -= Time.deltaTime; 
             }    
-        }
-
-        //retracting
-        if(_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance +.1f)
-        {
-            Retracting();
-        }
-        else if(_baseOfVine.parent.gameObject.activeInHierarchy && _currentState == EVineState.retracting)
-        {
-            _currentState = EVineState.none;
         }
 
         //appearing
@@ -130,7 +127,11 @@ public class ProceduralVine : MonoBehaviour
         Vector3 direction = (_pathCreator.path.GetPointAtDistance(_idleMoveDistance) - _followTransform.position).normalized;
         _followTransform.forward = direction;
         yield return new WaitForSeconds(timeToGetToPath);
-        _currentState = EVineState.none;
+        if(_currentState != EVineState.retracting)
+        {
+            _currentState = EVineState.none;
+        }
+        
         _isAppeared = true;
     }
 
@@ -203,39 +204,43 @@ public class ProceduralVine : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Attack(Vector3 playerPosition)
     {
-        _currentState = EVineState.attacking;
-        _currentAttackCD = _cooldownToAttackAfterMoveBackToPath;
-        StopMovementAudio();
+        if (_currentState != EVineState.retracting)
+        {
+            _currentState = EVineState.attacking;
+            _currentAttackCD = _cooldownToAttackAfterMoveBackToPath;
+            StopMovementAudio();
 
-        // Calculate the direction from the current object to the target object (X and Z only)
-        Vector3 direction = (playerPosition - _followTransform.position).normalized;
-        _followTransform.forward = direction;
+            // Calculate the direction from the current object to the target object (X and Z only)
+            Vector3 direction = (playerPosition - _followTransform.position).normalized;
+            _followTransform.forward = direction;
 
-        //rear back and raise up a little
-        Vector3 posToRearBack = _followTransform.position + -direction * _rearBackDistance;
-        _followTransform.DOJump(posToRearBack, -.5f, 1, _rearBackTime, false).SetEase(Ease.InSine);
-        yield return new WaitForSeconds(_rearBackTime);
-        posToRearBack = _followTransform.position + direction * _rearBackDistance;
-        _followTransform.DOMove(posToRearBack, _rearBackTime, false).SetEase(Ease.OutSine);
-        yield return new WaitForSeconds(_rearBackTime + _waitAfterRearBackTime);
+            //rear back and raise up a little
+            Vector3 posToRearBack = _followTransform.position + -direction * _rearBackDistance;
+            _followTransform.DOJump(posToRearBack, -.5f, 1, _rearBackTime, false).SetEase(Ease.InSine);
+            yield return new WaitForSeconds(_rearBackTime);
+            posToRearBack = _followTransform.position + direction * _rearBackDistance;
+            _followTransform.DOMove(posToRearBack, _rearBackTime, false).SetEase(Ease.OutSine);
+            yield return new WaitForSeconds(_rearBackTime + _waitAfterRearBackTime);
 
-        //redo direction from new position
-        direction = (playerPosition - _followTransform.position).normalized;
-        var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, playerPosition) + Vector3.up * .3f;
+            //redo direction from new position
+            direction = (playerPosition - _followTransform.position).normalized;
+            var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, playerPosition) + Vector3.up * .3f;
 
-        //snaps to player
-        _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
-        //Plays attack audio
-        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
-        yield return new WaitForSeconds(_lungeToPlayerDuration);
+            //snaps to player
+            _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
+            //Plays attack audio
+            RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
+            yield return new WaitForSeconds(_lungeToPlayerDuration);
 
-        //move back to og position
-        _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
-        yield return new WaitForSeconds(_moveBackAfterAttackTime);
+            //move back to og position
+            _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
+            yield return new WaitForSeconds(_moveBackAfterAttackTime);
 
-        // //attack done
-        _currentState = EVineState.none;
-        StartMovementAudio();
+            // //attack done
+            _currentState = EVineState.none;
+            StartMovementAudio();
+        }
+        
     }
 
     /// <summary>
@@ -244,7 +249,7 @@ public class ProceduralVine : MonoBehaviour
     /// <param name="collider"></param>
     private void OnTriggerStay(Collider collider)
     {
-        if(IsColliderPlayer(collider) && _currentState != EVineState.attacking && _currentAttackCD <= 0 && _isAppeared)
+        if(IsColliderPlayer(collider) && _currentState != EVineState.attacking && _currentState != EVineState.retracting && _currentAttackCD <= 0 && _isAppeared)
         {
             //start attack
             StartCoroutine(Attack(collider.transform.position));
