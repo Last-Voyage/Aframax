@@ -8,6 +8,7 @@
 *****************************************************************************/
 using UnityEngine;
 using FMOD.Studio;
+using FMODUnity;
 
 /// <summary>
 /// This class controls the group of chasing vines
@@ -101,7 +102,7 @@ public class ChaseVineGroup : MonoBehaviour
         }
 
         _chaseEventInstance = RuntimeSfxManager.Instance.
-            CreateInstanceFromReference(FmodSfxEvents.Instance.ChaseSequenceLoop, _chaseSequenceVines[0].Head.gameObject);
+            CreateInstanceFromReference(FmodSfxEvents.Instance.ChaseSequenceLoop, _chaseSequenceVines[0]._chaseAudioSource.gameObject);
     }
 
     /// <summary>
@@ -113,7 +114,7 @@ public class ChaseVineGroup : MonoBehaviour
         {
             //Play the start audio
             RuntimeSfxManager.APlayOneShotSfx?
-                .Invoke(FmodSfxEvents.Instance.ChaseSequenceStart, _chaseSequenceVines[0].Head.transform.position);
+                .Invoke(FmodSfxEvents.Instance.ChaseSequenceStart, _chaseSequenceVines[0]._chaseAudioSource.transform.position);
         }
 
         if (!_chaseEventInstance.isValid())
@@ -123,6 +124,7 @@ public class ChaseVineGroup : MonoBehaviour
 
         //Play the looping audio
         RuntimeSfxManager.Instance.FadeInLoopingOneShot(_chaseEventInstance, FmodSfxEvents.Instance.ChaseLoopFadeInTime);
+        RuntimeManager.AttachInstanceToGameObject(_chaseEventInstance, _chaseSequenceVines[0]._chaseAudioSource.gameObject.transform);
     }
 
     /// <summary>
