@@ -136,6 +136,7 @@ public class PlayerCollision : MonoBehaviour
         if (contact.gameObject.TryGetComponent(out SavePointTrigger savePlayerTrigger))
         {
             savePlayerTrigger.PlayerContact();
+            SaveManager.Instance.SaveText();
         }
     }
 
