@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       AframaxSceneManager.cs
 // Author:          Ryan Swanson
-// Contributor:     Jeremiah Peters
+// Contributor:     Jeremiah Peters, Nick Rice
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides the framework to be used by the core managers
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Provides the functionality for scenes to be loaded
@@ -24,7 +25,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     [field: SerializeField] public int MainMenuSceneIndex { get; private set; }
 
-    [field: SerializeField] public int GameplaySceneIndex { get; private set; }
+    [field: SerializeField] public int BoatSceneIndex { get; private set; }
+    
+    [field: SerializeField] public int MazeSceneIndex { get; private set; }
 
     [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
 
@@ -77,10 +80,34 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <returns> True if currently in a game scene </returns>
     public bool IsGameScene()
     {
-        return !(SceneManager.GetActiveScene().buildIndex == MainMenuSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == DeathScreenSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == EndScreenSceneIndex ||
-               SceneManager.GetActiveScene().buildIndex == SettingsSceneIndex);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        return !(currentSceneIndex == MainMenuSceneIndex ||
+               currentSceneIndex == DeathScreenSceneIndex ||
+               currentSceneIndex == EndScreenSceneIndex ||
+               currentSceneIndex == SettingsSceneIndex ||
+               currentSceneIndex == MazeSceneIndex);
+    }
+
+    /// <summary>
+    /// Checks if you are currently above deck
+    /// </summary>
+    /// <returns> True if in an above deck scene </returns>
+    public bool IsAboveDeck()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        return (currentSceneIndex == BoatSceneIndex);
+    }
+
+    /// <summary>
+    /// Checks if you are currently below deck
+    /// </summary>
+    /// <returns> True if in a below deck scene </returns>
+    public bool IsBelowDeck()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        return (currentSceneIndex == MazeSceneIndex);
     }
 
     /// <summary>
@@ -122,8 +149,16 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// </summary>
     public void LoadEndScene()
     {
-        InvokeEndOfGameScene();
+        OnInvokeEndOfGameScene();
         StartAsyncSceneLoadViaID(EndScreenSceneIndex, 0);
+    }
+
+    /// <summary>
+    /// Reloads the current scene
+    /// </summary>
+    public void ReloadCurrentScene()
+    {
+        StartAsyncSceneLoadViaID(SceneManager.GetActiveScene().buildIndex, 0);
     }
 
     /// <summary>
@@ -134,21 +169,27 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <returns></returns>
     private IEnumerator AsyncSceneLoadingProcess(int sceneID, SceneTransition sceneTransition)
     {
-        InvokeOnBeforeSceneChangeEvent();
+        OnInvokeBeforeSceneChangeEvent();
 
         if (_isGameplaySceneLoaded)
         {
-            InvokeOnLeavingGameplayScene();
+            OnInvokeLeavingGameplayScene();
         }
-        
-        //Starts loading the scene
-        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneID);
 
-        //Can start the starting scene transition animation here
-        //Will be implemented when scene transition work occurs
-        
+        //start the scene transition animation here
+        if (sceneTransition.SceneTransitionIntroAnimTrigger != "")
+        {
+            SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionIntroAnimTrigger);
+        }
+
+        //turn off buttons to prevent doing stuff during transition
+        GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
+
+        //Starts loading the scene
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneID);
 
         //Wait until the asynchronous scene fully loads
         //This exists to hide any screen freeze from loading an intense scene
@@ -157,10 +198,13 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             yield return null;
         }
 
-        InvokeOnSceneChangedEvent();
+        OnInvokeSceneChangedEvent();
 
-        //Can start the ending scene transition animation here
-        //Will be implemented when scene transition work occurs
+        //start the ending scene transition animation here
+        if (sceneTransition.SceneTransitionIntroAnimTrigger != "")
+        {
+            SceneTransitionBehaviour.Instance.PlayTransition(sceneTransition.SceneTransitionExitAnimTrigger);
+        }
 
         //Sets the coroutine to null to allow for new scene loading to occur
         _sceneLoadingCoroutine = null;
@@ -175,7 +219,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         UpdateLastScene();
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
-        InvokeOnSceneAdditiveLoadAddEvent();
+        OnInvokeSceneAdditiveLoadAddEvent();
     }
 
     /// <summary>
@@ -186,7 +230,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         SceneManager.UnloadSceneAsync(sceneID);
 
-        InvokeOnSceneAdditiveLoadRemoveEvent();
+        OnInvokeSceneAdditiveLoadRemoveEvent();
     }
 
     /// <summary>
@@ -218,7 +262,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes event for just before a scene changes
     /// </summary>
-    private void InvokeOnBeforeSceneChangeEvent()
+    private void OnInvokeBeforeSceneChangeEvent()
     {
         _onBeforeSceneChange?.Invoke();
     }
@@ -226,7 +270,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes event for after a scene changes
     /// </summary>
-    private void InvokeOnSceneChangedEvent()
+    private void OnInvokeSceneChangedEvent()
     {
         _onSceneChanged?.Invoke();
     }
@@ -235,7 +279,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// Invokes event for when a gameplay scene is loaded
     /// A gameplay scene is a scene with gameplay managers
     /// </summary>
-    public void InvokeOnGameplaySceneLoaded()
+    public void OnInvokeGameplaySceneLoaded()
     {
         _onGameplaySceneLoaded?.Invoke();
     }
@@ -243,7 +287,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes event for when leaving a gameplay scene
     /// </summary>
-    public void InvokeOnLeavingGameplayScene()
+    public void OnInvokeLeavingGameplayScene()
     {
         _onLeavingGameplayScene?.Invoke();
     }
@@ -251,7 +295,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes an event for when a scene is additively loaded
     /// </summary>
-    private void InvokeOnSceneAdditiveLoadAddEvent()
+    private void OnInvokeSceneAdditiveLoadAddEvent()
     {
         _onAdditiveLoadAddedEvent?.Invoke();
     }
@@ -259,7 +303,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// Invokes an event for when an additively loaded scene is removed
     /// </summary>
-    private void InvokeOnSceneAdditiveLoadRemoveEvent()
+    private void OnInvokeSceneAdditiveLoadRemoveEvent()
     {
         _onAdditiveLoadRemovedEvent?.Invoke();
     }
@@ -267,7 +311,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <summary>
     /// For Boss Attacks Act System to end the game
     /// </summary>
-    public void InvokeEndOfGameScene()
+    public void OnInvokeEndOfGameScene()
     {
         _onEndOfGameScene?.Invoke();
     }
@@ -302,8 +346,8 @@ public struct SceneTransition
     /// Strings for animation triggers
     /// </summary>
     [Space]
-    [SerializeField] private string _sceneTransitionIntroAnimTrigger;
-    [SerializeField] private string _sceneTransitionExitAnimTrigger;
+    public string SceneTransitionIntroAnimTrigger;
+    public string SceneTransitionExitAnimTrigger;
 
     #region Getters
     public string GetSceneTransitionName() => _sceneTransitionName;

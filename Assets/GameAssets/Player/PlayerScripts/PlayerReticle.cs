@@ -1,10 +1,12 @@
 /*****************************************************************************
 // File Name :         PlayerReticle.cs
 // Author :            Adam Garwacki
-// Contributors:       David Henvick
+// Contributors:       David Henvick, Ryan Swanson
 // Creation Date :     10/27/2024
 //
-// Brief Description : Allows for dynamic reticle control based on inputs.
+// Brief Description : Allows a reticle scope to be displayed and controlled
+//                     by the player focusing the harpoon gun. Also displays
+//                     ammo icons representing the player's stock and max.
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -17,18 +19,29 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerReticle : MonoBehaviour
 {
-    [Tooltip("Reticle color while unfocused. Should be less prominent than the focused color.")]
+    [Tooltip("Reticle color while unfocused. Also ammo icons' colors while the player lacks them.")]
     [SerializeField] private Color _unfocusedColor;
-    [Tooltip("Reticle color while focused. Should be more prominent than the unfocused color.")]
+    [Tooltip("Reticle color while focused. Also ammo icons' colors while they are stocked.")]
     [SerializeField] private Color _focusedColor;
+    [Tooltip("Ammo icon color while the player is fully out of ammo.")]
+    [SerializeField] private Color _outOfAmmoIconColor;
 
     [Space]
 
     [Tooltip("The minimum size of the reticle scope. Higher numbers increase visibility.")]
     [SerializeField] private float _minScopeSize;
-
     [Tooltip("How much bigger the outer ring of the reticle is compared to the inner, dynamic one.")]
     [SerializeField] private float _scopePadding;
+
+    [Space]
+
+    [Tooltip("Prefab hosting a sprite for ammo icons. Will change colors to match the scope's sprite.")]
+    [SerializeField] private GameObject _harpoonIcon;
+    [Tooltip("The Y position of ammo icons on the screen. Between 0 and 1: 0 is bottom of screen, 1 is top.")]
+    [SerializeField] private float _ammoIconYPosition;
+    [Tooltip("How much horizontal spacing exists between each ammo icon. Use a decimal as percentage of screen.")]
+    [SerializeField] private float _ammoIconXSpacing;
+
 
     [Tooltip("The circle showing the potential deviation of harpoon shots")]
     private GameObject _reticleScope;
@@ -41,7 +54,11 @@ public class PlayerReticle : MonoBehaviour
     private Image _frameImage;
     private Image _scopeImage;
 
+    private List<Image> _ammoIconList = new();
+
     private float _newReticleSize = 0;
+    private float _gunMaxAmmo;
+
     [Tooltip("Scales reticle assets in relation to reticle inaccuracy. Adjusting this leads to inaccurate shown aim.")]
     private readonly float _maxScopeSize = 1000;
     private readonly float _scopeScalar = 1000;
@@ -56,6 +73,8 @@ public class PlayerReticle : MonoBehaviour
         ObtainReferences();
 
         InitializeReticle();
+
+        InitializeAmmoDisplay();
 
         _isFocusChanging = false;
     }
@@ -90,11 +109,16 @@ public class PlayerReticle : MonoBehaviour
         }
     }
 
-        public void ReticleFire()
+    /// <summary>
+    /// Resets the reticle to its original size once a harpoon is fired.
+    /// </summary>
+    public void ReticleFire()
     {
         _newReticleSize = _maxScopeSize;
         AdjustReticleSize();
         AdjustReticleAppearance();
+
+        // Maybe refresh the ammo icons here?
     }
 
     /// <summary>
@@ -111,6 +135,8 @@ public class PlayerReticle : MonoBehaviour
 
         _frameImage = gameObject.GetComponent<Image>();
         _scopeImage = _reticleScope.GetComponent<Image>();
+
+        _gunMaxAmmo = _harpoonGunScript.GetMaxAmmo();
 
         gameObject.GetComponent<Image>().color = _unfocusedColor;
     }
@@ -130,6 +156,26 @@ public class PlayerReticle : MonoBehaviour
         _outerRingRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize + _scopePadding, _minScopeSize, _maxScopeSize));
+    }
+
+    /// <summary>
+    /// Initialize ammo icons for each individual harpoon the player can possibly hold.
+    /// </summary>
+    private void InitializeAmmoDisplay()
+    {
+        Camera cam = Camera.main;
+
+        // Initializes offset and ensures all icons will be horizontally centered on the screen
+        float iconPlaceOffset = 0.5f - (_ammoIconXSpacing * _gunMaxAmmo / 2) + (_ammoIconXSpacing / 2);
+        // Generates icons until the max ammo count is represented
+        for (int i = 0; i < _gunMaxAmmo; i++)
+        {
+            GameObject newIcon = Instantiate(_harpoonIcon, gameObject.transform);
+            newIcon.GetComponent<RectTransform>().position = cam.ViewportToScreenPoint(new(iconPlaceOffset, _ammoIconYPosition));
+            newIcon.GetComponent<Image>().color = _focusedColor;
+            iconPlaceOffset += _ammoIconXSpacing;
+            _ammoIconList.Add(newIcon.GetComponent<Image>());
+        }
     }
 
     /// <summary>
@@ -170,4 +216,70 @@ public class PlayerReticle : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// Unfocuses the ammo icon for the most recent harpoon fired.
+    /// </summary>
+    public void UpdateAmmoDisplay()
+    {
+        switch (_harpoonGunScript.GetReserveAmmo())
+        {
+            case 0:
+                OutOfAmmoIconUpdate();
+                break;
+            default:
+                _ammoIconList[_harpoonGunScript.GetReserveAmmo()].color = _unfocusedColor;
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// Updates ammo icons to a new color when the player has no ammo left.
+    /// </summary>
+    private void OutOfAmmoIconUpdate()
+    {
+        foreach(Image icon in _ammoIconList)
+        {
+            icon.color = _outOfAmmoIconColor;
+        }
+        
+    }
+
+    /// <summary>
+    /// Visually shows all appropriate ammo icons as active.
+    /// </summary>
+    public void RestockAmmoIcons()
+    {
+        // As this function is called after reloading we don't need it running twice at the same time
+        // Also prevents an error that can occur if reloading at the same time as restocking
+        if (_harpoonGunScript.GetHarpoonFiringState() == HarpoonGun.EHarpoonFiringState.Reloading)
+        {
+            return;
+        }
+
+        int i;
+        for (i = 0; i < _harpoonGunScript.GetReserveAmmo() + 1; i++)
+        {
+            _ammoIconList[i].color = _focusedColor;
+        }
+
+        while (i < _gunMaxAmmo)
+        {
+            _ammoIconList[i].color = _unfocusedColor;
+            i++;
+        }
+    }
+
+    /// <summary>
+    /// Toggles all ammo icons on or off.
+    /// </summary>
+    public void ToggleAmmoIcons()
+    {
+        foreach (Image icon in _ammoIconList)
+        {
+            icon.enabled = !icon.enabled;
+        }
+    }
+
 }

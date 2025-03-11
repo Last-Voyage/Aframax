@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         GeneratorInteractable.cs
 // Author :            Ryan Swanson
-// Contributors:       Nick Rice
+// Contributors:       Nick Rice, Charlie Polonus
 // Creation Date :     11/14/24
 // 
 // Brief Description : Controls the functionality for the generator
@@ -14,11 +14,8 @@ using UnityEngine;
 /// <summary>
 /// Controls the functionality for the generator
 /// </summary>
-public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
+public class GeneratorInteractable : InventoryInteractableTrigger
 {
-    public bool CanGeneratorBeInteracted { get; set; }
-    public bool DoesRequireSpanner { get; set; }
-
     [Tooltip("Moves the sparks and smoke forwards, or elsewhere")]
     private readonly Vector3 _vfxDisplacement = Vector3.back;
     
@@ -27,7 +24,6 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void GeneratorStartsSmoking()
     {
-        
         VfxManager.Instance.GetPlumeSmokeVfx().PlayNextVfxInPool
             (transform.position + _vfxDisplacement, transform.rotation);
     }
@@ -41,18 +37,14 @@ public class GeneratorInteractable : MonoBehaviour, IPlayerInteractable
             (transform.position + _vfxDisplacement, transform.rotation);
     }
 
-    public void OnInteractedByPlayer()
+    /// <summary>
+    /// This function plays the audio when repaired
+    /// </summary>
+    public void GeneratorRepair()
     {
-        if(!CanGeneratorBeInteracted)
-        {
-            return;
-        }
-
-        if(DoesRequireSpanner && !PlayerInventory.Instance.DoesPlayerHaveSpanner)
-        {
-            return;
-        }
-
-        StoryManager.Instance.ProgressNextStoryBeat();
+        RuntimeSfxManager.APlayOneShotSfxAttached?.Invoke(FmodSfxEvents.Instance.GeneratorFixed, gameObject);
     }
+
+    /// Note for future engineers: The method OnInteractedByPlayer() still exists, it just runs the base script
+    /// InventoryInteractableTrigger, if you want to override it you still can
 }

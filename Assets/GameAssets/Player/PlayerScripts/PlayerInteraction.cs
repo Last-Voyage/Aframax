@@ -1,6 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         PlayerInteraction.cs
 // Author :            Alex Kalscheur
+// Contributers :      Charlie Polonus
 // Creation Date :     11/10/24
 // 
 // Brief Description : Controls the interaction system on the player side
@@ -22,7 +23,7 @@ public class PlayerInteraction : MonoBehaviour
     [Tooltip("Ray that is cast from camera to find interactable objects")]
     private Ray _ray;
     [Tooltip("UI object that will be toggled when you can or cannot interact with an object")]
-    private InteractableUI _interactableUI;
+    private InteractableUi _interactableUi;
 
     //Input
     private PlayerInput _playerInput;
@@ -34,7 +35,7 @@ public class PlayerInteraction : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _interactableUI = FindObjectOfType<InteractableUI>();
+        _interactableUi = FindObjectOfType<InteractableUi>();
     }
 
     /// <summary>
@@ -57,7 +58,7 @@ public class PlayerInteraction : MonoBehaviour
         if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach) && 
             hit.collider.gameObject.TryGetComponent(out IPlayerInteractable interactableComponent))
         {
-            _interactableUI.SetInteractUIStatus(true);
+            _interactableUi.SetInteractUIStatus(true);
             if (_interactInput.WasPerformedThisFrame())
             {
                 interactableComponent.OnInteractedByPlayer();
@@ -65,7 +66,25 @@ public class PlayerInteraction : MonoBehaviour
         }
         else
         {
-            _interactableUI.SetInteractUIStatus(false);
+            _interactableUi.SetInteractUIStatus(false);
+        }
+    }
+
+    /// <summary>
+    /// Checks to see if the player is currently able to interact with something
+    /// </summary>
+    /// <returns>The object the player is currently able to interact with</returns>
+    public GameObject CurrentInteractable()
+    {
+        SetRaycast();
+        if (Physics.Raycast(_ray, out RaycastHit hit, _maxReach) &&
+            hit.collider.gameObject.TryGetComponent(out IPlayerInteractable interactableComponent))
+        {
+            return hit.collider.gameObject;
+        }
+        else
+        {
+            return null;
         }
     }
 

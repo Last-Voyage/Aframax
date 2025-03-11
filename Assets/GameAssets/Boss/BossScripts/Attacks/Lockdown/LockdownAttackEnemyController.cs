@@ -31,10 +31,10 @@ public struct PatrolLocation
 
     public Transform[] WaypointTransforms { get; private set; }
 
-    public PatrolLocation(Transform patroSpawnPoint, Transform coreSpawnPoint,
+    public PatrolLocation(Transform patrolSpawnPoint, Transform coreSpawnPoint,
         LockdownAttackPatrolRoom enemyRoom, Transform[] waypoints)
     {
-        PatrolSpawnPoint = patroSpawnPoint;
+        PatrolSpawnPoint = patrolSpawnPoint;
         CoreSpawnPoint = coreSpawnPoint;
         EnemyRoom = enemyRoom;
         WaypointTransforms = waypoints;
@@ -124,8 +124,9 @@ public class LockdownAttackEnemyController : MonoBehaviour
         _instantiatedCoreEnemy = 
             Instantiate(_coreEnemyPrefab, _patrolLocation.CoreSpawnPoint.position, 
             Quaternion.identity,transform.parent);
-        AmbienceManager.APlayAmbienceOnObject?.Invoke(FmodAmbienceEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
-        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);
+        PersistentAudioManager.APlayPersistentAudioOnObject?.Invoke(FmodPersistentAudioEvents.Instance.LimbIdle, _instantiatedCoreEnemy);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(
+            FmodSfxEvents.Instance.LimbSpawn, _patrolLocation.CoreSpawnPoint.position);
 
         //Gets the weak point handler from the core
         if (!_instantiatedCoreEnemy.TryGetComponent(out WeakPointHandler weakPointHandler))
@@ -144,7 +145,7 @@ public class LockdownAttackEnemyController : MonoBehaviour
     {
         //Invokes event for core destruction and removes its listeners
         ForceDestroy();
-        InvokeOnCoreDestroyed();
+        OnInvokeCoreDestroyed();
     }
 
     /// <summary>
@@ -160,7 +161,7 @@ public class LockdownAttackEnemyController : MonoBehaviour
     }
 
     #region Events
-    private void InvokeOnCoreDestroyed()
+    private void OnInvokeCoreDestroyed()
     {
         _onCoreDestroyed?.Invoke();
     }

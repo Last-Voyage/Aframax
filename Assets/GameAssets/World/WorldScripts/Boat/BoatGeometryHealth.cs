@@ -27,7 +27,7 @@ public class BoatGeometryHealth : BaseHealth
         {
             if (damageSource is HarpoonDamage)
             {
-                PlayOnHitSFX();
+                PlayOnHitSfx();
             }
         }
     }
@@ -35,8 +35,8 @@ public class BoatGeometryHealth : BaseHealth
     /// <summary>
     /// Plays the onHit sfx if hit by the harpoon
     /// </summary>
-    private void PlayOnHitSFX()
+    private void PlayOnHitSfx()
     {
-        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.HarpoonHitBoat, transform.position);
+        RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance.HarpoonHitMetal, transform.position);
     }
 }

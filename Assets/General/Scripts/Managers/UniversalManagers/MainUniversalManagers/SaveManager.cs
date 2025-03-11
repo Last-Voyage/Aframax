@@ -1,14 +1,18 @@
 /******************************************************************************
 // File Name:       SaveManager.cs
 // Author:          Ryan Swanson
+// Contributor:     Nick Rice
 // Creation Date:   September 14, 2024
 //
 // Description:     Contains the functionality to set up and get access to save data
 ******************************************************************************/
 
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using UnityEngine.Events;
+using FMOD.Studio;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -20,6 +24,9 @@ public class SaveManager : MainUniversalManagerFramework
     private string _saveDataFilePath;
 
     public static SaveManager Instance;
+
+    private readonly UnityEvent _onNewCheckpoint = new();
+    private readonly UnityEvent _onLoadSaveData = new();
 
     /// <summary>
     /// Sets the path to create the save file
@@ -47,13 +54,45 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void StartingValues()
     {
-        
+        GameplayStartingValues();
+
+        SettingsStartingValues();
+    }
+
+    /// <summary>
+    /// Sets the values of the gameplay related save data
+    /// </summary>
+    private void GameplayStartingValues()
+    {
+        _gameSaveData.CurrentCheckpoint = 0;
+
+        _gameSaveData.SetPlayerInventory(new());
+
+        _gameSaveData.CurrentSceneIndex = 0;
+
+        // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
+        _gameSaveData.SetCurrentSceneIndex(1);
+    }
+
+    /// <summary>
+    /// Sets the values of the settings related save data
+    /// </summary>
+    private void SettingsStartingValues()
+    {
+        GetGameSaveData().CurrentMasterVolume = 0.5f;
+        GetGameSaveData().CurrentSfxVolume = 0.5f;
+        GetGameSaveData().CurrentAmbienceVolume = 0.5f;
+        GetGameSaveData().CurrentVoiceVolume = 0.5f;
+        GetGameSaveData().CurrentMusicVolume = 0.5f;
+
+        // We'll go ahead and reset that brightness value too
+        Instance.GetGameSaveData().SetBrightness(0.5f);
     }
 
     /// <summary>
     /// Writes all variables in the Game Save Data class into Json
     /// </summary>
-    private void SaveText()
+    public void SaveText()
     {
         //Converts the Game Save Data class into a string
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
@@ -73,6 +112,8 @@ public class SaveManager : MainUniversalManagerFramework
             var json = File.ReadAllText(_saveDataFilePath + "Data.json");
             //Converts the string into the Game Save Data class
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
+
+            LoadInitialVolumes();
         }
         else
         {
@@ -81,6 +122,18 @@ public class SaveManager : MainUniversalManagerFramework
             //Saves the initial values
             SaveText();
         }
+    }
+
+    /// <summary>
+    /// Loads the volumes to what they should be on start
+    /// </summary>
+    private void LoadInitialVolumes()
+    {
+        FMODUnity.RuntimeManager.GetVCA("vca:/MasterVCA").setVolume(GetGameSaveData().CurrentMasterVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/SFXVCA").setVolume(GetGameSaveData().CurrentSfxVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/AmbianceVCA").setVolume(GetGameSaveData().CurrentAmbienceVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/DialogueVCA").setVolume(GetGameSaveData().CurrentVoiceVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/MusicVCA").setVolume(GetGameSaveData().CurrentMusicVolume);
     }
 
     /// <summary>
@@ -96,6 +149,34 @@ public class SaveManager : MainUniversalManagerFramework
 
         //Saves the changes into the text file
         SaveText();
+    }
+
+    /// <summary>
+    /// Resets all variables relating to the gameplay
+    /// Doesn't reset settings data
+    /// </summary>
+    public void ResetGameplaySaveData()
+    {
+        GameplayStartingValues();
+
+        //Saves the changes into the text file
+        SaveText();
+    }
+
+    /// <summary>
+    /// When the player reaches a checkpoint the data will be saved
+    /// </summary>
+    private void OnEnable()
+    {
+        GetOnNewCheckpoint()?.AddListener(SaveText);
+    }
+
+    /// <summary>
+    /// Removes the listener, preventing a memory leak
+    /// </summary>
+    private void OnDisable()
+    {
+        GetOnNewCheckpoint()?.RemoveListener(SaveText);
     }
 
     #region BaseManager
@@ -121,5 +202,8 @@ public class SaveManager : MainUniversalManagerFramework
 
     #region Getters
     public GameSaveData GetGameSaveData() => _gameSaveData;
+    public UnityEvent GetOnNewCheckpoint() => _onNewCheckpoint;
+    public UnityEvent GetOnLoadSaveData() => _onLoadSaveData;
+
     #endregion
 }

@@ -7,8 +7,6 @@
 // Brief Description : Controls the functionality for collisions
 *****************************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -16,19 +14,29 @@ using UnityEngine;
 /// </summary>
 public class PlayerCollision : MonoBehaviour
 {
-    private const string KILLBOX_TAG = "Killbox";
+    private const string _KILLBOX_TAG = "Killbox";
 
     #region Trigger Contact
 
     /// <summary>
     /// Checks for the start of trigger contact
     /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
+    /// <param name="contact"> The collider we just hit</param>
+    private void OnTriggerEnter(Collider contact)
     {
-        CheckForKillBoxContact(other.gameObject);
+        CheckForKillBoxContact(contact.gameObject);
 
-        CheckForEnemyContact(other.gameObject);
+        CheckForEnemyContact(contact.gameObject);
+
+        CheckForStartVineChaseTrigger(contact);
+
+        CheckForChaseDamageTrigger(contact);
+
+        CheckForMusicTrigger(contact);
+
+        CheckForSavePointTrigger(contact);
+
+        CheckForAppearTrigger(contact);
     }
 
     #endregion
@@ -53,9 +61,9 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="other"> The object that we are checking for if it is a killbox </param>
     private void CheckForKillBoxContact(GameObject contact)
     {
-        if(contact.CompareTag(KILLBOX_TAG))
+        if(contact.CompareTag(_KILLBOX_TAG))
         {
-            PlayerManager.Instance.InvokeOnPlayerDeath();
+            PlayerManager.Instance.OnInvokePlayerDeath();
         }
     }
 
@@ -67,6 +75,85 @@ public class PlayerCollision : MonoBehaviour
     {
         //TODO: Implement later
     }
+
+    /// <summary>
+    /// Checks for trigger to activate chase sequence
+    /// </summary>
+    /// <param name="contact"></param>
+    private void CheckForStartVineChaseTrigger(Collider contact)
+    {
+        if(contact.CompareTag("ChaseTrigger"))
+        {
+            ChaseVineGroup chaseVineGroup = contact.GetComponent<ChaseVineGroup>();
+            if(chaseVineGroup != null && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
+            {
+                chaseVineGroup.ActivateThisGroupOfVines();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks for the trigger to damage player in chase sequence
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForChaseDamageTrigger(Collider contact)
+    {
+        if(contact.CompareTag("ChaseDamageTrigger"))
+        {
+            ChaseVineGroup chaseVineGroup = contact.GetComponentInParent<ChaseVineGroup>();
+            if(chaseVineGroup != null)
+            {
+                if(chaseVineGroup.IsSupposedToKillInstant())
+                {
+                    PlayerManager.Instance.OnInvokePlayerDeath();
+                }
+                else
+                {
+                    PlayerFunctionalityCore.Instance.GetPlayerHealth().TakeDamage(chaseVineGroup.GetPlayerDamageAmount(), null);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks for the trigger to change the music
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForMusicTrigger(Collider contact)
+    {
+        if(contact.gameObject.TryGetComponent(out MusicSwapPlayerTrigger musicSwapPlayerTrigger))
+        {
+            musicSwapPlayerTrigger.PlayerContact();
+        }
+    }
     
+    /// <summary>
+    /// Checks for the trigger to save the game
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForSavePointTrigger(Collider contact)
+    {
+        if (contact.gameObject.TryGetComponent(out SavePointTrigger savePlayerTrigger))
+        {
+            savePlayerTrigger.PlayerContact();
+        }
+    }
+
+    private void CheckForAppearTrigger(Collider contact)
+    {
+        if(contact.CompareTag("AppearTrigger"))
+        {
+            //the component should always be on the 3rd child of the vine base
+            if (contact.transform.parent.GetChild(2).TryGetComponent(out ProceduralVine proceduralVine))
+            {
+                if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
+                {
+                    proceduralVine.StartAppear();
+                }
+                
+            }
+        }
+    }
+
     #endregion
 }

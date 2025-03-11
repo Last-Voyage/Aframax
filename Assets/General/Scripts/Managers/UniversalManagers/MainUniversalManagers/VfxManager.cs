@@ -8,6 +8,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// How the vfx duration is set
@@ -31,13 +32,25 @@ public class VfxManager : MainUniversalManagerFramework
 
     [SerializeField] private SpecificVisualEffect[] _allVfxInGame;
 
+    [SerializeField] private HarpoonVisualAudioEffectsBank[] _visualAudioEffectBank;
+
     //Personally don't like to have to use ids. Let me know if you have a better solution
-    private const int MUZZLE_SMOKE_ID = 0;
-    private const int ENEMY_BLOOD_ID = 1;
-    private const int ENEMY_ATTACK_WARNING_ID = 2;
-    private const int WOODEN_SPARKS_ID = 3;
-    private const int METAL_SPARKS_ID = 4;
-    private const int PLUME_SMOKE_ID = 5;
+    private const int _MUZZLE_SMOKE_ID = 0;
+    private const int _ENEMY_BLOOD_ID = 1;
+    private const int _ENEMY_ATTACK_WARNING_ID = 2;
+    private const int _WOODEN_SPARKS_ID = 3;
+    private const int _METAL_SPARKS_ID = 4;
+    private const int _PLUME_SMOKE_ID = 5;
+
+    /// <summary>
+    /// Triggers the Light Shift Horror Moment
+    /// </summary>
+    private static readonly UnityEvent _onLightShift = new();
+
+    /// <summary>
+    /// Triggers light flickering for the Slytherin Horror Moment
+    /// </summary>
+    private static readonly UnityEvent _onLightFlicker = new();
 
     /// <summary>
     /// Sets up the object pool of all vfx
@@ -58,7 +71,7 @@ public class VfxManager : MainUniversalManagerFramework
     public void CreateVisualEffectsInPool(SpecificVisualEffect specificVisualEffect)
     {
         //Spawn the vfx
-        GameObject newVfx = Instantiate(specificVisualEffect.GetVFXObject());
+        GameObject newVfx = Instantiate(specificVisualEffect.GetVfxObject());
         newVfx.SetActive(false);
         ObjectPoolingParent.Instance.InitiallyAddObjectToPool(newVfx);
 
@@ -131,16 +144,45 @@ public class VfxManager : MainUniversalManagerFramework
     }
     #endregion
 
+    #region Events
+
+    /// <summary>
+    /// Invokes the _onLightShift event
+    /// </summary>
+    public void InvokeOnLightShift()
+    {
+        _onLightShift?.Invoke();
+    }
+
+    public void InvokeOnLightFlicker()
+    {
+        _onLightFlicker?.Invoke();
+    }
+
+    #endregion
+
     #region Getters
 
     #region GetVfx
-    public SpecificVisualEffect GetMuzzleSmokeVfx() => _allVfxInGame[MUZZLE_SMOKE_ID];
-    public SpecificVisualEffect GetEnemyBloodVfx() => _allVfxInGame[ENEMY_BLOOD_ID];
-    public SpecificVisualEffect GetEnemyAttackWarningVfx() => _allVfxInGame[ENEMY_ATTACK_WARNING_ID];
-    public SpecificVisualEffect GetMetalSparksVfx() => _allVfxInGame[METAL_SPARKS_ID];
-    public SpecificVisualEffect GetWoodenSparksVfx() => _allVfxInGame[WOODEN_SPARKS_ID];
-    public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[PLUME_SMOKE_ID];
+    public SpecificVisualEffect GetMuzzleSmokeVfx() => _allVfxInGame[_MUZZLE_SMOKE_ID];
+    public SpecificVisualEffect GetEnemyBloodVfx() => _allVfxInGame[_ENEMY_BLOOD_ID];
+    public SpecificVisualEffect GetEnemyAttackWarningVfx() => _allVfxInGame[_ENEMY_ATTACK_WARNING_ID];
+    public SpecificVisualEffect GetMetalSparksVfx() => _allVfxInGame[_METAL_SPARKS_ID];
+    public SpecificVisualEffect GetWoodenSparksVfx() => _allVfxInGame[_WOODEN_SPARKS_ID];
+    public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[_PLUME_SMOKE_ID];
+
+    public HarpoonVisualAudioEffectsBank[] GetHarpoonVisualArray() => _visualAudioEffectBank;
     #endregion
+
+    /// <summary>
+    /// Returns the light shift event
+    /// </summary>
+    public UnityEvent GetOnLightShiftEvent() => _onLightShift;
+
+    /// <summary>
+    /// Returns the light flicker event
+    /// </summary>
+    public UnityEvent GetOnLightFlickerEvent() => _onLightFlicker;
 
     #endregion
 }

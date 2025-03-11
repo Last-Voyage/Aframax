@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// functionality for moving the camera on the title screen
@@ -22,6 +23,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [SerializeField] private Canvas _sceneCanvas;
 
+    [SerializeField] private EventSystem _setUpPlayerControls;
+
     private PlayerInputMap _playerInputControls;
 
     private bool _hasScrollingStarted = false;
@@ -29,7 +32,8 @@ public class TitleScreenScrolling : MonoBehaviour
     private void Awake()
     {
         _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.EnterTitleScreen.performed += ctx => StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed));
+        _playerInputControls.Player.EnterTitleScreen.performed +=
+            ctx => StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed));
         if (_screenScrollSpeed == 0)
         {
             Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
@@ -49,13 +53,16 @@ public class TitleScreenScrolling : MonoBehaviour
             _hasScrollingStarted = true;
             while (transform.position != destination)
             {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, transform.position.z), 
+                transform.position = Vector3.MoveTowards(
+                    transform.position, new Vector3(destination.x, destination.y, transform.position.z), 
                     scrollSpeed * (_sceneCanvas.renderingDisplaySize.x/100) * Time.deltaTime);
 
-                //for whatever reason (probably rounding bs) this coroutine doesn't actually stop itself properly when done
+                //for whatever reason (probably rounding bs) this coroutine doesn't actually stop itself
+                //properly when done
                 //this fixes that
                 if (Mathf.Approximately(transform.position.y, destination.y))
                 {
+                    _setUpPlayerControls.gameObject.SetActive(true);
                     yield break;
                 }
                 

@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       CameraManager.cs
 // Author:          Ryan Swanson
+// Contributors:    Andrew Stapay
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides functionality to how the camera moves and interacts.
@@ -21,6 +22,11 @@ public class CameraManager : MainGameplayManagerFramework
     /// </summary>
     private static readonly UnityEvent<bool> _onCameraMovementToggled = new();
 
+    /// <summary>
+    /// Moves the camera during jumpscares
+    /// </summary>
+    private static readonly UnityEvent _onJumpscare = new();
+
     #region Base Manager
     /// <summary>
     /// Establishes the instance for the camera manager
@@ -38,7 +44,7 @@ public class CameraManager : MainGameplayManagerFramework
     {
         base.SubscribeToEvents();
         //Disables camera movement on game pause
-        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(InvokeOnCameraMovementToggle);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(OnInvokeCameraMovementToggle);
     }
 
     /// <summary>
@@ -47,7 +53,7 @@ public class CameraManager : MainGameplayManagerFramework
     protected override void UnsubscribeToEvents()
     {
         base.UnsubscribeToEvents();
-        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(InvokeOnCameraMovementToggle);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(OnInvokeCameraMovementToggle);
     }
     
     #endregion
@@ -58,9 +64,17 @@ public class CameraManager : MainGameplayManagerFramework
     /// Invokes the _onCameraMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    private void InvokeOnCameraMovementToggle(bool toggle)
+    public void OnInvokeCameraMovementToggle(bool toggle)
     {
         _onCameraMovementToggled?.Invoke(!toggle);
+    }
+
+    /// <summary>
+    /// Invokes the _onJumpscare event
+    /// </summary>
+    public void InvokeOnJumpscare()
+    {
+        _onJumpscare?.Invoke();
     }
     
     #endregion
@@ -71,6 +85,11 @@ public class CameraManager : MainGameplayManagerFramework
     /// Getter for the _onCameraMovementToggled event
     /// </summary>
     public UnityEvent<bool> GetOnCameraMovementToggleEvent() => _onCameraMovementToggled;
+
+    /// <summary>
+    /// Getter for the _onJumpscare event
+    /// </summary>
+    public UnityEvent GetOnJumpscareEvent() => _onJumpscare;
     
     #endregion
 }

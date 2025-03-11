@@ -1,6 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerMovementController.cs
 // Author:          Andrew Stapay, Miles Rogers
+// Contributers:    Charlie Polonus
 // Creation Date:   September 15, 2024
 //
 // Description:     Implementation of the basic movement for a player character.
@@ -45,12 +46,14 @@ public class PlayerMovementController : MonoBehaviour
     private float _accelerationProgress = 0;
     private Coroutine _accelerationCoroutine;
     private Coroutine _deccelerationCoroutine;
+    private bool _isInputSubscribed;
 
     [Space]
     [Header("Focusing Movement")]
     [SerializeField] private float _focusSpeedSlowTime;
     [SerializeField] private float _unfocusSpeedSlowTime;
     [SerializeField] private AnimationCurve _focusMoveSpeedCurve;
+    [SerializeField] private float _maxFocusMoveSpeedRatio;
 
     private float _currentFocusMoveSpeedMultiplier = 1;
     private float _currentFocusMoveSpeedProgress = 0;
@@ -75,7 +78,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private PlayerInput _playerInput;
     private InputAction _movementInput;
-    private const string MOVEMENT_INPUT_NAME = "Movement";
+    private const string _MOVEMENT_INPUT_NAME = "Movement";
+
+    private Vector2 _playerMovementPartial;
 
     private Rigidbody _playerRigidBody;
 
@@ -83,6 +88,15 @@ public class PlayerMovementController : MonoBehaviour
     /// Movement coroutine related variables
     /// </summary>
     private Coroutine _movementCoroutine;
+
+    #region dev console
+    /// <summary>
+    /// returns the player speed
+    /// </summary>
+    public float GetPlayerSpeed() => _playerRigidBody.velocity.magnitude;
+    
+
+    #endregion
 
     #region Setup
     /// <summary>
@@ -120,13 +134,20 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
+        if (_isInputSubscribed)
+        {
+            return;
+        }
+
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
-        _movementInput = _playerInput.currentActionMap.FindAction(MOVEMENT_INPUT_NAME);
+        _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
 
         // Run the movement coroutine
         _movementCoroutine = StartCoroutine(ResolveMovement());
+
+        _isInputSubscribed = true;
     }
 
     /// <summary>
@@ -134,8 +155,13 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     public void UnsubscribeInput()
     {
+        if (!_isInputSubscribed)
+        {
+            return;
+        }
         _playerInput = null;
-        StopCoroutine(ResolveMovement());
+        StopCoroutine(_movementCoroutine);
+        _isInputSubscribed = false;
     }
     #endregion
 
@@ -192,6 +218,11 @@ public class PlayerMovementController : MonoBehaviour
     private void OnEnable()
     {
         SubscribeToEvents();
+
+        _movementInput.performed += ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.canceled += ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.performed += ctx => IsMoving = true;
+        _movementInput.canceled += ctx => IsMoving = false;
     }
 
     /// <summary>
@@ -201,6 +232,11 @@ public class PlayerMovementController : MonoBehaviour
     private void OnDisable()
     {
         UnsubscribeToEvents();
+
+        _movementInput.performed -= ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.canceled -= ctx => _playerMovementPartial = _movementInput.ReadValue<Vector2>();
+        _movementInput.performed -= ctx => IsMoving = true;
+        _movementInput.canceled -= ctx => IsMoving = false;
     }
     #endregion
 
@@ -249,13 +285,13 @@ public class PlayerMovementController : MonoBehaviour
     private Vector3 DirectionalInputMovement()
     {
         // Read the movement input
-        Vector2 moveDir = _movementInput.ReadValue<Vector2>();
+        //Vector2 moveDir = _movementInput.ReadValue<Vector2>();
 
         // transform.right and transform.forward are vectors that point
         // in certain directions in the world
         // By manipulating them, we can move the character
-        Vector3 newMovement = (_playerVisuals.right * moveDir.x +
-            _playerVisuals.forward * moveDir.y);
+        Vector3 newMovement = (_playerVisuals.right * _playerMovementPartial.x +
+            _playerVisuals.forward * _playerMovementPartial.y);
         
         if(IsGrounded)
         {
@@ -265,7 +301,7 @@ public class PlayerMovementController : MonoBehaviour
         }
         
         // Returns the movement direction times the speed and acceleration
-        return newMovement * _playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration;
+        return newMovement * (_playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration);
     }
     
     /// <summary>
@@ -290,23 +326,21 @@ public class PlayerMovementController : MonoBehaviour
         //Check for if the input was started
         if(_movementInput.WasPressedThisFrame())
         {
-            DirectionalInputStarted();
-            IsMoving = true;
+            DirectionalInputStarted(_movementInput);
         }
         //Check for if the input has ended
-        else if (_movementInput.WasReleasedThisFrame())
+        if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
-            IsMoving = false;
         }
     }
 
     /// <summary>
     /// Called when the player begins an input
     /// </summary>
-    private void DirectionalInputStarted()
+    private void DirectionalInputStarted(InputAction playerMovement)
     {
-        PlayerManager.Instance.InvokeOnMovementStartedEvent();
+        PlayerManager.Instance.OnInvokeMovementStartedEvent(playerMovement);
 
         StopAccelerationDeccelerationCoroutines();
 
@@ -318,7 +352,7 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void DirectionalInputStopped()
     {
-        PlayerManager.Instance.InvokeOnMovementEndedEvent();
+        PlayerManager.Instance.OnInvokeMovementEndedEvent();
 
         StopAccelerationDeccelerationCoroutines();
 
@@ -501,7 +535,11 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void CalculateCurrentFocusSpeedMultiplier()
     {
-        _currentFocusMoveSpeedMultiplier = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
+        // Calculate the lerp value between the non-focus and focused speed
+        float moveSpeedLerpValue = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
+
+        // Set the ratio value from 1 to the max speed ratio
+        _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 1 - moveSpeedLerpValue);
     }
 
     #endregion
@@ -509,6 +547,9 @@ public class PlayerMovementController : MonoBehaviour
     #endregion
 
     #region  Getters
+
+    // Getter for the current movement ratio
+    public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
     #endregion Getters
 }

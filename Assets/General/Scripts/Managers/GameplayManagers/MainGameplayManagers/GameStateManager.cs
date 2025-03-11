@@ -8,6 +8,7 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
+using UnityEngine;
 using Unity.VisualScripting;
 using UnityEngine.Events;
 
@@ -28,7 +29,7 @@ public class GameStateManager : MainGameplayManagerFramework
     private readonly UnityEvent _onGamePaused = new();
     private readonly UnityEvent _onGameUnpaused = new();
     
-    private readonly UnityEvent<ScriptableDialogueUI> _onNewDialogueChain = new();
+    private readonly UnityEvent<ScriptableDialogueUi> _onNewDialogueChain = new();
 
     /// <summary>
     /// Switches gameplay state 
@@ -56,16 +57,37 @@ public class GameStateManager : MainGameplayManagerFramework
         if(Instance == null)
         {
             Instance = this;
+            GetLocationState();
         }
         else
         {
             Destroy(this);  
         }
     }
-
     #endregion
 
+    /// <summary>
+    /// Determines if you are above or below deck
+    /// Changes the state and updates the footstep audio
+    /// </summary>
+    private void GetLocationState()
+    {
+        if (AframaxSceneManager.Instance.IsAboveDeck())
+        {
+            _currentGameplayState = EGameplayState.AboveDeck;
+        }
+        else if (AframaxSceneManager.Instance.IsBelowDeck())
+        {
+            _currentGameplayState = EGameplayState.BelowDeck;
+        }
+        RuntimeSfxManager.Instance.InitializeFootstepInstance();
+    }
+
     #region Getters
+    public bool IsPlayerAboveDeck()
+    {
+        return _currentGameplayState != EGameplayState.BelowDeck;
+    }
 
     public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
 
@@ -73,8 +95,7 @@ public class GameStateManager : MainGameplayManagerFramework
     public UnityEvent GetOnGamePaused() => _onGamePaused;
     public UnityEvent GetOnGameUnpaused() => _onGameUnpaused;
     
-    public UnityEvent<ScriptableDialogueUI> GetOnNewDialogueChain() => _onNewDialogueChain;
-
+    public UnityEvent<ScriptableDialogueUi> GetOnNewDialogueChain() => _onNewDialogueChain;
     #endregion
 }
 
@@ -83,5 +104,7 @@ public class GameStateManager : MainGameplayManagerFramework
 /// </summary>
 public enum EGameplayState
 {
-    TempState
-}
+    AboveDeck,
+    BelowDeck,
+    Ending
+};

@@ -128,7 +128,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0.5
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -138,6 +138,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _maxFocusMoveSpeedRatio: 0.3
   _groundedCheckLength: 0.2
   _walkableLayers:
     serializedVersion: 2
@@ -156,6 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   _iFrameDelayInSeconds: 3
+  _damageToTakeFromEnemy: 25
   _healthToStartHeartSfx: 0
   _healthToEndHeartSfx: 0
   _heartBeatRateSfx: 0
@@ -277,6 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e337c04816a5f40b0ccfc7f669f9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _allItems: []
 --- !u!1 &2581785293803075771
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,6 +293,10 @@ GameObject:
   - component: {fileID: 3697781239049282484}
   - component: {fileID: 7573169614060137600}
   - component: {fileID: 798902588594118983}
+  - component: {fileID: 1043067514979856355}
+  - component: {fileID: 417643722659837913}
+  - component: {fileID: 2329313409841057912}
+  - component: {fileID: 8865071389336690928}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -312,6 +319,7 @@ Transform:
   m_Children:
   - {fileID: 333117514302688926}
   - {fileID: 4974042138453322927}
+  - {fileID: 1747720261229169481}
   m_Father: {fileID: 1597342954707975798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6591845243418425275
@@ -366,6 +374,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerVisuals: {fileID: 3991142726110527397}
+  _fullyZoomedFOV: 45
+  _boatSwaySpeed: 5
+  _boatSwayIntensity: 0.6
+  _harpoonGun: {fileID: 5197215059468236605}
+  _movementSwaySpeed: 5
+  _movementSwayIntensity: 5
+  _jumpscareTime: 0.1
+  _jumpscareIntensity: 5
+  _harpoonFollowTime: 5
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +408,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attenuationObject: {fileID: 1822883443245373252}
+--- !u!114 &1043067514979856355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266df2a6f8a12694ba426d16ede3897b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &417643722659837913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c11265b855408d42af33d62691f5194, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ChannelMask: 1
+  m_Gain: 1
+  m_Use2DDistance: 0
+  m_UseLocalSpace: 1
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &2329313409841057912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7194dc27b9df64c8beca7482ee8e0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerIndex: -1
+  AutoEnableInputs: 1
+  XYAxis: {fileID: 6846761872953345231, guid: a9035e5084fec0e4a81fdaa78201ec2c, type: 3}
+  ZAxis: {fileID: 6846761872953345231, guid: a9035e5084fec0e4a81fdaa78201ec2c, type: 3}
+--- !u!114 &8865071389336690928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2581785293803075771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe5baa3f4a28f24eb390f8394645708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameplaySettingFilePath: /GameplaySettings.txt
 --- !u!1 &3991142726110527397
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,12 +531,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1747720261229169481}
+  m_Children: []
   m_Father: {fileID: 8080776813772587216}
   m_LocalEulerAnglesHint: {x: -89.42, y: 92.26, z: 0}
 --- !u!20 &3262127005595780260
@@ -523,8 +602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
+  m_RequiresDepthTextureOption: 1
+  m_RequiresOpaqueTextureOption: 1
   m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1
@@ -533,8 +612,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -583,11 +662,11 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
+  m_UpdateMethod: 0
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 2
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -614,7 +693,7 @@ GameObject:
   - component: {fileID: 8274869166659161662}
   - component: {fileID: 288499798510270292}
   - component: {fileID: 7802874666347178443}
-  - component: {fileID: 5918330844541764187}
+  - component: {fileID: 13971246309430680}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -665,9 +744,9 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0.05
-    m_DecelTime: 0.05
+    m_MaxSpeed: 450
+    m_AccelTime: 1
+    m_DecelTime: 0.075
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
@@ -689,9 +768,9 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0.05
-    m_DecelTime: 0.05
+    m_MaxSpeed: 450
+    m_AccelTime: 1
+    m_DecelTime: 0.075
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
     m_InvertInput: 0
@@ -745,7 +824,7 @@ MonoBehaviour:
   m_AmplitudeGain: 0
   m_FrequencyGain: 1
   mNoiseOffsets: {x: -303.82715, y: 942.0294, z: 821.70654}
---- !u!114 &5918330844541764187
+--- !u!114 &13971246309430680
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -754,10 +833,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8563142598887208412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
+  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Damping: 0.1
+  m_BindingMode: 3
+  m_FollowOffset: {x: 0, y: 0, z: 0}
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
+  m_AngularDampingMode: 0
+  m_PitchDamping: 0
+  m_YawDamping: 0
+  m_RollDamping: 0
+  m_AngularDamping: 0
 --- !u!1 &8698693298101577677
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +894,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerMovementController: {fileID: 2827958547727462404}
   _playerHealthController: {fileID: 2275719215793297427}
-  _playerCamera: {fileID: 3697781239049282484}
+  PlayerCamera: {fileID: 3697781239049282484}
   _harpoonGun: {fileID: 1154209733901946177}
   _playerInteraction: {fileID: 7776482993356936769}
 --- !u!1 &9204655562382253024
@@ -846,83 +934,18 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 333117514302688926}
+    m_TransformParent: {fileID: 8080776813772587216}
     m_Modifications:
-    - target: {fileID: 263656960614271445, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 868130121539051626, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2538986390306804482, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3127624576787642536, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 3245540113063888829, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: m_Name
       value: Harpoon
-      objectReference: {fileID: 0}
-    - target: {fileID: 4388331321570957484, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4968774709907754663, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5193909547269669202, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6629707868117031412, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonGunOffset.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: _playerLookDirection
       value: 
       objectReference: {fileID: 333117514302688926}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonMoveSmoothing
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonFollowSmoothing
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 8443930053281611201, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: _harpoonRotationSmoothing
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8473538795549226789, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9037431801711115209, guid: 244fb0e576bfedc43aaf54ff18534b2f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -973,14 +996,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9197357737968571092, guid: 244fb0e576bfedc43aaf54ff18534b2f,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 1791221125701350206, guid: 244fb0e576bfedc43aaf54ff18534b2f, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 244fb0e576bfedc43aaf54ff18534b2f, type: 3}
@@ -990,7 +1007,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7289724734657163392}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5197215059468236605}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75d60e22217d6a04bbde921e451cff6d, type: 3}
@@ -999,6 +1016,12 @@ MonoBehaviour:
 --- !u!4 &1747720261229169481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9037431801711115209, guid: 244fb0e576bfedc43aaf54ff18534b2f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7289724734657163392}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5197215059468236605 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3245540113063888829, guid: 244fb0e576bfedc43aaf54ff18534b2f,
     type: 3}
   m_PrefabInstance: {fileID: 7289724734657163392}
   m_PrefabAsset: {fileID: 0}

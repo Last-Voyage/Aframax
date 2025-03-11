@@ -12,7 +12,8 @@ Material:
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - UNIVERSAL_DBUFFER_INCLUDED
   m_InvalidKeywords:
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
@@ -108,6 +109,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - UNIVERSAL_DBUFFER_INCLUDED: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -127,6 +129,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _HeightAmplitude: 0.1
+    - _LightingIntensity: 1
     - _MaskMapContrast: 1
     - _MaskMapIntensity: 1
     - _Metallic: 0
@@ -136,7 +139,7 @@ Material:
     - _PostBrightness: 0
     - _PostContrast: 1
     - _PostSaturation: 1
-    - _QueueControl: -1
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 1

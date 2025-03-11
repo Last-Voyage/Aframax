@@ -12,7 +12,8 @@ Material:
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - UNIVERSAL_DBUFFER_INCLUDED
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -56,12 +57,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Heightmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskMapTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Metallic:
-        m_Texture: {fileID: 2800000, guid: 18f8cc4a53f08854dbf37dc18d26bb36, type: 3}
+        m_Texture: {fileID: 2800000, guid: 62fbe74bd6b86ed4d8d41b7ca343fbf6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -98,6 +107,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - UNIVERSAL_DBUFFER_INCLUDED: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -116,14 +126,18 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _HeightAmplitude: 0.1
+    - _LightingIntensity: 0
+    - _MaskMapContrast: 1
+    - _MaskMapIntensity: 1
     - _Metallic: 0
     - _NormalMapIntensity: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _PostBrightness: 0
-    - _PostContrast: 1
-    - _PostSaturation: 1
-    - _QueueControl: -1
+    - _PostContrast: 7
+    - _PostSaturation: 4.67
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -132,18 +146,25 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _TilingValue: 1
+    - _WindSway: 0
+    - _WindSwayFrequency: 10
+    - _WindSwaySpeed: 0.1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColorTint: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColorTint: {r: 1, g: 0, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MetalBackground: {r: 0.5471698, g: 0, b: 0, a: 1}
-    - _MetalBaseColor: {r: 0.3962264, g: 0, b: 0, a: 1}
-    - _MetalHighlightColor: {r: 0.9150943, g: 0, b: 0, a: 1}
-    - _PostTint: {r: 0.745283, g: 0, b: 0, a: 1}
+    - _MaskMapColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MetalBackground: {r: 0.5566038, g: 0, b: 0, a: 1}
+    - _MetalBaseColor: {r: 0.16981131, g: 0, b: 0, a: 1}
+    - _MetalHighlightColor: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
+    - _PostTint: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _TextureOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _WindSwayIntensity: {r: 0.01, g: 0.01, b: 0.01, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &9104244389381369887
 MonoBehaviour:

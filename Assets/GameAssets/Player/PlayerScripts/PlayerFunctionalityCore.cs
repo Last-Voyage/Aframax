@@ -20,7 +20,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     //Controls player health functionality
     [SerializeField] private PlayerHealth _playerHealthController;
     //Controls camera movement
-    [SerializeField] private PlayerCameraController _playerCamera;
+    public PlayerCameraController PlayerCamera;
     //Controls harpoon weapon functionality
     [SerializeField] private HarpoonGun _harpoonGun;
     //Controls player interaction functionality
@@ -29,6 +29,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private PlayerInputMap _playerInputMap;
 
     private bool _subscribedToInput;
+
+    public static PlayerFunctionalityCore Instance;
 
     /// <summary>
     /// Performs any set up before everything else
@@ -45,6 +47,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SetUpPlayer()
     {
+        Instance = this;
         // Sets needed variables in the player movement controller before movement begins
         _playerMovementController.SetUpMovementController();
     }
@@ -77,7 +80,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         SubscribeToHarpoonInput();
         SubscribeToPlayerInteraction();
 
-        PlayerManager.Instance.InvokeOnPlayerInputToggle(true);
+        PlayerManager.Instance.OnInvokePlayerInputToggle(true);
 
         _subscribedToInput = true;
     }
@@ -87,7 +90,10 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribeToMovementInput()
     {
-        _playerMovementController.SubscribeInput();
+        if(PlayerSpawnPoint.Instance.CanSpawnWithMovement)
+        {
+            _playerMovementController.SubscribeInput();
+        }
     }
 
     /// <summary>
@@ -95,7 +101,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribeToCameraInput()
     {
-        _playerCamera.SubscribeInput();
+        PlayerCamera.SubscribeInput();
     }
 
     /// <summary>
@@ -104,6 +110,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void SubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(GamePaused);
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().AddListener(GameUnpaused);
     }
 
@@ -113,6 +120,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToEvents()
     {
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(GamePaused);
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().RemoveListener(GameUnpaused);
     }
 
@@ -162,7 +170,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
         _playerInputMap.Disable();
 
-        PlayerManager.Instance.InvokeOnPlayerInputToggle(false);
+        PlayerManager.Instance.OnInvokePlayerInputToggle(false);
 
         _subscribedToInput = false;
     }
@@ -180,7 +188,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void UnsubscribeToCameraInput()
     {
-        _playerCamera.UnsubscribeInput();
+        PlayerCamera.UnsubscribeInput();
     }
 
     /// <summary>
@@ -202,5 +210,6 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
     #region Getters
     //TODO as needed
+    public PlayerHealth GetPlayerHealth() => _playerHealthController;
     #endregion
 }

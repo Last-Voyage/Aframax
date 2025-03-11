@@ -55,15 +55,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ReelHarpoon"",
-                    ""type"": ""Button"",
-                    ""id"": ""46123ba1-202e-49de-a560-ebd47b8d6d5c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""fe01f416-f239-4edd-b4bf-89803f8eebdd"",
@@ -89,6 +80,33 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Looking"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""cc7ee0d5-2767-4b74-a902-4e6c37c4dbe9"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UIBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e9646e31-349e-464a-8fc3-133c0ef4bde6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UICycling"",
+                    ""type"": ""Button"",
+                    ""id"": ""05be2813-c0c4-4442-84b1-8c4ee5eff398"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -109,7 +127,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -120,7 +138,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -131,7 +149,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -142,10 +160,21 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""595523d3-0fe5-41c7-9f0d-5f2e3ca7234d"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone(min=0.05)"",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -153,7 +182,18 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""FireHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a5d74c7-a258-47ae-9063-1cb54ec63abd"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""FireHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -164,7 +204,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""FocusHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -175,19 +215,19 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""FocusHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fe6eab22-65f6-4bcf-b7c0-fa1f58688e0a"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""id"": ""daecdb79-8f2f-4640-bd54-1d7e708cfec1"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ReelHarpoon"",
+                    ""groups"": ""Controller"",
+                    ""action"": ""FocusHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -197,7 +237,18 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6698357b-3946-42d0-ad9e-0a9dbdd76f6b"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -208,7 +259,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""EnterTitleScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -219,7 +270,18 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/numpadEnter"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""EnterTitleScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed627943-05ea-4137-8f4a-1de44956ea71"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""EnterTitleScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -230,10 +292,197 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and Mouse"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e663f56-7ff1-4f83-b370-f69791677eb9"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ec06dd1-aad8-4fcb-9854-89852b7da2b9"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone(min=0.05)"",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d121193f-de14-4db2-8fab-8a958d3ce917"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""947d9b71-b319-489d-a00a-d39cc49c93e2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UIBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e7ed5f5-8051-4842-9b12-73afd2a6901a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UIBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Arrow Keys"",
+                    ""id"": ""a7b879d6-aa63-4ccd-b1e6-709d7fe7f358"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3285b107-39e0-4e4e-8361-00ba33ff1a09"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""267f55b6-2038-4df0-a52f-7f7c6814ca30"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AD Keys"",
+                    ""id"": ""00837ee6-6f18-4e49-9cab-bdfe4cc951ca"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""867af3ce-2134-47da-aeea-8c32ee9e2b15"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""5e476da0-efde-4be3-b209-1acb08c67f14"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Triggers"",
+                    ""id"": ""5fa2f6cf-d3b4-4d90-aa9f-4a94533f407f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c6da403a-2578-44e5-bca2-eeed4b74c5b6"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""1228089a-6ef2-418b-b183-dc56b5b72445"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""D-Pad"",
+                    ""id"": ""7d3a37c3-537a-4e63-a90f-243cecd543f3"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""53e2151c-c6e1-4a04-b7f1-c0329764195d"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""07d6a395-6c10-4f56-8cff-a4c864514016"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""UICycling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -432,6 +681,17 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Controller"",
+            ""bindingGroup"": ""Controller"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -440,10 +700,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
-        m_Player_ReelHarpoon = m_Player.FindAction("ReelHarpoon", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
+        m_Player_UIBack = m_Player.FindAction("UIBack", throwIfNotFound: true);
+        m_Player_UICycling = m_Player.FindAction("UICycling", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -513,10 +775,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_FireHarpoon;
     private readonly InputAction m_Player_FocusHarpoon;
-    private readonly InputAction m_Player_ReelHarpoon;
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_EnterTitleScreen;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Looking;
+    private readonly InputAction m_Player_UIBack;
+    private readonly InputAction m_Player_UICycling;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -524,10 +788,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @FireHarpoon => m_Wrapper.m_Player_FireHarpoon;
         public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
-        public InputAction @ReelHarpoon => m_Wrapper.m_Player_ReelHarpoon;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Looking => m_Wrapper.m_Player_Looking;
+        public InputAction @UIBack => m_Wrapper.m_Player_UIBack;
+        public InputAction @UICycling => m_Wrapper.m_Player_UICycling;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -546,9 +812,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @FocusHarpoon.started += instance.OnFocusHarpoon;
             @FocusHarpoon.performed += instance.OnFocusHarpoon;
             @FocusHarpoon.canceled += instance.OnFocusHarpoon;
-            @ReelHarpoon.started += instance.OnReelHarpoon;
-            @ReelHarpoon.performed += instance.OnReelHarpoon;
-            @ReelHarpoon.canceled += instance.OnReelHarpoon;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
@@ -558,6 +821,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Looking.started += instance.OnLooking;
+            @Looking.performed += instance.OnLooking;
+            @Looking.canceled += instance.OnLooking;
+            @UIBack.started += instance.OnUIBack;
+            @UIBack.performed += instance.OnUIBack;
+            @UIBack.canceled += instance.OnUIBack;
+            @UICycling.started += instance.OnUICycling;
+            @UICycling.performed += instance.OnUICycling;
+            @UICycling.canceled += instance.OnUICycling;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -571,9 +843,6 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @FocusHarpoon.started -= instance.OnFocusHarpoon;
             @FocusHarpoon.performed -= instance.OnFocusHarpoon;
             @FocusHarpoon.canceled -= instance.OnFocusHarpoon;
-            @ReelHarpoon.started -= instance.OnReelHarpoon;
-            @ReelHarpoon.performed -= instance.OnReelHarpoon;
-            @ReelHarpoon.canceled -= instance.OnReelHarpoon;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
@@ -583,6 +852,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Looking.started -= instance.OnLooking;
+            @Looking.performed -= instance.OnLooking;
+            @Looking.canceled -= instance.OnLooking;
+            @UIBack.started -= instance.OnUIBack;
+            @UIBack.performed -= instance.OnUIBack;
+            @UIBack.canceled -= instance.OnUIBack;
+            @UICycling.started -= instance.OnUICycling;
+            @UICycling.performed -= instance.OnUICycling;
+            @UICycling.canceled -= instance.OnUICycling;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -671,15 +949,26 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyboardandMouseSchemeIndex];
         }
     }
+    private int m_ControllerSchemeIndex = -1;
+    public InputControlScheme ControllerScheme
+    {
+        get
+        {
+            if (m_ControllerSchemeIndex == -1) m_ControllerSchemeIndex = asset.FindControlSchemeIndex("Controller");
+            return asset.controlSchemes[m_ControllerSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnFireHarpoon(InputAction.CallbackContext context);
         void OnFocusHarpoon(InputAction.CallbackContext context);
-        void OnReelHarpoon(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnEnterTitleScreen(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnLooking(InputAction.CallbackContext context);
+        void OnUIBack(InputAction.CallbackContext context);
+        void OnUICycling(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {

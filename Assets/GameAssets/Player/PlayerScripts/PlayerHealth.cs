@@ -10,6 +10,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using PrimeTween;
 
 /// <summary>
 /// Controls the player health functionality
@@ -19,6 +20,9 @@ public class PlayerHealth : BaseHealth
     //Set up for iframe coroutine. _iFrame delay will be inputable in the prefab,
     //so you can easily test and change what feels the best in each scenario
     [SerializeField] private float _iFrameDelayInSeconds;
+    [SerializeField] private float _damageToTakeFromEnemy =25f;
+
+    private Tween _iFrameTween;
 
     [HideInInspector]
     //Variable is used by the dev console to determine whether the player should take damage or not
@@ -44,6 +48,30 @@ public class PlayerHealth : BaseHealth
     }
 
     /// <summary>
+    /// simple collision to take damage when tag is enemy without using 2 or 3 other scripts
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("Enemy"))
+        {
+            TakeDamage(_damageToTakeFromEnemy, null);
+        }
+    }
+
+    /// <summary>
+    /// Collision for enemy contact
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(_damageToTakeFromEnemy, null);
+        }
+    }
+
+    /// <summary>
     /// Performs the base functionality then calls player related event
     /// </summary>
     /// <param name="heal"> The amount of healing received </param>
@@ -51,7 +79,9 @@ public class PlayerHealth : BaseHealth
     {
         base.IncreaseHealth(heal);
 
-        PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+        PlayerManager.Instance.OnInvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.PlayerHealed, gameObject);
+
         PlayHeartBeatSfx();
     }
     
@@ -94,8 +124,8 @@ public class PlayerHealth : BaseHealth
         {
             base.TakeDamage(damage, null);
 
-            PlayerManager.Instance.InvokePlayerDamagedEvent(damage);
-            PlayerManager.Instance.InvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
+            PlayerManager.Instance.OnInvokePlayerDamagedEvent(damage);
+            PlayerManager.Instance.OnInvokePlayerHealthChangeEvent(GetHealthPercent(), _currentHealth);
 
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.PlayerTookDamage, gameObject.transform.position);
@@ -111,7 +141,7 @@ public class PlayerHealth : BaseHealth
     private void StartIFrames()
     {
         CanPlayerTakeDamage = false;
-        PrimeTween.Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
+        _iFrameTween =Tween.Delay(this, _iFrameDelayInSeconds, EndIFrames);
     }
 
     /// <summary>
@@ -127,15 +157,25 @@ public class PlayerHealth : BaseHealth
     /// </summary>
     public override void OnDeath()
     {
+        if(_iFrameTween.isAlive)
+        {
+            _iFrameTween.Stop();
+        }
         base.OnDeath();
-        PlayerManager.Instance.InvokeOnPlayerDeath();
+        PlayerManager.Instance.OnInvokePlayerDeath();
     }
 
+    /// <summary>
+    /// Subscribes the chosen functions to the unity events
+    /// </summary>
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(IncreaseHealth);
     }
 
+    /// <summary>
+    /// Unsubscribes the chosen functions to the unity events
+    /// </summary>
     private void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(IncreaseHealth);

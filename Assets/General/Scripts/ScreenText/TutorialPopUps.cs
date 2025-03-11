@@ -23,7 +23,7 @@ public class TutorialPopUps : MonoBehaviour
 
     [Tooltip("The data used in the UI element")]
     [SerializeField]
-    private ScriptableDialogueUI[] _uIData;
+    private ScriptableDialogueUi[] _uIData;
 
     [Tooltip("The collider the player has to walk into")]
     private GameObject _walkTutorialObject;
@@ -158,20 +158,6 @@ public class TutorialPopUps : MonoBehaviour
             GameStateManager.Instance.GetOnCompletedEntireTutorial()?.Invoke();
             _textContainer.text = "";
         }
-    }
-
-    /// <summary>
-    /// This enables the event listener for getting the next tutorial
-    /// </summary>
-    private void OnEnable()
-    {
-        GameStateManager.Instance.GetOnCompletedTutorialSection().AddListener(NextTutorial);
-
-        _shootTutorialObject = GameObject.Find("TutorialShootObject");
-        _walkTutorialObject = GameObject.Find("TutorialWalkObject");
-        
-        _walkTutorialObject.SetActive(false);
-        _shootTutorialObject.SetActive(false);
     }
 
     /// <summary>

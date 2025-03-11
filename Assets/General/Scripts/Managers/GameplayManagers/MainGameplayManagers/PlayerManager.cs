@@ -8,13 +8,17 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
+using System.Numerics;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Provides all other scripts with access to the player
 /// </summary>
 public class PlayerManager : MainGameplayManagerFramework
 {
+    public PlayerSpawnPoint _spawnPoint;
+
     public static PlayerManager Instance;
 
     /// <summary>
@@ -23,7 +27,7 @@ public class PlayerManager : MainGameplayManagerFramework
     private static readonly UnityEvent<bool> _onPlayerInputToggled = new();
 
     //When the movement starts
-    private static readonly UnityEvent _onMovementStartedEvent = new();
+    private static readonly UnityEvent<InputAction> _onMovementStartedEvent = new();
     //When the movement stops
     private static readonly UnityEvent _onMovementEndedEvent = new();
 
@@ -67,6 +71,15 @@ public class PlayerManager : MainGameplayManagerFramework
         Instance = this;
     }
 
+    /// <summary>
+    /// Overrides the base class by also setting up the spawn point
+    /// </summary>
+    public override void SetUpMainManager()
+    {
+        base.SetUpMainManager();
+        _spawnPoint.SetUp();
+    }
+
     #endregion
 
     #region Events
@@ -74,7 +87,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Invokes the _onMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    public void InvokeOnPlayerInputToggle(bool toggle)
+    public void OnInvokePlayerInputToggle(bool toggle)
     {
         _onPlayerInputToggled?.Invoke(toggle);
     }
@@ -82,15 +95,16 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes when the player movement starts
     /// </summary>
-    public void InvokeOnMovementStartedEvent()
+    /// <param name="playerMovement"> The InputAction associated with the player's movement </param>
+    public void OnInvokeMovementStartedEvent(InputAction playerMovement)
     {
-        _onMovementStartedEvent?.Invoke();
+        _onMovementStartedEvent?.Invoke(playerMovement);
     }
 
     /// <summary>
     /// Invokes when the player movement ends
     /// </summary>
-    public void InvokeOnMovementEndedEvent()
+    public void OnInvokeMovementEndedEvent()
     {
         _onMovementEndedEvent?.Invoke();
     }
@@ -98,7 +112,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes event for when the harpoon projectile is fired
     /// </summary>
-    public void InvokeOnHarpoonFiredEvent()
+    public void OnInvokeHarpoonFiredEvent()
     {
         _onHarpoonFiredEvent?.Invoke();
     }
@@ -106,7 +120,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// IInvokes event for when the harpoon starts reloading
     /// </summary>
-    public void InvokeOnHarpoonStartReloadEvent()
+    public void OnInvokeHarpoonStartReloadEvent()
     {
         _onHarpoonReloadStartEvent?.Invoke();
     }
@@ -114,7 +128,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes event for when the harpoon is reloaded
     /// </summary>
-    public void InvokeOnHarpoonReloadedEvent()
+    public void OnInvokeHarpoonReloadedEvent()
     {
         _onHarpoonReloadedEvent?.Invoke();
     }
@@ -123,7 +137,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Invokes event for when the harpoon restocks its ammo
     /// </summary>
     /// <param name="ammoRack"> The ammo rack where the ammo is taken from </param>
-    public void InvokeOnHarpoonRestockEvent(AmmoRackInteractable ammoRack)
+    public void OnInvokeHarpoonRestockEvent(AmmoRackInteractable ammoRack)
     {
         _onHarpoonRestockEvent?.Invoke(ammoRack);
     }
@@ -132,7 +146,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Invokes event for when the harpoon is finished restocking
     /// </summary>
     /// <param name="numHarpoons"> the number of harpoons that were restocked </param>
-    public void InvokeOnHarpoonRestockCompleteEvent(int numHarpoons)
+    public void OnInvokeHarpoonRestockCompleteEvent(int numHarpoons)
     {
         _onHarpoonRestockCompleteEvent?.Invoke(numHarpoons);
     }
@@ -140,7 +154,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes the harpoon focus start event
     /// </summary>
-    public void InvokeOnHarpoonFocusStartEvent()
+    public void OnInvokeHarpoonFocusStartEvent()
     {
         _onHarpoonFocusStartEvent?.Invoke();
     }
@@ -148,7 +162,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes the harpoon focus max event
     /// </summary>
-    public void InvokeOnHarpoonFocusMaxEvent()
+    public void OnInvokeHarpoonFocusMaxEvent()
     {
         _onHarpoonFocusMaxEvent?.Invoke();
     }
@@ -156,7 +170,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes the harpoon focus end event
     /// </summary>
-    public void InvokeOnHarpoonFocusEndEvent()
+    public void OnInvokeHarpoonFocusEndEvent()
     {
         _onHarpoonFocusEndEvent?.Invoke();
     }
@@ -164,7 +178,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes the crosshair over enemy start event
     /// </summary>
-    public void InvokeOnCrosshairOverEnemyStartEvent()
+    public void OnInvokeCrosshairOverEnemyStartEvent()
     {
         _onEnemyOverCrosshairStartEvent?.Invoke();
     }
@@ -172,7 +186,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes the crosshair over enemy end event
     /// </summary>
-    public void InvokeOnCrosshairOverEnemyEndEvent()
+    public void OnInvokeCrosshairOverEnemyEndEvent()
     {
         _onEnemyOverCrosshairEndEvent?.Invoke();
     }
@@ -181,7 +195,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Invokes when the player receives damage
     /// </summary>
     /// <param name="damageTaken">The damage received</param>
-    public void InvokePlayerDamagedEvent(float damageTaken)
+    public void OnInvokePlayerDamagedEvent(float damageTaken)
     {
         _onPlayerDamageEvent?.Invoke(damageTaken);
     }
@@ -190,7 +204,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// Invokes when the player receives healing
     /// </summary>
     /// <param name="healTaken">The healing received</param>
-    public void InvokePlayerHealEvent(float healTaken)
+    public void OnInvokePlayerHealEvent(float healTaken)
     {
         _onPlayerHealEvent?.Invoke(healTaken);
     }
@@ -200,7 +214,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     /// <param name="percentHealth">The current percent health</param>
     /// <param name="currentHealth">The current health amount</param>
-    public void InvokePlayerHealthChangeEvent(float percentHealth, float currentHealth)
+    public void OnInvokePlayerHealthChangeEvent(float percentHealth, float currentHealth)
     {
         _onHealthChange?.Invoke(percentHealth, currentHealth);
     }
@@ -208,7 +222,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// <summary>
     /// Invokes when the player dies
     /// </summary>
-    public void InvokeOnPlayerDeath()
+    public void OnInvokePlayerDeath()
     {
         _onPlayerDeath?.Invoke();
     }
@@ -221,7 +235,7 @@ public class PlayerManager : MainGameplayManagerFramework
     /// </summary>
     public UnityEvent<bool> GetOnInputToggleEvent() => _onPlayerInputToggled;
 
-    public UnityEvent GetOnMovementStartEvent() => _onMovementStartedEvent;
+    public UnityEvent<InputAction> GetOnMovementStartEvent() => _onMovementStartedEvent;
     public UnityEvent GetOnMovementEndEvent() => _onMovementEndedEvent;
 
     public UnityEvent GetOnHarpoonFiredEvent() => _onHarpoonFiredEvent;

@@ -90,12 +90,19 @@ public class BaseHealth : MonoBehaviour, IBaseHealth
         }
     }
 
+    /// <summary>
+    /// Returns the current health
+    /// </summary>
+    public float GetCurrentHealth()
+    {
+        return _currentHealth;
+    }
     #region Events
 
     /// <summary>
     /// Death event to kill gameObject from the object
     /// </summary>
-    public void InvokeDeathEvent()
+    public void OnInvokeDeathEvent()
     {
         _onDeathEvent?.Invoke();
     }
