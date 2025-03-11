@@ -40,6 +40,9 @@ public class MazeSubSceneManager : MonoBehaviour
 
     private Rigidbody _playerRigidbody;
     private bool _firstMazeLoaded = false;
+
+    private int _currentMaze = -1;
+    private int _preloadedMaze = -1;
     
     private void Start()
     {
@@ -82,6 +85,8 @@ public class MazeSubSceneManager : MonoBehaviour
     /// </summary>
     public void LoadMazeAdditive(int mazeId)
     {
+        _currentMaze = mazeId;
+        
         int sceneId = _sceneManager.MazeAdditiveSceneIndices[mazeId];
         StartCoroutine(StartAsyncSceneLoadOperation(mazeId, sceneId));
     }
@@ -112,6 +117,8 @@ public class MazeSubSceneManager : MonoBehaviour
     /// <param name="mazeId">The maze index to be preloaded.</param>
     public void PreLoadMazeScene(int mazeId)
     {
+        _preloadedMaze = mazeId;
+        
         // (Re)initialize scene loading state
         _loadSceneState = new();
         _loadSceneState.SceneBuildID = AframaxSceneManager.Instance.MazeAdditiveSceneIndices[
@@ -175,6 +182,11 @@ public class MazeSubSceneManager : MonoBehaviour
     private IEnumerator StartDestroySceneOperation(int sceneId)
     {
         var sceneRef = SceneManager.GetSceneByBuildIndex(sceneId);
+
+        if (!sceneRef.isLoaded)
+        {
+            yield break;
+        }
         
         AsyncOperation unloadAsyncOp = SceneManager.UnloadSceneAsync(
             sceneRef
@@ -184,6 +196,26 @@ public class MazeSubSceneManager : MonoBehaviour
         while (unloadAsyncOp is { isDone: false })
         {
             yield return null;
+        }
+
+        VerifySceneIntegrity();
+    }
+
+    /// <summary>
+    /// Ensure no scenes but the currently loaded one and
+    /// the preloaded one exist in the scene.
+    /// </summary>
+    public void VerifySceneIntegrity()
+    {
+        int mazeCount = _sceneManager.MazeAdditiveSceneIndices.Count;
+        
+        for (int i = 0; i < mazeCount; i++)
+        {
+            if (i != _currentMaze && i != _preloadedMaze)
+            {
+                int sceneId = _sceneManager.MazeAdditiveSceneIndices[i];
+                StartDestroySceneOperation(sceneId);
+            }
         }
     }
 }
