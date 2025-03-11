@@ -60,6 +60,8 @@ public class MazeSubSceneManager : MonoBehaviour
         // Load first maze
         PreLoadMazeScene(_firstMazeIndex);
         LoadMazeAdditive(_firstMazeIndex);
+
+        FindObjectOfType<SaveReconfiguration>().LoadSave(this);
     }
 
     private void OnPlayerDeath()
