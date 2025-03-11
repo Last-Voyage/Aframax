@@ -72,12 +72,5 @@ public class GameplayManagers : CoreManagersFramework
         {
             storyManager.DefineSingleton();
         }
-
-        //If the scene has any saved data load the data
-        SaveReconfiguration saveReconfiguration = FindObjectOfType<SaveReconfiguration>();
-        if(saveReconfiguration != null)
-        {
-            saveReconfiguration.LoadSave();
-        }
     }
 }
