@@ -8,7 +8,6 @@
 *****************************************************************************/
 
 using System.Collections;
-
 using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.Video;
@@ -57,9 +56,9 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void StartVideo()
     {
-        // Turns the sound off
-        FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out VCA masterVCA);
-        masterVCA.setVolume(0);
+        // Stop all sounds
+        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out Bus masterBus);
+        masterBus.stopAllEvents(STOP_MODE.IMMEDIATE);
 
         _cinematicPlaying = true;
         _videoPlayer.time = 0;
@@ -85,10 +84,6 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     public void LoadNextScene()
     {
-        // Turns the sound back on
-        FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out VCA masterVCA);
-        masterVCA.setVolume(1);
-
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_sceneId, _sceneTransitionId);
 
         if (_cinematicAudio.isValid())
