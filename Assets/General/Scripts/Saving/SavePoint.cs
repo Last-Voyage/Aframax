@@ -17,5 +17,5 @@ using UnityEngine;
 public class SavePoint
 {
     public SavePointTrigger SavePointTrigger;
-    public List<GameObject> MapChunksEnabled;
+    public List<int> MapChunksEnabled;
 }
