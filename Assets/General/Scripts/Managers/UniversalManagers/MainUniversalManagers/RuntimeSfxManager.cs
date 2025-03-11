@@ -133,6 +133,15 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
+    /// added to play a sound instantly
+    /// </summary>
+    /// <param name="eventInstance"></param>
+    public void PlayOneShotEventInstance(EventInstance eventInstance)
+    {
+        eventInstance.start();
+    }
+
+    /// <summary>
     /// Plays an audio event on a specific object
     /// </summary>
     /// <param name="eventReference">reference to the FMOD SFX event</param>
