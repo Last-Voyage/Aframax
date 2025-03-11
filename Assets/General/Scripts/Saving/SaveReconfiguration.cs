@@ -19,7 +19,7 @@ public class SaveReconfiguration : MonoBehaviour
     /// <summary>
     /// Loads all data in the scene
     /// </summary>
-    public void LoadSave()
+    public void LoadSave(MazeSubSceneManager mazeSubSceneManager)
     {
         //Gets the player gameobject
         GameObject thePlayer = PlayerSpawnPoint.Instance.transform.GetChild(0).gameObject;
@@ -44,9 +44,11 @@ public class SaveReconfiguration : MonoBehaviour
         thePlayer.transform.position = currentSavePoint.SavePointTrigger.transform.position;
 
         //Enable all map chunks for this save
-        foreach (GameObject mapChunks in currentSavePoint.MapChunksEnabled)
+        foreach (int mapChunks in currentSavePoint.MapChunksEnabled)
         {
-            mapChunks.SetActive(true);
+            mazeSubSceneManager.PreLoadMazeScene(mapChunks);
+            mazeSubSceneManager.LoadMazeAdditive(mapChunks);
+            mazeSubSceneManager.PreLoadMazeScene(mapChunks + 1);
         }
 
         //Loads the player inventory
