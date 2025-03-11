@@ -46,6 +46,9 @@ public class MazeSubSceneManager : MonoBehaviour
     
     private void Start()
     {
+        // Throttle speed of maze loading
+        Application.backgroundLoadingPriority = ThreadPriority.BelowNormal;
+        
         // Get singleton reference to AframaxSceneManager
         _sceneManager = AframaxSceneManager.Instance;
         
@@ -96,6 +99,9 @@ public class MazeSubSceneManager : MonoBehaviour
     // Coroutine for LoadMazeAdditive()
     private IEnumerator StartAsyncSceneLoadOperation(int mazeId, int sceneId)
     {
+        // Load in scene as fast as possible
+        Application.backgroundLoadingPriority = ThreadPriority.High;
+        
         // Error if no scene is preloaded
         if (_asyncOpList[mazeId] == null)
         {
@@ -109,6 +115,9 @@ public class MazeSubSceneManager : MonoBehaviour
         
         // Enable scene in level
         _asyncOpList[mazeId].allowSceneActivation = true;
+        
+        // Reset thread priority
+        Application.backgroundLoadingPriority = ThreadPriority.BelowNormal;
         
         yield break;
     }
