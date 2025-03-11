@@ -69,7 +69,7 @@ public class WorldSpacePopups : MonoBehaviour
         {
             //rotate to face the player camera
             transform.LookAt(_playerCamera.transform);
-            transform.rotation = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
             transform.Rotate(0, 180, 0);
         }
 
