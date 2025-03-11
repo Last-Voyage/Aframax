@@ -190,10 +190,6 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void PlaySpawnAudio()
     {
-        if (!_spawnEventInstance.isValid())
-        {
-            return;
-        }
         RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbSpawn,_flowerHeadTransform.gameObject);
     }
 
