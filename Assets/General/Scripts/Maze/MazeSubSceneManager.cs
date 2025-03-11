@@ -43,9 +43,30 @@ public class MazeSubSceneManager : MonoBehaviour
         // Get singleton reference to AframaxSceneManager
         _sceneManager = AframaxSceneManager.Instance;
         
+        // Subscribe to death event
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(OnPlayerDeath);
+        
         // Load first maze
         PreLoadMazeScene(_firstMazeIndex);
         LoadMazeAdditive(_firstMazeIndex);
+    }
+
+    private void OnPlayerDeath()
+    {
+        // Remove blocking operations
+        foreach (var asyncOp in _asyncOpList)
+        {
+            if (asyncOp.Value != null)
+            {
+                asyncOp.Value.allowSceneActivation = true;
+            }
+        }
+        
+        // Stop all coroutines in this behavior
+        StopAllCoroutines();
+        
+        // Delete this component
+        Destroy(this);
     }
 
     /// <summary>
