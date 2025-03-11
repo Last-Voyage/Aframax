@@ -72,17 +72,17 @@ public class PauseMenu : MonoBehaviour
         {
             GameStateManager.Instance.GetOnGamePaused()?.Invoke();
 
-            // Mutes all audio
-            FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out FMOD.Studio.VCA masterVCA);
-            masterVCA.setVolume(0);
+            // Pauses all audio
+            FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out FMOD.Studio.Bus masterBus);
+            masterBus.setPaused(true);
         }
         else
         {
             GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();
 
             // Resumes all audio
-            FMODUnity.RuntimeManager.StudioSystem.getVCA("vca:/MasterVCA", out FMOD.Studio.VCA masterVCA);
-            masterVCA.setVolume(1);
+            FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out FMOD.Studio.Bus masterBus);
+            masterBus.setPaused(false);
         }
     }
 
