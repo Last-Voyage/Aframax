@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       PlayerCameraController.cs
 // Author:          Andrew Stapay
-// Contributor      Ryan Swanson, Adam Garwacki
+// Contributor      Ryan Swanson, Adam Garwacki, Miles Rogers
 // Creation Date:   September 19, 2024
 //
 // Description:     Implementation of the basic camera control for a player 
@@ -40,6 +40,8 @@ public class PlayerCameraController : MonoBehaviour
     // Variables that relate to the camera's coroutines
     private Coroutine _cameraCoroutine;
     private Coroutine _walkingSwayCoroutine;
+
+    private bool _walkingSwayStarted = false;
 
     // Variables for boat sway
     [Space]
@@ -216,13 +218,18 @@ public class PlayerCameraController : MonoBehaviour
     private void StartWalkingSway(InputAction playerMovement)
     {
         // Stop the camera returning coroutine
-        if (_walkingSwayCoroutine != null)
+        if (_walkingSwayCoroutine != null && _walkingSwayStarted == true)
         {
+            _walkingSwayStarted = false;
             StopCoroutine(_walkingSwayCoroutine);
         }
 
         // Start the walking sway
-        _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));
+        if (_walkingSwayStarted == false)
+        {
+            _walkingSwayStarted = true;
+            _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));   
+        }
     }
 
     /// <summary>

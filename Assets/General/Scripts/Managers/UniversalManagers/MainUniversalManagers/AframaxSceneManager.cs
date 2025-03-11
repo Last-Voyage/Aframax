@@ -1,12 +1,13 @@
 /******************************************************************************
 // File Name:       AframaxSceneManager.cs
 // Author:          Ryan Swanson
-// Contributor:     Jeremiah Peters, Nick Rice
+// Contributor:     Jeremiah Peters, Nick Rice, Miles Rogers
 // Creation Date:   September 15, 2024
 //
 // Description:     Provides the framework to be used by the core managers
 ******************************************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     [field: SerializeField] public int BoatSceneIndex { get; private set; }
     
     [field: SerializeField] public int MazeSceneIndex { get; private set; }
+    
+    [field: SerializeField] public List<int> MazeAdditiveSceneIndices { get; private set; }
 
     [field: SerializeField] public int DeathScreenSceneIndex { get; private set; }
 
