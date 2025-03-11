@@ -37,6 +37,9 @@ public class MazeSubSceneManager : MonoBehaviour
     private AframaxSceneManager _sceneManager;
     private LoadSceneState _loadSceneState;
     private Dictionary<int, AsyncOperation> _asyncOpList = new();
+
+    private Rigidbody _playerRigidbody;
+    private bool _firstMazeLoaded = false;
     
     private void Start()
     {
@@ -45,6 +48,11 @@ public class MazeSubSceneManager : MonoBehaviour
         
         // Subscribe to death event
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(OnPlayerDeath);
+        
+        // Disable player Rigidbody until scene is loaded
+        _playerRigidbody = PlayerMovementController.Instance
+            .GetComponent<Rigidbody>();
+        _playerRigidbody.isKinematic = true;
         
         // Load first maze
         PreLoadMazeScene(_firstMazeIndex);
@@ -137,6 +145,13 @@ public class MazeSubSceneManager : MonoBehaviour
         while (_asyncOpList[mazeId] is { isDone: false })
         {
             yield return null;
+        }
+        
+        // Enable player Rigidbody if running for the first time
+        if (!_firstMazeLoaded)
+        {
+            _playerRigidbody.isKinematic = false;
+            _firstMazeLoaded = true;
         }
         
         // Ref to preloaded scene
