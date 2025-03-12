@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PauseMenu.cs
 // Author :            Jeremiah Peters
-//                     Ryan Swanson
+// Contributers :      Ryan Swanson, Charlie Polonu
 // Creation Date :     9/28/24
 //
 // Brief Description : operates pausing the game and the pause menu buttons
@@ -37,20 +37,17 @@ public class PauseMenu : MonoBehaviour
         if (TutorialPopUp.ActiveTutorial != null)
         {
             TutorialPopUp.ExitActivePopUp();
-            return;
         }
 
         // Exit the note instead of pausing
         if (NoteInteractable.ActiveNote != null)
         {
             NoteInteractable.ExitActiveNote();
-            return;
         }
 
         if (PlaceholderTutorialBehaviour.ActivePlaceholderTutorial != null)
         {
             PlaceholderTutorialBehaviour.ExitActiveTutorial();
-            return;
         }
 
         //don't unpause if the settings scene is loaded
@@ -74,8 +71,12 @@ public class PauseMenu : MonoBehaviour
         }
         else
         {
-            GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();
+            GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();            
         }
+
+        // Pauses or resumes all the audio based on whether or not the menu is visible
+        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out FMOD.Studio.Bus masterBus);
+        masterBus.setPaused(isVisible);
     }
 
     /// <summary>

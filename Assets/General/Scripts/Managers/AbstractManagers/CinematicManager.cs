@@ -8,7 +8,6 @@
 *****************************************************************************/
 
 using System.Collections;
-
 using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.Video;
@@ -57,6 +56,10 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void StartVideo()
     {
+        // Stop all sounds
+        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out Bus masterBus);
+        masterBus.stopAllEvents(STOP_MODE.IMMEDIATE);
+
         _cinematicPlaying = true;
         _videoPlayer.time = 0;
         _videoPlayer.Play();
