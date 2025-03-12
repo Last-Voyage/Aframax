@@ -18,6 +18,7 @@ public class ChaseSequenceVine : MonoBehaviour
 {
     private float _chaseDistance;
     public Transform Head;
+    public Transform _chaseAudioSource;
     private float _chaseSpeed;
     [SerializeField] private PathCreator _chasePath;
     private bool _isChasing = false;
