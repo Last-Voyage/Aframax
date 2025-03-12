@@ -92,7 +92,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
-        
+
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
