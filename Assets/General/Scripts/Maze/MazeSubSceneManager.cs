@@ -17,6 +17,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Debug = System.Diagnostics.Debug;
 
+/// <summary>
+/// Works in conjunction with the AframaxSceneManager to additively load scenes
+/// </summary>
 public class MazeSubSceneManager : MonoBehaviour
 {
     /// <summary>
@@ -43,7 +46,12 @@ public class MazeSubSceneManager : MonoBehaviour
 
     private int _currentMaze = -1;
     private int _preloadedMaze = -1;
+
+    private IEnumerator _cachedCoroutineToDestroy;
     
+    /// <summary>
+    /// Performs any needed functionality for when the game starts
+    /// </summary>
     private void Start()
     {
         // Throttle speed of maze loading
@@ -64,6 +72,7 @@ public class MazeSubSceneManager : MonoBehaviour
         PreLoadMazeScene(_firstMazeIndex);
         LoadMazeAdditive(_firstMazeIndex);
 
+        //Loads any save data in the game
         FindObjectOfType<SaveReconfiguration>().LoadSave(this);
     }
 
@@ -93,10 +102,16 @@ public class MazeSubSceneManager : MonoBehaviour
         _currentMaze = mazeId;
         
         int sceneId = _sceneManager.MazeAdditiveSceneIndices[mazeId];
+        
         StartCoroutine(StartAsyncSceneLoadOperation(mazeId, sceneId));
     }
 
-    // Coroutine for LoadMazeAdditive()
+    /// <summary>
+    /// The process of asyncronously loading a scene
+    /// </summary>
+    /// <param name="mazeId">The maze id of the maze to start loading</param>
+    /// <param name="sceneId">The scene id of the scene to start loading</param>
+    /// <returns></returns>
     private IEnumerator StartAsyncSceneLoadOperation(int mazeId, int sceneId)
     {
         // Load in scene as fast as possible
@@ -137,10 +152,16 @@ public class MazeSubSceneManager : MonoBehaviour
         ];
         _loadSceneState.LoadingComplete = false;
 
-        StartCoroutine(StartSubscenePreLoadOperation(mazeId, _loadSceneState.SceneBuildID));
+        _cachedCoroutineToDestroy = StartSubscenePreLoadOperation(mazeId, _loadSceneState.SceneBuildID);
+        StartCoroutine(_cachedCoroutineToDestroy);
     }
 
-    // Coroutine for PreLoadMazeScene()
+    /// <summary>
+    /// The process of the scene being loaded
+    /// </summary>
+    /// <param name="mazeId"> The maze id of the maze being loaded</param>
+    /// <param name="sceneId"> The scene id of scene being loaded</param>
+    /// <returns>Time</returns>
     private IEnumerator StartSubscenePreLoadOperation(int mazeId, int sceneId)
     {
         // Check if scene is already preloaded
@@ -157,10 +178,10 @@ public class MazeSubSceneManager : MonoBehaviour
         Debug.Assert(_asyncOpList[mazeId] != null, nameof(List<AsyncOperation>) + " != null");
 
         // Make sure the scene isn't shown until LoadMazeAdditive() is called
-        _asyncOpList[mazeId].allowSceneActivation = false;
-
+        _asyncOpList[mazeId].allowSceneActivation = false; // This isn't working properly apparently
+        
         // Await scene loading
-        while (_asyncOpList[mazeId] is { isDone: false })
+        while (_asyncOpList[mazeId] is { isDone: false } || _asyncOpList[mazeId] is {allowSceneActivation:false}) 
         {
             yield return null;
         }
@@ -189,7 +210,11 @@ public class MazeSubSceneManager : MonoBehaviour
         StartCoroutine(StartDestroySceneOperation(sceneId));
     }
 
-    // Coroutine for DestroyMaze()
+    /// <summary>
+    /// The process of a scene being unloaded
+    /// </summary>
+    /// <param name="sceneId">The id of the scene being destroyed</param>
+    /// <returns>Time</returns>
     private IEnumerator StartDestroySceneOperation(int sceneId)
     {
         var sceneRef = SceneManager.GetSceneByBuildIndex(sceneId);
@@ -228,5 +253,65 @@ public class MazeSubSceneManager : MonoBehaviour
                 StartDestroySceneOperation(sceneId);
             }
         }
+    }
+
+    /// <summary>
+    /// Checks if any loaded scenes should be disabled
+    /// Subscribed to when a scene is loaded
+    /// </summary>
+    /// <param name="scene">The scene loaded</param>
+    /// <param name="mode">The method it was loaded with </param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // This should make sure it only affects improperly loaded scenes
+        if (ShouldDisableScene(scene))
+        {
+            AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(scene.buildIndex);
+            StopCoroutine(_cachedCoroutineToDestroy);
+            _asyncOpList.Remove(_currentMaze + 1);
+        }
+    }
+
+    /// <summary>
+    /// Checks if any unloaded scene should be preloaded
+    /// Subscribed to when a scene is unloaded
+    /// </summary>
+    /// <param name="scene">The scene unloaded</param>
+    private void OnSceneUnloaded(Scene scene)
+    {
+        if ((scene.buildIndex == 4 || scene.buildIndex == 5 || scene.buildIndex == 6)
+            && _currentMaze < AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Count-1)
+        {
+            PreLoadMazeScene(_currentMaze+1);
+        }
+    }
+
+    /// <summary>
+    /// This will check if the maze should be disabled
+    /// </summary>
+    /// <param name="scene">The new scene being loaded</param>
+    /// <returns></returns>
+    private bool ShouldDisableScene(Scene scene)
+    {
+        return (scene.buildIndex % 10) != _currentMaze && 
+               AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Contains(scene.buildIndex);
+    }
+    
+    /// <summary>
+    /// Subscribes to events on enable
+    /// </summary>
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    /// <summary>
+    /// Unsubscribes to events on disable
+    /// </summary>
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 }
