@@ -37,20 +37,17 @@ public class PauseMenu : MonoBehaviour
         if (TutorialPopUp.ActiveTutorial != null)
         {
             TutorialPopUp.ExitActivePopUp();
-            return;
         }
 
         // Exit the note instead of pausing
         if (NoteInteractable.ActiveNote != null)
         {
             NoteInteractable.ExitActiveNote();
-            return;
         }
 
         if (PlaceholderTutorialBehaviour.ActivePlaceholderTutorial != null)
         {
             PlaceholderTutorialBehaviour.ExitActiveTutorial();
-            return;
         }
 
         //don't unpause if the settings scene is loaded

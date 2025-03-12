@@ -50,9 +50,8 @@ public class PlaceholderTutorialBehaviour : MonoBehaviour
             _tutorialPagesContainer.SetActive(true);
 
             // Free the mouse and freeze the game
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Time.timeScale = 0;
+            TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
+            TimeManager.Instance.PauseGameToggle();
 
             ActivePlaceholderTutorial = this;
 
@@ -83,9 +82,7 @@ public class PlaceholderTutorialBehaviour : MonoBehaviour
     public void HidePlaceholderTutorial()
     {
         // Lock the mouse and unfreeze the game
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        Time.timeScale = 1;
+        TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
         ActivePlaceholderTutorial = null;
 
