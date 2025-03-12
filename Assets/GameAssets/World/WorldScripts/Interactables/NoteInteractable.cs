@@ -91,8 +91,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private void ShowNote()
     {
         // Free the mouse and freeze the game
-        TimeManager.Instance.GetOnGamePauseEvent();
-        
+        TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
+        TimeManager.Instance.PauseGameToggle();
+
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
@@ -120,7 +121,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         }
 
         // Lock the mouse and unfreeze the game
-        TimeManager.Instance.GetOnGameUnpauseEvent();
+        TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
         // Deactivate the note
         ActiveNote = null;
