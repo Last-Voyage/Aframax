@@ -92,6 +92,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
+        TimeManager.Instance.PauseGameToggle();
 
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
