@@ -43,6 +43,8 @@ public class MazeSubSceneManager : MonoBehaviour
 
     private int _currentMaze = -1;
     private int _preloadedMaze = -1;
+
+    private IEnumerator _cachedCoroutineToDestroy;
     
     private void Start()
     {
@@ -93,6 +95,9 @@ public class MazeSubSceneManager : MonoBehaviour
         _currentMaze = mazeId;
         
         int sceneId = _sceneManager.MazeAdditiveSceneIndices[mazeId];
+        
+        print("Loaded scene additive, maze part 0"+sceneId+" "+mazeId);
+        
         StartCoroutine(StartAsyncSceneLoadOperation(mazeId, sceneId));
     }
 
@@ -101,6 +106,8 @@ public class MazeSubSceneManager : MonoBehaviour
     {
         // Load in scene as fast as possible
         Application.backgroundLoadingPriority = ThreadPriority.High;
+        
+        print("It somehow got past load maze additive in sub scene maze "+mazeId);
         
         // Error if no scene is preloaded
         if (_asyncOpList[mazeId] == null)
@@ -112,6 +119,8 @@ public class MazeSubSceneManager : MonoBehaviour
                 "to call LoadNextMazeAdditive()."
             );
         }
+        
+        print("It loaded in the scene" +mazeId);
         
         // Enable scene in level
         _asyncOpList[mazeId].allowSceneActivation = true;
@@ -136,13 +145,17 @@ public class MazeSubSceneManager : MonoBehaviour
             mazeId
         ];
         _loadSceneState.LoadingComplete = false;
+        
+        print("This is the preload"+mazeId);
 
-        StartCoroutine(StartSubscenePreLoadOperation(mazeId, _loadSceneState.SceneBuildID));
+        _cachedCoroutineToDestroy = StartSubscenePreLoadOperation(mazeId, _loadSceneState.SceneBuildID);
+        StartCoroutine(_cachedCoroutineToDestroy);
     }
 
     // Coroutine for PreLoadMazeScene()
     private IEnumerator StartSubscenePreLoadOperation(int mazeId, int sceneId)
     {
+        print("This is the only other place preload"+mazeId);
         // Check if scene is already preloaded
         if (_asyncOpList.ContainsKey(mazeId))
         {
@@ -157,13 +170,17 @@ public class MazeSubSceneManager : MonoBehaviour
         Debug.Assert(_asyncOpList[mazeId] != null, nameof(List<AsyncOperation>) + " != null");
 
         // Make sure the scene isn't shown until LoadMazeAdditive() is called
-        _asyncOpList[mazeId].allowSceneActivation = false;
+        _asyncOpList[mazeId].allowSceneActivation = false; // This isn't working properly apparently
 
+        print("Heyo we got a maze in here");
+        
         // Await scene loading
-        while (_asyncOpList[mazeId] is { isDone: false })
+        while (_asyncOpList[mazeId] is { isDone: false } || _asyncOpList[mazeId] is {allowSceneActivation:false}) 
         {
             yield return null;
         }
+        
+        print("The great maze escape"+mazeId); // It ignores this completely, and yet it still goes through!!!!!!!
         
         // Enable player Rigidbody if running for the first time
         if (!_firstMazeLoaded)
@@ -228,5 +245,56 @@ public class MazeSubSceneManager : MonoBehaviour
                 StartDestroySceneOperation(sceneId);
             }
         }
+    }
+
+    /// <summary>
+    /// Th
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // This should make sure it only affects improperly loaded scenes
+        if (ShouldDisableScene(scene))
+        {
+            AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(scene.buildIndex);
+            StopCoroutine(_cachedCoroutineToDestroy);
+            _asyncOpList.Remove(_currentMaze + 1);
+            //PreLoadMazeScene(_currentMaze +1);
+        }
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        if ((scene.buildIndex == 4 || scene.buildIndex == 6) && _currentMaze < AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Count-1)
+        {
+            PreLoadMazeScene(_currentMaze+1);
+        }
+    }
+
+    /// <summary>
+    /// This will check if the 
+    /// </summary>
+    /// <param name="scene">The new scene being loaded</param>
+    /// <returns></returns>
+    private bool ShouldDisableScene(Scene scene)
+    {
+        int howManyMazes = AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Count;
+        /*return !AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Contains(scene.buildIndex) &&
+               scene.buildIndex != 1 && _currentMaze < howManyMazes-1;*/
+        return (scene.buildIndex % 10) != _currentMaze && 
+               AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Contains(scene.buildIndex);
+    }
+    
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 }
