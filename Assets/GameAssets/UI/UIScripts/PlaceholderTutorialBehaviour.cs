@@ -50,7 +50,7 @@ public class PlaceholderTutorialBehaviour : MonoBehaviour
             _tutorialPagesContainer.SetActive(true);
 
             // Free the mouse and freeze the game
-            TimeManager.Instance.GetOnGamePauseEvent();
+            TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
 
             ActivePlaceholderTutorial = this;
 
@@ -81,7 +81,7 @@ public class PlaceholderTutorialBehaviour : MonoBehaviour
     public void HidePlaceholderTutorial()
     {
         // Lock the mouse and unfreeze the game
-        TimeManager.Instance.GetOnGameUnpauseEvent();
+        TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
         ActivePlaceholderTutorial = null;
 
