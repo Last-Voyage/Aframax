@@ -279,7 +279,8 @@ public class MazeSubSceneManager : MonoBehaviour
     /// <param name="scene">The scene unloaded</param>
     private void OnSceneUnloaded(Scene scene)
     {
-        if ((scene.buildIndex == 4 || scene.buildIndex == 6) && _currentMaze < AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Count-1)
+        if ((scene.buildIndex == 4 || scene.buildIndex == 5 || scene.buildIndex == 6)
+            && _currentMaze < AframaxSceneManager.Instance.MazeAdditiveSceneIndices.Count-1)
         {
             PreLoadMazeScene(_currentMaze+1);
         }
