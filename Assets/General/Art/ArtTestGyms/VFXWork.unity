@@ -96,8 +96,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 1f94738de7fb1234fb0d3f5fb62b9535,
+    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 39c91e6144e1abe4ea9fe37120608468,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -231,7 +233,7 @@ PrefabInstance:
     - target: {fileID: 6245986809019448971, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.52
+      value: 4.228
       objectReference: {fileID: 0}
     - target: {fileID: 6245986809019448971, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
@@ -479,7 +481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &261970652
 Transform:
   m_ObjectHideFlags: 0
@@ -559,8 +561,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdb904e407007024699328760db4f39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlurIntensity: 0
-  volume: {fileID: 5116423029060796863, guid: 8ae1fc96e173a444daacc592b5f2235f, type: 3}
+  _postProcessingVolume: {fileID: 0}
+  _blurPercentage: 0
 --- !u!1 &265552877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,7 +1413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &848358973
 MeshCollider:
   m_ObjectHideFlags: 0
