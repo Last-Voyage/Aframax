@@ -343,7 +343,6 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private IEnumerator ReloadHarpoon()
     {
-        print("ReloadHarpoon");
         //nabil added infinite ammo functionality here
         if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
@@ -404,7 +403,6 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void HarpoonFullyReloaded()
     {
-        print("HarpoonFullyReloaded");
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
 
