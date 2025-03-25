@@ -38,7 +38,7 @@ public class SaveManager : MainUniversalManagerFramework
         _saveDataFilePath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
         //Append /SaveData/ to said path
         //SaveData is the file is assets containing the save data
-        _saveDataFilePath = _saveDataFilePath + "/SaveData/";
+        _saveDataFilePath = _saveDataFilePath + "/Resources/SaveData/";
         //Check if we're in a build, check if the directory exists, if not
         if (!Application.isEditor && !Directory.Exists(_saveDataFilePath)) 
         {
