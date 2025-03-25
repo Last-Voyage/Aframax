@@ -56,6 +56,7 @@ public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
         }
 
         PlayerManager.Instance.OnInvokePlayerHealEvent(_healthRestored);
+        PlayHealingVisualEffect();
         _numUses--;
 
         if (_numUses == 0)
@@ -73,5 +74,14 @@ public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
     {
         _canInteract = percentHealth < 1;
         UpdateInteractablePopupToggle();
+    }
+
+    /// <summary>
+    /// Plays the healing visual effect
+    /// </summary>
+    private void PlayHealingVisualEffect()
+    {
+        VfxManager.Instance.GetHealingVfx().PlayNextVfxInPool
+            (transform.position, transform.rotation);
     }
 }
