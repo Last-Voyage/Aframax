@@ -30,8 +30,8 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     /// Called to destroy the tentacle once it has completed its motion
     /// Called using Unity Animation Events, so it seems as though it is never reference, but believe me, it's used
     /// </summary>
-    private void DestroyTentacle()
+    public void DestroyTentacle(float t)
     {
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, t);
     }
 }

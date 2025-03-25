@@ -23,7 +23,8 @@ public class TentacleMover : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             _tentacle.MoveAway();
-            Destroy(this.gameObject);
+            _tentacle.DestroyTentacle(2.5f);
+            Destroy(this.gameObject, 2.5f);
         }
     }
 }
