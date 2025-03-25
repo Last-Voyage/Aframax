@@ -64,7 +64,8 @@ public class CameraManager : MainGameplayManagerFramework
     /// Invokes the _onCameraMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    public void OnInvokeCameraMovementToggle(bool toggle)
+    /// <param name="audioToggle"> the bool to toggle audio on pause</param>
+    public void OnInvokeCameraMovementToggle(bool toggle,bool audioToggle)
     {
         _onCameraMovementToggled?.Invoke(!toggle);
     }
