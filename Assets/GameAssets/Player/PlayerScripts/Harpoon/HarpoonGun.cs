@@ -30,6 +30,7 @@ public class HarpoonGun : MonoBehaviour
     {
         Ready,
         Firing,
+        NeedReload,
         Reloading
     };
 
@@ -99,6 +100,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private LayerMask _excludeLayers;
     [Tooltip("The input action for shooting")]
     [SerializeField] private InputActionReference _harpoonShoot;
+    [Tooltip("The input action for reloading")]
+    [SerializeField] private InputActionReference _harpoonReload;
     [Tooltip("The input action for focusing")]
     [SerializeField] private InputActionReference _harpoonFocus;
 
@@ -131,6 +134,8 @@ public class HarpoonGun : MonoBehaviour
     private PlayerReticle _reticle;
 
     private CinemachineImpulseSource _cinemachineImpulse;
+
+    private bool _shouldReload = true;
 
     #endregion
 
@@ -220,6 +225,8 @@ public class HarpoonGun : MonoBehaviour
     {
         _harpoonShoot.action.performed += FireHarpoon;
 
+        _harpoonReload.action.performed += StartReloadProcess;
+
         _harpoonFocus.action.performed += FocusButtonHeld;
         _harpoonFocus.action.canceled += FocusButtonReleased;
     }
@@ -230,6 +237,8 @@ public class HarpoonGun : MonoBehaviour
     public void UnsubscribeInput()
     {
         _harpoonShoot.action.performed -= FireHarpoon;
+
+        _harpoonReload.action.performed -= StartReloadProcess;
 
         _harpoonFocus.action.performed -= FocusButtonHeld;
         _harpoonFocus.action.canceled -= FocusButtonReleased;
@@ -292,7 +301,11 @@ public class HarpoonGun : MonoBehaviour
         RuntimeSfxManager.APlayOneShotSfx?
             .Invoke(FmodSfxEvents.Instance.HarpoonShot, gameObject.transform.position);
 
-        StartReloadProcess();
+        _harpoonFiringState = EHarpoonFiringState.NeedReload;
+
+        // This is basically used as a trap to prevent reloading from happening automatically
+        // That happens cuz of some goofy things with events and the input system
+        _shouldReload = false;
     }
 
     /// <summary>
@@ -311,8 +324,15 @@ public class HarpoonGun : MonoBehaviour
     /// <summary>
     /// Start the process of reloading
     /// </summary>
-    private void StartReloadProcess()
+    private void StartReloadProcess(InputAction.CallbackContext context)
     {
+        // Return if we don't need to reload
+        if (_harpoonFiringState != EHarpoonFiringState.NeedReload || !_shouldReload)
+        {
+            _shouldReload = true;
+            return;
+        }
+
         _harpoonFiringState = EHarpoonFiringState.Reloading;
 
         StartCoroutine(ReloadHarpoon());
@@ -323,7 +343,8 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private IEnumerator ReloadHarpoon()
     {
-        //nabii added infinite ammo functionality here
+        print("ReloadHarpoon");
+        //nabil added infinite ammo functionality here
         if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
             _reticle.ToggleAmmoIcons();
@@ -383,6 +404,7 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     private void HarpoonFullyReloaded()
     {
+        print("HarpoonFullyReloaded");
         _harpoonFiringState = EHarpoonFiringState.Ready;
         _harpoonOnGun.SetActive(true);
 
