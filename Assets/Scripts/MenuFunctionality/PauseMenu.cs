@@ -53,7 +53,7 @@ public class PauseMenu : MonoBehaviour
         //don't unpause if the settings scene is loaded
         if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded)
         {
-            TimeManager.Instance.PauseGameToggle();
+            TimeManager.Instance.PauseGameToggle(true);
         }
     }
 
@@ -61,7 +61,7 @@ public class PauseMenu : MonoBehaviour
     /// Enables and disables the pause menu ui
     /// </summary>
     /// <param name="isVisible"></param>
-    private void PauseUIVisibility(bool isVisible)
+    private void PauseUIVisibility(bool isVisible,bool shouldToggleAudio)
     {
         _pauseMenuContent.SetActive(isVisible);
         
@@ -74,9 +74,12 @@ public class PauseMenu : MonoBehaviour
             GameStateManager.Instance.GetOnGameUnpaused()?.Invoke();            
         }
 
-        // Pauses or resumes all the audio based on whether or not the menu is visible
-        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out FMOD.Studio.Bus masterBus);
-        masterBus.setPaused(isVisible);
+        if(shouldToggleAudio)
+        {
+            // Pauses or resumes all the audio based on whether or not the menu is visible
+            FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out FMOD.Studio.Bus masterBus);
+            masterBus.setPaused(isVisible);
+        }
     }
 
     /// <summary>
