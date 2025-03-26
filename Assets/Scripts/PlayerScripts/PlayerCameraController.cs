@@ -8,6 +8,8 @@
 //                  character. This script takes input from the mouse and
 //                  allows the Main Camera to rotate in the scene.
 ******************************************************************************/
+
+using System;
 using Cinemachine;
 using System.Collections;
 using Unity.VisualScripting;
@@ -70,6 +72,7 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for harpoon turning
     [SerializeField, Range(0f, 10f)] private float _harpoonFollowTime = 5f;
+    [SerializeField, Range(0f, 1f)] private float _harpoonAimFollowTimeReduction = 0.5F;
     private const float _BASE_FOLLOW_TIME = 0.01f;
     private float _harpoonHorizontalVelocity;
     private float _harpoonVerticalVelocity;
@@ -125,20 +128,11 @@ public class PlayerCameraController : MonoBehaviour
         _rangeOfFOV = _defaultFOV - _fullyZoomedFOV;
     }
 
-    /// <summary>
-    /// Camera coroutine
-    /// This will perpetually call the camera-moving method until disabled
-    /// </summary>
-    private IEnumerator MoveCamera()
+    private void Update()
     {
-        while (true)
-        {
-            AdjustPlayerRotation();
-            AdjustHarpoonRotation();
-            BoatSway();
-
-            yield return null;
-        }
+        AdjustPlayerRotation();
+        AdjustHarpoonRotation();
+        BoatSway();
     }
 
     /// <summary>
@@ -158,37 +152,36 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void AdjustHarpoonRotation()
     {
-        if (!_harpoonAnimator.IsUnityNull())
+        // Ensure object exists
+        if (_harpoonAnimator.IsUnityNull())
         {
-            if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
-            {
-                // Let's make sure the harpoon is set to the PlayerCamera as its parent
-                // This is because we want to ignore the Main Camera's current rotation so we can just do it ourselves
-                _harpoonGun.transform.SetParent(this.transform, true);
-
-                // Get new angles for the harpoon
-                // We do this by getting the current rotation for the harpoon and putting it through this
-                // SmoothDampAngle function, which is super intuitive and makes the movement clean
-                float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
-                    Camera.main.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
-                    _harpoonFollowTime * _BASE_FOLLOW_TIME);
-                float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
-                    Camera.main.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
-                    _harpoonFollowTime * _BASE_FOLLOW_TIME);
-
-                // Set new angles for the harpoon
-                _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
-            }
-            else
-            {
-                // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
-                // to keep its rotation when it's not idle
-                _harpoonGun.transform.SetParent(Camera.main.transform, true);
-
-                // Let's reset the rotation too, just in case
-                _harpoonGun.transform.localRotation = Quaternion.identity;
-            }
+            return;
         }
+
+        // Get current frame follow time: default or aiming
+        float frameFollowTime = _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0]
+            .clip.name == _IDLE_ANIMATION
+                ? _harpoonFollowTime
+                : _harpoonFollowTime * _harpoonAimFollowTimeReduction;
+        
+        // Ensure harpoon gun is decoupled from player body
+        _harpoonGun.transform.SetParent(this.transform, false);
+        
+        // Follow player position
+        _harpoonGun.transform.position = this.transform.position;
+
+        // Get new angles for the harpoon
+        // We do this by getting the current rotation for the harpoon and putting it through this
+        // SmoothDampAngle function, which is super intuitive and makes the movement clean
+        float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
+            Camera.main.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
+            frameFollowTime * _BASE_FOLLOW_TIME);
+        float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
+            Camera.main.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
+            frameFollowTime * _BASE_FOLLOW_TIME);
+
+        // Set new angles for the harpoon
+        _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
     }
 
     /// <summary>
@@ -364,7 +357,6 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (change)
         {
-            _cameraCoroutine = StartCoroutine(MoveCamera());
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         }
         else

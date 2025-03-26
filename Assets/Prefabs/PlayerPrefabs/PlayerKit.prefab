@@ -382,7 +382,8 @@ MonoBehaviour:
   _movementSwayIntensity: 5
   _jumpscareTime: 0.1
   _jumpscareIntensity: 5
-  _harpoonFollowTime: 5
+  _harpoonFollowTime: 10
+  _harpoonAimFollowTimeReduction: 0.5
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,7 +532,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -744,8 +745,8 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 450
-    m_AccelTime: 1
+    m_MaxSpeed: 250
+    m_AccelTime: 0.1
     m_DecelTime: 0.075
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
@@ -768,8 +769,8 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 450
-    m_AccelTime: 1
+    m_MaxSpeed: 250
+    m_AccelTime: 0.1
     m_DecelTime: 0.075
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
