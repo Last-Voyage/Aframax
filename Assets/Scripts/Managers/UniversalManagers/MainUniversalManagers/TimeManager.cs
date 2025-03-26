@@ -24,41 +24,47 @@ public class TimeManager : MainUniversalManagerFramework
     private static readonly UnityEvent _onGamePausedEvent = new();
     private static readonly UnityEvent _onGameUnpausedEvent = new();
 
-    private static readonly UnityEvent<bool> _onGamePauseToggleEvent = new();
+    /// <summary>
+    /// First bool is if the game is toggled. Second bool is for if the audio should pause
+    /// </summary>
+    private static readonly UnityEvent<bool,bool> _onGamePauseToggleEvent = new();
 
     #region General Time Management
     /// <summary>
     /// Toggles if the game is paused or unpaused
     /// </summary>
-    public void PauseGameToggle()
+    /// <param name="doesToggleAudio"> Toggle to pause audio</param>
+    public void PauseGameToggle(bool doesToggleAudio)
     {
         _isGamePaused = !_isGamePaused;
         if(_isGamePaused)
         {
-            PauseGame();
+            PauseGame(doesToggleAudio);
         }
         else
         {
-            UnpauseGame();
+            UnpauseGame(doesToggleAudio);
         }
     }
 
     /// <summary>
     /// Pauses the game and invokes needed events
     /// </summary>
-    private void PauseGame()
+    /// <param name="doesToggleAudio"> Toggle to pause audio</param>
+    private void PauseGame(bool doesToggleAudio)
     {
         Time.timeScale = 0;
-        OnInvokeGamePause();
+        OnInvokeGamePause(doesToggleAudio);
     }
 
     /// <summary>
     /// Unpauses the game and invokes needed events
     /// </summary>
-    private void UnpauseGame()
+    /// <param name="doesToggleAudio"> Toggle to pause audio</param>
+    private void UnpauseGame(bool doesToggleAudio)
     {
         Time.timeScale = 1;
-        OnInvokeGameUnpaused();
+        OnInvokeGameUnpaused(doesToggleAudio);
     }
     #endregion
 
@@ -80,21 +86,30 @@ public class TimeManager : MainUniversalManagerFramework
     /// Toggles the game being paused or unpaused
     /// </summary>
     /// <param name="isPaused"> Toggle for if the game is paused or not </param>
-    private void OnInvokeGamePauseToggle(bool isPaused)
+    /// <param name="doesToggleAudio"> Toggle to pause audio</param>
+    private void OnInvokeGamePauseToggle(bool isPaused, bool doesToggleAudio)
     {
-        _onGamePauseToggleEvent?.Invoke(isPaused);
+        _onGamePauseToggleEvent?.Invoke(isPaused, doesToggleAudio);
     }
     
-    private void OnInvokeGamePause()
+    /// <summary>
+    /// Invokes the game pause
+    /// </summary>
+    /// <param name="doesToggleAudio"></param>
+    private void OnInvokeGamePause(bool doesToggleAudio)
     {
         _onGamePausedEvent?.Invoke();
-        OnInvokeGamePauseToggle(true);
+        OnInvokeGamePauseToggle(true,doesToggleAudio);
     }
     
-    private void OnInvokeGameUnpaused()
+    /// <summary>
+    /// Invokes the game unpause
+    /// </summary>
+    /// <param name="doesToggleAudio"></param>
+    private void OnInvokeGameUnpaused(bool doesToggleAudio)
     {
         _onGameUnpausedEvent?.Invoke();
-        OnInvokeGamePauseToggle(false);
+        OnInvokeGamePauseToggle(false,doesToggleAudio);
     }
     
     #endregion
@@ -102,7 +117,7 @@ public class TimeManager : MainUniversalManagerFramework
     #region Getters
     public bool GetIsGamePaused() => _isGamePaused;
 
-    public UnityEvent<bool> GetOnGamePauseToggleEvent() => _onGamePauseToggleEvent;
+    public UnityEvent<bool,bool> GetOnGamePauseToggleEvent() => _onGamePauseToggleEvent;
 
     public UnityEvent GetOnGamePauseEvent() => _onGamePausedEvent;
     public UnityEvent GetOnGameUnpauseEvent() => _onGameUnpausedEvent;
