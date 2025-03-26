@@ -27,6 +27,16 @@ public class CameraManager : MainGameplayManagerFramework
     /// </summary>
     private static readonly UnityEvent _onJumpscare = new();
 
+    /// <summary>
+    /// Invokes the _onCameraMovementToggled event when the game is paused
+    /// </summary>
+    /// <param name="toggle"> the bool to input into the invoked event </param>
+    /// <param name="audioToggle"> the bool to toggle audio on pause</param>
+    private void CameraMovementOnPause(bool toggle, bool audioToggle)
+    {
+        OnInvokeCameraMovementToggle(toggle);
+    }
+
     #region Base Manager
     /// <summary>
     /// Establishes the instance for the camera manager
@@ -44,7 +54,7 @@ public class CameraManager : MainGameplayManagerFramework
     {
         base.SubscribeToEvents();
         //Disables camera movement on game pause
-        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(OnInvokeCameraMovementToggle);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(CameraMovementOnPause);
     }
 
     /// <summary>
@@ -53,7 +63,7 @@ public class CameraManager : MainGameplayManagerFramework
     protected override void UnsubscribeToEvents()
     {
         base.UnsubscribeToEvents();
-        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(OnInvokeCameraMovementToggle);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(CameraMovementOnPause);
     }
     
     #endregion
@@ -64,8 +74,7 @@ public class CameraManager : MainGameplayManagerFramework
     /// Invokes the _onCameraMovementToggled event with the input bool
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
-    /// <param name="audioToggle"> the bool to toggle audio on pause</param>
-    public void OnInvokeCameraMovementToggle(bool toggle,bool audioToggle)
+    public void OnInvokeCameraMovementToggle(bool toggle)
     {
         _onCameraMovementToggled?.Invoke(!toggle);
     }
