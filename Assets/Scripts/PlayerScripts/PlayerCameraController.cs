@@ -74,6 +74,9 @@ public class PlayerCameraController : MonoBehaviour
     private float _harpoonHorizontalVelocity;
     private float _harpoonVerticalVelocity;
 
+    // A cached version of the main camera
+    private Camera _mainCamera;
+
     /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized
@@ -113,6 +116,7 @@ public class PlayerCameraController : MonoBehaviour
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
         _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
+        _mainCamera = Camera.main;
     }
 
     /// <summary>
@@ -149,7 +153,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+        _playerVisuals.transform.eulerAngles = new Vector3(0, _mainCamera.transform.eulerAngles.y, 0);
     }
 
     /// <summary>
@@ -170,10 +174,10 @@ public class PlayerCameraController : MonoBehaviour
                 // We do this by getting the current rotation for the harpoon and putting it through this
                 // SmoothDampAngle function, which is super intuitive and makes the movement clean
                 float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
-                    Camera.main.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
+                    _mainCamera.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
                     _harpoonFollowTime * _BASE_FOLLOW_TIME);
                 float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
-                    Camera.main.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
+                    _mainCamera.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
                     _harpoonFollowTime * _BASE_FOLLOW_TIME);
 
                 // Set new angles for the harpoon
@@ -183,7 +187,7 @@ public class PlayerCameraController : MonoBehaviour
             {
                 // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
                 // to keep its rotation when it's not idle
-                _harpoonGun.transform.SetParent(Camera.main.transform, true);
+                _harpoonGun.transform.SetParent(_mainCamera.transform, true);
 
                 // Let's reset the rotation too, just in case
                 _harpoonGun.transform.localRotation = Quaternion.identity;
@@ -257,7 +261,7 @@ public class PlayerCameraController : MonoBehaviour
 
                 // We would like to get the angle at which that camera is facing
                 // So that we can move the harpoon accurately when the player turns
-                float angle = Camera.main.transform.localEulerAngles.y * Mathf.PI / 180f;
+                float angle = _mainCamera.transform.localEulerAngles.y * Mathf.PI / 180f;
 
                 // Movement Sway
                 float newX = 0;

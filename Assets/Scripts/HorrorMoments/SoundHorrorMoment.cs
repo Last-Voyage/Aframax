@@ -28,7 +28,7 @@ public class SoundHorrorMoment : MonoBehaviour
     /// <param name="other"> reference to the other object colided with</param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !_hasPlayedHorrorSound) 
+        if (other.gameObject.CompareTag("Player") && !_hasPlayedHorrorSound) 
         {
             //play horror moment souund
             RuntimeSfxManager.APlayOneShotSfx?.Invoke(_horrorMomentSounds[_soundToUseIndex], transform.position);
