@@ -25,6 +25,7 @@ public class LightController : MonoBehaviour
     // Light Shift Variables
     [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
     [SerializeField] private bool _doesReturnColor;
+    [SerializeField] private float _lightTransitionTime = 1f;
     [SerializeField] private float _lightShiftDuration = 20f;
 
     // Animation variables
@@ -73,11 +74,11 @@ public class LightController : MonoBehaviour
     {
         // Change the lights to target color
         float timer = 0;
-        while (timer <= 1)
+        while (timer <= _lightTransitionTime)
         {
-            float newR = Mathf.Lerp(_light.color.r, _lightShiftTargetColor.r, timer);
-            float newG = Mathf.Lerp(_light.color.g, _lightShiftTargetColor.g, timer);
-            float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer);
+            float newR = Mathf.Lerp(_light.color.r, _lightShiftTargetColor.r, timer / _lightTransitionTime);
+            float newG = Mathf.Lerp(_light.color.g, _lightShiftTargetColor.g, timer / _lightTransitionTime);
+            float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer / _lightTransitionTime);
 
             _light.color = new Color(newR, newG, newB, 0);
             timer += Time.deltaTime;
@@ -85,24 +86,22 @@ public class LightController : MonoBehaviour
             yield return null;
         }
 
+        // Confirm we made it to the target color
+        _light.color = _lightShiftTargetColor;
+
         // If we don't want the lights to change back, we can skip the rest of this
         if (_doesReturnColor)
         {
             // Now, we need the lights to stay this color until the set time has elapsed
-            timer = _lightShiftDuration;
-            while (timer >= 0)
-            {
-                timer -= Time.deltaTime;
-                yield return null;
-            }
+            yield return new WaitForSeconds(_lightShiftDuration);
 
             // Finally, we can change the lights back to normal
             timer = 0;
-            while (timer <= 1)
+            while (timer <= _lightTransitionTime)
             {
-                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer);
-                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer);
-                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer);
+                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer / _lightTransitionTime);
+                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer / _lightTransitionTime);
+                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer / _lightTransitionTime);
 
                 _light.color = new Color(newR, newG, newB, 0);
                 timer += Time.deltaTime;
