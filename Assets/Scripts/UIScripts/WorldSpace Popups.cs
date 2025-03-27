@@ -52,6 +52,9 @@ public class WorldSpacePopups : MonoBehaviour
     private string _closeText;
 
     private float _playerProximity;
+    
+    // Cached variables
+    private WaitForSeconds _findPlayerWait = new WaitForSeconds(.1f);
 
 
     private void Awake()
@@ -109,7 +112,7 @@ public class WorldSpacePopups : MonoBehaviour
     /// <returns></returns>
     private IEnumerator FindPlayer()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return _findPlayerWait;
 
         //added check for PlayerFunctionality to get rid of null error
         PlayerFunctionalityCore pfc = PlayerFunctionalityCore.Instance;

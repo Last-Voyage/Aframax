@@ -29,7 +29,7 @@ public class PlayerHealthUi : MonoBehaviour
     [Header("Player Healed")]
     [SerializeField] private Animator _healingEffectAnimator;
     private const string _HEALING_EFFECT_TRIGGER = "PlayHealing";
-    private readonly string _animHealthStage = "Health_Stage";
+    private const string _animHealthStage = "Health_Stage";
 
     [Header("Heart UI fading variables")] 
     
@@ -50,6 +50,9 @@ public class PlayerHealthUi : MonoBehaviour
 
     private Animator _heartAnimator;
     
+    // Cached variables
+    private WaitForSeconds _heartOnScreenWait;
+    
     private void Awake()
     { 
         SubscribeToEvents();
@@ -61,6 +64,7 @@ public class PlayerHealthUi : MonoBehaviour
 
         _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
         _heartAlphaParent.SetAlpha(0);
+        _heartOnScreenWait = new WaitForSeconds(_heartTimeOnScreen);
     }
 
     /// <summary>
@@ -151,7 +155,7 @@ public class PlayerHealthUi : MonoBehaviour
         _heartAlphaParent.SetAlpha(1);
 
         // Keep the heart on screen for some time
-        yield return new WaitForSeconds(_heartTimeOnScreen);
+        yield return _heartOnScreenWait;
 
         // Lerp to completely hidden
         appearTime = 0;

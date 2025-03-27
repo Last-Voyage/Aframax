@@ -62,6 +62,9 @@ public class PlayerCameraController : MonoBehaviour
     private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
+    // Cached variables for movement sway
+    private float _xSway;
+    private float _ySway;
 
     // Variables for pullback
     [Space]
@@ -74,8 +77,9 @@ public class PlayerCameraController : MonoBehaviour
     private float _harpoonHorizontalVelocity;
     private float _harpoonVerticalVelocity;
 
-    // A cached version of the main camera
+    // Cached variables
     private Camera _mainCamera;
+    private WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
 
     /// <summary>
     /// This function is called before the first frame update.
@@ -153,7 +157,8 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        _playerVisuals.transform.eulerAngles = new Vector3(0, _mainCamera.transform.eulerAngles.y, 0);
+        //_playerVisuals.transform.eulerAngles = new Vector3(0, _mainCamera.transform.eulerAngles.y, 0);
+        _playerVisuals.transform.rotation = Quaternion.Euler(0,_mainCamera.transform.eulerAngles.y,0);
     }
 
     /// <summary>
