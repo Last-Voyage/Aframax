@@ -27,9 +27,15 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private TMP_Text _noteTextField;
     [SerializeField] private Image _leftArrow;
     [SerializeField] private Image _rightArrow;
+
+    [Space]
+    [SerializeField] private UnityEvent _onNoteOpen;
+
+    [Space]
+    [Header("Exit Dialogue")]
     [SerializeField] private ScriptableDialogueUi _dialogueOnExit;
     [SerializeField] private UnityEvent _onDialogueExit;
-    [SerializeField] private bool _onlyPlayOnce = true;
+    [SerializeField] private bool _doesDialogueOnlyPlayOnce = true;
     private SpriteRenderer _interactablePopUp;
     private bool _hasPlayed;
     private int _currentPage;
@@ -90,10 +96,13 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void ShowNote()
     {
+        _onNoteOpen?.Invoke();
+        RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.NotePickUp, transform.position);
+       
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
-        TimeManager.Instance.PauseGameToggle();
-
+        TimeManager.Instance.PauseGameToggle(false);
+        
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
@@ -127,7 +136,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         ActiveNote = null;
         _noteView.SetActive(false);
 
-        if (!_onlyPlayOnce || !_hasPlayed)
+        if (!_doesDialogueOnlyPlayOnce || !_hasPlayed)
         {
             if (_dialogueOnExit != null)
             {
@@ -147,6 +156,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void OnDestroy()
     {
+        _onNoteOpen?.RemoveAllListeners();
         _onDialogueExit?.RemoveAllListeners();
     }
 
