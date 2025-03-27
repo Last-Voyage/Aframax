@@ -46,6 +46,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ReloadHarpoon"",
+                    ""type"": ""Button"",
+                    ""id"": ""c2cdd3e0-3048-4d0e-be1c-bfad40976c34"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""FocusHarpoon"",
                     ""type"": ""Button"",
                     ""id"": ""b8545e07-0d14-4c11-96b3-0a45742a7a07"",
@@ -483,6 +492,28 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""UICycling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b781aaf2-1360-4d85-a754-8fd4ddfa6c3f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""ReloadHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14fdb131-0c07-4b8a-a78b-ecd396b9ce2d"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ReloadHarpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -699,6 +730,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_FireHarpoon = m_Player.FindAction("FireHarpoon", throwIfNotFound: true);
+        m_Player_ReloadHarpoon = m_Player.FindAction("ReloadHarpoon", throwIfNotFound: true);
         m_Player_FocusHarpoon = m_Player.FindAction("FocusHarpoon", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_EnterTitleScreen = m_Player.FindAction("EnterTitleScreen", throwIfNotFound: true);
@@ -774,6 +806,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_FireHarpoon;
+    private readonly InputAction m_Player_ReloadHarpoon;
     private readonly InputAction m_Player_FocusHarpoon;
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_EnterTitleScreen;
@@ -787,6 +820,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public PlayerActions(@PlayerInputMap wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @FireHarpoon => m_Wrapper.m_Player_FireHarpoon;
+        public InputAction @ReloadHarpoon => m_Wrapper.m_Player_ReloadHarpoon;
         public InputAction @FocusHarpoon => m_Wrapper.m_Player_FocusHarpoon;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @EnterTitleScreen => m_Wrapper.m_Player_EnterTitleScreen;
@@ -809,6 +843,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @FireHarpoon.started += instance.OnFireHarpoon;
             @FireHarpoon.performed += instance.OnFireHarpoon;
             @FireHarpoon.canceled += instance.OnFireHarpoon;
+            @ReloadHarpoon.started += instance.OnReloadHarpoon;
+            @ReloadHarpoon.performed += instance.OnReloadHarpoon;
+            @ReloadHarpoon.canceled += instance.OnReloadHarpoon;
             @FocusHarpoon.started += instance.OnFocusHarpoon;
             @FocusHarpoon.performed += instance.OnFocusHarpoon;
             @FocusHarpoon.canceled += instance.OnFocusHarpoon;
@@ -840,6 +877,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @FireHarpoon.started -= instance.OnFireHarpoon;
             @FireHarpoon.performed -= instance.OnFireHarpoon;
             @FireHarpoon.canceled -= instance.OnFireHarpoon;
+            @ReloadHarpoon.started -= instance.OnReloadHarpoon;
+            @ReloadHarpoon.performed -= instance.OnReloadHarpoon;
+            @ReloadHarpoon.canceled -= instance.OnReloadHarpoon;
             @FocusHarpoon.started -= instance.OnFocusHarpoon;
             @FocusHarpoon.performed -= instance.OnFocusHarpoon;
             @FocusHarpoon.canceled -= instance.OnFocusHarpoon;
@@ -962,6 +1002,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnFireHarpoon(InputAction.CallbackContext context);
+        void OnReloadHarpoon(InputAction.CallbackContext context);
         void OnFocusHarpoon(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnEnterTitleScreen(InputAction.CallbackContext context);
