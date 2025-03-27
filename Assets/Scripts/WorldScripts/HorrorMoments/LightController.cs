@@ -74,14 +74,14 @@ public class LightController : MonoBehaviour
     {
         // Change the lights to target color
         float timer = 0;
-        while (timer <= _lightTransitionTime)
+        while (timer <= 1)
         {
-            float newR = Mathf.Lerp(_light.color.r, _lightShiftTargetColor.r, timer / _lightTransitionTime);
-            float newG = Mathf.Lerp(_light.color.g, _lightShiftTargetColor.g, timer / _lightTransitionTime);
-            float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer / _lightTransitionTime);
+            float newR = Mathf.Lerp(_light.color.r, _lightShiftTargetColor.r, timer);
+            float newG = Mathf.Lerp(_light.color.g, _lightShiftTargetColor.g, timer);
+            float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer);
 
             _light.color = new Color(newR, newG, newB, 0);
-            timer += Time.deltaTime;
+            timer += Time.deltaTime / _lightTransitionTime;
 
             yield return null;
         }
@@ -97,14 +97,14 @@ public class LightController : MonoBehaviour
 
             // Finally, we can change the lights back to normal
             timer = 0;
-            while (timer <= _lightTransitionTime)
+            while (timer <= 1)
             {
-                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer / _lightTransitionTime);
-                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer / _lightTransitionTime);
-                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer / _lightTransitionTime);
+                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer);
+                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer);
+                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer);
 
                 _light.color = new Color(newR, newG, newB, 0);
-                timer += Time.deltaTime;
+                timer += Time.deltaTime / _lightTransitionTime;
 
                 yield return null;
             }
