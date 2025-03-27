@@ -23,6 +23,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Slider _brightnessSlider;
 
+    [SerializeField] private Toggle _subtitleToggleButton;
+
     /// <summary>
     /// set up references
     /// </summary>
@@ -36,8 +38,12 @@ public class VideoSettingsBehaviour : MonoBehaviour
             throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
 
+        ///remember settings
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
+
+        Debug.Log(SaveManager.Instance.GetGameSaveData().IsSubtitlesOn);
+        _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
     }
 
     /// <summary>
@@ -48,5 +54,15 @@ public class VideoSettingsBehaviour : MonoBehaviour
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
         
         SaveManager.Instance.GetGameSaveData().SetBrightness(_brightnessSlider.value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="subtitleState">bool</param>
+    public void ToggleSubtitleSetting()
+    {
+        Debug.Log(_subtitleToggleButton.isOn);
+        SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
     }
 }
