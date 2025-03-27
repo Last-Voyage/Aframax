@@ -1,59 +1,63 @@
+/*****************************************************************************
+// File Name :         DemoContextTextPage.cs
+// Author :            Andrew Stapay
+// Creation Date :     3/27/25
+//
+// Brief Description : Handles and progresses through the text pages that are
+                       used with the Demo Context Scene
+*****************************************************************************/
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Handles the text pages associated with the Demo Context Scene
+/// </summary>
 public class DemoContextTextPage : MonoBehaviour
 {
+    /// <summary>
+    /// A struct that we will use to consolidate our pages
+    /// </summary>
     [Serializable]
     private struct TextPage
     {
+        // the text that we will update to when necessary
         public string TextToDisplay;
+
+        // the amount of time that this page will be active for before moving to the next
         public float ActiveTime;
     }
 
     [SerializeField] private TextPage[] _textPages;
     private TMP_Text _currentText;
 
+    /// <summary>
+    /// Called when the associated game object is initialized
+    /// Used to set up initial text
+    /// </summary>
     private void Awake()
     {
-        GetTextComponent();
+        // Get the text element from the canvas
+        _currentText = GetComponent<TMP_Text>();
 
-        SetFirstPage();
-
+        // Start displaying the pages
         StartCoroutine(ProgressPages());
     }
 
-    private void GetTextComponent()
-    {
-        _currentText = GetComponent<TMP_Text>();
-    }
-
-    private void SetFirstPage()
-    {
-        if (!_textPages[0].IsUnityNull())
-        {
-            _currentText.text = _textPages[0].TextToDisplay;
-        }
-    }
-
+    /// <summary>
+    /// Progresses through the pages set in the _textPages array
+    /// </summary>
     private IEnumerator ProgressPages()
     {
-        int index = 0;
-
-        while (index < _textPages.Length)
+        // Let's iterate through the text pages woo!
+        for (int index = 0; index < _textPages.Length; index++)
         {
+            // Set the text of this page
+            _currentText.text = _textPages[index].TextToDisplay;
+
+            // Wait for the active time for this page to be up
             yield return new WaitForSeconds(_textPages[index].ActiveTime);
-
-            index++;
-
-            if (index < _textPages.Length)
-            {
-                _currentText.text = _textPages[index].TextToDisplay;
-            }
         }
     }
 }
