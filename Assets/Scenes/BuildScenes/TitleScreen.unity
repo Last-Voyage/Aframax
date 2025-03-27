@@ -1367,6 +1367,7 @@ MonoBehaviour:
   _movingDestination: {fileID: 324132671}
   _screenScrollSpeed: 30
   _sceneCanvas: {fileID: 1668942281}
+  _enterFadeOutAnimator: {fileID: 901565831}
   _setUpPlayerControls: {fileID: 887760780}
 --- !u!1 &689632244
 GameObject:
@@ -1886,6 +1887,7 @@ GameObject:
   - component: {fileID: 901565828}
   - component: {fileID: 901565830}
   - component: {fileID: 901565829}
+  - component: {fileID: 901565831}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2010,6 +2012,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901565827}
   m_CullTransparentMesh: 1
+--- !u!95 &901565831
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901565827}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 36139ea3c8797ad419b79e8b86ca3215, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &979090212
 GameObject:
   m_ObjectHideFlags: 0
