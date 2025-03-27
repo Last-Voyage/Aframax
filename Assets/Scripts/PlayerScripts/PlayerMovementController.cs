@@ -41,6 +41,11 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private AnimationCurve _accelerationCurve;
     [Tooltip("The amount of gravity affecting the player (in m/s^2)")] 
     [SerializeField] private float _playerGravity = 9.8F;
+    
+    // Cached variables
+    private Vector3 _horizontalMovement = new();
+    private Vector3 _verticalMovement = new ();
+    private WaitForSeconds _deccelerationWaitTime;
 
     private float _currentAcceleration = 0;
     private float _accelerationProgress = 0;
@@ -111,6 +116,7 @@ public class PlayerMovementController : MonoBehaviour
         InitializeRigidbody();
         SetupPlayerVisuals();
         SetupPlayerGroundedCheckTransform();
+        InitializeDecelerationTime();
     }
 
     /// <summary>
@@ -212,6 +218,14 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
+    /// Initializes the deceleration time for moving
+    /// </summary>
+    private void InitializeDecelerationTime()
+    {
+        _deccelerationWaitTime = new WaitForSeconds(_deccelerationTime);
+    }
+
+    /// <summary>
     /// Called when this component is enabled.
     /// Used to assign the OnMovementToggled Action to a listener
     /// </summary>
@@ -263,10 +277,10 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void HandleMovement()
     {
-        Vector3 horizontalMovement = DirectionalInputMovement();
-        Vector3 verticalMovement = HandleVerticalMovement();
+        _horizontalMovement = DirectionalInputMovement();
+        _verticalMovement = HandleVerticalMovement();
 
-        _playerRigidBody.velocity = horizontalMovement + verticalMovement;
+        _playerRigidBody.velocity = _horizontalMovement + _verticalMovement;
     }
 
     /// <summary>
@@ -402,7 +416,7 @@ public class PlayerMovementController : MonoBehaviour
     private IEnumerator MovementDecceleration()
     {
         //Wait for a short period before reseting the acceleration
-        yield return new WaitForSeconds(_deccelerationTime);
+        yield return _deccelerationWaitTime;
         _accelerationProgress = 0;
         EvaluateCurrentAcceleration();
     }
