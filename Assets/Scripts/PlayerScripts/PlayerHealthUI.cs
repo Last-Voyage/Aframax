@@ -25,6 +25,10 @@ public class PlayerHealthUi : MonoBehaviour
 
     [SerializeField] private GameObject _playerHeart;
 
+    [Header("Player Healed")]
+    [SerializeField] private Animator _healingEffectAnimator;
+    private const string _HEALING_EFFECT_TRIGGER = "PlayHealing";
+
     [Header("Heart UI fading variables")] 
     
     [SerializeField]
@@ -40,7 +44,7 @@ public class PlayerHealthUi : MonoBehaviour
 
     private CanvasRenderer _heartAlphaParent;
 
-    private Animator _animator;
+    private Animator _heartAnimator;
     
     private void Awake()
     { 
@@ -60,7 +64,7 @@ public class PlayerHealthUi : MonoBehaviour
     /// </summary>
     private void InitializeAnimator()
     {
-        _animator = _playerHeart.GetComponent<Animator>();
+        _heartAnimator = _playerHeart.GetComponent<Animator>();
     }
 
     private void OnDestroy()
@@ -89,27 +93,27 @@ public class PlayerHealthUi : MonoBehaviour
         {
             case >=1f:
                 TurnOffDamagedUI();
-                _animator.SetFloat("Health_Stage_Num",4);
+                _heartAnimator.SetFloat("Health_Stage_Num",4);
                 break;
             case >.75f:
                 TurnOffDamagedUI();
                 _damagedUIImages[3].gameObject.SetActive(true);
-                _animator.SetFloat("Health_Stage_Num", 3);
+                _heartAnimator.SetFloat("Health_Stage_Num", 3);
                 break;
             case >.5f:
                 TurnOffDamagedUI();
                 _damagedUIImages[2].gameObject.SetActive(true);
-                _animator.SetFloat("Health_Stage_Num", 2);
+                _heartAnimator.SetFloat("Health_Stage_Num", 2);
                 break;
             case >.25f:
                 TurnOffDamagedUI();
                 _damagedUIImages[1].gameObject.SetActive(true);
-                _animator.SetFloat("Health_Stage_Num", 1);
+                _heartAnimator.SetFloat("Health_Stage_Num", 1);
                 break;
             default:
                 TurnOffDamagedUI();
                 _damagedUIImages[0].gameObject.SetActive(true);
-                _animator.SetFloat("Health_Stage_Num", 0);
+                _heartAnimator.SetFloat("Health_Stage_Num", 0);
                 break;
         }
     }
@@ -170,11 +174,21 @@ public class PlayerHealthUi : MonoBehaviour
     }
 
     /// <summary>
+    /// Plays the healing visual effect on the ui
+    /// </summary>
+    /// <param name="healing">The amount healed. Used because of event subscription</param>
+    private void PlayHealingEffect(float healing)
+    {
+        _healingEffectAnimator.SetTrigger(_HEALING_EFFECT_TRIGGER);
+    }
+
+    /// <summary>
     /// Subscribes to events
     /// </summary>
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().AddListener(UpdateHealthUI);
+        PlayerManager.Instance.GetOnPlayerHealEvent().AddListener(PlayHealingEffect);
     }
 
     /// <summary>
@@ -183,5 +197,7 @@ public class PlayerHealthUi : MonoBehaviour
     private void UnsubscribeToEvents()
     {
         PlayerManager.Instance.GetOnPlayerHealthChangeEvent().RemoveListener(UpdateHealthUI);
+        PlayerManager.Instance.GetOnPlayerHealEvent().RemoveListener(PlayHealingEffect);
+
     }
 }
