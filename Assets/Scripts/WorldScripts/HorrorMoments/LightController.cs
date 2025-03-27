@@ -6,6 +6,7 @@
 // Brief description :  Controls various aspects of the lighting, such as the Light Shift Horror Moment
 **********************************************************************************************************************/
 using System.Collections;
+using System.Xml;
 using UnityEngine;
 
 /// <summary>
@@ -23,6 +24,8 @@ public class LightController : MonoBehaviour
 
     // Light Shift Variables
     [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
+    [SerializeField] private bool _doesReturnColor;
+    [SerializeField] private float _lightTransitionTime = 1f;
     [SerializeField] private float _lightShiftDuration = 20f;
 
     // Animation variables
@@ -78,35 +81,37 @@ public class LightController : MonoBehaviour
             float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer);
 
             _light.color = new Color(newR, newG, newB, 0);
-            timer += Time.deltaTime;
+            timer += Time.deltaTime / _lightTransitionTime;
 
             yield return null;
         }
 
-        // Now, we need the lights to stay this color until the set time has elapsed
-        timer = _lightShiftDuration;
-        while (timer >= 0)
+        // Confirm we made it to the target color
+        _light.color = _lightShiftTargetColor;
+
+        // If we don't want the lights to change back, we can skip the rest of this
+        if (_doesReturnColor)
         {
-            timer -= Time.deltaTime;
-            yield return null;
+            // Now, we need the lights to stay this color until the set time has elapsed
+            yield return new WaitForSeconds(_lightShiftDuration);
+
+            // Finally, we can change the lights back to normal
+            timer = 0;
+            while (timer <= 1)
+            {
+                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer);
+                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer);
+                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer);
+
+                _light.color = new Color(newR, newG, newB, 0);
+                timer += Time.deltaTime / _lightTransitionTime;
+
+                yield return null;
+            }
+
+            // Confirm we made it back to the original color
+            _light.color = _originalColor;
         }
-
-        // Finally, we can change the lights back to normal
-        timer = 0;
-        while (timer <= 1)
-        {
-            float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer);
-            float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer);
-            float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer);
-
-            _light.color = new Color(newR, newG, newB, 0);
-            timer += Time.deltaTime;
-
-            yield return null;
-        }
-
-        // Confirm we made it back to the original color
-        _light.color = _originalColor;
     }
 
     /// <summary>
