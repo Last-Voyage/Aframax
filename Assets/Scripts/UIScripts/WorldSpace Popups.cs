@@ -55,6 +55,7 @@ public class WorldSpacePopups : MonoBehaviour
     
     // Cached variables
     private WaitForSeconds _findPlayerWait = new WaitForSeconds(.1f);
+    private Transform _playerTransform;
 
 
     private void Awake()
@@ -82,7 +83,7 @@ public class WorldSpacePopups : MonoBehaviour
         if (!_playerReference.IsUnityNull())
         {
             //check proximity to player
-            _playerProximity = Vector3.Distance(_playerReference.transform.position, transform.position);
+            _playerProximity = Vector3.Distance(_playerTransform.position, transform.position);
 
             // If the player is in range and is currently looking at the interactable
             if (_playerProximity < _playerDetectionProximity
@@ -122,6 +123,7 @@ public class WorldSpacePopups : MonoBehaviour
             //_playerCamera = pfc.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
             _playerReference = pfc.transform.GetChild(1).gameObject;
             _playerInteractor = pfc.GetComponentInChildren<PlayerInteraction>();
+            _playerTransform = _playerReference.transform;
         }
 
         _objectSpriteReference = GetComponent<SpriteRenderer>();

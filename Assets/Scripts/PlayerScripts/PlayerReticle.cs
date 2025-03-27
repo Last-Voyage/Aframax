@@ -66,7 +66,7 @@ public class PlayerReticle : MonoBehaviour
     private bool _isFocusChanging;
 
     private WaitForFixedUpdate _reticlePhysWait = new WaitForFixedUpdate();
-
+    
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
     /// </summary>
