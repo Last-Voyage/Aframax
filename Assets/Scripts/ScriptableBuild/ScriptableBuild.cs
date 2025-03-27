@@ -96,7 +96,10 @@ public class AframaxBuildMinSizeRel
         }
         
         // Remove leftover burst compiler files
-        RemoveBurstCompilerDirectory(Path.Join(buildSummary.outputPath, _BURST_COMPILER_DIR));
+        RemoveBurstCompilerDirectory(Path.Join(
+            Path.GetDirectoryName(buildSummary.outputPath), 
+            _BURST_COMPILER_DIR)
+        );
     }
 
     /// <summary>
