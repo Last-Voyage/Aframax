@@ -38,11 +38,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
             throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
 
-        ///remember settings
+        ///remembers previously set values 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
 
-        Debug.Log(SaveManager.Instance.GetGameSaveData().IsSubtitlesOn);
         _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
     }
 
@@ -57,9 +56,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// updates the setting when the button is pressed
     /// </summary>
-    /// <param name="subtitleState">bool</param>
     public void ToggleSubtitleSetting()
     {
         SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
