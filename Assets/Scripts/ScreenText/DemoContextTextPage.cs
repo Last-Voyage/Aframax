@@ -12,23 +12,23 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
+/// A struct that we will use to consolidate our pages
+/// </summary>
+[Serializable]
+public struct TextPage
+{
+    // the text that we will update to when necessary
+    public string TextToDisplay;
+
+    // the amount of time that this page will be active for before moving to the next
+    public float ActiveTime;
+}
+
+/// <summary>
 /// Handles the text pages associated with the Demo Context Scene
 /// </summary>
 public class DemoContextTextPage : MonoBehaviour
 {
-    /// <summary>
-    /// A struct that we will use to consolidate our pages
-    /// </summary>
-    [Serializable]
-    private struct TextPage
-    {
-        // the text that we will update to when necessary
-        public string TextToDisplay;
-
-        // the amount of time that this page will be active for before moving to the next
-        public float ActiveTime;
-    }
-
     [SerializeField] private TextPage[] _textPages;
     private TMP_Text _currentText;
 
