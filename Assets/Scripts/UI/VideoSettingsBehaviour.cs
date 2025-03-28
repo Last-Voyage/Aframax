@@ -62,7 +62,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// <param name="subtitleState">bool</param>
     public void ToggleSubtitleSetting()
     {
-        Debug.Log(_subtitleToggleButton.isOn);
         SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
     }
 }
