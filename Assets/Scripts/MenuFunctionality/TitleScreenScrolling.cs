@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         PauseMenu.cs
+// File Name :         TitleScreenScrolling.cs
 // Author :            Jeremiah Peters
 // Creation Date :     10/27/24
 //
