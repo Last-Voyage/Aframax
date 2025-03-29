@@ -23,6 +23,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [SerializeField] private Canvas _sceneCanvas;
 
+    [SerializeField] private Animator _enterFadeOutAnimator;
+
     [SerializeField] private EventSystem _setUpPlayerControls;
 
     private PlayerInputMap _playerInputControls;
@@ -48,6 +50,8 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ScrollingScreen(Vector3 destination, float scrollSpeed)
     {
+        _enterFadeOutAnimator.SetTrigger("GameStarted");
+
         if (!_hasScrollingStarted)
         {
             _hasScrollingStarted = true;

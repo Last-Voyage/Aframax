@@ -552,4 +552,24 @@ public class PlayerMovementController : MonoBehaviour
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
     #endregion Getters
+
+    #region Setters
+    /// <summary>
+    /// Sets the value of the move speed
+    /// </summary>
+    /// <param name="moveSpeed">The new value for speed</param>
+    public void SetCurrentMovementSpeed(float moveSpeed)
+    {
+        _playerMovementSpeed = moveSpeed;
+    }
+
+    /// <summary>
+    /// Sets the value of the acceleration
+    /// </summary>
+    /// <param name="acceleration">The new value for acceleration</param>
+    public void SetCurrentAcceleration(float acceleration)
+    {
+        _currentAcceleration = acceleration;
+    }
+    #endregion
 }
