@@ -40,7 +40,7 @@ public class RandomizedAnimation : MonoBehaviour
     [SerializeField] private ERandomizedAnimationType _randomAnimType;
 
     [Space]
-    [SerializeField] private UnityEvent _onAnimPlay;
+    public UnityEvent OnAnimPlay;
 
     private Tween _delayTween;
     
@@ -94,8 +94,11 @@ public class RandomizedAnimation : MonoBehaviour
     /// <param name="animPos"></param>
     private void PlayAnimationTrigger(int animPos)
     {
-        _onAnimPlay?.Invoke();
-        _animator.SetTrigger(_animationNameList[animPos]);
+        OnAnimPlay?.Invoke();
+        if (_animator != null)
+        {
+            _animator.SetTrigger(_animationNameList[animPos]);
+        }
         StartRandomDelay();
     }
 
@@ -108,6 +111,6 @@ public class RandomizedAnimation : MonoBehaviour
         {
             _delayTween.Stop();
         }
-        _onAnimPlay?.RemoveAllListeners();
+        OnAnimPlay?.RemoveAllListeners();
     }
 }

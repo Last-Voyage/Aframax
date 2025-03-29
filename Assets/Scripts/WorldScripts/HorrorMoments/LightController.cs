@@ -23,7 +23,9 @@ public class LightController : MonoBehaviour
     // Toggle for turning on and off light flickering
     [SerializeField] private bool _canLightFlicker;
     [SerializeField] private float _lightFlickerDuration;
+    [SerializeField] private float _horrorFlickerDuration;
     [SerializeField] private AnimationCurve _flickerCurve;
+    [SerializeField] private AnimationCurve _horrorMomentCurve;
     private float _startingIntensity;
 
     [Header("Light Shift")]
@@ -124,13 +126,20 @@ public class LightController : MonoBehaviour
     /// <summary>
     /// Begins the light flickering animation by setting the trigger
     /// </summary>
-    public void LightFlicker()
+    private void LightFlicker()
     {
         if (_canLightFlicker)
         {
-            //_animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
-            StartCoroutine(LightFlickerProcess());
+            StartLightFlickerProcess();
         }
+    }
+
+    /// <summary>
+    /// Starts the light flicker process
+    /// </summary>
+    private void StartLightFlickerProcess()
+    {
+        StartCoroutine(LightFlickerProcess());
     }
 
     /// <summary>
@@ -139,12 +148,14 @@ public class LightController : MonoBehaviour
     /// <returns>Time itself</returns>
     private IEnumerator LightFlickerProcess()
     {
-        print("PROCESS START");
         float flickerTimer = 0;
-        while(flickerTimer < 1)
+        float flickerDuration = _canLightFlicker ? _horrorFlickerDuration: _lightFlickerDuration;
+        AnimationCurve curve = _canLightFlicker ? _horrorMomentCurve: _flickerCurve;
+
+        while (flickerTimer < 1)
         {
             flickerTimer += Time.deltaTime / _lightFlickerDuration;
-            _light.intensity = _flickerCurve.Evaluate(flickerTimer);
+            _light.intensity = curve.Evaluate(flickerTimer) * _startingIntensity;
             yield return null;
         }
     }
@@ -157,6 +168,11 @@ public class LightController : MonoBehaviour
     {
         VfxManager.Instance.GetOnLightShiftEvent().AddListener(LightShift);
         VfxManager.Instance.GetOnLightFlickerEvent().AddListener(LightFlicker);
+
+        if (TryGetComponent<RandomizedAnimation>(out RandomizedAnimation anim))
+        {
+            anim.OnAnimPlay.AddListener(StartLightFlickerProcess);
+        }
     }
 
     /// <summary>
