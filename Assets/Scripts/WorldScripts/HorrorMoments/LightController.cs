@@ -19,9 +19,14 @@ public class LightController : MonoBehaviour
     private Color _originalColor;
     private Animator _animator;
 
+    [Header("Flicker")]
     // Toggle for turning on and off light flickering
     [SerializeField] private bool _canLightFlicker;
+    [SerializeField] private float _lightFlickerDuration;
+    [SerializeField] private AnimationCurve _flickerCurve;
+    private float _startingIntensity;
 
+    [Header("Light Shift")]
     // Light Shift Variables
     [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
     [SerializeField] private bool _doesReturnColor;
@@ -30,6 +35,7 @@ public class LightController : MonoBehaviour
 
     // Animation variables
     private const string _LIGHT_FLICKER_TRIGGER = "PlayFlicker";
+
 
     /// <summary>
     /// Called on the first frame
@@ -47,6 +53,7 @@ public class LightController : MonoBehaviour
     private void GetLight()
     {
         _light = GetComponent<Light>();
+        _startingIntensity = _light.intensity;
         _originalColor = _light.color;
     }
 
@@ -117,11 +124,28 @@ public class LightController : MonoBehaviour
     /// <summary>
     /// Begins the light flickering animation by setting the trigger
     /// </summary>
-    private void LightFlicker()
+    public void LightFlicker()
     {
         if (_canLightFlicker)
         {
-            _animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
+            //_animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
+            StartCoroutine(LightFlickerProcess());
+        }
+    }
+
+    /// <summary>
+    /// The process of the light flickering
+    /// </summary>
+    /// <returns>Time itself</returns>
+    private IEnumerator LightFlickerProcess()
+    {
+        print("PROCESS START");
+        float flickerTimer = 0;
+        while(flickerTimer < 1)
+        {
+            flickerTimer += Time.deltaTime / _lightFlickerDuration;
+            _light.intensity = _flickerCurve.Evaluate(flickerTimer);
+            yield return null;
         }
     }
 

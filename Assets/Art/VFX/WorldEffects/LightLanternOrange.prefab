@@ -156,6 +156,94 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canLightFlicker: 0
+  _lightFlickerDuration: 5
+  _flickerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.066666
+      value: 1
+      inSlope: -0.00007119747
+      outSlope: -0.00007119747
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.133332
+      value: 1.25
+      inSlope: 0.0013773236
+      outSlope: 0.0013773236
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.36835608
+    - serializedVersion: 3
+      time: 0.15
+      value: 1
+      inSlope: -0.11526048
+      outSlope: -0.11526048
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.1666666
+      value: 0.75
+      inSlope: -0.07017438
+      outSlope: -0.07017438
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.183332
+      value: 1
+      inSlope: 0.0020089902
+      outSlope: 0.0020089902
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: 0.04739949
+      outSlope: 0.04739949
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.216666
+      value: 1.25
+      inSlope: 0.018140227
+      outSlope: 0.018140227
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.31914866
+      outSlope: -0.31914866
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _lightShiftTargetColor: {r: 0, g: 0.3056603, b: 0.08650762, a: 0}
   _doesReturnColor: 1
   _lightTransitionTime: 1
