@@ -7,6 +7,7 @@
 // Brief Description : Stores all the SFX
 *********************************************************************************************************************/
 
+using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
@@ -68,8 +69,8 @@ public class FmodSfxEvents : MonoBehaviour
     #region Player
 
     [field: Header("Player")]
-    [field: SerializeField] public EventReference AboveDeckWalking { get; private set; }
-    [field: SerializeField] public EventReference BelowDeckWalking { get; private set; }
+    [field: SerializeField] public EventReference DefaultWalking { get; private set; }
+    [field: SerializeField] public FootStepType[] MaterialFootsteps { get; private set; }
     [field: Tooltip("Time between each footstep")]
     [field: SerializeField] public float FootstepDelay { get; private set; } = 0.3f;
     [field: Tooltip("Time between each footstep")]
@@ -142,5 +143,24 @@ public class FmodSfxEvents : MonoBehaviour
     public void SetUpInstance()
     {
         Instance = this;
+    }
+}
+
+[System.Serializable]
+public class FootStepType
+{
+    [field: SerializeField] public Material AssociatedMaterial { get; private set; }
+    [field: SerializeField] public EventReference AssociatedWalkingSound { get; private set; }
+    internal EventInstance AssociatedInstance { get; set; }
+
+    /// <summary>
+    /// Creates the associated instance based on the walking sound
+    /// </summary>
+    public void CreateInstance()
+    {
+        if(!AssociatedWalkingSound.IsNull)
+        {
+            AssociatedInstance = RuntimeManager.CreateInstance(AssociatedWalkingSound);
+        }
     }
 }

@@ -67,6 +67,7 @@ public class PlayerMovementController : MonoBehaviour
     private Transform _playerVisuals;
     public static bool IsGrounded { get; private set; } = false;
     private Transform _groundedCheckOrigin;
+    internal static GameObject CurrentGround;
     public static bool IsMoving { get; private set; }
 
     [Tooltip("Size of boxcast for the grounded check")]
@@ -277,6 +278,7 @@ public class PlayerMovementController : MonoBehaviour
         //Checks for if the player is grounded based on a boxcast
         IsGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
             transform.up*-1, out _groundHit, Quaternion.identity,_groundedCheckLength,_walkableLayers);
+        CurrentGround = _groundHit.collider.gameObject;
     }
 
     /// <summary>
