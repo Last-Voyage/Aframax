@@ -37,6 +37,8 @@ public class PlayerCollision : MonoBehaviour
         CheckForSavePointTrigger(contact);
 
         CheckForAppearTrigger(contact);
+
+        CheckForWhackAMoleTrigger(contact);
     }
 
     #endregion
@@ -116,6 +118,20 @@ public class PlayerCollision : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks for the trigger to damage player in chase sequence
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForWhackAMoleTrigger(Collider contact)
+    {
+        if (contact.CompareTag("WhackAMoleTrigger"))
+        {
+            var whackAMoleObject = contact.transform.parent.GetComponent<WhackAMole>();
+
+            whackAMoleObject.CallAttack(transform);
+        }
+    }
+
+    /// <summary>
     /// Checks for the trigger to change the music
     /// </summary>
     /// <param name="contact">The collider we contacted</param>
@@ -149,7 +165,10 @@ public class PlayerCollision : MonoBehaviour
             {
                 if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
                 {
-                    proceduralVine.StartAppear();
+                    if(proceduralVine.IsWhackAMoleVine)
+                    {
+                        proceduralVine.StartAppear();
+                    }
                 }
                 
             }

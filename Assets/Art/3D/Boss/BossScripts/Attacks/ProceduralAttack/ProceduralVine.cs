@@ -23,6 +23,7 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private PathCreator _pathCreator;
     [SerializeField] private float _speed = 5f; // speed of idle path following movement
     private float _idleMoveDistance = 0; //current distance along the path
+    [SerializeField] private bool _isWhackAMoleVine = false;
 
     [Header("Attack stuff")]
     [SerializeField] private Transform _flowerHeadTransform;
@@ -70,6 +71,8 @@ public class ProceduralVine : MonoBehaviour
 
     private EventInstance _movementEventInstance;
 
+    public bool IsWhackAMoleVine { get => _isWhackAMoleVine; set => _isWhackAMoleVine = value; }
+
     private void Start()
     {
         _currentState = EVineState.none;
@@ -80,32 +83,54 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     private void Update() 
     {
-        //retracting
-        if (_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance + .1f)
+        //normal idle vine
+        if(!IsWhackAMoleVine)
         {
-            Retracting();
-            return;
-        }
-
-        if (_currentState == EVineState.none)
-        {
-            //move along path
-            MoveAlongPath();
-            if(_currentAttackCD > 0)
+            //retracting
+            if (_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance + .1f)
             {
-               _currentAttackCD -= Time.deltaTime; 
-            }    
-        }
+                Retracting();
+                return;
+            }
 
-        //appearing
-        if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance +.1f)
-        {
-            Appearing();
+            if (_currentState == EVineState.none)
+            {
+                //move along path
+                MoveAlongPath();
+                if (_currentAttackCD > 0)
+                {
+                    _currentAttackCD -= Time.deltaTime;
+                }
+            }
+
+            //appearing
+            if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance + .1f)
+            {
+                Appearing();
+            }
+            else if (_currentState == EVineState.appearing)
+            {
+                StartCoroutine(JumpBackToPath(_moveBackToPathDuration));
+            }
         }
-        else if (_currentState == EVineState.appearing)
+        //whack a mole vine
+        else
         {
-            StartCoroutine(JumpBackToPath(_moveBackToPathDuration));
+            //appearing
+            if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance + .1f)
+            {
+                Appearing();
+            }
+            else if(!_isAppeared && _appearPath.path.length <= _appearDistance + .1f) _isAppeared = true;
+
+            //retracting
+            if (_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance + .1f)
+            {
+                Retracting();
+                return;
+            }
         }
+        
     }
 
     /// <summary>
@@ -127,7 +152,7 @@ public class ProceduralVine : MonoBehaviour
         Vector3 direction = (_pathCreator.path.GetPointAtDistance(_idleMoveDistance) - _followTransform.position).normalized;
         _followTransform.forward = direction;
         yield return new WaitForSeconds(timeToGetToPath);
-        if(_currentState != EVineState.retracting)
+        if(_currentState != EVineState.retracting && !_isWhackAMoleVine)
         {
             _currentState = EVineState.none;
         }
@@ -228,15 +253,33 @@ public class ProceduralVine : MonoBehaviour
             RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
             yield return new WaitForSeconds(_lungeToPlayerDuration);
 
-            //move back to og position
-            _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
-            yield return new WaitForSeconds(_moveBackAfterAttackTime);
-
-            // //attack done
-            _currentState = EVineState.none;
+            if(!_isWhackAMoleVine)
+            {
+                //move back to og position
+                _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
+                yield return new WaitForSeconds(_moveBackAfterAttackTime);
+                // //attack done
+                _currentState = EVineState.none;
+            }
+            else
+            {
+                StartRetract();
+            }
+            
             StartMovementAudio();
         }
         
+    }
+
+    public void StartAttack(Vector3 playerPos)
+    {
+        //change rig to use chainIK
+        _dampedTransformRig.weight = 0f;
+        _chainIKRig.weight = 1f;
+        _followTransform.position = _flowerHeadTransform.position;
+        _rigBuilder.Build();
+        StartCoroutine(Attack(playerPos));
+        Debug.Log("attack started");
     }
 
     /// <summary>
