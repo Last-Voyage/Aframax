@@ -114,17 +114,24 @@ public class DialoguePopUps : MonoBehaviour
             //fix for background going slightly faster than actual text
             _textBackgroundContainer.maxVisibleCharacters--;
 
-            if (SaveManager.Instance.GetGameSaveData().IsSubtitlesOn == true)
+            while (_textContainer.maxVisibleCharacters < totalLength)
             {
-                while (_textContainer.maxVisibleCharacters < totalLength)
+                if (SaveManager.Instance.GetGameSaveData().IsSubtitlesOn == true)
                 {
-                    _textContainer.maxVisibleCharacters++;
-
-                    //scroll the background too
-                    _textBackgroundContainer.maxVisibleCharacters++;
-
-                    yield return new WaitForSeconds(1f / typeSpeed);
+                    _textContainer.enabled = true;
+                    _textBackgroundContainer.enabled = true;
                 }
+                else
+                {
+                    _textContainer.enabled = false;
+                    _textBackgroundContainer.enabled = false;
+                }
+                
+                _textContainer.maxVisibleCharacters++;
+
+                //scroll the background too
+                _textBackgroundContainer.maxVisibleCharacters++;
+                yield return new WaitForSeconds(1f / typeSpeed);
             }
             _dataPointer++;
         }
