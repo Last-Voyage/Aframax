@@ -16,30 +16,17 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class TitleScreenScrolling : MonoBehaviour
 {
-    [SerializeField] private Transform _movingDestination;
-
-    [Tooltip("how fast the screen scrolls when it is started")]
-    [SerializeField] private float _screenScrollSpeed;
-
-    [SerializeField] private Canvas _sceneCanvas;
-
     [SerializeField] private Animator _enterFadeOutAnimator;
 
-    [SerializeField] private EventSystem _setUpPlayerControls;
+    [SerializeField] private Animator _titleScrollAnimator;
 
     private PlayerInputMap _playerInputControls;
-
-    private bool _hasScrollingStarted = false;
 
     private void Awake()
     {
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.EnterTitleScreen.performed +=
-            ctx => StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed));
-        if (_screenScrollSpeed == 0)
-        {
-            Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
-        }
+            ctx => StartCoroutine(ScrollingScreen());
     }
 
     /// <summary>
@@ -48,31 +35,12 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <param name="destination"> The destination to move the title screen to </param>
     /// <param name="scrollSpeed"> The speed to move the title screen at </param>
     /// <returns></returns>
-    private IEnumerator ScrollingScreen(Vector3 destination, float scrollSpeed)
+    private IEnumerator ScrollingScreen()
     {
         _enterFadeOutAnimator.SetTrigger("GameStarted");
+        _titleScrollAnimator.SetTrigger("EnterPressed");
 
-        if (!_hasScrollingStarted)
-        {
-            _hasScrollingStarted = true;
-            while (transform.position != destination)
-            {
-                transform.position = Vector3.MoveTowards(
-                    transform.position, new Vector3(destination.x, destination.y, transform.position.z), 
-                    scrollSpeed * (_sceneCanvas.renderingDisplaySize.x/100) * Time.deltaTime);
-
-                //for whatever reason (probably rounding bs) this coroutine doesn't actually stop itself
-                //properly when done
-                //this fixes that
-                if (Mathf.Approximately(transform.position.y, destination.y))
-                {
-                    _setUpPlayerControls.gameObject.SetActive(true);
-                    yield break;
-                }
-                
-                yield return null;
-            }
-        }
+        yield return null;
     }
 
     private void OnEnable()
