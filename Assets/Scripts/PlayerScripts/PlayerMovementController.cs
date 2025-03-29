@@ -10,6 +10,7 @@
 ******************************************************************************/
 using System.Collections;
 using System.Linq.Expressions;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -278,7 +279,11 @@ public class PlayerMovementController : MonoBehaviour
         //Checks for if the player is grounded based on a boxcast
         IsGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
             transform.up*-1, out _groundHit, Quaternion.identity,_groundedCheckLength,_walkableLayers);
-        CurrentGround = _groundHit.collider.gameObject;
+
+        if(IsGrounded)
+        {
+            CurrentGround = _groundHit.collider.gameObject;
+        }
     }
 
     /// <summary>

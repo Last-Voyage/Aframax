@@ -10,6 +10,7 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -288,8 +289,8 @@ public class RuntimeSfxManager : AudioManager
                 return;
             }
 
-            _walkingEventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
-            _walkingEventInstance.start();
+            walkInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
+            walkInstance.start();
         }
     }
 
@@ -301,13 +302,20 @@ public class RuntimeSfxManager : AudioManager
     {
         foreach(FootStepType footStepType in FmodSfxEvents.Instance.MaterialFootsteps)
         {
+            //Skip this footstep type if it is missing values
+            if(!footStepType.AssociatedInstance.isValid() || 
+                footStepType.AssociatedMaterial.IsUnityNull())
+            {
+                continue;
+            }
+
             PlayerMovementController.CurrentGround.
                 TryGetComponent<Renderer>(out Renderer groundRenderer);
 
             // Iterates through each material
             foreach (Material mat in groundRenderer.sharedMaterials)
             {
-                if (footStepType.AssociatedMaterial == mat)
+                if (footStepType.AssociatedMaterial.name == mat.name)
                 {
                     return footStepType.AssociatedInstance;
                 }
