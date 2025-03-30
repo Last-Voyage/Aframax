@@ -27,6 +27,9 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference VoiceVolumeSettingsChanged { get; private set; }
     [field: SerializeField] public EventReference MusicVolumeSettingsChanged { get; private set; }
 
+    [field:Space]
+    [field: SerializeField] public EventReference TitleScreenSplash { get; private set; }
+
     #endregion
 
     #region Boss
