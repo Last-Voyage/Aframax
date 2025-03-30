@@ -10,6 +10,7 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,7 +24,7 @@ public class RuntimeSfxManager : AudioManager
     public static Action<EventReference, GameObject> APlayOneShotSfxAttached;
 
     private EventInstance _walkingEventInstance;
-    private EventReference _currentWalkingSfx;
+    private EventReference _defaultWalkingSfx;
 
     private Coroutine _footstepsCoroutine;
 
@@ -222,22 +223,20 @@ public class RuntimeSfxManager : AudioManager
     /// <summary>
     /// Initializes the footstep instance
     /// </summary>
-    public void InitializeFootstepInstance()
+    public void InitializeFootstepInstances()
     {
-        if(GameStateManager.Instance.IsPlayerAboveDeck())
-        {
-            _currentWalkingSfx = FmodSfxEvents.Instance.AboveDeckWalking;
-        }
-        else
-        {
-            _currentWalkingSfx = FmodSfxEvents.Instance.BelowDeckWalking;
-        }
+        _defaultWalkingSfx = FmodSfxEvents.Instance.DefaultWalking;
 
-        if (_currentWalkingSfx.IsNull)
+        if (_defaultWalkingSfx.IsNull)
         {
             return;
         }
-        _walkingEventInstance = RuntimeManager.CreateInstance(_currentWalkingSfx);
+        _walkingEventInstance = RuntimeManager.CreateInstance(_defaultWalkingSfx);
+
+        foreach(FootStepType footStepType in FmodSfxEvents.Instance.MaterialFootsteps)
+        {
+            footStepType.CreateInstance();
+        }
     }
 
     /// <summary>
@@ -283,14 +282,47 @@ public class RuntimeSfxManager : AudioManager
     {
         if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
-            if (_currentWalkingSfx.IsNull)
+            EventInstance walkInstance = DetermineFootstepAudio();
+
+            if (!walkInstance.isValid())
             {
                 return;
             }
 
-            _walkingEventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
-            _walkingEventInstance.start();
+            walkInstance.set3DAttributes(RuntimeUtils.To3DAttributes(gameObject));
+            walkInstance.start();
         }
+    }
+
+    /// <summary>
+    /// Determines what footstep audio we should play based on what we are standing on
+    /// </summary>
+    /// <returns></returns>
+    private EventInstance DetermineFootstepAudio()
+    {
+        foreach(FootStepType footStepType in FmodSfxEvents.Instance.MaterialFootsteps)
+        {
+            //Skip this footstep type if it is missing values
+            if(!footStepType.AssociatedInstance.isValid() || 
+                footStepType.AssociatedMaterial.IsUnityNull())
+            {
+                continue;
+            }
+
+            PlayerMovementController.CurrentGround.
+                TryGetComponent<Renderer>(out Renderer groundRenderer);
+
+            // Iterates through each material
+            foreach (Material mat in groundRenderer.sharedMaterials)
+            {
+                if (footStepType.AssociatedMaterial.name == mat.name)
+                {
+                    return footStepType.AssociatedInstance;
+                }
+            }
+            
+        }
+        return _walkingEventInstance;
     }
 
     /// <summary>
