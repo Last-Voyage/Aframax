@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles all SFX during runtime and how / where they play.
@@ -221,6 +222,14 @@ public class RuntimeSfxManager : AudioManager
 
     #region Footsteps
 
+    private void OnLevelWasLoaded(int level)
+    {
+        if (SceneManager.GetActiveScene().name == "MazeScene") 
+        {
+            CanPlayFootSteps = true;
+        }
+    }
+
     /// <summary>
     /// Initializes the footstep instance
     /// </summary>
@@ -261,6 +270,7 @@ public class RuntimeSfxManager : AudioManager
     private void PlayFootSteps(InputAction unused)
     { 
         StopFootsteps();
+        if (CanPlayFootSteps == false) return;
         _footstepsCoroutine = StartCoroutine(LoopFootSteps());
     }
 
@@ -283,7 +293,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootStep()
     {
-        if(CanPlayFootSteps == false) return;
+        
         if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
             if (_currentWalkingSfx.IsNull)
@@ -302,7 +312,6 @@ public class RuntimeSfxManager : AudioManager
     /// <returns></returns>
     private IEnumerator LoopFootSteps()
     {
-        if (CanPlayFootSteps == false) yield return null;
         // Update the initial footstep speed
         float currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier;
         firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay
