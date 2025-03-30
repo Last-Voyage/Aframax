@@ -10,6 +10,7 @@
 ******************************************************************************/
 using System.Collections;
 using System.Linq.Expressions;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -67,6 +68,7 @@ public class PlayerMovementController : MonoBehaviour
     private Transform _playerVisuals;
     public static bool IsGrounded { get; private set; } = false;
     private Transform _groundedCheckOrigin;
+    internal static GameObject CurrentGround;
     public static bool IsMoving { get; private set; }
 
     [Tooltip("Size of boxcast for the grounded check")]
@@ -277,6 +279,11 @@ public class PlayerMovementController : MonoBehaviour
         //Checks for if the player is grounded based on a boxcast
         IsGrounded = Physics.BoxCast(_groundedCheckOrigin.position, _groundedExtents, 
             transform.up*-1, out _groundHit, Quaternion.identity,_groundedCheckLength,_walkableLayers);
+
+        if(IsGrounded)
+        {
+            CurrentGround = _groundHit.collider.gameObject;
+        }
     }
 
     /// <summary>
@@ -552,4 +559,24 @@ public class PlayerMovementController : MonoBehaviour
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
     #endregion Getters
+
+    #region Setters
+    /// <summary>
+    /// Sets the value of the move speed
+    /// </summary>
+    /// <param name="moveSpeed">The new value for speed</param>
+    public void SetCurrentMovementSpeed(float moveSpeed)
+    {
+        _playerMovementSpeed = moveSpeed;
+    }
+
+    /// <summary>
+    /// Sets the value of the acceleration
+    /// </summary>
+    /// <param name="acceleration">The new value for acceleration</param>
+    public void SetCurrentAcceleration(float acceleration)
+    {
+        _currentAcceleration = acceleration;
+    }
+    #endregion
 }
