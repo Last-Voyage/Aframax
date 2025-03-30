@@ -31,6 +31,8 @@ public class RuntimeSfxManager : AudioManager
 
     private WaitForSeconds footstepDelay;
     private WaitForSeconds firstFootstepDelay;
+    //determins if the foot steps should be played or not
+    public bool CanPlayFootSteps = true;
 
     #region Enable and Action Subscriptions
     /// <summary>
@@ -281,6 +283,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootStep()
     {
+        if(CanPlayFootSteps == false) return;
         if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
             if (_currentWalkingSfx.IsNull)
@@ -299,6 +302,7 @@ public class RuntimeSfxManager : AudioManager
     /// <returns></returns>
     private IEnumerator LoopFootSteps()
     {
+        if (CanPlayFootSteps == false) yield return null;
         // Update the initial footstep speed
         float currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier;
         firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay
