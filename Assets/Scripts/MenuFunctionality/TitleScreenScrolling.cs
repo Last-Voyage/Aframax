@@ -20,6 +20,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [Tooltip("how fast the screen scrolls when it is started")]
     [SerializeField] private float _screenScrollSpeed;
+    [Tooltip("The delay before the splash effect plays")]
+    [SerializeField] private float _splashEffectDelay;
 
     [SerializeField] private Canvas _sceneCanvas;
 
@@ -54,6 +56,7 @@ public class TitleScreenScrolling : MonoBehaviour
 
         if (!_hasScrollingStarted)
         {
+            PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
             _hasScrollingStarted = true;
             while (transform.position != destination)
             {
@@ -73,6 +76,14 @@ public class TitleScreenScrolling : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    /// <summary>
+    /// Plays the sound effect of the main menu splash effect
+    /// </summary>
+    private void PlayMainMenuSplash()
+    {
+        RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.TitleScreenSplash, Vector3.zero);
     }
 
     private void OnEnable()
