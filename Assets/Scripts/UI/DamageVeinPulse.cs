@@ -21,7 +21,11 @@ public class DamageVeinPulse : MonoBehaviour
     [SerializeField] private float _minOpacity;
     
     private float _maxOpacity;
+    private float _alphaValueRatio;
+
     private Image _imageComponent;
+
+    private Color _baseColor;
 
     /// <summary>
     /// Initializes the alpha of the GameObject while setting a reference to
@@ -32,7 +36,8 @@ public class DamageVeinPulse : MonoBehaviour
         _imageComponent = gameObject.GetComponent<Image>();
         _maxOpacity = _imageComponent.color.a;
 
-        _imageComponent.color = new(1, 1, 1, _maxOpacity);
+        _baseColor = _imageComponent.color;
+        _imageComponent.color = new(_baseColor.r, _baseColor.g, _baseColor.b, _maxOpacity);
 
         StartCoroutine(VeinPulse());
     }
@@ -47,16 +52,18 @@ public class DamageVeinPulse : MonoBehaviour
         {
             // Lerp to completely visible
             float appearTime = 0;
+
             while (appearTime < _timeTakenToPulse)
             {
                 appearTime += Time.deltaTime;
 
                 // Get the ratio of time, lerp the alpha
-                float alphaValueRatio = appearTime / _timeTakenToPulse;
-                _imageComponent.color = new(1, 1, 1, Mathf.Lerp(_maxOpacity, _minOpacity, alphaValueRatio));
+                _alphaValueRatio = appearTime / _timeTakenToPulse;
+                _imageComponent.color = new(1, 1, 1, Mathf.Lerp(_maxOpacity, _minOpacity, _alphaValueRatio));
 
                 yield return null;
             }
+
             // Safeguard: Make sure that it's at minimum opacity at the end
             _imageComponent.color = new(1, 1, 1, _minOpacity);
 
@@ -70,13 +77,15 @@ public class DamageVeinPulse : MonoBehaviour
                 appearTime += Time.deltaTime;
 
                 // Get the ratio of time, lerp the alpha
-                float alphaValueRatio = appearTime / _timeTakenToPulse;
-                _imageComponent.color = new(1, 1, 1, Mathf.Lerp(_minOpacity, _maxOpacity, alphaValueRatio));
+                _alphaValueRatio = appearTime / _timeTakenToPulse;
+                _imageComponent.color = new(_baseColor.r, _baseColor.g, _baseColor.b, 
+                    Mathf.Lerp(_minOpacity, _maxOpacity, _alphaValueRatio));
 
                 yield return null;
             }
+
             // Safeguard: Make sure that it's at full opacity at the end
-            _imageComponent.color = new(1, 1, 1, _maxOpacity);
+            _imageComponent.color = new(_baseColor.r, _baseColor.g, _baseColor.b, _maxOpacity);
 
             yield return new WaitForSeconds(_delayBetweenPulses);
         }
