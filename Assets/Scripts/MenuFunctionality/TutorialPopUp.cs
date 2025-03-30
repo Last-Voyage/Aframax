@@ -47,7 +47,9 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
-        TimeManager.Instance.PauseGameToggle();
+
+        //Unless it's not
+        TimeManager.Instance.PauseGameToggle(true);
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
