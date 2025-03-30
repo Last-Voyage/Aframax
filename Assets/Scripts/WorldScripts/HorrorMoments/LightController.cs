@@ -19,9 +19,16 @@ public class LightController : MonoBehaviour
     private Color _originalColor;
     private Animator _animator;
 
+    [Header("Flicker")]
     // Toggle for turning on and off light flickering
     [SerializeField] private bool _canLightFlicker;
+    [SerializeField] private float _lightFlickerDuration;
+    [SerializeField] private float _horrorFlickerDuration;
+    [SerializeField] private AnimationCurve _flickerCurve;
+    [SerializeField] private AnimationCurve _horrorMomentCurve;
+    private float _startingIntensity;
 
+    [Header("Light Shift")]
     // Light Shift Variables
     [SerializeField] private Color _lightShiftTargetColor = new Color(0, 0.396f, 0.114f, 0);
     [SerializeField] private bool _doesReturnColor;
@@ -30,6 +37,7 @@ public class LightController : MonoBehaviour
 
     // Animation variables
     private const string _LIGHT_FLICKER_TRIGGER = "PlayFlicker";
+
 
     /// <summary>
     /// Called on the first frame
@@ -47,6 +55,7 @@ public class LightController : MonoBehaviour
     private void GetLight()
     {
         _light = GetComponent<Light>();
+        _startingIntensity = _light.intensity;
         _originalColor = _light.color;
     }
 
@@ -121,7 +130,33 @@ public class LightController : MonoBehaviour
     {
         if (_canLightFlicker)
         {
-            _animator.SetTrigger(_LIGHT_FLICKER_TRIGGER);
+            StartLightFlickerProcess();
+        }
+    }
+
+    /// <summary>
+    /// Starts the light flicker process
+    /// </summary>
+    private void StartLightFlickerProcess()
+    {
+        StartCoroutine(LightFlickerProcess());
+    }
+
+    /// <summary>
+    /// The process of the light flickering
+    /// </summary>
+    /// <returns>Time itself</returns>
+    private IEnumerator LightFlickerProcess()
+    {
+        float flickerTimer = 0;
+        float flickerDuration = _canLightFlicker ? _horrorFlickerDuration: _lightFlickerDuration;
+        AnimationCurve curve = _canLightFlicker ? _horrorMomentCurve: _flickerCurve;
+
+        while (flickerTimer < 1)
+        {
+            flickerTimer += Time.deltaTime / _lightFlickerDuration;
+            _light.intensity = curve.Evaluate(flickerTimer) * _startingIntensity;
+            yield return null;
         }
     }
 
@@ -133,6 +168,11 @@ public class LightController : MonoBehaviour
     {
         VfxManager.Instance.GetOnLightShiftEvent().AddListener(LightShift);
         VfxManager.Instance.GetOnLightFlickerEvent().AddListener(LightFlicker);
+
+        if (TryGetComponent<RandomizedAnimation>(out RandomizedAnimation anim))
+        {
+            anim.OnAnimPlay.AddListener(StartLightFlickerProcess);
+        }
     }
 
     /// <summary>
