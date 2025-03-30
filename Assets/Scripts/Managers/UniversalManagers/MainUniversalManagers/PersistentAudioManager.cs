@@ -243,22 +243,6 @@ public class PersistentAudioManager : AudioManager
     }
 
     /// <summary>
-    /// THIS IS PURELY HERE FOR TESTING AND WILL BE REMOVED AFTER THE PR IS APPROVED
-    /// IF SOMEONE LEAVES A COMMENT ABOUT THIS I WILL SLAP THEM
-    /// </summary>
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            FadeInAllAmbience();
-        }
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            FadeOutAllAmbience();
-        }
-    }
-
-    /// <summary>
     /// Fades in the volume of all current ambience playing
     /// </summary>
     private void FadeInAllAmbience()
