@@ -18,7 +18,20 @@ public class TitleScreenScrolling : MonoBehaviour
 {
     [SerializeField] private Animator _enterFadeOutAnimator;
 
-    [SerializeField] private Animator _titleScrollAnimator;
+    [SerializeField] private Canvas _sceneCanvas;
+
+    private Vector3 velocity = Vector3.zero;
+
+    public float smoothTime = 0.3f;
+
+    [SerializeField] private EventSystem _setUpPlayerControls;
+
+    [SerializeField] private Transform _movingDestination;
+
+    [Tooltip("how fast the screen scrolls when it is started")]
+    [SerializeField] private float _screenScrollTime;
+
+    private bool _hasScrollingStarted = false;
 
     private PlayerInputMap _playerInputControls;
 
@@ -32,14 +45,29 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <summary>
     /// moves the ui up to simulate the camera moving down
     /// </summary>
-    /// <param name="destination"> The destination to move the title screen to </param>
-    /// <param name="scrollSpeed"> The speed to move the title screen at </param>
     /// <returns></returns>
     private IEnumerator ScrollingScreen()
     {
         _enterFadeOutAnimator.SetTrigger("GameStarted");
-        _titleScrollAnimator.SetTrigger("EnterPressed");
 
+        if (!_hasScrollingStarted)
+        {
+            _hasScrollingStarted = true;
+            
+
+            while (transform.position != _movingDestination.position)
+            {
+                transform.position = Vector3.SmoothDamp(transform.position, _movingDestination.transform.position, ref velocity, _screenScrollTime * Time.deltaTime * _sceneCanvas.renderingDisplaySize.y/10);
+                yield return null;
+
+                //double checking to make sure the loop stops properly, accounting for floating point shenanigans
+                if (transform.position.y / _movingDestination.transform.position.y >= 0.99f)
+                {
+                    _setUpPlayerControls.gameObject.SetActive(true);
+                    yield break;
+                }
+            }
+        }
         yield return null;
     }
 

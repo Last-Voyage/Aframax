@@ -613,7 +613,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 637296204}
+  m_Father: {fileID: 1668942282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1324,7 +1324,6 @@ GameObject:
   m_Component:
   - component: {fileID: 637296204}
   - component: {fileID: 637296205}
-  - component: {fileID: 637296206}
   m_Layer: 5
   m_Name: MovingUI
   m_TagString: Untagged
@@ -1344,7 +1343,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 324132671}
   - {fileID: 1048824174}
   m_Father: {fileID: 1668942282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1365,33 +1363,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e58b3d3c8283294ca2b068d66f79ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movingDestination: {fileID: 324132671}
-  _screenScrollSpeed: 30
-  _sceneCanvas: {fileID: 1668942281}
   _enterFadeOutAnimator: {fileID: 901565831}
-  _titleScrollAnimator: {fileID: 637296206}
+  _sceneCanvas: {fileID: 1668942281}
+  smoothTime: 1
   _setUpPlayerControls: {fileID: 887760780}
---- !u!95 &637296206
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637296203}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9e361ebc5b4d7cb4785d63bade935e14, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  _movingDestination: {fileID: 324132671}
+  _screenScrollTime: 25
 --- !u!1 &689632244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1679,7 +1656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &887760780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1687,7 +1664,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 887760778}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
@@ -3467,6 +3444,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 324132671}
   - {fileID: 637296204}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
