@@ -23,8 +23,6 @@ public class DamageVeinPulse : MonoBehaviour
     private float _maxOpacity;
     private Image _imageComponent;
 
-    private bool _canPulse = true;
-
     /// <summary>
     /// Initializes the alpha of the GameObject while setting a reference to
     /// this GameObject's Image component, and begins the pulse coroutine.
@@ -40,7 +38,7 @@ public class DamageVeinPulse : MonoBehaviour
     }
 
     /// <summary>
-    /// Makes the damage effect pulse on occassion.
+    /// Makes the damage effect pulse on occasion. Perpetually loops while active.
     /// </summary>
     /// <returns></returns>
     private IEnumerator VeinPulse()
