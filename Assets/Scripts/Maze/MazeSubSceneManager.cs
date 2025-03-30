@@ -143,6 +143,10 @@ public class MazeSubSceneManager : MonoBehaviour
     /// <param name="mazeId">The maze index to be preloaded.</param>
     public void PreLoadMazeScene(int mazeId)
     {
+        if(mazeId>= 5)
+        {
+            return;
+        }
         _preloadedMaze = mazeId;
         
         // (Re)initialize scene loading state
