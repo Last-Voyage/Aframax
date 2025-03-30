@@ -74,6 +74,16 @@ public class PlayerCameraController : MonoBehaviour
     private float _harpoonHorizontalVelocity;
     private float _harpoonVerticalVelocity;
 
+    private bool _isReticleFullyZoomed;
+
+    /// <summary>
+    /// Whether the reticle is
+    /// </summary>
+    public bool IsReticleFullyZoomed
+    {
+        set { _isReticleFullyZoomed = value; }
+    }
+
     /// <summary>
     /// This function is called before the first frame update.
     /// Used to initialize any variables that are not serialized
@@ -391,7 +401,15 @@ public class PlayerCameraController : MonoBehaviour
     /// <param name="focusProgress">As a percentage, how much the player has focused. 0 is 0%, 1 is 100%.</param>
     public void AdjustZoom(float focusProgress)
     {
-        _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
+        switch(_isReticleFullyZoomed)
+        {
+            case true:
+                return;
+            case false:
+                _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
+                return;
+        }
+
     }
 
     /// <summary>
