@@ -80,7 +80,7 @@ public class GameStateManager : MainGameplayManagerFramework
         {
             _currentGameplayState = EGameplayState.BelowDeck;
         }
-        RuntimeSfxManager.Instance.InitializeFootstepInstance();
+        RuntimeSfxManager.Instance.InitializeFootstepInstances();
     }
 
     #region Getters
