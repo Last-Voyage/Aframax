@@ -16,17 +16,27 @@ using TMPro;
 /// <summary>
 /// A collection of pages for a popup tutorial
 /// </summary>
-public class TutorialPopUp : MonoBehaviour
+public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 {
     public static TutorialPopUp ActiveTutorial = null;
 
     [Header("References")]
     [SerializeField] private Canvas _popupCanvas;
-    [SerializeField] private GameObject[] _pages;
-    [SerializeField] private TMP_Text _leftArrow;
-    [SerializeField] private TMP_Text _rightArrow;
+    [SerializeField] private Image _leftArrow;
+    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Transform _pageParent;
+    private GameObject[] _pages;
     private int _currentPage;
-    private bool _hasRead;
+
+    private void Start()
+    {
+        _pages = new GameObject[_pageParent.childCount];
+
+        for (int i = 0; i < _pageParent.childCount; i++)
+        {
+            _pages[i] = _pageParent.GetChild(i).gameObject;
+        }
+    }
 
     /// <summary>
     /// Open the tutorial pop up and go to page one
@@ -36,7 +46,8 @@ public class TutorialPopUp : MonoBehaviour
         _popupCanvas.enabled = true;
 
         // Free the mouse and freeze the game
-        TimeManager.Instance.GetOnGamePauseEvent();
+        TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
+        TimeManager.Instance.PauseGameToggle();
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -95,13 +106,23 @@ public class TutorialPopUp : MonoBehaviour
     {
         // Find the video in the page
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
+        RawImage pageVideoImage = page.GetComponentInChildren<RawImage>();
+        Image pageImage = page.GetComponentInChildren<Image>();
+
+        bool hasVideo = pageVideo.clip != null;
 
         // Play the video if there is one
-        if (pageVideo.clip != null)
+        if (hasVideo)
         {
             pageVideo.targetCamera = Camera.current;
             pageVideo.time = 0;
             pageVideo.Play();
+
+            pageImage.enabled = false;
+        }
+        else
+        {
+            pageVideoImage.enabled = false;
         }
     }
 
@@ -112,7 +133,6 @@ public class TutorialPopUp : MonoBehaviour
     {
         // Set the page to inactive and read
         ActiveTutorial = null;
-        _hasRead = true;
         _popupCanvas.enabled = false;
 
         // Stop the currently open page
@@ -134,5 +154,10 @@ public class TutorialPopUp : MonoBehaviour
     public static void ExitActivePopUp()
     {
         ActiveTutorial.CloseTutorialPopUp();
+    }
+
+    public void OnInteractedByPlayer()
+    {
+        OpenTutorialPopUp();
     }
 }
