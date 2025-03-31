@@ -161,6 +161,7 @@ public class PlayerHealth : BaseHealth
         {
             _iFrameTween.Stop();
         }
+        RuntimeSfxManager.Instance.CanPlayFootSteps = false;
         base.OnDeath();
         PlayerManager.Instance.OnInvokePlayerDeath();
     }
