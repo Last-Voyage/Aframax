@@ -42,6 +42,9 @@ public class SceneLoadingButtons : MonoBehaviour
             (SaveManager.Instance.GetGameSaveData().GetCurrentSceneIndex(),_sceneTransitionID);
     }
 
+    /// <summary>
+    /// Allows buttons to load the title screen
+    /// </summary>
     public void ReloadTitleScreenButton()
     {
         AframaxSceneManager.Instance.ReloadTitleScreen();
