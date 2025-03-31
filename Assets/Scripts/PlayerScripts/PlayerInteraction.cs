@@ -28,6 +28,10 @@ public class PlayerInteraction : MonoBehaviour
     //Input
     private PlayerInput _playerInput;
     private InputAction _interactInput;
+    
+    // Cached variables
+    private Camera _mainCamera;
+    private Vector3 _raycastDirectional = new Vector3(.5f,.5f,0); 
 
     /// <summary>
     /// Right away finds the InteractableUI script
@@ -36,6 +40,7 @@ public class PlayerInteraction : MonoBehaviour
     private void Awake()
     {
         _interactableUi = FindObjectOfType<InteractableUi>();
+        _mainCamera = Camera.main;
     }
 
     /// <summary>
@@ -93,7 +98,7 @@ public class PlayerInteraction : MonoBehaviour
     /// </summary>
     private void SetRaycast()
     {
-        _ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        _ray = _mainCamera.ViewportPointToRay(_raycastDirectional);
     }
 
     #region INPUT
