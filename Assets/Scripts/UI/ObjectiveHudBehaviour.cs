@@ -5,6 +5,8 @@
 //
 // Brief Description : handles hud and pause menu objective notifications
 *****************************************************************************/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +22,17 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     [SerializeField] private Animator _objectiveHudAnimator;
     [SerializeField] private TextMeshProUGUI _objectiveHudText;
     [SerializeField] private TextMeshProUGUI _objectivePauseText;
+    
+    // Cached variables
+    private WaitForSeconds _animationWait;
+
+    /// <summary>
+    /// This initializes the cached variable
+    /// </summary>
+    private void Awake()
+    {
+        _animationWait = new WaitForSeconds(_objectiveLingerTime);
+    }
 
     /// <summary>
     /// slides the objective onto screen with the corresponding text
@@ -55,7 +68,7 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// <returns></returns>
     private IEnumerator WaitForAnimation()
     {
-        yield return new WaitForSeconds(_objectiveLingerTime);
+        yield return _animationWait;
         DeactivateObjectiveHud();
     }
 }
