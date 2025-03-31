@@ -413,6 +413,14 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     /// <summary>
+    /// Resets the player's FOV / zoom level.
+    /// </summary>
+    public void ResetZoom()
+    {
+        _virtualCamera.m_Lens.FieldOfView = _defaultFOV;
+    }
+
+    /// <summary>
     /// Called when this component is enabled.
     /// Used to assign various actions to listeners
     /// </summary>
