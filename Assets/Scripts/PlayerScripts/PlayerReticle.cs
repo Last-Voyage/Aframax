@@ -189,14 +189,7 @@ public class PlayerReticle : MonoBehaviour
             new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
 
-        if(_newReticleSize <= _minScopeSize)
-        {
-            PlayerCameraController.Instance.IsReticleFullyZoomed = true;
-        }
-        else
-        {
-            PlayerCameraController.Instance.IsReticleFullyZoomed = false;
-        }
+        PlayerCameraController.Instance.IsReticleFullyZoomed = _newReticleSize <= _minScopeSize;
     }
 
     /// <summary>

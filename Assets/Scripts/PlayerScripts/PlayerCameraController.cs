@@ -401,13 +401,9 @@ public class PlayerCameraController : MonoBehaviour
     /// <param name="focusProgress">As a percentage, how much the player has focused. 0 is 0%, 1 is 100%.</param>
     public void AdjustZoom(float focusProgress)
     {
-        switch(_isReticleFullyZoomed)
+        if (!_isReticleFullyZoomed)
         {
-            case true:
-                return;
-            case false:
-                _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
-                return;
+            _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
         }
 
     }
