@@ -613,7 +613,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1668942282}
+  m_Father: {fileID: 637296204}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1343,6 +1343,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 324132671}
   - {fileID: 1048824174}
   m_Father: {fileID: 1668942282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1363,12 +1364,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e58b3d3c8283294ca2b068d66f79ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enterFadeOutAnimator: {fileID: 901565831}
-  _sceneCanvas: {fileID: 1668942281}
-  smoothTime: 1
-  _setUpPlayerControls: {fileID: 887760780}
   _movingDestination: {fileID: 324132671}
-  _screenScrollTime: 275
+  _screenScrollSpeed: 30
+  _splashEffectDelay: 0.5
+  _sceneCanvas: {fileID: 1668942281}
+  _enterFadeOutAnimator: {fileID: 901565831}
+  _setUpPlayerControls: {fileID: 887760780}
 --- !u!1 &689632244
 GameObject:
   m_ObjectHideFlags: 0
@@ -3444,7 +3445,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 324132671}
   - {fileID: 637296204}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

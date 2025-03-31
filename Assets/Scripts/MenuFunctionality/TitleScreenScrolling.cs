@@ -1,5 +1,5 @@
 /*****************************************************************************
-// File Name :         TitleScreenScrolling.cs
+// File Name :         PauseMenu.cs
 // Author :            Jeremiah Peters
 // Creation Date :     10/27/24
 //
@@ -16,59 +16,74 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class TitleScreenScrolling : MonoBehaviour
 {
-    [SerializeField] private Animator _enterFadeOutAnimator;
-
-    [SerializeField] private Canvas _sceneCanvas;
-
-    private Vector3 velocity = Vector3.zero;
-
-    public float smoothTime = 0.3f;
-
-    [SerializeField] private EventSystem _setUpPlayerControls;
-
     [SerializeField] private Transform _movingDestination;
 
     [Tooltip("how fast the screen scrolls when it is started")]
-    [SerializeField] private float _screenScrollTime;
+    [SerializeField] private float _screenScrollSpeed;
+    [Tooltip("The delay before the splash effect plays")]
+    [SerializeField] private float _splashEffectDelay;
 
-    private bool _hasScrollingStarted = false;
+    [SerializeField] private Canvas _sceneCanvas;
+
+    [SerializeField] private Animator _enterFadeOutAnimator;
+
+    [SerializeField] private EventSystem _setUpPlayerControls;
 
     private PlayerInputMap _playerInputControls;
+
+    private bool _hasScrollingStarted = false;
 
     private void Awake()
     {
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.EnterTitleScreen.performed +=
-            ctx => StartCoroutine(ScrollingScreen());
+            ctx => StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed));
+        if (_screenScrollSpeed == 0)
+        {
+            Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
+        }
     }
 
     /// <summary>
     /// moves the ui up to simulate the camera moving down
     /// </summary>
+    /// <param name="destination"> The destination to move the title screen to </param>
+    /// <param name="scrollSpeed"> The speed to move the title screen at </param>
     /// <returns></returns>
-    private IEnumerator ScrollingScreen()
+    private IEnumerator ScrollingScreen(Vector3 destination, float scrollSpeed)
     {
         _enterFadeOutAnimator.SetTrigger("GameStarted");
 
         if (!_hasScrollingStarted)
         {
+            PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
             _hasScrollingStarted = true;
-
-            while (transform.position != _movingDestination.position)
+            while (transform.position != destination)
             {
-                transform.position = Vector3.SmoothDamp(transform.position, _movingDestination.transform.position, ref velocity,
-                    _screenScrollTime * Time.deltaTime * 2000/_sceneCanvas.renderingDisplaySize.y);
-                yield return null;
+                transform.position = Vector3.MoveTowards(
+                    transform.position, new Vector3(destination.x, destination.y, transform.position.z), 
+                    scrollSpeed * (_sceneCanvas.renderingDisplaySize.x/100) * Time.deltaTime);
 
-                //double checking to make sure the loop stops properly, accounting for floating point shenanigans
-                if (transform.position.y / _movingDestination.transform.position.y >= 0.99f)
+                //for whatever reason (probably rounding bs) this coroutine doesn't actually stop itself
+                //properly when done
+                //this fixes that
+                if (Mathf.Approximately(transform.position.y, destination.y))
                 {
                     _setUpPlayerControls.gameObject.SetActive(true);
                     yield break;
                 }
+                
+                yield return null;
             }
         }
-        yield return null;
+    }
+
+    /// <summary>
+    /// Plays the sound effect of the main menu splash effect
+    /// </summary>
+    private void PlayMainMenuSplash()
+    {
+        RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.TitleScreenSplash, Vector3.zero);
     }
 
     private void OnEnable()
