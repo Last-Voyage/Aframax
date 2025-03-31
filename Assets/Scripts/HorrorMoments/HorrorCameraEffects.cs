@@ -52,7 +52,7 @@ public class HorrorCameraEffects : MonoBehaviour
     /// <param name="other"> The object the trigger collided with </param>
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player" && _doesPlayOnTriggerCollision)
+        if(other.gameObject.CompareTag("Player") && _doesPlayOnTriggerCollision)
         {
             PlayCameraHorrorEffects();
         }
@@ -64,7 +64,7 @@ public class HorrorCameraEffects : MonoBehaviour
     /// <param name="collision"> The object we are colliding with </param>
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" && _doesPlayOnCollision)
+        if (collision.gameObject.CompareTag("Player") && _doesPlayOnCollision)
         {
             PlayCameraHorrorEffects();
         }
