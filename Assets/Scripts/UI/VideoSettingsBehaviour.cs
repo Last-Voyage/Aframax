@@ -61,5 +61,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
     public void ToggleSubtitleSetting()
     {
         SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
+        //stop any current subtitles
+        if (FindObjectOfType<DialoguePopUps>() != null)
+        {
+            FindObjectOfType<DialoguePopUps>().UpdateSubtitleSettingState();
+        }
     }
 }

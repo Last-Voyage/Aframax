@@ -76,6 +76,7 @@ public class DialoguePopUps : MonoBehaviour
     {
         foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer())
         {
+            UpdateSubtitleSettingState();
             // Wait to start displaying the next text
             yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeText);
             // Takes the display text and makes it invisible
@@ -116,17 +117,6 @@ public class DialoguePopUps : MonoBehaviour
 
             while (_textContainer.maxVisibleCharacters < totalLength)
             {
-                if (SaveManager.Instance.GetGameSaveData().IsSubtitlesOn == true)
-                {
-                    _textContainer.enabled = true;
-                    _textBackgroundContainer.enabled = true;
-                }
-                else
-                {
-                    _textContainer.enabled = false;
-                    _textBackgroundContainer.enabled = false;
-                }
-                
                 _textContainer.maxVisibleCharacters++;
 
                 //scroll the background too
@@ -152,6 +142,23 @@ public class DialoguePopUps : MonoBehaviour
         {
             StopCoroutine(_playingDialogue);
             _playingDialogue = null;
+        }
+    }
+
+    /// <summary>
+    /// disable or enable currently running subtitles
+    /// </summary>
+    public void UpdateSubtitleSettingState()
+    {
+        if (SaveManager.Instance.GetGameSaveData().IsSubtitlesOn == true)
+        {
+            _textContainer.enabled = true;
+            _textBackgroundContainer.enabled = true;
+        }
+        else
+        {
+            _textContainer.enabled = false;
+            _textBackgroundContainer.enabled = false;
         }
     }
 
