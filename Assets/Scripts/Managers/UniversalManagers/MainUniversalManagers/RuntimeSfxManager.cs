@@ -13,6 +13,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles all SFX during runtime and how / where they play.
@@ -32,6 +33,8 @@ public class RuntimeSfxManager : AudioManager
 
     private WaitForSeconds footstepDelay;
     private WaitForSeconds firstFootstepDelay;
+    //determins if the foot steps should be played or not
+    public bool CanPlayFootSteps = true;
 
     #region Enable and Action Subscriptions
     /// <summary>
@@ -220,6 +223,7 @@ public class RuntimeSfxManager : AudioManager
 
     #region Footsteps
 
+
     /// <summary>
     /// Initializes the footstep instance
     /// </summary>
@@ -258,6 +262,7 @@ public class RuntimeSfxManager : AudioManager
     private void PlayFootSteps(InputAction unused)
     { 
         StopFootsteps();
+        if (CanPlayFootSteps == false) return;
         _footstepsCoroutine = StartCoroutine(LoopFootSteps());
     }
 
@@ -280,6 +285,7 @@ public class RuntimeSfxManager : AudioManager
     /// </summary>
     private void PlayFootStep()
     {
+        
         if (PlayerMovementController.IsGrounded && PlayerMovementController.IsMoving)
         {
             EventInstance walkInstance = DetermineFootstepAudio();
