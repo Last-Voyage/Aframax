@@ -222,13 +222,6 @@ public class RuntimeSfxManager : AudioManager
 
     #region Footsteps
 
-    private void OnLevelWasLoaded(int level)
-    {
-        if (SceneManager.GetActiveScene().name == "MazeScene") 
-        {
-            CanPlayFootSteps = true;
-        }
-    }
 
     /// <summary>
     /// Initializes the footstep instance
