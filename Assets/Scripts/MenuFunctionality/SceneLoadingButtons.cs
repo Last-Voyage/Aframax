@@ -42,6 +42,11 @@ public class SceneLoadingButtons : MonoBehaviour
             (SaveManager.Instance.GetGameSaveData().GetCurrentSceneIndex(),_sceneTransitionID);
     }
 
+    public void ReloadTitleScreenButton()
+    {
+        AframaxSceneManager.Instance.ReloadTitleScreen();
+    }
+
     /// <summary>
     /// Quits the game
     /// </summary>

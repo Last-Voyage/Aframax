@@ -157,6 +157,29 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// destroys all do not destroy on load objects and then loads the title screen
+    /// </summary>
+    public void ReloadTitleScreen()
+    {
+        //destroy all "dont destroy on load" objects
+        GameObject temp = new GameObject();
+        DontDestroyOnLoad(temp);
+        Scene dontDestroyOnLoad = temp.scene;
+        DestroyImmediate(temp);
+
+        foreach (GameObject h in dontDestroyOnLoad.GetRootGameObjects())
+        {
+            //except this one
+            if (h != gameObject)
+            {
+                Destroy(h);
+            }
+        }
+        SceneManager.LoadScene(0);
+    }
+
+
+    /// <summary>
     /// Happens when the object is enable and it subscribes
     /// to on scene loaded event
     /// </summary>
