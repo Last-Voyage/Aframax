@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7272385528186772610}
   - component: {fileID: 3575234578944361709}
   - component: {fileID: 1568505217200163139}
+  - component: {fileID: 4553560567763047763}
   m_Layer: 0
   m_Name: SM_Barrel_5_Blue
   m_TagString: Untagged
@@ -101,8 +102,31 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -276203922753945006, guid: e0ca9213a9d28be43ab0bd072d4771b7, type: 3}
+--- !u!136 &4553560567763047763
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5934442807555175046}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.20274878
+  m_Height: 0.5116164
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.2558082, z: 0}
