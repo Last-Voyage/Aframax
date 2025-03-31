@@ -13,11 +13,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Lets visual damage states flicker or pulse while onscreen.
+/// </summary>
 public class DamageVeinPulse : MonoBehaviour
 {   
     [SerializeField] private float _delayBetweenPulses;
-    [SerializeField] private float _timeTakenToPulse;
     [SerializeField] private float _pulsePersistTime;
+    [SerializeField] private float _timeTakenToPulse;
     [SerializeField] private float _minOpacity;
     
     private float _maxOpacity;
@@ -26,6 +29,9 @@ public class DamageVeinPulse : MonoBehaviour
     private Image _imageComponent;
 
     private Color _baseColor;
+
+    private WaitForSeconds _pulseDelayWait;
+    private WaitForSeconds _pulsePersistWait;
 
     /// <summary>
     /// Initializes the alpha of the GameObject while setting a reference to
@@ -38,6 +44,9 @@ public class DamageVeinPulse : MonoBehaviour
 
         _baseColor = _imageComponent.color;
         _imageComponent.color = new(_baseColor.r, _baseColor.g, _baseColor.b, _maxOpacity);
+
+        _pulseDelayWait = new(_delayBetweenPulses);
+        _pulsePersistWait = new(_pulsePersistTime);
 
         StartCoroutine(VeinPulse());
     }
@@ -68,10 +77,11 @@ public class DamageVeinPulse : MonoBehaviour
             _imageComponent.color = new(1, 1, 1, _minOpacity);
 
             // Keep the heart on screen for some time
-            yield return new WaitForSeconds(_pulsePersistTime);
+            yield return _pulsePersistWait;
 
             // Lerp to completely hidden
             appearTime = 0;
+
             while (appearTime < _timeTakenToPulse)
             {
                 appearTime += Time.deltaTime;
@@ -87,7 +97,7 @@ public class DamageVeinPulse : MonoBehaviour
             // Safeguard: Make sure that it's at full opacity at the end
             _imageComponent.color = new(_baseColor.r, _baseColor.g, _baseColor.b, _maxOpacity);
 
-            yield return new WaitForSeconds(_delayBetweenPulses);
+            yield return _pulseDelayWait;
         }
         
     }
