@@ -1,9 +1,20 @@
+
+/******************************************************************************
+// File Name:       PersistentSound.cs
+// Author:          Nabil Tagba
+// Creation Date:   March 30, 2025
+//
+// Description:     plays an fmode event persistently
+******************************************************************************/
 using FMOD.Studio;
 using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// plays a specific fmod event persistently
+/// </summary>
 public class PersistentSound : AudioManager
 {
     [field: SerializeField]
