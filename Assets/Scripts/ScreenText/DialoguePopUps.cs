@@ -55,9 +55,21 @@ public class DialoguePopUps : MonoBehaviour
     private int _dataPointer;
 
     private IEnumerator _playingDialogue;
+
+    [Tooltip("Time between all of the text being on screen and it's removal")] 
+    [SerializeField] 
+    private float _timeBeforeNoText = 2f;
     
     // Cached variables
-    private WaitForSeconds _timeBeforeNoText = new WaitForSeconds(2f);
+    private WaitForSeconds _waitBeforeNoText;
+
+    /// <summary>
+    /// Initializes the cached variable
+    /// </summary>
+    private void Start()
+    {
+        _waitBeforeNoText = new WaitForSeconds(_timeBeforeNoText);
+    }
 
     /// <summary>
     /// The pass through function for actually displaying the dialogue
@@ -130,7 +142,7 @@ public class DialoguePopUps : MonoBehaviour
         }
 
         _dataPointer = 0;
-        yield return _timeBeforeNoText;
+        yield return _waitBeforeNoText;
         _textContainer.text = "";
         _textBackgroundContainer.text = "";
         _playingDialogue = null;

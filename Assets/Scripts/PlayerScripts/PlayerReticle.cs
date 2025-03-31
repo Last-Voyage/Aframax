@@ -65,7 +65,7 @@ public class PlayerReticle : MonoBehaviour
 
     private bool _isFocusChanging;
 
-    private WaitForFixedUpdate _reticlePhysWait = new WaitForFixedUpdate();
+    private WaitForFixedUpdate _reticlePhysicsWait = new WaitForFixedUpdate();
     
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
@@ -100,7 +100,7 @@ public class PlayerReticle : MonoBehaviour
         { 
             if (_newReticleSize < _maxScopeSize || _newReticleSize > _minScopeSize)
             {
-                yield return _reticlePhysWait;
+                yield return _reticlePhysicsWait;
                 AdjustReticleSize();
                 AdjustReticleAppearance();
             }

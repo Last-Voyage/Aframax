@@ -29,7 +29,7 @@ public class PlayerHealthUi : MonoBehaviour
     [Header("Player Healed")]
     [SerializeField] private Animator _healingEffectAnimator;
     private const string _HEALING_EFFECT_TRIGGER = "PlayHealing";
-    private const string _animHealthStage = "Health_Stage";
+    private const string _ANIM_HEALTH_STAGE = "Health_Stage";
 
     [Header("Heart UI fading variables")] 
     
@@ -117,7 +117,7 @@ public class PlayerHealthUi : MonoBehaviour
                 break;
         }
         _damagedUIImages[Mathf.Clamp(_damageStatePointer-1,0,4)].gameObject.SetActive(true);
-        _heartAnimator.SetInteger(_animHealthStage,_damageStatePointer);
+        _heartAnimator.SetInteger(_ANIM_HEALTH_STAGE,_damageStatePointer);
     }
 
     /// <summary>
