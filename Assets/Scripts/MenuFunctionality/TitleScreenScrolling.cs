@@ -53,11 +53,11 @@ public class TitleScreenScrolling : MonoBehaviour
         if (!_hasScrollingStarted)
         {
             _hasScrollingStarted = true;
-            
 
             while (transform.position != _movingDestination.position)
             {
-                transform.position = Vector3.SmoothDamp(transform.position, _movingDestination.transform.position, ref velocity, _screenScrollTime * Time.deltaTime * _sceneCanvas.renderingDisplaySize.y/10);
+                transform.position = Vector3.SmoothDamp(transform.position, _movingDestination.transform.position, ref velocity,
+                    _screenScrollTime * Time.deltaTime * 10/_sceneCanvas.renderingDisplaySize.y);
                 yield return null;
 
                 //double checking to make sure the loop stops properly, accounting for floating point shenanigans
