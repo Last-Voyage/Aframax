@@ -30,10 +30,13 @@ public class PersistentSound : AudioManager
         if (_shouldPlay)
         {
             EventReference[] sounds = FmodPersistentAudioEvents.Instance.PersistentSound;
-            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]); ;
+            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId], this.gameObject); ;
             _eventInstance.getDescription(out EventDescription eventDesc);
             eventDesc.isOneshot(out bool isOneShot);
-            if (isOneShot) Debug.LogWarning("The event is a one shot, go in fmod and add loop region");
+            if (isOneShot) 
+            { 
+                Debug.LogWarning("The event is a one shot, go in fmod and add loop region");
+            }
             _eventInstance.start();
         }
        
