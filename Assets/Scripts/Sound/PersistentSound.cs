@@ -20,18 +20,22 @@ public class PersistentSound : AudioManager
     
     private EventInstance _eventInstance;
     [SerializeField] private int _soundId;
+    [SerializeField] private bool _shouldPlay = true;
     /// <summary>
     /// happens when the scene starts
     /// it triggers the fmod event
     /// </summary>
     private void Start()
     {
-        EventReference[] sounds = FmodPersistentAudioEvents.Instance.PersistentSound;
-        _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]); ;
-        _eventInstance.getDescription(out EventDescription eventDesc);
-        eventDesc.isOneshot(out bool isOneShot);
-        if (isOneShot) Debug.LogWarning("The event is a one shot, go in fmod and add loop region");
-        _eventInstance.start();
+        if (_shouldPlay)
+        {
+            EventReference[] sounds = FmodPersistentAudioEvents.Instance.PersistentSound;
+            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]); ;
+            _eventInstance.getDescription(out EventDescription eventDesc);
+            eventDesc.isOneshot(out bool isOneShot);
+            if (isOneShot) Debug.LogWarning("The event is a one shot, go in fmod and add loop region");
+            _eventInstance.start();
+        }
        
     }
 
