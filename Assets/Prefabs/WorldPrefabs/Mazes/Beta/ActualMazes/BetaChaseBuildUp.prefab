@@ -219,7 +219,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3478115506789853297
 Transform:
@@ -1003,6 +1003,9 @@ MonoBehaviour:
   _animationNameList:
   - PlayFlicker
   _randomAnimType: 0
+  OnAnimPlay:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3887145064001759299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1016,6 +1019,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canLightFlicker: 0
+  _lightFlickerDuration: 0
+  _horrorFlickerDuration: 0
+  _flickerCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _horrorMomentCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _lightShiftTargetColor: {r: 0, g: 0.3056603, b: 0.08650762, a: 0}
   _doesReturnColor: 0
   _lightTransitionTime: 1
@@ -1393,6 +1410,9 @@ MonoBehaviour:
   _animationNameList:
   - PlayFlicker
   _randomAnimType: 0
+  OnAnimPlay:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2854573118142096123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,6 +1426,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canLightFlicker: 0
+  _lightFlickerDuration: 0
+  _horrorFlickerDuration: 0
+  _flickerCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _horrorMomentCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _lightShiftTargetColor: {r: 0, g: 0.3056603, b: 0.08650762, a: 0}
   _doesReturnColor: 0
   _lightTransitionTime: 1
@@ -2147,6 +2181,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Pallet_Barrels_2
       objectReference: {fileID: 0}
+    - target: {fileID: 7815731273951138370, guid: b6fb0613a497b06498b3fdbd1d9acdff,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2558,6 +2597,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Fabric_11
       objectReference: {fileID: 0}
+    - target: {fileID: 8468262557935526185, guid: 290853e6b6bf0444288b7d6108ebeeb0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 9137415797194144659, guid: 290853e6b6bf0444288b7d6108ebeeb0,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2966,6 +3010,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_CardBoard_Box (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 443191212077410841, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 967526955039764643, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -3054,6 +3103,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Barrel_1_Blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235032739264384899, guid: aced6ff014a238f439aa394706afeff0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7929124904167786438, guid: aced6ff014a238f439aa394706afeff0,
         type: 3}
@@ -3447,6 +3501,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Metal_Box_Blue (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6024640126711304314, guid: 2ed74e33adf65cd49a7eaea0de14e65b,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3470,6 +3529,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_CardBoard_Box (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 443191212077410841, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 967526955039764643, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
         type: 3}
@@ -3777,6 +3841,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Hand_Trolley_Orange (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5840396621790006807, guid: 1bbfa9ce2f44b6c4d843d790922ebac8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6505046571533407405, guid: 1bbfa9ce2f44b6c4d843d790922ebac8,
         type: 3}
@@ -4827,6 +4896,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Bottle_4_Blue (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1279283264397233546, guid: 15238f91fde86764c8dd3e0af27cf41d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5960,6 +6034,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Plastic_Box_Blue (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4383460341721296083, guid: b43cb3a4bd709b140a4460eb9095cedd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8730140282857508727, guid: b43cb3a4bd709b140a4460eb9095cedd,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -7084,6 +7163,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Fabric_11v2
       objectReference: {fileID: 0}
+    - target: {fileID: 7440664555089146626, guid: 70efd6a79c88a1f4bb2b80e0f43eb74c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7171,6 +7255,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Barrel_3_Green (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5099750642237041375, guid: 0ba586d5506dce34c88e0b4b9b1cfa4c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7532,6 +7621,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Bottle_3_Orange_1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2511419173096839370, guid: 41a5db3d97138bd4d8f1a21b6e9e1808,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3836593757205693793, guid: 41a5db3d97138bd4d8f1a21b6e9e1808,
         type: 3}
@@ -8330,6 +8424,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EndTableSmallWood_LP
+      objectReference: {fileID: 0}
+    - target: {fileID: 2523292213667235531, guid: df4820a242870cb48acbdd35901a02de,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2904637362322889841, guid: df4820a242870cb48acbdd35901a02de,
         type: 3}
@@ -9282,6 +9381,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Wood_Box_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8522816820904686167, guid: cdb9f10311731d14c9ac7059acb1a819,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 9010840917733484781, guid: cdb9f10311731d14c9ac7059acb1a819,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -9500,6 +9604,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Wood_Box_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8522816820904686167, guid: cdb9f10311731d14c9ac7059acb1a819,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 9010840917733484781, guid: cdb9f10311731d14c9ac7059acb1a819,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -9717,6 +9826,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Barrel_4 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2361681554365277435, guid: d36a670654cdfe64c84d6a57e121c1b5,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3138358514493734465, guid: d36a670654cdfe64c84d6a57e121c1b5,
         type: 3}
@@ -10039,6 +10153,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Barrel_5_Red (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037682117427971451, guid: 2cafe6000479f47458c5e26deb8d67b2,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10787,6 +10906,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Snurderer
       objectReference: {fileID: 0}
+    - target: {fileID: 3308432200853281438, guid: bcdf75750ac49ed4cbdbe57ef353d9a8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11093,6 +11217,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HumanScaleRef
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dc46e5d82e577e346bf974642bac702f,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11586,6 +11715,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_CardBoard_Box (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 443191212077410841, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 967526955039764643, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -11853,6 +11987,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_Barrel_1_Green
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058780092406758289, guid: 3f00f081547028249a7c20da7e402205,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12680,6 +12819,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SM_CardBoard_Box (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 443191212077410841, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 967526955039764643, guid: 1f76a2040fedff2479e89f2e1ab4fc4e,
         type: 3}
