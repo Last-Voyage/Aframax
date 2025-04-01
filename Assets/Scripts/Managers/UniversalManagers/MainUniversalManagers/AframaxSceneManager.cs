@@ -162,17 +162,17 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     public void ReloadTitleScreen()
     {
         //destroy all "dont destroy on load" objects
-        GameObject temp = new GameObject();
-        DontDestroyOnLoad(temp);
-        Scene dontDestroyOnLoad = temp.scene;
-        DestroyImmediate(temp);
+        GameObject dontDestroyFinder = new GameObject();
+        DontDestroyOnLoad(dontDestroyFinder);
+        Scene dontDestroyOnLoad = dontDestroyFinder.scene;
+        DestroyImmediate(dontDestroyFinder);
 
-        foreach (GameObject h in dontDestroyOnLoad.GetRootGameObjects())
+        foreach (GameObject dontDestroyObject in dontDestroyOnLoad.GetRootGameObjects())
         {
             //stuff to not destroy
-            if (h != gameObject & !h.CompareTag("Dont destroy") & h.name != "PrimeTweenManager")
+            if (dontDestroyObject != gameObject & !dontDestroyObject.CompareTag("Dont destroy") & dontDestroyObject.name != "PrimeTweenManager")
             {
-                Destroy(h);
+                Destroy(dontDestroyObject);
             }
         }
         SceneManager.LoadScene(0);
