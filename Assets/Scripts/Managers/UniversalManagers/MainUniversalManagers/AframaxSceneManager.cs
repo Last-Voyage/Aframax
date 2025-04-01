@@ -170,7 +170,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         foreach (GameObject dontDestroyObject in dontDestroyOnLoad.GetRootGameObjects())
         {
             //stuff to not destroy
-            if (dontDestroyObject != gameObject & !dontDestroyObject.CompareTag("Dont destroy") & dontDestroyObject.name != "PrimeTweenManager")
+            if (dontDestroyObject != gameObject && !dontDestroyObject.CompareTag("Dont destroy") && dontDestroyObject.name != "PrimeTweenManager")
             {
                 Destroy(dontDestroyObject);
             }
