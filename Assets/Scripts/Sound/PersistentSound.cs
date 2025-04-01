@@ -17,17 +17,17 @@ using UnityEngine;
 /// </summary>
 public class PersistentSound : AudioManager
 {
-    [field: SerializeField]
-    public EventReference Sound;
+    
     private EventInstance _eventInstance;
-
+    [SerializeField] private int _soundId;
     /// <summary>
     /// happens whent he scene starts
     /// it triggers the fmode event
     /// </summary>
     private void Start()
     {
-        _eventInstance = RuntimeManager.CreateInstance(Sound);
+        EventReference[] sounds = FmodPersistentAudioEvents.Instance.PersistentSound;
+        _eventInstance = RuntimeManager.CreateInstance(sounds[_soundId]);
         _eventInstance.getDescription(out EventDescription eventDesc);
         eventDesc.isOneshot(out bool isOneShot);
         if (isOneShot) Debug.LogWarning("The event is a one shot, go in fmode and add loop region");
