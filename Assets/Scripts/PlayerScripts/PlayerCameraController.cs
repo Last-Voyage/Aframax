@@ -444,18 +444,14 @@ public class PlayerCameraController : MonoBehaviour
     {
         //ResetToStoredSensitivity();
         float returnSpeedProgress = 0;
-        print("A");
         yield return _delayToMaxSpeedWait;
-        print("B");
         while (returnSpeedProgress < 1)
         {
-            print(returnSpeedProgress);
             returnSpeedProgress+= Time.deltaTime/_timeToReturnToMaxSpeed;
             SetCinemachineSpeed(Mathf.Lerp(0, _storedSensitivity.x, returnSpeedProgress),
                 Mathf.Lerp(0, _storedSensitivity.y, returnSpeedProgress));
             yield return null;
         }
-        print("Done");
     }
 
     /// <summary>
