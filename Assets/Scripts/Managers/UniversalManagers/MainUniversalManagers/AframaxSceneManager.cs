@@ -157,6 +157,69 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// destroys all do not destroy on load objects and then loads the title screen
+    /// </summary>
+    public void ReloadTitleScreen()
+    {
+        //destroy all "dont destroy on load" objects
+        GameObject dontDestroyFinder = new GameObject();
+        DontDestroyOnLoad(dontDestroyFinder);
+        Scene dontDestroyOnLoad = dontDestroyFinder.scene;
+        DestroyImmediate(dontDestroyFinder);
+
+        foreach (GameObject dontDestroyObject in dontDestroyOnLoad.GetRootGameObjects())
+        {
+            //stuff to not destroy
+            if (dontDestroyObject != gameObject && !dontDestroyObject.CompareTag("Dont destroy") && dontDestroyObject.name != "PrimeTweenManager")
+            {
+                Destroy(dontDestroyObject);
+            }
+        }
+        SceneManager.LoadScene(0);
+    }
+
+
+    /// <summary>
+    /// Happens when the object is enable and it subscribes
+    /// to on scene loaded event
+    /// </summary>
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLevelLoaded;
+        SceneManager.sceneLoaded += OnMazeSceneLoaded;
+    }
+
+    /// <summary>
+    /// happens when the object is disabled and it unsubscribes
+    /// to the on scene loaded event
+    /// </summary>
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelLoaded;
+        SceneManager.sceneLoaded -= OnMazeSceneLoaded;
+    }
+
+    void OnMazeSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MazeScene")
+        {
+           RuntimeSfxManager.Instance.CanPlayFootSteps = true;
+           print("wabalabadubdub");
+        }
+    }
+
+    /// <summary>
+    /// called when the scene is loaded
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Loaded Scene: " + scene.name);
+    }
+
+
+    /// <summary>
     /// Reloads the current scene
     /// </summary>
     public void ReloadCurrentScene()
