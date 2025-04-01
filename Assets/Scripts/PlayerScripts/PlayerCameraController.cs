@@ -62,6 +62,9 @@ public class PlayerCameraController : MonoBehaviour
     private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
+    // Cached variables for movement sway
+    private float _xSway;
+    private float _ySway;
 
     // Variables for pullback
     [Space]
@@ -73,6 +76,22 @@ public class PlayerCameraController : MonoBehaviour
     private const float _BASE_FOLLOW_TIME = 0.01f;
     private float _harpoonHorizontalVelocity;
     private float _harpoonVerticalVelocity;
+
+    // Cached variables
+    private WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
+    private Transform _playerTransform;
+    private Transform _cameraTransform;
+    private Transform _harpoonTransform;
+
+    private bool _isReticleFullyZoomed;
+
+    /// <summary>
+    /// Whether the reticle is visually fully shrunken or not.
+    /// </summary>
+    public bool IsReticleFullyZoomed
+    {
+        set { _isReticleFullyZoomed = value; }
+    }
 
     /// <summary>
     /// This function is called before the first frame update.
@@ -87,6 +106,9 @@ public class PlayerCameraController : MonoBehaviour
         InitializeCamera();
 
         InitializeFOVDifference();
+
+        _playerTransform = _playerVisuals.transform;
+        _harpoonTransform = _harpoonGun.transform;
     }
 
     /// <summary>
@@ -113,6 +135,7 @@ public class PlayerCameraController : MonoBehaviour
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
 
         _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
+        _cameraTransform = Camera.main.transform;
     }
 
     /// <summary>
@@ -149,7 +172,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         // Cinemachine actually manipulates the Main Camera itself
         // By getting the rotation of the Main Camera, we can rotate our character
-        _playerVisuals.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, 0);
+        _playerTransform.rotation = Quaternion.Euler(0,_cameraTransform.eulerAngles.y,0);
     }
 
     /// <summary>
@@ -164,29 +187,29 @@ public class PlayerCameraController : MonoBehaviour
             {
                 // Let's make sure the harpoon is set to the PlayerCamera as its parent
                 // This is because we want to ignore the Main Camera's current rotation so we can just do it ourselves
-                _harpoonGun.transform.SetParent(this.transform, true);
+                _harpoonTransform.SetParent(this.transform, true);
 
                 // Get new angles for the harpoon
                 // We do this by getting the current rotation for the harpoon and putting it through this
                 // SmoothDampAngle function, which is super intuitive and makes the movement clean
-                float newHoriAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.y,
-                    Camera.main.transform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
+                float newHoriAngle = Mathf.SmoothDampAngle(_harpoonTransform.localEulerAngles.y,
+                    _cameraTransform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
                     _harpoonFollowTime * _BASE_FOLLOW_TIME);
-                float newVertAngle = Mathf.SmoothDampAngle(_harpoonGun.transform.localEulerAngles.x,
-                    Camera.main.transform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
+                float newVertAngle = Mathf.SmoothDampAngle(_harpoonTransform.localEulerAngles.x,
+                    _cameraTransform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
                     _harpoonFollowTime * _BASE_FOLLOW_TIME);
 
                 // Set new angles for the harpoon
-                _harpoonGun.transform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
+                _harpoonTransform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
             }
             else
             {
                 // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
                 // to keep its rotation when it's not idle
-                _harpoonGun.transform.SetParent(Camera.main.transform, true);
+                _harpoonTransform.SetParent(_cameraTransform, true);
 
                 // Let's reset the rotation too, just in case
-                _harpoonGun.transform.localRotation = Quaternion.identity;
+                _harpoonTransform.localRotation = Quaternion.identity;
             }
         }
     }
@@ -257,30 +280,30 @@ public class PlayerCameraController : MonoBehaviour
 
                 // We would like to get the angle at which that camera is facing
                 // So that we can move the harpoon accurately when the player turns
-                float angle = Camera.main.transform.localEulerAngles.y * Mathf.PI / 180f;
+                float angle = _cameraTransform.localEulerAngles.y * Mathf.PI / 180f;
 
                 // Movement Sway
                 float newX = 0;
                 float newZ = 0;
                 if (_movementSwayRight)
                 {
-                    newX = _harpoonGun.transform.localPosition.x +
+                    newX = _harpoonTransform.localPosition.x +
                         (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Cos(angle);
-                    newZ = _harpoonGun.transform.localPosition.z +
+                    newZ = _harpoonTransform.localPosition.z +
                         (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Sin(angle);
                 }
                 else
                 {
-                    newX = _harpoonGun.transform.localPosition.x -
+                    newX = _harpoonTransform.localPosition.x -
                         (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Cos(angle);
-                    newZ = _harpoonGun.transform.localPosition.z -
+                    newZ = _harpoonTransform.localPosition.z -
                         (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Sin(angle);
                 }
-                _harpoonGun.transform.localPosition = new Vector3(newX, 0, newZ);
+                _harpoonTransform.localPosition = new Vector3(newX, 0, newZ);
 
                 // If we reach the limit on our sway, switch directions
                 float swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
-                float currentSwayDistance = Vector3.Distance(_harpoonGun.transform.localPosition, Vector3.zero);
+                float currentSwayDistance = Vector3.Distance(_harpoonTransform.localPosition, Vector3.zero);
                 if (currentSwayDistance >= swayDistanceLimit)
                 {
                     _movementSwayRight = !_movementSwayRight;
@@ -289,7 +312,7 @@ public class PlayerCameraController : MonoBehaviour
             else
             {
                 // If we aren't moving directly forward, let's just reset the camera
-                if (_harpoonGun.transform.localPosition.x != 0 || _harpoonGun.transform.localPosition.z != 0)
+                if (_harpoonTransform.localPosition.x != 0 || _harpoonTransform.localPosition.z != 0)
                 {
                     // NO DUPLICATING COROUTINES
                     if (stopSwayCoroutine == null)
@@ -325,10 +348,10 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
         {
-            while (_harpoonGun.transform.localPosition != Vector3.zero)
+            while (_harpoonTransform.localPosition != Vector3.zero)
             {
                 // Slowly move the harpoon back to position
-                _harpoonGun.transform.localPosition = Vector3.MoveTowards(_harpoonGun.transform.localPosition,
+                _harpoonTransform.localPosition = Vector3.MoveTowards(_harpoonTransform.localPosition,
                     Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
 
                 yield return null;
@@ -336,7 +359,7 @@ public class PlayerCameraController : MonoBehaviour
         }
         else
         {
-            _harpoonGun.transform.localPosition = Vector3.zero;
+            _harpoonTransform.localPosition = Vector3.zero;
         }
 
         // I'm deciding that our main character is right footed
@@ -391,7 +414,18 @@ public class PlayerCameraController : MonoBehaviour
     /// <param name="focusProgress">As a percentage, how much the player has focused. 0 is 0%, 1 is 100%.</param>
     public void AdjustZoom(float focusProgress)
     {
-        _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
+        if (!_isReticleFullyZoomed)
+        {
+            _virtualCamera.m_Lens.FieldOfView = _defaultFOV - (_rangeOfFOV * focusProgress);
+        }
+    }
+
+    /// <summary>
+    /// Resets the zoom of the camera to its default FOV.
+    /// </summary>
+    public void ResetZoom()
+    {
+        _virtualCamera.m_Lens.FieldOfView = _defaultFOV;
     }
 
     /// <summary>
