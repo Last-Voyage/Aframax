@@ -16,6 +16,6 @@ using UnityEngine;
 [System.Serializable]
 public class SavePoint
 {
-    public SavePointTrigger SavePointTrigger;
+    internal SavePointTrigger SavePointTrigger;
     public List<int> MapChunksEnabled;
 }
