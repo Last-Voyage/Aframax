@@ -28,6 +28,9 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private GameObject[] _pages;
     private int _currentPage;
 
+    /// <summary>
+    /// Setup the pages list to hold all the possible pages
+    /// </summary>
     private void Start()
     {
         _pages = new GameObject[_pageParent.childCount];
@@ -48,7 +51,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
 
-        //Unless it's not
+        // I believe that making this true pauses audio, if we want to change that, then it's right below here
         TimeManager.Instance.PauseGameToggle(true);
 
         // Reset the page counter to the first page and activate the note
@@ -158,6 +161,9 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         ActiveTutorial.CloseTutorialPopUp();
     }
 
+    /// <summary>
+    /// Override for the player interacting with the tutorial
+    /// </summary>
     public void OnInteractedByPlayer()
     {
         OpenTutorialPopUp();
