@@ -18,7 +18,9 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: 7589671715582660117}
-  m_RendererFeatureMap: 154e22a936ee5369
+  - {fileID: 5417431254003241590}
+  - {fileID: 1174619332367383052}
+  m_RendererFeatureMap: 154e22a936ee53697652f6d105952e4b0c7a10340f164d10
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -57,10 +59,48 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 0
   m_RenderingMode: 0
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 2
   m_CopyDepthMode: 1
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &1174619332367383052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
+  m_Name: DatamoshEffect
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  injectionPoint: 450
+  fetchColorBuffer: 1
+  requirements: 12
+  passMaterial: {fileID: 2100000, guid: 1ff797f92d9301746ad3fce958a722e7, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1
+--- !u!114 &5417431254003241590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa0ef948bee3975418fd9c43f38032e0, type: 3}
+  m_Name: GrabPassRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  _timing: 1
+  _grabbedTextureName: _GrabbedTexture
+  _shaderLightModes:
+  - Always
+  _sortingCriteria: 55
 --- !u!114 &7589671715582660117
 MonoBehaviour:
   m_ObjectHideFlags: 0
