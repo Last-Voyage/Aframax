@@ -13,6 +13,7 @@ using FMODUnity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -25,6 +26,10 @@ public class PersistentAudioManager : AudioManager
     public static Action<EventReference, GameObject> APlayPersistentAudioOnObject;
     
     private List<EventInstance> _allAmbientEvents;
+    private List<Coroutine> _allAmbientCoroutines = new();
+
+    private WaitForSeconds _ambienceFadeInTime;
+    private WaitForSeconds _ambienceFadeOutTime;
 
     private EventReference _currentMusicReference;
     private EventInstance _currentMusicInstance;
@@ -80,6 +85,8 @@ public class PersistentAudioManager : AudioManager
     /// </summary>
     private void SetUpStartingValues()
     {
+        _ambienceFadeInTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.AmbienceFadeInTime);
+        _ambienceFadeOutTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.AmbienceFadeOutTime);
         _musicFadeOutTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.MusicFadeOutTime);
     }
     
@@ -235,6 +242,92 @@ public class PersistentAudioManager : AudioManager
         StopIntervalAudio();
     }
 
+    /// <summary>
+    /// Fades in the volume of all current ambience playing
+    /// </summary>
+    private void FadeInAllAmbience()
+    {
+        StopAllAmbienceFade();
+        for(int i =0 ; i < _allAmbientEvents.Count; i++) 
+        {
+            _allAmbientCoroutines.Add(StartCoroutine
+                (ChangePersistentAudioVolume(_allAmbientEvents[i], 1, false)));
+        }
+    }
+
+    /// <summary>
+    /// Fades out the volume of all current ambience playing
+    /// </summary>
+    private void FadeOutAllAmbience()
+    {
+        StopAllAmbienceFade();
+        for (int i = 0; i < _allAmbientEvents.Count; i++)
+        {
+            _allAmbientCoroutines.Add(StartCoroutine
+                (ChangePersistentAudioVolume(_allAmbientEvents[i], 0, false)));
+        }
+    }
+
+    /// <summary>
+    /// Stops the process of any ambience currently fading in or out
+    /// </summary>
+    private void StopAllAmbienceFade()
+    {
+        if (_allAmbientCoroutines.Count == 0 ||
+            _allAmbientCoroutines[0].IsUnityNull())
+        {
+            return;
+        }
+
+        for (int i = 0; i < _allAmbientEvents.Count; i++)
+        {
+            StopCoroutine(_allAmbientCoroutines[i]);
+        }
+        _allAmbientCoroutines.Clear();
+    }
+
+    /// <summary>
+    /// Changes an ambience volume from the current value to an end value
+    /// </summary>
+    /// <param name="instance"> The ambience we are changing </param>
+    /// <param name="endAmbienceVolume"> The end volume we want </param>
+    /// <param name="isMusic"> Whether or not we are changing  </param>
+    /// <returns>Time</returns>
+    private IEnumerator ChangePersistentAudioVolume(EventInstance instance, float endAmbienceVolume,
+        bool isMusic)
+    {
+        float startAmbienceVolume;
+        float timeElapsed = 0;
+        float fadeTime;
+
+        // Sets the start volume as the current volume
+        instance.getVolume(out startAmbienceVolume);
+
+        if(isMusic)
+        {
+            // Determines the fade time based on if we are fading in or fading out audio for music
+            fadeTime = startAmbienceVolume < endAmbienceVolume ?
+                FmodPersistentAudioEvents.Instance.MusicFadeInTime : FmodPersistentAudioEvents.Instance.MusicFadeOutTime;
+        }
+        else
+        {
+            // Determines the fade time for ambience
+            fadeTime = startAmbienceVolume < endAmbienceVolume ?
+                FmodPersistentAudioEvents.Instance.AmbienceFadeInTime : FmodPersistentAudioEvents.Instance.AmbienceFadeOutTime;
+        }
+        
+
+        // The process of changing the volume
+        while (timeElapsed < 1)
+        {
+            // Increments the time elapsed based on the fade time
+            timeElapsed += Time.deltaTime / fadeTime;
+            // Sets the volume of the ambience based on the current time elapsed
+            instance.setVolume(Mathf.Lerp(startAmbienceVolume, endAmbienceVolume, timeElapsed));
+            yield return null;
+        }
+    }
+
     #region Music
     /// <summary>
     /// Starts playing music via an id as input
@@ -277,7 +370,7 @@ public class PersistentAudioManager : AudioManager
         if (_currentMusicInstance.isValid())
         {
             // Starts the process of fading the volume to 0
-            StartCoroutine(ChangeMusicVolume(_currentMusicInstance, 0));
+            StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0,true));
             // Waits for the fade out time
             yield return _musicFadeOutTime;
             // Releases the instance of the music
@@ -292,37 +385,7 @@ public class PersistentAudioManager : AudioManager
         _currentMusicInstance.start();
 
         // Starts the process of changing the volume from 0 to 1
-        StartCoroutine(ChangeMusicVolume(_currentMusicInstance, 1));
-    }
-
-    /// <summary>
-    /// Changes a music volume from the current value to an end value
-    /// </summary>
-    /// <param name="instance"> The music we are changing </param>
-    /// <param name="endMusicVolume"> The end volume we want </param>
-    /// <returns>Time</returns>
-    private IEnumerator ChangeMusicVolume(EventInstance instance, float endMusicVolume)
-    {
-        float startMusicVolume;
-        float timeElapsed = 0;
-        float fadeTime;
-
-        // Sets the start volume as the current volume
-        instance.getVolume(out startMusicVolume);
-
-        // Determines the fade time based on if we are fading in or fading out audio
-        fadeTime = startMusicVolume < endMusicVolume ? 
-            FmodPersistentAudioEvents.Instance.MusicFadeInTime : FmodPersistentAudioEvents.Instance.MusicFadeOutTime;
-
-        // The process of changing the volume
-        while (timeElapsed < 1)
-        {
-            // Increments the time elapsed based on the fade time
-            timeElapsed += Time.deltaTime/fadeTime;
-            // Sets the volume of the music based on the current time elapsed
-            instance.setVolume(Mathf.Lerp(startMusicVolume, endMusicVolume, timeElapsed));
-            yield return null;
-        }
+        StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 1,true));
     }
 
     /// <summary>
@@ -331,7 +394,8 @@ public class PersistentAudioManager : AudioManager
     /// <param name="endMusicVolume"> The end volume </param>
     public void ChangeCurrentMusicVolume(float endMusicVolume)
     {
-        StartCoroutine(ChangeMusicVolume(_currentMusicInstance, endMusicVolume));
+        StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, endMusicVolume,true));
     }
     #endregion
+
 }

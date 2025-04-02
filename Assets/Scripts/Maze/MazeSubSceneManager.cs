@@ -69,11 +69,11 @@ public class MazeSubSceneManager : MonoBehaviour
         _playerRigidbody.isKinematic = true;
         
         // Load first maze
-        PreLoadMazeScene(_firstMazeIndex);
-        LoadMazeAdditive(_firstMazeIndex);
+        //PreLoadMazeScene(_firstMazeIndex);
+        //LoadMazeAdditive(_firstMazeIndex);
 
         //Loads any save data in the game
-        FindObjectOfType<SaveReconfiguration>().LoadSave(this);
+        FindObjectOfType<SaveReconfiguration>().StartLoadSave(this);
     }
 
     private void OnPlayerDeath()
@@ -143,6 +143,10 @@ public class MazeSubSceneManager : MonoBehaviour
     /// <param name="mazeId">The maze index to be preloaded.</param>
     public void PreLoadMazeScene(int mazeId)
     {
+        if(mazeId>= 5)
+        {
+            return;
+        }
         _preloadedMaze = mazeId;
         
         // (Re)initialize scene loading state
@@ -218,7 +222,6 @@ public class MazeSubSceneManager : MonoBehaviour
     private IEnumerator StartDestroySceneOperation(int sceneId)
     {
         var sceneRef = SceneManager.GetSceneByBuildIndex(sceneId);
-
         if (!sceneRef.isLoaded)
         {
             yield break;
