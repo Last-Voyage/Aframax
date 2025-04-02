@@ -36,6 +36,7 @@ public class PlayerCameraController : MonoBehaviour
     // Variables for the Virtual Camera
     private CinemachineVirtualCamera _virtualCamera;
     private CinemachineTransposer _transposer;
+    private CinemachinePOV _cinemachinePOV;
 
     // Variables that relate to the camera's coroutines
     private Coroutine _cameraCoroutine;
@@ -77,6 +78,12 @@ public class PlayerCameraController : MonoBehaviour
     private float _harpoonHorizontalVelocity;
     private float _harpoonVerticalVelocity;
 
+    [Space]
+    [SerializeField] private float _timeToReturnToMaxSpeed;
+    [SerializeField] private float _delayToReturnToMaxSpeed;
+    private WaitForSeconds _delayToMaxSpeedWait;
+    private Coroutine _cameraSpeedReturnCoroutine;
+
     // Cached variables
     private WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
     private Transform _playerTransform;
@@ -84,6 +91,10 @@ public class PlayerCameraController : MonoBehaviour
     private Transform _harpoonTransform;
 
     private bool _isReticleFullyZoomed;
+
+    private Vector2 _storedSensitivity;
+
+    private CinemachineBrain _cinemachineBrain;
 
     /// <summary>
     /// Whether the reticle is visually fully shrunken or not.
@@ -94,11 +105,9 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// This function is called before the first frame update.
-    /// Used to initialize any variables that are not serialized
-    /// and to start the coroutine
+    /// Performs any needed set up before the first frame
     /// </summary>
-    void Start()
+    public void CameraSetup()
     {
         EstablishInstance();
 
@@ -133,9 +142,30 @@ public class PlayerCameraController : MonoBehaviour
     {
         _virtualCamera = GetComponent<CinemachineVirtualCamera>();
         _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        _cinemachinePOV = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
 
         _harpoonAnimator = _harpoonGun.GetComponent<Animator>();
         _cameraTransform = Camera.main.transform;
+
+        _delayToMaxSpeedWait = new WaitForSeconds(_delayToReturnToMaxSpeed);
+        InitializeStoredSensitivity();
+    }
+
+    /// <summary>
+    /// Sets the stored sensitivity to its default values
+    /// </summary>
+    private void InitializeStoredSensitivity()
+    {
+        _storedSensitivity = new Vector2(_cinemachinePOV.m_HorizontalAxis.m_MaxSpeed,
+            _cinemachinePOV.m_VerticalAxis.m_MaxSpeed);
+    }
+
+    /// <summary>
+    /// Resets the value of the sensitivity to its stored value
+    /// </summary>
+    private void ResetToStoredSensitivity()
+    {
+        SetCinemachineSpeed(_storedSensitivity.x, _storedSensitivity.y);
     }
 
     /// <summary>
@@ -389,6 +419,7 @@ public class PlayerCameraController : MonoBehaviour
         {
             _cameraCoroutine = StartCoroutine(MoveCamera());
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            _cameraSpeedReturnCoroutine = StartCoroutine(ReturnCameraSpeed());
         }
         else
         {
@@ -396,8 +427,42 @@ public class PlayerCameraController : MonoBehaviour
             {
                 StopCoroutine(_cameraCoroutine);
             }
+            if(_cameraSpeedReturnCoroutine != null)
+            {
+                StopCoroutine(_cameraSpeedReturnCoroutine);
+            }
             UnityEngine.Cursor.lockState = CursorLockMode.None;
+            SetCinemachineSpeed(0, 0);
         }
+    }
+
+    /// <summary>
+    /// Returns the camera to its default speed
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ReturnCameraSpeed()
+    {
+        //ResetToStoredSensitivity();
+        float returnSpeedProgress = 0;
+        yield return _delayToMaxSpeedWait;
+        while (returnSpeedProgress < 1)
+        {
+            returnSpeedProgress+= Time.deltaTime/_timeToReturnToMaxSpeed;
+            SetCinemachineSpeed(Mathf.Lerp(0, _storedSensitivity.x, returnSpeedProgress),
+                Mathf.Lerp(0, _storedSensitivity.y, returnSpeedProgress));
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// Sets the speed of the cinemachine camera
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    private void SetCinemachineSpeed(float x, float y)
+    {
+        _cinemachinePOV.m_HorizontalAxis.m_MaxSpeed =x;
+        _cinemachinePOV.m_VerticalAxis.m_MaxSpeed =y;
     }
 
     /// <summary>
