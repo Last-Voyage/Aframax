@@ -659,6 +659,7 @@ GameObject:
   - component: {fileID: 8187951987838561063}
   - component: {fileID: 5764846222485844572}
   - component: {fileID: 8559583421479446824}
+  - component: {fileID: 5791247462259175713}
   m_Layer: 0
   m_Name: badly damaged
   m_TagString: Untagged
@@ -723,6 +724,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5791247462259175713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993747633314502716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdbd22d751a4f89498833d1a7885fc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayBetweenPulses: 0.25
+  _pulsePersistTime: 0.25
+  _timeTakenToPulse: 0.35
+  _minOpacity: 0.3
 --- !u!1 &1254629104882903510
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,7 +2232,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: Title Screen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1d5051ad2f5f84364a2eb9afadc1b07a, type: 2}
   m_sharedMaterial: {fileID: 3692528365223220164, guid: 1d5051ad2f5f84364a2eb9afadc1b07a,
@@ -2522,6 +2539,7 @@ GameObject:
   - component: {fileID: 2609981669843856006}
   - component: {fileID: 351464609398635788}
   - component: {fileID: 6498450457682507099}
+  - component: {fileID: 2874584925840264451}
   m_Layer: 0
   m_Name: kinda damaged
   m_TagString: Untagged
@@ -2586,6 +2604,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2874584925840264451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036410516559902516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdbd22d751a4f89498833d1a7885fc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayBetweenPulses: 0.5
+  _pulsePersistTime: 0.32
+  _timeTakenToPulse: 0.41
+  _minOpacity: 0.3
 --- !u!1 &4511239216469425147
 GameObject:
   m_ObjectHideFlags: 0
@@ -3017,6 +3051,7 @@ GameObject:
   - component: {fileID: 6159081515645885144}
   - component: {fileID: 1407209810209811597}
   - component: {fileID: 4631831477171939706}
+  - component: {fileID: 8681815504007621421}
   m_Layer: 0
   m_Name: lightly damaged
   m_TagString: Untagged
@@ -3081,6 +3116,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8681815504007621421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5871296724561524157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdbd22d751a4f89498833d1a7885fc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayBetweenPulses: 0.75
+  _pulsePersistTime: 0.35
+  _timeTakenToPulse: 0.55
+  _minOpacity: 0.3
 --- !u!1 &6021170994679013400
 GameObject:
   m_ObjectHideFlags: 0
@@ -4799,7 +4850,7 @@ GameObject:
   - component: {fileID: 8579510687457511908}
   - component: {fileID: 3745379537181484424}
   m_Layer: 5
-  m_Name: Quit
+  m_Name: Title Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4909,7 +4960,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3745379537181484424}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: LoadDesiredSceneButtonAdditive
+        m_MethodName: ReloadTitleScreenButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4931,8 +4982,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 6
-  _sceneTransitionID: 0
+  _sceneToLoad: 0
+  _sceneTransitionID: 1
 --- !u!1 &8515277942726040230
 GameObject:
   m_ObjectHideFlags: 0

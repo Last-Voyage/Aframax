@@ -1,7 +1,7 @@
 /*********************************************************************************************************************
 // File Name :         FmodPersistentAudioEvents
 // Author :            Andrea Swihart-DeCoster
-// Contributors :      Ryan Swanson
+// Contributors :      Ryan Swanson, Nabil Tagba
 // Creation Date :     10/23/24
 //
 // Brief Description : Stores all persistent sounds.
@@ -59,13 +59,17 @@ public class FmodPersistentAudioEvents : MonoBehaviour
     [field: Tooltip("Any audio added here will play throughout the full game")]
     [field: SerializeField] public EventReference[] PersistentGameBackgroundSounds { get; private set; }
     [field: SerializeField] public EventReference LimbIdle { get; private set; }
-    
+    [field: SerializeField] public float AmbienceFadeOutTime { get; private set; }
+    [field: SerializeField] public float AmbienceFadeInTime { get; private set; }
+
     [field: Header("Random Interval Looping Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game at random intervals")]
     [field: SerializeField] public IntervalFMODEvent[] IntervalPersistentEvents { get; private set; }
 
     [field: Header("Music")]
     [field: SerializeField] public EventReference[] MusicInGame { get; private set; }
+    [field: Header("Persistent Sound")]
+    [field: SerializeField] public EventReference[] PersistentSound { get; private set; }
     [field: SerializeField] public float MusicFadeOutTime { get; private set; }
     [field: SerializeField] public float MusicFadeInTime { get; private set; }
     public void SetUpInstance()

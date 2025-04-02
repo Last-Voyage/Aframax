@@ -267,6 +267,8 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFiringState = EHarpoonFiringState.Firing;
 
+        PlayerCameraController.Instance.ResetZoom();
+
         if (!Gamepad.current.IsUnityNull())
         {
             StartCoroutine(HarpoonRumble());

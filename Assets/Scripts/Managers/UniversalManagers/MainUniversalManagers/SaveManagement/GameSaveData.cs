@@ -36,6 +36,8 @@ public class GameSaveData
 
     #region Video Settings
     public float CurrentBrightness { get; set; } = 0.5f;
+
+    public bool IsSubtitlesOn { get; set; } = true;
     #endregion
 
     #region Getters
