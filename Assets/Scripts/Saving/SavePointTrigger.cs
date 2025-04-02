@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       SavePointTrigger.cs
 // Author:          Ryan Swanson
-// Creation Date:   Februsary 25, 2025
+// Creation Date:   February 25, 2025
 //
 // Description:     Saves the game on contact with a trigger
 ******************************************************************************/

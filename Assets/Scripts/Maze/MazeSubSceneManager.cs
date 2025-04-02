@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       MazeSubSceneManager.cs
 // Author:          Miles Rogers
-// Contributor:     ...
+// Contributor:     Ryan Swanson
 // Creation Date:   March 3rd, 2025
 //
 // Description:     Interacts with AframaxSceneManager to additively load
@@ -67,10 +67,6 @@ public class MazeSubSceneManager : MonoBehaviour
         _playerRigidbody = PlayerMovementController.Instance
             .GetComponent<Rigidbody>();
         _playerRigidbody.isKinematic = true;
-        
-        // Load first maze
-        //PreLoadMazeScene(_firstMazeIndex);
-        //LoadMazeAdditive(_firstMazeIndex);
 
         //Loads any save data in the game
         FindObjectOfType<SaveReconfiguration>().StartLoadSave(this);
