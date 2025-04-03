@@ -56,9 +56,9 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private bool _isAppeared = false;
 
     [Header("WAttack Stuff")]
-    [SerializeField] private PathCreator _wAttackPath; // The target to move toward
-    [SerializeField] private float _wAttackSpeed = 5f; // Speed of movement
-    [SerializeField] private float _wAttackDistance = 0;
+    [SerializeField] private PathCreator _whackAMoleAttackPath; // The target to move toward
+    [SerializeField] private float _whackAMoleAttackSpeed = 5f; // Speed of movement
+    [SerializeField] private float _whackAMoleAttackDistance = 0;
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
 
@@ -69,7 +69,7 @@ public class ProceduralVine : MonoBehaviour
         retracting,
         appearing,
         shifting,
-        wAttacking,
+        whackAMoleAttacking,
         none
     }
 
@@ -110,13 +110,16 @@ public class ProceduralVine : MonoBehaviour
             }
 
             //appearing
-            if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance + .1f)
+            if (_currentState == EVineState.appearing)
             {
-                Appearing();
-            }
-            else if (_currentState == EVineState.appearing)
-            {
-                StartCoroutine(JumpBackToPath(_moveBackToPathDuration));
+                if(_appearPath.path.length > _appearDistance + .1f)
+                {
+                    Appearing();
+                }
+                else
+                {
+                    StartCoroutine(JumpBackToPath(_moveBackToPathDuration));
+                }
             }
         }
         //whack a mole vine
@@ -130,24 +133,31 @@ public class ProceduralVine : MonoBehaviour
             else if(!_isAppeared && _appearPath.path.length <= _appearDistance + .1f) _isAppeared = true;
 
             //retracting
-            if (_currentState == EVineState.retracting && _retractPath.path.length >= _retractDistance + .1f)
+            if (_currentState == EVineState.retracting)
             {
-                Retracting();
-                return;
-            }
-            else if(_currentState == EVineState.retracting && _retractPath.path.length < _retractDistance)
-            {
-                Destroy(transform.parent.gameObject, .5f);
+                if(_retractPath.path.length >= _retractDistance + .1f)
+                {
+                    Retracting();
+                    return;
+                }
+                else if(_retractPath.path.length < _retractDistance)
+                {
+                    //.5f delay is a magic number but an important one that shouldn't be changed anywhere
+                    Destroy(transform.parent.gameObject, .5f);
+                }  
             }
 
             //wAttacking
-            if(_currentState == EVineState.wAttacking && _wAttackPath.path.length > _wAttackDistance + .1f)
+            if(_currentState == EVineState.whackAMoleAttacking)
             {
-                WAttack();
-            }
-            else if(_currentState == EVineState.wAttacking && _wAttackPath.path.length <= _wAttackDistance + .1f)
-            {
-                StartCoroutine(WSnapAttack());
+                if(_whackAMoleAttackPath.path.length > _whackAMoleAttackDistance + .1f)
+                {
+                    WhackAMoleAttack();
+                }
+                else if(_whackAMoleAttackPath.path.length <= _whackAMoleAttackDistance + .1f)
+                {
+                    StartCoroutine(WSnapAttack());
+                }    
             }
         }
         
@@ -291,13 +301,22 @@ public class ProceduralVine : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// starts the whack a mole attack. This specific function sets up the model after appearing.
+    /// </summary>
+    /// <param name="playerPos"></param>
     public void StartAttack(Vector3 playerPos)
     {
-        Invoke(nameof(StartWAttack), .5f);
+        //magic number .5f for delay otherwise system bugs. Important number that shouldn't be chnaged
+        Invoke(nameof(StartWhackAMoleAttack), .5f);
     }
 
     private Transform _playerTransform;
 
+    /// <summary>
+    /// does the actual "strike" to the player
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator WSnapAttack()
     {
         yield return new WaitForSeconds(_waitAfterRearBackTime);
@@ -370,6 +389,7 @@ public class ProceduralVine : MonoBehaviour
     /// <summary>
     /// starts the vine appear
     /// </summary>
+    /// <param name="player"></param>
     public void StartAppear(Transform player)
     {
         //skip if already appearing or appeared
@@ -406,28 +426,31 @@ public class ProceduralVine : MonoBehaviour
     #endregion
 
     #region WhackAmoleAttack
-    public void StartWAttack()
+
+    /// <summary>
+    /// sets up the vine for the attack
+    /// </summary>
+    public void StartWhackAMoleAttack()
     {
         //shift the rig to used the dampedTransform instead of IK
-        _wAttackDistance = 0;
+        _whackAMoleAttackDistance = 0;
         
         //change rig to use chainIK
         _dampedTransformRig.weight = 0f;
         _chainIKRig.weight = 1f;
-        _followTransform.position = _wAttackPath.path.GetPointAtDistance(0);
+        _followTransform.position = _whackAMoleAttackPath.path.GetPointAtDistance(0);
         _rigBuilder.Build();
-        _currentState = EVineState.wAttacking;
+        _currentState = EVineState.whackAMoleAttacking;
     }
 
     /// <summary>
-    ///  the vine appears!
+    ///  this rears the whack a mole attack vine back before attacking
     /// </summary>
-    private void WAttack()
+    private void WhackAMoleAttack()
     {
         //makes the base of the vine start moving up, cannot make system follow the head(it doesn't work)
-        _wAttackDistance += Time.deltaTime * _wAttackSpeed;
-        _followTransform.position = _wAttackPath.path.GetPointAtDistance(_wAttackDistance);
-        //_followTransform.right = -_appearPath.path.GetDirectionAtDistance(_appearDistance);
+        _whackAMoleAttackDistance += Time.deltaTime * _whackAMoleAttackSpeed;
+        _followTransform.position = _whackAMoleAttackPath.path.GetPointAtDistance(_whackAMoleAttackDistance);
     }
     #endregion
 
