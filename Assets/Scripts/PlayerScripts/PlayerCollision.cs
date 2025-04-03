@@ -7,6 +7,7 @@
 // Brief Description : Controls the functionality for collisions
 *****************************************************************************/
 
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -151,7 +152,6 @@ public class PlayerCollision : MonoBehaviour
                 {
                     proceduralVine.StartAppear();
                 }
-                
             }
         }
     }

@@ -7,10 +7,10 @@ public class DatamoshEffectManager : MonoBehaviour
     public static DatamoshEffectManager Instance { get; private set; }
     
     [SerializeField] private Material _datamoshMaterial;
+    public float effectLength = 1.0F;
     
     private static readonly int EnableDatamoshEffect = 
         Shader.PropertyToID("_EnableDatamoshEffect");
-    private static readonly int NaNPropEnabled = Shader.PropertyToID("_NaNPropEnabled");
     
     private void Awake() 
     { 
@@ -25,17 +25,27 @@ public class DatamoshEffectManager : MonoBehaviour
         
         _datamoshMaterial.SetInt(EnableDatamoshEffect, 0);
     }
-    
-    public void ShowDatamoshEffectForSeconds(float duration)
+
+#if UNITY_EDITOR
+    public void Update()
     {
-        StartCoroutine(DatamoshEffectBegin(duration));
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayDatamoshEffect();
+        }
+    }
+#endif
+    
+    public void PlayDatamoshEffect()
+    {
+        StartCoroutine(DatamoshEffectBegin());
     }
 
-    private IEnumerator DatamoshEffectBegin(float duration)
+    private IEnumerator DatamoshEffectBegin()
     {
         _datamoshMaterial.SetInt(EnableDatamoshEffect, 1);
         
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(effectLength);
 
         _datamoshMaterial.SetInt(EnableDatamoshEffect, 0);
     }

@@ -12,17 +12,13 @@ public class TriggerDatamoshingEffect : MonoBehaviour
     {
         _datamoshEffectManager = DatamoshEffectManager.Instance;
     }
-    
-    public void ShowDatamoshEffectForSeconds(float duration)
-    {
-        _datamoshEffectManager.ShowDatamoshEffectForSeconds(duration);
-    }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (other.gameObject.CompareTag("Player"))
         {
-            DatamoshEffectManager.Instance.ShowDatamoshEffectForSeconds(3.0F);
+            GetComponent<BoxCollider>().enabled = false;
+            _datamoshEffectManager.PlayDatamoshEffect();
         }
     }
 }
