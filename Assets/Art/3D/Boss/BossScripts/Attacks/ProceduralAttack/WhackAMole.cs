@@ -64,7 +64,6 @@ public class WhackAMole : MonoBehaviour
     {
         if (!_canAttack || !_attackTriggered) return;
 
-        Debug.Log(_canAttack);
         _attackTimer = _attackInterval;
         _playerTransform = player;
 
