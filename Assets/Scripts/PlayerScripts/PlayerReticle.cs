@@ -65,6 +65,8 @@ public class PlayerReticle : MonoBehaviour
 
     private bool _isFocusChanging;
 
+    private WaitForFixedUpdate _reticlePhysicsWait = new WaitForFixedUpdate();
+    
     /// <summary>
     /// Initially sets the reticle to be visually unfocused.
     /// </summary>
@@ -98,7 +100,7 @@ public class PlayerReticle : MonoBehaviour
         { 
             if (_newReticleSize < _maxScopeSize || _newReticleSize > _minScopeSize)
             {
-                yield return new WaitForFixedUpdate();
+                yield return _reticlePhysicsWait;
                 AdjustReticleSize();
                 AdjustReticleAppearance();
             }
@@ -188,6 +190,8 @@ public class PlayerReticle : MonoBehaviour
         _scopeRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
+
+        PlayerCameraController.Instance.IsReticleFullyZoomed = _newReticleSize <= _minScopeSize;
     }
 
     /// <summary>
