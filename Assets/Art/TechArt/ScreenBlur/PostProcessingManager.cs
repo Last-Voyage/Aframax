@@ -18,6 +18,8 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class PostProcessingManager : MonoBehaviour
 {
+    public static PostProcessingManager Instance;
+
     [SerializeField] private Volume _postProcessingVolume;
     [SerializeField] [Range(0,1)] private float _blurPercentage;
     private Coroutine _blurCoroutine = null;
@@ -37,6 +39,21 @@ public class PostProcessingManager : MonoBehaviour
     }
 
 #endif
+
+    /// <summary>
+    /// Initializes the singleton instance for the script
+    /// </summary>
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     /// <summary>
     /// Sets the blur of the camera to a certain value over time
