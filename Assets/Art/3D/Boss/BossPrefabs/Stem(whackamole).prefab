@@ -522,6 +522,111 @@ MonoBehaviour:
     showNormalsHelpInfo: 0
     tabIndex: 0
   initialized: 1
+--- !u!1 &1630088072657193494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4140569224815548953}
+  - component: {fileID: 6492066729862926564}
+  m_Layer: 0
+  m_Name: AttackPath
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4140569224815548953
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630088072657193494}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 0.25, z: 2.69}
+  m_LocalScale: {x: 0.8828247, y: 0.8828247, z: 0.8828247}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7457077358042273283}
+  m_LocalEulerAnglesHint: {x: -270, y: 0, z: 0}
+--- !u!114 &6492066729862926564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630088072657193494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5ac92bc18f545cc84cd886ece82b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  editorData:
+    _bezierPath:
+      points:
+      - {x: -0.03150396, y: 1.6747544, z: -0.053650703}
+      - {x: -0.02961947, y: 1.6975926, z: -0.29852012}
+      - {x: -0.02773498, y: 1.7204309, z: -0.54338956}
+      - {x: -0.024037251, y: 1.6337395, z: -0.72585905}
+      - {x: -0.019124767, y: 1.5185688, z: -0.9682723}
+      - {x: -0.011101164, y: 1.2392101, z: -1.2802224}
+      - {x: -0.0035750975, y: 0.9759428, z: -1.3320518}
+      - {x: 0.011911314, y: 0.43421656, z: -1.4387012}
+      - {x: 0.051788535, y: -0.27221853, z: -0.41264153}
+      - {x: 0.04233404, y: -0.7493081, z: -0.6908093}
+      - {x: 0.03730817, y: -1.0029218, z: -0.8386792}
+      - {x: -0.0039892164, y: -1.0570989, z: -1.4060813}
+      - {x: -0.0032985527, y: -0.90338945, z: -1.6562486}
+      - {x: -0.0028277272, y: -0.7986058, z: -1.8267876}
+      - {x: 0.034522273, y: -0.4655134, z: -1.8970376}
+      - {x: 0.030188212, y: -0.2688931, z: -1.8598212}
+      - {x: 0.026050534, y: -0.08118196, z: -1.8242911}
+      - {x: 0.000047646463, y: 0.07043257, z: -1.6410913}
+      - {x: -0.025955241, y: 0.2220471, z: -1.4578915}
+      isClosed: 0
+      space: 0
+      controlMode: 3
+      autoControlLength: 0.3
+      boundsUpToDate: 0
+      bounds:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+      perAnchorNormalsAngle:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      globalNormalsAngle: 0
+      flipNormals: 0
+    vertexPathUpToDate: 1
+    vertexPathMaxAngleError: 0.3
+    vertexPathMinVertexSpacing: 0.01
+    showTransformTool: 1
+    showPathBounds: 0
+    showPerSegmentBounds: 0
+    displayAnchorPoints: 1
+    displayControlPoints: 1
+    bezierHandleScale: 1
+    globalDisplaySettingsFoldout: 0
+    keepConstantHandleSize: 0
+    showNormalsInVertexMode: 0
+    showBezierPathInVertexMode: 0
+    showDisplayOptions: 0
+    showPathOptions: 1
+    showVertexPathDisplayOptions: 0
+    showVertexPathOptions: 1
+    showNormals: 1
+    showNormalsHelpInfo: 0
+    tabIndex: 0
+  initialized: 1
 --- !u!1 &1697086383297100291
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +931,7 @@ MonoBehaviour:
     m_Root: {fileID: 5409346209179785215}
     m_Tip: {fileID: 8863720439378020940}
     m_Target: {fileID: 7355364383953907259}
-    m_ChainRotationWeight: 0.485
+    m_ChainRotationWeight: 0.275
     m_TipRotationWeight: 1
     m_MaxIterations: 30
     m_Tolerance: 0.0001
@@ -1245,20 +1350,23 @@ MonoBehaviour:
   _dampedTransformRig: {fileID: 6325858858680453788}
   _chainIKRig: {fileID: 8332639229204651747}
   _rigBuilder: {fileID: 3199943555231365109}
-  _rearBackTime: 0.6
-  _rearBackDistance: 1
-  _waitAfterRearBackTime: 0.5
-  _lungeToPlayerDuration: 0.2
+  _rearBackTime: 0.2
+  _rearBackDistance: 2
+  _waitAfterRearBackTime: 0.3
+  _lungeToPlayerDuration: 0.4
   _moveBackAfterAttackTime: 2
   _cooldownToAttackAfterMoveBackToPath: 0.2
   _retractPath: {fileID: 1887428945912749962}
   _baseOfVine: {fileID: 5409346209179785215}
-  _retractSpeed: 2
+  _retractSpeed: 3
   _retractDistance: 0
   _appearPath: {fileID: 7943830330852778638}
-  _appearSpeed: 2
+  _appearSpeed: 3
   _appearDistance: 0
   _isAppeared: 0
+  _wAttackPath: {fileID: 6492066729862926564}
+  _wAttackSpeed: 4
+  _wAttackDistance: 0
   _moveBackToPathDuration: 1.5
 --- !u!1 &4347710411246873471
 GameObject:
@@ -1548,6 +1656,7 @@ Transform:
   - {fileID: 6494977633332778398}
   - {fileID: 3735120714654903626}
   - {fileID: 1747166530077150137}
+  - {fileID: 4140569224815548953}
   - {fileID: 2518169010331280349}
   - {fileID: 1405511201053436424}
   - {fileID: 5221917780054561656}
@@ -1588,9 +1697,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RigLayers:
-  - m_Rig: {fileID: 8332639229204651747}
-    m_Active: 1
   - m_Rig: {fileID: 6325858858680453788}
+    m_Active: 1
+  - m_Rig: {fileID: 8332639229204651747}
     m_Active: 1
   m_Effectors: []
 --- !u!114 &371735774266112528
@@ -1607,7 +1716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _delayFirstSpawn: 0
   _spawnInterval: 0
-  _retractOnAllWeakPointsDestroyed: 1
+  _retractOnAllWeakPointsDestroyed: 0
   _weakPointPrefab: {fileID: 7717971156621110341, guid: 1ca29d51decce974db16269dd060eee0,
     type: 3}
   _weakPointHealth: 1

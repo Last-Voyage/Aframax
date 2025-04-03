@@ -49,7 +49,7 @@ public class WhackAMole : MonoBehaviour
     private IEnumerator StartVineAppear()
     {
         yield return new WaitForSeconds(.1f);
-        _currentActiveVineScript.StartAppear();
+        _currentActiveVineScript.StartAppear(_playerTransform);
 
         //wait for fully appeared 
         yield return new WaitUntil(() => _currentActiveVineScript.GetIsAppeared());

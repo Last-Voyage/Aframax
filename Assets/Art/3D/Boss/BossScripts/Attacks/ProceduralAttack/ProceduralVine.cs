@@ -55,6 +55,11 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _appearDistance = 0;
     [SerializeField] private bool _isAppeared = false;
 
+    [Header("WAttack Stuff")]
+    [SerializeField] private PathCreator _wAttackPath; // The target to move toward
+    [SerializeField] private float _wAttackSpeed = 5f; // Speed of movement
+    [SerializeField] private float _wAttackDistance = 0;
+
     [SerializeField] private float _moveBackToPathDuration = .3f;
 
     //state stuff
@@ -64,6 +69,7 @@ public class ProceduralVine : MonoBehaviour
         retracting,
         appearing,
         shifting,
+        wAttacking,
         none
     }
 
@@ -124,10 +130,24 @@ public class ProceduralVine : MonoBehaviour
             else if(!_isAppeared && _appearPath.path.length <= _appearDistance + .1f) _isAppeared = true;
 
             //retracting
-            if (_currentState == EVineState.retracting && _retractPath.path.length > _retractDistance + .1f)
+            if (_currentState == EVineState.retracting && _retractPath.path.length >= _retractDistance + .1f)
             {
                 Retracting();
                 return;
+            }
+            else if(_currentState == EVineState.retracting && _retractPath.path.length < _retractDistance)
+            {
+                Destroy(transform.parent.gameObject, .5f);
+            }
+
+            //wAttacking
+            if(_currentState == EVineState.wAttacking && _wAttackPath.path.length > _wAttackDistance + .1f)
+            {
+                WAttack();
+            }
+            else if(_currentState == EVineState.wAttacking && _wAttackPath.path.length <= _wAttackDistance + .1f)
+            {
+                StartCoroutine(WSnapAttack());
             }
         }
         
@@ -253,7 +273,7 @@ public class ProceduralVine : MonoBehaviour
             RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
             yield return new WaitForSeconds(_lungeToPlayerDuration);
 
-            if(!_isWhackAMoleVine)
+            if(!IsWhackAMoleVine)
             {
                 //move back to og position
                 _followTransform.DOJump(_pathCreator.path.GetPointAtDistance(_idleMoveDistance), .2f, 1, _moveBackAfterAttackTime, false).SetEase(Ease.InOutCubic);
@@ -273,13 +293,26 @@ public class ProceduralVine : MonoBehaviour
 
     public void StartAttack(Vector3 playerPos)
     {
-        //change rig to use chainIK
-        _dampedTransformRig.weight = 0f;
-        _chainIKRig.weight = 1f;
-        _followTransform.position = _flowerHeadTransform.position;
-        _rigBuilder.Build();
-        StartCoroutine(Attack(playerPos));
-        Debug.Log("attack started");
+        Invoke(nameof(StartWAttack), .5f);
+    }
+
+    private Transform _playerTransform;
+
+    private IEnumerator WSnapAttack()
+    {
+        yield return new WaitForSeconds(_waitAfterRearBackTime);
+
+        //redo direction from new position
+        var direction = (_playerTransform.position - _followTransform.position).normalized;
+        var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
+
+        //snaps to player
+        _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
+        //Plays attack audio
+        RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
+        yield return new WaitForSeconds(_lungeToPlayerDuration);
+
+        StartRetract();
     }
 
     /// <summary>
@@ -337,7 +370,7 @@ public class ProceduralVine : MonoBehaviour
     /// <summary>
     /// starts the vine appear
     /// </summary>
-    public void StartAppear()
+    public void StartAppear(Transform player)
     {
         //skip if already appearing or appeared
         if(_currentState == EVineState.appearing || _isAppeared)
@@ -345,12 +378,13 @@ public class ProceduralVine : MonoBehaviour
             return;
         }
 
+        _playerTransform = player;
+
         //shift the rig to used the dampedTransform instead of IK
         _appearDistance = 0;
         _currentState = EVineState.appearing;
         _chainIKRig.weight = 0;
         _dampedTransformRig.weight = 1;
-        _rigBuilder.Build();
         _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
 
         //play sfx
@@ -368,6 +402,32 @@ public class ProceduralVine : MonoBehaviour
         _appearDistance += Time.deltaTime * _appearSpeed;
         _baseOfVine.position = _appearPath.path.GetPointAtDistance(_appearDistance);
         _baseOfVine.right = -_appearPath.path.GetDirectionAtDistance(_appearDistance);
+    }
+    #endregion
+
+    #region WhackAmoleAttack
+    public void StartWAttack()
+    {
+        //shift the rig to used the dampedTransform instead of IK
+        _wAttackDistance = 0;
+        
+        //change rig to use chainIK
+        _dampedTransformRig.weight = 0f;
+        _chainIKRig.weight = 1f;
+        _followTransform.position = _wAttackPath.path.GetPointAtDistance(0);
+        _rigBuilder.Build();
+        _currentState = EVineState.wAttacking;
+    }
+
+    /// <summary>
+    ///  the vine appears!
+    /// </summary>
+    private void WAttack()
+    {
+        //makes the base of the vine start moving up, cannot make system follow the head(it doesn't work)
+        _wAttackDistance += Time.deltaTime * _wAttackSpeed;
+        _followTransform.position = _wAttackPath.path.GetPointAtDistance(_wAttackDistance);
+        //_followTransform.right = -_appearPath.path.GetDirectionAtDistance(_appearDistance);
     }
     #endregion
 

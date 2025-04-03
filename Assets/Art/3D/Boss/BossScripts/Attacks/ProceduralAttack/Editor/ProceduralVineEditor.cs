@@ -28,7 +28,7 @@ public class ProceduralVineEditor : Editor
 
         if (GUILayout.Button("Start Appear Test"))
         {
-            proceduralVine.StartAppear();
+            /*proceduralVine.StartAppear();*/
         }
     }
 }

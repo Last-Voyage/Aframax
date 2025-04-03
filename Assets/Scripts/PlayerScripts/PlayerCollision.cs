@@ -167,7 +167,7 @@ public class PlayerCollision : MonoBehaviour
                 {
                     if(proceduralVine.IsWhackAMoleVine)
                     {
-                        proceduralVine.StartAppear();
+                        proceduralVine.StartAppear(transform);
                     }
                 }
                 
