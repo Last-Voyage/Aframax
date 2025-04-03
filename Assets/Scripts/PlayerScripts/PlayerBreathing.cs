@@ -73,35 +73,10 @@ public class PlayerBreathing : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            AdjustStoredBreathingLevel(1,true);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            AdjustStoredBreathingLevel(2, true);
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            AdjustStoredBreathingLevel(3, true);
-        }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AdjustStoredBreathingLevel(1, false);
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            AdjustStoredBreathingLevel(2, false);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            AdjustStoredBreathingLevel(3, false);
-        }
-    }
-
+    /// <summary>
+    /// Starts playing a breathing level at a specific intensity
+    /// </summary>
+    /// <param name="newIntensity"> The new intensity level</param>
     private void PlayBreathingAtIntensity(int newIntensity)
     {
         if(newIntensity == _currentBreathingIntensity)
@@ -136,8 +111,6 @@ public class PlayerBreathing : MonoBehaviour
             FmodPersistentAudioEvents.Instance.BreathingFadeInTime);
 
         yield return _breathingFadeOut;
-
-        print("Completed switch to " + newIntensity);
     }
 
     /// <summary>
@@ -170,6 +143,9 @@ public class PlayerBreathing : MonoBehaviour
         DetermineBreathingLevel();
     }
 
+    /// <summary>
+    /// Subscribes to all needed events
+    /// </summary>
     private void SubscribeToEvents()
     {
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().
@@ -186,10 +162,32 @@ public class PlayerBreathing : MonoBehaviour
 
         PersistentAudioManager.Instance.GetOnBossMusicEndedEvent().
             AddListener(delegate { AdjustStoredBreathingLevel(2, false); });
+
+        EnemyManager.Instance.GetOnChaseSequenceBegin().
+            AddListener(delegate { AdjustStoredBreathingLevel(3,true); });
     }
 
+    /// <summary>
+    /// Unsubscribes to all subscribed event
+    /// </summary>
     private void UnsubscribeToEvents()
     {
+        PlayerManager.Instance.GetOnHarpoonFocusStartEvent().
+            RemoveListener(delegate { AdjustStoredBreathingLevel(1, true); });
 
+        PlayerManager.Instance.GetOnHarpoonFocusEndEvent().
+            RemoveListener(delegate { AdjustStoredBreathingLevel(1, false); });
+
+        PlayerManager.Instance.GetOnHarpoonFiredEvent().
+            RemoveListener(delegate { AdjustStoredBreathingLevel(1, false); });
+
+        PersistentAudioManager.Instance.GetOnBossMusicStartedEvent().
+            RemoveListener(delegate { AdjustStoredBreathingLevel(2, true); });
+
+        PersistentAudioManager.Instance.GetOnBossMusicEndedEvent().
+            RemoveListener(delegate { AdjustStoredBreathingLevel(2, false); });
+
+        EnemyManager.Instance.GetOnChaseSequenceBegin().
+            RemoveListener(delegate { AdjustStoredBreathingLevel(3, true); });
     }
 }
