@@ -28,11 +28,18 @@ public class TriggerDatamoshingEffect : MonoBehaviour
     private DatamoshEffectManager _datamoshEffectManager;
 
     /// <summary>
+    /// Cache the BoxCollider on start so it doesn't have to be
+    /// queried from memory when the collision takes place 
+    /// </summary>
+    private BoxCollider _triggerZone;
+
+    /// <summary>
     /// Grab instance of the DatamoshEffectManager singleton
     /// </summary>
     private void Start()
     {
         _datamoshEffectManager = DatamoshEffectManager.Instance;
+        _triggerZone = GetComponent<BoxCollider>();
     }
 
     /// <summary>
@@ -44,7 +51,7 @@ public class TriggerDatamoshingEffect : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            GetComponent<BoxCollider>().enabled = false;
+            _triggerZone.enabled = false;
             _datamoshEffectManager.PlayDatamoshEffect(_effectDuration);
         }
     }
