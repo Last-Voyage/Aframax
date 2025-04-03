@@ -14,6 +14,9 @@ using UnityEngine;
 /// </summary>
 public class LightFlicker : MonoBehaviour
 {
+    /// <summary>
+    /// Check to ensure the collider does not trigger twice
+    /// </summary>
     private bool _triggered = false;
     
     /// <summary>
