@@ -116,6 +116,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkipCinematic"",
+                    ""type"": ""Button"",
+                    ""id"": ""442a7b0b-f504-43ae-b2ab-ca26cc28f140"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -514,6 +523,28 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""ReloadHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b131d53-f394-4c02-91de-11d08d5caf12"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""SkipCinematic"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""580870fd-38ea-47f0-9f8d-bd7410705a8e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""SkipCinematic"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -738,6 +769,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
         m_Player_UIBack = m_Player.FindAction("UIBack", throwIfNotFound: true);
         m_Player_UICycling = m_Player.FindAction("UICycling", throwIfNotFound: true);
+        m_Player_SkipCinematic = m_Player.FindAction("SkipCinematic", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -814,6 +846,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Looking;
     private readonly InputAction m_Player_UIBack;
     private readonly InputAction m_Player_UICycling;
+    private readonly InputAction m_Player_SkipCinematic;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -828,6 +861,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @Looking => m_Wrapper.m_Player_Looking;
         public InputAction @UIBack => m_Wrapper.m_Player_UIBack;
         public InputAction @UICycling => m_Wrapper.m_Player_UICycling;
+        public InputAction @SkipCinematic => m_Wrapper.m_Player_SkipCinematic;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -867,6 +901,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @UICycling.started += instance.OnUICycling;
             @UICycling.performed += instance.OnUICycling;
             @UICycling.canceled += instance.OnUICycling;
+            @SkipCinematic.started += instance.OnSkipCinematic;
+            @SkipCinematic.performed += instance.OnSkipCinematic;
+            @SkipCinematic.canceled += instance.OnSkipCinematic;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -901,6 +938,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @UICycling.started -= instance.OnUICycling;
             @UICycling.performed -= instance.OnUICycling;
             @UICycling.canceled -= instance.OnUICycling;
+            @SkipCinematic.started -= instance.OnSkipCinematic;
+            @SkipCinematic.performed -= instance.OnSkipCinematic;
+            @SkipCinematic.canceled -= instance.OnSkipCinematic;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1010,6 +1050,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnLooking(InputAction.CallbackContext context);
         void OnUIBack(InputAction.CallbackContext context);
         void OnUICycling(InputAction.CallbackContext context);
+        void OnSkipCinematic(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {
