@@ -40,6 +40,9 @@ public class PostProcessingManager : MonoBehaviour
 
 #endif
 
+    /// <summary>
+    /// Initializes the singleton instance for the script
+    /// </summary>
     private void Awake()
     {
         if (Instance == null)

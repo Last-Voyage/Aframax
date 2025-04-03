@@ -27,12 +27,15 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     [SerializeField] private Transform _pageParent;
     private GameObject[] _pages;
     private int _currentPage;
+    private PlayerInputMap _playerInputMap;
 
     /// <summary>
     /// Setup the pages list to hold all the possible pages
     /// </summary>
     private void Start()
     {
+        _playerInputMap = new PlayerInputMap();
+
         _pages = new GameObject[_pageParent.childCount];
 
         for (int i = 0; i < _pageParent.childCount; i++)
@@ -53,6 +56,10 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
         // I believe that making this true pauses audio, if we want to change that, then it's right below here
         TimeManager.Instance.PauseGameToggle(true);
+
+        // Enables a/d, arrow keys, and shoulder button controls
+        _playerInputMap.Enable();
+        _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -143,6 +150,10 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         // Stop the currently open page
         StopPage(_pages[_currentPage]);
 
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Disable();
+
         // Set all the pages to off
         for (int i = 0; i < _pages.Length; i++)
         {
@@ -166,6 +177,22 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     /// </summary>
     public void OnInteractedByPlayer()
     {
+        // Edge cases: There's no tutorials or something is already open
+        if (ActiveTutorial != null
+            || Time.deltaTime == 0)
+        {
+            return;
+        }
+
         OpenTutorialPopUp();
+    }
+
+    /// <summary>
+    /// Prevents memory leaks
+    /// </summary>
+    private void OnDisable()
+    {
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Disable();
     }
 }
