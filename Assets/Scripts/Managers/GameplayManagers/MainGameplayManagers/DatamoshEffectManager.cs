@@ -25,27 +25,17 @@ public class DatamoshEffectManager : MonoBehaviour
         
         _datamoshMaterial.SetInt(EnableDatamoshEffect, 0);
     }
-
-#if UNITY_EDITOR
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PlayDatamoshEffect();
-        }
-    }
-#endif
     
-    public void PlayDatamoshEffect()
+    public void PlayDatamoshEffect(float duration)
     {
-        StartCoroutine(DatamoshEffectBegin());
+        StartCoroutine(DatamoshEffectBegin(duration));
     }
 
-    private IEnumerator DatamoshEffectBegin()
+    private IEnumerator DatamoshEffectBegin(float duration)
     {
         _datamoshMaterial.SetInt(EnableDatamoshEffect, 1);
         
-        yield return new WaitForSeconds(effectLength);
+        yield return new WaitForSeconds(duration);
 
         _datamoshMaterial.SetInt(EnableDatamoshEffect, 0);
     }

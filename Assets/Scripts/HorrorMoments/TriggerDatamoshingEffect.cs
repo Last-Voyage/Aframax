@@ -8,6 +8,8 @@ public class TriggerDatamoshingEffect : MonoBehaviour
 {
     private DatamoshEffectManager _datamoshEffectManager;
 
+    [SerializeField] private float _effectDuration = 1.0F;
+
     private void Start()
     {
         _datamoshEffectManager = DatamoshEffectManager.Instance;
@@ -18,7 +20,7 @@ public class TriggerDatamoshingEffect : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             GetComponent<BoxCollider>().enabled = false;
-            _datamoshEffectManager.PlayDatamoshEffect();
+            _datamoshEffectManager.PlayDatamoshEffect(_effectDuration);
         }
     }
 }
