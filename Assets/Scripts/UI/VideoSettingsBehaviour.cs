@@ -6,9 +6,14 @@
 // 
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
+
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
+using Slider = UnityEngine.UI.Slider;
 
 /// <summary>
 /// operates video settings, currently just brightness but probably more to come
@@ -22,6 +27,11 @@ public class VideoSettingsBehaviour : MonoBehaviour
     [SerializeField] private float _brightnessMultiplier = 3;
 
     [SerializeField] private Slider _brightnessSlider;
+
+    [SerializeField] private Dropdown _resolutionDropdown;
+    [SerializeField] private string _resolutionOptionName;
+
+    private Resolution[] _allResolutions = Screen.resolutions;
 
     /// <summary>
     /// set up references
@@ -38,6 +48,14 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
+
+        List<string> _resolutionNames = new List<string>();
+        foreach (var resolutions in _allResolutions)
+        {
+            _resolutionNames.Add(resolutions.ToString());
+        }
+        
+        //_resolutionDropdown.options = new List<Dropdown.OptionData>(_allResolutions.ToList());
     }
 
     /// <summary>
