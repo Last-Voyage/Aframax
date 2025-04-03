@@ -7,6 +7,7 @@
 // Brief Description : Controls the functionality for collisions
 *****************************************************************************/
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -161,7 +162,8 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("AppearTrigger"))
         {
             //the component should always be on the 3rd child of the vine base
-            if (contact.transform.parent.GetChild(2).TryGetComponent(out ProceduralVine proceduralVine))
+            var proceduralVine = contact.transform.parent.GetChild(2).GetComponent<ProceduralVine>();
+            if (proceduralVine != null)
             {
                 if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
                 {
