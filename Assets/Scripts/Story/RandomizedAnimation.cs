@@ -8,6 +8,7 @@
 
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Provides the different types of ways of determining randomized animations to be played.
@@ -37,6 +38,9 @@ public class RandomizedAnimation : MonoBehaviour
     [Space]
     [Tooltip("Determines if the animation to play is random from the array or in the order of the array")]
     [SerializeField] private ERandomizedAnimationType _randomAnimType;
+
+    [Space]
+    public UnityEvent OnAnimPlay;
 
     private Tween _delayTween;
     
@@ -90,7 +94,11 @@ public class RandomizedAnimation : MonoBehaviour
     /// <param name="animPos"></param>
     private void PlayAnimationTrigger(int animPos)
     {
-        _animator.SetTrigger(_animationNameList[animPos]);
+        OnAnimPlay?.Invoke();
+        if (_animator != null)
+        {
+            _animator.SetTrigger(_animationNameList[animPos]);
+        }
         StartRandomDelay();
     }
 
@@ -103,5 +111,6 @@ public class RandomizedAnimation : MonoBehaviour
         {
             _delayTween.Stop();
         }
+        OnAnimPlay?.RemoveAllListeners();
     }
 }

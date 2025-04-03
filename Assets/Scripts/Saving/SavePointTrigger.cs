@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       SavePointTrigger.cs
 // Author:          Ryan Swanson
-// Creation Date:   Februsary 25, 2025
+// Creation Date:   February 25, 2025
 //
 // Description:     Saves the game on contact with a trigger
 ******************************************************************************/
@@ -15,6 +15,28 @@ using UnityEngine.SceneManagement;
 public class SavePointTrigger : MonoBehaviour
 {
     public int SavePointID;
+
+    private bool _savePointActivated = false;
+
+    /// <summary>
+    /// Activates the save point if it hasn't already
+    /// </summary>
+    private void Start()
+    {
+        if(!_savePointActivated)
+        {
+            Activate();
+        }
+    }
+
+    /// <summary>
+    /// Tells the save point trigger to add itself to the save reconfiguration
+    /// </summary>
+    public void Activate()
+    {
+        _savePointActivated = true;
+        SaveReconfiguration.Instance.SavePoints[SavePointID].SavePointTrigger = this;
+    }
 
     /// <summary>
     /// Saves the game on contact

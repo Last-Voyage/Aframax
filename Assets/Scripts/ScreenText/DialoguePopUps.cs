@@ -56,6 +56,21 @@ public class DialoguePopUps : MonoBehaviour
 
     private IEnumerator _playingDialogue;
 
+    [Tooltip("Time between all of the text being on screen and it's removal")] 
+    [SerializeField] 
+    private float _timeBeforeNoText = 2f;
+    
+    // Cached variables
+    private WaitForSeconds _waitBeforeNoText;
+
+    /// <summary>
+    /// Initializes the cached variable
+    /// </summary>
+    private void Start()
+    {
+        _waitBeforeNoText = new WaitForSeconds(_timeBeforeNoText);
+    }
+
     /// <summary>
     /// The pass through function for actually displaying the dialogue
     /// Because events do not like coroutines
@@ -76,6 +91,7 @@ public class DialoguePopUps : MonoBehaviour
     {
         foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer())
         {
+            UpdateSubtitleSettingState();
             // Wait to start displaying the next text
             yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeText);
             // Takes the display text and makes it invisible
@@ -87,9 +103,9 @@ public class DialoguePopUps : MonoBehaviour
             if (doTextBackground)
             {
                 _textBackgroundContainer.text =
-                    $"<mark=#000000aa padding=“{_leftBackgroundPadding}," +
+                    $"<mark=#000000aa padding=ï¿½{_leftBackgroundPadding}," +
                     $"{_rightBackgroundPadding}, {_topBackgroundPadding}," +
-                    $"{_bottomBackgroundPadding}”>" + dialogueInfo.GetText + "</mark>";
+                    $"{_bottomBackgroundPadding}ï¿½>" + dialogueInfo.GetText + "</mark>";
             }
             //padding order is left, right, top, bottom.
             //first 6 digits of the hex color code is color ("000000" means black)
@@ -101,7 +117,7 @@ public class DialoguePopUps : MonoBehaviour
             RuntimeSfxManager.APlayOneShotSfx(dialogueInfo.GetAudio, transform.position);
 
             //format for background
-            //<mark=#000000aa padding=“10, 10, 0, 0”>text is highlighted</mark>
+            //<mark=#000000aa padding=ï¿½10, 10, 0, 0ï¿½>text is highlighted</mark>
 
             // Gets total length of text in characters, and gets the speed of the text display
             int totalLength = dialogueInfo.GetText.Length;
@@ -120,14 +136,13 @@ public class DialoguePopUps : MonoBehaviour
 
                 //scroll the background too
                 _textBackgroundContainer.maxVisibleCharacters++;
-
-                yield return new WaitForSeconds(1f/typeSpeed);
+                yield return new WaitForSeconds(1f / typeSpeed);
             }
             _dataPointer++;
         }
 
         _dataPointer = 0;
-        yield return new WaitForSeconds(2f);
+        yield return _waitBeforeNoText;
         _textContainer.text = "";
         _textBackgroundContainer.text = "";
         _playingDialogue = null;
@@ -142,6 +157,23 @@ public class DialoguePopUps : MonoBehaviour
         {
             StopCoroutine(_playingDialogue);
             _playingDialogue = null;
+        }
+    }
+
+    /// <summary>
+    /// disable or enable currently running subtitles
+    /// </summary>
+    public void UpdateSubtitleSettingState()
+    {
+        if (SaveManager.Instance.GetGameSaveData().IsSubtitlesOn == true)
+        {
+            _textContainer.enabled = true;
+            _textBackgroundContainer.enabled = true;
+        }
+        else
+        {
+            _textContainer.enabled = false;
+            _textBackgroundContainer.enabled = false;
         }
     }
 
