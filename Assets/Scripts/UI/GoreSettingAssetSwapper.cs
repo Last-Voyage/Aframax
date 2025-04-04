@@ -12,9 +12,9 @@ using UnityEngine.UI;
 
 public class GoreSettingAssetSwapper : MonoBehaviour
 {
-    [SerializeField] private Sprite GoreAsset;
+    [SerializeField] private Sprite _goreAsset;
 
-    [SerializeField] private Sprite SafeAsset;
+    [SerializeField] private Sprite _safeAsset;
 
     /// <summary>
     /// /sets the object's sprite to the correct one for the setting
@@ -24,29 +24,27 @@ public class GoreSettingAssetSwapper : MonoBehaviour
         if (SaveManager.Instance.GetGameSaveData().IsGoreOn)
         {
             //normal
-
             //check if the attached object has an image component or a sprite renderer
             if (gameObject.GetComponent<Image>())
             {
-                gameObject.GetComponent<Image>().sprite = GoreAsset;
+                gameObject.GetComponent<Image>().sprite = _goreAsset;
             }
             else
             {
-                gameObject.GetComponent<SpriteRenderer>().sprite = GoreAsset;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _goreAsset;
             }
         }
         else
         {
             //no gore
-
             //check if the attached object has an image component or a sprite renderer
             if (gameObject.GetComponent<Image>())
             {
-                gameObject.GetComponent<Image>().sprite = SafeAsset;
+                gameObject.GetComponent<Image>().sprite = _safeAsset;
             }
             else
             {
-                gameObject.GetComponent<SpriteRenderer>().sprite = SafeAsset;
+                gameObject.GetComponent<SpriteRenderer>().sprite = _safeAsset;
             }
         }
     }
