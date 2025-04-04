@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 7085364630383168051}
   - component: {fileID: 4643836251014840689}
   - component: {fileID: 1759446208357729453}
+  - component: {fileID: 6995140823767463408}
   m_Layer: 5
   m_Name: Note_Image
   m_TagString: Untagged
@@ -212,6 +213,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6995140823767463408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856850489809228113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5997679b821454bbda490408585051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoreAsset: {fileID: 21300000, guid: d4cf5c1df2ca9184cac6e7bcbeda1ceb, type: 3}
+  SafeAsset: {fileID: 21300000, guid: 2f5363eb70976c64191d4bd61e345266, type: 3}
 --- !u!1 &1546502535880105828
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +285,9 @@ MonoBehaviour:
   _noteTextField: {fileID: 4086155748339625662}
   _leftArrow: {fileID: 6537556353185578291}
   _rightArrow: {fileID: 7826593754231933513}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: b678d42ea015dc84083e2a75a1d8d617, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -287,7 +305,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &6216022144944009535
 BoxCollider:
   m_ObjectHideFlags: 0

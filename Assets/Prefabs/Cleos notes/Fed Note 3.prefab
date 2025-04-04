@@ -349,6 +349,9 @@ MonoBehaviour:
   _noteTextField: {fileID: 3343508327351955646}
   _leftArrow: {fileID: 3593651802965712552}
   _rightArrow: {fileID: 1618024301202730844}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: 78765f4b9156d8549a127ecce61dae5b, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -366,7 +369,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &4892765003989273064
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -883,6 +886,7 @@ GameObject:
   - component: {fileID: 2086986237282407709}
   - component: {fileID: 7732658397128370077}
   - component: {fileID: 7865932778606672042}
+  - component: {fileID: 8652200374768106894}
   m_Layer: 5
   m_Name: Note_Image
   m_TagString: Untagged
@@ -947,6 +951,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8652200374768106894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488459398487697619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5997679b821454bbda490408585051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoreAsset: {fileID: 21300000, guid: d4cf5c1df2ca9184cac6e7bcbeda1ceb, type: 3}
+  SafeAsset: {fileID: 21300000, guid: 2f5363eb70976c64191d4bd61e345266, type: 3}
 --- !u!1 &7971816738105975802
 GameObject:
   m_ObjectHideFlags: 0
