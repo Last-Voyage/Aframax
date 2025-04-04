@@ -1077,16 +1077,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pageTexts:
-  - "I\u2019m alone now. \nVernon is dead. Everyone else too. \nIt's just me. \nDon\u2019t
-    come here."
+  - "August Seven- Eighth??, 1926\r\n\r\nI can\u2019t remember anymore\r\n\tI\u2019m
+    alone now. Vernon is dead. Everyone else too. It's just me. Don\u2019t come here.
+    If you are reading this, I am so sorry.\r\n\r\n- Ruth\r\n"
   - "You\u2019ll get him killed, too.\r\nYou brought him here to sate your curiosity,
     and now he\u2019s going to die, just like me. \r\nI told you not to come here.\r\r\r"
-  - You did this.
   - You did this.
   _noteView: {fileID: 4126275638514795707}
   _noteTextField: {fileID: 8631879711453089730}
   _leftArrow: {fileID: 8445778588673796004}
   _rightArrow: {fileID: 7477028048252907230}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: 5130ad515fa8e7b4496429eba0850b1e, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -1104,7 +1107,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &4735296592879260614
 BoxCollider:
   m_ObjectHideFlags: 0
