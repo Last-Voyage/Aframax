@@ -7,6 +7,7 @@
 *****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,10 @@ public class GoreSettingAssetSwapper : MonoBehaviour
 
     [SerializeField] private Sprite _safeAsset;
 
+    [Space]
+    [SerializeField] private bool _doesObjectDisableOnGoreSetting;
+    [SerializeField] private bool _doesDisableOnGoreSettingOn;
+
     private Image _imageReference;
 
     /// <summary>
@@ -26,7 +31,18 @@ public class GoreSettingAssetSwapper : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        if(_doesObjectDisableOnGoreSetting && 
+            _doesDisableOnGoreSettingOn == SaveManager.Instance.GetGameSaveData().IsGoreOn)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         _imageReference = gameObject.GetComponent<Image>();
+        if(_imageReference.IsUnityNull())
+        {
+            return;
+        }
 
         if (SaveManager.Instance.GetGameSaveData().IsGoreOn)
         {
