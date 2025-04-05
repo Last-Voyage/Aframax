@@ -71,8 +71,11 @@ public class VideoSettingsBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// updates the setting when the button is pressed
+    /// </summary>
     public void ToggleGoreSetting()
     {
-        
+        SaveManager.Instance.GetGameSaveData().IsGoreOn = _goreToggleButton.isOn;
     }
 }

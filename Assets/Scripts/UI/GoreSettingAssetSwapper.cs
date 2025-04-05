@@ -10,24 +10,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// swaps image or sprite renderer assets according to selected gore setting
+/// </summary>
 public class GoreSettingAssetSwapper : MonoBehaviour
 {
     [SerializeField] private Sprite _goreAsset;
 
     [SerializeField] private Sprite _safeAsset;
 
+    private Image _imageReference;
+
     /// <summary>
     /// /sets the object's sprite to the correct one for the setting
     /// </summary>
     private void Awake()
     {
+        _imageReference = gameObject.GetComponent<Image>();
+
         if (SaveManager.Instance.GetGameSaveData().IsGoreOn)
         {
             //normal
             //check if the attached object has an image component or a sprite renderer
-            if (gameObject.GetComponent<Image>())
+            if (_imageReference)
             {
-                gameObject.GetComponent<Image>().sprite = _goreAsset;
+                _imageReference.sprite = _goreAsset;
             }
             else
             {
@@ -38,9 +45,9 @@ public class GoreSettingAssetSwapper : MonoBehaviour
         {
             //no gore
             //check if the attached object has an image component or a sprite renderer
-            if (gameObject.GetComponent<Image>())
+            if (_imageReference)
             {
-                gameObject.GetComponent<Image>().sprite = _safeAsset;
+                _imageReference.sprite = _safeAsset;
             }
             else
             {
