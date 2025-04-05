@@ -340,7 +340,6 @@ public class PersistentAudioManager : AudioManager
         {
             return;
         }
-        print("kdlfj:" + id);
         // Starts the music by using the reference found for that id
         StartMusicByReference(FmodPersistentAudioEvents.Instance.MusicInGame[id]);
         

@@ -23,6 +23,15 @@ public class MusicTrigger : MonoBehaviour
 
 
     /// <summary>
+    /// happens every frame
+    /// being used to make the object follow the player
+    /// </summary>
+    private void Update()
+    {
+       
+    }
+
+    /// <summary>
     /// plays a sound on enter
     /// </summary>
     /// <param name="other"></param>
@@ -32,8 +41,12 @@ public class MusicTrigger : MonoBehaviour
         if (other.gameObject.tag == "Player" && _playOnEnter && _playDoOnce)
         {
             EventReference[] sounds = FmodPersistentAudioEvents.Instance.MusicInGame;
-            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId],
-                GameObject.FindGameObjectWithTag("Player"));
+            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]);
+
+            RuntimeManager.AttachInstanceToGameObject(_eventInstance,
+                GameObject.FindGameObjectWithTag("Player").transform ,
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>());
+
             _eventInstance.start();
             _playDoOnce = false;
         }
@@ -48,8 +61,12 @@ public class MusicTrigger : MonoBehaviour
         if (other.gameObject.tag == "Player" && _playOnExit && _playDoOnce)
         {
             EventReference[] sounds = FmodPersistentAudioEvents.Instance.MusicInGame;
-            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId],
-                GameObject.FindGameObjectWithTag("Player"));
+            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]);
+
+            RuntimeManager.AttachInstanceToGameObject(_eventInstance,
+                GameObject.FindGameObjectWithTag("Player").transform,
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>());
+
             _eventInstance.start();
             _playDoOnce = false;
         }

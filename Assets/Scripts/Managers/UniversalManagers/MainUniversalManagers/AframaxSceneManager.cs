@@ -204,7 +204,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         if (scene.name == "MazeScene")
         {
            RuntimeSfxManager.Instance.CanPlayFootSteps = true;
-           print("wabalabadubdub");
         }
     }
 
