@@ -336,13 +336,14 @@ public class PersistentAudioManager : AudioManager
     public void StartMusicByID(int id)
     {
         // Prevents out of bounds ids
-        if(FmodPersistentAudioEvents.Instance.MusicInGame.Length <= id || id < 0)
+        if(id >= FmodPersistentAudioEvents.Instance.MusicInGame.Length || id < 0)
         {
             return;
         }
-
+        print("kdlfj:" + id);
         // Starts the music by using the reference found for that id
         StartMusicByReference(FmodPersistentAudioEvents.Instance.MusicInGame[id]);
+        
     }
 
     /// <summary>
