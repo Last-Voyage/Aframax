@@ -45,14 +45,14 @@ public class CinematicManager : MonoBehaviour
 
     private bool _skipTextActive;
 
+    private WaitForSeconds _skipPromptWait;
+
     private void Awake()
     {
         _playerInputControls = new PlayerInputMap();
 
         //check for any input to show the skip cutscene text
-        InputSystem.onAnyButtonPress.Call(ctx => StartCoroutine(ShowSkipText(_skipPromptDuration)));
-        //this is the only way i can find to listen for any input, but I can't find any way to stop it from listening
-        //it even keeps running in the editor when not in play mode
+        _playerInputControls.Player.SkipPrompt.started += StartShowSkipText;
     }
 
     /// <summary>
@@ -60,6 +60,8 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _skipPromptTextAnimator = GetComponentInChildren<Animator>();
+        _skipPromptWait = new WaitForSeconds(_skipPromptDuration);
         StartVideo();
         StartCinematicAudio();
     }
@@ -105,26 +107,36 @@ public class CinematicManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Starts the process of showing the skip text
+    /// </summary>
+    /// <param name="ctx"> The input context </param>
+    private void StartShowSkipText(InputAction.CallbackContext ctx)
+    {
+        StartCoroutine(ShowSkipText(_skipPromptDuration));
+    }
+
+    /// <summary>
     /// makes the skip text appear on screen, then disappear after a while
     /// also enables and disables the input for skipping
     /// </summary>
-    /// <param name="SkipTimer">time the text remains on screen</param>
+    /// <param name="skipTimer">time the text remains on screen</param>
     /// <returns></returns>
-    IEnumerator ShowSkipText(int SkipTimer)
+    private IEnumerator ShowSkipText(int skipTimer)
     {
         if (_skipTextActive == false)
         {
             _skipTextActive = true;
-            yield return new WaitForSeconds(0.01f);
+            yield return null;
             _playerInputControls.Player.SkipCinematic.started += SkipCinematic;
-            while (SkipTimer >= 1)
-            {
-                SkipTimer--;
-                _skipPromptTextAnimator.SetInteger("FadeTimer", SkipTimer);
 
-                if (SkipTimer == 0)
+            while (skipTimer >= 1)
+            {
+                skipTimer--;
+                _skipPromptTextAnimator.SetInteger("FadeTimer", skipTimer);
+
+                if (skipTimer == 0)
                 {
-                    yield return new WaitForSeconds(1f);
+                    yield return _skipPromptWait;
                     _playerInputControls.Player.SkipCinematic.started -= SkipCinematic;
                     _skipTextActive = false;
                     break;
@@ -158,13 +170,20 @@ public class CinematicManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Peforms any needed functionality for when this is enabled
+    /// </summary>
     private void OnEnable()
     {
         _playerInputControls.Enable();
     }
 
+    /// <summary>
+    /// Performs any needed functionality for when this is disabled
+    /// </summary>
     private void OnDisable()
     {
+        _playerInputControls.Player.SkipPrompt.started -= StartShowSkipText;
         _playerInputControls.Disable();
     }
 }
