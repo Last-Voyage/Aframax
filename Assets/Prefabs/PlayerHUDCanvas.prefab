@@ -2232,7 +2232,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: Title Screen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1d5051ad2f5f84364a2eb9afadc1b07a, type: 2}
   m_sharedMaterial: {fileID: 3692528365223220164, guid: 1d5051ad2f5f84364a2eb9afadc1b07a,
@@ -2453,8 +2453,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -461.3, y: 284.6}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchoredPosition: {x: -460.7, y: 284.4}
+  m_SizeDelta: {x: 26.8858, y: 26.8858}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7734839096786422022
 CanvasRenderer:
@@ -2484,7 +2484,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 151453d1b6f9eb64f984e5baabbb8bd4, type: 3}
+  m_Sprite: {fileID: -956400062, guid: 46f3e5a6018cd1e468df8fb7e4ead2b2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3616,8 +3616,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -382.49887, y: 154.99998}
-  m_SizeDelta: {x: 55, y: 55}
+  m_AnchoredPosition: {x: -380.5, y: 155}
+  m_SizeDelta: {x: 41.5985, y: 41.5985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5170280378533094936
 CanvasRenderer:
@@ -3647,7 +3647,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 151453d1b6f9eb64f984e5baabbb8bd4, type: 3}
+  m_Sprite: {fileID: -956400062, guid: 46f3e5a6018cd1e468df8fb7e4ead2b2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4836,6 +4836,7 @@ MonoBehaviour:
   _topBackgroundPadding: 0
   _bottomBackgroundPadding: 0
   _uiData: {fileID: 0}
+  _timeBeforeNoText: 2
 --- !u!1 &8472161962240514721
 GameObject:
   m_ObjectHideFlags: 0
@@ -4850,7 +4851,7 @@ GameObject:
   - component: {fileID: 8579510687457511908}
   - component: {fileID: 3745379537181484424}
   m_Layer: 5
-  m_Name: Quit
+  m_Name: Title Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4960,7 +4961,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3745379537181484424}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: LoadDesiredSceneButtonAdditive
+        m_MethodName: ReloadTitleScreenButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4982,8 +4983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39ee52ffa5d21c4194a5899930746f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneToLoad: 6
-  _sceneTransitionID: 0
+  _sceneToLoad: 0
+  _sceneTransitionID: 1
 --- !u!1 &8515277942726040230
 GameObject:
   m_ObjectHideFlags: 0

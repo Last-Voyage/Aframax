@@ -341,14 +341,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pageTexts:
-  - "This operation was a bigger failure than I could\u2019ve imagined. Me and the
-    \u201Cexpert\u201D we brought in are only survivors at the moment. \nThe rest
-    got swallowed up by the vines. I think I know what happened to the moonshiners
-    and police force sent to catch them. \nThis whole damn swamp is a deathtrap."
+  - "8/6/1926\r\n\r\nMission Log:\r\n\tThis operation was a bigger failure than I
+    could\u2019ve imagined. Me and the so-called \u201Cexpert\u201D we brought along
+    are the only survivors. The rest got swallowed up by the vines. I think I know
+    what happened to the moonshiners and police force sent to catch them. This whole
+    swamp is a deathtrap.\r\n\r\n- Agent Vernon, Bureau of Prohibition\r"
   _noteView: {fileID: 1763412960129470686}
   _noteTextField: {fileID: 3343508327351955646}
   _leftArrow: {fileID: 3593651802965712552}
   _rightArrow: {fileID: 1618024301202730844}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: 78765f4b9156d8549a127ecce61dae5b, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -366,7 +370,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &4892765003989273064
 BoxCollider:
   m_ObjectHideFlags: 0
