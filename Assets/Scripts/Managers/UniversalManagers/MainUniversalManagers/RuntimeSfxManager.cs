@@ -161,52 +161,6 @@ public class RuntimeSfxManager : AudioManager
     }
 
     /// <summary>
-    /// Fades in a sfx using an instance
-    /// </summary>
-    /// <param name="eventInstance"> The sfx to fade in </param>
-    /// <param name="fadeTime"> The time to fade in </param>
-    public void FadeInLoopingOneShot(EventInstance eventInstance, float fadeTime)
-    {
-        eventInstance.start();
-
-        StartCoroutine(FadeEventInstance(eventInstance, fadeTime,1));
-    }
-
-    /// <summary>
-    /// Fades out a sfx using an instance
-    /// </summary>
-    /// <param name="inst"> The sfx to fade out </param>
-    /// <param name="fadeTime"> The time to fade out </param>
-    public void FadeOutLoopingOneShot(EventInstance inst, float fadeTime)
-    {
-        StartCoroutine(FadeEventInstance(inst, fadeTime,0));
-    }
-
-    /// <summary>
-    /// Moves an instances volume from where it starts to an end
-    /// </summary>
-    /// <param name="eventInstance"> The instance to adjust the volume </param>
-    /// <param name="fadeTime"> The time to fade </param>
-    /// <param name="endVol"> The ending volume </param>
-    /// <returns></returns>
-    private IEnumerator FadeEventInstance(EventInstance eventInstance, float fadeTime, float endVol)
-    {
-        float progress = 0;
-        float currentVol;
-        eventInstance.getVolume(out float startingVol);
-        while(progress<1)
-        {
-            progress += Time.deltaTime / fadeTime;
-
-            currentVol = Mathf.Lerp(startingVol, endVol,progress);
-            currentVol = Mathf.Clamp(currentVol, 0, 1);
-
-            eventInstance.setVolume(currentVol);
-            yield return null;
-        }
-    }
-
-    /// <summary>
     /// Checks for if the audio is null before playing it
     /// </summary>
     /// <param name="eventReference">The EventReference we are checking is null</param>
