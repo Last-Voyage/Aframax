@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// The types of actions to take on player contact
@@ -34,6 +35,8 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     [field: SerializeField] private bool _detachOnStart = true;
     [field: SerializeField] private bool _destroyOnContact;
 
+    [field: SerializeField] private UnityEvent _onPlayerContact;
+
     /// <summary>
     /// Removes the parent associate with this. That way it can be safely attached to other prefabs.
     /// </summary>
@@ -50,6 +53,7 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     /// </summary>
     public void PlayerContact()
     {
+        _onPlayerContact?.Invoke();
         if(_contactType == EMusicTriggerTypes.SwapMusic)
         {
             SwapMusic();
@@ -80,5 +84,21 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     private void SwapVolume()
     {
         PersistentAudioManager.Instance.ChangeCurrentMusicVolume(_newVolume);
+    }
+
+    /// <summary>
+    /// Called when boss music is activated to invoke the events
+    /// </summary>
+    /// <param name="active"> If it is active or not </param>
+    public void BossMusicActivation(bool active)
+    {
+        if(active)
+        {
+            PersistentAudioManager.Instance.InvokeOnBossMusicStarted();
+        }
+        else
+        {
+            PersistentAudioManager.Instance.InvokeOnBossMusicEnded();
+        }
     }
 }
