@@ -88,6 +88,8 @@ public class SaveManager : MainUniversalManagerFramework
         // We'll go ahead and reset that brightness value too
         Instance.GetGameSaveData().SetBrightness(0.5f);
         Instance.GetGameSaveData().IsSubtitlesOn = true;
+
+        Instance.GetGameSaveData().IsGoreOn = true;
     }
 
     /// <summary>
