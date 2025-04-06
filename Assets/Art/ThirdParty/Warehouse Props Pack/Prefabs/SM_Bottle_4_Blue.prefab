@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7117649896726227601}
   - component: {fileID: 7188332304561219697}
   - component: {fileID: -4464186749586536282}
+  - component: {fileID: 8197086098083966621}
   m_Layer: 0
   m_Name: SM_Bottle_4_Blue
   m_TagString: Untagged
@@ -101,8 +102,31 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1475536512016156736, guid: 8714d95543ab29c43bfc380c8aefcc84, type: 3}
+--- !u!136 &8197086098083966621
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279283264397233546}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03150779
+  m_Height: 0.27446276
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.13723138, z: -0.000000059604645}
