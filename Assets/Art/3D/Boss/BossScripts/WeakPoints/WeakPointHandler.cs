@@ -195,6 +195,10 @@ public class WeakPointHandler : MonoBehaviour
             if (_proceduralVine != null)
             {
                 _proceduralVine.StartRetract();
+                if(_proceduralVine.IsWhackAMoleVine)
+                {
+                    _proceduralVine.transform.parent.parent.GetComponent<WhackAMole>().CanAttack = false;
+                }
 
                 //disable player colliding with weakpoint when retracting
                 foreach(var collider in GetComponentsInChildren<Collider>())

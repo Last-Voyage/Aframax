@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Manages audio that persists throughout the game
@@ -35,6 +36,9 @@ public class PersistentAudioManager : AudioManager
     private EventInstance _currentMusicInstance;
 
     private WaitForSeconds _musicFadeOutTime;
+
+    private static UnityEvent _onBossMusicStarted = new();
+    private static UnityEvent _onBossMusicEnded = new();
 
     /// <summary>
     /// Performs any set up needed for the manager
@@ -398,4 +402,20 @@ public class PersistentAudioManager : AudioManager
     }
     #endregion
 
+    #region Events
+    public void InvokeOnBossMusicStarted()
+    {
+        _onBossMusicStarted?.Invoke();
+    }
+
+    public void InvokeOnBossMusicEnded()
+    {
+        _onBossMusicEnded?.Invoke();
+    }
+    #endregion
+
+    #region Getters
+    public UnityEvent GetOnBossMusicStartedEvent() => _onBossMusicStarted;
+    public UnityEvent GetOnBossMusicEndedEvent() => _onBossMusicEnded;
+    #endregion
 }

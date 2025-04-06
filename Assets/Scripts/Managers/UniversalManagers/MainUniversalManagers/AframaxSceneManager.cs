@@ -57,6 +57,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     private bool _isGameplaySceneLoaded;
 
+    private EventSystem _eventSystem;
+
     /// <summary>
     /// Subscribes to any needed gameplay events
     /// </summary>
@@ -206,7 +208,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
            RuntimeSfxManager.Instance.CanPlayFootSteps = true;
         }
     }
-
+    
+    #if UNITY_EDITOR
     /// <summary>
     /// called when the scene is loaded
     /// </summary>
@@ -216,6 +219,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         Debug.Log("Loaded Scene: " + scene.name);
     }
+    #endif
+    
 
 
     /// <summary>
@@ -248,7 +253,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         }
 
         //turn off buttons to prevent doing stuff during transition
-        GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+        EventSystem.current.enabled = false;
 
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());
