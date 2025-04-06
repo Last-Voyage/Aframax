@@ -166,7 +166,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &3410347775039147783
 Transform:
@@ -202,7 +202,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -597,17 +597,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pageTexts:
-  - "Vernon \u2014 that's the agent's name \u2014 might not be happy about it, but
-    we might have found our answers. We looked through the police files not expecting
-    much, but we found the suspected location of the moonshiner cult. It's in a swamp
-    nearby, called the Devil's Strait."
-  - "Vernon is requisitioning a boat, and we leave tomorrow. As for me, I think I\u2019ll
-    spend the rest of tonight doing a little research of my own. \nThis is already
-    turning out to be quite the story!\n\n- Ruth Sencher, Anthropologist\r"
+  - "August Fifth, 1926\r\n\r\n8:12 pm\r\n\tVernon \u2014 that's the agent's name
+    \u2014 might not be happy about it, but we might have found our answers. We looked
+    through the police files not expecting much, but we found the suspected location
+    of these dangerous  moonshiners. It's in a swamp nearby, called the Devil's Strait.
+    \r"
+  - " Vernon found a spare police boat, and we leave tomorrow. As for me, I think
+    I\u2019ll spend the rest of tonight doing a little research of my own. This is
+    already turning out to be quite the story!\r\n \r\n- Ruth Sencher, Forensic Anthropologist\r\n"
   _noteView: {fileID: 1414641401951080507}
   _noteTextField: {fileID: 1743129240989749820}
   _leftArrow: {fileID: 1155651786496565496}
   _rightArrow: {fileID: 2479757215281989484}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: 419cd136682addb4dbcc262e6c54d305, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -625,7 +629,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &1788416085725685776
 BoxCollider:
   m_ObjectHideFlags: 0

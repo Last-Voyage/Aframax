@@ -7,7 +7,7 @@
 // Brief Description : Controls the functionality for collisions
 *****************************************************************************/
 
-using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -38,6 +38,8 @@ public class PlayerCollision : MonoBehaviour
         CheckForSavePointTrigger(contact);
 
         CheckForAppearTrigger(contact);
+
+        CheckForWhackAMoleTrigger(contact);
     }
 
     #endregion
@@ -117,6 +119,20 @@ public class PlayerCollision : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks for the trigger to damage player in chase sequence
+    /// </summary>
+    /// <param name="contact">The collider we contacted</param>
+    private void CheckForWhackAMoleTrigger(Collider contact)
+    {
+        if (contact.CompareTag("WhackAMoleTrigger"))
+        {
+            var whackAMoleObject = contact.transform.parent.GetComponent<WhackAMole>();
+
+            whackAMoleObject.CallAttack(transform);
+        }
+    }
+
+    /// <summary>
     /// Checks for the trigger to change the music
     /// </summary>
     /// <param name="contact">The collider we contacted</param>
@@ -146,12 +162,17 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("AppearTrigger"))
         {
             //the component should always be on the 3rd child of the vine base
-            if (contact.transform.parent.GetChild(2).TryGetComponent(out ProceduralVine proceduralVine))
+            ProceduralVine proceduralVine = contact.transform.parent.GetChild(2).GetComponent<ProceduralVine>();
+            if (proceduralVine != null)
             {
                 if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
                 {
-                    proceduralVine.StartAppear();
+                    if(proceduralVine.IsWhackAMoleVine)
+                    {
+                        proceduralVine.StartAppear(transform);
+                    }
                 }
+                
             }
         }
     }
