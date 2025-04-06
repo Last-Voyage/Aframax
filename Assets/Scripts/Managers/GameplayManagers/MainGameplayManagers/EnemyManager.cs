@@ -7,6 +7,8 @@
                     Manager to be developed as I know specifics
 ******************************************************************************/
 
+using UnityEngine.Events;
+
 /// <summary>
 /// Provides other scripts with access to the boss
 /// Manager to be developed as I know specifics
@@ -14,6 +16,8 @@
 public class EnemyManager : MainGameplayManagerFramework
 {
     public static EnemyManager Instance;
+
+    private UnityEvent _onChaseSequenceBegin = new UnityEvent();
 
     #region Base Manager
     /// <summary>
@@ -25,5 +29,16 @@ public class EnemyManager : MainGameplayManagerFramework
         Instance = this;
     }
 
+    #endregion
+
+    #region Events
+    public void InvokeOnChaseSequenceBegin()
+    {
+        _onChaseSequenceBegin?.Invoke();
+    }
+    #endregion
+
+    #region Getter
+    public UnityEvent GetOnChaseSequenceBegin() => _onChaseSequenceBegin;
     #endregion
 }
