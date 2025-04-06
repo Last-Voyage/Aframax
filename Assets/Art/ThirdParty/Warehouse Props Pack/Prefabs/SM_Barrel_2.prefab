@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9031959198514730414}
   - component: {fileID: 6535567760453935460}
   - component: {fileID: 7056019694929724502}
+  - component: {fileID: -3372683131387210687}
   m_Layer: 0
   m_Name: SM_Barrel_2
   m_TagString: Untagged
@@ -101,8 +102,31 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8365562796223098153, guid: 6d08d156d399090488f13c6ea72b5367, type: 3}
+--- !u!136 &-3372683131387210687
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4734404918431285425}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.26653174
+  m_Height: 0.9496499
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.47482494, z: 0}

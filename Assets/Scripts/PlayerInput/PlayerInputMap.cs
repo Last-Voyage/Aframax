@@ -116,6 +116,24 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkipCinematic"",
+                    ""type"": ""Button"",
+                    ""id"": ""442a7b0b-f504-43ae-b2ab-ca26cc28f140"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkipPrompt"",
+                    ""type"": ""Button"",
+                    ""id"": ""351a57a5-9d53-45f4-8bf8-cb1250419a4f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -514,6 +532,127 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""ReloadHarpoon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b131d53-f394-4c02-91de-11d08d5caf12"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""SkipCinematic"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""580870fd-38ea-47f0-9f8d-bd7410705a8e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""SkipCinematic"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b60eb450-abe8-4195-9d45-6ab45483c645"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32838032-52a5-4fd9-add0-e42e181ba15f"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5dce83b2-cf94-4c0d-842c-c32c454c9253"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""454a262a-0228-4523-a259-ba6c6a036334"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a5b98de-1eab-4535-a1f4-f2b0277b95cb"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2308d97f-8694-4e8a-946c-9de42e25bcaa"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e61ff377-88d3-4750-bbea-965a37f19b7f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7e6d17c-2879-4ea1-b851-1ca5eeb856b5"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48a8cb3b-55fd-4797-b9fb-1278de4c832f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkipPrompt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -738,6 +877,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
         m_Player_UIBack = m_Player.FindAction("UIBack", throwIfNotFound: true);
         m_Player_UICycling = m_Player.FindAction("UICycling", throwIfNotFound: true);
+        m_Player_SkipCinematic = m_Player.FindAction("SkipCinematic", throwIfNotFound: true);
+        m_Player_SkipPrompt = m_Player.FindAction("SkipPrompt", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_OpenCloseConsole = m_DebugConsole.FindAction("OpenCloseConsole", throwIfNotFound: true);
@@ -814,6 +955,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Looking;
     private readonly InputAction m_Player_UIBack;
     private readonly InputAction m_Player_UICycling;
+    private readonly InputAction m_Player_SkipCinematic;
+    private readonly InputAction m_Player_SkipPrompt;
     public struct PlayerActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -828,6 +971,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @Looking => m_Wrapper.m_Player_Looking;
         public InputAction @UIBack => m_Wrapper.m_Player_UIBack;
         public InputAction @UICycling => m_Wrapper.m_Player_UICycling;
+        public InputAction @SkipCinematic => m_Wrapper.m_Player_SkipCinematic;
+        public InputAction @SkipPrompt => m_Wrapper.m_Player_SkipPrompt;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -867,6 +1012,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @UICycling.started += instance.OnUICycling;
             @UICycling.performed += instance.OnUICycling;
             @UICycling.canceled += instance.OnUICycling;
+            @SkipCinematic.started += instance.OnSkipCinematic;
+            @SkipCinematic.performed += instance.OnSkipCinematic;
+            @SkipCinematic.canceled += instance.OnSkipCinematic;
+            @SkipPrompt.started += instance.OnSkipPrompt;
+            @SkipPrompt.performed += instance.OnSkipPrompt;
+            @SkipPrompt.canceled += instance.OnSkipPrompt;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -901,6 +1052,12 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @UICycling.started -= instance.OnUICycling;
             @UICycling.performed -= instance.OnUICycling;
             @UICycling.canceled -= instance.OnUICycling;
+            @SkipCinematic.started -= instance.OnSkipCinematic;
+            @SkipCinematic.performed -= instance.OnSkipCinematic;
+            @SkipCinematic.canceled -= instance.OnSkipCinematic;
+            @SkipPrompt.started -= instance.OnSkipPrompt;
+            @SkipPrompt.performed -= instance.OnSkipPrompt;
+            @SkipPrompt.canceled -= instance.OnSkipPrompt;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1010,6 +1167,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnLooking(InputAction.CallbackContext context);
         void OnUIBack(InputAction.CallbackContext context);
         void OnUICycling(InputAction.CallbackContext context);
+        void OnSkipCinematic(InputAction.CallbackContext context);
+        void OnSkipPrompt(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {

@@ -510,22 +510,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pageTexts:
-  - "How does an entire police force go missing? More importantly, why is it my problem?
-    Just because they were going after some moonshiners\u2026 \nI don\u2019t understand
-    how that\u2019s even possible. Needless to say, I was very intrigued when that
-    assignment came."
-  - "The only part that worries me is the anthropologist we\u2019re bringing along\u2026\nIf
-    we need to bring a cult expert in, that can\u2019t bode well\u2026 Fine. We leave
-    tomorrow.\n\n- Agent Vernon"
+  - "8/4/1926\r\n\r\nMission Log:\r\n\tHow does an entire police force go missing?
+    I don\u2019t understand how that\u2019s even possible, just because they were
+    going after some moonshiners? More importantly, why is it my problem? Needless
+    to say, I loathe the fact that the assignment came to me.\r\n"
+  - "The part that worries me is the anthropologist we\u2019re bringing along. If
+    we need to bring an expert in, that can\u2019t bode well. Fine, as long as I
+    get paid. We leave tomorrow, I\u2019ll report what I find.\r\n\r\n- Agent Vernon,
+    Bureau of Prohibition\r"
   _noteView: {fileID: 4723086297554507030}
   _noteTextField: {fileID: 493075336414579571}
   _leftArrow: {fileID: 5385081397421308772}
   _rightArrow: {fileID: 3520376590501259888}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 0}
   _onDialogueExit:
     m_PersistentCalls:
       m_Calls: []
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &4606435824098115678
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1310,7 +1314,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &4407101390431540042
 Transform:
@@ -1338,7 +1342,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

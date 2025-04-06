@@ -80,6 +80,38 @@ public class PlayerManager : MainGameplayManagerFramework
         _spawnPoint.SetUp();
     }
 
+    /// <summary>
+    /// Overrides to unsubscribe to this managers events
+    /// </summary>
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        //Fully unsubscribes each event just to be extra safe
+
+        _onPlayerInputToggled?.RemoveAllListeners();
+
+        _onMovementEndedEvent?.RemoveAllListeners();
+        _onMovementEndedEvent?.RemoveAllListeners();
+
+        _onHarpoonFiredEvent?.RemoveAllListeners();
+        _onHarpoonReloadStartEvent?.RemoveAllListeners();
+        _onHarpoonReloadedEvent?.RemoveAllListeners();
+
+        _onHarpoonRestockEvent?.RemoveAllListeners();
+        _onHarpoonRestockCompleteEvent?.RemoveAllListeners();
+
+        _onHarpoonFocusStartEvent?.RemoveAllListeners();
+        _onHarpoonFocusMaxEvent?.RemoveAllListeners();
+        _onHarpoonFocusEndEvent?.RemoveAllListeners();
+
+        _onEnemyOverCrosshairStartEvent?.RemoveAllListeners();
+        _onEnemyOverCrosshairEndEvent?.RemoveAllListeners();
+
+        _onPlayerDamageEvent?.RemoveAllListeners();
+        _onPlayerHealEvent?.RemoveAllListeners();
+        _onHealthChange?.RemoveAllListeners();
+        _onPlayerDeath?.RemoveAllListeners();
+    }
     #endregion
 
     #region Events
