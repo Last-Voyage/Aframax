@@ -16,20 +16,12 @@ using UnityEngine;
 public class MusicTrigger : MonoBehaviour
 {
     private EventInstance _eventInstance;
-    [SerializeField] private int _soundId;
-    [SerializeField] private bool _playOnEnter = false;
-    [SerializeField] private bool _playOnExit = false;
+    [SerializeField] private int _exitSoundId;
+    [SerializeField] private int _enterSoundId;
+    [SerializeField] private bool _canPlayOnEnter = false;
+    [SerializeField] private bool _canPlayOnExit = false;
     private bool _playDoOnce = true;
 
-
-    /// <summary>
-    /// happens every frame
-    /// being used to make the object follow the player
-    /// </summary>
-    private void Update()
-    {
-       
-    }
 
     /// <summary>
     /// plays a sound on enter
@@ -37,11 +29,10 @@ public class MusicTrigger : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        
-        if (other.gameObject.tag == "Player" && _playOnEnter && _playDoOnce)
+        if (other.gameObject.tag == "Player" && _canPlayOnEnter && _playDoOnce)
         {
             EventReference[] sounds = FmodPersistentAudioEvents.Instance.MusicInGame;
-            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]);
+            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_enterSoundId]);
 
             RuntimeManager.AttachInstanceToGameObject(_eventInstance,
                 GameObject.FindGameObjectWithTag("Player").transform ,
@@ -57,11 +48,10 @@ public class MusicTrigger : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
-        
-        if (other.gameObject.tag == "Player" && _playOnExit && _playDoOnce)
+        if (other.gameObject.tag == "Player" && _canPlayOnExit && _playDoOnce)
         {
             EventReference[] sounds = FmodPersistentAudioEvents.Instance.MusicInGame;
-            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_soundId]);
+            _eventInstance = PersistentAudioManager.Instance.CreateInstanceFromReference(sounds[_exitSoundId]);
 
             RuntimeManager.AttachInstanceToGameObject(_eventInstance,
                 GameObject.FindGameObjectWithTag("Player").transform,
