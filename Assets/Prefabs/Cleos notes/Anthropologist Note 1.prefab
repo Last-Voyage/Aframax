@@ -91,7 +91,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &9183269798085911027
 Transform:
@@ -127,7 +127,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1044,23 +1044,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pageTexts:
-  - "A supposedly deadly moonshiner cult, a completely MIA police force, and a small
-    town just as full of rumors as it is of disease. \nThis isn't exactly what I
-    had imagined, but it certainly beats all my previous assignments. They\u2019re
-    putting me in with an old prohibition agent and his team."
-  - 'I feel sorry for him. Probably the only person in this state more overworked
-    than me. Hopefully my skills will prove useful for the team tomorrow.
-
-
-    -
-    Ruth Sencher, Anthropologist
-
-'
-  - "You recognize this handwriting, don\u2019t you?"
+  - "August Fourth, 1926\r\n\r\n7:23 am\r\n\tA supposedly deadly group of moonshiners
+    in a  swamp, a completely MIA police force, and a small town just as full of
+    rumors as it is of disease. \nThis isn't exactly what I had imagined, but it
+    certainly beats all my previous assignments!  What a thrill!"
+  - "They\u2019ve assigned to an old prohibition agent and his team.Hopefully my
+    skills will prove useful for the team tomorrow.\n\t\n- Ruth Sencher, Forensic
+    Anthropologist"
+  - "You recognize my handwriting, don\u2019t you?"
   _noteView: {fileID: 8130619562924930062}
   _noteTextField: {fileID: 1439181050420378442}
   _leftArrow: {fileID: 735729043934098636}
   _rightArrow: {fileID: 2530956766307766794}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: 8c4990368a52499488b2487cfb2d0a04, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -1078,7 +1076,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &8797671428045302828
 BoxCollider:
   m_ObjectHideFlags: 0

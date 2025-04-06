@@ -25,10 +25,5 @@ public class ProceduralVineEditor : Editor
         {
             proceduralVine.StartRetract();
         }
-
-        if (GUILayout.Button("Start Appear Test"))
-        {
-            proceduralVine.StartAppear();
-        }
     }
 }
