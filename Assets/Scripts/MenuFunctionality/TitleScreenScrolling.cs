@@ -24,8 +24,6 @@ public class TitleScreenScrolling : MonoBehaviour
     [Tooltip("The delay before the splash effect plays")]
     [SerializeField] private float _splashEffectDelay;
 
-    [SerializeField] private Canvas _sceneCanvas;
-
     [SerializeField] private Animator _enterFadeOutAnimator;
 
     [SerializeField] private EventSystem _setUpPlayerControls;
@@ -59,7 +57,7 @@ public class TitleScreenScrolling : MonoBehaviour
             while (transform.position != _movingDestination.position)
             {
                 transform.position = Vector3.SmoothDamp(transform.position, _movingDestination.transform.position, ref velocity,
-                    _screenScrollTime * Time.deltaTime * 2000 / _sceneCanvas.renderingDisplaySize.y);
+                    _screenScrollTime);
                 yield return null;
 
                 //double checking to make sure the loop stops properly, accounting for floating point shenanigans
