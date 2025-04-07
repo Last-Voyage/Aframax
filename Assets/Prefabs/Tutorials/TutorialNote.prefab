@@ -1226,19 +1226,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7207200925730435770}
     m_Modifications:
+    - target: {fileID: 2774047300713060956, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6558935013269256284, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_Name
       value: Page4
       objectReference: {fileID: 0}
+    - target: {fileID: 8168807501209762574, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 34dd7675e6bb85a4e800350372992901,
+        type: 3}
+    - target: {fileID: 8280726578164131318, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8437659022961240458, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_text
-      value: "Protect Yourself\n\nYou never know what might happen in the Louisiana
-        bayou, so you\u2019d best be ready for trouble. To use your harpoon gun,
-        first aim by holding down the right mouse button, and then you can fire with
-        the left. The longer you hold your aim, the more focused your accuracy will
-        be. "
+      value: "Protect Yourself\n\nYou never know what might happen in the bayou,
+        so you\u2019d best be ready for trouble. \n\nTo use your harpoon gun, first
+        aim by holding down the right mouse button, and then you can fire with the
+        left. The longer you hold your aim, the more focused your accuracy will be. "
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
@@ -1343,8 +1358,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3005338518394651823, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4481144645641284849}
   m_SourcePrefab: {fileID: 100100000, guid: f67afb8443c84e640b64c54e20c1ffb8, type: 3}
+--- !u!1 &2981385786844902722 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3005338518394651823, guid: f67afb8443c84e640b64c54e20c1ffb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 59982646108729837}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4481144645641284849
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2981385786844902722}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: acc498704464a244196ebf7c4c110635, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!224 &9138473061547171362 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
@@ -1368,9 +1414,9 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: "Don't Shoot Like a Bum\n\nYou\u2019re only so strong, and there are
-        only so many harpoons you can lug around with ya\u2019. Keep an eye on your
-        ammo count under the reticle, cuz\u2019 when you're out, you\u2019re screwed
-        until you find more. Interact with ammo racks around the ship to refill your
+        only so many harpoons you can lug around with ya'. Keep an eye on your ammo
+        count under the reticle, cuz\u2019 when you're out, you\u2019re screwed until
+        you find more. \n\nInteract with ammo racks around the ship to refill your
         supply."
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
@@ -1599,7 +1645,10 @@ PrefabInstance:
 
         Working on a ship can be dangerous
         work, your current health status will appear in the bottom left of the screen.
-        But be careful, you can only take so much damage. If anything does go wrong,
+
+
+        But
+        be careful, you can only take so much damage. If anything does go wrong,
         interact with the various health packs on the ship to patch yourself up.'
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
@@ -1726,14 +1775,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Page3
       objectReference: {fileID: 0}
+    - target: {fileID: 8168807501209762574, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -956400062, guid: 46f3e5a6018cd1e468df8fb7e4ead2b2,
+        type: 3}
     - target: {fileID: 8437659022961240458, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_text
       value: "Take Inventory\n\nIf the Captain needs something, you better get it.
-        To interact with anything, press [E] when it\u2019s nearby. An object will
-        be interactable when a pop-up appears. If you interact and pick up an object,
-        it will appear in the bottom right corner of the screen, disappearing upon
-        use."
+        \n\nTo interact with anything, press [E] when it\u2019s nearby. An object
+        will be interactable when a pop-up appears.\n\n If you interact and pick
+        up an object, it will appear in the bottom right corner of the screen, disappearing
+        upon use."
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
@@ -1864,9 +1919,9 @@ PrefabInstance:
       propertyPath: m_text
       value: "Make Yourself Useful\n\nDon\u2019t forget, if anything goes wrong,
         you should probably check the engine. It\u2019ll probably be nothin\u2019,
-        but worst case scenario, go find the start-up key to test it. If the engine\u2019s
-        still givin\u2019 you trouble after that, you can always try the spanner
-        once it\u2019s on."
+        but worst case scenario, go find the start-up key to test it. \n\nIf the
+        engine\u2019s still givin\u2019 you trouble after that, you can always try
+        the spanner once it\u2019s on."
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
@@ -1987,10 +2042,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7207200925730435770}
     m_Modifications:
+    - target: {fileID: 2774047300713060956, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2774047300713060956, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -60
+      objectReference: {fileID: 0}
     - target: {fileID: 2932133484459611349, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5745170680001555993, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 6558935013269256284, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
@@ -2001,8 +2071,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: dbc11317a69925942835d3c7bb82f930,
+      objectReference: {fileID: 0}
+    - target: {fileID: 8168807501209762574, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8269550662855989165, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_VideoClip
@@ -2013,6 +2087,11 @@ PrefabInstance:
       propertyPath: m_text
       value: "Welcome Aboard!\n\nIf it\u2019s your first time with us, allow us to
         go over some important information to know on your trip."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8437659022961240458, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
@@ -2133,6 +2212,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7207200925730435770}
     m_Modifications:
+    - target: {fileID: 2774047300713060956, guid: f67afb8443c84e640b64c54e20c1ffb8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -60
+      objectReference: {fileID: 0}
     - target: {fileID: 2932133484459611349, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_text
@@ -2147,7 +2231,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: -956400062, guid: 46f3e5a6018cd1e468df8fb7e4ead2b2,
+        type: 3}
     - target: {fileID: 8269550662855989165, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
       propertyPath: m_VideoClip
@@ -2158,8 +2243,8 @@ PrefabInstance:
       propertyPath: m_text
       value: "Captain\u2019s Orders\n\nThe Captain is the head of the ship, so when
         he talks, you listen. He\u2019ll tell you what to do, and will guide you
-        throughout the journey. Your objective will appear in the top left of the
-        screen, and can be checked any time in the pause menu by pressing [ESC]."
+        throughout the journey. \n\nYour objective will appear in the top left of
+        the screen, and can be checked any time in the pause menu by pressing [ESC]."
       objectReference: {fileID: 0}
     - target: {fileID: 9081360433415286735, guid: f67afb8443c84e640b64c54e20c1ffb8,
         type: 3}
