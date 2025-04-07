@@ -334,7 +334,6 @@ public class PlayerMovementController : MonoBehaviour
             newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
         }
 
-        print(_currentReloadMoveSpeedMultiplier);
         // Returns the movement direction times the speed and acceleration
         return newMovement * (_playerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
             _currentReloadMoveSpeedMultiplier * _currentAcceleration);
@@ -584,7 +583,7 @@ public class PlayerMovementController : MonoBehaviour
     #region Harpoon Reload Slowdown
 
     /// <summary>
-    /// Starts the harpoon speed slowdown
+    /// Starts the harpoon speed slowdown while reloading
     /// </summary>
     private void StartReloadSpeedSlowdown()
     {
@@ -593,7 +592,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Stops the slowdown from focusing the harpoon
+    /// Stops the slowdown from focusing the harpoon after reloading
     /// </summary>
     private void StopReloadSpeedSlowdown()
     {
@@ -602,7 +601,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Stops the process of focusing or unfocusing
+    /// Stops the process of slowing down while reloading
     /// </summary>
     private void StopCurrentReloadCoroutine()
     {
