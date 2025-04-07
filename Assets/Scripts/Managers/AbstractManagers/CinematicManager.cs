@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         CinematicManager.cs
 // Author :            Charlie Polonus
+// Contributor:        Jeremiah Peters
 // Creation Date :     3/2/25
 //
 // Brief Description : Manages the different cinematics that play throughout
@@ -11,6 +12,10 @@ using System.Collections;
 using FMOD.Studio;
 using UnityEngine;
 using UnityEngine.Video;
+using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
+using System;
 
 /// <summary>
 /// Manages all the cinematics that play
@@ -30,11 +35,33 @@ public class CinematicManager : MonoBehaviour
 
     private EventInstance _cinematicAudio;
 
+    [SerializeField] private TMP_Text _skipPromptText;
+
+    [SerializeField] private Animator _skipPromptTextAnimator;
+
+    [SerializeField] private int _skipPromptDuration;
+
+    private PlayerInputMap _playerInputControls;
+
+    private bool _skipTextActive;
+
+    private WaitForSeconds _skipPromptWait;
+
+    private void Awake()
+    {
+        _playerInputControls = new PlayerInputMap();
+
+        //check for any input to show the skip cutscene text
+        _playerInputControls.Player.SkipPrompt.started += StartShowSkipText;
+    }
+
     /// <summary>
     /// Starts the cinematic
     /// </summary>
     private void Start()
     {
+        _skipPromptTextAnimator = GetComponentInChildren<Animator>();
+        _skipPromptWait = new WaitForSeconds(_skipPromptDuration);
         StartVideo();
         StartCinematicAudio();
     }
@@ -80,6 +107,56 @@ public class CinematicManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Starts the process of showing the skip text
+    /// </summary>
+    /// <param name="ctx"> The input context </param>
+    private void StartShowSkipText(InputAction.CallbackContext ctx)
+    {
+        StartCoroutine(ShowSkipText(_skipPromptDuration));
+    }
+
+    /// <summary>
+    /// makes the skip text appear on screen, then disappear after a while
+    /// also enables and disables the input for skipping
+    /// </summary>
+    /// <param name="skipTimer">time the text remains on screen</param>
+    /// <returns></returns>
+    private IEnumerator ShowSkipText(int skipTimer)
+    {
+        if (_skipTextActive == false)
+        {
+            _skipTextActive = true;
+            yield return null;
+            _playerInputControls.Player.SkipCinematic.started += SkipCinematic;
+
+            while (skipTimer >= 1)
+            {
+                skipTimer--;
+                _skipPromptTextAnimator.SetInteger("FadeTimer", skipTimer);
+
+                if (skipTimer == 0)
+                {
+                    yield return _skipPromptWait;
+                    _playerInputControls.Player.SkipCinematic.started -= SkipCinematic;
+                    _skipTextActive = false;
+                    break;
+                }
+                yield return null;
+            }
+        }
+        yield return null;
+    }
+
+    /// <summary>
+    /// calls LoadNextScene
+    /// </summary>
+    /// <param name="ctx">in order for the input to be disablable it needs to send the context</param>
+    private void SkipCinematic(InputAction.CallbackContext ctx)
+    {
+        LoadNextScene();
+    }
+
+    /// <summary>
     /// Finish the cinematic, so load the next scene
     /// </summary>
     public void LoadNextScene()
@@ -91,5 +168,22 @@ public class CinematicManager : MonoBehaviour
             _cinematicAudio.stop(STOP_MODE.IMMEDIATE);
             _cinematicAudio.release();
         }
+    }
+
+    /// <summary>
+    /// Peforms any needed functionality for when this is enabled
+    /// </summary>
+    private void OnEnable()
+    {
+        _playerInputControls.Enable();
+    }
+
+    /// <summary>
+    /// Performs any needed functionality for when this is disabled
+    /// </summary>
+    private void OnDisable()
+    {
+        _playerInputControls.Player.SkipPrompt.started -= StartShowSkipText;
+        _playerInputControls.Disable();
     }
 }

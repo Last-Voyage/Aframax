@@ -25,6 +25,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _subtitleToggleButton;
 
+    [SerializeField] private Toggle _goreToggleButton;
+
     /// <summary>
     /// set up references
     /// </summary>
@@ -43,6 +45,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
 
         _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
+        _goreToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsGoreOn;
     }
 
     /// <summary>
@@ -66,5 +69,13 @@ public class VideoSettingsBehaviour : MonoBehaviour
         {
             FindObjectOfType<DialoguePopUps>().UpdateSubtitleSettingState();
         }
+    }
+
+    /// <summary>
+    /// updates the setting when the button is pressed
+    /// </summary>
+    public void ToggleGoreSetting()
+    {
+        SaveManager.Instance.GetGameSaveData().IsGoreOn = _goreToggleButton.isOn;
     }
 }

@@ -17,6 +17,7 @@ using UnityEngine.UI;
 public class SceneTransitionBehaviour : MonoBehaviour
 {
     private Animator _sceneTransitionAnimator;
+    private Image _transitionImage;
 
     public static SceneTransitionBehaviour Instance;
 
@@ -26,6 +27,7 @@ public class SceneTransitionBehaviour : MonoBehaviour
     public void Setup()
     {
         _sceneTransitionAnimator = GetComponent<Animator>();
+        _transitionImage = GetComponent<Image>();
         Instance = this;
     }
 
@@ -35,7 +37,7 @@ public class SceneTransitionBehaviour : MonoBehaviour
     /// <param name="animationTrigger"></param>
     public void PlayTransition(string animationTrigger)
     {
-        gameObject.GetComponent<Image>().enabled = true;
+        _transitionImage.enabled = true;
         _sceneTransitionAnimator.SetTrigger(animationTrigger);
     }
 }

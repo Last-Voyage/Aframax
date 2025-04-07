@@ -474,11 +474,14 @@ MonoBehaviour:
   _noteTextField: {fileID: 6260992914342017818}
   _leftArrow: {fileID: 0}
   _rightArrow: {fileID: 0}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 0}
   _onDialogueExit:
     m_PersistentCalls:
       m_Calls: []
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &287783848974716843
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -591,7 +594,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2396587058841169269
 Transform:
@@ -619,7 +622,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
