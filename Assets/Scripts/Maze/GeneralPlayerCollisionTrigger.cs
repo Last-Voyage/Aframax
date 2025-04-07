@@ -15,6 +15,7 @@ using UnityEngine.Events;
 /// </summary>
 public class GeneralPlayerCollisionTrigger : MonoBehaviour
 {
+    [SerializeField] private bool _doesDestroyOnContact;
     [SerializeField] private UnityEvent _onPlayerCollision;
     /// <summary>
     /// Called when contacting the player
@@ -22,6 +23,10 @@ public class GeneralPlayerCollisionTrigger : MonoBehaviour
     public void PlayerContact()
     {
         _onPlayerCollision?.Invoke();
+        if(_doesDestroyOnContact )
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
