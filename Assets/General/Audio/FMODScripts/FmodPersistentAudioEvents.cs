@@ -68,10 +68,19 @@ public class FmodPersistentAudioEvents : MonoBehaviour
 
     [field: Header("Music")]
     [field: SerializeField] public EventReference[] MusicInGame { get; private set; }
-    [field: Header("Persistent Sound")]
-    [field: SerializeField] public EventReference[] PersistentSound { get; private set; }
     [field: SerializeField] public float MusicFadeOutTime { get; private set; }
     [field: SerializeField] public float MusicFadeInTime { get; private set; }
+
+    public const int _ENEMY_MUSIC_ID = 3;
+
+    [field: Header("Player Persistent Audio")]
+    [field: SerializeField] public EventReference[] BreathingLevels { get; private set; }
+    [field: SerializeField] public float BreathingFadeOutTime { get; private set; }
+    [field: SerializeField] public float BreathingFadeInTime { get; private set; }
+
+    [field: Header("Persistent Sound")]
+    [field: SerializeField] public EventReference[] PersistentSound { get; private set; }
+    
     public void SetUpInstance()
     {
         Instance = this;

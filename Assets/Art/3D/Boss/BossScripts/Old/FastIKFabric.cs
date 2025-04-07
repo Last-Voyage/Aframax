@@ -8,6 +8,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -59,13 +60,13 @@ public class FastIkFabric : MonoBehaviour
         _root = transform;
         for (var i = 0; i <= _chainLength; i++)
         {
-            if (_root == null)
+            if (_root.IsUnityNull())
                 throw new UnityException("The chain value is longer than the ancestor chain!");
             _root = _root.parent;
         }
 
         //init target
-        if (Target == null)
+        if (Target.IsUnityNull())
         {
             Target = new GameObject(gameObject.name + " Target").transform;
             SetPositionRootSpace(Target, GetPositionRootSpace(transform));
@@ -109,7 +110,7 @@ public class FastIkFabric : MonoBehaviour
     /// </summary>
     private void ResolveIK()
     {
-        if (Target == null) 
+        if (Target.IsUnityNull()) 
         { 
             return; 
         }
@@ -186,7 +187,7 @@ public class FastIkFabric : MonoBehaviour
         }
 
         //move entire system slightly towards pole
-        if (_pole != null)
+        if (!_pole.IsUnityNull())
         {
             var polePosition = GetPositionRootSpace(_pole);
             for (int i = 1; i < _jointPositions.Length - 1; i++)
@@ -223,7 +224,7 @@ public class FastIkFabric : MonoBehaviour
     /// </summary>
     private Vector3 GetPositionRootSpace(Transform current)
     {
-        if (_root == null)
+        if (_root.IsUnityNull())
         {
             return current.position;
         }
@@ -238,7 +239,7 @@ public class FastIkFabric : MonoBehaviour
     /// </summary>
     private void SetPositionRootSpace(Transform current, Vector3 position)
     {
-        if (_root == null)
+        if (_root.IsUnityNull())
         {
             current.position = position;
         }
@@ -254,7 +255,7 @@ public class FastIkFabric : MonoBehaviour
     private Quaternion GetRotationRootSpace(Transform current)
     {
         //inverse(after) * before => rot: before -> after
-        if (_root == null)
+        if (_root.IsUnityNull())
         {
             return current.rotation;
         }
@@ -269,7 +270,7 @@ public class FastIkFabric : MonoBehaviour
     /// </summary>
     private void SetRotationRootSpace(Transform current, Quaternion rotation)
     {
-        if (_root == null)
+        if (_root.IsUnityNull())
         {
             current.rotation = rotation;
         }

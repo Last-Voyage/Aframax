@@ -120,7 +120,6 @@ public class WorldSpacePopups : MonoBehaviour
         if(!pfc.IsUnityNull())
         {
             _playerCamera = Camera.main;
-            //_playerCamera = pfc.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
             _playerReference = pfc.transform.GetChild(1).gameObject;
             _playerInteractor = pfc.GetComponentInChildren<PlayerInteraction>();
             _playerTransform = _playerReference.transform;

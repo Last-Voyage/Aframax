@@ -199,7 +199,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2309372390608021792
 Transform:
@@ -227,7 +227,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1288,15 +1288,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pageTexts:
-  - "Update:\nWe found some files in the police department left by some of the missing
-    men. We\u2019re heading to the swamp. \nThankfully, the old force had a spare
-    boat we can use to survey the area, and there\u2019s plenty of firepower if we
-    need to use lethal force. We\u2019re heading to the coordinates tomorrow. Then,
-    maybe I can go home\u2026\n\n- Agent Vernon"
+  - "8/5/1926\r\n\r\nMission Log:\r\n\tWe found some files in the police department
+    left by some of the missing men. We\u2019re heading to the swamp. Thankfully,
+    the old force had a spare boat we can use to survey the area, and there\u2019s
+    plenty of firepower if we need to use lethal force. We\u2019re heading to the
+    coordinates tomorrow. Then, maybe I can go home. \r\n\r\n- Agent Vernon, Bureau
+    of Prohibition\r"
   _noteView: {fileID: 449227253940896502}
   _noteTextField: {fileID: 670672905262606960}
   _leftArrow: {fileID: 3058310543265626270}
   _rightArrow: {fileID: 6805642356441943871}
+  _onNoteOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _dialogueOnExit: {fileID: 11400000, guid: 586cc085156a19f4d80365af9468856e, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
@@ -1314,7 +1318,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onlyPlayOnce: 1
+  _doesDialogueOnlyPlayOnce: 1
 --- !u!65 &6317186835380604676
 BoxCollider:
   m_ObjectHideFlags: 0
