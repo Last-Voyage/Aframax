@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -20,6 +21,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     internal bool IsHit;
 
     private Transform _movingObjects;
+    private Camera _mainCamera;
 
     /// <summary>
     /// Instantiates _movingObjects 
@@ -27,6 +29,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     private void Awake()
     {
         _movingObjects = FindObjectOfType<BoatMover>()?.gameObject.transform;
+        _mainCamera = Camera.main;
     }
 
     /// <summary>
@@ -55,7 +58,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance() && !IsHit)
         {
             // Calculate how far the harpoon should move in this frame
-            Vector3 movement = transform.forward * HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime;
+            Vector3 movement = transform.forward * (HarpoonGun.Instance.GetHarpoonProjectileSpeed() * Time.deltaTime);
 
             // If no collision, move the harpoon
             HarpoonFiredProjectileMovement(movement);
@@ -106,7 +109,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// </summary>
     private void CheckAimAtBoat()
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit) && RecursiveCheckForParent(hit.collider.transform,_movingObjects))
         {
             transform.parent = _movingObjects;
@@ -121,7 +124,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <returns>True if child is within parent in the hierarchy</returns>
     private bool RecursiveCheckForParent(Transform child, Transform parent)
     {
-        if (child.parent == null)
+        if (child.parent.IsUnityNull())
         {
             return false;
         }
