@@ -605,14 +605,14 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopCurrentReloadCoroutine()
     {
-        if (_harpoonSlowdownCoroutine != null)
+        if (!_harpoonSlowdownCoroutine.IsUnityNull())
         {
             StopCoroutine(_harpoonSlowdownCoroutine);
         }
     }
 
     /// <summary>
-    /// The process of slowing down the player while focusing
+    /// The process of slowing down the player while reloading
     /// </summary>
     /// <returns></returns>
     private IEnumerator ReloadSpeedSlowdownProcess()
@@ -628,7 +628,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// The process of speeding up the player after unfocusing
+    /// The process of speeding up the player after reloading
     /// </summary>
     /// <returns></returns>
     private IEnumerator ReloadSpeedUpProcess()
@@ -647,7 +647,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the player is at max speed after unfocusing their weapon
+    /// Called when the player is at max speed after reloading
     /// </summary>
     private void ReloadSpeedUpComplete()
     {
@@ -656,7 +656,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculates the current speed multiplier for focusing the weapon
+    /// Calculates the current speed multiplier for reloading the weapon
     /// </summary>
     private void CalculateCurrentReloadSpeedMultiplier()
     {
