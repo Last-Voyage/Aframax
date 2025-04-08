@@ -661,7 +661,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         // Set the ratio value from 1 to the max speed ratio
         _currentReloadMoveSpeedMultiplier = Mathf.Lerp(1, _maxReloadMoveSpeedRatio, 
-            1 - _focusMoveSpeedCurve.Evaluate(_currentReloadMoveSpeedProgress));
+            1 - _reloadMoveSpeedCurve.Evaluate(_currentReloadMoveSpeedProgress));
     }
 
     #endregion
