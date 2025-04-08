@@ -29,6 +29,9 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
 
+    [Space]
+    [SerializeField] private bool _doesInteractOnStart = false;
+
     /// <summary>
     /// Setup the pages list to hold all the possible pages
     /// </summary>
@@ -42,6 +45,11 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         {
             _pages[i] = _pageParent.GetChild(i).gameObject;
         }
+
+        if(_doesInteractOnStart)
+        {
+            OnInteractedByPlayer();
+        } 
     }
 
     /// <summary>
