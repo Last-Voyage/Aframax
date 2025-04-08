@@ -69,6 +69,7 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Reloading Movement")]
     [SerializeField] private float _reloadSpeedSlowTime;
     [SerializeField] private float _reloadDoneSpeedSlowTime;
+    [SerializeField] private AnimationCurve _reloadMoveSpeedCurve;
     [SerializeField] private float _maxReloadMoveSpeedRatio;
 
     private float _currentReloadMoveSpeedMultiplier = 1;
@@ -571,11 +572,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void CalculateCurrentFocusSpeedMultiplier()
     {
-        // Calculate the lerp value between the non-focus and focused speed
-        float moveSpeedLerpValue = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
-
         // Set the ratio value from 1 to the max speed ratio
-        _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 1 - moveSpeedLerpValue);
+        _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 
+            1 - _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress));
     }
 
     #endregion
@@ -660,11 +659,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void CalculateCurrentReloadSpeedMultiplier()
     {
-        // Calculate the lerp value between the non-focus and focused speed
-        float moveSpeedLerpValue = _focusMoveSpeedCurve.Evaluate(_currentReloadMoveSpeedProgress);
-
         // Set the ratio value from 1 to the max speed ratio
-        _currentReloadMoveSpeedMultiplier = Mathf.Lerp(1, _maxReloadMoveSpeedRatio, 1 - moveSpeedLerpValue);
+        _currentReloadMoveSpeedMultiplier = Mathf.Lerp(1, _maxReloadMoveSpeedRatio, 
+            1 - _focusMoveSpeedCurve.Evaluate(_currentReloadMoveSpeedProgress));
     }
 
     #endregion
