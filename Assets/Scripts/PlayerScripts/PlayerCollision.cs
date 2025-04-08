@@ -92,7 +92,7 @@ public class PlayerCollision : MonoBehaviour
             ChaseVineGroup chaseVineGroup = contact.GetComponent<ChaseVineGroup>();
             if(chaseVineGroup != null && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
             {
-                chaseVineGroup.ActivateThisGroupOfVines();
+                StartCoroutine(chaseVineGroup.ActivateThisGroupOfVines());
             }
         }
     }

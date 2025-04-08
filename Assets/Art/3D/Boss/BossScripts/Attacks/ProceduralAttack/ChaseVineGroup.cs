@@ -7,6 +7,7 @@
 // Brief Description : This script controls the chase vine group
 *****************************************************************************/
 using UnityEngine;
+using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
 using Unity.VisualScripting;
@@ -35,6 +36,10 @@ public class ChaseVineGroup : MonoBehaviour
     [SerializeField] private bool _doesPlayStartAudioEveryChase;
     [Tooltip("The instance of the audio that is started for the looping audio")]
     private EventInstance _chaseEventInstance;
+
+    [Header("Start Animation")]
+    [SerializeField] private GameObject _startScreamObject;
+    [SerializeField] private float _lengthOfStartAnimation = 4.5f;
 
     /// <summary>
     /// Sets up the chase vine group
@@ -65,15 +70,22 @@ public class ChaseVineGroup : MonoBehaviour
     /// <summary>
     /// Activates all the vines and starts them moving toward end of path
     /// </summary>
-    public void ActivateThisGroupOfVines()
+    public IEnumerator ActivateThisGroupOfVines()
     {
         EnemyManager.Instance.InvokeOnChaseSequenceBegin();
+
+        //play start screaming animation
+        _startScreamObject.SetActive(true);
+
+        //wait until animation is over
+        yield return new WaitForSeconds(_lengthOfStartAnimation);
 
         //this transform should be the joint which is leading the vine toward its destination
         _chaseCollider.gameObject.SetActive(true);
         foreach(ChaseSequenceVine chaseSequenceVine in _chaseSequenceVines)
         {
             chaseSequenceVine.gameObject.SetActive(true);
+            //release the kraken
             chaseSequenceVine.ActivateChase(_chaseSpeed);
         }
         _colliderFollow = _chaseSequenceVines[0].transform.GetChild(0);

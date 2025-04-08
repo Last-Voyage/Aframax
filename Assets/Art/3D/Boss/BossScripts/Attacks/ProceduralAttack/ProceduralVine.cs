@@ -62,6 +62,8 @@ public class ProceduralVine : MonoBehaviour
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
 
+    private Coroutine _wSnapAttack;
+
     //state stuff
     public enum EVineState
     {
@@ -154,9 +156,9 @@ public class ProceduralVine : MonoBehaviour
                 {
                     WhackAMoleAttack();
                 }
-                else if(_whackAMoleAttackPath.path.length <= _whackAMoleAttackDistance + .1f)
+                else if(_whackAMoleAttackPath.path.length <= _whackAMoleAttackDistance + .1f && _wSnapAttack == null)
                 {
-                    StartCoroutine(WSnapAttack());
+                    _wSnapAttack = StartCoroutine(WSnapAttack());
                 }    
             }
         }
