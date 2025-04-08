@@ -454,7 +454,6 @@ public class ProceduralVine : MonoBehaviour
     }
     #endregion
 
-
     public bool GetIsAppeared() => _isAppeared;
     public EVineState GetVineState() => _currentState;
 }
