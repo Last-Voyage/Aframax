@@ -107,8 +107,6 @@ public class ConsoleController : MonoBehaviour
         return _content.activeSelf;
     }
 
-    //only works in engine or development builds
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
 
     /// <summary>
     /// happens when the game starts
@@ -534,7 +532,7 @@ public class ConsoleController : MonoBehaviour
         if (_toggleFreeLookCamButton == null) return;
         _toggleFreeLookCamButton.GetComponent<Button>().onClick.RemoveAllListeners();
     }
-    #endif
+    
 }
 
 
