@@ -24,6 +24,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
     private const string _NOT_WALL_ANIM = "notAtWall";
     private const string _AT_WALL_ANIM = "atWall";
+    private const string _SPRINT_ANIM = "sprint";
     
     // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
@@ -67,6 +68,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StartFiringAnimation);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(ReloadHarpoonAnimation);
+        EnemyManager.Instance.GetOnChaseSequenceBegin().AddListener(StartSprintAnimation);
     }
 
     /// <summary>
@@ -135,6 +137,14 @@ public class HarpoonAnimationManager : MonoBehaviour
         {
             _animator.SetTrigger(_RELOAD_READY_ANIM);
         }
+    }
+
+    /// <summary>
+    /// Changes the animation boolean for sprinting to true
+    /// </summary>
+    private void StartSprintAnimation()
+    {
+        _animator.SetBool(_SPRINT_ANIM, true);
     }
 
     /// <summary>
