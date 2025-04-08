@@ -180,7 +180,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         SceneManager.LoadScene(0);
     }
 
-
+#if UNITY_EDITOR
     /// <summary>
     /// Happens when the object is enable and it subscribes
     /// to on scene loaded event
@@ -200,6 +200,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         SceneManager.sceneLoaded -= OnLevelLoaded;
         SceneManager.sceneLoaded -= OnMazeSceneLoaded;
     }
+#endif
 
     void OnMazeSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -210,7 +211,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         }
     }
     
-    #if UNITY_EDITOR
     /// <summary>
     /// called when the scene is loaded
     /// </summary>
@@ -220,7 +220,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         Debug.Log("Loaded Scene: " + scene.name);
     }
-    #endif
     
 
 
