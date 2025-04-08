@@ -81,6 +81,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StartFiringAnimation);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(ReloadHarpoonAnimation);
+        EnemyManager.Instance.GetOnChaseSequenceBegin().RemoveListener(StartSprintAnimation);
     }
 
     /// <summary>
