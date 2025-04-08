@@ -9,6 +9,7 @@
 **********************************************************************************************************************/
 
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Volume trigger that plays the datamoshing effect for a set amount of seconds
@@ -20,6 +21,8 @@ public class TriggerDatamoshingEffect : MonoBehaviour
     /// enters the object's BoxCollider trigger
     /// </summary>
     [SerializeField] private float _effectDuration = 1.0F;
+
+    [SerializeField] private UnityEvent _onTriggerEvents;
     
     /// <summary>
     /// Reference to the global datamosh effect manager (so Coroutines
@@ -53,6 +56,7 @@ public class TriggerDatamoshingEffect : MonoBehaviour
         {
             _triggerZone.enabled = false;
             _datamoshEffectManager.PlayDatamoshEffect(_effectDuration);
+            _onTriggerEvents.Invoke();
         }
     }
 }
