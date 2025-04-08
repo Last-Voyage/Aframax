@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2708155772857696346}
   - component: {fileID: 4635204261599285859}
   - component: {fileID: -1554573157787438905}
+  - component: {fileID: 6790573496601543156}
   m_Layer: 0
   m_Name: SM_Fabric_3v2
   m_TagString: Untagged
@@ -53,7 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -101,8 +102,29 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3721040159996056764, guid: 643fe6454f2b90e4fa380a1b4dab4a08, type: 3}
+--- !u!65 &6790573496601543156
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5234617465113671468}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.67325985, y: 0.9398011, z: 2.2558246}
+  m_Center: {x: -0.034819007, y: -0.41729164, z: -0.0002489686}

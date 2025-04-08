@@ -9,6 +9,7 @@
 using UnityEngine;
 using FMOD.Studio;
 using FMODUnity;
+using Unity.VisualScripting;
 
 /// <summary>
 /// This class controls the group of chasing vines
@@ -55,7 +56,7 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(_colliderFollow != null)
+        if(!_colliderFollow.IsUnityNull())
         {
             _chaseCollider.position = _colliderFollow.position;
         }   
@@ -66,6 +67,8 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     public void ActivateThisGroupOfVines()
     {
+        EnemyManager.Instance.InvokeOnChaseSequenceBegin();
+
         //this transform should be the joint which is leading the vine toward its destination
         _chaseCollider.gameObject.SetActive(true);
         foreach(ChaseSequenceVine chaseSequenceVine in _chaseSequenceVines)
@@ -96,7 +99,7 @@ public class ChaseVineGroup : MonoBehaviour
     private void CreateMovementAudio()
     {
         //return statement added so as not to throw a thousand nulls in logs
-        if (RuntimeSfxManager.Instance == null || FmodSfxEvents.Instance == null)
+        if (RuntimeSfxManager.Instance.IsUnityNull() || FmodSfxEvents.Instance.IsUnityNull())
         {
             return;
         }

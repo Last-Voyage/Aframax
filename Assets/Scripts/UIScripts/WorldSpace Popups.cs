@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 /// <summary>
 /// runs the world space pop ups for interactable objects
@@ -50,6 +51,12 @@ public class WorldSpacePopups : MonoBehaviour
     [SerializeField]
     private string _closeText;
 
+    private float _playerProximity;
+    
+    // Cached variables
+    private WaitForSeconds _findPlayerWait = new WaitForSeconds(.1f);
+    private Transform _playerTransform;
+
 
     private void Awake()
     {
@@ -65,7 +72,7 @@ public class WorldSpacePopups : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_playerCamera != null)
+        if (!_playerCamera.IsUnityNull())
         {
             //rotate to face the player camera
             transform.LookAt(_playerCamera.transform);
@@ -73,20 +80,20 @@ public class WorldSpacePopups : MonoBehaviour
             transform.Rotate(0, 180, 0);
         }
 
-        if (_playerReference != null)
+        if (!_playerReference.IsUnityNull())
         {
             //check proximity to player
-            float playerProximity = Vector3.Distance(_playerReference.transform.position, transform.position);
+            _playerProximity = Vector3.Distance(_playerTransform.position, transform.position);
 
             // If the player is in range and is currently looking at the interactable
-            if (playerProximity < _playerDetectionProximity
+            if (_playerProximity < _playerDetectionProximity
                 && _playerInteractor.CurrentInteractable() == _interactableObject)
             {
                 _objectSpriteReference.sprite = _closeDistanceSprite;
                 _popUpTextContainer.text = _closeText;
             }
             // The player is in range to see it
-            else if (playerProximity < _visibilityProximity)
+            else if (_playerProximity < _visibilityProximity)
             {
                 _objectSpriteReference.sprite = _farDistanceSprite;
                 _popUpTextContainer.text = _farText;
@@ -106,15 +113,16 @@ public class WorldSpacePopups : MonoBehaviour
     /// <returns></returns>
     private IEnumerator FindPlayer()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return _findPlayerWait;
 
         //added check for PlayerFunctionality to get rid of null error
         PlayerFunctionalityCore pfc = PlayerFunctionalityCore.Instance;
-        if(pfc != null)
+        if(!pfc.IsUnityNull())
         {
-            _playerCamera = pfc.PlayerCamera.transform.Find("Main Camera").GetComponent<Camera>();
+            _playerCamera = Camera.main;
             _playerReference = pfc.transform.GetChild(1).gameObject;
             _playerInteractor = pfc.GetComponentInChildren<PlayerInteraction>();
+            _playerTransform = _playerReference.transform;
         }
 
         _objectSpriteReference = GetComponent<SpriteRenderer>();

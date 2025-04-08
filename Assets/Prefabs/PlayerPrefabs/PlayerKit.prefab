@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 3641362925933844938}
   - component: {fileID: 7776482993356936769}
   - component: {fileID: 4682911453422675945}
+  - component: {fileID: 7633608414156307089}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -84,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbffff5d8a3ade9498bf32487b59d444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMovementSpeed: 5
+  _playerMovementSpeed: 3
   _accelerationTime: 0.5
   _deccelerationTime: 0.2
   _accelerationCurve:
@@ -280,6 +281,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _allItems: []
+--- !u!114 &7633608414156307089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822883443245373252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05aba1324eb6064585646cf1af179ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2581785293803075771
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,6 +396,8 @@ MonoBehaviour:
   _jumpscareTime: 0.1
   _jumpscareIntensity: 5
   _harpoonFollowTime: 5
+  _timeToReturnToMaxSpeed: 0.3
+  _delayToReturnToMaxSpeed: 0.1
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,7 +546,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.08795113, y: -0.32423258, z: -0.03029195, w: 0.9413927}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -742,7 +757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RecenterTarget: 0
   m_VerticalAxis:
-    Value: 0
+    Value: -10.674914
     m_SpeedMode: 0
     m_MaxSpeed: 450
     m_AccelTime: 1
@@ -766,7 +781,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: 0
+    Value: -38.009254
     m_SpeedMode: 0
     m_MaxSpeed: 450
     m_AccelTime: 1

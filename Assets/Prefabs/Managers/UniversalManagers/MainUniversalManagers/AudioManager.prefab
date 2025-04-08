@@ -57,7 +57,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25300d6117e68a4291efb2eb20a4524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PersistentGameBackgroundSounds>k__BackingField: []
+  <PersistentGameBackgroundSounds>k__BackingField:
+  - Guid:
+      Data1: -1855679205
+      Data2: 1226079920
+      Data3: 840459650
+      Data4: 1316730629
+    Path: event:/Ambiance/AmbientBugNoisesSFX
   <LimbIdle>k__BackingField:
     Guid:
       Data1: 1422967212
@@ -65,6 +71,8 @@ MonoBehaviour:
       Data3: 51789702
       Data4: 1267664235
     Path: event:/LimbSlitherSFX
+  <AmbienceFadeOutTime>k__BackingField: 2
+  <AmbienceFadeInTime>k__BackingField: 2
   <IntervalPersistentEvents>k__BackingField: []
   <MusicInGame>k__BackingField:
   - Guid:
@@ -99,52 +107,34 @@ MonoBehaviour:
     Path: event:/Music/DeathScreenMusic
   <MusicFadeOutTime>k__BackingField: 2
   <MusicFadeInTime>k__BackingField: 2
---- !u!1 &6730670262102700080
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6909289104129828165}
-  - component: {fileID: 3765887407214756233}
-  m_Layer: 0
-  m_Name: StoryBeatAudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6909289104129828165
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6730670262102700080}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2592068699120065575}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3765887407214756233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6730670262102700080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98dbfa91af712304eb99d6d85a757353, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OneshotSounds: []
-  AmbientSounds: []
+  <BreathingLevels>k__BackingField:
+  - Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  - Guid:
+      Data1: -1650469793
+      Data2: 1093943221
+      Data3: 847860409
+      Data4: 694894390
+    Path: event:/Ambiance/DisWavesSFX
+  - Guid:
+      Data1: -1855679205
+      Data2: 1226079920
+      Data3: 840459650
+      Data4: 1316730629
+    Path: event:/Ambiance/AmbientBugNoisesSFX
+  - Guid:
+      Data1: -1337434004
+      Data2: 1296524643
+      Data3: 1671713928
+      Data4: -28827058
+    Path: event:/Music/DeathScreenMusic
+  <BreathingFadeOutTime>k__BackingField: 0.2
+  <BreathingFadeInTime>k__BackingField: 0.2
+  <PersistentSound>k__BackingField: []
 --- !u!1 &8436064714450324664
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14b1129206b53446b2ce056d5bf4bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanPlayFootSteps: 1
 --- !u!114 &3525013294109823446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +228,13 @@ MonoBehaviour:
       Data3: -1398998366
       Data4: 1394744620
     Path: event:/Sliders/MusicSliderBoatThump
+  <TitleScreenSplash>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   <WeakPointDestroyed>k__BackingField:
     Guid:
       Data1: 70777364
@@ -312,20 +310,23 @@ MonoBehaviour:
       Data4: 0
     Path: 
   _itemPickupSoundEffects: []
-  <AboveDeckWalking>k__BackingField:
-    Guid:
-      Data1: -687637641
-      Data2: 1303265195
-      Data3: 630810014
-      Data4: 1682835577
-    Path: event:/WoodWalkingSFX
-  <BelowDeckWalking>k__BackingField:
+  <DefaultWalking>k__BackingField:
     Guid:
       Data1: -476142977
       Data2: 1309294690
       Data3: -709017196
       Data4: -1916222613
-    Path: event:/MetalWlakingSFX
+    Path: event:/Ambiance/PlayerAmb/MetalWlakingSFX
+  <MaterialFootsteps>k__BackingField:
+  - <AssociatedMaterial>k__BackingField: {fileID: 2100000, guid: 32e4724413cdd6d43a131cd86e745766,
+      type: 2}
+    <AssociatedWalkingSound>k__BackingField:
+      Guid:
+        Data1: -687637641
+        Data2: 1303265195
+        Data3: 630810014
+        Data4: 1682835577
+      Path: event:/Ambiance/PlayerAmb/WoodWalkingSFX
   <FootstepDelay>k__BackingField: 0.65
   <FirstFootstepDelay>k__BackingField: 0.6
   <PlayerTookDamage>k__BackingField:
@@ -481,3 +482,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1639991eb0baf7a4691718e9d3f7940c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &4111677443477574288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2592068699120065575}
+    m_Modifications:
+    - target: {fileID: 7234953812385800864, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_Name
+      value: StoryBeatAudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a9333c64209bda4c96cdb2b653a12ce, type: 3}
+--- !u!4 &6909289104129828165 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 4111677443477574288}
+  m_PrefabAsset: {fileID: 0}

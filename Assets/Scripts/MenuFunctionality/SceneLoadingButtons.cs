@@ -43,6 +43,14 @@ public class SceneLoadingButtons : MonoBehaviour
     }
 
     /// <summary>
+    /// Allows buttons to load the title screen
+    /// </summary>
+    public void ReloadTitleScreenButton()
+    {
+        AframaxSceneManager.Instance.ReloadTitleScreen();
+    }
+
+    /// <summary>
     /// Quits the game
     /// </summary>
     public void QuitGame()

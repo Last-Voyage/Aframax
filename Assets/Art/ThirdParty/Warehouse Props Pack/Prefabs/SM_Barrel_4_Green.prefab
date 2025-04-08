@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2044846630424986526}
   - component: {fileID: 8004577314893135247}
   - component: {fileID: 4286306378840804286}
+  - component: {fileID: 3448540553883122471}
   m_Layer: 0
   m_Name: SM_Barrel_4_Green
   m_TagString: Untagged
@@ -53,7 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -101,8 +102,31 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3039972588651823241, guid: e771655f827b54943afabe6eb5ef827d, type: 3}
+--- !u!136 &3448540553883122471
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3048034676730162626}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.20668745
+  m_Height: 0.7367254
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.3683627, z: 0}

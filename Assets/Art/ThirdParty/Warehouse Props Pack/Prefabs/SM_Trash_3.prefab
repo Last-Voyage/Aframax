@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 837165875417155444}
   - component: {fileID: 3205088096408400830}
   - component: {fileID: 5734297018086692978}
+  - component: {fileID: -8796794674858124894}
   m_Layer: 0
   m_Name: SM_Trash_3
   m_TagString: Untagged
@@ -53,7 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -102,8 +103,31 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4264335958521341477, guid: 0a5946edfe0d2a945a5ec1171b84c2fc, type: 3}
+--- !u!136 &-8796794674858124894
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3997576700621673067}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.32715374
+  m_Height: 0.89845955
+  m_Direction: 1
+  m_Center: {x: 0.000000461936, y: 0.42949128, z: -0.0000005662441}

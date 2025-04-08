@@ -1157,6 +1157,7 @@ GameObject:
   - component: {fileID: 8083398508036932365}
   - component: {fileID: 27397175164127527}
   - component: {fileID: 2412335518704089520}
+  - component: {fileID: 2437821028840828364}
   m_Layer: 5
   m_Name: TutorialPopUp
   m_TagString: Untagged
@@ -1264,7 +1265,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7bf4d139e0a3084f91dc3271bc28cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ui: {fileID: 1066133135283021676}
-  _pages: []
+  _popupCanvas: {fileID: 1066133135283021676}
+  _pageParent: {fileID: 5976218624940914710}
   _leftArrow: {fileID: 8431185368485079034}
   _rightArrow: {fileID: 7276227587887006655}
+--- !u!65 &2437821028840828364
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9031550617566477637}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
