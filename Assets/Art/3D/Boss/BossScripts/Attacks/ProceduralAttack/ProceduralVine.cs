@@ -398,8 +398,6 @@ public class ProceduralVine : MonoBehaviour
             return;
         }
 
-        CreateSpawnVfx();
-
         _playerTransform = player;
 
         //shift the rig to used the dampedTransform instead of IK
@@ -455,15 +453,6 @@ public class ProceduralVine : MonoBehaviour
         _followTransform.position = _whackAMoleAttackPath.path.GetPointAtDistance(_whackAMoleAttackDistance);
     }
     #endregion
-
-    /// <summary>
-    /// Creates the enemy spawn vfx
-    /// </summary>
-    private void CreateSpawnVfx()
-    {
-        VfxManager.Instance.GetMonsterSpawnVfx().PlayNextVfxInPool
-            (_flowerHeadTransform.position, _flowerHeadTransform.rotation);
-    }
 
     public bool GetIsAppeared() => _isAppeared;
     public EVineState GetVineState() => _currentState;
