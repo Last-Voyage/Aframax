@@ -25,6 +25,8 @@ using UnityEngine.UI;
 /// </summary>
 public class ConsoleController : MonoBehaviour
 {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+
     #region variables
     [Header("Settings")]
     [SerializeField] private bool _isInDeveloperMode;
@@ -108,7 +110,6 @@ public class ConsoleController : MonoBehaviour
     }
 
     //only works in engine or development builds
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
 
     /// <summary>
     /// happens when the game starts
