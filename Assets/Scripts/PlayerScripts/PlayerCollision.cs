@@ -40,6 +40,8 @@ public class PlayerCollision : MonoBehaviour
         CheckForAppearTrigger(contact);
 
         CheckForWhackAMoleTrigger(contact);
+
+        CheckForGeneralTrigger(contact);
     }
 
     #endregion
@@ -177,5 +179,17 @@ public class PlayerCollision : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Check for a general trigger for contact
+    /// </summary>
+    /// <param name="contact">The object we contacted</param>
+    private void CheckForGeneralTrigger(Collider contact)
+    {
+        if(contact.TryGetComponent<GeneralPlayerCollisionTrigger>
+            (out  GeneralPlayerCollisionTrigger generalPlayerCollisionTrigger))
+        {
+            generalPlayerCollisionTrigger.PlayerContact();
+        }
+    }
     #endregion
 }
