@@ -1339,6 +1339,7 @@ GameObject:
   - component: {fileID: 2580789440704249717}
   - component: {fileID: 8780696817342125128}
   - component: {fileID: 1410610222384218454}
+  - component: {fileID: 6859222349178804348}
   m_Layer: 0
   m_Name: TutorialNote
   m_TagString: Untagged
@@ -1380,6 +1381,9 @@ MonoBehaviour:
   _leftArrow: {fileID: 3208948437419490141}
   _rightArrow: {fileID: 4646738477319065116}
   _pageParent: {fileID: 7207200925730435770}
+  _onDialogueExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1410610222384218454
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1401,6 +1405,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6, y: 0.6, z: 0.3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6859222349178804348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6649308911875667470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd19339fc64270646945fe435e0f3978, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7695656535426906447
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
@@ -25,7 +26,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     [SerializeField] private Image _leftArrow;
     [SerializeField] private Image _rightArrow;
     [SerializeField] private Transform _pageParent;
-    [SerializeField] private Animator _tutorialDoorAnimator;
+    [Space]
+    [SerializeField] private UnityEvent _onDialogueExit;
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
@@ -163,7 +165,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
-        _tutorialDoorAnimator.SetTrigger("Open");
+        _onDialogueExit?.Invoke();
     }
 
     /// <summary>
