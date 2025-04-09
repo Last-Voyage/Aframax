@@ -25,6 +25,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     [SerializeField] private Image _leftArrow;
     [SerializeField] private Image _rightArrow;
     [SerializeField] private Transform _pageParent;
+    [SerializeField] private Animator _tutorialDoorAnimator;
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
@@ -162,6 +163,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
+        _tutorialDoorAnimator.SetTrigger("Open");
     }
 
     /// <summary>

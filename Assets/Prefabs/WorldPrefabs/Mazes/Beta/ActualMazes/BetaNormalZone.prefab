@@ -2218,6 +2218,7 @@ Transform:
   - {fileID: 4469773314774230463}
   - {fileID: 9011641507593975581}
   - {fileID: 7576072666985449433}
+  - {fileID: 247798600755051138}
   - {fileID: 1323184086654364667}
   - {fileID: 8278843485638095841}
   m_Father: {fileID: 0}
@@ -8310,6 +8311,111 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1798553, y: 1.0186572, z: 0.5932441}
   m_Center: {x: 0.10019398, y: 0.5093286, z: -0.042896986}
+--- !u!1001 &327829106623104401
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6948935953142747233}
+    m_Modifications:
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.660004
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -17.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.43000007
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.50000143
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.50000143
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.49999857
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.49999857
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -270
+      objectReference: {fileID: 0}
+    - target: {fileID: 916242808223458729, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      propertyPath: m_Name
+      value: TutorialDoor
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 916242808223458729, guid: cc292a19eda0e8b4f872aa022153ac40,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2220434172083801691}
+  m_SourcePrefab: {fileID: 100100000, guid: cc292a19eda0e8b4f872aa022153ac40, type: 3}
+--- !u!4 &247798600755051138 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 575604603498413843, guid: cc292a19eda0e8b4f872aa022153ac40,
+    type: 3}
+  m_PrefabInstance: {fileID: 327829106623104401}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &593220810704396344 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 916242808223458729, guid: cc292a19eda0e8b4f872aa022153ac40,
+    type: 3}
+  m_PrefabInstance: {fileID: 327829106623104401}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2220434172083801691
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593220810704396344}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e6b111c3320cac842b7be0e8b91b237f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &343069112471604082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18198,6 +18304,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TutorialNote
       objectReference: {fileID: 0}
+    - target: {fileID: 8780696817342125128, guid: 307c24d622efa184bb8a05c5bffa590d,
+        type: 3}
+      propertyPath: _tutorialDoorAnimator
+      value: 
+      objectReference: {fileID: 2220434172083801691}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
