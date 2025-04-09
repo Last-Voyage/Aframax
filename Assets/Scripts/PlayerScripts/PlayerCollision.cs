@@ -87,13 +87,11 @@ public class PlayerCollision : MonoBehaviour
     {
         if (contact.CompareTag("WallCeilingTrigger"))
         {
-            Debug.Log("collide");
             WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
             Debug.Log(attackScript.gameObject);
 
             if (attackScript != null)
             {
-                Debug.Log("attack");
                 attackScript.ActivateAttack();
             }
         }
