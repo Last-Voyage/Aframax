@@ -199,4 +199,12 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
         _playerInputMap.Disable();
     }
+
+    /// <summary>
+    /// Removes the listeners to the event
+    /// </summary>
+    private void OnDestroy()
+    {
+        _onDialogueExit?.RemoveAllListeners();
+    }
 }
