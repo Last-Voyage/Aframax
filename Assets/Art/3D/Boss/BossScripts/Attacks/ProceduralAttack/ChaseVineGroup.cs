@@ -11,6 +11,7 @@ using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
 using Unity.VisualScripting;
+using Cinemachine;
 
 /// <summary>
 /// This class controls the group of chasing vines
@@ -39,7 +40,10 @@ public class ChaseVineGroup : MonoBehaviour
 
     [Header("Start Animation")]
     [SerializeField] private GameObject _startScreamObject;
+    [SerializeField] private CinemachineVirtualCamera _startVirtualCamera;
     [SerializeField] private float _lengthOfStartAnimation = 4.5f;
+    private CinemachineVirtualCamera _playerCam;
+    [SerializeField] private float _delayCameraSwitch = 2f;
 
     /// <summary>
     /// Sets up the chase vine group
@@ -74,7 +78,14 @@ public class ChaseVineGroup : MonoBehaviour
     {
         EnemyManager.Instance.InvokeOnChaseSequenceBegin();
 
-        //play start screaming animation
+        //get the player virtual camera
+        _playerCam = FindObjectOfType<PlayerCameraController>().GetComponent<CinemachineVirtualCamera>();
+
+        //disable player camera and enable this camera
+        _startVirtualCamera.enabled = true;
+        _playerCam.enabled = false;
+
+        //play start screaming animatio
         _startScreamObject.SetActive(true);
 
         //wait until animation is over
@@ -95,6 +106,12 @@ public class ChaseVineGroup : MonoBehaviour
         {
             CinemachineShake.Instance.ShakeCamera(_startCameraShakeIntensity, _startCameraShakeTime, true);
         }
+
+        yield return new WaitForSeconds(_delayCameraSwitch);
+
+        //after all the vines appear move camera back to player
+        _playerCam.enabled = true;
+        _startVirtualCamera.enabled = false;
 
         StartMovementAudio();
 
