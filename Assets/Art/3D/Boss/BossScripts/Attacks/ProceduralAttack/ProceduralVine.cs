@@ -13,6 +13,7 @@ using UnityEngine;
 using PathCreation;
 using DG.Tweening;
 using UnityEngine.Animations.Rigging;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Controls all functionality for the attack procedural animation and room movement
@@ -62,7 +63,7 @@ public class ProceduralVine : MonoBehaviour
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
 
-    private Coroutine _wSnapAttack;
+    private Coroutine _whackAMoleSnapAttack;
 
     //state stuff
     public enum EVineState
@@ -156,9 +157,9 @@ public class ProceduralVine : MonoBehaviour
                 {
                     WhackAMoleAttack();
                 }
-                else if(_whackAMoleAttackPath.path.length <= _whackAMoleAttackDistance + .1f && _wSnapAttack == null)
+                else if(_whackAMoleAttackPath.path.length <= _whackAMoleAttackDistance + .1f && _whackAMoleSnapAttack.IsUnityNull())
                 {
-                    _wSnapAttack = StartCoroutine(WSnapAttack());
+                    _whackAMoleSnapAttack = StartCoroutine(WSnapAttack());
                 }    
             }
         }

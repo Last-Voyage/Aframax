@@ -21,11 +21,11 @@ public class TentacleMover : MonoBehaviour
     /// <param name="other"> Information about the other collider in the collision </param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             _tentacle.MoveAway();
-            _tentacle.DestroyTentacle(2.5f);
-            Destroy(this.gameObject, 3f);
+            StartCoroutine(_tentacle.DestroyTentacle(3f));
+            Destroy(this.gameObject, 3.1f);
         }
     }
 }

@@ -72,7 +72,7 @@ public class PlayerCollision : MonoBehaviour
         {
             WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
 
-            if(attackScript != null) 
+            if(!attackScript.IsUnityNull()) 
             {
                 attackScript.DamagePlayer();
             }
@@ -88,9 +88,8 @@ public class PlayerCollision : MonoBehaviour
         if (contact.CompareTag("WallCeilingTrigger"))
         {
             WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
-            Debug.Log(attackScript.gameObject);
 
-            if (attackScript != null)
+            if (!attackScript.IsUnityNull())
             {
                 attackScript.ActivateAttack();
             }
@@ -106,7 +105,7 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("ChaseTrigger"))
         {
             ChaseVineGroup chaseVineGroup = contact.GetComponent<ChaseVineGroup>();
-            if(chaseVineGroup != null && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
+            if(!chaseVineGroup.IsUnityNull() && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
             {
                 StartCoroutine(chaseVineGroup.ActivateThisGroupOfVines());
             }
@@ -122,7 +121,7 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("ChaseDamageTrigger"))
         {
             ChaseVineGroup chaseVineGroup = contact.GetComponentInParent<ChaseVineGroup>();
-            if(chaseVineGroup != null)
+            if(!chaseVineGroup.IsUnityNull())
             {
                 if(chaseVineGroup.IsSupposedToKillInstant())
                 {
@@ -181,7 +180,7 @@ public class PlayerCollision : MonoBehaviour
         {
             //the component should always be on the 3rd child of the vine base
             ProceduralVine proceduralVine = contact.transform.parent.GetChild(2).GetComponent<ProceduralVine>();
-            if (proceduralVine != null)
+            if (!proceduralVine.IsUnityNull())
             {
                 if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
                 {

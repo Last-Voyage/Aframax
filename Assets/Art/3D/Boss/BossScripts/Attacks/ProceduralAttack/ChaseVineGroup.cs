@@ -79,13 +79,13 @@ public class ChaseVineGroup : MonoBehaviour
         EnemyManager.Instance.InvokeOnChaseSequenceBegin();
 
         //get the player virtual camera
-        _playerCam = FindObjectOfType<PlayerCameraController>().GetComponent<CinemachineVirtualCamera>();
+        _playerCam = PlayerCameraController.Instance.GetComponent<CinemachineVirtualCamera>();
 
         //disable player camera and enable this camera
         _startVirtualCamera.enabled = true;
         _playerCam.enabled = false;
 
-        //play start screaming animatio
+        //play start screaming animation
         _startScreamObject.SetActive(true);
 
         //wait until animation is over
