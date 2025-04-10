@@ -15,6 +15,7 @@ using UnityEngine.Events;
 /// </summary>
 public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
 {
+    [SerializeField] private bool _hasInfiniteHarpoons;
     // The nuumber of harpoons that are currently on the rack
     private int _currentHarpoons;
 
@@ -71,6 +72,12 @@ public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
     /// <param name="numHarpoons"> the number of harpoons to remove </param>
     public void RemoveHarpoons(int numHarpoons)
     {
+        // Don't adjust the harpoon visuals if this rack has infinite
+        if(_hasInfiniteHarpoons)
+        {
+            return;
+        }
+
         for (int i = 0; i < numHarpoons; i++)
         {
             _currentHarpoons--;
