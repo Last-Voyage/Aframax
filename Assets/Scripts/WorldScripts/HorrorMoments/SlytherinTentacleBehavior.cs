@@ -20,6 +20,7 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     private CinemachineVirtualCamera _playerCam;
     private PlayerMovementController _playerMovementController;
     private Rigidbody _playerRb;
+    private float _basePlayerSpeed;
 
     /// <summary>
     /// Called to make the tentacle play its animation
@@ -29,19 +30,18 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         // Everything should already be set up, just play the animation
         Animator animator = GetComponent<Animator>();
 
-
         //disable player movement and pan camera to cinematic spot
         //get the player virtual camera
-        _playerCam = PlayerCameraController.Instance.GetComponent<CinemachineVirtualCamera>();
+        _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
         _playerMovementController = PlayerMovementController.Instance;
         _playerRb = _playerMovementController.GetComponent<Rigidbody>();
         _playerMovementController.enabled = false;
         _playerRb.constraints = RigidbodyConstraints.FreezeAll;
+        _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
+        _playerMovementController.PlayerMovementSpeed = 0;
 
         _dragCam.enabled = true;
         _playerCam.enabled = false;
-
-
 
         animator.SetTrigger(_TENTACLE_MOVE_TRIGGER);
     }
@@ -60,6 +60,8 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         _playerMovementController.enabled = true;
         _playerRb.constraints = RigidbodyConstraints.None;
         _playerRb.constraints = RigidbodyConstraints.FreezeRotation;
+        _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
+
         _playerCam.enabled = true;
         _dragCam.enabled = false;
 

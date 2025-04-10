@@ -44,6 +44,9 @@ public class ChaseVineGroup : MonoBehaviour
     [SerializeField] private float _lengthOfStartAnimation = 4.5f;
     private CinemachineVirtualCamera _playerCam;
     [SerializeField] private float _delayCameraSwitch = 2f;
+    private bool _hasBeenActivated = false;
+    private float _basePlayerSpeed;
+    private PlayerMovementController _playerMovementController;
 
     /// <summary>
     /// Sets up the chase vine group
@@ -76,14 +79,21 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     public IEnumerator ActivateThisGroupOfVines()
     {
+        if(_hasBeenActivated) { yield break; }
+
+        _hasBeenActivated = true;
         EnemyManager.Instance.InvokeOnChaseSequenceBegin();
 
         //get the player virtual camera
-        _playerCam = PlayerCameraController.Instance.GetComponent<CinemachineVirtualCamera>();
+        _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
+        _playerMovementController = PlayerMovementController.Instance;
+        _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
 
-        //disable player camera and enable this camera
+
+        //disable player camera and enable this camera stop player movement
         _startVirtualCamera.enabled = true;
         _playerCam.enabled = false;
+        _playerMovementController.PlayerMovementSpeed = 0;
 
         //play start screaming animation
         _startScreamObject.SetActive(true);
@@ -109,9 +119,10 @@ public class ChaseVineGroup : MonoBehaviour
 
         yield return new WaitForSeconds(_delayCameraSwitch);
 
-        //after all the vines appear move camera back to player
+        //after all the vines appear move camera back to player enable player movement
         _playerCam.enabled = true;
         _startVirtualCamera.enabled = false;
+        _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
 
         StartMovementAudio();
 
