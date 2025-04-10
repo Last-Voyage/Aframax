@@ -263,9 +263,13 @@ public class PlayerReticle : MonoBehaviour
         }
 
         int i;
+        
         for (i = 0; i < _harpoonGunScript.GetReserveAmmo() + 1; i++)
         {
-            _ammoIconList[i].color = _focusedColor;
+            if(i < _gunMaxAmmo)
+            {
+                _ammoIconList[i].color = _focusedColor;
+            }
         }
 
         while (i < _gunMaxAmmo)
