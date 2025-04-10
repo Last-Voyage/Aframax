@@ -309,7 +309,7 @@ public class HarpoonGun : MonoBehaviour
 
         // This is basically used as a trap to prevent reloading from happening automatically
         // That happens cuz of some goofy things with events and the input system
-        if (!_automaticReload)
+        if (!_shouldAutomaticReload)
         {
             _shouldReload = false;
         }
