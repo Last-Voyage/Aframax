@@ -57,6 +57,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
 
     private bool _isGameplaySceneLoaded;
 
+    private EventSystem _eventSystem;
+
     /// <summary>
     /// Subscribes to any needed gameplay events
     /// </summary>
@@ -157,6 +159,29 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// destroys all do not destroy on load objects and then loads the title screen
+    /// </summary>
+    public void ReloadTitleScreen()
+    {
+        //destroy all "dont destroy on load" objects
+        GameObject dontDestroyFinder = new GameObject();
+        DontDestroyOnLoad(dontDestroyFinder);
+        Scene dontDestroyOnLoad = dontDestroyFinder.scene;
+        DestroyImmediate(dontDestroyFinder);
+
+        foreach (GameObject dontDestroyObject in dontDestroyOnLoad.GetRootGameObjects())
+        {
+            //stuff to not destroy
+            if (dontDestroyObject != gameObject && !dontDestroyObject.CompareTag("Dont destroy") && dontDestroyObject.name != "PrimeTweenManager")
+            {
+                Destroy(dontDestroyObject);
+            }
+        }
+        SceneManager.LoadScene(0);
+    }
+
+#if UNITY_EDITOR
+    /// <summary>
     /// Happens when the object is enable and it subscribes
     /// to on scene loaded event
     /// </summary>
@@ -175,6 +200,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         SceneManager.sceneLoaded -= OnLevelLoaded;
         SceneManager.sceneLoaded -= OnMazeSceneLoaded;
     }
+#endif
 
     void OnMazeSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -184,7 +210,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
            print("wabalabadubdub");
         }
     }
-
+    
     /// <summary>
     /// called when the scene is loaded
     /// </summary>
@@ -194,6 +220,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     {
         Debug.Log("Loaded Scene: " + scene.name);
     }
+    
 
 
     /// <summary>
@@ -226,7 +253,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         }
 
         //turn off buttons to prevent doing stuff during transition
-        GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+        EventSystem.current.enabled = false;
 
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());

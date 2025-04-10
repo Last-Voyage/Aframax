@@ -67,6 +67,8 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     public void ActivateThisGroupOfVines()
     {
+        EnemyManager.Instance.InvokeOnChaseSequenceBegin();
+
         //this transform should be the joint which is leading the vine toward its destination
         _chaseCollider.gameObject.SetActive(true);
         foreach(ChaseSequenceVine chaseSequenceVine in _chaseSequenceVines)

@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
@@ -16,17 +17,35 @@ using TMPro;
 /// <summary>
 /// A collection of pages for a popup tutorial
 /// </summary>
-public class TutorialPopUp : MonoBehaviour
+public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 {
     public static TutorialPopUp ActiveTutorial = null;
 
     [Header("References")]
     [SerializeField] private Canvas _popupCanvas;
-    [SerializeField] private GameObject[] _pages;
-    [SerializeField] private TMP_Text _leftArrow;
-    [SerializeField] private TMP_Text _rightArrow;
+    [SerializeField] private Image _leftArrow;
+    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Transform _pageParent;
+    [Space]
+    [SerializeField] private UnityEvent _onDialogueExit;
+    private GameObject[] _pages;
     private int _currentPage;
-    private bool _hasRead;
+    private PlayerInputMap _playerInputMap;
+
+    /// <summary>
+    /// Setup the pages list to hold all the possible pages
+    /// </summary>
+    private void Start()
+    {
+        _playerInputMap = new PlayerInputMap();
+
+        _pages = new GameObject[_pageParent.childCount];
+
+        for (int i = 0; i < _pageParent.childCount; i++)
+        {
+            _pages[i] = _pageParent.GetChild(i).gameObject;
+        }
+    }
 
     /// <summary>
     /// Open the tutorial pop up and go to page one
@@ -36,7 +55,14 @@ public class TutorialPopUp : MonoBehaviour
         _popupCanvas.enabled = true;
 
         // Free the mouse and freeze the game
-        TimeManager.Instance.GetOnGamePauseEvent();
+        TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
+
+        // I believe that making this true pauses audio, if we want to change that, then it's right below here
+        TimeManager.Instance.PauseGameToggle(true);
+
+        // Enables a/d, arrow keys, and shoulder button controls
+        _playerInputMap.Enable();
+        _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -95,13 +121,23 @@ public class TutorialPopUp : MonoBehaviour
     {
         // Find the video in the page
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
+        RawImage pageVideoImage = page.GetComponentInChildren<RawImage>();
+        Image pageImage = page.GetComponentInChildren<Image>();
+
+        bool hasVideo = pageVideo.clip != null;
 
         // Play the video if there is one
-        if (pageVideo.clip != null)
+        if (hasVideo)
         {
             pageVideo.targetCamera = Camera.current;
             pageVideo.time = 0;
             pageVideo.Play();
+
+            pageImage.enabled = false;
+        }
+        else
+        {
+            pageVideoImage.enabled = false;
         }
     }
 
@@ -112,11 +148,14 @@ public class TutorialPopUp : MonoBehaviour
     {
         // Set the page to inactive and read
         ActiveTutorial = null;
-        _hasRead = true;
         _popupCanvas.enabled = false;
 
         // Stop the currently open page
         StopPage(_pages[_currentPage]);
+
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Disable();
 
         // Set all the pages to off
         for (int i = 0; i < _pages.Length; i++)
@@ -126,6 +165,7 @@ public class TutorialPopUp : MonoBehaviour
 
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
+        _onDialogueExit?.Invoke();
     }
 
     /// <summary>
@@ -134,5 +174,37 @@ public class TutorialPopUp : MonoBehaviour
     public static void ExitActivePopUp()
     {
         ActiveTutorial.CloseTutorialPopUp();
+    }
+
+    /// <summary>
+    /// Override for the player interacting with the tutorial
+    /// </summary>
+    public void OnInteractedByPlayer()
+    {
+        // Edge cases: There's no tutorials or something is already open
+        if (ActiveTutorial != null
+            || Time.deltaTime == 0)
+        {
+            return;
+        }
+
+        OpenTutorialPopUp();
+    }
+
+    /// <summary>
+    /// Prevents memory leaks
+    /// </summary>
+    private void OnDisable()
+    {
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Disable();
+    }
+
+    /// <summary>
+    /// Removes the listeners to the event
+    /// </summary>
+    private void OnDestroy()
+    {
+        _onDialogueExit?.RemoveAllListeners();
     }
 }

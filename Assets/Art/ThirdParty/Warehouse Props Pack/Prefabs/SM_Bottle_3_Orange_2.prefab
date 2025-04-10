@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7330915364900232350}
   - component: {fileID: 8144767682991777523}
   - component: {fileID: 7330888681979889794}
+  - component: {fileID: 7363357910622647831}
   m_Layer: 0
   m_Name: SM_Bottle_3_Orange_2
   m_TagString: Untagged
@@ -101,8 +102,31 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -840467822875528786, guid: fdd41018037c7824b9e3a776c92e4545, type: 3}
+--- !u!136 &7363357910622647831
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4618017638531349013}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.04543531
+  m_Height: 0.27850893
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.13925447, z: 0.00000006146729}

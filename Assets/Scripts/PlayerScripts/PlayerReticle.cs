@@ -190,6 +190,8 @@ public class PlayerReticle : MonoBehaviour
         _scopeRectTransform.sizeDelta =
             new Vector2(Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize),
             Mathf.Clamp(_newReticleSize, _minScopeSize, _maxScopeSize));
+
+        PlayerCameraController.Instance.IsReticleFullyZoomed = _newReticleSize <= _minScopeSize;
     }
 
     /// <summary>
@@ -261,9 +263,13 @@ public class PlayerReticle : MonoBehaviour
         }
 
         int i;
+        
         for (i = 0; i < _harpoonGunScript.GetReserveAmmo() + 1; i++)
         {
-            _ammoIconList[i].color = _focusedColor;
+            if(i < _gunMaxAmmo)
+            {
+                _ammoIconList[i].color = _focusedColor;
+            }
         }
 
         while (i < _gunMaxAmmo)
