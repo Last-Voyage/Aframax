@@ -452,7 +452,8 @@ public class HarpoonGun : MonoBehaviour
 
     private void ReloadAfterRestocking(int ammoRestored)
     {
-        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo - ammoRestored == 0)
+        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo == ammoRestored && 
+            _shouldAutomaticReload)
         {
             StartCoroutine(ReloadHarpoon());
         }
