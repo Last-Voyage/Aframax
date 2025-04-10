@@ -24,23 +24,30 @@ public enum EMusicTriggerTypes
 /// </summary>
 public class MusicSwapPlayerTrigger : MonoBehaviour
 {
+    [Header("Enter")]
     [Tooltip("What we want to happen on player contact")]
     [field: SerializeField] private EMusicTriggerTypes _contactType;
-    [field: SerializeField] private EMusicTriggerTypes _exitType;
 
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
     [field: SerializeField] private int _musicEnterID;
-    [field: SerializeField] private int _musicExitID;
 
     [Tooltip("The volume to switch to")]
     [field: SerializeField] [Range(0,1)] private float _newEnterVolume;
-    [field: SerializeField] [Range(0,1)] private float _newExitVolume;
-
-    [field: SerializeField] private bool _detachOnStart = true;
-    [field: SerializeField] private bool _destroyOnContact;
 
     [field: SerializeField] private UnityEvent _onPlayerContact;
+
+    [Header("Exit")]
+    [field: SerializeField] private EMusicTriggerTypes _exitType;
+
+    [field: SerializeField] private int _musicExitID;
+
+    [field: SerializeField][Range(0, 1)] private float _newExitVolume;
+
     [field: SerializeField] private UnityEvent _onPlayerExit;
+
+    [Header("General")]
+    [field: SerializeField] private bool _detachOnStart = true;
+    [field: SerializeField] private bool _destroyOnContact;
 
     /// <summary>
     /// Removes the parent associate with this. That way it can be safely attached to other prefabs.
