@@ -61,7 +61,7 @@ public class HarpoonGun : MonoBehaviour
     [Tooltip("The maximum amount of ammo that the harpoon may have")]
     [SerializeField] private int _maxAmmo = 3;
     [Tooltip("Whether or not the harpoon should automatically reload")]
-    [SerializeField] private bool _automaticReload = false;
+    [SerializeField] private bool _shouldAutomaticReload = false;
 
     private static HarpoonProjectileMovement[] _harpoonSpearPool;
     private int _harpoonPoolCounter;
