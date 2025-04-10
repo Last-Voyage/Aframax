@@ -14,6 +14,7 @@ using UnityEngine.Events;
 /// </summary>
 public enum EMusicTriggerTypes
 {
+    None,
     SwapMusic,
     SwapVolume
 }
@@ -25,17 +26,21 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
 {
     [Tooltip("What we want to happen on player contact")]
     [field: SerializeField] private EMusicTriggerTypes _contactType;
+    [field: SerializeField] private EMusicTriggerTypes _exitType;
 
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
-    [field: SerializeField] private int _musicID;
+    [field: SerializeField] private int _musicEnterID;
+    [field: SerializeField] private int _musicExitID;
 
     [Tooltip("The volume to switch to")]
-    [field: SerializeField] [Range(0,1)] private float _newVolume;
+    [field: SerializeField] [Range(0,1)] private float _newEnterVolume;
+    [field: SerializeField] [Range(0,1)] private float _newExitVolume;
 
     [field: SerializeField] private bool _detachOnStart = true;
     [field: SerializeField] private bool _destroyOnContact;
 
     [field: SerializeField] private UnityEvent _onPlayerContact;
+    [field: SerializeField] private UnityEvent _onPlayerExit;
 
     /// <summary>
     /// Removes the parent associate with this. That way it can be safely attached to other prefabs.
@@ -54,15 +59,8 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     public void PlayerContact()
     {
         _onPlayerContact?.Invoke();
-        if(_contactType == EMusicTriggerTypes.SwapMusic)
-        {
-            SwapMusic();
-        }
-        else if(_contactType == EMusicTriggerTypes.SwapVolume)
-        {
-            //Using an Else If just in case we end up adding more EMusicTriggerTypes
-            SwapVolume();
-        }
+
+        PlayerCollision(true, _contactType);
 
         if(_destroyOnContact)
         {
@@ -70,20 +68,42 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         }
     }
 
+    public void PlayerExit()
+    {
+        _onPlayerExit?.Invoke();
+
+        PlayerCollision(false, _exitType);
+    }
+
+    private void PlayerCollision(bool isEnter, EMusicTriggerTypes triggerType)
+    {
+        if (triggerType == EMusicTriggerTypes.SwapMusic)
+        {
+            int musicID = isEnter ? _musicExitID : _musicExitID;
+            SwapMusic(musicID);
+        }
+        else if (triggerType == EMusicTriggerTypes.SwapVolume)
+        {
+            float volume = isEnter ? _newExitVolume : _newEnterVolume;
+            //Using an Else If just in case we end up adding more EMusicTriggerTypes
+            SwapVolume(volume);
+        }
+    }
+
     /// <summary>
     /// Switches the music to play
     /// </summary>
-    private void SwapMusic()
+    private void SwapMusic(int id)
     {
-        PersistentAudioManager.Instance.StartMusicByID(_musicID);
+        PersistentAudioManager.Instance.StartMusicByID(_musicEnterID);
     }
 
     /// <summary>
     /// Switches the volume of the music
     /// </summary>
-    private void SwapVolume()
+    private void SwapVolume(float volume)
     {
-        PersistentAudioManager.Instance.ChangeCurrentMusicVolume(_newVolume);
+        PersistentAudioManager.Instance.ChangeCurrentMusicVolume(_newEnterVolume);
     }
 
     /// <summary>
@@ -100,5 +120,11 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         {
             PersistentAudioManager.Instance.InvokeOnBossMusicEnded();
         }
+    }
+
+    private void OnDestroy()
+    {
+        _onPlayerContact?.RemoveAllListeners();
+        _onPlayerExit?.RemoveAllListeners();
     }
 }
