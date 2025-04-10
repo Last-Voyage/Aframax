@@ -6,9 +6,15 @@
 // 
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
+
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
+using Slider = UnityEngine.UI.Slider;
+using Toggle = UnityEngine.UI.Toggle;
 
 /// <summary>
 /// operates video settings, currently just brightness but probably more to come
@@ -27,6 +33,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _goreToggleButton;
 
+    [SerializeField] private Dropdown _resolutionDropdown;
+    
     /// <summary>
     /// set up references
     /// </summary>
@@ -39,7 +47,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
         {
             throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
-
+        
+        AddResolutionsToDropdown();
+        SelectDefaultResolution();
+        
         ///remembers previously set values 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
@@ -77,5 +88,40 @@ public class VideoSettingsBehaviour : MonoBehaviour
     public void ToggleGoreSetting()
     {
         SaveManager.Instance.GetGameSaveData().IsGoreOn = _goreToggleButton.isOn;
+    }
+
+    private void AddResolutionsToDropdown()
+    {
+        List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+        string tempOption;
+        
+        foreach (var resolution in Screen.resolutions)
+        {
+            tempOption = resolution.ToString();
+            tempOption = tempOption[..(tempOption.LastIndexOf('@') - 1)];
+            optionData.Add(new Dropdown.OptionData(tempOption));
+        }
+        
+        _resolutionDropdown.options = optionData;
+    }
+
+    private void SelectDefaultResolution()
+    {
+        int selectedResolution = 0;
+        string currentResolutionString = Screen.currentResolution.ToString();
+
+        currentResolutionString = currentResolutionString[..(currentResolutionString.LastIndexOf('@')-1)];
+
+        for (int i = 0; i < _resolutionDropdown.options.Capacity; i++)
+        {
+            if (_resolutionDropdown.options[i].text == currentResolutionString)
+            {
+                selectedResolution = i;
+                return;
+            }
+        }
+
+        _resolutionDropdown.value = selectedResolution;
     }
 }
