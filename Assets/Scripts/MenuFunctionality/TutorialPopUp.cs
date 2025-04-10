@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
@@ -25,6 +26,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     [SerializeField] private Image _leftArrow;
     [SerializeField] private Image _rightArrow;
     [SerializeField] private Transform _pageParent;
+    [Space]
+    [SerializeField] private UnityEvent _onDialogueExit;
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
@@ -162,6 +165,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
+        _onDialogueExit?.Invoke();
     }
 
     /// <summary>
@@ -194,5 +198,13 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     {
         _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
         _playerInputMap.Disable();
+    }
+
+    /// <summary>
+    /// Removes the listeners to the event
+    /// </summary>
+    private void OnDestroy()
+    {
+        _onDialogueExit?.RemoveAllListeners();
     }
 }
