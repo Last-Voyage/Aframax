@@ -337,7 +337,7 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         // Returns the movement direction times the speed and acceleration
-        return newMovement * (_playerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
+        return newMovement * (PlayerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
             _currentReloadMoveSpeedMultiplier * _currentAcceleration);
     }
     
@@ -674,6 +674,8 @@ public class PlayerMovementController : MonoBehaviour
     // Getter for the current movement ratio
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
+    public float PlayerMovementSpeed { get => _playerMovementSpeed; set => _playerMovementSpeed = value; }
+
     #endregion Getters
 
     #region Setters
@@ -683,7 +685,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <param name="moveSpeed">The new value for speed</param>
     public void SetCurrentMovementSpeed(float moveSpeed)
     {
-        _playerMovementSpeed = moveSpeed;
+        PlayerMovementSpeed = moveSpeed;
     }
 
     /// <summary>
