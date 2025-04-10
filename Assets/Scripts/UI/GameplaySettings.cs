@@ -24,7 +24,15 @@ public class GameplaySettings : MonoBehaviour
 
     [SerializeField] private string _GameplaySettingFilePath;
 
+    public static GameplaySettings instance;
 
+    private void Awake()
+    {
+        if (GameplaySettings.instance == null)
+        {
+            instance = this;
+        }
+    }
     /// <summary>
     /// happens when the game object is enabled
     /// save changes when values are changed
@@ -70,7 +78,7 @@ public class GameplaySettings : MonoBehaviour
 
 
     /// <summary>
-    /// Save the volumes to the save file
+    /// Save the values to the save file
     /// </summary>
     private void SaveData()
     {
@@ -81,5 +89,6 @@ public class GameplaySettings : MonoBehaviour
         File.WriteAllText(Application.streamingAssetsPath + _GameplaySettingFilePath, _settings);
     }
 
+   
 
 }

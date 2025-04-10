@@ -72,6 +72,14 @@ public class SaveManager : MainUniversalManagerFramework
 
         // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
         _gameSaveData.SetCurrentSceneIndex(1);
+
+        //sensitiviy starting values
+
+        // Convert the sensitivity to a string
+        string _settings = 225 + " " + false + " " + false;
+
+        // Write the text to the file
+        File.WriteAllText(Application.streamingAssetsPath + "/GameplaySettings.txt", _settings);
     }
 
     /// <summary>
@@ -86,7 +94,7 @@ public class SaveManager : MainUniversalManagerFramework
         GetGameSaveData().CurrentMusicVolume = 0.5f;
 
         // We'll go ahead and reset that brightness value too
-        Instance.GetGameSaveData().SetBrightness(0.5f);
+        Instance.GetGameSaveData().SetBrightness(.5f);
         Instance.GetGameSaveData().IsSubtitlesOn = true;
 
         Instance.GetGameSaveData().IsGoreOn = true;
@@ -199,7 +207,9 @@ public class SaveManager : MainUniversalManagerFramework
     {
         base.SetUpMainManager();
         EstablishPath();
+        StartingValues();
         Load();
+        
     }
     #endregion
 
