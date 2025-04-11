@@ -85,8 +85,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbffff5d8a3ade9498bf32487b59d444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMovementSpeed: 3
-  _accelerationTime: 0.5
+  _playerMovementSpeed: 3.5
+  _accelerationTime: 0.7
   _deccelerationTime: 0.2
   _accelerationCurve:
     serializedVersion: 2
@@ -113,8 +113,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _playerGravity: 500
-  _focusSpeedSlowTime: 2
-  _unfocusSpeedSlowTime: 1
+  _focusSpeedSlowTime: 1
+  _unfocusSpeedSlowTime: 0.5
   _focusMoveSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -140,8 +140,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _maxFocusMoveSpeedRatio: 0.3
-  _reloadSpeedSlowTime: 0.5
-  _reloadDoneSpeedSlowTime: 0.5
+  _reloadSpeedSlowTime: 1
+  _reloadDoneSpeedSlowTime: 1
   _reloadMoveSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -425,6 +425,7 @@ MonoBehaviour:
   _harpoonFollowTime: 5
   _timeToReturnToMaxSpeed: 0.3
   _delayToReturnToMaxSpeed: 0.1
+  StoredSensitivity: {x: 0, y: 0}
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,7 +710,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 1
+    m_Time: 0.75
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
