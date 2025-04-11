@@ -825,6 +825,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _goreAsset: {fileID: 21300000, guid: a6610c1caa5b9ed47a04be8596dd042b, type: 3}
   _safeAsset: {fileID: 21300000, guid: 2ab7be434fbfec345949863c15d11c46, type: 3}
+  _doesObjectDisableOnGoreSetting: 0
+  _doesDisableOnGoreSettingOn: 0
 --- !u!1 &5730222041742319640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,7 +1183,20 @@ MonoBehaviour:
   _rightArrow: {fileID: 7477028048252907230}
   _onNoteOpen:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 229067008747493563, guid: f5227929ec9dc3b429ea35d8c49ec091,
+          type: 2}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _dialogueOnExit: {fileID: 11400000, guid: 5130ad515fa8e7b4496429eba0850b1e, type: 2}
   _onDialogueExit:
     m_PersistentCalls:
