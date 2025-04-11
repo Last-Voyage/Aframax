@@ -74,7 +74,9 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    /// <summary>
+    /// Called when the player exits collision
+    /// </summary>
     public void PlayerExit()
     {
         _onPlayerExit?.Invoke();
@@ -82,6 +84,11 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         PlayerCollision(false, _exitType);
     }
 
+    /// <summary>
+    /// Called to determine what to do on player collision
+    /// </summary>
+    /// <param name="isEnter">If the collision came from entering contact</param>
+    /// <param name="triggerType"> The type of action to take from contact </param>
     private void PlayerCollision(bool isEnter, EMusicTriggerTypes triggerType)
     {
         if (triggerType == EMusicTriggerTypes.SwapMusic)
@@ -129,6 +136,9 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Remove all listeners on destruction
+    /// </summary>
     private void OnDestroy()
     {
         _onPlayerContact?.RemoveAllListeners();
