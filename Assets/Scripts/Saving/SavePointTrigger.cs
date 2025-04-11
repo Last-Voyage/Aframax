@@ -16,6 +16,8 @@ public class SavePointTrigger : MonoBehaviour
 {
     public int SavePointID;
 
+    [SerializeField] private GameObject[] _objectsToEnableOnLoad;
+
     private bool _savePointActivated = false;
 
     /// <summary>
@@ -36,6 +38,17 @@ public class SavePointTrigger : MonoBehaviour
     {
         _savePointActivated = true;
         SaveReconfiguration.Instance.SavePoints[SavePointID].SavePointTrigger = this;
+    }
+
+    /// <summary>
+    /// Sets active all objects that should appear when loading from this save point
+    /// </summary>
+    public void EnableOnLoadObjects()
+    {
+        foreach(GameObject obj in _objectsToEnableOnLoad)
+        {
+            obj.SetActive(true);
+        }
     }
 
     /// <summary>
