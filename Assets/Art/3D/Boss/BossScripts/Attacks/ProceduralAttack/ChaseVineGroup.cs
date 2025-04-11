@@ -7,9 +7,11 @@
 // Brief Description : This script controls the chase vine group
 *****************************************************************************/
 using UnityEngine;
+using System.Collections;
 using FMOD.Studio;
 using FMODUnity;
 using Unity.VisualScripting;
+using Cinemachine;
 
 /// <summary>
 /// This class controls the group of chasing vines
@@ -35,6 +37,16 @@ public class ChaseVineGroup : MonoBehaviour
     [SerializeField] private bool _doesPlayStartAudioEveryChase;
     [Tooltip("The instance of the audio that is started for the looping audio")]
     private EventInstance _chaseEventInstance;
+
+    [Header("Start Animation")]
+    [SerializeField] private GameObject _startScreamObject;
+    [SerializeField] private CinemachineVirtualCamera _startVirtualCamera;
+    [SerializeField] private float _lengthOfStartAnimation = 4.5f;
+    private CinemachineVirtualCamera _playerCam;
+    [SerializeField] private float _delayCameraSwitch = 2f;
+    private bool _hasBeenActivated = false;
+    private float _basePlayerSpeed;
+    private PlayerMovementController _playerMovementController;
 
     /// <summary>
     /// Sets up the chase vine group
@@ -65,15 +77,36 @@ public class ChaseVineGroup : MonoBehaviour
     /// <summary>
     /// Activates all the vines and starts them moving toward end of path
     /// </summary>
-    public void ActivateThisGroupOfVines()
+    public IEnumerator ActivateThisGroupOfVines()
     {
+        if(_hasBeenActivated) { yield break; }
+
+        _hasBeenActivated = true;
         EnemyManager.Instance.InvokeOnChaseSequenceBegin();
+
+        //get the player virtual camera
+        _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
+        _playerMovementController = PlayerMovementController.Instance;
+        _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
+
+
+        //disable player camera and enable this camera stop player movement
+        _startVirtualCamera.enabled = true;
+        _playerCam.enabled = false;
+        _playerMovementController.PlayerMovementSpeed = 0;
+
+        //play start screaming animation
+        _startScreamObject.SetActive(true);
+
+        //wait until animation is over
+        yield return new WaitForSeconds(_lengthOfStartAnimation);
 
         //this transform should be the joint which is leading the vine toward its destination
         _chaseCollider.gameObject.SetActive(true);
         foreach(ChaseSequenceVine chaseSequenceVine in _chaseSequenceVines)
         {
             chaseSequenceVine.gameObject.SetActive(true);
+            //release the kraken
             chaseSequenceVine.ActivateChase(_chaseSpeed);
         }
         _colliderFollow = _chaseSequenceVines[0].transform.GetChild(0);
@@ -83,6 +116,13 @@ public class ChaseVineGroup : MonoBehaviour
         {
             CinemachineShake.Instance.ShakeCamera(_startCameraShakeIntensity, _startCameraShakeTime, true);
         }
+
+        yield return new WaitForSeconds(_delayCameraSwitch);
+
+        //after all the vines appear move camera back to player enable player movement
+        _playerCam.enabled = true;
+        _startVirtualCamera.enabled = false;
+        _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
 
         StartMovementAudio();
 
