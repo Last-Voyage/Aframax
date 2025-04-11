@@ -34,6 +34,8 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PauseToggle()
     {
+        Debug.Log("hi");
+
         if (TutorialPopUp.ActiveTutorial != null)
         {
             TutorialPopUp.ExitActivePopUp();
@@ -63,6 +65,8 @@ public class PauseMenu : MonoBehaviour
     /// <param name="isVisible"></param>
     private void PauseUIVisibility(bool isVisible,bool shouldToggleAudio)
     {
+        Debug.Log("isVisible = " + isVisible);
+
         _pauseMenuContent.SetActive(isVisible);
         
         if (isVisible)
