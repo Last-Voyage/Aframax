@@ -60,6 +60,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
     [Tooltip("The maximum amount of ammo that the harpoon may have")]
     [SerializeField] private int _maxAmmo = 3;
+    [Tooltip("Whether or not the harpoon should automatically reload")]
+    [SerializeField] private bool _shouldAutomaticReload = false;
 
     private static HarpoonProjectileMovement[] _harpoonSpearPool;
     private int _harpoonPoolCounter;
@@ -307,7 +309,10 @@ public class HarpoonGun : MonoBehaviour
 
         // This is basically used as a trap to prevent reloading from happening automatically
         // That happens cuz of some goofy things with events and the input system
-        _shouldReload = false;
+        if (!_shouldAutomaticReload)
+        {
+            _shouldReload = false;
+        }
     }
 
     /// <summary>
@@ -447,7 +452,8 @@ public class HarpoonGun : MonoBehaviour
 
     private void ReloadAfterRestocking(int ammoRestored)
     {
-        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo - ammoRestored == 0)
+        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo == ammoRestored && 
+            _shouldAutomaticReload)
         {
             StartCoroutine(ReloadHarpoon());
         }
