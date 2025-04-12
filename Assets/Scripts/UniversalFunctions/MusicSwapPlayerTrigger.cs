@@ -93,12 +93,12 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     {
         if (triggerType == EMusicTriggerTypes.SwapMusic)
         {
-            int musicID = isEnter ? _musicExitID : _musicExitID;
+            int musicID = isEnter ? _musicEnterID : _musicExitID;
             SwapMusic(musicID);
         }
         else if (triggerType == EMusicTriggerTypes.SwapVolume)
         {
-            float volume = isEnter ? _newExitVolume : _newEnterVolume;
+            float volume = isEnter ? _newEnterVolume : _musicExitID;
             //Using an Else If just in case we end up adding more EMusicTriggerTypes
             SwapVolume(volume);
         }
