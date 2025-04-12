@@ -7,14 +7,19 @@
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using Slider = UnityEngine.UI.Slider;
 using Toggle = UnityEngine.UI.Toggle;
+using TMPro;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// operates video settings, currently just brightness but probably more to come
@@ -33,7 +38,11 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _goreToggleButton;
 
-    [SerializeField] private Dropdown _resolutionDropdown;
+    [SerializeField] private Toggle _fullScreenButton;
+    
+    [SerializeField] private TMP_Dropdown _resolutionDropdown;
+    
+    private int _resolutionWidth, _resolutionHeight;
     
     /// <summary>
     /// set up references
@@ -50,8 +59,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
         
         AddResolutionsToDropdown();
         SelectDefaultResolution();
+
+        _resolutionDropdown.onValueChanged.AddListener(ChangeResolution);
         
-        ///remembers previously set values 
+        //remembers previously set values 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
 
@@ -76,7 +87,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     {
         SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
         //stop any current subtitles
-        if (FindObjectOfType<DialoguePopUps>() != null)
+        if (!FindObjectOfType<DialoguePopUps>().IsUnityNull())
         {
             FindObjectOfType<DialoguePopUps>().UpdateSubtitleSettingState();
         }
@@ -90,38 +101,100 @@ public class VideoSettingsBehaviour : MonoBehaviour
         SaveManager.Instance.GetGameSaveData().IsGoreOn = _goreToggleButton.isOn;
     }
 
+    /// <summary>
+    /// This inverts whether the game is full screened
+    /// </summary>
+    public void ToggleFullScreenSetting()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
+
+    
+    #region Resolution Functions
+
+    /// <summary>
+    /// This changes the player's resolution
+    /// </summary>
+    private void ChangeResolution(int newResolutionPointer)
+    {
+        StoreWidthHeight(_resolutionDropdown.options[newResolutionPointer].text);
+        
+        Screen.SetResolution(_resolutionWidth,_resolutionHeight, Screen.fullScreen);
+    }
+    
+    /// <summary>
+    /// This adds all the resolutions as options to the dropdown
+    /// </summary>
     private void AddResolutionsToDropdown()
     {
-        List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+        List<TMP_Dropdown.OptionData> optionData = new List<TMP_Dropdown.OptionData>();
 
-        string tempOption;
+        string tempOption = "";
         
+        _resolutionDropdown.ClearOptions();
+
+        optionData.Capacity = Screen.resolutions.Length;
+        
+        // This goes through each of the available screen resolutions
         foreach (var resolution in Screen.resolutions)
         {
+            // Grabs the name of the resolution
             tempOption = resolution.ToString();
+            // Cuts out the refresh rate
             tempOption = tempOption[..(tempOption.LastIndexOf('@') - 1)];
-            optionData.Add(new Dropdown.OptionData(tempOption));
+            // And then adds it as an option to a list
+            TMP_Dropdown.OptionData testerOptionData = new TMP_Dropdown.OptionData(tempOption);
+            if (!optionData.Contains(testerOptionData))
+            {
+                Debug.Log(testerOptionData.text + " " + testerOptionData);
+                Debug.Log(optionData.Contains(testerOptionData));
+                optionData.Add(testerOptionData);
+            }
         }
-        
+        // Finally filling out the actual options with the list made above
         _resolutionDropdown.options = optionData;
     }
 
+    /// <summary>
+    /// This takes the default resolution, and makes it the first selected option
+    /// </summary>
     private void SelectDefaultResolution()
     {
         int selectedResolution = 0;
         string currentResolutionString = Screen.currentResolution.ToString();
-
+        
+        // This cuts off the refresh rate of the current resolution
         currentResolutionString = currentResolutionString[..(currentResolutionString.LastIndexOf('@')-1)];
 
-        for (int i = 0; i < _resolutionDropdown.options.Capacity; i++)
+        // This goes through the resolutions and makes it the currently selected option
+        for (int i = 0; i < _resolutionDropdown.options.Count; i++)
         {
-            if (_resolutionDropdown.options[i].text == currentResolutionString)
+            if (String.Equals(_resolutionDropdown.options[i].text,currentResolutionString))
             {
                 selectedResolution = i;
-                return;
             }
         }
 
+        StoreWidthHeight(currentResolutionString);
         _resolutionDropdown.value = selectedResolution;
+        _resolutionDropdown.RefreshShownValue();
+    }
+
+    /// <summary>
+    /// Stores the width and height of the current resolution
+    /// </summary>
+    /// <param name="resolution">The resolution to be broken into width and height</param>
+    private void StoreWidthHeight(string resolution)
+    {
+        int seperatorIndex = resolution.LastIndexOf('x');
+        _resolutionWidth = int.Parse(resolution[..(seperatorIndex-1)]);
+        _resolutionHeight = int.Parse(resolution[(seperatorIndex+2)..]);
+    }
+    
+    #endregion
+
+    private void OnDisable()
+    {
+        _resolutionDropdown.onValueChanged.RemoveListener(ChangeResolution);
     }
 }
