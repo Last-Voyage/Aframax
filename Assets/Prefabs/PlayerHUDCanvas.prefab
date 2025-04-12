@@ -2233,7 +2233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title Screen
+  m_text: Main Menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1d5051ad2f5f84364a2eb9afadc1b07a, type: 2}
   m_sharedMaterial: {fileID: 3692528365223220164, guid: 1d5051ad2f5f84364a2eb9afadc1b07a,
@@ -4932,7 +4932,7 @@ GameObject:
   - component: {fileID: 8579510687457511908}
   - component: {fileID: 3745379537181484424}
   m_Layer: 5
-  m_Name: Title Screen
+  m_Name: Main Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5040,6 +5040,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 3542307743524629354}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: PauseToggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3745379537181484424}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
         m_MethodName: ReloadTitleScreenButton
