@@ -162,6 +162,7 @@ Transform:
   - {fileID: 1337019300}
   - {fileID: 261970652}
   - {fileID: 886868683}
+  - {fileID: 650812582}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &90764791
@@ -180,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 5640899975672396624, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6245986809019448971, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
@@ -258,7 +259,7 @@ PrefabInstance:
     - target: {fileID: 5640899975672396624, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6245986809019448971, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
@@ -1061,63 +1062,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
         type: 3}
-      propertyPath: VelocityModule.z.scalar
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: ClampVelocityModule.dampen
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: ClampVelocityModule.drag.scalar
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: InitialModule.startSpeed.minScalar
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: VelocityModule.speedModifier.scalar
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: InitialModule.gravityModifier.scalar
-      value: -0.003
-      objectReference: {fileID: 0}
-    - target: {fileID: 4650087681967206291, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 1
+      propertyPath: lengthInSec
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 7172741698664796151, guid: 5553f60587e67ec4db11da6e0a28e677,
         type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7172741698664796151, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 1
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7921928084009363462, guid: 5553f60587e67ec4db11da6e0a28e677,
         type: 3}
       propertyPath: m_Name
       value: VFXMuzzleSmoke
-      objectReference: {fileID: 0}
-    - target: {fileID: 7921928084009363462, guid: 5553f60587e67ec4db11da6e0a28e677,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1236,7 +1192,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 50075409}
     m_Modifications:
     - target: {fileID: 4416689212500348852, guid: 8ae1fc96e173a444daacc592b5f2235f,
         type: 3}
@@ -1261,17 +1217,17 @@ PrefabInstance:
     - target: {fileID: 4416689212500348852, guid: 8ae1fc96e173a444daacc592b5f2235f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4416689212500348852, guid: 8ae1fc96e173a444daacc592b5f2235f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4416689212500348852, guid: 8ae1fc96e173a444daacc592b5f2235f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4416689212500348852, guid: 8ae1fc96e173a444daacc592b5f2235f,
         type: 3}
@@ -1292,6 +1248,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GlobalVolumePostProcessing
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264635984025439183, guid: 8ae1fc96e173a444daacc592b5f2235f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1329,6 +1290,12 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &650812582 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4416689212500348852, guid: 8ae1fc96e173a444daacc592b5f2235f,
+    type: 3}
+  m_PrefabInstance: {fileID: 650812579}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &765955698
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,7 +1524,7 @@ PrefabInstance:
     - target: {fileID: 5640899975672396624, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6245986809019448971, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
@@ -2000,13 +1967,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127536153}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.79, z: 3.276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.545, z: -0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1127536157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2062,12 +2029,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: dc46e5d82e577e346bf974642bac702f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.197
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dc46e5d82e577e346bf974642bac702f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08
+      value: -0.034
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dc46e5d82e577e346bf974642bac702f,
         type: 3}
@@ -3270,7 +3237,7 @@ PrefabInstance:
     - target: {fileID: 5640899975672396624, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6245986809019448971, guid: 22ebc6e1dbbaf67439ebcdea97febc3f,
         type: 3}
@@ -3951,6 +3918,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFXMonsterAppearGoop
       objectReference: {fileID: 0}
+    - target: {fileID: 5681241177789783321, guid: 3949b4eb7843d7442a7e2e5d63db6f1a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6195908062198183240, guid: 3949b4eb7843d7442a7e2e5d63db6f1a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4186,6 +4158,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VFXFUSESpatter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280440837457184454, guid: 5252d28c1362a374c9ac2334c54f62d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8379288813591020469, guid: 5252d28c1362a374c9ac2334c54f62d5,
         type: 3}
@@ -4651,7 +4628,7 @@ PrefabInstance:
     - target: {fileID: 4004325593349421983, guid: c49d6c80236e52a4596db6b957588203,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5647949138283795737, guid: c49d6c80236e52a4596db6b957588203,
         type: 3}
@@ -4866,5 +4843,4 @@ SceneRoots:
   - {fileID: 121655622}
   - {fileID: 879420933}
   - {fileID: 1884253203}
-  - {fileID: 650812579}
   - {fileID: 3605517253253451471}
