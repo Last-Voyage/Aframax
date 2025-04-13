@@ -27,7 +27,9 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckForKillBoxContact(contact.gameObject);
 
-        CheckForEnemyContact(contact.gameObject);
+        CheckForEnemyContact(contact);
+
+        CheckForWallCeilingEnemyTriggerContact(contact);
 
         CheckForStartVineChaseTrigger(contact);
 
@@ -42,18 +44,6 @@ public class PlayerCollision : MonoBehaviour
         CheckForWhackAMoleTrigger(contact);
 
         CheckForGeneralTrigger(contact);
-    }
-
-    #endregion
-
-    #region Collision Contact
-    /// <summary>
-    /// Checks for the start of collision contact
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionEnter(Collision collision)
-    {
-        CheckForEnemyContact(collision.gameObject);
     }
 
     #endregion
@@ -73,12 +63,37 @@ public class PlayerCollision : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks for if the player makes contact with an enemy
+    /// Checks for if the player makes contact with an enemy and damages player
     /// </summary>
     /// <param name="collision"> The object that we are checking for if it is an enemy </param>
-    private void CheckForEnemyContact(GameObject contact)
+    private void CheckForEnemyContact(Collider contact)
     {
-        //TODO: Implement later
+        if(contact.CompareTag("Enemy"))
+        {
+            WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
+
+            if(!attackScript.IsUnityNull()) 
+            {
+                attackScript.DamagePlayer();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks for if the player makes contact with an enemy trigger
+    /// </summary>
+    /// <param name="collision"> The object that we are checking for if it is an enemy </param>
+    private void CheckForWallCeilingEnemyTriggerContact(Collider contact)
+    {
+        if (contact.CompareTag("WallCeilingTrigger"))
+        {
+            WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
+
+            if (!attackScript.IsUnityNull())
+            {
+                attackScript.ActivateAttack();
+            }
+        }
     }
 
     /// <summary>
@@ -90,9 +105,9 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("ChaseTrigger"))
         {
             ChaseVineGroup chaseVineGroup = contact.GetComponent<ChaseVineGroup>();
-            if(chaseVineGroup != null && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
+            if(!chaseVineGroup.IsUnityNull() && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
             {
-                chaseVineGroup.ActivateThisGroupOfVines();
+                StartCoroutine(chaseVineGroup.ActivateThisGroupOfVines());
             }
         }
     }
@@ -106,7 +121,7 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("ChaseDamageTrigger"))
         {
             ChaseVineGroup chaseVineGroup = contact.GetComponentInParent<ChaseVineGroup>();
-            if(chaseVineGroup != null)
+            if(!chaseVineGroup.IsUnityNull())
             {
                 if(chaseVineGroup.IsSupposedToKillInstant())
                 {
@@ -165,7 +180,7 @@ public class PlayerCollision : MonoBehaviour
         {
             //the component should always be on the 3rd child of the vine base
             ProceduralVine proceduralVine = contact.transform.parent.GetChild(2).GetComponent<ProceduralVine>();
-            if (proceduralVine != null)
+            if (!proceduralVine.IsUnityNull())
             {
                 if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
                 {
