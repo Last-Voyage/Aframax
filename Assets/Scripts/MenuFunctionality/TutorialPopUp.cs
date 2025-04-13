@@ -31,6 +31,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
+    private bool _doorOpened;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -174,9 +175,14 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             _pages[i].SetActive(false);
         }
 
+        if (_doorOpened == false)
+        {
+            _onDialogueExit?.Invoke();
+            _doorOpened = true;
+        }
+        
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
-        _onDialogueExit?.Invoke();
     }
 
     /// <summary>
