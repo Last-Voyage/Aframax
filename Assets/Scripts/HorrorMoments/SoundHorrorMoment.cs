@@ -33,6 +33,7 @@ public class SoundHorrorMoment : MonoBehaviour
         {
             //play horror moment souund
             RuntimeSfxManager.APlayOneShotSfx?.Invoke(_horrorMomentSounds[_soundToUseIndex], transform.position);
+            //Play the dialogue 
             GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogue);
 
             _hasPlayedHorrorSound = true;
