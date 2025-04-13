@@ -69,6 +69,8 @@ public class SaveReconfiguration : MonoBehaviour
         //Sets the player location to the saved location
         thePlayer.transform.position = currentSavePoint.SavePointTrigger.transform.position;
 
+        currentSavePoint.SavePointTrigger.EnableOnLoadObjects();
+
         //Loads the player inventory
         PlayerInventory.Instance.LoadInventory();
 

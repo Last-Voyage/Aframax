@@ -52,7 +52,7 @@ public class MazeSubSceneManager : MonoBehaviour
     /// <summary>
     /// Performs any needed functionality for when the game starts
     /// </summary>
-    private void Start()
+    private void Awake()
     {
         // Throttle speed of maze loading
         Application.backgroundLoadingPriority = ThreadPriority.BelowNormal;
