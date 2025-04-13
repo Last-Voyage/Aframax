@@ -9,6 +9,7 @@
 *****************************************************************************/
 using System;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,19 +19,22 @@ using UnityEngine.UI;
 /// </summary>
 public class GameplaySettings : MonoBehaviour
 {
-    [SerializeField] private Slider _sensitivitySlider;
+    public Slider SensitivitySlider;
     [SerializeField] private Toggle _invertX;
     [SerializeField] private Toggle _invertY;
 
     [SerializeField] private string _GameplaySettingFilePath;
 
-    public static GameplaySettings instance;
+    public static GameplaySettings Instance;
 
+    /// <summary>
+    /// happens on awake, used to set the instance
+    /// </summary>
     private void Awake()
     {
-        if (GameplaySettings.instance == null)
+        if (GameplaySettings.Instance.IsUnityNull())
         {
-            instance = this;
+            Instance = this;
         }
     }
     /// <summary>
@@ -40,14 +44,14 @@ public class GameplaySettings : MonoBehaviour
     private void OnEnable()
     {
         //save data when the values are changed
-        _sensitivitySlider.onValueChanged.AddListener(delegate { SaveData(); });
+        SensitivitySlider.onValueChanged.AddListener(delegate { SaveData(); });
         _invertX.onValueChanged.AddListener(delegate { SaveData(); });
         _invertY.onValueChanged.AddListener(delegate { SaveData(); });
 
         string[] camSettings = File.ReadAllLines(Application.streamingAssetsPath +
             _GameplaySettingFilePath)[0].Split(" ");
 
-        _sensitivitySlider.value = float.Parse(camSettings[0]);
+        SensitivitySlider.value = float.Parse(camSettings[0]);
         _invertX.isOn = bool.Parse(camSettings[1]);
         _invertY.isOn = bool.Parse(camSettings[2]);
 
@@ -71,7 +75,7 @@ public class GameplaySettings : MonoBehaviour
             Debug.LogWarning(e);
         }
         //remove listeners
-        _sensitivitySlider.onValueChanged.RemoveAllListeners();
+        SensitivitySlider.onValueChanged.RemoveAllListeners();
         _invertX.onValueChanged.RemoveAllListeners();
         _invertY.onValueChanged.RemoveAllListeners();
     }
@@ -83,7 +87,7 @@ public class GameplaySettings : MonoBehaviour
     private void SaveData()
     {
         // Convert the sensitivity to a string
-        string _settings = _sensitivitySlider.value + " " + _invertX.isOn + " " + _invertY.isOn;
+        string _settings = SensitivitySlider.value + " " + _invertX.isOn + " " + _invertY.isOn;
 
         // Write the text to the file
         File.WriteAllText(Application.streamingAssetsPath + _GameplaySettingFilePath, _settings);

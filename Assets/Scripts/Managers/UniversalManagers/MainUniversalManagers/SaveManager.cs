@@ -76,7 +76,8 @@ public class SaveManager : MainUniversalManagerFramework
         //sensitiviy starting values
 
         // Convert the sensitivity to a string
-        string _settings = 225 + " " + false + " " + false;
+        string _settings = GameplaySettings.Instance.SensitivitySlider.value/2
+            + " " + false + " " + false;
 
         // Write the text to the file
         File.WriteAllText(Application.streamingAssetsPath + "/GameplaySettings.txt", _settings);
@@ -207,7 +208,6 @@ public class SaveManager : MainUniversalManagerFramework
     {
         base.SetUpMainManager();
         EstablishPath();
-        StartingValues();
         Load();
         
     }
