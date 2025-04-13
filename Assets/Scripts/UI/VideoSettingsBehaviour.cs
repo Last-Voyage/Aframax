@@ -130,6 +130,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
         List<TMP_Dropdown.OptionData> optionData = new List<TMP_Dropdown.OptionData>();
 
         string tempOption = "";
+        string lastAddition = "lastVoyageRocks"; // This shouldn't be an empty string because tempOption is also empty
         
         _resolutionDropdown.ClearOptions();
 
@@ -142,14 +143,17 @@ public class VideoSettingsBehaviour : MonoBehaviour
             tempOption = resolution.ToString();
             // Cuts out the refresh rate
             tempOption = tempOption[..(tempOption.LastIndexOf('@') - 1)];
+
+            if (lastAddition == tempOption)
+            {
+                continue;
+            }
+
+            lastAddition = tempOption;
             // And then adds it as an option to a list
             TMP_Dropdown.OptionData testerOptionData = new TMP_Dropdown.OptionData(tempOption);
-            if (!optionData.Contains(testerOptionData))
-            {
-                Debug.Log(testerOptionData.text + " " + testerOptionData);
-                Debug.Log(optionData.Contains(testerOptionData));
-                optionData.Add(testerOptionData);
-            }
+            optionData.Add(testerOptionData);
+            
         }
         // Finally filling out the actual options with the list made above
         _resolutionDropdown.options = optionData;
