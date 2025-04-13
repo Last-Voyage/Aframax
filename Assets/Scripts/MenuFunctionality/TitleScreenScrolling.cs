@@ -68,6 +68,16 @@ public class TitleScreenScrolling : MonoBehaviour
                     _screenScrollTime);
                 yield return null;
 
+                if (transform.position.y / _movingDestination.transform.position.y >= _skullTriggerPercent/100)
+                {
+                    _skullAnimator.SetTrigger("StartMoving");
+                }
+
+                if (transform.position.y / _movingDestination.transform.position.y >= _menuTriggerPercent / 100)
+                {
+                    _menuAnimator.SetTrigger("StartMoving");
+                }
+
                 //double checking to make sure the loop stops properly, accounting for floating point shenanigans
                 if (transform.position.y / _movingDestination.transform.position.y >= 0.99f)
                 {
