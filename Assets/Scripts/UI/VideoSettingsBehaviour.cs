@@ -1,7 +1,7 @@
 /**********************************************************************************************************************
 // File Name :         VideoSettingsBehaviour.cs
 // Author :            Jeremiah Peters
-// Contributors :      Andrew Stapay
+// Contributors :      Andrew Stapay, Nick Rice
 // Creation Date :     2/28/2025
 // 
 // Brief Description : Handles the video settings and applying them
@@ -115,6 +115,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// <summary>
     /// This changes the player's resolution
     /// </summary>
+    /// <param name="newResolutionPointer">The pointer that picks the selected resolution option</param>
     private void ChangeResolution(int newResolutionPointer)
     {
         StoreWidthHeight(_resolutionDropdown.options[newResolutionPointer].text);
@@ -196,7 +197,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
     }
     
     #endregion
-
+    
+    /// <summary>
+    /// This removes the listener to check if the resolution has changed
+    /// </summary>
     private void OnDisable()
     {
         _resolutionDropdown.onValueChanged.RemoveListener(ChangeResolution);
