@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
@@ -39,6 +40,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private SpriteRenderer _interactablePopUp;
     private bool _hasPlayed;
     private int _currentPage;
+    private bool _isInInteractableBuffer;
 
     private PlayerInputMap _playerInputMap;
 
@@ -96,6 +98,11 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void ShowNote()
     {
+        if(_isInInteractableBuffer)
+        {
+            return;
+        }
+
         _onNoteOpen?.Invoke();
         RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.NotePickUp, transform.position);
        
@@ -129,6 +136,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
             return;
         }
 
+        StartCoroutine(InteractableBuffer());
+
         // Lock the mouse and unfreeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
@@ -149,6 +158,17 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
         // Show the interaction popup
         _interactablePopUp.enabled = true;
+    }
+
+    /// <summary>
+    /// Buffers the ability to interact with the note to prevent spam
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator InteractableBuffer()
+    {
+        _isInInteractableBuffer = true;
+        yield return null;
+        _isInInteractableBuffer = false;
     }
 
     /// <summary>
