@@ -14,6 +14,9 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// functionality for moving the camera on the title screen
 /// </summary>
+/// 
+
+///gutuyyufyyigui
 public class TitleScreenScrolling : MonoBehaviour
 {
     [SerializeField] private Transform _movingDestination;
