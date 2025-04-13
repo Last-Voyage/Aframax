@@ -51,7 +51,41 @@ MonoBehaviour:
     BeatDescription: 
     TriggerOnStart: 1
     Outdated: 0
-    StoryBeatEvents: []
+    StoryBeatEvents:
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 1
+      Dialogue: {fileID: 11400000, guid: 49054a239f4fb5944a549c36497fa76d, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 'Read the Manual '
+              m_BoolArgument: 0
+            m_CallState: 2
   - BeatName: After Tutorial
     BeatDescription: 
     TriggerOnStart: 0
@@ -95,8 +129,19 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 0
-      DelayTime: 0
+      DelayTime: 9
       Dialogue: {fileID: 11400000, guid: f197c2444e4a19448a7694c65914f97d, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 0
+      Dialogue: {fileID: 11400000, guid: 9df9d981ca152aa498f272696662c73e, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
@@ -108,29 +153,6 @@ MonoBehaviour:
     TriggerOnStart: 0
     Outdated: 0
     StoryBeatEvents:
-    - IsMinimized: 0
-      EventName: 
-      EventType: 3
-      DelayTime: 0
-      Dialogue: {fileID: 0}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks: []
-      OnBeatEvent:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
-            m_MethodName: ActivateObjectiveHud
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: Start the Generator
-              m_BoolArgument: 0
-            m_CallState: 2
     - IsMinimized: 0
       EventName: 
       EventType: 3
@@ -157,8 +179,8 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 0
-      DelayTime: 6
-      Dialogue: {fileID: 11400000, guid: a4f561840e966484c9016f3e369e349b, type: 2}
+      DelayTime: 0
+      Dialogue: {fileID: 11400000, guid: b93d9e80e7c58e04b983d26dc0d10bca, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
@@ -167,15 +189,27 @@ MonoBehaviour:
           m_Calls: []
     - IsMinimized: 0
       EventName: 
-      EventType: 0
+      EventType: 3
       DelayTime: 0
-      Dialogue: {fileID: 11400000, guid: 9df9d981ca152aa498f272696662c73e, type: 2}
+      Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
       OnBeatEvent:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Start the Generator
+              m_BoolArgument: 0
+            m_CallState: 2
   - BeatName: Maze Starts
     BeatDescription: 
     TriggerOnStart: 0
@@ -201,7 +235,7 @@ MonoBehaviour:
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
-              m_StringArgument: 
+              m_StringArgument: Start the Generator
               m_BoolArgument: 0
             m_CallState: 2
           - m_Target: {fileID: 8896928037882086897}
@@ -255,7 +289,7 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 3
-      DelayTime: 3
+      DelayTime: 2
       Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -275,11 +309,11 @@ MonoBehaviour:
               m_FloatArgument: 0
               m_StringArgument: 
               m_BoolArgument: 0
-            m_CallState: 2
+            m_CallState: 0
     - IsMinimized: 0
       EventName: 
       EventType: 0
-      DelayTime: 9
+      DelayTime: 4
       Dialogue: {fileID: 11400000, guid: 12ea49b7accf6e944b37f3dad8c6df2b, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -313,7 +347,7 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 0
-      DelayTime: 2
+      DelayTime: 0
       Dialogue: {fileID: 11400000, guid: 9266c8b72f949d24db7105f2d7656321, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -353,7 +387,7 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 3
-      DelayTime: 0
+      DelayTime: 0.5
       Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -425,6 +459,17 @@ MonoBehaviour:
       EventType: 0
       DelayTime: 4
       Dialogue: {fileID: 11400000, guid: 28c0881a64a7b0a48b5f7b10233d4ccd, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 1
+      Dialogue: {fileID: 11400000, guid: b6f42ca468d5f954e943aaedd1db4569, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
@@ -534,7 +579,7 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 0
-      DelayTime: 7
+      DelayTime: 10
       Dialogue: {fileID: 11400000, guid: 18499d3ae3f8cea49bb2f346f0bc01a5, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -568,8 +613,8 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 0
-      DelayTime: 3
-      Dialogue: {fileID: 11400000, guid: a5382f88a40196a469ad207115b9e2b5, type: 2}
+      DelayTime: 1
+      Dialogue: {fileID: 11400000, guid: 3f6ea7776602f124da40a8ad16102087, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
@@ -608,7 +653,7 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 3
-      DelayTime: 0
+      DelayTime: 0.5
       Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -663,12 +708,12 @@ MonoBehaviour:
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
+              m_IntArgument: 2
               m_FloatArgument: 5.5
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  OpenStoryBeat: 0
+  OpenStoryBeat: 5
 --- !u!114 &8896928037882086897
 MonoBehaviour:
   m_ObjectHideFlags: 0
