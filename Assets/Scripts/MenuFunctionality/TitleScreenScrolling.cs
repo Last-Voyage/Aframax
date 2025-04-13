@@ -28,6 +28,14 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [SerializeField] private EventSystem _setUpPlayerControls;
 
+    [SerializeField] private Animator _skullAnimator;
+
+    [SerializeField] private float _skullTriggerPercent;
+
+    [SerializeField] private Animator _menuAnimator;
+
+    [SerializeField] private float _menuTriggerPercent;
+
     private Vector3 velocity = Vector3.zero;
 
     private PlayerInputMap _playerInputControls;
