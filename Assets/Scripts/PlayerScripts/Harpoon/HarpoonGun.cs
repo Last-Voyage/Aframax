@@ -137,7 +137,8 @@ public class HarpoonGun : MonoBehaviour
 
     private CinemachineImpulseSource _cinemachineImpulse;
 
-    private bool _shouldReload = true;
+    // Used during automatic reloading
+    private InputAction.CallbackContext _emptyCallback = new InputAction.CallbackContext();
 
     #endregion
 
@@ -309,9 +310,9 @@ public class HarpoonGun : MonoBehaviour
 
         // This is basically used as a trap to prevent reloading from happening automatically
         // That happens cuz of some goofy things with events and the input system
-        if (!_shouldAutomaticReload)
+        if (_shouldAutomaticReload)
         {
-            _shouldReload = false;
+            StartReloadProcess(_emptyCallback);
         }
     }
 
@@ -334,9 +335,8 @@ public class HarpoonGun : MonoBehaviour
     private void StartReloadProcess(InputAction.CallbackContext context)
     {
         // Return if we don't need to reload
-        if (_harpoonFiringState != EHarpoonFiringState.NeedReload || !_shouldReload)
+        if (_harpoonFiringState != EHarpoonFiringState.NeedReload)
         {
-            _shouldReload = true;
             return;
         }
 
