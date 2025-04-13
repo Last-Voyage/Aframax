@@ -21,6 +21,7 @@ public class SoundHorrorMoment : MonoBehaviour
 
     [SerializeField] private List<EventReference> _horrorMomentSounds;
     [SerializeField] private int _soundToUseIndex;
+    [SerializeField] private ScriptableDialogueUi _dialogue;
     /// <summary>
     /// happens when the player comes in contact with
     /// the collider
@@ -32,6 +33,8 @@ public class SoundHorrorMoment : MonoBehaviour
         {
             //play horror moment souund
             RuntimeSfxManager.APlayOneShotSfx?.Invoke(_horrorMomentSounds[_soundToUseIndex], transform.position);
+            GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogue);
+
             _hasPlayedHorrorSound = true;
         }
     }
