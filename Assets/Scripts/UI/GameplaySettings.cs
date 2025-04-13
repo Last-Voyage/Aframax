@@ -43,6 +43,9 @@ public class GameplaySettings : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
+        //set max sensitivity
+        SensitivitySlider.maxValue = SaveManager.Instance.MaxSensitivity;
+
         //save data when the values are changed
         SensitivitySlider.onValueChanged.AddListener(delegate { SaveData(); });
         _invertX.onValueChanged.AddListener(delegate { SaveData(); });

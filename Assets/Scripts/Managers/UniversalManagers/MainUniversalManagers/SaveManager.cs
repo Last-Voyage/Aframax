@@ -28,6 +28,7 @@ public class SaveManager : MainUniversalManagerFramework
     private readonly UnityEvent _onNewCheckpoint = new();
     private readonly UnityEvent _onLoadSaveData = new();
 
+    public float MaxSensitivity = 450;
     /// <summary>
     /// Sets the path to create the save file
     /// </summary>
@@ -76,7 +77,7 @@ public class SaveManager : MainUniversalManagerFramework
         //sensitiviy starting values
 
         // Convert the sensitivity to a string
-        string _settings = GameplaySettings.Instance.SensitivitySlider.value/2
+        string _settings = MaxSensitivity/2
             + " " + false + " " + false;
 
         // Write the text to the file
