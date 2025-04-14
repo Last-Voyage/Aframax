@@ -98,7 +98,7 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         }
         else if (triggerType == EMusicTriggerTypes.SwapVolume)
         {
-            float volume = isEnter ? _newEnterVolume : _musicExitID;
+            float volume = isEnter ? _newEnterVolume : _newExitVolume;
             //Using an Else If just in case we end up adding more EMusicTriggerTypes
             SwapVolume(volume);
         }
@@ -109,7 +109,7 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     /// </summary>
     private void SwapMusic(int id)
     {
-        PersistentAudioManager.Instance.StartMusicByID(_musicEnterID);
+        PersistentAudioManager.Instance.StartMusicByID(id);
     }
 
     /// <summary>
