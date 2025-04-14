@@ -1525,13 +1525,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7696855808277865503}
   - component: {fileID: 7487807562845102265}
+  - component: {fileID: 4310535256886631751}
   m_Layer: 0
   m_Name: PauseUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7696855808277865503
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1568,6 +1569,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firstSelectedButton: {fileID: 8890312314440679010}
+--- !u!114 &4310535256886631751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3473542947727293446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec26e9746d8e6749be806930b8a973b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _basePauseUI: {fileID: 8794100072468844783}
+  _pauseUIPage2: {fileID: 615306361208662448}
 --- !u!1 &3840506596002102238
 GameObject:
   m_ObjectHideFlags: 0
