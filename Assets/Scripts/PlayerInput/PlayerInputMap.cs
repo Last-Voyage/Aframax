@@ -514,7 +514,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b781aaf2-1360-4d85-a754-8fd4ddfa6c3f"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
@@ -525,7 +525,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""14fdb131-0c07-4b8a-a78b-ecd396b9ce2d"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
