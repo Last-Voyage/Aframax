@@ -17,7 +17,6 @@ public class LightController : MonoBehaviour
     // Components of the GameObject
     private Light _light;
     private Color _originalColor;
-    private Animator _animator;
 
     [Header("Flicker")]
     // Toggle for turning on and off light flickering
@@ -42,7 +41,6 @@ public class LightController : MonoBehaviour
     private void Awake()
     {
         GetLight();
-        GetAnimator();
     }
 
     /// <summary>
@@ -53,14 +51,6 @@ public class LightController : MonoBehaviour
         _light = GetComponent<Light>();
         _startingIntensity = _light.intensity;
         _originalColor = _light.color;
-    }
-
-    /// <summary>
-    /// Gets the animator component
-    /// </summary>
-    private void GetAnimator()
-    {
-        _animator = GetComponent<Animator>();
     }
 
     /// <summary>
