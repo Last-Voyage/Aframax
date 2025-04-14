@@ -208,7 +208,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         if (scene.name == "MazeScene")
         {
            RuntimeSfxManager.Instance.CanPlayFootSteps = true;
-           print("wabalabadubdub");
         }
     }
     
@@ -219,7 +218,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <param name="mode"></param>
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Loaded Scene: " + scene.name);
+        //Debug.Log("Loaded Scene: " + scene.name);
     }
     
 
