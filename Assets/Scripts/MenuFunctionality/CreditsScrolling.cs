@@ -50,7 +50,7 @@ public class CreditsScrolling : MonoBehaviour
             while (transform.position != destination)
             {
                 transform.position = Vector3.MoveTowards(
-                    transform.position, new Vector3(destination.x, destination.y, transform.position.z),
+                    transform.position, new Vector3(transform.position.x, destination.y, transform.position.z),
                     scrollSpeed * Time.deltaTime);
 
                 yield return null;
