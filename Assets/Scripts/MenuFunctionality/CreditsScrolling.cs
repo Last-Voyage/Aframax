@@ -51,7 +51,7 @@ public class CreditsScrolling : MonoBehaviour
             {
                 transform.position = Vector3.MoveTowards(
                     transform.position, new Vector3(destination.x, destination.y, transform.position.z),
-                    scrollSpeed * (_sceneCanvas.renderingDisplaySize.x / 100) * Time.deltaTime);
+                    scrollSpeed * Time.deltaTime);
 
                 yield return null;
             }
