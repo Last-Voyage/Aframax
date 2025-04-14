@@ -48,8 +48,8 @@ public class TitleScreenScrolling : MonoBehaviour
         _playerInputControls.Player.EnterTitleScreen.performed +=
             ctx => StartCoroutine(ScrollingScreen());
 
-        _skullTriggerPercent = _skullTriggerPercent / 100;
-        _menuTriggerPercent = _menuTriggerPercent / 100;
+        _skullTriggerPercent /= 100;
+        _menuTriggerPercent /= 100;
     }
 
     /// <summary>
