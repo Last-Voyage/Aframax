@@ -215,7 +215,6 @@ public class PlayerReticle : MonoBehaviour
         // When the player is reloading, the reticle disappears
         else
         {
-            print(_harpoonGunScript.GetHarpoonFiringState());
             _frameImage.color = Color.clear;
             _scopeImage.color = Color.clear;
         }
