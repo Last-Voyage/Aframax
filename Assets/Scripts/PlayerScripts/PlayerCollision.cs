@@ -35,7 +35,7 @@ public class PlayerCollision : MonoBehaviour
 
         CheckForChaseDamageTrigger(contact);
 
-        CheckForMusicTrigger(contact);
+        CheckForMusicTrigger(contact, true);
 
         CheckForSavePointTrigger(contact);
 
@@ -46,10 +46,18 @@ public class PlayerCollision : MonoBehaviour
         CheckForGeneralTrigger(contact);
     }
 
+    /// <summary>
+    /// Checks for the end of trigger contact
+    /// </summary>
+    /// <param name="contact">The collider we just left </param>
+    private void OnTriggerExit(Collider contact)
+    {
+        CheckForMusicTrigger(contact, false);
+    }
     #endregion
 
     #region Contact Checks
-    
+
     /// <summary>
     /// Checks if the player hit a killbox
     /// </summary>
@@ -153,11 +161,19 @@ public class PlayerCollision : MonoBehaviour
     /// Checks for the trigger to change the music
     /// </summary>
     /// <param name="contact">The collider we contacted</param>
-    private void CheckForMusicTrigger(Collider contact)
+    /// <param name="isEnter">If the collision came from entering</param>
+    private void CheckForMusicTrigger(Collider contact, bool isEnter)
     {
         if(contact.gameObject.TryGetComponent(out MusicSwapPlayerTrigger musicSwapPlayerTrigger))
         {
-            musicSwapPlayerTrigger.PlayerContact();
+            if(isEnter)
+            {
+                musicSwapPlayerTrigger.PlayerContact();
+            }
+            else
+            {
+                musicSwapPlayerTrigger.PlayerExit();
+            }
         }
     }
     
