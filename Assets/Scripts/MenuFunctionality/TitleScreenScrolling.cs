@@ -47,6 +47,9 @@ public class TitleScreenScrolling : MonoBehaviour
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.EnterTitleScreen.performed +=
             ctx => StartCoroutine(ScrollingScreen());
+
+        _skullTriggerPercent = _skullTriggerPercent / 100;
+        _menuTriggerPercent = _menuTriggerPercent / 100;
     }
 
     /// <summary>
@@ -62,24 +65,33 @@ public class TitleScreenScrolling : MonoBehaviour
             PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
 
             _hasScrollingStarted = true;
+
+            float _screenScrollProgress;
+            bool _skullTriggerSet = false;
+            bool _menuTriggerSet = false;
+
             while (transform.position != _movingDestination.position)
             {
                 transform.position = Vector3.SmoothDamp(transform.position, _movingDestination.transform.position, ref velocity,
                     _screenScrollTime);
                 yield return null;
 
-                if (transform.position.y / _movingDestination.transform.position.y >= _skullTriggerPercent/100)
+                _screenScrollProgress = transform.position.y / _movingDestination.transform.position.y;
+
+                if (_screenScrollProgress >= _skullTriggerPercent && _skullTriggerSet == false)
                 {
                     _skullAnimator.SetTrigger("StartMoving");
+                    _skullTriggerSet = true;
                 }
 
-                if (transform.position.y / _movingDestination.transform.position.y >= _menuTriggerPercent / 100)
+                if (_screenScrollProgress >= _menuTriggerPercent && _menuTriggerSet == false)
                 {
                     _menuAnimator.SetTrigger("StartMoving");
+                    _menuTriggerSet = true;
                 }
 
                 //double checking to make sure the loop stops properly, accounting for floating point shenanigans
-                if (transform.position.y / _movingDestination.transform.position.y >= 0.99f)
+                if (_screenScrollProgress >= 0.99f)
                 {
                     _setUpPlayerControls.gameObject.SetActive(true);
                     yield break;
