@@ -31,10 +31,17 @@ public class SoundHorrorMoment : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") && !_hasPlayedHorrorSound) 
         {
-            //play horror moment souund
-            RuntimeSfxManager.APlayOneShotSfx?.Invoke(_horrorMomentSounds[_soundToUseIndex], transform.position);
-            //Play the dialogue 
-            GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogue);
+            if (_horrorMomentSounds != null && _soundToUseIndex < _horrorMomentSounds.Count)
+            {
+                //play horror moment souund
+                RuntimeSfxManager.APlayOneShotSfx?.Invoke(_horrorMomentSounds[_soundToUseIndex], transform.position);
+            }
+
+            if (_dialogue != null)
+            {
+                //Play the dialogue 
+                GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogue);
+            }
 
             _hasPlayedHorrorSound = true;
         }
