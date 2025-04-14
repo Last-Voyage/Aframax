@@ -1,10 +1,10 @@
 /*****************************************************************************
-// File Name :         TitleScreenScrolling.cs
-// Author :            Jeremiah Peters, Adam Garwacki
+// File Name :         CreditsScrolling.cs
+// Author :            Adam Garwacki, Jeremiah Peters
 // Creation Date :     11/15/24
 //
 // Brief Description : Handles scrolling the credits screen from top to bottom
-//                     This script was duplicated from TitleScreenScrolling.cs
+//                     This script was adapted from TitleScreenScrolling.cs
 *****************************************************************************/
 
 using System.Collections;
