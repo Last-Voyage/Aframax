@@ -269,7 +269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5221917780054561656
 Transform:
   m_ObjectHideFlags: 0
@@ -319,11 +319,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 3
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
   _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &869882474733977947
@@ -1180,11 +1186,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
   _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4251369667010664836
@@ -1480,11 +1492,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
   _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4747106929188878242
@@ -1824,11 +1842,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
   _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6085586657516272993
@@ -1982,11 +2006,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
   _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &6396810580862375318
@@ -2004,7 +2034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1048279401646612031
 Transform:
   m_ObjectHideFlags: 0
