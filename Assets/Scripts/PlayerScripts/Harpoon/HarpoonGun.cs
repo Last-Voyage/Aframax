@@ -340,8 +340,6 @@ public class HarpoonGun : MonoBehaviour
             return;
         }
 
-        _harpoonFiringState = EHarpoonFiringState.Reloading;
-
         StartCoroutine(ReloadHarpoon());
     }
 
@@ -353,6 +351,8 @@ public class HarpoonGun : MonoBehaviour
         //nabil added infinite ammo functionality here
         if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
+            _harpoonFiringState = EHarpoonFiringState.Reloading;
+
             _reticle.ToggleAmmoIcons();
 
             PlayerManager.Instance.OnInvokeHarpoonStartReloadEvent();
