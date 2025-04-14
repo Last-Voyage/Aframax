@@ -35,10 +35,6 @@ public class LightController : MonoBehaviour
     [SerializeField] private float _lightTransitionTime = 1f;
     [SerializeField] private float _lightShiftDuration = 20f;
 
-    // Animation variables
-    private const string _LIGHT_FLICKER_TRIGGER = "PlayFlicker";
-
-
     /// <summary>
     /// Called on the first frame
     /// Used to set up variables
@@ -85,11 +81,8 @@ public class LightController : MonoBehaviour
         float timer = 0;
         while (timer <= 1)
         {
-            float newR = Mathf.Lerp(_light.color.r, _lightShiftTargetColor.r, timer);
-            float newG = Mathf.Lerp(_light.color.g, _lightShiftTargetColor.g, timer);
-            float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer);
+            _light.color = Color.Lerp(_originalColor, _lightShiftTargetColor, timer);
 
-            _light.color = new Color(newR, newG, newB, 0);
             timer += Time.deltaTime / _lightTransitionTime;
 
             yield return null;
@@ -108,11 +101,8 @@ public class LightController : MonoBehaviour
             timer = 0;
             while (timer <= 1)
             {
-                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer);
-                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer);
-                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer);
+                _light.color = Color.Lerp(_lightShiftTargetColor, _originalColor, timer);
 
-                _light.color = new Color(newR, newG, newB, 0);
                 timer += Time.deltaTime / _lightTransitionTime;
 
                 yield return null;
