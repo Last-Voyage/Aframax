@@ -860,6 +860,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4013041096337582946}
   - component: {fileID: 6259921214527907433}
+  - component: {fileID: 7219382997009096610}
   m_Layer: 0
   m_Name: WhackAMoleActivationRange
   m_TagString: WhackAMoleTrigger
@@ -903,6 +904,56 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7219382997009096610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4845220462528300888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3a7a1a0a023f534f90f561c1f638c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _contactType: 1
+  _musicEnterID: 3
+  _newEnterVolume: 0
+  _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7219382997009096610}
+        m_TargetAssemblyTypeName: MusicSwapPlayerTrigger, Assembly-CSharp
+        m_MethodName: BossMusicActivation
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  _exitType: 1
+  _musicExitID: 1
+  _newExitVolume: 0
+  _onPlayerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7219382997009096610}
+        m_TargetAssemblyTypeName: MusicSwapPlayerTrigger, Assembly-CSharp
+        m_MethodName: BossMusicActivation
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _detachOnStart: 0
+  _destroyOnContact: 0
 --- !u!1 &4907926892503833362
 GameObject:
   m_ObjectHideFlags: 0
