@@ -32,11 +32,17 @@ public class WorldSpacePopups : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _popUpTextContainer;
 
+    [Tooltip("Whether or not the player is using a controller")]
+    private bool _usingController;
+
     [SerializeField]
     private Sprite _farDistanceSprite;
 
     [SerializeField]
-    private Sprite _closeDistanceSprite;
+    private Sprite _closeDistanceSprite; // Need to change the name for this
+    
+    [SerializeField] 
+    private Sprite _closeDistanceControllerSprite;
 
     [SerializeField]
     private float _playerDetectionProximity;
@@ -80,30 +86,41 @@ public class WorldSpacePopups : MonoBehaviour
             transform.Rotate(0, 180, 0);
         }
 
-        if (!_playerReference.IsUnityNull())
+        if (_playerReference.IsUnityNull())
         {
-            //check proximity to player
-            _playerProximity = Vector3.Distance(_playerTransform.position, transform.position);
+            return;
+        }
 
-            // If the player is in range and is currently looking at the interactable
-            if (_playerProximity < _playerDetectionProximity
-                && _playerInteractor.CurrentInteractable() == _interactableObject)
+        //check proximity to player
+        _playerProximity = Vector3.Distance(_playerTransform.position, transform.position);
+
+        // If the player is in range and is currently looking at the interactable
+        if (_playerProximity < _playerDetectionProximity
+            && _playerInteractor.CurrentInteractable() == _interactableObject)
+        {
+            // This will change the sprite
+            if (_usingController)
             {
-                _objectSpriteReference.sprite = _closeDistanceSprite;
-                _popUpTextContainer.text = _closeText;
+                _objectSpriteReference.sprite = _closeDistanceControllerSprite;
             }
-            // The player is in range to see it
-            else if (_playerProximity < _visibilityProximity)
-            {
-                _objectSpriteReference.sprite = _farDistanceSprite;
-                _popUpTextContainer.text = _farText;
-            }
-            // The player is nowhere near the interactable
             else
             {
-                _objectSpriteReference.sprite = null;
-                _popUpTextContainer.text = null;
+                _objectSpriteReference.sprite = _closeDistanceSprite;
             }
+            
+            _popUpTextContainer.text = _closeText;
+        }
+        // The player is in range to see it
+        else if (_playerProximity < _visibilityProximity)
+        {
+            _objectSpriteReference.sprite = _farDistanceSprite;
+            _popUpTextContainer.text = _farText;
+        }
+        // The player is nowhere near the interactable
+        else
+        {
+            _objectSpriteReference.sprite = null;
+            _popUpTextContainer.text = null;
         }
     }
 

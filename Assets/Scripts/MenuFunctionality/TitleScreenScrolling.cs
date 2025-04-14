@@ -8,6 +8,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -23,6 +24,15 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [Tooltip("The delay before the splash effect plays")]
     [SerializeField] private float _splashEffectDelay;
+
+    [SerializeField] 
+    private TextMeshProUGUI _startGameText;
+    
+    [SerializeField]
+    private string _controllerStartGameMessage = "A TO START";
+
+    [SerializeField] 
+    private string _keyboardStartGameMessage = "ENTER TO START";
 
     [SerializeField] private Animator _enterFadeOutAnimator;
 
