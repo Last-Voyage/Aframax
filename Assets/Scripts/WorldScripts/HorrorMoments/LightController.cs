@@ -154,7 +154,7 @@ public class LightController : MonoBehaviour
 
         while (flickerTimer < 1)
         {
-            flickerTimer += Time.deltaTime / _lightFlickerDuration;
+            flickerTimer += Time.deltaTime / flickerDuration;
             _light.intensity = curve.Evaluate(flickerTimer) * _startingIntensity;
             yield return null;
         }
