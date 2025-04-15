@@ -33,6 +33,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
     private bool _hasDoorOpened;
+    private InGameMenuSwap _menuSwapScript;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -45,6 +46,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         _playerInputMap = new PlayerInputMap();
 
         _pages = new GameObject[_pageParent.childCount];
+
+        _menuSwapScript = _popupCanvas.GetComponent<InGameMenuSwap>();
 
         for (int i = 0; i < _pageParent.childCount; i++)
         {
@@ -80,7 +83,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
         ActiveTutorial = this;
-        _popupCanvas.GetComponent<InGameMenuSwap>().DeselectMenu();
+        _menuSwapScript.DeselectMenu();
         ChangePage(_currentPage);
     }
 
