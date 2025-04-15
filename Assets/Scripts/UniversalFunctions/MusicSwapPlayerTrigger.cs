@@ -14,6 +14,7 @@ using UnityEngine.Events;
 /// </summary>
 public enum EMusicTriggerTypes
 {
+    None,
     SwapMusic,
     SwapVolume
 }
@@ -23,19 +24,30 @@ public enum EMusicTriggerTypes
 /// </summary>
 public class MusicSwapPlayerTrigger : MonoBehaviour
 {
+    [Header("Enter")]
     [Tooltip("What we want to happen on player contact")]
     [field: SerializeField] private EMusicTriggerTypes _contactType;
 
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
-    [field: SerializeField] private int _musicID;
+    [field: SerializeField] private int _musicEnterID;
 
     [Tooltip("The volume to switch to")]
-    [field: SerializeField] [Range(0,1)] private float _newVolume;
-
-    [field: SerializeField] private bool _detachOnStart = true;
-    [field: SerializeField] private bool _destroyOnContact;
+    [field: SerializeField] [Range(0,1)] private float _newEnterVolume;
 
     [field: SerializeField] private UnityEvent _onPlayerContact;
+
+    [Header("Exit")]
+    [field: SerializeField] private EMusicTriggerTypes _exitType;
+
+    [field: SerializeField] private int _musicExitID;
+
+    [field: SerializeField][Range(0, 1)] private float _newExitVolume;
+
+    [field: SerializeField] private UnityEvent _onPlayerExit;
+
+    [Header("General")]
+    [field: SerializeField] private bool _detachOnStart = true;
+    [field: SerializeField] private bool _destroyOnContact;
 
     /// <summary>
     /// Removes the parent associate with this. That way it can be safely attached to other prefabs.
@@ -54,36 +66,58 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
     public void PlayerContact()
     {
         _onPlayerContact?.Invoke();
-        if(_contactType == EMusicTriggerTypes.SwapMusic)
-        {
-            SwapMusic();
-        }
-        else if(_contactType == EMusicTriggerTypes.SwapVolume)
-        {
-            //Using an Else If just in case we end up adding more EMusicTriggerTypes
-            SwapVolume();
-        }
+
+        PlayerCollision(true, _contactType);
 
         if(_destroyOnContact)
         {
             Destroy(gameObject);
         }
     }
+    /// <summary>
+    /// Called when the player exits collision
+    /// </summary>
+    public void PlayerExit()
+    {
+        _onPlayerExit?.Invoke();
+
+        PlayerCollision(false, _exitType);
+    }
+
+    /// <summary>
+    /// Called to determine what to do on player collision
+    /// </summary>
+    /// <param name="isEnter">If the collision came from entering contact</param>
+    /// <param name="triggerType"> The type of action to take from contact </param>
+    private void PlayerCollision(bool isEnter, EMusicTriggerTypes triggerType)
+    {
+        if (triggerType == EMusicTriggerTypes.SwapMusic)
+        {
+            int musicID = isEnter ? _musicEnterID : _musicExitID;
+            SwapMusic(musicID);
+        }
+        else if (triggerType == EMusicTriggerTypes.SwapVolume)
+        {
+            float volume = isEnter ? _newEnterVolume : _newExitVolume;
+            //Using an Else If just in case we end up adding more EMusicTriggerTypes
+            SwapVolume(volume);
+        }
+    }
 
     /// <summary>
     /// Switches the music to play
     /// </summary>
-    private void SwapMusic()
+    private void SwapMusic(int id)
     {
-        PersistentAudioManager.Instance.StartMusicByID(_musicID);
+        PersistentAudioManager.Instance.StartMusicByID(id);
     }
 
     /// <summary>
     /// Switches the volume of the music
     /// </summary>
-    private void SwapVolume()
+    private void SwapVolume(float volume)
     {
-        PersistentAudioManager.Instance.ChangeCurrentMusicVolume(_newVolume);
+        PersistentAudioManager.Instance.ChangeCurrentMusicVolume(_newEnterVolume);
     }
 
     /// <summary>
@@ -100,5 +134,14 @@ public class MusicSwapPlayerTrigger : MonoBehaviour
         {
             PersistentAudioManager.Instance.InvokeOnBossMusicEnded();
         }
+    }
+
+    /// <summary>
+    /// Remove all listeners on destruction
+    /// </summary>
+    private void OnDestroy()
+    {
+        _onPlayerContact?.RemoveAllListeners();
+        _onPlayerExit?.RemoveAllListeners();
     }
 }

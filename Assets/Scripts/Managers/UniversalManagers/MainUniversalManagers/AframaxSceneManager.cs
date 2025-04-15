@@ -14,6 +14,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Provides the functionality for scenes to be loaded
@@ -207,7 +208,6 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         if (scene.name == "MazeScene")
         {
            RuntimeSfxManager.Instance.CanPlayFootSteps = true;
-           print("wabalabadubdub");
         }
     }
     
@@ -218,7 +218,7 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// <param name="mode"></param>
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Loaded Scene: " + scene.name);
+        //Debug.Log("Loaded Scene: " + scene.name);
     }
     
 
@@ -253,7 +253,10 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         }
 
         //turn off buttons to prevent doing stuff during transition
-        EventSystem.current.enabled = false;
+        if (!EventSystem.current.IsUnityNull())
+        {
+            EventSystem.current.enabled = false;
+        }
 
         //Waits for a minimum amount of time before  
         yield return new WaitForSeconds(sceneTransition.GetMinimumSceneTransitionTime());

@@ -6269,6 +6269,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisSceneID: 7
+  _willTransition: 1
+  _targetScene: 0
 --- !u!4 &777569228
 Transform:
   m_ObjectHideFlags: 0
@@ -10238,6 +10240,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UniversalManagers
       objectReference: {fileID: 0}
+    - target: {fileID: 7363450958969491974, guid: 7c30abfc4fff66e41b78b755035f0523,
+        type: 3}
+      propertyPath: _sceneMusicID
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12423,7 +12430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movingDestination: {fileID: 615320896}
-  _screenScrollSpeed: 11
+  _screenScrollSpeed: 250
   _scrollWaitTime: 2
   _sceneCanvas: {fileID: 814277661}
 --- !u!1 &1673243805
