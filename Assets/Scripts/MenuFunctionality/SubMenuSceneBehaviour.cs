@@ -19,6 +19,14 @@ public class SubMenuSceneBehaviour : MonoBehaviour
 
     [SerializeField] private int _thisSceneID;
 
+    [Space]
+    [Tooltip("If this scene is not additive, we will transition to a set scene")]
+    [SerializeField] private bool _willTransition = false;
+    [SerializeField] private int _targetScene = 0;
+
+    [Space]
+    [SerializeField] private bool _doesSaveOnExit;
+
     private void Awake()
     {
         //initialize input
@@ -31,13 +39,25 @@ public class SubMenuSceneBehaviour : MonoBehaviour
     /// </summary>
     public void ExitScene()
     {
-        //checks if this scene was additively loaded. if additive, then just unload it. if not, load old scene
+        //checks if this scene was additively loaded. if additive, then just unload it. if not, load old scene or next one
         if (SceneManager.GetActiveScene().buildIndex == _thisSceneID)
         {
-            AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.LastSceneIndex, 0);
+            if (_willTransition)
+            {
+                AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(_targetScene, 0);
+            }
+            else
+            {
+                AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.LastSceneIndex, 0);
+            }
         }
         else
         {
+            if(_doesSaveOnExit)
+            {
+                SaveManager.Instance.SaveText();
+            }
+            
             AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(_thisSceneID);
         }
     }

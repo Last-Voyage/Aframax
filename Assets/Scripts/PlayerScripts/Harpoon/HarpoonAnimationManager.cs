@@ -21,9 +21,11 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _FOCUS_START_ANIM = "holdFocus";
     private const string _FOCUS_END_ANIM = "releaseFocus";
     private const string _RELOAD_READY_ANIM = "reloadReady";
+    private const string _RESTOCK_COMPLETE_ANIM = "restockComplete";
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
     private const string _NOT_WALL_ANIM = "notAtWall";
     private const string _AT_WALL_ANIM = "atWall";
+    private const string _SPRINT_ANIM = "sprint";
     
     // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
@@ -65,8 +67,9 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StartFocusingAnimation);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().AddListener(StopFocusingAnimation);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StartFiringAnimation);
-        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadFromEmptyAnimation);
+        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(RestockFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(ReloadHarpoonAnimation);
+        EnemyManager.Instance.GetOnChaseSequenceBegin().AddListener(StartSprintAnimation);
     }
 
     /// <summary>
@@ -77,8 +80,9 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(StartFocusingAnimation);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().RemoveListener(StopFocusingAnimation);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StartFiringAnimation);
-        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadFromEmptyAnimation);
+        PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(RestockFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(ReloadHarpoonAnimation);
+        EnemyManager.Instance.GetOnChaseSequenceBegin().RemoveListener(StartSprintAnimation);
     }
 
     /// <summary>
@@ -129,12 +133,20 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// If we went from completely empty to full, play the reloading animation
     /// </summary>
     /// <param name="ammoRestocked"> The amount of ammo that was restocked </param>
-    private void ReloadFromEmptyAnimation(int ammoRestocked)
+    private void RestockFromEmptyAnimation(int ammoRestocked)
     {
-        if (ammoRestocked == HarpoonGun.Instance.GetMaxAmmo())
+        if (ammoRestocked == HarpoonGun.Instance.GetReserveAmmo())
         {
-            _animator.SetTrigger(_RELOAD_READY_ANIM);
+            _animator.SetTrigger(_RESTOCK_COMPLETE_ANIM);
         }
+    }
+
+    /// <summary>
+    /// Changes the animation boolean for sprinting to true
+    /// </summary>
+    private void StartSprintAnimation()
+    {
+        _animator.SetBool(_SPRINT_ANIM, true);
     }
 
     /// <summary>

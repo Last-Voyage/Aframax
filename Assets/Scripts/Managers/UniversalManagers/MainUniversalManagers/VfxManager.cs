@@ -42,6 +42,7 @@ public class VfxManager : MainUniversalManagerFramework
     private const int _METAL_SPARKS_ID = 4;
     private const int _PLUME_SMOKE_ID = 5;
     private const int _HEALING_EFFECT_ID = 6;
+    private const int _ENEMY_SPAWN_ID = 7;
 
     /// <summary>
     /// Triggers the Light Shift Horror Moment
@@ -172,6 +173,7 @@ public class VfxManager : MainUniversalManagerFramework
     public SpecificVisualEffect GetWoodenSparksVfx() => _allVfxInGame[_WOODEN_SPARKS_ID];
     public SpecificVisualEffect GetPlumeSmokeVfx() => _allVfxInGame[_PLUME_SMOKE_ID];
     public SpecificVisualEffect GetHealingVfx() => _allVfxInGame[_HEALING_EFFECT_ID];
+    public SpecificVisualEffect GetMonsterSpawnVfx() => _allVfxInGame[_ENEMY_SPAWN_ID];
 
     public HarpoonVisualAudioEffectsBank[] GetHarpoonVisualArray() => _visualAudioEffectBank;
     #endregion

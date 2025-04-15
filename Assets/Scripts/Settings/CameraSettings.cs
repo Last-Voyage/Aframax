@@ -36,6 +36,7 @@ public class CameraSettings : MonoBehaviour
         WasSettingsChanged.Invoke();
     }
 
+   
 
     /// <summary>
     /// Gets the sensitivity settings and applys it to the camera
@@ -45,7 +46,6 @@ public class CameraSettings : MonoBehaviour
         
         string[] camSettings = File.ReadAllLines(Application.streamingAssetsPath +
             _gameplaySettingFilePath)[0].Split(" ");
-        print(camSettings);
 
         for (int i = 0; i < camSettings.Length; i++)
         {
@@ -53,6 +53,12 @@ public class CameraSettings : MonoBehaviour
             {
                 case 0:
                     //sensitivity
+                    if (PlayerCameraController.Instance != null)
+                    {
+                        PlayerCameraController.Instance.StoredSensitivity =
+                            new Vector2 (float.Parse(camSettings[0]), float.Parse(camSettings[0]));
+                    }
+
                     GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachinePOV>()
                         .m_VerticalAxis.m_MaxSpeed = float.Parse(camSettings[0]);
                     GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachinePOV>()

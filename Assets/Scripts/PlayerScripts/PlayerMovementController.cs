@@ -63,7 +63,18 @@ public class PlayerMovementController : MonoBehaviour
 
     private float _currentFocusMoveSpeedMultiplier = 1;
     private float _currentFocusMoveSpeedProgress = 0;
-    private Coroutine _harpoonSlowdownCoroutine;
+    private Coroutine _harpoonFocusSlowdownCoroutine;
+
+    [Space]
+    [Header("Reloading Movement")]
+    [SerializeField] private float _reloadSpeedSlowTime;
+    [SerializeField] private float _reloadDoneSpeedSlowTime;
+    [SerializeField] private AnimationCurve _reloadMoveSpeedCurve;
+    [SerializeField] private float _maxReloadMoveSpeedRatio;
+
+    private float _currentReloadMoveSpeedMultiplier = 1;
+    private float _currentReloadMoveSpeedProgress = 0;
+    private Coroutine _harpoonReloadSlowdownCoroutine;
 
     [Space]
     [Header("General")]
@@ -182,6 +193,8 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().AddListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(StartReloadSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonReloadedEvent().AddListener(StopReloadSpeedSlowdown);
     }
 
     /// <summary>
@@ -192,6 +205,8 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(StartHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFocusEndEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(StartReloadSpeedSlowdown);
+        PlayerManager.Instance.GetOnHarpoonReloadedEvent().RemoveListener(StopReloadSpeedSlowdown);
     }
     #endregion
     
@@ -320,9 +335,10 @@ public class PlayerMovementController : MonoBehaviour
             //This movement will be vertical when on a sloped surface
             newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
         }
-        
+
         // Returns the movement direction times the speed and acceleration
-        return newMovement * (_playerMovementSpeed * _currentFocusMoveSpeedMultiplier * _currentAcceleration);
+        return newMovement * (PlayerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
+            _currentReloadMoveSpeedMultiplier * _currentAcceleration);
     }
     
     /// <summary>
@@ -477,14 +493,15 @@ public class PlayerMovementController : MonoBehaviour
     
     #endregion
 
-    #region Harpoon Slowdown
+    #region Harpoon Focus Slowdown
+
     /// <summary>
     /// Starts the harpoon speed slowdown
     /// </summary>
     private void StartHarpoonSpeedSlowdown()
     {
         StopCurrentFocusCoroutine();
-        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+        _harpoonFocusSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
     }
 
     /// <summary>
@@ -493,7 +510,7 @@ public class PlayerMovementController : MonoBehaviour
     private void StopHarpoonSpeedSlowdown()
     {
         StopCurrentFocusCoroutine();
-        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
+        _harpoonFocusSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
     }
 
     /// <summary>
@@ -501,9 +518,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopCurrentFocusCoroutine()
     {
-        if (_harpoonSlowdownCoroutine != null)
+        if (_harpoonFocusSlowdownCoroutine != null)
         {
-            StopCoroutine(_harpoonSlowdownCoroutine);
+            StopCoroutine(_harpoonFocusSlowdownCoroutine);
         }
     }
 
@@ -556,11 +573,96 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void CalculateCurrentFocusSpeedMultiplier()
     {
-        // Calculate the lerp value between the non-focus and focused speed
-        float moveSpeedLerpValue = _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress);
-
         // Set the ratio value from 1 to the max speed ratio
-        _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 1 - moveSpeedLerpValue);
+        _currentFocusMoveSpeedMultiplier = Mathf.Lerp(1, _maxFocusMoveSpeedRatio, 
+            1 - _focusMoveSpeedCurve.Evaluate(_currentFocusMoveSpeedProgress));
+    }
+
+    #endregion
+
+    #region Harpoon Reload Slowdown
+
+    /// <summary>
+    /// Starts the harpoon speed slowdown while reloading
+    /// </summary>
+    private void StartReloadSpeedSlowdown()
+    {
+        StopCurrentReloadCoroutine();
+        _harpoonReloadSlowdownCoroutine = StartCoroutine(ReloadSpeedSlowdownProcess());
+    }
+
+    /// <summary>
+    /// Stops the slowdown from focusing the harpoon after reloading
+    /// </summary>
+    private void StopReloadSpeedSlowdown()
+    {
+        StopCurrentReloadCoroutine();
+        _harpoonReloadSlowdownCoroutine = StartCoroutine(ReloadSpeedUpProcess());
+    }
+
+    /// <summary>
+    /// Stops the process of slowing down while reloading
+    /// </summary>
+    private void StopCurrentReloadCoroutine()
+    {
+        if (!_harpoonReloadSlowdownCoroutine.IsUnityNull())
+        {
+            StopCoroutine(_harpoonReloadSlowdownCoroutine);
+        }
+    }
+
+    /// <summary>
+    /// The process of slowing down the player while reloading
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ReloadSpeedSlowdownProcess()
+    {
+        while (_currentReloadMoveSpeedProgress < 1)
+        {
+            //Increases the progress on slowdown
+            _currentReloadMoveSpeedProgress += Time.deltaTime / _reloadSpeedSlowTime;
+
+            CalculateCurrentReloadSpeedMultiplier();
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// The process of speeding up the player after reloading
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ReloadSpeedUpProcess()
+    {
+        while (_currentReloadMoveSpeedProgress > 0)
+        {
+            //Decreases the progress on slowdown
+            _currentReloadMoveSpeedProgress -= Time.deltaTime / _reloadDoneSpeedSlowTime;
+
+            CalculateCurrentReloadSpeedMultiplier();
+
+            yield return null;
+        }
+
+        ReloadSpeedUpComplete();
+    }
+
+    /// <summary>
+    /// Called when the player is at max speed after reloading
+    /// </summary>
+    private void ReloadSpeedUpComplete()
+    {
+        _currentReloadMoveSpeedProgress = 0;
+        CalculateCurrentReloadSpeedMultiplier();
+    }
+
+    /// <summary>
+    /// Calculates the current speed multiplier for reloading the weapon
+    /// </summary>
+    private void CalculateCurrentReloadSpeedMultiplier()
+    {
+        // Set the ratio value from 1 to the max speed ratio
+        _currentReloadMoveSpeedMultiplier = Mathf.Lerp(1, _maxReloadMoveSpeedRatio, 
+            1 - _reloadMoveSpeedCurve.Evaluate(_currentReloadMoveSpeedProgress));
     }
 
     #endregion
@@ -572,6 +674,8 @@ public class PlayerMovementController : MonoBehaviour
     // Getter for the current movement ratio
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
+    public float PlayerMovementSpeed { get => _playerMovementSpeed; set => _playerMovementSpeed = value; }
+
     #endregion Getters
 
     #region Setters
@@ -581,7 +685,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <param name="moveSpeed">The new value for speed</param>
     public void SetCurrentMovementSpeed(float moveSpeed)
     {
-        _playerMovementSpeed = moveSpeed;
+        PlayerMovementSpeed = moveSpeed;
     }
 
     /// <summary>

@@ -92,7 +92,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private bool _isReticleFullyZoomed;
 
-    private Vector2 _storedSensitivity;
+    public Vector2 StoredSensitivity;
 
     private CinemachineBrain _cinemachineBrain;
 
@@ -103,6 +103,8 @@ public class PlayerCameraController : MonoBehaviour
     {
         set { _isReticleFullyZoomed = value; }
     }
+
+    public CinemachineVirtualCamera PlayerVirtualCamera { get => _virtualCamera; set => _virtualCamera = value; }
 
     /// <summary>
     /// Performs any needed set up before the first frame
@@ -156,7 +158,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void InitializeStoredSensitivity()
     {
-        _storedSensitivity = new Vector2(_cinemachinePOV.m_HorizontalAxis.m_MaxSpeed,
+        StoredSensitivity = new Vector2(_cinemachinePOV.m_HorizontalAxis.m_MaxSpeed,
             _cinemachinePOV.m_VerticalAxis.m_MaxSpeed);
     }
 
@@ -165,7 +167,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void ResetToStoredSensitivity()
     {
-        SetCinemachineSpeed(_storedSensitivity.x, _storedSensitivity.y);
+        SetCinemachineSpeed(StoredSensitivity.x, StoredSensitivity.y);
     }
 
     /// <summary>
@@ -448,8 +450,8 @@ public class PlayerCameraController : MonoBehaviour
         while (returnSpeedProgress < 1)
         {
             returnSpeedProgress+= Time.deltaTime/_timeToReturnToMaxSpeed;
-            SetCinemachineSpeed(Mathf.Lerp(0, _storedSensitivity.x, returnSpeedProgress),
-                Mathf.Lerp(0, _storedSensitivity.y, returnSpeedProgress));
+            SetCinemachineSpeed(Mathf.Lerp(0, StoredSensitivity.x, returnSpeedProgress),
+                Mathf.Lerp(0, StoredSensitivity.y, returnSpeedProgress));
             yield return null;
         }
     }

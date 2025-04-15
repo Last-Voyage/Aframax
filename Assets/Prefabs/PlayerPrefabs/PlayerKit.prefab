@@ -85,8 +85,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbffff5d8a3ade9498bf32487b59d444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMovementSpeed: 3
-  _accelerationTime: 0.5
+  _playerMovementSpeed: 3.5
+  _accelerationTime: 0.7
   _deccelerationTime: 0.2
   _accelerationCurve:
     serializedVersion: 2
@@ -113,8 +113,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _playerGravity: 500
-  _focusSpeedSlowTime: 2
-  _unfocusSpeedSlowTime: 1
+  _focusSpeedSlowTime: 1
+  _unfocusSpeedSlowTime: 0.5
   _focusMoveSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -140,6 +140,33 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _maxFocusMoveSpeedRatio: 0.3
+  _reloadSpeedSlowTime: 1
+  _reloadDoneSpeedSlowTime: 1
+  _reloadMoveSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _maxReloadMoveSpeedRatio: 0.6
   _groundedCheckLength: 0.2
   _walkableLayers:
     serializedVersion: 2
@@ -267,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9297d0e62b3d14ea04e77873c4ba42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxReach: 5
+  _maxReach: 2
 --- !u!114 &4682911453422675945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,6 +425,7 @@ MonoBehaviour:
   _harpoonFollowTime: 5
   _timeToReturnToMaxSpeed: 0.3
   _delayToReturnToMaxSpeed: 0.1
+  StoredSensitivity: {x: 0, y: 0}
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +559,7 @@ GameObject:
   - component: {fileID: 1252328638694049583}
   - component: {fileID: 5890115328406357900}
   - component: {fileID: 6787786228018511587}
+  - component: {fileID: 6561123618709210648}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -546,7 +575,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.08795113, y: -0.32423258, z: -0.03029195, w: 0.9413927}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -681,7 +710,7 @@ MonoBehaviour:
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
-    m_Time: 1
+    m_Time: 0.75
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -695,6 +724,19 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6561123618709210648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5131231787490673698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfea3d61787a8fb47936d90db096ae21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _datamoshMaterial: {fileID: 2100000, guid: 1ff797f92d9301746ad3fce958a722e7, type: 2}
 --- !u!1 &8563142598887208412
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,9 +799,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RecenterTarget: 0
   m_VerticalAxis:
-    Value: -10.674914
+    Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 450
+    m_MaxSpeed: 225
     m_AccelTime: 1
     m_DecelTime: 0.075
     m_InputAxisName: Mouse Y
@@ -781,9 +823,9 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: -38.009254
+    Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 450
+    m_MaxSpeed: 225
     m_AccelTime: 1
     m_DecelTime: 0.075
     m_InputAxisName: Mouse X

@@ -269,7 +269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5221917780054561656
 Transform:
   m_ObjectHideFlags: 0
@@ -319,10 +319,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 3
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
+  _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &869882474733977947
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +424,7 @@ Transform:
   m_GameObject: {fileID: 1583038954211203549}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.7700002}
+  m_LocalPosition: {x: 0, y: 0, z: -1.0200002}
   m_LocalScale: {x: 0.8828247, y: 0.8828247, z: 0.8828247}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -547,13 +556,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630088072657193494}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0.25, z: 2.69}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.24400002, y: 0.25, z: 1.75}
   m_LocalScale: {x: 0.8828247, y: 0.8828247, z: 0.8828247}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7457077358042273283}
-  m_LocalEulerAnglesHint: {x: -270, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6492066729862926564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,25 +578,19 @@ MonoBehaviour:
   editorData:
     _bezierPath:
       points:
-      - {x: -0.03150396, y: 1.6747544, z: -0.053650703}
-      - {x: -0.02961947, y: 1.6975926, z: -0.29852012}
-      - {x: -0.02773498, y: 1.7204309, z: -0.54338956}
-      - {x: -0.024037251, y: 1.6337395, z: -0.72585905}
-      - {x: -0.019124767, y: 1.5185688, z: -0.9682723}
-      - {x: -0.011101164, y: 1.2392101, z: -1.2802224}
-      - {x: -0.0035750975, y: 0.9759428, z: -1.3320518}
-      - {x: 0.011911314, y: 0.43421656, z: -1.4387012}
-      - {x: 0.051788535, y: -0.27221853, z: -0.41264153}
-      - {x: 0.04233404, y: -0.7493081, z: -0.6908093}
-      - {x: 0.03730817, y: -1.0029218, z: -0.8386792}
-      - {x: -0.0039892164, y: -1.0570989, z: -1.4060813}
-      - {x: -0.0032985527, y: -0.90338945, z: -1.6562486}
-      - {x: -0.0028277272, y: -0.7986058, z: -1.8267876}
-      - {x: 0.034522273, y: -0.4655134, z: -1.8970376}
-      - {x: 0.030188212, y: -0.2688931, z: -1.8598212}
-      - {x: 0.026050534, y: -0.08118196, z: -1.8242911}
-      - {x: 0.000047646463, y: 0.07043257, z: -1.6410913}
-      - {x: -0.025955241, y: 0.2220471, z: -1.4578915}
+      - {x: 0.22154287, y: 0.473537, z: -1.0094854}
+      - {x: 0.12814389, y: 0.3932824, z: -0.9604637}
+      - {x: 0.034744922, y: 0.31302786, z: -0.91144204}
+      - {x: -0.0035751422, y: 0.22538081, z: -0.9474826}
+      - {x: -0.09760371, y: 0.01031518, z: -1.0359178}
+      - {x: 0.04182452, y: -0.076338485, z: -1.6149125}
+      - {x: 0.042339154, y: -0.3241256, z: -1.5759683}
+      - {x: 0.042880088, y: -0.584576, z: -1.5350337}
+      - {x: -0.074783415, y: -0.46471202, z: -0.91756535}
+      - {x: -0.0040007327, y: -0.67141294, z: -0.7700022}
+      - {x: 0.034042314, y: -0.782507, z: -0.6906925}
+      - {x: 0.13005729, y: -0.9331993, z: -0.7330762}
+      - {x: 0.22607227, y: -1.0838916, z: -0.7754599}
       isClosed: 0
       space: 0
       controlMode: 3
@@ -597,8 +600,6 @@ MonoBehaviour:
         m_Center: {x: 0, y: 0, z: 0}
         m_Extent: {x: 0, y: 0, z: 0}
       perAnchorNormalsAngle:
-      - 0
-      - 0
       - 0
       - 0
       - 0
@@ -1185,10 +1186,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
+  _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4251369667010664836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1247,7 +1257,7 @@ Transform:
   m_GameObject: {fileID: 4307724637815237374}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.02, y: -1.15, z: 1.1}
+  m_LocalPosition: {x: -0.02, y: -1.15, z: 0.85}
   m_LocalScale: {x: 0.5593683, y: 0.5593683, z: 0.49155048}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1321,7 +1331,7 @@ MonoBehaviour:
     keepConstantHandleSize: 0
     showNormalsInVertexMode: 0
     showBezierPathInVertexMode: 0
-    showDisplayOptions: 0
+    showDisplayOptions: 1
     showPathOptions: 1
     showVertexPathDisplayOptions: 0
     showVertexPathOptions: 1
@@ -1358,14 +1368,14 @@ MonoBehaviour:
   _cooldownToAttackAfterMoveBackToPath: 0.2
   _retractPath: {fileID: 1887428945912749962}
   _baseOfVine: {fileID: 5409346209179785215}
-  _retractSpeed: 3
+  _retractSpeed: 2
   _retractDistance: 0
   _appearPath: {fileID: 7943830330852778638}
   _appearSpeed: 3
   _appearDistance: 0
   _isAppeared: 0
   _whackAMoleAttackPath: {fileID: 6492066729862926564}
-  _whackAMoleAttackSpeed: 4
+  _whackAMoleAttackSpeed: 3
   _whackAMoleAttackDistance: 0
   _moveBackToPathDuration: 1.5
 --- !u!1 &4347710411246873471
@@ -1482,10 +1492,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
+  _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4747106929188878242
 GameObject:
   m_ObjectHideFlags: 0
@@ -1647,7 +1666,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5151874394816523964}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3632021, y: 0.06, z: -0.61307573}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1662,7 +1681,7 @@ Transform:
   - {fileID: 5221917780054561656}
   - {fileID: 1048279401646612031}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3667374273753244758
 Animator:
   serializedVersion: 5
@@ -1715,7 +1734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _delayFirstSpawn: 0
-  _spawnInterval: 0
+  _spawnInterval: 1
   _retractOnAllWeakPointsDestroyed: 1
   _weakPointPrefab: {fileID: 7717971156621110341, guid: 1ca29d51decce974db16269dd060eee0,
     type: 3}
@@ -1823,10 +1842,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
+  _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6085586657516272993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1978,10 +2006,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _contactType: 0
-  _musicID: 2
-  _newVolume: 0
+  _exitType: 0
+  _musicEnterID: 0
+  _musicExitID: 0
+  _newEnterVolume: 0
+  _newExitVolume: 0
   _detachOnStart: 1
   _destroyOnContact: 0
+  _onPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6396810580862375318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1997,7 +2034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1048279401646612031
 Transform:
   m_ObjectHideFlags: 0
@@ -2448,7 +2485,7 @@ Transform:
   m_GameObject: {fileID: 7635989395489808126}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0, z: -3.21}
+  m_LocalPosition: {x: 0, y: 0, z: -4.71}
   m_LocalScale: {x: 0.8828247, y: 0.8828247, z: 0.8828247}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2859,8 +2896,8 @@ Transform:
   m_GameObject: {fileID: 8698085422794058855}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: -4.7}
-  m_LocalScale: {x: 1.5, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -6.95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8417522999656067865}

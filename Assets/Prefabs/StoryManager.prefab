@@ -47,52 +47,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoryBeats:
-  - BeatName: Beat1
+  - BeatName: Tutorial
     BeatDescription: 
-    TriggerOnStart: 0
-    Outdated: 0
-    StoryBeatEvents: []
-  - BeatName: Beat2
-    BeatDescription: 
-    TriggerOnStart: 0
-    Outdated: 0
-    StoryBeatEvents:
-    - IsMinimized: 0
-      EventName: 
-      EventType: 1
-      DelayTime: 0
-      Dialogue: {fileID: 0}
-      BoatSpeed: 10
-      SpeedChangeTime: 0
-      BossAttacks: []
-      OnBeatEvent:
-        m_PersistentCalls:
-          m_Calls: []
-  - BeatName: Beat3
-    BeatDescription: Combat 1 (Part 1)
     TriggerOnStart: 1
     Outdated: 0
     StoryBeatEvents:
     - IsMinimized: 0
-      EventName: Start of beat Dialogue
+      EventName: 
       EventType: 0
-      DelayTime: 10
-      Dialogue: {fileID: 11400000, guid: e9519732f23e0e94dae170cbbbe7e83c, type: 2}
+      DelayTime: 1
+      Dialogue: {fileID: 11400000, guid: 49054a239f4fb5944a549c36497fa76d, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
-      OnBeatEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - IsMinimized: 0
-      EventName: 
-      EventType: 2
-      DelayTime: 0
-      Dialogue: {fileID: 0}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks:
-      - {fileID: 0}
       OnBeatEvent:
         m_PersistentCalls:
           m_Calls: []
@@ -108,16 +75,44 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: GeneratorInteractable, Assembly-CSharp
-            m_MethodName: set_CanGeneratorBeInteracted
-            m_Mode: 6
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 1
+              m_StringArgument: 'Read the Manual '
+              m_BoolArgument: 0
+            m_CallState: 2
+  - BeatName: After Tutorial
+    BeatDescription: 
+    TriggerOnStart: 0
+    Outdated: 0
+    StoryBeatEvents:
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Find the Key
+              m_BoolArgument: 0
             m_CallState: 2
           - m_Target: {fileID: 8896928037882086897}
             m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
@@ -129,13 +124,13 @@ MonoBehaviour:
               m_IntArgument: 1
               m_FloatArgument: 0
               m_StringArgument: 
-              m_BoolArgument: 1
+              m_BoolArgument: 0
             m_CallState: 2
     - IsMinimized: 0
-      EventName: Check the Back Dialogue
+      EventName: 
       EventType: 0
-      DelayTime: 10
-      Dialogue: {fileID: 11400000, guid: 855ea25a599bfa241b5cc3031245205a, type: 2}
+      DelayTime: 9
+      Dialogue: {fileID: 11400000, guid: f197c2444e4a19448a7694c65914f97d, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
@@ -143,18 +138,18 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
     - IsMinimized: 0
-      EventName: 'Get to the Generator Dialogue '
+      EventName: 
       EventType: 0
       DelayTime: 0
-      Dialogue: {fileID: 11400000, guid: d34d33320b0dade4bb51b8a74d178ee8, type: 2}
+      Dialogue: {fileID: 11400000, guid: 9df9d981ca152aa498f272696662c73e, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
       OnBeatEvent:
         m_PersistentCalls:
           m_Calls: []
-  - BeatName: Beat4
-    BeatDescription: Combat 1 (Part 2)
+  - BeatName: 'Normal Maze Pick up '
+    BeatDescription: 
     TriggerOnStart: 0
     Outdated: 0
     StoryBeatEvents:
@@ -170,8 +165,8 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: GeneratorInteractable, Assembly-CSharp
-            m_MethodName: set_DoesRequireSpanner
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
             m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
@@ -183,45 +178,143 @@ MonoBehaviour:
             m_CallState: 2
     - IsMinimized: 0
       EventName: 
+      EventType: 0
+      DelayTime: 0
+      Dialogue: {fileID: 11400000, guid: b93d9e80e7c58e04b983d26dc0d10bca, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - IsMinimized: 0
+      EventName: 
       EventType: 3
       DelayTime: 0
       Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
-      BossAttacks:
-      - {fileID: 0}
+      BossAttacks: []
       OnBeatEvent:
         m_PersistentCalls:
           m_Calls:
           - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: BossAttackActSystem, Assembly-CSharp
-            m_MethodName: ForceEndAllAttacks
-            m_Mode: 1
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Start the Generator
+              m_BoolArgument: 0
+            m_CallState: 2
+  - BeatName: Maze Starts
+    BeatDescription: 
+    TriggerOnStart: 0
+    Outdated: 0
+    StoryBeatEvents:
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 11400000, guid: 0a52526c4a3e2fd439f9c97d7c2b0777, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: DestroyMaze
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Start the Generator
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: LoadMazeAdditive
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 1
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: PreLoadMazeScene
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0.5
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+              type: 3}
+            m_TargetAssemblyTypeName: StoryBeatAudioManager, Assembly-CSharp
+            m_MethodName: PlayOneshotSound
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 3
               m_FloatArgument: 0
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
     - IsMinimized: 0
       EventName: 
-      EventType: 2
-      DelayTime: 0
+      EventType: 3
+      DelayTime: 2
       Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
-      BossAttacks:
-      - {fileID: 0}
+      BossAttacks: []
       OnBeatEvent:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+              type: 3}
+            m_TargetAssemblyTypeName: StoryBeatAudioManager, Assembly-CSharp
+            m_MethodName: PlayOneshotSound
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 0
     - IsMinimized: 0
-      EventName: 'find the spanner dialogue '
+      EventName: 
       EventType: 0
-      DelayTime: 40
-      Dialogue: {fileID: 11400000, guid: e42fc134fd7965f49b7bf4bef43f21ca, type: 2}
+      DelayTime: 4
+      Dialogue: {fileID: 11400000, guid: 12ea49b7accf6e944b37f3dad8c6df2b, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
@@ -229,18 +322,41 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
     - IsMinimized: 0
-      EventName: 'Taking too long dialogue '
+      EventName: 
+      EventType: 3
+      DelayTime: 1
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Find a Spanner
+              m_BoolArgument: 0
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
       EventType: 0
       DelayTime: 0
-      Dialogue: {fileID: 11400000, guid: bd1b07f3311cbe4438b7d08c5fe2560e, type: 2}
+      Dialogue: {fileID: 11400000, guid: 9266c8b72f949d24db7105f2d7656321, type: 2}
       BoatSpeed: 0
       SpeedChangeTime: 0
       BossAttacks: []
       OnBeatEvent:
         m_PersistentCalls:
           m_Calls: []
-  - BeatName: Beat5
-    BeatDescription: Map Shifting (End of Vertical Slice)
+  - BeatName: Spanner Pickup
+    BeatDescription: 
     TriggerOnStart: 0
     Outdated: 0
     StoryBeatEvents:
@@ -255,14 +371,15 @@ MonoBehaviour:
       OnBeatEvent:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: BossAttackActSystem, Assembly-CSharp
-            m_MethodName: ForceEndAllAttacks
-            m_Mode: 1
+          - m_Target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+              type: 3}
+            m_TargetAssemblyTypeName: StoryBeatAudioManager, Assembly-CSharp
+            m_MethodName: PlayOneshotSound
+            m_Mode: 3
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
+              m_IntArgument: 2
               m_FloatArgument: 0
               m_StringArgument: 
               m_BoolArgument: 0
@@ -270,7 +387,7 @@ MonoBehaviour:
     - IsMinimized: 0
       EventName: 
       EventType: 3
-      DelayTime: 0
+      DelayTime: 0.5
       Dialogue: {fileID: 0}
       BoatSpeed: 0
       SpeedChangeTime: 0
@@ -278,43 +395,9 @@ MonoBehaviour:
       OnBeatEvent:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: GeneratorInteractable, Assembly-CSharp
-            m_MethodName: set_CanGeneratorBeInteracted
-            m_Mode: 6
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-    - IsMinimized: 0
-      EventName: Getting away from the monster
-      EventType: 0
-      DelayTime: 0
-      Dialogue: {fileID: 11400000, guid: 71308ec16246fce4c81ea7c3131348b3, type: 2}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks: []
-      OnBeatEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - IsMinimized: 0
-      EventName: Map Shift to Ceiling
-      EventType: 3
-      DelayTime: 30
-      Dialogue: {fileID: 0}
-      BoatSpeed: 0
-      SpeedChangeTime: 0
-      BossAttacks: []
-      OnBeatEvent:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: MapShifting, Assembly-CSharp
-            m_MethodName: SwapLayout
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: DestroyMaze
             m_Mode: 3
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
@@ -324,7 +407,313 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  OpenStoryBeat: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: LoadMazeAdditive
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: PreLoadMazeScene
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 3
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Fix the Generator
+              m_BoolArgument: 0
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 4
+      Dialogue: {fileID: 11400000, guid: 28c0881a64a7b0a48b5f7b10233d4ccd, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 1
+      Dialogue: {fileID: 11400000, guid: b6f42ca468d5f954e943aaedd1db4569, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+  - BeatName: 'Post Fixing Generator '
+    BeatDescription: 
+    TriggerOnStart: 0
+    Outdated: 0
+    StoryBeatEvents:
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: DestroyMaze
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: LoadMazeAdditive
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 3
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: PreLoadMazeScene
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 4
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0.5
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+              type: 3}
+            m_TargetAssemblyTypeName: StoryBeatAudioManager, Assembly-CSharp
+            m_MethodName: PlayOneshotSound
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 4
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+              type: 3}
+            m_TargetAssemblyTypeName: StoryBeatAudioManager, Assembly-CSharp
+            m_MethodName: PlayOneshotSound
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 10
+      Dialogue: {fileID: 11400000, guid: 18499d3ae3f8cea49bb2f346f0bc01a5, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: ObjectiveHudBehaviour, Assembly-CSharp
+            m_MethodName: ActivateObjectiveHud
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: Get Above Deck
+              m_BoolArgument: 0
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 0
+      DelayTime: 1
+      Dialogue: {fileID: 11400000, guid: 3f6ea7776602f124da40a8ad16102087, type: 2}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls: []
+  - BeatName: Post Last Note Pickup
+    BeatDescription: 
+    TriggerOnStart: 0
+    Outdated: 0
+    StoryBeatEvents:
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+              type: 3}
+            m_TargetAssemblyTypeName: StoryBeatAudioManager, Assembly-CSharp
+            m_MethodName: PlayOneshotSound
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0.5
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: DestroyMaze
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 3
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 8896928037882086897}
+            m_TargetAssemblyTypeName: MazeSubSceneManager, Assembly-CSharp
+            m_MethodName: LoadMazeAdditive
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 4
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+  - BeatName: Sprint
+    BeatDescription: 
+    TriggerOnStart: 0
+    Outdated: 0
+    StoryBeatEvents:
+    - IsMinimized: 0
+      EventName: 
+      EventType: 3
+      DelayTime: 0
+      Dialogue: {fileID: 0}
+      BoatSpeed: 0
+      SpeedChangeTime: 0
+      BossAttacks: []
+      OnBeatEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 4904936231933613865}
+            m_TargetAssemblyTypeName: PlayerStoryManager, Assembly-CSharp
+            m_MethodName: ModifyPlayerSpeed
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 5.5
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  OpenStoryBeat: 5
 --- !u!114 &8896928037882086897
 MonoBehaviour:
   m_ObjectHideFlags: 0

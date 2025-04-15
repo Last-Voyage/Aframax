@@ -476,6 +476,81 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &4027028787631455707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8924963641149284919}
+  - component: {fileID: 554558143517916985}
+  - component: {fileID: 6514717540448683830}
+  m_Layer: 0
+  m_Name: Background Scrim
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8924963641149284919
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027028787631455707}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -243.75052}
+  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6031478599758094904}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &554558143517916985
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027028787631455707}
+  m_CullTransparentMesh: 1
+--- !u!114 &6514717540448683830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027028787631455707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4126275638514795707
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,6 +582,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8924963641149284919}
   - {fileID: 6274846589342411179}
   - {fileID: 6949232066830057136}
   - {fileID: 6177959202681509227}
@@ -561,7 +637,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -692,10 +768,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6031478599758094904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 9600, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &660948574259860915
 CanvasRenderer:
@@ -727,7 +803,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: a6610c1caa5b9ed47a04be8596dd042b, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -749,6 +825,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _goreAsset: {fileID: 21300000, guid: a6610c1caa5b9ed47a04be8596dd042b, type: 3}
   _safeAsset: {fileID: 21300000, guid: 2ab7be434fbfec345949863c15d11c46, type: 3}
+  _doesObjectDisableOnGoreSetting: 0
+  _doesDisableOnGoreSettingOn: 0
 --- !u!1 &5730222041742319640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1095,10 +1173,10 @@ MonoBehaviour:
   - "August Seven- Eighth??, 1926\r\n\r\nI can\u2019t remember anymore\r\n\tI\u2019m
     alone now. Vernon is dead. Everyone else too. It's just me. Don\u2019t come here.
     If you are reading this, I am so sorry.\r\n\r\n- Ruth\r\n"
-  - "You\u2019ll get the captain killed, too.\r\nYou brought him here to sate your
-    curiosity, and now she's going to die, just like me. \r\nI told you not to come
-    here.\r\r\r"
-  - You did this.
+  - "<color=#DF3838>You\u2019ll get the captain killed, too.</color>\r\n<color=#DF3838>You
+    brought him here to sate your curiosity, and now she's going to die, just like
+    me. </color>\r\n<color=#DF3838>I told you not to come here.</color>\r\r\r"
+  - <color=#DF3838>You did this.</color>
   _noteView: {fileID: 4126275638514795707}
   _noteTextField: {fileID: 8631879711453089730}
   _leftArrow: {fileID: 8445778588673796004}

@@ -75,6 +75,9 @@ public class WhackAMole : MonoBehaviour
         //set up vine and start the appearance
         _currentActiveVine.transform.position = randTransform.position;
         _currentActiveVine.transform.forward = randTransform.up;
+
+        CreateSpawnVfx(randTransform);
+
         StartCoroutine(StartVineAppear());
     }
 
@@ -94,6 +97,15 @@ public class WhackAMole : MonoBehaviour
         _currentActiveVineScript.StartAttack(_playerTransform.position);
     }
 
+    /// <summary>
+    /// Creates the enemy spawn vfx
+    /// </summary>
+    /// <param name="spawnTransform"> The transform to spawn at </param>
+    private void CreateSpawnVfx(Transform spawnTransform)
+    {
+        VfxManager.Instance.GetMonsterSpawnVfx().PlayNextVfxInPool
+            (spawnTransform.position, spawnTransform.rotation);
+    }
 
     public bool CanAttack { get => _canAttack; set => _canAttack = value; }
 }
