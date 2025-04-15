@@ -31,6 +31,15 @@ public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
     }
 
     /// <summary>
+    /// Performs any needed functionality needed on start up
+    /// </summary>
+    protected override void Start()
+    {
+        base.Start();
+        UpdateInteractability();
+    }
+
+    /// <summary>
     /// Subscribes to events of when the ammo changes
     /// </summary>
     protected override void SubscribeToEvents()
