@@ -60,12 +60,12 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ScrollingScreen()
     {
-        _enterFadeOutAnimator.SetTrigger("GameStarted");
-
-        ButtonSFXManagerReference.PlayClickSFX();
-
         if (!_hasScrollingStarted)
         {
+            _enterFadeOutAnimator.SetTrigger("GameStarted");
+
+            ButtonSFXManagerReference.PlayClickSFX();
+
             PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
 
             _hasScrollingStarted = true;

@@ -15,6 +15,7 @@ public class ButtonSFXManager : MonoBehaviour
     [SerializeField] private int _clickSFXIndex;
     public void PlayClickSFX()
     {
+        Debug.Log("click");
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance._buttonUsedSFX[_clickSFXIndex], Vector3.zero);
     }
 }
