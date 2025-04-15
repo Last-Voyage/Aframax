@@ -9,6 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// used for buttons to play sfx
+/// </summary>
 public class ButtonSFXManager : MonoBehaviour
 {
     //the index of sfx to use
