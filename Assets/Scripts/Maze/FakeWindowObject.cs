@@ -8,6 +8,7 @@
 //                      material.
 **********************************************************************************************************************/
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -20,29 +21,6 @@ public class FakeWindowObject : MonoBehaviour
     /// Reference to the FakeWindowManager global singleton
     /// </summary>
     private FakeWindowManager _fakeWindowManager;
-    
-    /// <summary>
-    /// Reference to the player camera's transform value
-    /// </summary>
-    private Transform _cameraTransform;
-
-    /// <summary>
-    /// The mesh renderer rendering the fake window texture (assumes the correct
-    /// fake window material is assigned)
-    /// </summary>
-    [SerializeField] private MeshRenderer _windowMeshRenderer;
-    
-    /// <summary>
-    /// Camera position cached shader property
-    /// </summary>
-    private static readonly int _CAMERA_POS = 
-        Shader.PropertyToID("_CameraPos");
-    
-    /// <summary>
-    /// Position of this object cached shader property
-    /// </summary>
-    private static readonly int _OBJ_POS = 
-        Shader.PropertyToID("_ObjPos");
 
     /// <summary>
     /// Ensure existence of FakeWindowManager, which spawns
@@ -51,22 +29,17 @@ public class FakeWindowObject : MonoBehaviour
     private void Start()
     {
         _fakeWindowManager = FakeWindowManager.Instance;
-        _cameraTransform = _fakeWindowManager.transform;
+        Debug.Assert(!_fakeWindowManager.IsUnityNull());
+        
+        _fakeWindowManager.RegisterFakeWindow(this);
     }
 
     /// <summary>
-    /// Update values in fake window material instance on the window mesh
-    /// renderer.
+    /// When destroyed, remove this window from the global
+    /// registry
     /// </summary>
-    private void Update()
+    private void OnDestroy()
     {
-        _windowMeshRenderer.material.SetVector(
-            _CAMERA_POS,
-            _cameraTransform.position
-        );
-        _windowMeshRenderer.material.SetVector(
-            _OBJ_POS,
-            transform.position
-        );
+        _fakeWindowManager.UnregisterFakeWindow(this);
     }
 }
