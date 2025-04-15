@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3365500300843155243}
   - component: {fileID: 5529341787120720756}
   - component: {fileID: 5509874886391856134}
+  - component: {fileID: 4740791883943588467}
   m_Layer: 0
   m_Name: VFXRainPatch
   m_TagString: Untagged
@@ -4839,7 +4840,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7906696111618212606}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d4c7b88b80804842b05304181b50432, type: 3}
   m_Name: 
@@ -4847,6 +4848,20 @@ MonoBehaviour:
   _minVfxDelay: 4
   _maxVfxDelay: 5
   _audioDelay: 0.1
+--- !u!114 &4740791883943588467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7906696111618212606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac274082ededcfc4e8649ce8e91f7ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundId: 0
+  _shouldPlay: 1
 --- !u!1 &7922609499839226860
 GameObject:
   m_ObjectHideFlags: 0
