@@ -62,6 +62,7 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _whackAMoleAttackDistance = 0;
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
+    [SerializeField] private Animator _animator;
 
     private Coroutine _whackAMoleSnapAttack;
 
@@ -85,6 +86,10 @@ public class ProceduralVine : MonoBehaviour
     private void Start()
     {
         _currentState = EVineState.none;
+        if(_animator.IsUnityNull())
+        {
+            _animator = GetComponent<Animator>();
+        }
     }
 
     /// <summary>
@@ -128,7 +133,7 @@ public class ProceduralVine : MonoBehaviour
         //whack a mole vine
         else
         {
-            //appearing
+            /*//appearing
             if (_currentState == EVineState.appearing && _appearPath.path.length > _appearDistance + .1f)
             {
                 Appearing();
@@ -161,7 +166,7 @@ public class ProceduralVine : MonoBehaviour
                 {
                     _whackAMoleSnapAttack = StartCoroutine(WSnapAttack());
                 }    
-            }
+            }*/
         }
         
     }
@@ -324,17 +329,25 @@ public class ProceduralVine : MonoBehaviour
     {
         yield return new WaitForSeconds(_waitAfterRearBackTime);
 
+        //setup
+        _dampedTransformRig.weight = 0f;
+        _chainIKRig.weight = .7f;
+        _followTransform.position = _flowerHeadTransform.position;
+        _rigBuilder.Build();
+        _currentState = EVineState.whackAMoleAttacking;
+
         //redo direction from new position
         var direction = (_playerTransform.position - _followTransform.position).normalized;
         var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
 
+        _followTransform.forward = direction;
         //snaps to player
-        _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutBack);
+        _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutCubic);
         //Plays attack audio
         RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
-        StartRetract();
+        _chainIK.weight = .3f;
     }
 
     /// <summary>
@@ -406,9 +419,13 @@ public class ProceduralVine : MonoBehaviour
         //shift the rig to used the dampedTransform instead of IK
         _appearDistance = 0;
         _currentState = EVineState.appearing;
-        _chainIKRig.weight = 0;
-        _dampedTransformRig.weight = 1;
-        _baseOfVine.position = _appearPath.path.GetPointAtDistance(0);
+
+        //trigger animation
+        _animator.SetTrigger("attack");
+
+        //trigger attack to happen after certain point in animation
+        //change rig to use chainIK
+        StartCoroutine(WSnapAttack());
 
         //play sfx
         CreateMovementAudio();
@@ -444,6 +461,7 @@ public class ProceduralVine : MonoBehaviour
         _followTransform.position = _whackAMoleAttackPath.path.GetPointAtDistance(0);
         _rigBuilder.Build();
         _currentState = EVineState.whackAMoleAttacking;
+        StartCoroutine(WSnapAttack());
     }
 
     /// <summary>
