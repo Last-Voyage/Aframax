@@ -238,7 +238,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -718,7 +718,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -971,6 +971,7 @@ GameObject:
   - component: {fileID: 2366566894887988713}
   - component: {fileID: 4192843196178405900}
   - component: {fileID: 8136100751525448859}
+  - component: {fileID: 4431880367997274538}
   m_Layer: 0
   m_Name: Anthropologist Note 3
   m_TagString: Untagged
@@ -1020,8 +1021,8 @@ MonoBehaviour:
     did you come here?</color>\r\n<color=#DF3838>I told you not to.</color>"
   _noteView: {fileID: 2486577564569583234}
   _noteTextField: {fileID: 181987583258806539}
-  _leftArrow: {fileID: 3207101466229188796}
-  _rightArrow: {fileID: 3964727566383569392}
+  _leftArrow: {fileID: 2981105805710715792}
+  _rightArrow: {fileID: 9092961820849660129}
   _onNoteOpen:
     m_PersistentCalls:
       m_Calls: []
@@ -1043,6 +1044,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doesDialogueOnlyPlayOnce: 1
+  _buttonSFXManagerReference: {fileID: 4431880367997274538}
 --- !u!65 &8136100751525448859
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1064,6 +1066,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.25, z: 0.2}
   m_Center: {x: 0.000027286578, y: 5.4089415e-12, z: 0.0019859702}
+--- !u!114 &4431880367997274538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5039337238714946988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &5046973692865596703
 GameObject:
   m_ObjectHideFlags: 0
