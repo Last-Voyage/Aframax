@@ -60,7 +60,7 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _skipPromptTextAnimator = GetComponentInChildren<Animator>();
+        //_skipPromptTextAnimator = GetComponentInChildren<Animator>();
         _skipPromptWait = new WaitForSeconds(_skipPromptDuration);
         StartVideo();
         StartCinematicAudio();
