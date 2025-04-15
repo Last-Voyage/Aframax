@@ -24,8 +24,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
     [Header("References")]
     [SerializeField] private Canvas _popupCanvas;
-    [SerializeField] private Image _leftArrow;
-    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Button _leftArrow;
+    [SerializeField] private Button _rightArrow;
     [SerializeField] private Transform _pageParent;
     [Space]
     [SerializeField] private UnityEvent _onDialogueExit;
@@ -34,6 +34,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private PlayerInputMap _playerInputMap;
     private bool _hasDoorOpened;
     private InGameMenuSwap _menuSwapScript;
+
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -73,7 +75,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
 
             // I believe that making this true pauses audio, if we want to change that, then it's right below here
-            TimeManager.Instance.PauseGameToggle(true);
+            TimeManager.Instance.PauseGameToggle(false);
         }
         
         // Enables a/d, arrow keys, and shoulder button controls
@@ -97,7 +99,15 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         StopPage(_pages[_currentPage]);
 
         // Clamp the page to the bounds of the note, then assign the text
-        _currentPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
+        int _nextPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
+
+        //play sfx if changing page
+        if (_currentPage != _nextPage)
+        {
+            _buttonSFXManagerReference.PlayClickSFX();
+        }
+
+        _currentPage = _nextPage;
 
         // Set the visibility of each page based on the current active page
         for (int i = 0; i < _pages.Length; i++)
@@ -109,8 +119,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         StartPage(_pages[_currentPage]);
 
         // Update the arrows to look the correct color
-        _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
-        _rightArrow.color = _currentPage == _pages.Length - 1 ? Color.clear : Color.white;
+        _leftArrow.interactable = _currentPage != 0;
+        _rightArrow.interactable = _currentPage != _pages.Length - 1;
     }
 
     /// <summary>
