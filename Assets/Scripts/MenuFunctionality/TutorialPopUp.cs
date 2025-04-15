@@ -75,7 +75,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
 
             // I believe that making this true pauses audio, if we want to change that, then it's right below here
-            TimeManager.Instance.PauseGameToggle(true);
+            TimeManager.Instance.PauseGameToggle(false);
         }
         
         // Enables a/d, arrow keys, and shoulder button controls
