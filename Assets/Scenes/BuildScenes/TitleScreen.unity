@@ -883,6 +883,7 @@ GameObject:
   - component: {fileID: 423880369}
   - component: {fileID: 423880368}
   - component: {fileID: 423880367}
+  - component: {fileID: 423880371}
   m_Layer: 5
   m_Name: Continue
   m_TagString: Untagged
@@ -980,6 +981,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 423880371}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: PlayClickSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &423880369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1018,6 +1031,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 423880365}
   m_CullTransparentMesh: 1
+--- !u!114 &423880371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423880365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &446559027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1057,7 @@ GameObject:
   - component: {fileID: 446559030}
   - component: {fileID: 446559029}
   - component: {fileID: 446559033}
+  - component: {fileID: 446559034}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -1150,6 +1177,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 446559034}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: PlayClickSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &446559030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1204,6 +1243,19 @@ MonoBehaviour:
   - {fileID: 1210901528}
   - {fileID: 528432475}
   - {fileID: 1616860948}
+--- !u!114 &446559034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446559027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &528432475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,6 +2438,7 @@ GameObject:
   - component: {fileID: 897474136}
   - component: {fileID: 897474135}
   - component: {fileID: 897474134}
+  - component: {fileID: 897474138}
   m_Layer: 5
   m_Name: Quit
   m_TagString: Untagged
@@ -2483,6 +2536,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 897474138}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: PlayClickSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &897474136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2521,6 +2586,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897474132}
   m_CullTransparentMesh: 1
+--- !u!114 &897474138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897474132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &901565827
 GameObject:
   m_ObjectHideFlags: 0
@@ -3718,6 +3796,7 @@ GameObject:
   - component: {fileID: 1299406566}
   - component: {fileID: 1299406565}
   - component: {fileID: 1299406564}
+  - component: {fileID: 1299406568}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -3815,6 +3894,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1299406568}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: PlayClickSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1299406566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3853,6 +3944,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1299406562}
   m_CullTransparentMesh: 1
+--- !u!114 &1299406568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299406562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &1322408111
 GameObject:
   m_ObjectHideFlags: 0
@@ -4204,6 +4308,7 @@ GameObject:
   - component: {fileID: 1415852576}
   - component: {fileID: 1415852575}
   - component: {fileID: 1415852579}
+  - component: {fileID: 1415852580}
   m_Layer: 5
   m_Name: New Game
   m_TagString: Untagged
@@ -4313,6 +4418,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1415852580}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: PlayClickSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1415852577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4364,6 +4481,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _doesReloadCurrentScene: 0
+--- !u!114 &1415852580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415852573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &1529603423
 GameObject:
   m_ObjectHideFlags: 0
