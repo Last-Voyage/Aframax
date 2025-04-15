@@ -44,7 +44,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     private PlayerInputMap _playerInputMap;
 
-    [SerializeField] private ButtonSFXManager ButtonSFXManagerReference;
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
     public bool HasPlayed => _hasPlayed;
 
@@ -73,10 +73,16 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public void ChangePage(int value)
     {
         // Clamp the page to the bounds of the note, then assign the text
-        _currentPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
-        _noteTextField.text = _pageTexts[_currentPage];
+        int _nextPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
 
-        ButtonSFXManagerReference.PlayClickSFX();
+        //play sfx if changing page
+        if (_currentPage != _nextPage)
+        {
+            _buttonSFXManagerReference.PlayClickSFX();
+        }
+
+        _currentPage = _nextPage;
+        _noteTextField.text = _pageTexts[_currentPage];
 
         _leftArrow.interactable = _currentPage != 0;
         _rightArrow.interactable = _currentPage != _pageTexts.Length - 1;

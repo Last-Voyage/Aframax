@@ -35,7 +35,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private bool _hasDoorOpened;
     private InGameMenuSwap _menuSwapScript;
 
-    [SerializeField] private ButtonSFXManager ButtonSFXManagerReference;
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -95,13 +95,19 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     /// <param name="pageChangeAmount">The value to change the page by</param>
     public void ChangePage(int pageChangeAmount)
     {
-        ButtonSFXManagerReference.PlayClickSFX();
-
         // Stop the currently active page from playing
         StopPage(_pages[_currentPage]);
 
         // Clamp the page to the bounds of the note, then assign the text
-        _currentPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
+        int _nextPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
+
+        //play sfx if changing page
+        if (_currentPage != _nextPage)
+        {
+            _buttonSFXManagerReference.PlayClickSFX();
+        }
+
+        _currentPage = _nextPage;
 
         // Set the visibility of each page based on the current active page
         for (int i = 0; i < _pages.Length; i++)

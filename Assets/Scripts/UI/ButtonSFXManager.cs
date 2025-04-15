@@ -13,6 +13,9 @@ public class ButtonSFXManager : MonoBehaviour
 {
     //the index of sfx to use
     [SerializeField] private int _clickSFXIndex;
+    /// <summary>
+    /// plays the designated button sfx (currently there is only one)
+    /// </summary>
     public void PlayClickSFX()
     {
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance._buttonUsedSFX[_clickSFXIndex], Vector3.zero);
