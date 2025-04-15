@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         InGameMenuSwap.cs
 // Author :            Nick Rice
+// Contributors :      Adam Garwacki
 // Creation Date :     3/1/25
 //
 // Brief Description : Selects UI buttons when the UI opens

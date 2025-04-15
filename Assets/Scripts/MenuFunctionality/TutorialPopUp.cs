@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         TutorialPopUp.cs
 // Author :            Charlie Polonus
+// Contributors :      Adam Garwacki
 // Creation Date :     3/2/25
 //
 // Brief Description : Controls a tutorial pop up in-engine.
