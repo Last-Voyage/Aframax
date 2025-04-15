@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
-// Contributor:        Nick Rice
+// Contributor:        Nick Rice, Jeremiah Peters
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
@@ -44,6 +44,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     private PlayerInputMap _playerInputMap;
 
+    [SerializeField] private ButtonSFXManager ButtonSFXManagerReference;
+
     public bool HasPlayed => _hasPlayed;
 
     /// <summary>
@@ -73,6 +75,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         // Clamp the page to the bounds of the note, then assign the text
         _currentPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
         _noteTextField.text = _pageTexts[_currentPage];
+
+        ButtonSFXManagerReference.PlayClickSFX();
 
         _leftArrow.interactable = _currentPage != 0;
         _rightArrow.interactable = _currentPage != _pageTexts.Length - 1;

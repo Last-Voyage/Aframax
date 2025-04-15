@@ -149,7 +149,6 @@ GameObject:
   - component: {fileID: 1633457751740266550}
   - component: {fileID: 3964727566383569392}
   - component: {fileID: 9092961820849660129}
-  - component: {fileID: 8297945968747037176}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -270,31 +269,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8297945968747037176}
-        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &8297945968747037176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2418564821100641492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _clickSFXIndex: 0
 --- !u!1 &2486577564569583234
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,7 +615,6 @@ GameObject:
   - component: {fileID: 3893183353216296313}
   - component: {fileID: 3207101466229188796}
   - component: {fileID: 2981105805710715792}
-  - component: {fileID: 8560761042546156734}
   m_Layer: 5
   m_Name: PreviousButton
   m_TagString: Untagged
@@ -762,31 +735,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 8560761042546156734}
-        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &8560761042546156734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4276571363594961169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _clickSFXIndex: 0
 --- !u!1 &4393824556919392120
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,6 +957,7 @@ GameObject:
   - component: {fileID: 2366566894887988713}
   - component: {fileID: 4192843196178405900}
   - component: {fileID: 8136100751525448859}
+  - component: {fileID: 4431880367997274538}
   m_Layer: 0
   m_Name: Anthropologist Note 3
   m_TagString: Untagged
@@ -1081,6 +1030,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doesDialogueOnlyPlayOnce: 1
+  ButtonSFXManagerReference: {fileID: 4431880367997274538}
 --- !u!65 &8136100751525448859
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1102,6 +1052,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.25, z: 0.2}
   m_Center: {x: 0.000027286578, y: 5.4089415e-12, z: 0.0019859702}
+--- !u!114 &4431880367997274538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5039337238714946988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &5046973692865596703
 GameObject:
   m_ObjectHideFlags: 0

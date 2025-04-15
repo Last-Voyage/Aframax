@@ -920,6 +920,7 @@ GameObject:
   - component: {fileID: 7590073797402489051}
   - component: {fileID: 5698923500879196607}
   - component: {fileID: 2003612806479532721}
+  - component: {fileID: 1334086591141670107}
   m_Layer: 0
   m_Name: Tutorial Pop Up
   m_TagString: Untagged
@@ -956,9 +957,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _popupCanvas: {fileID: 6520553985457878833}
-  _leftArrow: {fileID: 5992873322945660372}
-  _rightArrow: {fileID: 3618416735303537073}
+  _leftArrow: {fileID: 0}
+  _rightArrow: {fileID: 0}
   _pageParent: {fileID: 0}
+  _onDialogueExit:
+    m_PersistentCalls:
+      m_Calls: []
+  ButtonSFXManagerReference: {fileID: 1334086591141670107}
+  _doesInteractOnStart: 0
 --- !u!65 &2003612806479532721
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -980,6 +986,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1334086591141670107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6554589381621015277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &6885545470520017596
 GameObject:
   m_ObjectHideFlags: 0

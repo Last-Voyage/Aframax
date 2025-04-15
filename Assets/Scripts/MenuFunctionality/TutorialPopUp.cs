@@ -33,6 +33,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private PlayerInputMap _playerInputMap;
     private bool _hasDoorOpened;
 
+    [SerializeField] private ButtonSFXManager ButtonSFXManagerReference;
+
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
 
@@ -88,6 +90,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     /// <param name="pageChangeAmount">The value to change the page by</param>
     public void ChangePage(int pageChangeAmount)
     {
+        ButtonSFXManagerReference.PlayClickSFX();
+
         // Stop the currently active page from playing
         StopPage(_pages[_currentPage]);
 
