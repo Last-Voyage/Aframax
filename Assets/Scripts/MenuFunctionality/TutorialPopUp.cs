@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         TutorialPopUp.cs
 // Author :            Charlie Polonus
+// Contributors :      Adam Garwacki
 // Creation Date :     3/2/25
 //
 // Brief Description : Controls a tutorial pop up in-engine.
@@ -31,6 +32,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
+    private bool _hasDoorOpened;
+    private InGameMenuSwap _menuSwapScript;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -43,6 +46,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         _playerInputMap = new PlayerInputMap();
 
         _pages = new GameObject[_pageParent.childCount];
+
+        _menuSwapScript = _popupCanvas.GetComponent<InGameMenuSwap>();
 
         for (int i = 0; i < _pageParent.childCount; i++)
         {
@@ -78,6 +83,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
         ActiveTutorial = this;
+        _menuSwapScript.DeselectMenu();
         ChangePage(_currentPage);
     }
 
@@ -174,9 +180,14 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             _pages[i].SetActive(false);
         }
 
+        if (!_hasDoorOpened)
+        {
+            _onDialogueExit?.Invoke();
+            _hasDoorOpened = true;
+        }
+        
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
-        _onDialogueExit?.Invoke();
     }
 
     /// <summary>

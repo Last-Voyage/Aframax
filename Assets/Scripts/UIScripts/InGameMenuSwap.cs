@@ -1,6 +1,7 @@
 /*****************************************************************************
-// File Name :         PauseMenu.cs
+// File Name :         InGameMenuSwap.cs
 // Author :            Nick Rice
+// Contributors :      Adam Garwacki
 // Creation Date :     3/1/25
 //
 // Brief Description : Selects UI buttons when the UI opens
@@ -22,6 +23,15 @@ public class InGameMenuSwap : MonoBehaviour
     private void OnEnable()
     {
         // EventSystem.current uses the event system that is in use
+        DeselectMenu();
+    }
+
+    /// <summary>
+    /// Deselects the pause menu option currently active.
+    /// </summary>
+    public void DeselectMenu()
+    {
         EventSystem.current.SetSelectedGameObject(_firstSelectedButton);
     }
+
 }

@@ -227,6 +227,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _goreAsset: {fileID: 21300000, guid: d4cf5c1df2ca9184cac6e7bcbeda1ceb, type: 3}
   _safeAsset: {fileID: 21300000, guid: 2f5363eb70976c64191d4bd61e345266, type: 3}
+  _doesObjectDisableOnGoreSetting: 0
+  _doesDisableOnGoreSettingOn: 0
 --- !u!1 &1546502535880105828
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +284,8 @@ MonoBehaviour:
     to cheer me up, even through all this. We got to talking, and she\u2019s better
     company than I gave her credit for. Either way, if I get out of this, I will
     never go back to the bureau. If I even get that far.\r\n\r\n- Vernon, I quit\r"
-  - "She told me about you, too.\r\nI am so happy you are here.\r\r"
+  - "<color=#DF3838>She told me about you, too.</color>\r\n<color=#DF3838>I am so
+    happy you are here.</color>\r\r"
   _noteView: {fileID: 2747467716240038529}
   _noteTextField: {fileID: 4086155748339625662}
   _leftArrow: {fileID: 6537556353185578291}
@@ -548,6 +551,7 @@ GameObject:
   - component: {fileID: 6847883393552305048}
   - component: {fileID: 27088366858944481}
   - component: {fileID: 9201530302975988970}
+  - component: {fileID: 8897159767182505334}
   m_Layer: 5
   m_Name: NoteView (1)
   m_TagString: Untagged
@@ -645,6 +649,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &8897159767182505334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2747467716240038529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 0}
 --- !u!1 &3000462794794032552
 GameObject:
   m_ObjectHideFlags: 0

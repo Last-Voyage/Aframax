@@ -281,6 +281,7 @@ GameObject:
   - component: {fileID: 5884704251286248399}
   - component: {fileID: 3287032425617186727}
   - component: {fileID: 6552384694958287896}
+  - component: {fileID: 2276308090451475445}
   m_Layer: 5
   m_Name: NoteView (1)
   m_TagString: Untagged
@@ -378,6 +379,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2276308090451475445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2486577564569583234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 0}
 --- !u!1 &3131509969688993568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,8 +1016,8 @@ MonoBehaviour:
   - "I hear their screams echoing through the halls. Vernon and I decided to stay
     behind.  When the screams stop, we\u2019re  going to make a break for it. God
     please, someone help us.\r\n\r\nRuth Sencher, Forensic Anthropologist\r\n"
-  - "I know you\u2019re reading this.\r\nWhy did you come here?\r\nI told you not
-    to."
+  - "<color=#DF3838>I know you\u2019re reading this.</color>\r\n<color=#DF3838>Why
+    did you come here?</color>\r\n<color=#DF3838>I told you not to.</color>"
   _noteView: {fileID: 2486577564569583234}
   _noteTextField: {fileID: 181987583258806539}
   _leftArrow: {fileID: 3207101466229188796}

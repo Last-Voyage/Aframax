@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 7941357122554405762}
   - component: {fileID: 7473654825335702532}
   - component: {fileID: 3027689366625347073}
+  - component: {fileID: 1597286709790560921}
   m_Layer: 5
   m_Name: NoteView (1)
   m_TagString: Untagged
@@ -241,6 +242,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1597286709790560921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763412960129470686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 0}
 --- !u!1 &2039494084266303679
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,6 +1056,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _goreAsset: {fileID: 21300000, guid: d4cf5c1df2ca9184cac6e7bcbeda1ceb, type: 3}
   _safeAsset: {fileID: 21300000, guid: 2f5363eb70976c64191d4bd61e345266, type: 3}
+  _doesObjectDisableOnGoreSetting: 0
+  _doesDisableOnGoreSettingOn: 0
 --- !u!1 &7971816738105975802
 GameObject:
   m_ObjectHideFlags: 0
