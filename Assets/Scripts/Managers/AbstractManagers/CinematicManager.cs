@@ -133,6 +133,7 @@ public class CinematicManager : MonoBehaviour
 
                 if (skipTimer == 0)
                 {
+                    //Debug.Log("hi");
                     _playerInputControls.Player.SkipCinematic.started -= SkipCinematic;
                     _skipTextActive = false;
                     break;
