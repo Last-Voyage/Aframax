@@ -318,7 +318,7 @@ MonoBehaviour:
   m_fontSizeMin: 0
   m_fontSizeMax: 0
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -599,7 +599,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -35, y: -125}
+  m_AnchoredPosition: {x: -60, y: -125}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &599968797
@@ -933,7 +933,7 @@ GameObject:
   - component: {fileID: 1252769084}
   - component: {fileID: 1252769083}
   m_Layer: 5
-  m_Name: Quit
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1019,7 +1019,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1252769083}
         m_TargetAssemblyTypeName: SceneLoadingButtons, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: ReloadTitleScreenButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1452,7 +1452,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: Title Screen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1d5051ad2f5f84364a2eb9afadc1b07a, type: 2}
   m_sharedMaterial: {fileID: 3692528365223220164, guid: 1d5051ad2f5f84364a2eb9afadc1b07a,
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_fontSizeMin: 0
   m_fontSizeMax: 0
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
