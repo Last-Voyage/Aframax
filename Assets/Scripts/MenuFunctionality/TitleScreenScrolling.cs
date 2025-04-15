@@ -36,6 +36,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [SerializeField] private float _menuTriggerPercent;
 
+    [SerializeField] private ButtonSFXManager ButtonSFXManagerReference;
+
     private Vector3 velocity = Vector3.zero;
 
     private PlayerInputMap _playerInputControls;
@@ -59,6 +61,8 @@ public class TitleScreenScrolling : MonoBehaviour
     private IEnumerator ScrollingScreen()
     {
         _enterFadeOutAnimator.SetTrigger("GameStarted");
+
+        ButtonSFXManagerReference.PlayClickSFX();
 
         if (!_hasScrollingStarted)
         {
