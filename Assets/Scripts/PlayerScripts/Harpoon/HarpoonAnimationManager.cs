@@ -26,6 +26,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _NOT_WALL_ANIM = "notAtWall";
     private const string _AT_WALL_ANIM = "atWall";
     private const string _SPRINT_ANIM = "sprint";
+    private const string _PLAYER_MOVING_ANIM = "move";
     
     // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
@@ -69,6 +70,8 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StartFiringAnimation);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(RestockFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(ReloadHarpoonAnimation);
+        PlayerManager.Instance.GetOnMovementStartEvent().AddListener(delegate { TogglePlayerMovingAnimation(true); });
+        PlayerManager.Instance.GetOnMovementEndEvent().AddListener(delegate { TogglePlayerMovingAnimation(false); });
         EnemyManager.Instance.GetOnChaseSequenceBegin().AddListener(StartSprintAnimation);
     }
 
@@ -82,6 +85,8 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StartFiringAnimation);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(RestockFromEmptyAnimation);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(ReloadHarpoonAnimation);
+        PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(delegate { TogglePlayerMovingAnimation(true); });
+        PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(delegate { TogglePlayerMovingAnimation(false); });
         EnemyManager.Instance.GetOnChaseSequenceBegin().RemoveListener(StartSprintAnimation);
     }
 
@@ -147,6 +152,15 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void StartSprintAnimation()
     {
         _animator.SetBool(_SPRINT_ANIM, true);
+    }
+
+    /// <summary>
+    /// Toggles if the player is moving in the animations
+    /// </summary>
+    /// <param name="isMoving"> If the player is moving </param>
+    private void TogglePlayerMovingAnimation(bool isMoving)
+    {
+        _animator.SetBool(_PLAYER_MOVING_ANIM, isMoving);
     }
 
     /// <summary>
