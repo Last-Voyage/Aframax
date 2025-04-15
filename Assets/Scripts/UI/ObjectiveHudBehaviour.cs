@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         ObjectiveHudBehaviour.cs
 // Author :            Jeremiah Peters
+// Contributors :      Adam Garwacki
 // Creation Date :     3/4/25
 //
 // Brief Description : handles hud and pause menu objective notifications
@@ -41,6 +42,9 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     public void ActivateObjectiveHud(string objectiveHudTextString) 
     {
         _objectiveHudText.text = objectiveHudTextString;
+        // Mirrors info in pause menu
+        SetPauseMenuObjective(objectiveHudTextString);
+
         _objectiveHudAnimator.SetTrigger("SlideIn");
         StartCoroutine(WaitForAnimation());
     }
