@@ -13,6 +13,7 @@ using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
@@ -28,6 +29,13 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private TMP_Text _noteTextField;
     [SerializeField] private Image _leftArrow;
     [SerializeField] private Image _rightArrow;
+    
+    [SerializeField] private Image _keyboardLeftPageButtonAsset;
+    [SerializeField] private Image _keyboardRightPageButtonAsset;
+    [SerializeField] private Image _controllerLeftPageButtonAsset;
+    [SerializeField] private Image _controllerRightPageButtonAsset;
+    [SerializeField] private Image _rightPageButton;
+    [SerializeField] private Image _leftPageButton;
 
     [Space]
     [SerializeField] private UnityEvent _onNoteOpen;
@@ -53,7 +61,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
 	    _noteView.transform.parent = null;
 	    _noteView.transform.rotation = Quaternion.identity;
-        if (_activeConsole == null)
+        if (_activeConsole.IsUnityNull())
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
         }
@@ -84,7 +92,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public void OnInteractedByPlayer()
     {
         // Edge cases: There's no notes or something is already open
-        if (ActiveNote != null
+        if (!ActiveNote.IsUnityNull()
             || Time.timeScale == 0)
         {
             return;
@@ -130,7 +138,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public void HideNote()
     {
         // Edge cases: The console is in use and the console is open
-        if (_activeConsole != null
+        if (!_activeConsole.IsUnityNull()
             && _activeConsole.ConsoleIsOpen())
         {
             return;
@@ -147,7 +155,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
         if (!_doesDialogueOnlyPlayOnce || !_hasPlayed)
         {
-            if (_dialogueOnExit != null)
+            if (!_dialogueOnExit.IsUnityNull())
             {
                 GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogueOnExit);
                 
@@ -169,6 +177,23 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         _isInInteractableBuffer = true;
         yield return null;
         _isInInteractableBuffer = false;
+    }
+
+    /// <summary>
+    /// Changes 
+    /// </summary>
+    private void UseButtonAsset()
+    {
+        if (UiManager.UsingController)
+        {
+            _leftPageButton = _controllerLeftPageButtonAsset;
+            _rightPageButton = _controllerRightPageButtonAsset;
+        }
+        else
+        {
+            _leftPageButton = _keyboardLeftPageButtonAsset;
+            _rightPageButton = _keyboardRightPageButtonAsset;
+        }
     }
 
     /// <summary>
