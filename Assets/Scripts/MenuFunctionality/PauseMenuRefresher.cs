@@ -11,6 +11,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Returns the pause menu to its default appearance when it is closed.
+/// </summary>
 public class PauseMenuRefresher : MonoBehaviour
 {
     [SerializeField] private GameObject _basePauseUI;
