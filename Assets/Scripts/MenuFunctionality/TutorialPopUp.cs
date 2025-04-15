@@ -23,8 +23,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
 
     [Header("References")]
     [SerializeField] private Canvas _popupCanvas;
-    [SerializeField] private Image _leftArrow;
-    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Button _leftArrow;
+    [SerializeField] private Button _rightArrow;
     [SerializeField] private Transform _pageParent;
     [Space]
     [SerializeField] private UnityEvent _onDialogueExit;
@@ -104,8 +104,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         StartPage(_pages[_currentPage]);
 
         // Update the arrows to look the correct color
-        _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
-        _rightArrow.color = _currentPage == _pages.Length - 1 ? Color.clear : Color.white;
+        _leftArrow.interactable = _currentPage != 0;
+        _rightArrow.interactable = _currentPage != _pages.Length - 1;
     }
 
     /// <summary>

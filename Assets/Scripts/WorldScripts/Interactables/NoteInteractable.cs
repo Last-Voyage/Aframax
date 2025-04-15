@@ -26,8 +26,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
-    [SerializeField] private Image _leftArrow;
-    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Button _leftArrow;
+    [SerializeField] private Button _rightArrow;
 
     [Space]
     [SerializeField] private UnityEvent _onNoteOpen;
@@ -74,8 +74,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         _currentPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
         _noteTextField.text = _pageTexts[_currentPage];
 
-        _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
-        _rightArrow.color = _currentPage == _pageTexts.Length - 1 ? Color.clear : Color.white;
+        _leftArrow.interactable = _currentPage != 0;
+        _rightArrow.interactable = _currentPage != _pageTexts.Length - 1;
     }
 
     /// <summary>
