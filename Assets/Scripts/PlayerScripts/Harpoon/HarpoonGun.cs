@@ -60,6 +60,8 @@ public class HarpoonGun : MonoBehaviour
     [SerializeField] private GameObject _harpoonPrefab; // Prefab of the harpoon
     [Tooltip("The maximum amount of ammo that the harpoon may have")]
     [SerializeField] private int _maxAmmo = 3;
+    [Tooltip("Whether or not the harpoon should automatically reload")]
+    [SerializeField] private bool _shouldAutomaticReload = false;
 
     private static HarpoonProjectileMovement[] _harpoonSpearPool;
     private int _harpoonPoolCounter;
@@ -135,7 +137,8 @@ public class HarpoonGun : MonoBehaviour
 
     private CinemachineImpulseSource _cinemachineImpulse;
 
-    private bool _shouldReload = true;
+    // Used during automatic reloading
+    private InputAction.CallbackContext _emptyCallback = new InputAction.CallbackContext();
 
     #endregion
 
@@ -307,7 +310,10 @@ public class HarpoonGun : MonoBehaviour
 
         // This is basically used as a trap to prevent reloading from happening automatically
         // That happens cuz of some goofy things with events and the input system
-        _shouldReload = false;
+        if (_shouldAutomaticReload)
+        {
+            StartReloadProcess(_emptyCallback);
+        }
     }
 
     /// <summary>
@@ -329,13 +335,10 @@ public class HarpoonGun : MonoBehaviour
     private void StartReloadProcess(InputAction.CallbackContext context)
     {
         // Return if we don't need to reload
-        if (_harpoonFiringState != EHarpoonFiringState.NeedReload || !_shouldReload)
+        if (_harpoonFiringState != EHarpoonFiringState.NeedReload)
         {
-            _shouldReload = true;
             return;
         }
-
-        _harpoonFiringState = EHarpoonFiringState.Reloading;
 
         StartCoroutine(ReloadHarpoon());
     }
@@ -348,6 +351,8 @@ public class HarpoonGun : MonoBehaviour
         //nabil added infinite ammo functionality here
         if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
+            _harpoonFiringState = EHarpoonFiringState.Reloading;
+
             _reticle.ToggleAmmoIcons();
 
             PlayerManager.Instance.OnInvokeHarpoonStartReloadEvent();
@@ -447,7 +452,8 @@ public class HarpoonGun : MonoBehaviour
 
     private void ReloadAfterRestocking(int ammoRestored)
     {
-        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo - ammoRestored == 0)
+        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo == ammoRestored && 
+            _shouldAutomaticReload)
         {
             StartCoroutine(ReloadHarpoon());
         }

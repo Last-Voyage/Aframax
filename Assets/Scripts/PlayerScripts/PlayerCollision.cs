@@ -27,13 +27,15 @@ public class PlayerCollision : MonoBehaviour
     {
         CheckForKillBoxContact(contact.gameObject);
 
-        CheckForEnemyContact(contact.gameObject);
+        CheckForEnemyContact(contact);
+
+        CheckForWallCeilingEnemyTriggerContact(contact);
 
         CheckForStartVineChaseTrigger(contact);
 
         CheckForChaseDamageTrigger(contact);
 
-        CheckForMusicTrigger(contact);
+        CheckForMusicTrigger(contact, true);
 
         CheckForSavePointTrigger(contact);
 
@@ -44,22 +46,18 @@ public class PlayerCollision : MonoBehaviour
         CheckForGeneralTrigger(contact);
     }
 
-    #endregion
-
-    #region Collision Contact
     /// <summary>
-    /// Checks for the start of collision contact
+    /// Checks for the end of trigger contact
     /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionEnter(Collision collision)
+    /// <param name="contact">The collider we just left </param>
+    private void OnTriggerExit(Collider contact)
     {
-        CheckForEnemyContact(collision.gameObject);
+        CheckForMusicTrigger(contact, false);
     }
-
     #endregion
 
     #region Contact Checks
-    
+
     /// <summary>
     /// Checks if the player hit a killbox
     /// </summary>
@@ -73,12 +71,37 @@ public class PlayerCollision : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks for if the player makes contact with an enemy
+    /// Checks for if the player makes contact with an enemy and damages player
     /// </summary>
     /// <param name="collision"> The object that we are checking for if it is an enemy </param>
-    private void CheckForEnemyContact(GameObject contact)
+    private void CheckForEnemyContact(Collider contact)
     {
-        //TODO: Implement later
+        if(contact.CompareTag("Enemy"))
+        {
+            WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
+
+            if(!attackScript.IsUnityNull()) 
+            {
+                attackScript.DamagePlayer();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks for if the player makes contact with an enemy trigger
+    /// </summary>
+    /// <param name="collision"> The object that we are checking for if it is an enemy </param>
+    private void CheckForWallCeilingEnemyTriggerContact(Collider contact)
+    {
+        if (contact.CompareTag("WallCeilingTrigger"))
+        {
+            WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
+
+            if (!attackScript.IsUnityNull())
+            {
+                attackScript.ActivateAttack();
+            }
+        }
     }
 
     /// <summary>
@@ -90,9 +113,9 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("ChaseTrigger"))
         {
             ChaseVineGroup chaseVineGroup = contact.GetComponent<ChaseVineGroup>();
-            if(chaseVineGroup != null && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
+            if(!chaseVineGroup.IsUnityNull() && chaseVineGroup.IsTriggeredByPlayerWalkThrough())
             {
-                chaseVineGroup.ActivateThisGroupOfVines();
+                StartCoroutine(chaseVineGroup.ActivateThisGroupOfVines());
             }
         }
     }
@@ -106,7 +129,7 @@ public class PlayerCollision : MonoBehaviour
         if(contact.CompareTag("ChaseDamageTrigger"))
         {
             ChaseVineGroup chaseVineGroup = contact.GetComponentInParent<ChaseVineGroup>();
-            if(chaseVineGroup != null)
+            if(!chaseVineGroup.IsUnityNull())
             {
                 if(chaseVineGroup.IsSupposedToKillInstant())
                 {
@@ -138,11 +161,19 @@ public class PlayerCollision : MonoBehaviour
     /// Checks for the trigger to change the music
     /// </summary>
     /// <param name="contact">The collider we contacted</param>
-    private void CheckForMusicTrigger(Collider contact)
+    /// <param name="isEnter">If the collision came from entering</param>
+    private void CheckForMusicTrigger(Collider contact, bool isEnter)
     {
         if(contact.gameObject.TryGetComponent(out MusicSwapPlayerTrigger musicSwapPlayerTrigger))
         {
-            musicSwapPlayerTrigger.PlayerContact();
+            if(isEnter)
+            {
+                musicSwapPlayerTrigger.PlayerContact();
+            }
+            else
+            {
+                musicSwapPlayerTrigger.PlayerExit();
+            }
         }
     }
     
@@ -165,7 +196,7 @@ public class PlayerCollision : MonoBehaviour
         {
             //the component should always be on the 3rd child of the vine base
             ProceduralVine proceduralVine = contact.transform.parent.GetChild(2).GetComponent<ProceduralVine>();
-            if (proceduralVine != null)
+            if (!proceduralVine.IsUnityNull())
             {
                 if(proceduralVine.GetVineState() != ProceduralVine.EVineState.appearing && proceduralVine.GetVineState() != ProceduralVine.EVineState.shifting && !proceduralVine.GetIsAppeared())
                 {

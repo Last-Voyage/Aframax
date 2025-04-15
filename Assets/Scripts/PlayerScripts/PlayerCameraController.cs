@@ -104,6 +104,8 @@ public class PlayerCameraController : MonoBehaviour
         set { _isReticleFullyZoomed = value; }
     }
 
+    public CinemachineVirtualCamera PlayerVirtualCamera { get => _virtualCamera; set => _virtualCamera = value; }
+
     /// <summary>
     /// Performs any needed set up before the first frame
     /// </summary>

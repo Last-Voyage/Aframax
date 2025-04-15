@@ -14,16 +14,18 @@ public class TentacleMover : MonoBehaviour
 {
     [SerializeField] private SlytherinTentacleBehavior _tentacle;
 
+
     /// <summary>
     /// Called when the player makes contact with the associated trigger
     /// </summary>
     /// <param name="other"> Information about the other collider in the collision </param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             _tentacle.MoveAway();
-            Destroy(this.gameObject);
+            StartCoroutine(_tentacle.DestroyTentacle(3f));
+            Destroy(this.gameObject, 3.1f);
         }
     }
 }

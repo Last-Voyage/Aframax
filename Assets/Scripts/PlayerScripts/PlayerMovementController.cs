@@ -63,7 +63,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private float _currentFocusMoveSpeedMultiplier = 1;
     private float _currentFocusMoveSpeedProgress = 0;
-    private Coroutine _harpoonSlowdownCoroutine;
+    private Coroutine _harpoonFocusSlowdownCoroutine;
 
     [Space]
     [Header("Reloading Movement")]
@@ -74,6 +74,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private float _currentReloadMoveSpeedMultiplier = 1;
     private float _currentReloadMoveSpeedProgress = 0;
+    private Coroutine _harpoonReloadSlowdownCoroutine;
 
     [Space]
     [Header("General")]
@@ -336,7 +337,7 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         // Returns the movement direction times the speed and acceleration
-        return newMovement * (_playerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
+        return newMovement * (PlayerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
             _currentReloadMoveSpeedMultiplier * _currentAcceleration);
     }
     
@@ -500,7 +501,7 @@ public class PlayerMovementController : MonoBehaviour
     private void StartHarpoonSpeedSlowdown()
     {
         StopCurrentFocusCoroutine();
-        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
+        _harpoonFocusSlowdownCoroutine = StartCoroutine(HarpoonSpeedSlowdownProcess());
     }
 
     /// <summary>
@@ -509,7 +510,7 @@ public class PlayerMovementController : MonoBehaviour
     private void StopHarpoonSpeedSlowdown()
     {
         StopCurrentFocusCoroutine();
-        _harpoonSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
+        _harpoonFocusSlowdownCoroutine = StartCoroutine(HarpoonSpeedUpProcess());
     }
 
     /// <summary>
@@ -517,9 +518,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopCurrentFocusCoroutine()
     {
-        if (_harpoonSlowdownCoroutine != null)
+        if (_harpoonFocusSlowdownCoroutine != null)
         {
-            StopCoroutine(_harpoonSlowdownCoroutine);
+            StopCoroutine(_harpoonFocusSlowdownCoroutine);
         }
     }
 
@@ -587,7 +588,7 @@ public class PlayerMovementController : MonoBehaviour
     private void StartReloadSpeedSlowdown()
     {
         StopCurrentReloadCoroutine();
-        _harpoonSlowdownCoroutine = StartCoroutine(ReloadSpeedSlowdownProcess());
+        _harpoonReloadSlowdownCoroutine = StartCoroutine(ReloadSpeedSlowdownProcess());
     }
 
     /// <summary>
@@ -596,7 +597,7 @@ public class PlayerMovementController : MonoBehaviour
     private void StopReloadSpeedSlowdown()
     {
         StopCurrentReloadCoroutine();
-        _harpoonSlowdownCoroutine = StartCoroutine(ReloadSpeedUpProcess());
+        _harpoonReloadSlowdownCoroutine = StartCoroutine(ReloadSpeedUpProcess());
     }
 
     /// <summary>
@@ -604,9 +605,9 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopCurrentReloadCoroutine()
     {
-        if (!_harpoonSlowdownCoroutine.IsUnityNull())
+        if (!_harpoonReloadSlowdownCoroutine.IsUnityNull())
         {
-            StopCoroutine(_harpoonSlowdownCoroutine);
+            StopCoroutine(_harpoonReloadSlowdownCoroutine);
         }
     }
 
@@ -616,7 +617,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ReloadSpeedSlowdownProcess()
     {
-        while (_currentFocusMoveSpeedProgress < 1)
+        while (_currentReloadMoveSpeedProgress < 1)
         {
             //Increases the progress on slowdown
             _currentReloadMoveSpeedProgress += Time.deltaTime / _reloadSpeedSlowTime;
@@ -632,7 +633,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ReloadSpeedUpProcess()
     {
-        while (_currentFocusMoveSpeedProgress > 0)
+        while (_currentReloadMoveSpeedProgress > 0)
         {
             //Decreases the progress on slowdown
             _currentReloadMoveSpeedProgress -= Time.deltaTime / _reloadDoneSpeedSlowTime;
@@ -673,6 +674,8 @@ public class PlayerMovementController : MonoBehaviour
     // Getter for the current movement ratio
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
+    public float PlayerMovementSpeed { get => _playerMovementSpeed; set => _playerMovementSpeed = value; }
+
     #endregion Getters
 
     #region Setters
@@ -682,7 +685,7 @@ public class PlayerMovementController : MonoBehaviour
     /// <param name="moveSpeed">The new value for speed</param>
     public void SetCurrentMovementSpeed(float moveSpeed)
     {
-        _playerMovementSpeed = moveSpeed;
+        PlayerMovementSpeed = moveSpeed;
     }
 
     /// <summary>

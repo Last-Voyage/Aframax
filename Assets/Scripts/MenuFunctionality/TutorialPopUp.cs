@@ -31,6 +31,10 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
+    private bool _hasDoorOpened;
+
+    [Space]
+    [SerializeField] private bool _doesInteractOnStart = false;
 
     /// <summary>
     /// Setup the pages list to hold all the possible pages
@@ -45,6 +49,11 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         {
             _pages[i] = _pageParent.GetChild(i).gameObject;
         }
+
+        if(_doesInteractOnStart)
+        {
+            OnInteractedByPlayer();
+        } 
     }
 
     /// <summary>
@@ -54,12 +63,15 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     {
         _popupCanvas.enabled = true;
 
-        // Free the mouse and freeze the game
-        TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
+        if(!_doesInteractOnStart)
+        {
+            // Free the mouse and freeze the game
+            TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
 
-        // I believe that making this true pauses audio, if we want to change that, then it's right below here
-        TimeManager.Instance.PauseGameToggle(true);
-
+            // I believe that making this true pauses audio, if we want to change that, then it's right below here
+            TimeManager.Instance.PauseGameToggle(true);
+        }
+        
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
@@ -163,9 +175,14 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             _pages[i].SetActive(false);
         }
 
+        if (!_hasDoorOpened)
+        {
+            _onDialogueExit?.Invoke();
+            _hasDoorOpened = true;
+        }
+        
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
-        _onDialogueExit?.Invoke();
     }
 
     /// <summary>
