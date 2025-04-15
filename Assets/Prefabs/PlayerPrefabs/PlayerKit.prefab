@@ -560,6 +560,7 @@ GameObject:
   - component: {fileID: 5890115328406357900}
   - component: {fileID: 6787786228018511587}
   - component: {fileID: 6561123618709210648}
+  - component: {fileID: 7356622522790512902}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -575,7 +576,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -737,6 +738,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _datamoshMaterial: {fileID: 2100000, guid: 1ff797f92d9301746ad3fce958a722e7, type: 2}
+--- !u!114 &7356622522790512902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5131231787490673698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aff33f62c5610944c9c34d0d31dc27bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _windowMaterial: {fileID: 2100000, guid: 1a6e17257ffd7a749b9264a45c5c0fc6, type: 2}
+  _fakeWindowCaptureContainer: {fileID: 1695045253923563657, guid: 419aa0c2783469d4ea30b2df2568fd29,
+    type: 3}
+  _worldSpawnPos: {x: 0, y: 0, z: 1500}
 --- !u!1 &8563142598887208412
 GameObject:
   m_ObjectHideFlags: 0
