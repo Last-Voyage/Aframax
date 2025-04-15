@@ -22,6 +22,15 @@ public class InGameMenuSwap : MonoBehaviour
     private void OnEnable()
     {
         // EventSystem.current uses the event system that is in use
+        DeselectMenu();
+    }
+
+    /// <summary>
+    /// Deselects the pause menu option currently active.
+    /// </summary>
+    public void DeselectMenu()
+    {
         EventSystem.current.SetSelectedGameObject(_firstSelectedButton);
     }
+
 }

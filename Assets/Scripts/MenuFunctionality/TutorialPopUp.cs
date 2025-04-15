@@ -79,6 +79,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
         ActiveTutorial = this;
+        _popupCanvas.GetComponent<InGameMenuSwap>().DeselectMenu();
         ChangePage(_currentPage);
     }
 
