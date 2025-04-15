@@ -1,10 +1,10 @@
 /*****************************************************************************
-// File Name :         TitleScreenScrolling.cs
-// Author :            Jeremiah Peters, Adam Garwacki
+// File Name :         CreditsScrolling.cs
+// Author :            Adam Garwacki, Jeremiah Peters
 // Creation Date :     11/15/24
 //
 // Brief Description : Handles scrolling the credits screen from top to bottom
-//                     This script was duplicated from TitleScreenScrolling.cs
+//                     This script was adapted from TitleScreenScrolling.cs
 *****************************************************************************/
 
 using System.Collections;
@@ -50,8 +50,8 @@ public class CreditsScrolling : MonoBehaviour
             while (transform.position != destination)
             {
                 transform.position = Vector3.MoveTowards(
-                    transform.position, new Vector3(destination.x, destination.y, transform.position.z),
-                    scrollSpeed * (_sceneCanvas.renderingDisplaySize.x / 100) * Time.deltaTime);
+                    transform.position, new Vector3(transform.position.x, destination.y, transform.position.z),
+                    scrollSpeed * Time.deltaTime);
 
                 yield return null;
             }
