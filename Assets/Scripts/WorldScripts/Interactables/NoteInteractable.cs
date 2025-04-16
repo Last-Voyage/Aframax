@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
-// Contributor:        Nick Rice
+// Contributor:        Nick Rice, Jeremiah Peters
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
@@ -27,15 +27,15 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
-    [SerializeField] private Image _leftArrow;
-    [SerializeField] private Image _rightArrow;
-    
+
     [SerializeField] private Image _keyboardLeftPageButtonAsset;
     [SerializeField] private Image _keyboardRightPageButtonAsset;
     [SerializeField] private Image _controllerLeftPageButtonAsset;
     [SerializeField] private Image _controllerRightPageButtonAsset;
     [SerializeField] private Image _rightPageButton;
     [SerializeField] private Image _leftPageButton;
+    [SerializeField] private Button _leftArrow;
+    [SerializeField] private Button _rightArrow;
 
     [Space]
     [SerializeField] private UnityEvent _onNoteOpen;
@@ -51,6 +51,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     private bool _isInInteractableBuffer;
 
     private PlayerInputMap _playerInputMap;
+
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
     public bool HasPlayed => _hasPlayed;
 
@@ -79,11 +81,19 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public void ChangePage(int value)
     {
         // Clamp the page to the bounds of the note, then assign the text
-        _currentPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
+        int _nextPage = Mathf.Clamp(_currentPage + value, 0, _pageTexts.Length - 1);
+
+        //play sfx if changing page
+        if (_currentPage != _nextPage)
+        {
+            _buttonSFXManagerReference.PlayClickSFX();
+        }
+
+        _currentPage = _nextPage;
         _noteTextField.text = _pageTexts[_currentPage];
 
-        _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
-        _rightArrow.color = _currentPage == _pageTexts.Length - 1 ? Color.clear : Color.white;
+        _leftArrow.interactable = _currentPage != 0;
+        _rightArrow.interactable = _currentPage != _pageTexts.Length - 1;
     }
 
     /// <summary>
