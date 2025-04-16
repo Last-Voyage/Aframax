@@ -22,10 +22,10 @@ public class ColorBlindnessEditorUtility : EditorWindow
     /// Creates the ColorBlindnessEditorUtility
     /// </summary>
     [MenuItem("Tools/Color Blindness")]
-    public static void OpenColorblindnessSettings()
+    public static void OpenColorBlindnessSettings()
     {
-        var wnd = GetWindow<ColorBlindnessEditorUtility>();
-        wnd.titleContent = new GUIContent("Color Blindness Settings");
+        var editorWindow = GetWindow<ColorBlindnessEditorUtility>();
+        editorWindow.titleContent = new GUIContent("Color Blindness Settings");
     }
 
     /// <summary>

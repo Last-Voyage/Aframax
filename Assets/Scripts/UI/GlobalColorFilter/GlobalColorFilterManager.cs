@@ -7,6 +7,7 @@
 **********************************************************************************************************************/
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// A global singleton to manage scene saturation and color blindness filters
@@ -49,7 +50,7 @@ public class GlobalColorFilterManager : MonoBehaviour
     /// <summary>
     /// Saturation value to apply to the scene
     /// </summary>
-    [Range(0.0F, 1.5F)] public float saturation = 1.0F;
+    [Range(0.0F, 1.5F)] public float Saturation = 1.0F;
     
     /// <summary>
     /// Last value when saturation was changed (used to detect changes in the value)
@@ -95,7 +96,7 @@ public class GlobalColorFilterManager : MonoBehaviour
             Instance = this;
         }
 
-        _lastSaturation = saturation;
+        _lastSaturation = Saturation;
         
         SetSaturation();
     }
@@ -105,9 +106,9 @@ public class GlobalColorFilterManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (!Mathf.Approximately(_lastSaturation, saturation))
+        if (!Mathf.Approximately(_lastSaturation, Saturation))
         {
-            _lastSaturation = saturation;
+            _lastSaturation = Saturation;
             SetSaturation();
         }
     }
@@ -117,7 +118,7 @@ public class GlobalColorFilterManager : MonoBehaviour
     /// </summary>
     private void SetSaturation()
     {
-        _colorManagerMaterial.SetFloat(_SATURATION, saturation);
+        _colorManagerMaterial.SetFloat(_SATURATION, Saturation);
     }
 
     /// <summary>
@@ -126,7 +127,7 @@ public class GlobalColorFilterManager : MonoBehaviour
     private void OnDestroy()
     {
         SetColorblindnessFilterPrivate(ColorBlindnessMode.None);
-        saturation = 1.0F;
+        Saturation = 1.0F;
         SetSaturation();
     }
 
