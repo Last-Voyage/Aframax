@@ -44,7 +44,7 @@ public class ChaseVineGroup : MonoBehaviour
     [SerializeField] private float _lengthOfStartAnimation = 4.5f;
     private CinemachineVirtualCamera _playerCam;
     [SerializeField] private float _delayCameraSwitch = 2f;
-    private bool _hasBeenActivated = false;
+    private static bool _hasBeenActivated = false;
     private float _basePlayerSpeed;
     private PlayerMovementController _playerMovementController;
 
@@ -53,6 +53,8 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _hasBeenActivated = false;
+
         _chaseSequenceVines = GetComponentsInChildren<ChaseSequenceVine>();
         foreach(ChaseSequenceVine chaseSequenceVine in _chaseSequenceVines)
         {
@@ -79,27 +81,28 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     public IEnumerator ActivateThisGroupOfVines()
     {
-        if(_hasBeenActivated) { yield break; }
+        if (!_hasBeenActivated)
+        {
+            //get the player virtual camera
+            _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
+            _playerMovementController = PlayerMovementController.Instance;
+            _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
+
+
+            //disable player camera and enable this camera stop player movement
+            _startVirtualCamera.enabled = true;
+            _playerCam.enabled = false;
+            _playerMovementController.PlayerMovementSpeed = 0;
+
+            //play start screaming animation
+            _startScreamObject.SetActive(true);
+
+            //wait until animation is over
+            yield return new WaitForSeconds(_lengthOfStartAnimation);
+        }
 
         _hasBeenActivated = true;
         EnemyManager.Instance.InvokeOnChaseSequenceBegin();
-
-        //get the player virtual camera
-        _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
-        _playerMovementController = PlayerMovementController.Instance;
-        _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
-
-
-        //disable player camera and enable this camera stop player movement
-        _startVirtualCamera.enabled = true;
-        _playerCam.enabled = false;
-        _playerMovementController.PlayerMovementSpeed = 0;
-
-        //play start screaming animation
-        _startScreamObject.SetActive(true);
-
-        //wait until animation is over
-        yield return new WaitForSeconds(_lengthOfStartAnimation);
 
         //this transform should be the joint which is leading the vine toward its destination
         _chaseCollider.gameObject.SetActive(true);
