@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 /// <summary>
 /// A collection of pages for a popup tutorial
@@ -133,7 +134,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
 
         // Stop the video if there is one
-        if (pageVideo.clip != null)
+        if (!pageVideo.clip.IsUnityNull())
         {
             pageVideo.time = 0;
             pageVideo.Stop();
@@ -151,7 +152,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         RawImage pageVideoImage = page.GetComponentInChildren<RawImage>();
         Image pageImage = page.GetComponentInChildren<Image>();
 
-        bool hasVideo = pageVideo.clip != null;
+        bool hasVideo = !pageVideo.clip.IsUnityNull();
 
         // Play the video if there is one
         if (hasVideo)
@@ -214,7 +215,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     public void OnInteractedByPlayer()
     {
         // Edge cases: There's no tutorials or something is already open
-        if (ActiveTutorial != null
+        if (!ActiveTutorial.IsUnityNull()
             || Time.deltaTime == 0)
         {
             return;

@@ -18,7 +18,7 @@ using Unity.VisualScripting;
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
 /// </summary>
-public class NoteInteractable : MonoBehaviour, IPlayerInteractable
+public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
 {
     public static NoteInteractable ActiveNote = null;
     private static ConsoleController _activeConsole = null;
@@ -27,15 +27,16 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
-
-    [SerializeField] private Image _keyboardLeftPageButtonAsset;
-    [SerializeField] private Image _keyboardRightPageButtonAsset;
-    [SerializeField] private Image _controllerLeftPageButtonAsset;
-    [SerializeField] private Image _controllerRightPageButtonAsset;
+    [SerializeField] private Image _leftArrow;
+    [SerializeField] private Image _rightArrow;
+    
     [SerializeField] private Image _rightPageButton;
     [SerializeField] private Image _leftPageButton;
-    [SerializeField] private Button _leftArrow;
-    [SerializeField] private Button _rightArrow;
+    [Header("Keyboard UI assets")]
+    [SerializeField] private Sprite _keyboardLeftPageButtonAsset, _keyboardRightPageButtonAsset;
+    [Header("Controller UI assets")]
+    [SerializeField] private Sprite _controllerLeftPageButtonAsset, _controllerRightPageButtonAsset;
+    
 
     [Space]
     [SerializeField] private UnityEvent _onNoteOpen;
@@ -194,15 +195,20 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     /// </summary>
     private void UseButtonAsset()
     {
+        
+    }
+
+    public void OnUiSwap()
+    {
         if (UiManager.UsingController)
         {
-            _leftPageButton = _controllerLeftPageButtonAsset;
-            _rightPageButton = _controllerRightPageButtonAsset;
+            _leftPageButton.sprite = _controllerLeftPageButtonAsset;
+            _rightPageButton.sprite = _controllerRightPageButtonAsset;
         }
         else
         {
-            _leftPageButton = _keyboardLeftPageButtonAsset;
-            _rightPageButton = _keyboardRightPageButtonAsset;
+            _leftPageButton.sprite = _keyboardLeftPageButtonAsset;
+            _rightPageButton.sprite = _keyboardRightPageButtonAsset;
         }
     }
 

@@ -7,6 +7,7 @@
 // Brief Description : Manages the world space pop ups for interactable objects
 *****************************************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,7 @@ using Unity.VisualScripting;
 /// runs the world space pop ups for interactable objects
 /// makes them look at the player and change depending on proximity
 /// </summary>
-public class WorldSpacePopups : MonoBehaviour
+public class WorldSpacePopups : MonoBehaviour, IUiSwap
 {
     private Camera _playerCamera;
 
@@ -30,19 +31,13 @@ public class WorldSpacePopups : MonoBehaviour
     private GameObject _interactableObject;
 
     [SerializeField]
-    private TextMeshProUGUI _popUpTextContainer;
-
-    [Tooltip("Whether or not the player is using a controller")]
-    private bool _usingController;
-
-    [SerializeField]
     private Sprite _farDistanceSprite;
 
     [SerializeField]
-    private Sprite _closeDistanceSprite; // Need to change the name for this
+    private Sprite _closeDistanceSprite;
     
     [SerializeField] 
-    private Sprite _closeDistanceControllerSprite;
+    private Sprite _closeDistanceControllerSpriteAsset, _closeDistanceKeyboardSpriteAsset;
 
     [SerializeField]
     private float _playerDetectionProximity;
@@ -50,12 +45,6 @@ public class WorldSpacePopups : MonoBehaviour
     [SerializeField]
     private float _visibilityProximity;
     //should be larger than _playerDetectionProximity
-
-    [SerializeField]
-    private string _farText;
-
-    [SerializeField]
-    private string _closeText;
 
     private float _playerProximity;
     
@@ -70,7 +59,7 @@ public class WorldSpacePopups : MonoBehaviour
         StartCoroutine(FindPlayer());
 
         // Get the interactable object this popup is tied to
-        if (transform.GetComponentInParent<IPlayerInteractable>() != null)
+        if (!transform.GetComponentInParent<IPlayerInteractable>().IsUnityNull())
         {
             _interactableObject = transform.parent.gameObject;
         }
@@ -98,36 +87,33 @@ public class WorldSpacePopups : MonoBehaviour
         if (_playerProximity < _playerDetectionProximity
             && _playerInteractor.CurrentInteractable() == _interactableObject)
         {
-            // This will change the sprite
-            if (_usingController)
-            {
-                _objectSpriteReference.sprite = _closeDistanceControllerSprite;
-            }
-            else
-            {
-                _objectSpriteReference.sprite = _closeDistanceSprite;
-            }
-            
-            _popUpTextContainer.text = _closeText;
+            _objectSpriteReference.sprite = _closeDistanceSprite;
         }
         // The player is in range to see it
         else if (_playerProximity < _visibilityProximity)
         {
             _objectSpriteReference.sprite = _farDistanceSprite;
-            _popUpTextContainer.text = _farText;
         }
         // The player is nowhere near the interactable
-        else
+        else if (!_objectSpriteReference.sprite.IsUnityNull())
         {
             _objectSpriteReference.sprite = null;
-            _popUpTextContainer.text = null;
         }
+    }
+
+    /// <summary>
+    /// This changes the currently used close UI based on whether the player is using controller
+    /// </summary>
+    public void OnUiSwap()
+    {
+        _closeDistanceSprite = UiManager.UsingController
+            ? _closeDistanceControllerSpriteAsset
+            : _closeDistanceKeyboardSpriteAsset;
     }
 
     /// <summary>
     /// just getting references for the player
     /// </summary>
-    /// <returns></returns>
     private IEnumerator FindPlayer()
     {
         yield return _findPlayerWait;
@@ -152,5 +138,22 @@ public class WorldSpacePopups : MonoBehaviour
     public void TogglePopUp(bool doesHavePopup)
     {
         _objectSpriteReference.enabled = doesHavePopup;
+    }
+
+    /// <summary>
+    /// This adds a listener to ui swapping, and makes sure that the ui is properly swapped
+    /// </summary>
+    private void OnEnable()
+    {
+        UiManager.Instance.GetOnSwapInput.AddListener(OnUiSwap);
+        OnUiSwap();
+    }
+
+    /// <summary>
+    /// This removes the ui swapping listener
+    /// </summary>
+    private void OnDisable()
+    {
+        UiManager.Instance.GetOnSwapInput.RemoveListener(OnUiSwap);
     }
 }
