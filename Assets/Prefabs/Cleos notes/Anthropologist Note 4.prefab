@@ -176,7 +176,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -308,7 +308,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -563,6 +563,7 @@ GameObject:
   - component: {fileID: 3629026274491354823}
   - component: {fileID: 2320519143014250369}
   - component: {fileID: 8715419299741000066}
+  - component: {fileID: 4645282322408584892}
   m_Layer: 5
   m_Name: NoteView (1)
   m_TagString: Untagged
@@ -660,6 +661,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4645282322408584892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4126275638514795707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 0}
 --- !u!1 &4174206712582354768
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,6 +1146,7 @@ GameObject:
   - component: {fileID: 239063153386442759}
   - component: {fileID: 2801754018737775609}
   - component: {fileID: 4735296592879260614}
+  - component: {fileID: 4496846642878462183}
   m_Layer: 0
   m_Name: Anthropologist Note 4
   m_TagString: Untagged
@@ -1174,13 +1189,13 @@ MonoBehaviour:
     alone now. Vernon is dead. Everyone else too. It's just me. Don\u2019t come here.
     If you are reading this, I am so sorry.\r\n\r\n- Ruth\r\n"
   - "<color=#DF3838>You\u2019ll get the captain killed, too.</color>\r\n<color=#DF3838>You
-    brought him here to sate your curiosity, and now she's going to die, just like
+    brought her here to sate your curiosity, and now she's going to die, just like
     me. </color>\r\n<color=#DF3838>I told you not to come here.</color>\r\r\r"
   - <color=#DF3838>You did this.</color>
   _noteView: {fileID: 4126275638514795707}
   _noteTextField: {fileID: 8631879711453089730}
-  _leftArrow: {fileID: 8445778588673796004}
-  _rightArrow: {fileID: 7477028048252907230}
+  _leftArrow: {fileID: 6611148780113896720}
+  _rightArrow: {fileID: 4157126087180318510}
   _onNoteOpen:
     m_PersistentCalls:
       m_Calls: []
@@ -1202,6 +1217,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doesDialogueOnlyPlayOnce: 1
+  _buttonSFXManagerReference: {fileID: 4496846642878462183}
 --- !u!65 &4735296592879260614
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1223,6 +1239,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.25, z: 0.2}
   m_Center: {x: 0.000027286578, y: 5.4089415e-12, z: 0.0019859702}
+--- !u!114 &4496846642878462183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7491805893857985205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &8201222206375826610
 GameObject:
   m_ObjectHideFlags: 0
