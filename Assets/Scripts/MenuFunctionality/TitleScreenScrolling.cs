@@ -36,6 +36,8 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [SerializeField] private float _menuTriggerPercent;
 
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
+
     private Vector3 velocity = Vector3.zero;
 
     private PlayerInputMap _playerInputControls;
@@ -58,10 +60,12 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ScrollingScreen()
     {
-        _enterFadeOutAnimator.SetTrigger("GameStarted");
-
         if (!_hasScrollingStarted)
         {
+            _enterFadeOutAnimator.SetTrigger("GameStarted");
+
+            _buttonSFXManagerReference.PlayClickSFX();
+
             PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
 
             _hasScrollingStarted = true;
