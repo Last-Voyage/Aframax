@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7251913806733542079}
   - component: {fileID: 4634952408190575521}
   - component: {fileID: 8798793622324048552}
+  - component: {fileID: 6495092162554010570}
   m_Layer: 5
   m_Name: NoteView (1)
   m_TagString: Untagged
@@ -109,6 +110,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6495092162554010570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449227253940896502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 0}
 --- !u!1 &2000395368267083890
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +457,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -650,7 +664,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1326,6 +1340,7 @@ GameObject:
   - component: {fileID: 1574036690705652775}
   - component: {fileID: 7732758697661542670}
   - component: {fileID: 6317186835380604676}
+  - component: {fileID: 8012458171541399994}
   m_Layer: 0
   m_Name: Fed Note 2
   m_TagString: Untagged
@@ -1372,8 +1387,8 @@ MonoBehaviour:
     of Prohibition\r"
   _noteView: {fileID: 449227253940896502}
   _noteTextField: {fileID: 670672905262606960}
-  _leftArrow: {fileID: 3058310543265626270}
-  _rightArrow: {fileID: 6805642356441943871}
+  _leftArrow: {fileID: 4599644291588829541}
+  _rightArrow: {fileID: 4813825829774611689}
   _onNoteOpen:
     m_PersistentCalls:
       m_Calls: []
@@ -1395,6 +1410,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doesDialogueOnlyPlayOnce: 1
+  _buttonSFXManagerReference: {fileID: 8012458171541399994}
 --- !u!65 &6317186835380604676
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1416,6 +1432,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.25, z: 0.2}
   m_Center: {x: 0.000027286578, y: 5.4089415e-12, z: 0.0019859702}
+--- !u!114 &8012458171541399994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9088428411324816305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1001 &3212783439089264446
 PrefabInstance:
   m_ObjectHideFlags: 0

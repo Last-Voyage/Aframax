@@ -950,14 +950,14 @@ Shader "Custom/WaterShader"
                 );
 
                 // Adding all the colors together
-                float3 finalColor = saturate((
+                float3 finalColor = saturate(
                     _WaterColor *
                     _WaterTint *
                     NdotL *
-                    gradient) +
-                        specular +
-                        underwaterColor +
-                        edgeFoam
+                    gradient +
+                    specular +
+                    underwaterColor +
+                    edgeFoam
                 );
 
                 // Pixel color output

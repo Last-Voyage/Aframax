@@ -334,7 +334,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -452,6 +452,7 @@ GameObject:
   - component: {fileID: 3138115401761064214}
   - component: {fileID: 7230535594340585095}
   - component: {fileID: 2965170859582839080}
+  - component: {fileID: 4625542842818378950}
   m_Layer: 5
   m_Name: NoteView (1)
   m_TagString: Untagged
@@ -549,6 +550,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4625542842818378950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414641401951080507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46646f483aba1894c975a9ac27042f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstSelectedButton: {fileID: 0}
 --- !u!1 &2942092598242505155
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,6 +649,7 @@ GameObject:
   - component: {fileID: 1693913392438543959}
   - component: {fileID: 2049775267897538311}
   - component: {fileID: 1788416085725685776}
+  - component: {fileID: 5590755852193152444}
   m_Layer: 0
   m_Name: Anthropologist Note 2
   m_TagString: Untagged
@@ -683,8 +698,8 @@ MonoBehaviour:
     already turning out to be quite the story!\r\n \r\n- Ruth Sencher, Forensic Anthropologist\r\n"
   _noteView: {fileID: 1414641401951080507}
   _noteTextField: {fileID: 1743129240989749820}
-  _leftArrow: {fileID: 1155651786496565496}
-  _rightArrow: {fileID: 2479757215281989484}
+  _leftArrow: {fileID: 8470796384565342541}
+  _rightArrow: {fileID: 7051755835041059117}
   _onNoteOpen:
     m_PersistentCalls:
       m_Calls: []
@@ -706,6 +721,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _doesDialogueOnlyPlayOnce: 1
+  _buttonSFXManagerReference: {fileID: 5590755852193152444}
 --- !u!65 &1788416085725685776
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -727,6 +743,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.25, z: 0.2}
   m_Center: {x: 0.000027286578, y: 5.4089415e-12, z: 0.0019859702}
+--- !u!114 &5590755852193152444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105254958075313366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &4105401584718012814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,7 +1130,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 1}
     m_PressedColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
