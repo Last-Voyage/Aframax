@@ -48,7 +48,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour, IUiSwap
     /// </summary>
     public void OnUiSwap()
     {
-        _backArrowSprite = UiManager.UsingController
+        _backArrowSprite = UiManager.IsUsingController
             ? _controllerBackArrowSpriteAsset
             : _keyboardBackArrowSpriteAsset;
     }

@@ -191,16 +191,11 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
     }
 
     /// <summary>
-    /// Changes 
+    /// Swaps the left and right page movement sprites
     /// </summary>
-    private void UseButtonAsset()
-    {
-        
-    }
-
     public void OnUiSwap()
     {
-        if (UiManager.UsingController)
+        if (UiManager.IsUsingController)
         {
             _leftPageButton.sprite = _controllerLeftPageButtonAsset;
             _rightPageButton.sprite = _controllerRightPageButtonAsset;

@@ -6,6 +6,9 @@
 // Brief Description : Interface for implementing a controller and keyboard ui swap
 *****************************************************************************/
 
+/// <summary>
+/// Interface for implementing a controller and keyboard ui swap
+/// </summary>
 public interface IUiSwap
 {
     /// <summary>

@@ -106,7 +106,7 @@ public class WorldSpacePopups : MonoBehaviour, IUiSwap
     /// </summary>
     public void OnUiSwap()
     {
-        _closeDistanceSprite = UiManager.UsingController
+        _closeDistanceSprite = UiManager.IsUsingController
             ? _closeDistanceControllerSpriteAsset
             : _closeDistanceKeyboardSpriteAsset;
     }

@@ -8,6 +8,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Allows the back UI to swap visuals
+/// </summary>
 public class BackUI : MonoBehaviour, IUiSwap
 {
     [Tooltip("The Image on screen that will be swapped")]
@@ -23,7 +26,7 @@ public class BackUI : MonoBehaviour, IUiSwap
     /// </summary>
     public void OnUiSwap()
     {
-        _backSprite.sprite = UiManager.UsingController
+        _backSprite.sprite = UiManager.IsUsingController
             ? _controllerBackSpriteAsset
             : _keyboardBackSpriteAsset;
     }
