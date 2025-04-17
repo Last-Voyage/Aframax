@@ -17,6 +17,7 @@ public class StoryBeatAudioManager : MonoBehaviour
 {
     [SerializeField] public EventReference[] OneshotSounds;
     [SerializeField] public EventReference[] AmbientSounds;
+    [SerializeField] private Vector3[] _oneshotPositions;
     
     private EventInstance _audioEvent;
     
@@ -34,7 +35,7 @@ public class StoryBeatAudioManager : MonoBehaviour
     /// <param name="index"></param> will be the index of the desired sound
     public void PlayOneshotSound(int index)
     {
-        StoryBeatOneShotSfx(OneshotSounds[index]);
+        StoryBeatOneShotSfx(OneshotSounds[index], _oneshotPositions[index]);
     }
 
     /// <summary>
