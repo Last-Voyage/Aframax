@@ -26,11 +26,6 @@ public class BackUI : MonoBehaviour, IUiSwap
     /// </summary>
     public void OnUiSwap()
     {
-        _backSprite.sprite = null;
-        _backSprite.overrideSprite = UiManager.IsUsingController
-            ? _controllerBackSpriteAsset
-            : _keyboardBackSpriteAsset;
-
         _backSprite.sprite = UiManager.IsUsingController
             ? _controllerBackSpriteAsset
             : _keyboardBackSpriteAsset;
