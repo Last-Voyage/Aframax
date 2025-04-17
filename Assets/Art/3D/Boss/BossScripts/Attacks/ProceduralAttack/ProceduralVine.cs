@@ -329,11 +329,11 @@ public class ProceduralVine : MonoBehaviour
     {
         yield return new WaitForSeconds(_waitAfterRearBackTime);
 
-        //setup
+        //setup and trigger attack
+        _animator.SetTrigger("bite");
         _dampedTransformRig.weight = 0f;
-        _chainIKRig.weight = .7f;
+        _chainIKRig.weight = .75f;
         _followTransform.position = _flowerHeadTransform.position;
-        _rigBuilder.Build();
         _currentState = EVineState.whackAMoleAttacking;
 
         //redo direction from new position
@@ -342,12 +342,36 @@ public class ProceduralVine : MonoBehaviour
 
         _followTransform.forward = direction;
         //snaps to player
-        _followTransform.DOMove(strikePos, _lungeToPlayerDuration, false).SetEase(Ease.OutCubic);
+        _followTransform.DOMove(strikePos, _lungeToPlayerDuration * .75f, false).SetEase(Ease.OutCubic);
         //Plays attack audio
         RuntimeSfxManager.APlayOneShotSfxAttached(FmodSfxEvents.Instance.LimbAttack, _flowerHeadTransform.gameObject);
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
-        _chainIK.weight = .3f;
+        StartCoroutine(LerpChainIKWeight(_chainIK.weight, .25f, .25f));
+        //trigger retract and then destroy
+        DisappearWhackAMole();
+    }
+
+    public void DisappearWhackAMole()
+    {
+        StopCoroutine(_whackAMoleSnapAttack);
+        _animator.SetTrigger("disappear");
+        Destroy(transform.parent.gameObject, 1.167f);
+    }
+
+    private IEnumerator LerpChainIKWeight(float a, float b, float time)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < time)
+        {
+            float t = elapsed / time;
+            _chainIK.weight = Mathf.Lerp(a, b, t);
+
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -421,11 +445,11 @@ public class ProceduralVine : MonoBehaviour
         _currentState = EVineState.appearing;
 
         //trigger animation
-        _animator.SetTrigger("attack");
+        _animator.SetTrigger("appear");
 
         //trigger attack to happen after certain point in animation
         //change rig to use chainIK
-        StartCoroutine(WSnapAttack());
+        _whackAMoleSnapAttack =  StartCoroutine(WSnapAttack());
 
         //play sfx
         CreateMovementAudio();

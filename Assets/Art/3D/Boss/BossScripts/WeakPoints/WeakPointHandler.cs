@@ -129,20 +129,16 @@ public class WeakPointHandler : MonoBehaviour
     /// </summary>
     private void SpawnWeakPoint()
     {
-        Transform weakPointSpawnLocation = DetermineWeakPointSpawnLocation();
-
         /* The weak point destroyed function is added as a listener to the spawns  weak points death event so the 
          * Handler can properly track its lifespan.
         */
         WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, _spawnLocation, false).GetComponentInChildren<WeakPoint>();
 
         spawnedWeakPoint.HealthComponent.InitializeHealth(_weakPointHealth);
+        Debug.Log("weakpoint spawned");
 
         _weakPointSpawnCounter++;
         spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
-
-        //Removes the option to spawn successive weak points at the same location.
-        _possibleSpawnLocations.Remove(weakPointSpawnLocation);
     }
 
     /// <summary>
@@ -194,7 +190,7 @@ public class WeakPointHandler : MonoBehaviour
         {
             if (_proceduralVine != null)
             {
-                _proceduralVine.StartRetract();
+                _proceduralVine.DisappearWhackAMole();
                 if(_proceduralVine.IsWhackAMoleVine)
                 {
                     _proceduralVine.transform.parent.parent.GetComponent<WhackAMole>().CanAttack = false;
