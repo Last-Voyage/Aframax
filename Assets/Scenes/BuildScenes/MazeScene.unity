@@ -9423,7 +9423,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[3].StoryBeatEvents.Array.data[3].DelayTime
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -9458,12 +9458,12 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[5].StoryBeatEvents.Array.data[2].DelayTime
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[5].StoryBeatEvents.Array.data[3].DelayTime
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -9689,7 +9689,7 @@ PrefabInstance:
         type: 3}
       propertyPath: StoryBeats.Array.data[3].StoryBeatEvents.Array.data[3].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 930681735}
+      objectReference: {fileID: 2053691823}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[3].StoryBeatEvents.Array.data[4].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -9829,7 +9829,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[3].StoryBeatEvents.Array.data[3].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayOneshotSound
+      value: PlaySpatializedOneShot
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -9899,7 +9899,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[3].StoryBeatEvents.Array.data[3].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: StoryBeatAudioManager, Assembly-CSharp
+      value: SpatializedAudioPlayer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -12719,18 +12719,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &930681735 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
-    type: 3}
-  m_PrefabInstance: {fileID: 1974493116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98dbfa91af712304eb99d6d85a757353, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &938718301
 Mesh:
   m_ObjectHideFlags: 0
@@ -28858,18 +28846,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
+      propertyPath: _oneshotPositions.Array.data[1].x
+      value: 263.099
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      propertyPath: _oneshotPositions.Array.data[1].y
+      value: -0.01900101
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
+      propertyPath: _oneshotPositions.Array.data[1].z
+      value: 118.503
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
+        type: 3}
       propertyPath: _oneshotPositions.Array.data[6].x
-      value: 263.09903
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: _oneshotPositions.Array.data[6].y
-      value: -0.019001007
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: _oneshotPositions.Array.data[6].z
-      value: 118.503
+      value: 170.53
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
