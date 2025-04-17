@@ -45,8 +45,6 @@ public class CinematicManager : MonoBehaviour
 
     private bool _skipTextActive;
 
-    private WaitForSeconds _skipPromptWait;
-
     private void Awake()
     {
         _playerInputControls = new PlayerInputMap();
@@ -60,8 +58,6 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _skipPromptTextAnimator = GetComponentInChildren<Animator>();
-        _skipPromptWait = new WaitForSeconds(_skipPromptDuration);
         StartVideo();
         StartCinematicAudio();
     }
@@ -136,7 +132,6 @@ public class CinematicManager : MonoBehaviour
 
                 if (skipTimer == 0)
                 {
-                    yield return _skipPromptWait;
                     _playerInputControls.Player.SkipCinematic.started -= SkipCinematic;
                     _skipTextActive = false;
                     break;
