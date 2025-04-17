@@ -1471,12 +1471,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1145648125 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8553731799398769672, guid: 35ca6fc3818697a40bad5b48935e5ac1,
-    type: 3}
-  m_PrefabInstance: {fileID: 2010518050}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1234527698
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1490,12 +1484,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WhackAMolePrefab
       objectReference: {fileID: 0}
-    - target: {fileID: 3575066472085477899, guid: 207bbe8efc148674880a0ab09758e0fe,
-        type: 3}
-      propertyPath: _whackAMoleVine
-      value: 
-      objectReference: {fileID: 1547323414081130828, guid: 35ca6fc3818697a40bad5b48935e5ac1,
-        type: 3}
     - target: {fileID: 4077664978516323373, guid: 207bbe8efc148674880a0ab09758e0fe,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1757,35 +1745,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1705447154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1663072915 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1547323414081130828, guid: 35ca6fc3818697a40bad5b48935e5ac1,
-    type: 3}
-  m_PrefabInstance: {fileID: 2010518050}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1663072919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663072915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5268b2c91a0bee146a8862a8ded302c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _delayFirstSpawn: 0
-  _spawnInterval: 1
-  _retractOnAllWeakPointsDestroyed: 1
-  _weakPointPrefab: {fileID: 7717971156621110341, guid: 1ca29d51decce974db16269dd060eee0,
-    type: 3}
-  _weakPointHealth: 1
-  _numNeededToDestroy: 1
-  _spawnLocation: {fileID: 1145648125}
-  _onAllWeakPointsDestroyedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1705447150
 GameObject:
   m_ObjectHideFlags: 0
@@ -2423,11 +2382,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1547323414081130828, guid: 35ca6fc3818697a40bad5b48935e5ac1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1663072919}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35ca6fc3818697a40bad5b48935e5ac1, type: 3}
 --- !u!1 &2058693268
 GameObject:
