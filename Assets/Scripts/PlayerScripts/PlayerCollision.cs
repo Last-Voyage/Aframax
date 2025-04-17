@@ -7,6 +7,8 @@
 // Brief Description : Controls the functionality for collisions
 *****************************************************************************/
 
+using FMOD.Studio;
+using FMODUnity;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -76,15 +78,25 @@ public class PlayerCollision : MonoBehaviour
     /// <param name="collision"> The object that we are checking for if it is an enemy </param>
     private void CheckForEnemyContact(Collider contact)
     {
-        if(contact.CompareTag("Enemy"))
+        if (contact.CompareTag("Enemy"))
         {
             WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
 
-            if(!attackScript.IsUnityNull()) 
+            //play hit sound sound
+            EventInstance hitRef = RuntimeSfxManager.Instance.
+                CreateInstanceFromReference(FmodSfxEvents.Instance.Hit);
+            RuntimeSfxManager.Instance.PlayOneShotEventInstance(hitRef);
+
+            if (!attackScript.IsUnityNull())
             {
+                
                 attackScript.DamagePlayer();
+                
+
             }
+            
         }
+        
     }
 
     /// <summary>
@@ -96,6 +108,10 @@ public class PlayerCollision : MonoBehaviour
         if (contact.CompareTag("WallCeilingTrigger"))
         {
             WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
+            //play hit sound sound
+            EventInstance hitRef = RuntimeSfxManager.Instance.
+                CreateInstanceFromReference(FmodSfxEvents.Instance.Hit);
+            RuntimeSfxManager.Instance.PlayOneShotEventInstance(hitRef);
 
             if (!attackScript.IsUnityNull())
             {
