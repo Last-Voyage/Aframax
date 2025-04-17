@@ -18,7 +18,7 @@ public class UiManager : MainUniversalManagerFramework
     public static UiManager Instance;
 
     private static bool _isUsingController;
-    private readonly UnityEvent _onSwapInput;
+    private readonly UnityEvent _onSwapInput = new();
 
     /// <summary>
     /// This sends out the event to change the current Ui used in game when a controller is used

@@ -86,6 +86,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     public void ToggleControllerSetting()
     {
-        UiManager.Instance.GetOnSwapInput?.Invoke();
+        UiManager.Instance.SwapInput();
     }
 }
