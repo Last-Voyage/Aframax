@@ -30,6 +30,8 @@ public class FmodSfxEvents : MonoBehaviour
     [field:Space]
     [field: SerializeField] public EventReference TitleScreenSplash { get; private set; }
 
+    [field: SerializeField] public EventReference[] _buttonUsedSFX;
+
     #endregion
 
     #region Boss
