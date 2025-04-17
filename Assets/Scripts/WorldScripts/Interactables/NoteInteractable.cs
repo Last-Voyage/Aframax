@@ -27,8 +27,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
 
     [SerializeField] private GameObject _noteView;
     [SerializeField] private TMP_Text _noteTextField;
-    [SerializeField] private Image _leftArrow;
-    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Button _leftArrow;
+    [SerializeField] private Button _rightArrow;
     
     [SerializeField] private Image _rightPageButton;
     [SerializeField] private Image _leftPageButton;

@@ -27,6 +27,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _goreToggleButton;
 
+    [SerializeField] private Toggle _controllerToggleButton;
+
     /// <summary>
     /// set up references
     /// </summary>
@@ -77,5 +79,13 @@ public class VideoSettingsBehaviour : MonoBehaviour
     public void ToggleGoreSetting()
     {
         SaveManager.Instance.GetGameSaveData().IsGoreOn = _goreToggleButton.isOn;
+    }
+
+    /// <summary>
+    /// Updates the UI in the game to reflect controller or keyboard inputs
+    /// </summary>
+    public void ToggleControllerSetting()
+    {
+        UiManager.Instance.GetOnSwapInput?.Invoke();
     }
 }
