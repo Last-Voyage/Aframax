@@ -132,6 +132,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        
+        // Changes the note visuals
+        OnUiSwap();
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;

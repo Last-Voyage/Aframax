@@ -19,7 +19,7 @@ using Unity.VisualScripting;
 /// <summary>
 /// A collection of pages for a popup tutorial
 /// </summary>
-public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
+public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
 {
     public static TutorialPopUp ActiveTutorial = null;
 
@@ -37,6 +37,13 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private InGameMenuSwap _menuSwapScript;
 
     [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
+    
+    [SerializeField] private Image _rightPageButton;
+    [SerializeField] private Image _leftPageButton;
+    [Header("Keyboard UI assets")]
+    [SerializeField] private Sprite _keyboardLeftPageButtonAsset, _keyboardRightPageButtonAsset;
+    [Header("Controller UI assets")]
+    [SerializeField] private Sprite _controllerLeftPageButtonAsset, _controllerRightPageButtonAsset;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -88,6 +95,9 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         ActiveTutorial = this;
         _menuSwapScript.DeselectMenu();
         ChangePage(_currentPage);
+        
+        // Changes the note visuals
+        OnUiSwap();
     }
 
     /// <summary>
@@ -222,6 +232,23 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         }
 
         OpenTutorialPopUp();
+    }
+    
+    /// <summary>
+    /// Swaps the left and right page movement sprites
+    /// </summary>
+    public void OnUiSwap() // Yeah this broke everything
+    {
+        if (UiManager.IsUsingController)
+        {
+            _leftPageButton.sprite = _controllerLeftPageButtonAsset;
+            _rightPageButton.sprite = _controllerRightPageButtonAsset;
+        }
+        else
+        {
+            _leftPageButton.sprite = _keyboardLeftPageButtonAsset;
+            _rightPageButton.sprite = _keyboardRightPageButtonAsset;
+        }
     }
 
     /// <summary>
