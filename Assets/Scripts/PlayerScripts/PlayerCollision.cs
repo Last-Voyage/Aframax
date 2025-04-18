@@ -84,7 +84,7 @@ public class PlayerCollision : MonoBehaviour
 
             //play hit sound sound
             EventInstance hitRef = RuntimeSfxManager.Instance.
-                CreateInstanceFromReference(FmodSfxEvents.Instance.Hit);
+                CreateInstanceFromReference(FmodSfxEvents.Instance.HitByMonster);
             RuntimeSfxManager.Instance.PlayOneShotEventInstance(hitRef);
 
             if (!attackScript.IsUnityNull())
@@ -110,7 +110,7 @@ public class PlayerCollision : MonoBehaviour
             WallCeilingAttack attackScript = contact.GetComponentInParent<WallCeilingAttack>(contact);
             //play hit sound sound
             EventInstance hitRef = RuntimeSfxManager.Instance.
-                CreateInstanceFromReference(FmodSfxEvents.Instance.Hit);
+                CreateInstanceFromReference(FmodSfxEvents.Instance.HitByMonster);
             RuntimeSfxManager.Instance.PlayOneShotEventInstance(hitRef);
 
             if (!attackScript.IsUnityNull())

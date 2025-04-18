@@ -43,7 +43,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference SceneStart { get; private set; }
     [field: SerializeField] public EventReference LimbSpawn { get; private set; }
     [field: SerializeField] public EventReference LimbMove { get; private set; }
-    [field: SerializeField] public EventReference Hit { get; private set; }
+    
 
     [field: Tooltip("Time to fade in the limb movement")]
     [field: SerializeField] public float LimbMoveFadeInTime { get; private set; }
@@ -88,6 +88,9 @@ public class FmodSfxEvents : MonoBehaviour
 
     [field: Space]
     [field: SerializeField] public EventReference PlayerHealed { get; private set; }
+
+    [Tooltip("This is the impact sound of a monster hitting the player")]
+    [field: SerializeField] public EventReference HitByMonster { get; private set; }
 
     #region Harpoon
 
