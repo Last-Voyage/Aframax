@@ -26,20 +26,10 @@ public class FakeWindowObject : MonoBehaviour
     /// Ensure existence of FakeWindowManager, which spawns
     /// the capture container
     /// </summary>
-    private void Start()
+    private void OnEnable()
     {
         _fakeWindowManager = FakeWindowManager.Instance;
         Debug.Assert(!_fakeWindowManager.IsUnityNull());
-        
-        _fakeWindowManager.RegisterFakeWindow(this);
-    }
-
-    /// <summary>
-    /// When destroyed, remove this window from the global
-    /// registry
-    /// </summary>
-    private void OnDestroy()
-    {
-        _fakeWindowManager.UnregisterFakeWindow(this);
+        _fakeWindowManager.SetCurrentFakeWindow(this);
     }
 }
