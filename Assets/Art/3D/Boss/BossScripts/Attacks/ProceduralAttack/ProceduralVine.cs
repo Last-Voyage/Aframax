@@ -66,6 +66,10 @@ public class ProceduralVine : MonoBehaviour
 
     private Coroutine _whackAMoleSnapAttack;
 
+    private const string APPEAR_ANIMATION_TRIGGER = "appear";
+    private const string DISAPPEAR_ANIMATION_TRIGGER = "disappear";
+    private const string BITE_ANIMATION_TRIGGER = "bite";
+
     //state stuff
     public enum EVineState
     {
@@ -83,6 +87,9 @@ public class ProceduralVine : MonoBehaviour
 
     public bool IsWhackAMoleVine { get => _isWhackAMoleVine; set => _isWhackAMoleVine = value; }
 
+    /// <summary>
+    /// basic initializing upon start
+    /// </summary>
     private void Start()
     {
         _currentState = EVineState.none;
@@ -330,7 +337,7 @@ public class ProceduralVine : MonoBehaviour
         yield return new WaitForSeconds(_waitAfterRearBackTime);
 
         //setup and trigger attack
-        _animator.SetTrigger("bite");
+        _animator.SetTrigger(BITE_ANIMATION_TRIGGER);
         _dampedTransformRig.weight = 0f;
         _chainIKRig.weight = .75f;
         _followTransform.position = _flowerHeadTransform.position;
@@ -352,21 +359,31 @@ public class ProceduralVine : MonoBehaviour
         DisappearWhackAMole();
     }
 
+    /// <summary>
+    /// the function for destorying the whackamole system. Called when a vine is shot
+    /// </summary>
     public void DisappearWhackAMole()
     {
         StopCoroutine(_whackAMoleSnapAttack);
-        _animator.SetTrigger("disappear");
+        _animator.SetTrigger(DISAPPEAR_ANIMATION_TRIGGER);
         Destroy(transform.parent.gameObject, 1.167f);
     }
 
-    private IEnumerator LerpChainIKWeight(float a, float b, float time)
+    /// <summary>
+    /// lerps ChainIK rig weight
+    /// </summary>
+    /// <param name="weight1"></param>
+    /// <param name="weight2"></param>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    private IEnumerator LerpChainIKWeight(float weight1, float weight2, float time)
     {
         float elapsed = 0f;
-
+        float percentToCompletion;
         while (elapsed < time)
         {
-            float t = elapsed / time;
-            _chainIK.weight = Mathf.Lerp(a, b, t);
+            percentToCompletion = elapsed / time;
+            _chainIK.weight = Mathf.Lerp(weight1, weight2, percentToCompletion);
 
 
             elapsed += Time.deltaTime;
@@ -445,7 +462,7 @@ public class ProceduralVine : MonoBehaviour
         _currentState = EVineState.appearing;
 
         //trigger animation
-        _animator.SetTrigger("appear");
+        _animator.SetTrigger(APPEAR_ANIMATION_TRIGGER);
 
         //trigger attack to happen after certain point in animation
         //change rig to use chainIK

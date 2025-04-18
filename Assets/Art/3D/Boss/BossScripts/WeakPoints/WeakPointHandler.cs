@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -135,7 +136,6 @@ public class WeakPointHandler : MonoBehaviour
         WeakPoint spawnedWeakPoint = Instantiate(_weakPointPrefab, _spawnLocation, false).GetComponentInChildren<WeakPoint>();
 
         spawnedWeakPoint.HealthComponent.InitializeHealth(_weakPointHealth);
-        Debug.Log("weakpoint spawned");
 
         _weakPointSpawnCounter++;
         spawnedWeakPoint.GetWeakPointDeathEvent().AddListener(WeakPointDestroyed);
@@ -188,7 +188,7 @@ public class WeakPointHandler : MonoBehaviour
 
         if(_retractOnAllWeakPointsDestroyed)
         {
-            if (_proceduralVine != null)
+            if (!_proceduralVine.IsUnityNull())
             {
                 _proceduralVine.DisappearWhackAMole();
                 if(_proceduralVine.IsWhackAMoleVine)
