@@ -18,8 +18,7 @@ public class HarpoonAnimationManager : MonoBehaviour
 
     // The names of the parameters used in the Animator
     private const string _FIRE_ANIM = "shoot";
-    private const string _FOCUS_START_ANIM = "holdFocus";
-    private const string _FOCUS_END_ANIM = "releaseFocus";
+    private const string _FOCUS_ANIM = "focusing";
     private const string _RELOAD_READY_ANIM = "reloadReady";
     private const string _RESTOCK_COMPLETE_ANIM = "restockComplete";
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
@@ -95,8 +94,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StartFocusingAnimation()
     {
-        _animator.SetTrigger(_FOCUS_START_ANIM);
-        _animator.ResetTrigger(_FOCUS_END_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, true);
     }
 
     /// <summary>
@@ -104,7 +102,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StopFocusingAnimation()
     {
-        _animator.SetTrigger(_FOCUS_END_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, false);
     }
 
     /// <summary>
@@ -113,6 +111,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void StartFiringAnimation()
     {
         _animator.SetTrigger(_FIRE_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, false);
 
         //Check to see if we are out of ammo
         //If we are, start the empty ammo animation

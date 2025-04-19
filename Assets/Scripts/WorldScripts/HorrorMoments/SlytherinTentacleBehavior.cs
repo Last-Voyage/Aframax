@@ -22,6 +22,10 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     private Rigidbody _playerRb;
     private float _basePlayerSpeed;
 
+    private HarpoonGun _harpoonGun;
+    private GameObject _playerReticle;
+    private GameObject _horizonDot;
+
     /// <summary>
     /// Called to make the tentacle play its animation
     /// </summary>
@@ -42,6 +46,16 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
         _dragCam.enabled = true;
         _playerCam.enabled = false;
+
+        // Disabling the harpoon and reticle too
+        _harpoonGun = HarpoonGun.Instance;
+        _harpoonGun.UnsubscribeInput();
+
+        _playerReticle = FindObjectOfType<PlayerReticle>().gameObject;
+        _playerReticle.SetActive(false);
+
+        _horizonDot = GameObject.Find("Horizon_dot");
+        _horizonDot.SetActive(false);
 
         animator.SetTrigger(_TENTACLE_MOVE_TRIGGER);
     }
@@ -64,6 +78,11 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
         _playerCam.enabled = true;
         _dragCam.enabled = false;
+
+        // Enabling the harpoon and reticle too
+        _harpoonGun.SubscribeInput();
+        _playerReticle.SetActive(true);
+        _horizonDot.SetActive(true);
 
         Destroy(this.gameObject);
     }
