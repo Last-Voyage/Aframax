@@ -39,10 +39,6 @@ public class PlayerReticle : MonoBehaviour
     [SerializeField] private GameObject _ammoIconHost;
     [Tooltip("Prefab hosting a sprite for ammo icons. Will change colors to match the scope's sprite.")]
     [SerializeField] private GameObject _harpoonIcon;
-    [Tooltip("The Y position of ammo icons on the screen. Between 0 and 1: 0 is bottom of screen, 1 is top.")]
-    [SerializeField] private float _ammoIconYPosition;
-    [Tooltip("How much horizontal spacing exists between each ammo icon. Use a decimal as percentage of screen.")]
-    [SerializeField] private float _ammoIconXSpacing;
 
 
     [Tooltip("The circle showing the potential deviation of harpoon shots")]
