@@ -237,7 +237,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
     /// <summary>
     /// Swaps the left and right page movement sprites
     /// </summary>
-    public void OnUiSwap() // Yeah this broke everything
+    public void OnUiSwap()
     {
         if (UiManager.IsUsingController)
         {

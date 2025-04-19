@@ -12,7 +12,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
-//using UnityEngine.UIElements;
 
 /// <summary>
 /// operates video settings, currently just brightness but probably more to come
@@ -33,7 +32,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _controllerToggleButton;
 
-    private bool _preventUIChange = false;
+    private bool _isPreventingUIChange = false;
     private WaitForEndOfFrame _waitToAllowUIChange = new WaitForEndOfFrame();
 
     /// <summary>
@@ -58,11 +57,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
         if (_controllerToggleButton.isOn != UiManager.IsUsingController)
         {
-            _preventUIChange = true;
+            _isPreventingUIChange = true;
 
             StartCoroutine(PreventUISwap());
 
-            //_controllerToggleButton.isOn = !_controllerToggleButton.isOn;
             _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
         }
         // Trying to figure out how to make the toggle appear when 
@@ -104,7 +102,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     public void ToggleControllerSetting()
     {
-        if (!_preventUIChange)
+        if (!_isPreventingUIChange)
         {
             UiManager.Instance.SwapInput();
         }
@@ -119,6 +117,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     private IEnumerator PreventUISwap()
     {
         yield return _waitToAllowUIChange;
-        _preventUIChange = false;
+        _isPreventingUIChange = false;
     }
 }

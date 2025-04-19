@@ -20,6 +20,9 @@ public class SwapControlsPage : MonoBehaviour, IUiSwap
     [SerializeField] private GameObject _keyboard;
     [SerializeField] private GameObject _controller;
     
+    /// <summary>
+    /// This changes the current controls page if the player is using keyboard and mouse or controller
+    /// </summary>
     public void OnUiSwap()
     {
         _controller.SetActive(UiManager.IsUsingController);
