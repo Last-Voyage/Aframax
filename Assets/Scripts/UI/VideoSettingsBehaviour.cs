@@ -6,6 +6,9 @@
 // 
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
+
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -27,6 +30,11 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _goreToggleButton;
 
+    [SerializeField] private Toggle _controllerToggleButton;
+
+    private bool _isPreventingUIChange = false;
+    private WaitForEndOfFrame _waitToAllowUIChange = new WaitForEndOfFrame();
+
     /// <summary>
     /// set up references
     /// </summary>
@@ -46,6 +54,16 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
         _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
         _goreToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsGoreOn;
+
+        if (_controllerToggleButton.isOn != UiManager.IsUsingController)
+        {
+            _isPreventingUIChange = true;
+
+            StartCoroutine(PreventUISwap());
+
+            _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
+        }
+        // Trying to figure out how to make the toggle appear when 
     }
 
     /// <summary>
@@ -65,7 +83,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     {
         SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
         //stop any current subtitles
-        if (FindObjectOfType<DialoguePopUps>() != null)
+        if (!FindObjectOfType<DialoguePopUps>().IsUnityNull())
         {
             FindObjectOfType<DialoguePopUps>().UpdateSubtitleSettingState();
         }
@@ -77,5 +95,28 @@ public class VideoSettingsBehaviour : MonoBehaviour
     public void ToggleGoreSetting()
     {
         SaveManager.Instance.GetGameSaveData().IsGoreOn = _goreToggleButton.isOn;
+    }
+
+    /// <summary>
+    /// Updates the UI in the game to reflect controller or keyboard inputs
+    /// </summary>
+    public void ToggleControllerSetting()
+    {
+        if (!_isPreventingUIChange)
+        {
+            UiManager.Instance.SwapInput();
+        }
+
+    }
+
+    /// <summary>
+    /// This is meant to prevent the UI from swapping because Unity's system means that this will be called
+    /// on a value change
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PreventUISwap()
+    {
+        yield return _waitToAllowUIChange;
+        _isPreventingUIChange = false;
     }
 }
