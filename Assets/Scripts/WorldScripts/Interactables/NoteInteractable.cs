@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
-// Contributor:        Nick Rice, Jeremiah Peters
+// Contributor:        Nick Rice, Jeremiah Peters, Adam Garwacki
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
@@ -196,6 +196,16 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public static void ExitActiveNote()
     {
         ActiveNote.HideNote();
+    }
+
+    /// <summary>
+    /// Closes the currently active note and forces the game to unpause.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActiveNoteOnClick()
+    {
+        ActiveNote.HideNote();
+        PauseMenu.Instance.PauseToggle();
     }
 
     /// <summary>
