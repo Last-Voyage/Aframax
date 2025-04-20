@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
-// Contributor:        Nick Rice, Jeremiah Peters
+// Contributor:        Nick Rice, Jeremiah Peters, Adam Garwacki
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
@@ -163,6 +163,10 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Lock the mouse and unfreeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Disable();
+
         // Deactivate the note
         ActiveNote = null;
         _noteView.SetActive(false);
@@ -229,6 +233,15 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
     public static void ExitActiveNote()
     {
         ActiveNote.HideNote();
+    }
+
+    /// <summary>
+    /// Closes the currently active note and forces the game to unpause.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActiveNoteOnClick()
+    {
+        PauseMenu.Instance.PauseToggle();
     }
 
     /// <summary>

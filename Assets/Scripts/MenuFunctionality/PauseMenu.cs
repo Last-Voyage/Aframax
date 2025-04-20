@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PauseMenu.cs
 // Author :            Jeremiah Peters
-// Contributers :      Ryan Swanson, Charlie Polonu
+// Contributers :      Ryan Swanson, Charlie Polonus, Adam Garwacki
 // Creation Date :     9/28/24
 //
 // Brief Description : operates pausing the game and the pause menu buttons
@@ -21,11 +21,29 @@ public class PauseMenu : MonoBehaviour
 
     private PlayerInputMap _playerInputControls;
 
+    public static PauseMenu Instance;
+
     private void Awake()
     {
         //initialize input
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
+        CheckSingletonInstance();
+    }
+
+    /// <summary>
+    /// Confirms whether this asset exists as a singleton.
+    /// </summary>
+    private void CheckSingletonInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
