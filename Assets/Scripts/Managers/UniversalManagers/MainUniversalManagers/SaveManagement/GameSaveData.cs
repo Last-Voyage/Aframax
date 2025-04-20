@@ -25,7 +25,7 @@ public class GameSaveData
 
     public int CurrentStoryBeat { get; set; }
     public int CurrentSceneIndex { get; set; }
-
+    
     #region Audio Settings
     public float CurrentMasterVolume { get; set; }
     public float CurrentSfxVolume { get; set; }
@@ -40,6 +40,9 @@ public class GameSaveData
     public bool IsSubtitlesOn { get; set; } = true;
 
     public bool IsGoreOn { get; set; } = true;
+    
+    public bool IsUsingController { get; set; }
+
     #endregion
 
     #region Getters
