@@ -8,6 +8,7 @@
 //sensitivity, inverts
 *****************************************************************************/
 using System;
+using System.Collections;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,6 +23,11 @@ public class GameplaySettings : MonoBehaviour
     public Slider SensitivitySlider;
     [SerializeField] private Toggle _invertX;
     [SerializeField] private Toggle _invertY;
+    
+    [SerializeField] private Toggle _controllerToggleButton;
+
+    private bool _isPreventingUIChange = false;
+    private WaitForEndOfFrame _waitToAllowUIChange = new WaitForEndOfFrame();
 
     [SerializeField] private string _GameplaySettingFilePath;
 
@@ -32,9 +38,18 @@ public class GameplaySettings : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        if (GameplaySettings.Instance.IsUnityNull())
+        if (Instance.IsUnityNull())
         {
             Instance = this;
+        }
+        
+        if (_controllerToggleButton.isOn != UiManager.IsUsingController)
+        {
+            _isPreventingUIChange = true;
+
+            StartCoroutine(PreventUISwap());
+
+            _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
         }
     }
     /// <summary>
@@ -57,8 +72,6 @@ public class GameplaySettings : MonoBehaviour
         SensitivitySlider.value = float.Parse(camSettings[0]);
         _invertX.isOn = bool.Parse(camSettings[1]);
         _invertY.isOn = bool.Parse(camSettings[2]);
-
-        
     }
 
     /// <summary>
@@ -96,6 +109,25 @@ public class GameplaySettings : MonoBehaviour
         File.WriteAllText(Application.streamingAssetsPath + _GameplaySettingFilePath, _settings);
     }
 
-   
+    /// <summary>
+    /// Updates the UI in the game to reflect controller or keyboard inputs
+    /// </summary>
+    public void ToggleControllerSetting()
+    {
+        if (!_isPreventingUIChange)
+        {
+            UiManager.Instance.SwapInput();
+        }
+    }
 
+    /// <summary>
+    /// This is meant to prevent the UI from swapping because Unity's system means that this will be called
+    /// on a value change
+    /// </summary>
+    /// <returns>A singular frame</returns>
+    private IEnumerator PreventUISwap()
+    {
+        yield return _waitToAllowUIChange;
+        _isPreventingUIChange = false;
+    }
 }
