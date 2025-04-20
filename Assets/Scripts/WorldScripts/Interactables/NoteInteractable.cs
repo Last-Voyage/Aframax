@@ -163,6 +163,10 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Lock the mouse and unfreeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Disable();
+
         // Deactivate the note
         ActiveNote = null;
         _noteView.SetActive(false);
