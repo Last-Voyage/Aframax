@@ -163,9 +163,10 @@ public class PlayerReticle : MonoBehaviour
     /// </summary>
     private void InitializeAmmoDisplay()
     {
+        GameObject newIcon; 
         for (int i = 0; i < _gunMaxAmmo; i++)
         {
-            GameObject newIcon = Instantiate(_harpoonIcon, _ammoIconHost.transform);
+            newIcon = Instantiate(_harpoonIcon, _ammoIconHost.transform);
             newIcon.GetComponent<RectTransform>().position = newIcon.transform.position;
             newIcon.GetComponent<Image>().color = _focusedColor;
             _ammoIconList.Add(newIcon.GetComponent<Image>());
