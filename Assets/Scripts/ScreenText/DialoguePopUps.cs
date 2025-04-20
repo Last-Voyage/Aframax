@@ -12,6 +12,7 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using FMOD.Studio;
 
 /// <summary>
 /// This class handles the dialogue process, it's words and timing
@@ -114,7 +115,9 @@ public class DialoguePopUps : MonoBehaviour
             _textBackgroundContainer.maxVisibleCharacters = 0;
 
             // Play the voiceline sound effect provided by the dialogue object
-            RuntimeSfxManager.APlayOneShotSfx(dialogueInfo.GetAudio, transform.position);
+            EventInstance eventInstance = AudioManager.Instance.CreateInstanceFromReference(dialogueInfo.GetAudio);
+            RuntimeSfxManager.APlayOneShotSfxInstance(eventInstance, transform.position);
+            DialogueSfxManager.Instance.SetCurrentDialogueEventInstance(eventInstance);
 
             //format for background
             //<mark=#000000aa padding=�10, 10, 0, 0�>text is highlighted</mark>
@@ -182,7 +185,7 @@ public class DialoguePopUps : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        GameStateManager.Instance.GetOnNewDialogueChain().
+        GameStateManager.Instance.GetOnDialogueProgress().
             AddListener(BeginDisplayingText);
     }
 
@@ -192,7 +195,7 @@ public class DialoguePopUps : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        GameStateManager.Instance.GetOnNewDialogueChain().
+        GameStateManager.Instance.GetOnDialogueProgress().
             RemoveListener(BeginDisplayingText);
     }
 }

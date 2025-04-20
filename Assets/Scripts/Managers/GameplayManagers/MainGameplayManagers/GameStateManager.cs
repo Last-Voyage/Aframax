@@ -30,6 +30,7 @@ public class GameStateManager : MainGameplayManagerFramework
     private readonly UnityEvent _onGameUnpaused = new();
     
     private readonly UnityEvent<ScriptableDialogueUi> _onNewDialogueChain = new();
+    private readonly UnityEvent<ScriptableDialogueUi> _onDialogueProgress = new();
 
     /// <summary>
     /// Switches gameplay state 
@@ -96,6 +97,7 @@ public class GameStateManager : MainGameplayManagerFramework
     public UnityEvent GetOnGameUnpaused() => _onGameUnpaused;
     
     public UnityEvent<ScriptableDialogueUi> GetOnNewDialogueChain() => _onNewDialogueChain;
+    public UnityEvent<ScriptableDialogueUi> GetOnDialogueProgress() => _onDialogueProgress;
     #endregion
 }
 

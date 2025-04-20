@@ -214,9 +214,6 @@ public class StoryManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator TriggerBeatEvents(StoryBeat beat)
     {
-        // Stop dialogue from playing if there's already a beat playing dialogue
-        _dialogueManager.StopDialogue();
-
         List<StoryBeatEvent> events = beat.StoryBeatEvents;
 
         // Iterate through each event
