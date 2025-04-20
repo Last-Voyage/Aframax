@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         TitleScreenScrolling.cs
 // Author :            Jeremiah Peters
+// Contributor :       Nick Rice
 // Creation Date :     10/27/24
 //
 // Brief Description : handles scrolling the title screen from top to bottom
@@ -8,13 +9,14 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
 /// functionality for moving the camera on the title screen
 /// </summary>
-public class TitleScreenScrolling : MonoBehaviour
+public class TitleScreenScrolling : MonoBehaviour, IUiSwap
 {
     [SerializeField] private Transform _movingDestination;
 
@@ -23,6 +25,15 @@ public class TitleScreenScrolling : MonoBehaviour
 
     [Tooltip("The delay before the splash effect plays")]
     [SerializeField] private float _splashEffectDelay;
+
+    [SerializeField] 
+    private TextMeshProUGUI _startGameText;
+    
+    [SerializeField]
+    private string _controllerStartGameMessage = "A TO START";
+
+    [SerializeField] 
+    private string _keyboardStartGameMessage = "ENTER TO START";
 
     [SerializeField] private Animator _enterFadeOutAnimator;
 
@@ -35,6 +46,8 @@ public class TitleScreenScrolling : MonoBehaviour
     [SerializeField] private Animator _menuAnimator;
 
     [SerializeField] private float _menuTriggerPercent;
+
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
     private Vector3 velocity = Vector3.zero;
 
@@ -58,10 +71,12 @@ public class TitleScreenScrolling : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ScrollingScreen()
     {
-        _enterFadeOutAnimator.SetTrigger("GameStarted");
-
         if (!_hasScrollingStarted)
         {
+            _enterFadeOutAnimator.SetTrigger("GameStarted");
+
+            _buttonSFXManagerReference.PlayClickSFX();
+
             PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
 
             _hasScrollingStarted = true;
@@ -110,11 +125,26 @@ public class TitleScreenScrolling : MonoBehaviour
         RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.TitleScreenSplash, Vector3.zero);
     }
 
-    private void OnEnable()
+    /// <summary>
+    /// Swaps the start game UI for controller or keyboard
+    /// </summary>
+    public void OnUiSwap()
     {
-        _playerInputControls.Enable();
+        _startGameText.text = UiManager.IsUsingController ? _controllerStartGameMessage: _keyboardStartGameMessage;
     }
 
+    /// <summary>
+    /// Allows player input, and swaps UI if needed
+    /// </summary>
+    private void OnEnable()
+    {
+        _playerInputControls.Enable(); 
+        OnUiSwap();
+    }
+
+    /// <summary>
+    /// Disables player controls
+    /// </summary>
     private void OnDisable()
     {
         _playerInputControls.Disable();

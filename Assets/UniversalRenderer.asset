@@ -20,7 +20,8 @@ MonoBehaviour:
   - {fileID: 7589671715582660117}
   - {fileID: 6952784541282873837}
   - {fileID: 640890593084979188}
-  m_RendererFeatureMap: 154e22a936ee5369ed31feeeb3407d60f437b84c99e6e408
+  - {fileID: 2680154695011238700}
+  m_RendererFeatureMap: 154e22a936ee5369ed31feeeb3407d60f437b84c99e6e4082c833dbb7ed23125
   m_UseNativeRenderPass: 1
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -59,7 +60,7 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 0
   m_RenderingMode: 0
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 2
   m_CopyDepthMode: 1
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
@@ -82,6 +83,26 @@ MonoBehaviour:
   passMaterial: {fileID: 2100000, guid: 1ff797f92d9301746ad3fce958a722e7, type: 2}
   passIndex: 0
   bindDepthStencilAttachment: 1
+  m_Version: 1
+--- !u!114 &2680154695011238700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
+  m_Name: GlobalColorManager
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  injectionPoint: 600
+  fetchColorBuffer: 1
+  requirements: 4
+  passMaterial: {fileID: 2100000, guid: 42b28ae0648828c4ba0a1d7d6943aec7, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
   m_Version: 1
 --- !u!114 &6952784541282873837
 MonoBehaviour:
