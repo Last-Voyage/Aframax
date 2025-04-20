@@ -237,7 +237,6 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
     /// </summary>
     public void ExitActiveNoteOnClick()
     {
-        ActiveNote.HideNote();
         PauseMenu.Instance.PauseToggle();
     }
 
