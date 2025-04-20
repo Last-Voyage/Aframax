@@ -6,6 +6,9 @@
 // 
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
+
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -65,7 +68,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     {
         SaveManager.Instance.GetGameSaveData().IsSubtitlesOn = _subtitleToggleButton.isOn;
         //stop any current subtitles
-        if (FindObjectOfType<DialoguePopUps>() != null)
+        if (!FindObjectOfType<DialoguePopUps>().IsUnityNull())
         {
             FindObjectOfType<DialoguePopUps>().UpdateSubtitleSettingState();
         }

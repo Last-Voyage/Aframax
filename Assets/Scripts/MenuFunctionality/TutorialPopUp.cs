@@ -14,11 +14,12 @@ using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 /// <summary>
 /// A collection of pages for a popup tutorial
 /// </summary>
-public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
+public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
 {
     public static TutorialPopUp ActiveTutorial = null;
 
@@ -36,6 +37,13 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private InGameMenuSwap _menuSwapScript;
 
     [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
+    
+    [SerializeField] private Image _rightPageButton;
+    [SerializeField] private Image _leftPageButton;
+    [Header("Keyboard UI assets")]
+    [SerializeField] private Sprite _keyboardLeftPageButtonAsset, _keyboardRightPageButtonAsset;
+    [Header("Controller UI assets")]
+    [SerializeField] private Sprite _controllerLeftPageButtonAsset, _controllerRightPageButtonAsset;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -87,6 +95,9 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         ActiveTutorial = this;
         _menuSwapScript.DeselectMenu();
         ChangePage(_currentPage);
+        
+        // Changes the note visuals
+        OnUiSwap();
     }
 
     /// <summary>
@@ -133,7 +144,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
 
         // Stop the video if there is one
-        if (pageVideo.clip != null)
+        if (!pageVideo.clip.IsUnityNull())
         {
             pageVideo.time = 0;
             pageVideo.Stop();
@@ -151,7 +162,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         RawImage pageVideoImage = page.GetComponentInChildren<RawImage>();
         Image pageImage = page.GetComponentInChildren<Image>();
 
-        bool hasVideo = pageVideo.clip != null;
+        bool hasVideo = !pageVideo.clip.IsUnityNull();
 
         // Play the video if there is one
         if (hasVideo)
@@ -209,18 +220,46 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
+    /// Closes the popup of the current tutorial object.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActivePopupViaClick()
+    {
+        PauseMenu.Instance.PauseToggle();
+        CloseTutorialPopUp();
+    }
+
+
+    /// <summary>
     /// Override for the player interacting with the tutorial
     /// </summary>
     public void OnInteractedByPlayer()
     {
         // Edge cases: There's no tutorials or something is already open
-        if (ActiveTutorial != null
+        if (!ActiveTutorial.IsUnityNull()
             || Time.deltaTime == 0)
         {
             return;
         }
 
         OpenTutorialPopUp();
+    }
+    
+    /// <summary>
+    /// Swaps the left and right page movement sprites
+    /// </summary>
+    public void OnUiSwap()
+    {
+        if (UiManager.IsUsingController)
+        {
+            _leftPageButton.sprite = _controllerLeftPageButtonAsset;
+            _rightPageButton.sprite = _controllerRightPageButtonAsset;
+        }
+        else
+        {
+            _leftPageButton.sprite = _keyboardLeftPageButtonAsset;
+            _rightPageButton.sprite = _keyboardRightPageButtonAsset;
+        }
     }
 
     /// <summary>
