@@ -99,14 +99,7 @@ public class ChaseVineGroup : MonoBehaviour
             _playerMovementController.PlayerMovementSpeed = 0;
 
             // Also disable harpoon gun and reticle
-            _harpoonGun = HarpoonGun.Instance;
-            _harpoonGun.UnsubscribeInput();
-
-            _playerReticle = FindObjectOfType<PlayerReticle>().gameObject;
-            _playerReticle.SetActive(false);
-
-            _horizonDot = GameObject.Find("Horizon_dot");
-            _horizonDot.SetActive(false);
+            CameraManager.Instance.InvokeOnCinematicStart();
 
             //play start screaming animation
             _startScreamObject.SetActive(true);
@@ -142,9 +135,7 @@ public class ChaseVineGroup : MonoBehaviour
         _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
 
         // Also the harpoon gun and reticle
-        _harpoonGun.SubscribeInput();
-        _playerReticle.SetActive(true);
-        _horizonDot.SetActive(true);
+        CameraManager.Instance.InvokeOnCinematicEnd();
 
         StartMovementAudio();
 

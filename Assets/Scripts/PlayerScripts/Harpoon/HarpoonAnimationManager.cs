@@ -72,6 +72,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(delegate { TogglePlayerMovingAnimation(true); });
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(delegate { TogglePlayerMovingAnimation(false); });
         EnemyManager.Instance.GetOnChaseSequenceBegin().AddListener(StartSprintAnimation);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ForceIdle);
     }
 
     /// <summary>
@@ -87,6 +88,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(delegate { TogglePlayerMovingAnimation(true); });
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(delegate { TogglePlayerMovingAnimation(false); });
         EnemyManager.Instance.GetOnChaseSequenceBegin().RemoveListener(StartSprintAnimation);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ForceIdle);
     }
 
     /// <summary>
@@ -183,5 +185,22 @@ public class HarpoonAnimationManager : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Automatically resets the animator to the idle state
+    /// Used for cinematics
+    /// </summary>
+    private void ForceIdle()
+    {
+        _animator.ResetTrigger(_FIRE_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, false);
+        _animator.ResetTrigger(_RELOAD_READY_ANIM);
+        _animator.ResetTrigger(_RESTOCK_COMPLETE_ANIM);
+        _animator.ResetTrigger(_AMMO_EMPTY_ANIM);
+        _animator.ResetTrigger(_NOT_WALL_ANIM);
+        _animator.ResetTrigger(_AT_WALL_ANIM);
+        _animator.SetBool(_SPRINT_ANIM, false);
+        _animator.SetBool(_PLAYER_MOVING_ANIM, false);
     }
 }

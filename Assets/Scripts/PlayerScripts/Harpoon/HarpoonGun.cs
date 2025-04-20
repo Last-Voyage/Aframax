@@ -196,6 +196,11 @@ public class HarpoonGun : MonoBehaviour
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopShiftingMovementAudio);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(RestockHarpoons);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadAfterRestocking);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideReticle);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetFocus);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowReticle);
     }
 
     /// <summary>
@@ -208,6 +213,11 @@ public class HarpoonGun : MonoBehaviour
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopShiftingMovementAudio);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(RestockHarpoons);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadAfterRestocking);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideReticle);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetFocus);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowReticle);
     }
 
     /// <summary>
@@ -746,6 +756,22 @@ public class HarpoonGun : MonoBehaviour
 
         return _harpoonSpearPool[previousPoolValue];
     }
+    #endregion
+
+    #region Other
+
+    private void HideReticle()
+    {
+        _reticle.GetHorizonDot().SetActive(false);
+        _reticle.gameObject.SetActive(false);
+    }
+
+    private void ShowReticle()
+    {
+        _reticle.GetHorizonDot().SetActive(true);
+        _reticle.gameObject.SetActive(true);
+    }
+
     #endregion
 
     #region Getters

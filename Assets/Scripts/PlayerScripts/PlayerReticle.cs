@@ -42,6 +42,8 @@ public class PlayerReticle : MonoBehaviour
     [Tooltip("How much horizontal spacing exists between each ammo icon. Use a decimal as percentage of screen.")]
     [SerializeField] private float _ammoIconXSpacing;
 
+    [Space]
+    [SerializeField] private GameObject _horizonDot;
 
     [Tooltip("The circle showing the potential deviation of harpoon shots")]
     private GameObject _reticleScope;
@@ -290,4 +292,8 @@ public class PlayerReticle : MonoBehaviour
         }
     }
 
+    public GameObject GetHorizonDot()
+    {
+        return _horizonDot;
+    }
 }

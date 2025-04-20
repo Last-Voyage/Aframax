@@ -28,6 +28,12 @@ public class CameraManager : MainGameplayManagerFramework
     private static readonly UnityEvent _onJumpscare = new();
 
     /// <summary>
+    /// Manages the camera for cinematic events during gameplay
+    /// </summary>
+    private static readonly UnityEvent _onCinematicStart = new();
+    private static readonly UnityEvent _onCinematicEnd = new();
+
+    /// <summary>
     /// Invokes the _onCameraMovementToggled event when the game is paused
     /// </summary>
     /// <param name="toggle"> the bool to input into the invoked event </param>
@@ -86,6 +92,16 @@ public class CameraManager : MainGameplayManagerFramework
     {
         _onJumpscare?.Invoke();
     }
+
+    public void InvokeOnCinematicStart()
+    {
+        _onCinematicStart?.Invoke();
+    }
+
+    public void InvokeOnCinematicEnd()
+    {
+        _onCinematicEnd?.Invoke();
+    }
     
     #endregion
 
@@ -100,6 +116,16 @@ public class CameraManager : MainGameplayManagerFramework
     /// Getter for the _onJumpscare event
     /// </summary>
     public UnityEvent GetOnJumpscareEvent() => _onJumpscare;
+
+    /// <summary>
+    /// Getter for the _onCinematicStart event
+    /// </summary>
+    public UnityEvent GetOnCinematicStartEvent() => _onCinematicStart;
+
+    /// <summary>
+    /// Getter for the _onCinematicEnd event
+    /// </summary>
+    public UnityEvent GetOnCinematicEndEvent() => _onCinematicEnd;
     
     #endregion
 }
