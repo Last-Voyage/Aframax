@@ -63,7 +63,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
             _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
         }
-        // Trying to figure out how to make the toggle appear when 
     }
 
     /// <summary>
@@ -106,7 +105,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
         {
             UiManager.Instance.SwapInput();
         }
-
     }
 
     /// <summary>
