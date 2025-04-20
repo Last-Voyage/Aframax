@@ -73,7 +73,8 @@ public class WhackAMole : MonoBehaviour
         _currentActiveVineScript = _currentActiveVine.transform.GetChild(2).GetComponent<ProceduralVine>();
 
         //set up vine and start the appearance
-        _currentActiveVine.transform.position = randTransform.position;
+        Vector3 vinePos = new Vector3(randTransform.position.x, randTransform.position.y - 5.5f, randTransform.position.z);
+        _currentActiveVine.transform.position = vinePos;
         _currentActiveVine.transform.forward = randTransform.up;
 
         CreateSpawnVfx(randTransform);
