@@ -220,6 +220,17 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
     }
 
     /// <summary>
+    /// Closes the popup of the current tutorial object.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActivePopupViaClick()
+    {
+        PauseMenu.Instance.PauseToggle();
+        CloseTutorialPopUp();
+    }
+
+
+    /// <summary>
     /// Override for the player interacting with the tutorial
     /// </summary>
     public void OnInteractedByPlayer()
