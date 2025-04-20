@@ -109,6 +109,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// </summary>
     private void CheckAimAtBoat()
     {
+        _mainCamera = Camera.main;
         Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit) && RecursiveCheckForParent(hit.collider.transform,_movingObjects))
         {
