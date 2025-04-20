@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         TitleScreenScrolling.cs
 // Author :            Jeremiah Peters
+// Contributor :       Nick Rice
 // Creation Date :     10/27/24
 //
 // Brief Description : handles scrolling the title screen from top to bottom
@@ -15,7 +16,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// functionality for moving the camera on the title screen
 /// </summary>
-public class TitleScreenScrolling : MonoBehaviour
+public class TitleScreenScrolling : MonoBehaviour, IUiSwap
 {
     [SerializeField] private Transform _movingDestination;
 
@@ -124,11 +125,26 @@ public class TitleScreenScrolling : MonoBehaviour
         RuntimeSfxManager.APlayOneShotSfx(FmodSfxEvents.Instance.TitleScreenSplash, Vector3.zero);
     }
 
-    private void OnEnable()
+    /// <summary>
+    /// Swaps the start game UI for controller or keyboard
+    /// </summary>
+    public void OnUiSwap()
     {
-        _playerInputControls.Enable();
+        _startGameText.text = UiManager.IsUsingController ? _controllerStartGameMessage: _keyboardStartGameMessage;
     }
 
+    /// <summary>
+    /// Allows player input, and swaps UI if needed
+    /// </summary>
+    private void OnEnable()
+    {
+        _playerInputControls.Enable(); 
+        OnUiSwap();
+    }
+
+    /// <summary>
+    /// Disables player controls
+    /// </summary>
     private void OnDisable()
     {
         _playerInputControls.Disable();
