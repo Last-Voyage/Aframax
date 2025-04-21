@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
-// File Name :          LightShift.cs
+// File Name :          SlytherinTentacleBehavior.cs
 // Author :             Andrew Stapay
 // Creation Date :      2/4/25
 //
@@ -34,6 +34,9 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         // Everything should already be set up, just play the animation
         Animator animator = GetComponent<Animator>();
 
+        // Disabling things from other objects
+        CameraManager.Instance.InvokeOnCinematicStart();
+
         //disable player movement and pan camera to cinematic spot
         //get the player virtual camera
         _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
@@ -46,9 +49,6 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
         _dragCam.enabled = true;
         _playerCam.enabled = false;
-
-        // Disabling the harpoon and reticle too
-        CameraManager.Instance.InvokeOnCinematicStart();
 
         animator.SetTrigger(_TENTACLE_MOVE_TRIGGER);
     }
@@ -72,7 +72,7 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         _playerCam.enabled = true;
         _dragCam.enabled = false;
 
-        // Enabling the harpoon and reticle too
+        // Enabling the things we disables with the previous event
         CameraManager.Instance.InvokeOnCinematicEnd();
 
         Destroy(this.gameObject);

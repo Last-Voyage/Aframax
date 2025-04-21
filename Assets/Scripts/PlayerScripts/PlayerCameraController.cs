@@ -475,6 +475,10 @@ public class PlayerCameraController : MonoBehaviour
         _virtualCamera.m_Lens.FieldOfView = _defaultFOV;
     }
 
+    /// <summary>
+    /// Sets the harpoon to be the child of the main camera
+    /// Used during the logic of cinematics and animations
+    /// </summary>
     public void ChildHarpoon()
     {
         // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
@@ -485,6 +489,10 @@ public class PlayerCameraController : MonoBehaviour
         _harpoonTransform.localRotation = Quaternion.identity;
     }
 
+    /// <summary>
+    /// Sets the harpoon to be the child of this object
+    /// Used during the logic of cinematics and animations
+    /// </summary>
     public void UnchildHarpoon()
     {
         // Let's make sure the harpoon is set to the PlayerCamera as its parent
@@ -505,12 +513,18 @@ public class PlayerCameraController : MonoBehaviour
         _harpoonTransform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
     }
 
+    /// <summary>
+    /// Stops the camera movement coroutine
+    /// </summary>
     public void StopAutoCameraMovement()
     {
         StopCoroutine(_cameraCoroutine);
         _cameraCoroutine = null;
     }
 
+    /// <summary>
+    /// Restarts the camera movement coroutine
+    /// </summary>
     public void RestartAutoCameraMovement()
     {
         if (_cameraCoroutine.IsUnityNull())

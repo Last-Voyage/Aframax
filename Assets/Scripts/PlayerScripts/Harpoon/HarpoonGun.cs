@@ -255,6 +255,8 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFocus.action.performed -= FocusButtonHeld;
         _harpoonFocus.action.canceled -= FocusButtonReleased;
+
+        _isFocusButtonHeld = false;
     }
     
     #endregion
@@ -760,12 +762,18 @@ public class HarpoonGun : MonoBehaviour
 
     #region Other
 
+    /// <summary>
+    /// Disables the reticle icons when necessary, such as for cinematics
+    /// </summary>
     private void HideReticle()
     {
         _reticle.GetHorizonDot().SetActive(false);
         _reticle.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Enables the reticle icons when necessary, such as for exiting cinematics
+    /// </summary>
     private void ShowReticle()
     {
         _reticle.GetHorizonDot().SetActive(true);

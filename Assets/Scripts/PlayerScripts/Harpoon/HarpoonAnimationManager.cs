@@ -6,6 +6,7 @@
 // Description:     Assists with the logic of the harpoon's animations.
 ******************************************************************************/
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +16,9 @@ using UnityEngine;
 public class HarpoonAnimationManager : MonoBehaviour
 {
     private Animator _animator;
+
+    // Names of states used in the Animator
+    private const string _IDLE_ANIM = "harpoonIdle";
 
     // The names of the parameters used in the Animator
     private const string _FIRE_ANIM = "shoot";
@@ -26,7 +30,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AT_WALL_ANIM = "atWall";
     private const string _SPRINT_ANIM = "sprint";
     private const string _PLAYER_MOVING_ANIM = "move";
-    
+
     // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
 
@@ -193,6 +197,10 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void ForceIdle()
     {
+        // Cut back to the idle animation
+        _animator.Play(_IDLE_ANIM);
+
+        // Reset everything
         _animator.ResetTrigger(_FIRE_ANIM);
         _animator.SetBool(_FOCUS_ANIM, false);
         _animator.ResetTrigger(_RELOAD_READY_ANIM);
