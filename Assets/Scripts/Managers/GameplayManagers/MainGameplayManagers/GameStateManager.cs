@@ -60,10 +60,6 @@ public class GameStateManager : MainGameplayManagerFramework
             Instance = this;
             GetLocationState();
         }
-        else
-        {
-            Destroy(this);  
-        }
     }
     #endregion
 

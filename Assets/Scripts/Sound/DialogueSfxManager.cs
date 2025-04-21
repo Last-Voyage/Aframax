@@ -128,12 +128,36 @@ public class DialogueSfxManager : MonoBehaviour
         _currentDialogueEventInstance = eventInstance;
     }
 
+    private IEnumerator WaitForGameStateManagerEnable()
+    {
+        yield return new WaitUntil(GameStateManagerReady);
+        GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
+    }
+
+    private IEnumerator WaitForGameStateManagerDisable()
+    {
+        yield return new WaitUntil(GameStateManagerReady);
+        GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
+    }
+
+    private bool GameStateManagerReady()
+    {
+        return !GameStateManager.Instance.IsUnityNull();
+    }
+
     /// <summary>
     /// Called when the game object is enabled. Used to set listeners for events
     /// </summary>
     private void OnEnable()
     {
-        GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
+        if (GameStateManager.Instance.IsUnityNull())
+        {
+            StartCoroutine(WaitForGameStateManagerEnable());
+        }
+        else
+        {
+            GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
+        }
     }
 
     /// <summary>
@@ -141,6 +165,13 @@ public class DialogueSfxManager : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
+        if (GameStateManager.Instance.IsUnityNull())
+        {
+            StartCoroutine(WaitForGameStateManagerDisable());
+        }
+        else
+        {
+            GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
+        }
     }
 }
