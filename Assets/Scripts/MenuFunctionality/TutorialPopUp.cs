@@ -89,6 +89,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActivePopupViaClick();
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -220,6 +221,17 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
     }
 
     /// <summary>
+    /// Closes the popup of the current tutorial object.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActivePopupViaClick()
+    {
+        PauseMenu.Instance.PauseToggle();
+        CloseTutorialPopUp();
+    }
+
+
+    /// <summary>
     /// Override for the player interacting with the tutorial
     /// </summary>
     public void OnInteractedByPlayer()
@@ -257,6 +269,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
     private void OnDisable()
     {
         _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActivePopupViaClick();
+
         _playerInputMap.Disable();
     }
 
