@@ -132,6 +132,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActiveNoteOnClick();
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActiveNote();
         
         // Changes the note visuals
         OnUiSwap();
@@ -162,6 +164,12 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
 
         // Lock the mouse and unfreeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
+
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        
+
+        _playerInputMap.Disable();
 
         // Deactivate the note
         ActiveNote = null;
@@ -246,6 +254,10 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
     private void OnDisable()
     {
         _playerInputMap.Player.UICycling.performed -= ctx =>ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActiveNoteOnClick();
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActiveNote();
+
+
         _playerInputMap.Disable();
     }
 }
