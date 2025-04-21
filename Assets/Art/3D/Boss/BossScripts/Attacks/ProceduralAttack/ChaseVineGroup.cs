@@ -61,6 +61,7 @@ public class ChaseVineGroup : MonoBehaviour
             chaseSequenceVine.gameObject.SetActive(false);
         }
         _chaseSequenceVines[0].OnChaseEnd.AddListener(StopMovementAudio);
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(StopMovementAudio);
 
         CreateMovementAudio();
     }
