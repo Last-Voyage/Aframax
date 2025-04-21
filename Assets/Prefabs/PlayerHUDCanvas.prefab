@@ -64,6 +64,11 @@ MonoBehaviour:
   _heartTimeToAppear: 3
   _heartTimeOnScreen: 5
   _heartTimeToDisappear: 1
+  _undamagedSaturation: 1
+  _lightlyDamagedSaturation: 0.9
+  _kindaDamagedSaturation: 0.8
+  _badlyDamagedSaturation: 0.55
+  _onDeathSaturation: 0.3
 --- !u!1 &136632231506497350
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,6 +366,43 @@ MonoBehaviour:
   _objectiveHudAnimator: {fileID: 7293020857233100167}
   _objectiveHudText: {fileID: 1728442855219584249}
   _objectivePauseText: {fileID: 1728442855219584249}
+--- !u!1 &536308122868480405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4983865568339524223}
+  m_Layer: 0
+  m_Name: Reticle Group
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4983865568339524223
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536308122868480405}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00001100129}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2312885630441507566}
+  - {fileID: 740879109201762327}
+  m_Father: {fileID: 804828114086663352}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &589730961471837411
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,7 +880,7 @@ RectTransform:
   - {fileID: 4756201765198016523}
   - {fileID: 4505043264740860198}
   - {fileID: 1091169477309913697}
-  - {fileID: 2312885630441507566}
+  - {fileID: 4983865568339524223}
   - {fileID: 2443340525971020424}
   - {fileID: 7138622443520723946}
   - {fileID: 1314786059532348431}
@@ -1338,6 +1380,68 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3378587349897106242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 740879109201762327}
+  - component: {fileID: 4305069667019979846}
+  m_Layer: 0
+  m_Name: Reticle Ammo Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &740879109201762327
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3378587349897106242}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4983865568339524223}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -190}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4305069667019979846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3378587349897106242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: -50
+    m_Right: -50
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 7
+  m_Spacing: -50
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &4036410516559902516
 GameObject:
   m_ObjectHideFlags: 0
@@ -2060,17 +2164,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7527278818638328503}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00001100129}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5494002955428951111}
-  m_Father: {fileID: 804828114086663352}
+  m_Father: {fileID: 4983865568339524223}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5953750100522430210
 CanvasRenderer:
@@ -2127,10 +2231,9 @@ MonoBehaviour:
   _outOfAmmoIconColor: {r: 1, g: 0.24842751, b: 0.24842751, a: 0.7372549}
   _minScopeSize: 15
   _scopePadding: 20
+  _ammoIconHost: {fileID: 3378587349897106242}
   _harpoonIcon: {fileID: 9127794455894309700, guid: 944bbf53e6204bc4fa38f7709c91a7f0,
     type: 3}
-  _ammoIconYPosition: 0.27
-  _ammoIconXSpacing: 0.02
 --- !u!1 &7841186821545217479
 GameObject:
   m_ObjectHideFlags: 0
