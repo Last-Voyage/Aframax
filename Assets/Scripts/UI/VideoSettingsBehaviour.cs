@@ -1,17 +1,25 @@
 /**********************************************************************************************************************
 // File Name :         VideoSettingsBehaviour.cs
 // Author :            Jeremiah Peters
-// Contributors :      Andrew Stapay
+// Contributors :      Andrew Stapay, Nick Rice
 // Creation Date :     2/28/2025
 // 
 // Brief Description : Handles the video settings and applying them
 **********************************************************************************************************************/
 
-using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
+using Slider = UnityEngine.UI.Slider;
+using Toggle = UnityEngine.UI.Toggle;
+using TMPro;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// operates video settings, currently just brightness but probably more to come
@@ -30,11 +38,12 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
     [SerializeField] private Toggle _goreToggleButton;
 
-    [SerializeField] private Toggle _controllerToggleButton;
-
-    private bool _isPreventingUIChange = false;
-    private WaitForEndOfFrame _waitToAllowUIChange = new WaitForEndOfFrame();
-
+    [SerializeField] private Toggle _fullScreenButton;
+    
+    [SerializeField] private TMP_Dropdown _resolutionDropdown;
+    
+    private int _resolutionWidth, _resolutionHeight;
+    
     /// <summary>
     /// set up references
     /// </summary>
@@ -47,23 +56,18 @@ public class VideoSettingsBehaviour : MonoBehaviour
         {
             throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
+        
+        AddResolutionsToDropdown();
+        SelectDefaultResolution();
 
-        ///remembers previously set values 
+        _resolutionDropdown.onValueChanged.AddListener(ChangeResolution);
+        
+        //remembers previously set values 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
         _colorAdjustmentsName.postExposure.Override(_brightnessSlider.value * _brightnessMultiplier);
 
         _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
         _goreToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsGoreOn;
-
-        if (_controllerToggleButton.isOn != UiManager.IsUsingController)
-        {
-            _isPreventingUIChange = true;
-
-            StartCoroutine(PreventUISwap());
-
-            _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
-        }
-        // Trying to figure out how to make the toggle appear when 
     }
 
     /// <summary>
@@ -98,25 +102,107 @@ public class VideoSettingsBehaviour : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the UI in the game to reflect controller or keyboard inputs
+    /// This inverts whether the game is full screened
     /// </summary>
-    public void ToggleControllerSetting()
+    public void ToggleFullScreenSetting()
     {
-        if (!_isPreventingUIChange)
-        {
-            UiManager.Instance.SwapInput();
-        }
+        Screen.fullScreen = !Screen.fullScreen;
+    }
 
+    
+    #region Resolution Functions
+
+    /// <summary>
+    /// This changes the player's resolution
+    /// </summary>
+    /// <param name="newResolutionPointer">The pointer that picks the selected resolution option</param>
+    private void ChangeResolution(int newResolutionPointer)
+    {
+        StoreWidthHeight(_resolutionDropdown.options[newResolutionPointer].text);
+        
+        Screen.SetResolution(_resolutionWidth,_resolutionHeight, Screen.fullScreen);
+    }
+    
+    /// <summary>
+    /// This adds all the resolutions as options to the dropdown
+    /// </summary>
+    private void AddResolutionsToDropdown()
+    {
+        List<TMP_Dropdown.OptionData> optionData = new List<TMP_Dropdown.OptionData>();
+
+        string tempOption = "";
+        string lastAddition = "lastVoyageRocks"; // This shouldn't be an empty string because tempOption is also empty
+        
+        _resolutionDropdown.ClearOptions();
+
+        optionData.Capacity = Screen.resolutions.Length;
+        
+        // This goes through each of the available screen resolutions
+        foreach (var resolution in Screen.resolutions)
+        {
+            // Grabs the name of the resolution
+            tempOption = resolution.ToString();
+            // Cuts out the refresh rate
+            tempOption = tempOption[..(tempOption.LastIndexOf('@') - 1)];
+
+            if (lastAddition == tempOption)
+            {
+                continue;
+            }
+
+            lastAddition = tempOption;
+            // And then adds it as an option to a list
+            TMP_Dropdown.OptionData testerOptionData = new TMP_Dropdown.OptionData(tempOption);
+            optionData.Add(testerOptionData);
+            
+        }
+        // Finally filling out the actual options with the list made above
+        _resolutionDropdown.options = optionData;
     }
 
     /// <summary>
-    /// This is meant to prevent the UI from swapping because Unity's system means that this will be called
-    /// on a value change
+    /// This takes the default resolution, and makes it the first selected option
     /// </summary>
-    /// <returns></returns>
-    private IEnumerator PreventUISwap()
+    private void SelectDefaultResolution()
     {
-        yield return _waitToAllowUIChange;
-        _isPreventingUIChange = false;
+        int selectedResolution = 0;
+        string currentResolutionString = Screen.currentResolution.ToString();
+        
+        // This cuts off the refresh rate of the current resolution
+        currentResolutionString = currentResolutionString[..(currentResolutionString.LastIndexOf('@')-1)];
+
+        // This goes through the resolutions and makes it the currently selected option
+        for (int i = 0; i < _resolutionDropdown.options.Count; i++)
+        {
+            if (String.Equals(_resolutionDropdown.options[i].text,currentResolutionString))
+            {
+                selectedResolution = i;
+            }
+        }
+
+        StoreWidthHeight(currentResolutionString);
+        _resolutionDropdown.value = selectedResolution;
+        _resolutionDropdown.RefreshShownValue();
+    }
+
+    /// <summary>
+    /// Stores the width and height of the current resolution
+    /// </summary>
+    /// <param name="resolution">The resolution to be broken into width and height</param>
+    private void StoreWidthHeight(string resolution)
+    {
+        int seperatorIndex = resolution.LastIndexOf('x');
+        _resolutionWidth = int.Parse(resolution[..(seperatorIndex-1)]);
+        _resolutionHeight = int.Parse(resolution[(seperatorIndex+2)..]);
+    }
+    
+    #endregion
+    
+    /// <summary>
+    /// This removes the listener to check if the resolution has changed
+    /// </summary>
+    private void OnDisable()
+    {
+        _resolutionDropdown.onValueChanged.RemoveListener(ChangeResolution);
     }
 }
