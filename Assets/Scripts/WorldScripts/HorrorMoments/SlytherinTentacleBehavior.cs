@@ -55,7 +55,6 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
     /// <summary>
     /// Called to destroy the tentacle once it has completed its motion
-    /// Called using Unity Animation Events, so it seems as though it is never reference, but believe me, it's used
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
@@ -72,7 +71,7 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         _playerCam.enabled = true;
         _dragCam.enabled = false;
 
-        // Enabling the things we disables with the previous event
+        // Enabling the things we disabled with the previous event
         CameraManager.Instance.InvokeOnCinematicEnd();
 
         Destroy(this.gameObject);

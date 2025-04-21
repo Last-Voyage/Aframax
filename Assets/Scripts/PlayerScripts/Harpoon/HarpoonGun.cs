@@ -140,6 +140,8 @@ public class HarpoonGun : MonoBehaviour
     // Used during automatic reloading
     private InputAction.CallbackContext _emptyCallback = new InputAction.CallbackContext();
 
+    private Vector3 _cameraPositionWithLastInput = Vector3.zero;
+
     #endregion
 
     #region dev console
@@ -236,12 +238,40 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
+        if (Camera.main.transform.localPosition != _cameraPositionWithLastInput)
+        {
+            StartCoroutine(SubscribeInputWithDelay());
+        }
+        else
+        {
+            _harpoonShoot.action.performed += FireHarpoon;
+
+            _harpoonReload.action.performed += StartReloadProcess;
+
+            _harpoonFocus.action.performed += FocusButtonHeld;
+            _harpoonFocus.action.canceled += FocusButtonReleased;
+        }
+    }
+
+    /// <summary>
+    /// Variation of SubcribeInput with a delay for the camera to return to its original location
+    /// Intended to be used after cinematics
+    /// </summary>
+    private IEnumerator SubscribeInputWithDelay()
+    {
+        yield return new WaitUntil(WaitForCameraReturn);
+
         _harpoonShoot.action.performed += FireHarpoon;
 
         _harpoonReload.action.performed += StartReloadProcess;
 
         _harpoonFocus.action.performed += FocusButtonHeld;
         _harpoonFocus.action.canceled += FocusButtonReleased;
+    }
+
+    private bool WaitForCameraReturn()
+    {
+        return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
     }
 
     /// <summary>
