@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
-// Contributor:        Nick Rice, Jeremiah Peters
+// Contributor:        Nick Rice, Jeremiah Peters, Adam Garwacki
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
@@ -132,6 +132,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActiveNoteOnClick();
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActiveNote();
         
         // Changes the note visuals
         OnUiSwap();
@@ -162,6 +164,12 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
 
         // Lock the mouse and unfreeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
+
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        
+
+        _playerInputMap.Disable();
 
         // Deactivate the note
         ActiveNote = null;
@@ -232,11 +240,24 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
     }
 
     /// <summary>
+    /// Closes the currently active note and forces the game to unpause.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActiveNoteOnClick()
+    {
+        PauseMenu.Instance.PauseToggle();
+    }
+
+    /// <summary>
     /// Prevents memory leaks
     /// </summary>
     private void OnDisable()
     {
         _playerInputMap.Player.UICycling.performed -= ctx =>ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActiveNoteOnClick();
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActiveNote();
+
+
         _playerInputMap.Disable();
     }
 }
