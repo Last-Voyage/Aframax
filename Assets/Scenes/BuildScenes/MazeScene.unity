@@ -9422,7 +9422,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: OpenStoryBeat
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -9442,7 +9442,7 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -9702,6 +9702,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].EventType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
       propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].EventType
       value: 3
       objectReference: {fileID: 0}
@@ -9767,13 +9772,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
-      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.size
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
-      propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -9842,19 +9847,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
       propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[0].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1974493119}
-    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
-        type: 3}
-      propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1974493117}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -9958,6 +9963,16 @@ PrefabInstance:
       objectReference: {fileID: 2053691823}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1974493119}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 679851383}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
       propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -10020,11 +10035,6 @@ PrefabInstance:
         type: 3}
       propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
-        type: 3}
-      propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayOneshotSound
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -10098,8 +10108,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
-      propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: StoryBeatAudioManager, Assembly-CSharp
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ActivateObjectiveHud
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ModifyPlayerSpeed
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -10173,8 +10188,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
-      propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 5
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ObjectiveHudBehaviour, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerStoryManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -10233,6 +10253,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
       propertyPath: StoryBeats.Array.data[1].StoryBeatEvents.Array.data[2].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Find the Key
       objectReference: {fileID: 0}
@@ -10260,6 +10300,11 @@ PrefabInstance:
         type: 3}
       propertyPath: StoryBeats.Array.data[5].StoryBeatEvents.Array.data[5].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Get Above Deck
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Run
       objectReference: {fileID: 0}
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
@@ -10319,6 +10364,16 @@ PrefabInstance:
     - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
         type: 3}
       propertyPath: StoryBeats.Array.data[5].StoryBeatEvents.Array.data[6].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[0].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1474086490113822862, guid: 426d1cc7ef91cd041a464a723f01af91,
+        type: 3}
+      propertyPath: StoryBeats.Array.data[7].StoryBeatEvents.Array.data[1].OnBeatEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6280356863843514936, guid: 426d1cc7ef91cd041a464a723f01af91,
@@ -10381,6 +10436,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 426d1cc7ef91cd041a464a723f01af91, type: 3}
+--- !u!114 &679851383 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4904936231933613865, guid: 426d1cc7ef91cd041a464a723f01af91,
+    type: 3}
+  m_PrefabInstance: {fileID: 679851382}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc674088c25b1e840af1fd68d5d8b53b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &691326633
 Mesh:
   m_ObjectHideFlags: 0
@@ -29222,12 +29289,12 @@ PrefabInstance:
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[0].Path
-      value: event:/SFX/MonsterSFX/MonsterScreechSFX
+      value: event:/CreatureCrySFX
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[1].Path
-      value: event:/SFX/BoatSFX/GeneratorStartSFX
+      value: event:/GeneratorStartSFX
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -29247,7 +29314,7 @@ PrefabInstance:
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[5].Path
-      value: event:/SFX/BoatSFX/DoorOpen1
+      value: event:/SFX/PlayerSFX/SpannerUseSFX
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -29327,22 +29394,22 @@ PrefabInstance:
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[0].Guid.Data1
-      value: 1969268521
+      value: -776193466
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[0].Guid.Data2
-      value: 1170613618
+      value: 1323933284
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[0].Guid.Data3
-      value: -1128017498
+      value: 1306389638
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[0].Guid.Data4
-      value: 1189389732
+      value: 1417873818
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -29427,22 +29494,22 @@ PrefabInstance:
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[5].Guid.Data1
-      value: -1952504999
+      value: -813945292
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[5].Guid.Data2
-      value: 1091209544
+      value: 1323660629
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[5].Guid.Data3
-      value: -1118448454
+      value: -1868534595
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
       propertyPath: OneshotSounds.Array.data[5].Guid.Data4
-      value: -136688867
+      value: -1272223320
       objectReference: {fileID: 0}
     - target: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
         type: 3}
@@ -29585,18 +29652,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c50443a3218375d45bf77fa466cc0864, type: 3}
---- !u!114 &1974493117 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4701527607552809291, guid: c50443a3218375d45bf77fa466cc0864,
-    type: 3}
-  m_PrefabInstance: {fileID: 1974493116}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98dbfa91af712304eb99d6d85a757353, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1974493118 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5200270301678607674, guid: c50443a3218375d45bf77fa466cc0864,
