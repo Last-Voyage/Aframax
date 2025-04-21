@@ -24,6 +24,9 @@ public class SubMenuSceneBehaviour : MonoBehaviour
     [SerializeField] private bool _willTransition = false;
     [SerializeField] private int _targetScene = 0;
 
+    [Space]
+    [SerializeField] private bool _doesSaveOnExit;
+
     private void Awake()
     {
         //initialize input
@@ -50,6 +53,11 @@ public class SubMenuSceneBehaviour : MonoBehaviour
         }
         else
         {
+            if(_doesSaveOnExit)
+            {
+                SaveManager.Instance.SaveText();
+            }
+            
             AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(_thisSceneID);
         }
     }

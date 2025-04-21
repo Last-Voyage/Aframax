@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1924377635035419611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 213135637133841256}
+  - component: {fileID: 6191685287557013409}
+  m_Layer: 0
+  m_Name: Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &213135637133841256
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924377635035419611}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 2.4916134, y: 2.6320887, z: 0.69478035}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8027777761817403967}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6191685287557013409
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924377635035419611}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8019467063859333145
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,8 +62,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8027777761817403967}
-  - component: {fileID: 6768132622668865638}
   - component: {fileID: 8216716576995117460}
+  - component: {fileID: 7745070166122991740}
   m_Layer: 0
   m_Name: SoundHorrorMoment
   m_TagString: Untagged
@@ -30,30 +83,10 @@ Transform:
   m_LocalPosition: {x: 15.6, y: 9.729999, z: 21.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 213135637133841256}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6768132622668865638
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8019467063859333145}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8216716576995117460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,4 +106,68 @@ MonoBehaviour:
       Data3: -1477115973
       Data4: -66561552
     Path: event:/BoatThumpSFX
+  - Guid:
+      Data1: 894503396
+      Data2: 1178919832
+      Data3: -1175305801
+      Data4: -670371181
+    Path: event:/Anomalies/GlassShatter
+  - Guid:
+      Data1: 898782638
+      Data2: 1306502227
+      Data3: 1705356195
+      Data4: 448112877
+    Path: event:/Anomalies/ShipBell
+  - Guid:
+      Data1: 726086766
+      Data2: 1289630305
+      Data3: -305622382
+      Data4: 1626469632
+    Path: event:/Anomalies/WoodBreak
+  - Guid:
+      Data1: -776193466
+      Data2: 1323933284
+      Data3: 1306389638
+      Data4: 1417873818
+    Path: event:/SFX/MonsterSFX/CreatureCrySFX
+  - Guid:
+      Data1: 1969268521
+      Data2: 1170613618
+      Data3: -1128017498
+      Data4: 1189389732
+    Path: event:/SFX/MonsterSFX/MonsterScreechSFX
+  - Guid:
+      Data1: 398569970
+      Data2: 1261841308
+      Data3: 1946485940
+      Data4: -333236515
+    Path: event:/SFX/CreakingTreesSFX
   _soundToUseIndex: 0
+  _dialogue: {fileID: 0}
+--- !u!54 &7745070166122991740
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8019467063859333145}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0

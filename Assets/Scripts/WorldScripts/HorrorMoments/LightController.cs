@@ -17,7 +17,6 @@ public class LightController : MonoBehaviour
     // Components of the GameObject
     private Light _light;
     private Color _originalColor;
-    private Animator _animator;
 
     [Header("Flicker")]
     // Toggle for turning on and off light flickering
@@ -35,10 +34,6 @@ public class LightController : MonoBehaviour
     [SerializeField] private float _lightTransitionTime = 1f;
     [SerializeField] private float _lightShiftDuration = 20f;
 
-    // Animation variables
-    private const string _LIGHT_FLICKER_TRIGGER = "PlayFlicker";
-
-
     /// <summary>
     /// Called on the first frame
     /// Used to set up variables
@@ -46,7 +41,6 @@ public class LightController : MonoBehaviour
     private void Awake()
     {
         GetLight();
-        GetAnimator();
     }
 
     /// <summary>
@@ -57,14 +51,6 @@ public class LightController : MonoBehaviour
         _light = GetComponent<Light>();
         _startingIntensity = _light.intensity;
         _originalColor = _light.color;
-    }
-
-    /// <summary>
-    /// Gets the animator component
-    /// </summary>
-    private void GetAnimator()
-    {
-        _animator = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -85,11 +71,8 @@ public class LightController : MonoBehaviour
         float timer = 0;
         while (timer <= 1)
         {
-            float newR = Mathf.Lerp(_light.color.r, _lightShiftTargetColor.r, timer);
-            float newG = Mathf.Lerp(_light.color.g, _lightShiftTargetColor.g, timer);
-            float newB = Mathf.Lerp(_light.color.b, _lightShiftTargetColor.b, timer);
+            _light.color = Color.Lerp(_originalColor, _lightShiftTargetColor, timer);
 
-            _light.color = new Color(newR, newG, newB, 0);
             timer += Time.deltaTime / _lightTransitionTime;
 
             yield return null;
@@ -108,11 +91,8 @@ public class LightController : MonoBehaviour
             timer = 0;
             while (timer <= 1)
             {
-                float newR = Mathf.Lerp(_light.color.r, _originalColor.r, timer);
-                float newG = Mathf.Lerp(_light.color.g, _originalColor.g, timer);
-                float newB = Mathf.Lerp(_light.color.b, _originalColor.b, timer);
+                _light.color = Color.Lerp(_lightShiftTargetColor, _originalColor, timer);
 
-                _light.color = new Color(newR, newG, newB, 0);
                 timer += Time.deltaTime / _lightTransitionTime;
 
                 yield return null;
@@ -154,7 +134,7 @@ public class LightController : MonoBehaviour
 
         while (flickerTimer < 1)
         {
-            flickerTimer += Time.deltaTime / _lightFlickerDuration;
+            flickerTimer += Time.deltaTime / flickerDuration;
             _light.intensity = curve.Evaluate(flickerTimer) * _startingIntensity;
             yield return null;
         }

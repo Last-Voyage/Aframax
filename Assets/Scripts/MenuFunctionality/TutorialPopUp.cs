@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         TutorialPopUp.cs
 // Author :            Charlie Polonus
+// Contributors :      Adam Garwacki
 // Creation Date :     3/2/25
 //
 // Brief Description : Controls a tutorial pop up in-engine.
@@ -13,24 +14,36 @@ using UnityEngine.Events;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 /// <summary>
 /// A collection of pages for a popup tutorial
 /// </summary>
-public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
+public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
 {
     public static TutorialPopUp ActiveTutorial = null;
 
     [Header("References")]
     [SerializeField] private Canvas _popupCanvas;
-    [SerializeField] private Image _leftArrow;
-    [SerializeField] private Image _rightArrow;
+    [SerializeField] private Button _leftArrow;
+    [SerializeField] private Button _rightArrow;
     [SerializeField] private Transform _pageParent;
     [Space]
     [SerializeField] private UnityEvent _onDialogueExit;
     private GameObject[] _pages;
     private int _currentPage;
     private PlayerInputMap _playerInputMap;
+    private bool _hasDoorOpened;
+    private InGameMenuSwap _menuSwapScript;
+
+    [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
+    
+    [SerializeField] private Image _rightPageButton;
+    [SerializeField] private Image _leftPageButton;
+    [Header("Keyboard UI assets")]
+    [SerializeField] private Sprite _keyboardLeftPageButtonAsset, _keyboardRightPageButtonAsset;
+    [Header("Controller UI assets")]
+    [SerializeField] private Sprite _controllerLeftPageButtonAsset, _controllerRightPageButtonAsset;
 
     [Space]
     [SerializeField] private bool _doesInteractOnStart = false;
@@ -43,6 +56,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         _playerInputMap = new PlayerInputMap();
 
         _pages = new GameObject[_pageParent.childCount];
+
+        _menuSwapScript = _popupCanvas.GetComponent<InGameMenuSwap>();
 
         for (int i = 0; i < _pageParent.childCount; i++)
         {
@@ -68,17 +83,22 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             TimeManager.Instance.GetOnGamePauseEvent()?.Invoke();
 
             // I believe that making this true pauses audio, if we want to change that, then it's right below here
-            TimeManager.Instance.PauseGameToggle(true);
+            TimeManager.Instance.PauseGameToggle(false);
         }
         
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActivePopupViaClick();
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
         ActiveTutorial = this;
+        _menuSwapScript.DeselectMenu();
         ChangePage(_currentPage);
+        
+        // Changes the note visuals
+        OnUiSwap();
     }
 
     /// <summary>
@@ -91,7 +111,15 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         StopPage(_pages[_currentPage]);
 
         // Clamp the page to the bounds of the note, then assign the text
-        _currentPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
+        int _nextPage = Mathf.Clamp(_currentPage + pageChangeAmount, 0, _pages.Length - 1);
+
+        //play sfx if changing page
+        if (_currentPage != _nextPage)
+        {
+            _buttonSFXManagerReference.PlayClickSFX();
+        }
+
+        _currentPage = _nextPage;
 
         // Set the visibility of each page based on the current active page
         for (int i = 0; i < _pages.Length; i++)
@@ -103,8 +131,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         StartPage(_pages[_currentPage]);
 
         // Update the arrows to look the correct color
-        _leftArrow.color = _currentPage == 0 ? Color.clear : Color.white;
-        _rightArrow.color = _currentPage == _pages.Length - 1 ? Color.clear : Color.white;
+        _leftArrow.interactable = _currentPage != 0;
+        _rightArrow.interactable = _currentPage != _pages.Length - 1;
     }
 
     /// <summary>
@@ -117,7 +145,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         VideoPlayer pageVideo = page.GetComponentInChildren<VideoPlayer>();
 
         // Stop the video if there is one
-        if (pageVideo.clip != null)
+        if (!pageVideo.clip.IsUnityNull())
         {
             pageVideo.time = 0;
             pageVideo.Stop();
@@ -135,7 +163,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
         RawImage pageVideoImage = page.GetComponentInChildren<RawImage>();
         Image pageImage = page.GetComponentInChildren<Image>();
 
-        bool hasVideo = pageVideo.clip != null;
+        bool hasVideo = !pageVideo.clip.IsUnityNull();
 
         // Play the video if there is one
         if (hasVideo)
@@ -174,9 +202,14 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
             _pages[i].SetActive(false);
         }
 
+        if (!_hasDoorOpened)
+        {
+            _onDialogueExit?.Invoke();
+            _hasDoorOpened = true;
+        }
+        
         // Free the mouse and freeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent();
-        _onDialogueExit?.Invoke();
     }
 
     /// <summary>
@@ -188,18 +221,46 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
+    /// Closes the popup of the current tutorial object.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActivePopupViaClick()
+    {
+        PauseMenu.Instance.PauseToggle();
+        CloseTutorialPopUp();
+    }
+
+
+    /// <summary>
     /// Override for the player interacting with the tutorial
     /// </summary>
     public void OnInteractedByPlayer()
     {
         // Edge cases: There's no tutorials or something is already open
-        if (ActiveTutorial != null
+        if (!ActiveTutorial.IsUnityNull()
             || Time.deltaTime == 0)
         {
             return;
         }
 
         OpenTutorialPopUp();
+    }
+    
+    /// <summary>
+    /// Swaps the left and right page movement sprites
+    /// </summary>
+    public void OnUiSwap()
+    {
+        if (UiManager.IsUsingController)
+        {
+            _leftPageButton.sprite = _controllerLeftPageButtonAsset;
+            _rightPageButton.sprite = _controllerRightPageButtonAsset;
+        }
+        else
+        {
+            _leftPageButton.sprite = _keyboardLeftPageButtonAsset;
+            _rightPageButton.sprite = _keyboardRightPageButtonAsset;
+        }
     }
 
     /// <summary>
@@ -208,6 +269,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable
     private void OnDisable()
     {
         _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActivePopupViaClick();
+
         _playerInputMap.Disable();
     }
 

@@ -137,7 +137,8 @@ public class HarpoonGun : MonoBehaviour
 
     private CinemachineImpulseSource _cinemachineImpulse;
 
-    private bool _shouldReload = true;
+    // Used during automatic reloading
+    private InputAction.CallbackContext _emptyCallback = new InputAction.CallbackContext();
 
     #endregion
 
@@ -309,9 +310,9 @@ public class HarpoonGun : MonoBehaviour
 
         // This is basically used as a trap to prevent reloading from happening automatically
         // That happens cuz of some goofy things with events and the input system
-        if (!_shouldAutomaticReload)
+        if (_shouldAutomaticReload)
         {
-            _shouldReload = false;
+            StartReloadProcess(_emptyCallback);
         }
     }
 
@@ -334,13 +335,10 @@ public class HarpoonGun : MonoBehaviour
     private void StartReloadProcess(InputAction.CallbackContext context)
     {
         // Return if we don't need to reload
-        if (_harpoonFiringState != EHarpoonFiringState.NeedReload || !_shouldReload)
+        if (_harpoonFiringState != EHarpoonFiringState.NeedReload)
         {
-            _shouldReload = true;
             return;
         }
-
-        _harpoonFiringState = EHarpoonFiringState.Reloading;
 
         StartCoroutine(ReloadHarpoon());
     }
@@ -353,6 +351,8 @@ public class HarpoonGun : MonoBehaviour
         //nabil added infinite ammo functionality here
         if (_currentReserveAmmo > 0 || ConsoleController.Instance.IsInInfiniteAmmoMode)
         {
+            _harpoonFiringState = EHarpoonFiringState.Reloading;
+
             _reticle.ToggleAmmoIcons();
 
             PlayerManager.Instance.OnInvokeHarpoonStartReloadEvent();
@@ -452,7 +452,7 @@ public class HarpoonGun : MonoBehaviour
 
     private void ReloadAfterRestocking(int ammoRestored)
     {
-        if (_harpoonFiringState == EHarpoonFiringState.Reloading && _currentReserveAmmo == ammoRestored && 
+        if (_harpoonFiringState == EHarpoonFiringState.NeedReload && _currentReserveAmmo == ammoRestored && 
             _shouldAutomaticReload)
         {
             StartCoroutine(ReloadHarpoon());
@@ -757,7 +757,15 @@ public class HarpoonGun : MonoBehaviour
     public Transform GetHarpoonTip() => _harpoonTip;
     public int GetMaxAmmo() => _maxAmmo;
     public int GetReserveAmmo() => _currentReserveAmmo;
-    public bool IsAtMaxAmmo() => _currentReserveAmmo == _maxAmmo;
+    public bool IsAtMaxAmmo()
+    {
+        int tempAmmo = _currentReserveAmmo;
+        if (_harpoonFiringState == EHarpoonFiringState.Ready)
+        {
+            tempAmmo++;
+        }
+        return tempAmmo == _maxAmmo;
+    }
 
     /// <summary>
     /// The focus accuracy (or potential deviation) of the harpoon.
