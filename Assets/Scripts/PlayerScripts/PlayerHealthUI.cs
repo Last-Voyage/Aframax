@@ -51,11 +51,11 @@ public class PlayerHealthUi : MonoBehaviour
     private Animator _heartAnimator;
 
     [Header("Saturation While Damaged")]
-    [SerializeField] private float _undamagedSaturation;
-    [SerializeField] private float _lightlyDamagedSaturation;
-    [SerializeField] private float _kindaDamagedSaturation;
-    [SerializeField] private float _badlyDamagedSaturation;
-    [SerializeField] private float _onDeathSaturation;
+    [SerializeField] [Range(0, 1)] private float _undamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _lightlyDamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _kindaDamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _badlyDamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _onDeathSaturation;
 
     // Cached variables
     private WaitForSeconds _heartOnScreenWait;
