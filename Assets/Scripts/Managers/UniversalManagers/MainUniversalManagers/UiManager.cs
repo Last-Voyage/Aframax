@@ -5,6 +5,8 @@
 //
 // Description:     Contains the functionality to set up and get access to Ui changes
 ******************************************************************************/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,12 +23,21 @@ public class UiManager : MainUniversalManagerFramework
     private readonly UnityEvent _onSwapInput = new();
 
     /// <summary>
+    /// Makes the controller toggle save between game sessions
+    /// </summary>
+    private void Awake()
+    {
+        _isUsingController = SaveManager.Instance.GetGameSaveData().IsUsingController;
+    }
+
+    /// <summary>
     /// This sends out the event to change the current Ui used in game when a controller is used
     /// For the time being the main usage of this is for changing a boolean
     /// </summary>
     public void SwapInput()
     {
         _isUsingController = !_isUsingController;
+        SaveManager.Instance.GetGameSaveData().IsUsingController = _isUsingController;
         _onSwapInput?.Invoke();
     }
 
