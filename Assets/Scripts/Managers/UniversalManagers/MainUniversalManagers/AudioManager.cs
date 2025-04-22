@@ -12,6 +12,7 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,17 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class AudioManager : MainUniversalManagerFramework
 {
+    public static AudioManager Instance;
+
+    /// <summary>
+    /// Establishes the instance for the audio manager
+    /// </summary>
+    public override void SetUpInstance()
+    {
+        base.SetUpInstance();
+        Instance = this;
+    }
+
     /// <summary>
     /// Creates an Fmod instance after being given an Fmod reference
     /// </summary>
