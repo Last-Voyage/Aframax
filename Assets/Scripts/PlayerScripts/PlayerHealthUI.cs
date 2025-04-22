@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         PlayerHealthUI.cs
 // Author :            Jeremiah Peters
-// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster, Nick Rice
+// Contributors:       Ryan Swanson, Andrea Swihart-DeCoster, Nick Rice, Adam Garwacki
 // Creation Date :     9/16/24
 //
 // Brief Description : operates the health ui for the player
@@ -49,7 +49,14 @@ public class PlayerHealthUi : MonoBehaviour
     private CanvasRenderer _heartAlphaParent;
 
     private Animator _heartAnimator;
-    
+
+    [Header("Saturation While Damaged")]
+    [SerializeField] [Range(0, 1)] private float _undamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _lightlyDamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _kindaDamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _badlyDamagedSaturation;
+    [SerializeField] [Range(0, 1)] private float _onDeathSaturation;
+
     // Cached variables
     private WaitForSeconds _heartOnScreenWait;
     
@@ -102,18 +109,23 @@ public class PlayerHealthUi : MonoBehaviour
         {
             case >=1f:
                 _damageStatePointer = 4;
+                GlobalColorFilterManager.Instance.Saturation = _undamagedSaturation;
                 break;
             case >=.75f:
                 _damageStatePointer = 3;
+                GlobalColorFilterManager.Instance.Saturation = _lightlyDamagedSaturation;
                 break;
             case >=.5f:
                 _damageStatePointer = 2;
+                GlobalColorFilterManager.Instance.Saturation = _kindaDamagedSaturation;
                 break;
             case >=.25f:
                 _damageStatePointer = 1;
+                GlobalColorFilterManager.Instance.Saturation = _badlyDamagedSaturation;
                 break;
             default:
                 _damageStatePointer = 0;
+                GlobalColorFilterManager.Instance.Saturation = _onDeathSaturation;
                 break;
         }
         _damagedUIImages[Mathf.Clamp(_damageStatePointer-1,0,4)].gameObject.SetActive(true);

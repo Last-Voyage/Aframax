@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         NoteInteractable.cs
 // Author :            Charlie Polonus
-// Contributor:        Nick Rice, Jeremiah Peters
+// Contributor:        Nick Rice, Jeremiah Peters, Adam Garwacki
 // Creation Date :     1/27/25
 //
 // Brief Description : Controls an interactable note in scene. When
@@ -13,11 +13,12 @@ using UnityEngine.Events;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 /// <summary>
 /// The MonoBehaviour that manages anything that can be interacted with and read
 /// </summary>
-public class NoteInteractable : MonoBehaviour, IPlayerInteractable
+public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
 {
     public static NoteInteractable ActiveNote = null;
     private static ConsoleController _activeConsole = null;
@@ -28,6 +29,14 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     [SerializeField] private TMP_Text _noteTextField;
     [SerializeField] private Button _leftArrow;
     [SerializeField] private Button _rightArrow;
+    
+    [SerializeField] private Image _rightPageButton;
+    [SerializeField] private Image _leftPageButton;
+    [Header("Keyboard UI assets")]
+    [SerializeField] private Sprite _keyboardLeftPageButtonAsset, _keyboardRightPageButtonAsset;
+    [Header("Controller UI assets")]
+    [SerializeField] private Sprite _controllerLeftPageButtonAsset, _controllerRightPageButtonAsset;
+    
 
     [Space]
     [SerializeField] private UnityEvent _onNoteOpen;
@@ -55,7 +64,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     {
 	    _noteView.transform.parent = null;
 	    _noteView.transform.rotation = Quaternion.identity;
-        if (_activeConsole == null)
+        if (_activeConsole.IsUnityNull())
         {
             _activeConsole = FindAnyObjectByType<ConsoleController>();
         }
@@ -94,7 +103,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public void OnInteractedByPlayer()
     {
         // Edge cases: There's no notes or something is already open
-        if (ActiveNote != null
+        if (!ActiveNote.IsUnityNull()
             || Time.timeScale == 0)
         {
             return;
@@ -123,6 +132,11 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         // Enables a/d, arrow keys, and shoulder button controls
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActiveNoteOnClick();
+        _playerInputMap.Player.UIBack.performed += ctx => ExitActiveNote();
+        
+        // Changes the note visuals
+        OnUiSwap();
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -140,7 +154,7 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     public void HideNote()
     {
         // Edge cases: The console is in use and the console is open
-        if (_activeConsole != null
+        if (!_activeConsole.IsUnityNull()
             && _activeConsole.ConsoleIsOpen())
         {
             return;
@@ -151,13 +165,19 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
         // Lock the mouse and unfreeze the game
         TimeManager.Instance.GetOnGameUnpauseEvent()?.Invoke();
 
+        // Stop accepting A&D/Controller UI input
+        _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
+        
+
+        _playerInputMap.Disable();
+
         // Deactivate the note
         ActiveNote = null;
         _noteView.SetActive(false);
 
         if (!_doesDialogueOnlyPlayOnce || !_hasPlayed)
         {
-            if (_dialogueOnExit != null)
+            if (!_dialogueOnExit.IsUnityNull())
             {
                 GameStateManager.Instance.GetOnNewDialogueChain()?.Invoke(_dialogueOnExit);
                 
@@ -182,6 +202,27 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
+    /// Swaps the left and right page movement sprites
+    /// </summary>
+    public void OnUiSwap()
+    {
+        if (_leftPageButton.IsUnityNull() || _rightPageButton.IsUnityNull())
+        {
+            return;
+        }
+        if (UiManager.IsUsingController)
+        {
+            _leftPageButton.sprite = _controllerLeftPageButtonAsset;
+            _rightPageButton.sprite = _controllerRightPageButtonAsset;
+        }
+        else
+        {
+            _leftPageButton.sprite = _keyboardLeftPageButtonAsset;
+            _rightPageButton.sprite = _keyboardRightPageButtonAsset;
+        }
+    }
+
+    /// <summary>
     /// Removes the listeners to the event
     /// </summary>
     private void OnDestroy()
@@ -199,11 +240,24 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable
     }
 
     /// <summary>
+    /// Closes the currently active note and forces the game to unpause.
+    /// Accessed when clicking an Escape button prompt.
+    /// </summary>
+    public void ExitActiveNoteOnClick()
+    {
+        PauseMenu.Instance.PauseToggle();
+    }
+
+    /// <summary>
     /// Prevents memory leaks
     /// </summary>
     private void OnDisable()
     {
         _playerInputMap.Player.UICycling.performed -= ctx =>ChangePage((int)ctx.ReadValue<float>());
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActiveNoteOnClick();
+        _playerInputMap.Player.UIBack.performed -= ctx => ExitActiveNote();
+
+
         _playerInputMap.Disable();
     }
 }
