@@ -21,7 +21,7 @@ using UnityEngine.SceneManagement;
 public class RuntimeSfxManager : AudioManager
 {
     public static Action<EventReference, Vector3> APlayOneShotSfx;
-
+    public static Action<EventInstance, Vector3> APlayOneShotSfxInstance;
     public static Action<EventReference, GameObject> APlayOneShotSfxAttached;
 
     private EventInstance _walkingEventInstance;
@@ -102,12 +102,14 @@ public class RuntimeSfxManager : AudioManager
         if (val)
         {
             APlayOneShotSfx += PlayOneShotSfx;
+            APlayOneShotSfxInstance += PlayOneShotSfxInstance;
             APlayOneShotSfxAttached += PlayOneShotSfxAttached;
 
             return;
         }
 
         APlayOneShotSfx -= PlayOneShotSfx;
+        APlayOneShotSfxInstance -= PlayOneShotSfxInstance;
         APlayOneShotSfxAttached -= PlayOneShotSfxAttached;
     }
 
@@ -138,6 +140,22 @@ public class RuntimeSfxManager : AudioManager
         }
 
         RuntimeManager.PlayOneShot(eventReference, worldPosition);
+    }
+
+    /// <summary>
+    /// Plays an audio event via event instance at a specific location
+    /// </summary>
+    /// <param name="eventInstance"> The audio event to play </param>
+    /// <param name="worldPosition"> The location for the audio to play at </param>
+    private void PlayOneShotSfxInstance(EventInstance eventInstance, Vector3 worldPosition = new Vector3())
+    {
+        if (eventInstance.IsUnityNull())
+        {
+            return;
+        }
+
+        eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(worldPosition));
+        eventInstance.start();
     }
 
     /// <summary>
