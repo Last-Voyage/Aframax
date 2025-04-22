@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
-// File Name :          LightShift.cs
+// File Name :          SlytherinTentacleBehavior.cs
 // Author :             Andrew Stapay
 // Creation Date :      2/4/25
 //
@@ -22,6 +22,10 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     private Rigidbody _playerRb;
     private float _basePlayerSpeed;
 
+    private HarpoonGun _harpoonGun;
+    private GameObject _playerReticle;
+    private GameObject _horizonDot;
+
     /// <summary>
     /// Called to make the tentacle play its animation
     /// </summary>
@@ -29,6 +33,9 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     {
         // Everything should already be set up, just play the animation
         Animator animator = GetComponent<Animator>();
+
+        // Disabling things from other objects
+        CameraManager.Instance.InvokeOnCinematicStart();
 
         //disable player movement and pan camera to cinematic spot
         //get the player virtual camera
@@ -48,7 +55,6 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
     /// <summary>
     /// Called to destroy the tentacle once it has completed its motion
-    /// Called using Unity Animation Events, so it seems as though it is never reference, but believe me, it's used
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
@@ -64,6 +70,9 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
         _playerCam.enabled = true;
         _dragCam.enabled = false;
+
+        // Enabling the things we disabled with the previous event
+        CameraManager.Instance.InvokeOnCinematicEnd();
 
         Destroy(this.gameObject);
     }
