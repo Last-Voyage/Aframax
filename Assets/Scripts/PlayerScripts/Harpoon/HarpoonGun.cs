@@ -269,6 +269,10 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFocus.action.canceled += FocusButtonReleased;
     }
 
+    /// <summary>
+    /// Bool to check if the camera has returned to its original position after cinematics
+    /// </summary>
+    /// <returns> True if the camera is in the correct position, false otherwise </returns>
     private bool WaitForCameraReturn()
     {
         return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
@@ -287,6 +291,8 @@ public class HarpoonGun : MonoBehaviour
         _harpoonFocus.action.canceled -= FocusButtonReleased;
 
         _isFocusButtonHeld = false;
+
+        _cameraPositionWithLastInput = Camera.main.transform.localPosition;
     }
     
     #endregion
