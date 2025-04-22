@@ -195,6 +195,10 @@ public class DialoguePopUps : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
+        _textContainer.text = "";
+        _textBackgroundContainer.text = "";
+        _playingDialogue = null;
+        
         GameStateManager.Instance.GetOnDialogueProgress().
             RemoveListener(BeginDisplayingText);
     }

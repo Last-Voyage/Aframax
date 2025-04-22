@@ -61,6 +61,7 @@ public class ChaseVineGroup : MonoBehaviour
             chaseSequenceVine.gameObject.SetActive(false);
         }
         _chaseSequenceVines[0].OnChaseEnd.AddListener(StopMovementAudio);
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(StopMovementAudio);
 
         CreateMovementAudio();
     }
@@ -189,4 +190,20 @@ public class ChaseVineGroup : MonoBehaviour
     public bool IsTriggeredByPlayerWalkThrough() => _isTriggeredByPlayerWalkingBy;
     public bool IsSupposedToKillInstant() => _doeskillPlayerInstantly;
     public float GetPlayerDamageAmount() => _damageToPlayer;
+
+    /// <summary>
+    /// When the script instance is destroyed
+    /// </summary>
+    private void OnDestroy()
+    {
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(StopMovementAudio);
+    }
+
+    /// <summary>
+    /// When the script instance is disabled
+    /// </summary>
+    private void OnDisable()
+    {
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(StopMovementAudio);
+    }
 }
