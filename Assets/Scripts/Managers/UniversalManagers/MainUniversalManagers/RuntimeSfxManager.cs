@@ -71,6 +71,8 @@ public class RuntimeSfxManager : AudioManager
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
 
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopFootsteps);
+
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopFootsteps);
     }
 
@@ -83,6 +85,8 @@ public class RuntimeSfxManager : AudioManager
 
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopFootsteps);
 
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
 

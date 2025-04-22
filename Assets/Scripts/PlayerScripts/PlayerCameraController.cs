@@ -217,31 +217,11 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
             {
-                // Let's make sure the harpoon is set to the PlayerCamera as its parent
-                // This is because we want to ignore the Main Camera's current rotation so we can just do it ourselves
-                _harpoonTransform.SetParent(this.transform, true);
-
-                // Get new angles for the harpoon
-                // We do this by getting the current rotation for the harpoon and putting it through this
-                // SmoothDampAngle function, which is super intuitive and makes the movement clean
-                float newHoriAngle = Mathf.SmoothDampAngle(_harpoonTransform.localEulerAngles.y,
-                    _cameraTransform.localEulerAngles.y, ref _harpoonHorizontalVelocity, 
-                    _harpoonFollowTime * _BASE_FOLLOW_TIME);
-                float newVertAngle = Mathf.SmoothDampAngle(_harpoonTransform.localEulerAngles.x,
-                    _cameraTransform.localEulerAngles.x, ref _harpoonVerticalVelocity, 
-                    _harpoonFollowTime * _BASE_FOLLOW_TIME);
-
-                // Set new angles for the harpoon
-                _harpoonTransform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
+                UnchildHarpoon();
             }
             else
             {
-                // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
-                // to keep its rotation when it's not idle
-                _harpoonTransform.SetParent(_cameraTransform, true);
-
-                // Let's reset the rotation too, just in case
-                _harpoonTransform.localRotation = Quaternion.identity;
+                ChildHarpoon();
             }
         }
     }
@@ -496,6 +476,64 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     /// <summary>
+    /// Sets the harpoon to be the child of the main camera
+    /// Used during the logic of cinematics and animations
+    /// </summary>
+    public void ChildHarpoon()
+    {
+        // Because of the harpoon's animations, we need the harpoon to attach to the Main Camera
+        // to keep its rotation when it's not idle
+        _harpoonTransform.SetParent(_cameraTransform, true);
+
+        // Let's reset the rotation too, just in case
+        _harpoonTransform.localRotation = Quaternion.identity;
+    }
+
+    /// <summary>
+    /// Sets the harpoon to be the child of this object
+    /// Used during the logic of cinematics and animations
+    /// </summary>
+    public void UnchildHarpoon()
+    {
+        // Let's make sure the harpoon is set to the PlayerCamera as its parent
+        // This is because we want to ignore the Main Camera's current rotation so we can just do it ourselves
+        _harpoonTransform.SetParent(this.transform, true);
+
+        // Get new angles for the harpoon
+        // We do this by getting the current rotation for the harpoon and putting it through this
+        // SmoothDampAngle function, which is super intuitive and makes the movement clean
+        float newHoriAngle = Mathf.SmoothDampAngle(_harpoonTransform.localEulerAngles.y,
+            _cameraTransform.localEulerAngles.y, ref _harpoonHorizontalVelocity,
+            _harpoonFollowTime * _BASE_FOLLOW_TIME);
+        float newVertAngle = Mathf.SmoothDampAngle(_harpoonTransform.localEulerAngles.x,
+            _cameraTransform.localEulerAngles.x, ref _harpoonVerticalVelocity,
+            _harpoonFollowTime * _BASE_FOLLOW_TIME);
+
+        // Set new angles for the harpoon
+        _harpoonTransform.localRotation = Quaternion.Euler(newVertAngle, newHoriAngle, 0);
+    }
+
+    /// <summary>
+    /// Stops the camera movement coroutine
+    /// </summary>
+    public void StopAutoCameraMovement()
+    {
+        StopCoroutine(_cameraCoroutine);
+        _cameraCoroutine = null;
+    }
+
+    /// <summary>
+    /// Restarts the camera movement coroutine
+    /// </summary>
+    public void RestartAutoCameraMovement()
+    {
+        if (_cameraCoroutine.IsUnityNull())
+        {
+            _cameraCoroutine = StartCoroutine(MoveCamera());
+        }
+    }
+
+    /// <summary>
     /// Called when this component is enabled.
     /// Used to assign various actions to listeners
     /// </summary>
@@ -504,6 +542,9 @@ public class PlayerCameraController : MonoBehaviour
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(StartWalkingSway);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopWalkingSway);
         CameraManager.Instance.GetOnJumpscareEvent().AddListener(JumpscarePullback);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopAutoCameraMovement);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnchildHarpoon);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(RestartAutoCameraMovement);
     }
 
     /// <summary>
@@ -515,6 +556,9 @@ public class PlayerCameraController : MonoBehaviour
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(StartWalkingSway);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopWalkingSway);
         CameraManager.Instance.GetOnJumpscareEvent().RemoveListener(JumpscarePullback);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopAutoCameraMovement);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnchildHarpoon);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(RestartAutoCameraMovement);
     }
 
     /// <summary>

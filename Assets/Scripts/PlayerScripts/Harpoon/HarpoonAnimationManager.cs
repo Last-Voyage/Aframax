@@ -6,6 +6,7 @@
 // Description:     Assists with the logic of the harpoon's animations.
 ******************************************************************************/
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,10 +17,12 @@ public class HarpoonAnimationManager : MonoBehaviour
 {
     private Animator _animator;
 
+    // Names of states used in the Animator
+    private const string _IDLE_ANIM = "harpoonIdle";
+
     // The names of the parameters used in the Animator
     private const string _FIRE_ANIM = "shoot";
-    private const string _FOCUS_START_ANIM = "holdFocus";
-    private const string _FOCUS_END_ANIM = "releaseFocus";
+    private const string _FOCUS_ANIM = "focusing";
     private const string _RELOAD_READY_ANIM = "reloadReady";
     private const string _RESTOCK_COMPLETE_ANIM = "restockComplete";
     private const string _AMMO_EMPTY_ANIM = "ammoEmpty";
@@ -27,7 +30,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private const string _AT_WALL_ANIM = "atWall";
     private const string _SPRINT_ANIM = "sprint";
     private const string _PLAYER_MOVING_ANIM = "move";
-    
+
     // Used to check to see if we are near a wall
     private const float _WALL_CHECK_DIST = 1;
 
@@ -73,6 +76,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(delegate { TogglePlayerMovingAnimation(true); });
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(delegate { TogglePlayerMovingAnimation(false); });
         EnemyManager.Instance.GetOnChaseSequenceBegin().AddListener(StartSprintAnimation);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ForceIdle);
     }
 
     /// <summary>
@@ -88,6 +92,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(delegate { TogglePlayerMovingAnimation(true); });
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(delegate { TogglePlayerMovingAnimation(false); });
         EnemyManager.Instance.GetOnChaseSequenceBegin().RemoveListener(StartSprintAnimation);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ForceIdle);
     }
 
     /// <summary>
@@ -95,8 +100,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StartFocusingAnimation()
     {
-        _animator.SetTrigger(_FOCUS_START_ANIM);
-        _animator.ResetTrigger(_FOCUS_END_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, true);
     }
 
     /// <summary>
@@ -104,7 +108,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StopFocusingAnimation()
     {
-        _animator.SetTrigger(_FOCUS_END_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, false);
     }
 
     /// <summary>
@@ -113,6 +117,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void StartFiringAnimation()
     {
         _animator.SetTrigger(_FIRE_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, false);
 
         //Check to see if we are out of ammo
         //If we are, start the empty ammo animation
@@ -184,5 +189,26 @@ public class HarpoonAnimationManager : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Automatically resets the animator to the idle state
+    /// Used for cinematics
+    /// </summary>
+    private void ForceIdle()
+    {
+        // Cut back to the idle animation
+        _animator.Play(_IDLE_ANIM);
+
+        // Reset everything
+        _animator.ResetTrigger(_FIRE_ANIM);
+        _animator.SetBool(_FOCUS_ANIM, false);
+        _animator.ResetTrigger(_RELOAD_READY_ANIM);
+        _animator.ResetTrigger(_RESTOCK_COMPLETE_ANIM);
+        _animator.ResetTrigger(_AMMO_EMPTY_ANIM);
+        _animator.ResetTrigger(_NOT_WALL_ANIM);
+        _animator.ResetTrigger(_AT_WALL_ANIM);
+        _animator.SetBool(_SPRINT_ANIM, false);
+        _animator.SetBool(_PLAYER_MOVING_ANIM, false);
     }
 }

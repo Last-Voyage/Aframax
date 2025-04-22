@@ -195,6 +195,10 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(StartReloadSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().AddListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
     }
 
     /// <summary>
@@ -207,6 +211,10 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(StartReloadSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().RemoveListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
     }
     #endregion
     
