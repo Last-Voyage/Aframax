@@ -48,6 +48,10 @@ public class ChaseVineGroup : MonoBehaviour
     private float _basePlayerSpeed;
     private PlayerMovementController _playerMovementController;
 
+    private HarpoonGun _harpoonGun;
+    private GameObject _playerReticle;
+    private GameObject _horizonDot;
+
     /// <summary>
     /// Sets up the chase vine group
     /// </summary>
@@ -95,6 +99,9 @@ public class ChaseVineGroup : MonoBehaviour
             _playerCam.enabled = false;
             _playerMovementController.PlayerMovementSpeed = 0;
 
+            // Also disable harpoon gun and reticle
+            CameraManager.Instance.InvokeOnCinematicStart();
+
             //play start screaming animation
             _startScreamObject.SetActive(true);
 
@@ -127,6 +134,9 @@ public class ChaseVineGroup : MonoBehaviour
         _playerCam.enabled = true;
         _startVirtualCamera.enabled = false;
         _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
+
+        // Also the harpoon gun and reticle
+        CameraManager.Instance.InvokeOnCinematicEnd();
 
         StartMovementAudio();
 
