@@ -141,7 +141,7 @@ public class DialoguePopUps : MonoBehaviour
                 yield return new WaitForSeconds(1f / typeSpeed);
             }
             // Wait to start displaying the next text
-            yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeText);
+            yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeNextText);
             _dataPointer++;
         }
 

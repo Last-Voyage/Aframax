@@ -12,6 +12,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using FMODUnity;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// The scriptable object for dialogue text and timing
@@ -45,7 +46,7 @@ public class ScriptableDialogueUi : ScriptableObject
     {
         foreach (TextAndTimerData data in _dialogueData)
         {
-            TotalTime += data.GetTimeBeforeText + data.GetTimeToDisplay;
+            TotalTime += data.GetTimeBeforeNextText + data.GetTimeToDisplay;
         }
     }
     #endregion
@@ -81,7 +82,7 @@ public struct TextAndTimerData
     public TextAndTimerData(string screenGetText, uint timeUntilNextWords, uint timeToDisplay, EventReference audioReference)
     {
         _displayedText = screenGetText;
-        _getTimeBeforeTextDisplays = timeUntilNextWords;
+        getTimeBeforeNextTextDisplays = timeUntilNextWords;
         _getTimeToDisplay = timeToDisplay;
         _audioReference = audioReference;
     }
@@ -93,8 +94,8 @@ public struct TextAndTimerData
     { get => _displayedText; private set => _displayedText = value; }
 
     [Tooltip("Timing before the text shows up")]
-    public uint GetTimeBeforeText 
-    { get => _getTimeBeforeTextDisplays; private set => _getTimeBeforeTextDisplays = value; }
+    public uint GetTimeBeforeNextText 
+    { get => getTimeBeforeNextTextDisplays; private set => getTimeBeforeNextTextDisplays = value; }
 
     [Tooltip("Timing for all text to display")]
     public uint GetTimeToDisplay 
@@ -109,10 +110,11 @@ public struct TextAndTimerData
     [SerializeField]
     string _displayedText;
     
+    [FormerlySerializedAs("_getTimeBeforeTextDisplays")]
     [Header("Time variables")]
     [Range(0, 10)]
     [SerializeField]
-    uint _getTimeBeforeTextDisplays;
+    uint getTimeBeforeNextTextDisplays;
     
     [Range(2, 8)]
     [SerializeField]
