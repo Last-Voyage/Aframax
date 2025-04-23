@@ -93,8 +93,7 @@ public class DialoguePopUps : MonoBehaviour
         foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer())
         {
             UpdateSubtitleSettingState();
-            // Wait to start displaying the next text
-            yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeText);
+            
             // Takes the display text and makes it invisible
             _textContainer.text = dialogueInfo.GetText;
             _textContainer.maxVisibleCharacters = 0;
@@ -141,6 +140,8 @@ public class DialoguePopUps : MonoBehaviour
                 _textBackgroundContainer.maxVisibleCharacters++;
                 yield return new WaitForSeconds(1f / typeSpeed);
             }
+            // Wait to start displaying the next text
+            yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeText);
             _dataPointer++;
         }
 
