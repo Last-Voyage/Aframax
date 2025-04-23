@@ -16,6 +16,7 @@ using Cinemachine;
 using Unity.VisualScripting;
 using PrimeTween;
 using FMOD.Studio;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Provides the functionality for the harpoon weapon
@@ -140,6 +141,8 @@ public class HarpoonGun : MonoBehaviour
     // Used during automatic reloading
     private InputAction.CallbackContext _emptyCallback = new InputAction.CallbackContext();
 
+    private Vector3 _cameraPositionWithLastInput = Vector3.zero;
+
     #endregion
 
     #region dev console
@@ -196,6 +199,11 @@ public class HarpoonGun : MonoBehaviour
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopShiftingMovementAudio);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().AddListener(RestockHarpoons);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().AddListener(ReloadAfterRestocking);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideReticle);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetFocus);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowReticle);
     }
 
     /// <summary>
@@ -208,6 +216,11 @@ public class HarpoonGun : MonoBehaviour
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopShiftingMovementAudio);
         PlayerManager.Instance.GetOnHarpoonRestockEvent().RemoveListener(RestockHarpoons);
         PlayerManager.Instance.GetOnHarpoonRestockCompleteEvent().RemoveListener(ReloadAfterRestocking);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideReticle);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetFocus);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowReticle);
     }
 
     /// <summary>
@@ -226,12 +239,44 @@ public class HarpoonGun : MonoBehaviour
     /// </summary>
     public void SubscribeInput()
     {
+        if (Camera.main.transform.localPosition != _cameraPositionWithLastInput)
+        {
+            StartCoroutine(SubscribeInputWithDelay());
+        }
+        else
+        {
+            _harpoonShoot.action.performed += FireHarpoon;
+
+            _harpoonReload.action.performed += StartReloadProcess;
+
+            _harpoonFocus.action.performed += FocusButtonHeld;
+            _harpoonFocus.action.canceled += FocusButtonReleased;
+        }
+    }
+
+    /// <summary>
+    /// Variation of SubcribeInput with a delay for the camera to return to its original location
+    /// Intended to be used after cinematics
+    /// </summary>
+    private IEnumerator SubscribeInputWithDelay()
+    {
+        yield return new WaitUntil(WaitForCameraReturn);
+
         _harpoonShoot.action.performed += FireHarpoon;
 
         _harpoonReload.action.performed += StartReloadProcess;
 
         _harpoonFocus.action.performed += FocusButtonHeld;
         _harpoonFocus.action.canceled += FocusButtonReleased;
+    }
+
+    /// <summary>
+    /// Bool to check if the camera has returned to its original position after cinematics
+    /// </summary>
+    /// <returns> True if the camera is in the correct position, false otherwise </returns>
+    private bool WaitForCameraReturn()
+    {
+        return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
     }
 
     /// <summary>
@@ -245,6 +290,9 @@ public class HarpoonGun : MonoBehaviour
 
         _harpoonFocus.action.performed -= FocusButtonHeld;
         _harpoonFocus.action.canceled -= FocusButtonReleased;
+
+        _isFocusButtonHeld = false;
+        _cameraPositionWithLastInput = Camera.main.transform.localPosition;
     }
     
     #endregion
@@ -746,6 +794,28 @@ public class HarpoonGun : MonoBehaviour
 
         return _harpoonSpearPool[previousPoolValue];
     }
+    #endregion
+
+    #region Other
+
+    /// <summary>
+    /// Disables the reticle icons when necessary, such as for cinematics
+    /// </summary>
+    private void HideReticle()
+    {
+        _reticle.GetHorizonDot().SetActive(false);
+        _reticle.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Enables the reticle icons when necessary, such as for exiting cinematics
+    /// </summary>
+    private void ShowReticle()
+    {
+        _reticle.GetHorizonDot().SetActive(true);
+        _reticle.gameObject.SetActive(true);
+    }
+
     #endregion
 
     #region Getters

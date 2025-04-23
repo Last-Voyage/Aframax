@@ -7,6 +7,7 @@
 // Description:     Provides functionality to how the camera moves and interacts.
 ******************************************************************************/
 
+using System.Linq.Expressions;
 using UnityEngine.Events;
 
 /// <summary>
@@ -26,6 +27,12 @@ public class CameraManager : MainGameplayManagerFramework
     /// Moves the camera during jumpscares
     /// </summary>
     private static readonly UnityEvent _onJumpscare = new();
+
+    /// <summary>
+    /// Manages the camera for cinematic events during gameplay
+    /// </summary>
+    private static readonly UnityEvent _onCinematicStart = new();
+    private static readonly UnityEvent _onCinematicEnd = new();
 
     /// <summary>
     /// Invokes the _onCameraMovementToggled event when the game is paused
@@ -86,6 +93,22 @@ public class CameraManager : MainGameplayManagerFramework
     {
         _onJumpscare?.Invoke();
     }
+
+    /// <summary>
+    /// Invokes the _onCinematicStart event
+    /// </summary>
+    public void InvokeOnCinematicStart()
+    {
+        _onCinematicStart?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes the _onCinematicEnd event
+    /// </summary>
+    public void InvokeOnCinematicEnd()
+    {
+        _onCinematicEnd?.Invoke();
+    }
     
     #endregion
 
@@ -100,6 +123,17 @@ public class CameraManager : MainGameplayManagerFramework
     /// Getter for the _onJumpscare event
     /// </summary>
     public UnityEvent GetOnJumpscareEvent() => _onJumpscare;
+
+    /// <summary>
+    /// Getter for the _onCinematicStart event
+    /// </summary>
+    public UnityEvent GetOnCinematicStartEvent() => _onCinematicStart;
+
+    /// <summary>
+    /// Getter for the _onCinematicEnd event
+    /// </summary>
+    /// <returns></returns>
+    public UnityEvent GetOnCinematicEndEvent() => _onCinematicEnd;
     
     #endregion
 }
