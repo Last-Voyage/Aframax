@@ -60,7 +60,7 @@ public class TutorialPopUps : MonoBehaviour
     /// <returns>The number of seconds in the UI data</returns>
     private IEnumerator TimeBeforeText()
     {
-        yield return new WaitForSeconds(_uIData[_dataPointer].GetTextAndTimer()[0].GetTimeBeforeText);
+        yield return new WaitForSeconds(_uIData[_dataPointer].GetTextAndTimer()[0].GetTimeBeforeNextText);
         StartCoroutine(DisplayingTheText());
     }
 
