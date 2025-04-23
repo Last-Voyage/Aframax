@@ -34,12 +34,37 @@ public class PlayerHealth : BaseHealth
     [SerializeField] private float _healthToEndHeartSfx;
     [SerializeField] private float _heartBeatRateSfx;
     private Coroutine _heartBeatCoroutine;
+
+    public static PlayerHealth Instance { get; private set; }
     
     protected override void Awake()
     {
         base.Awake();
         SubscribeToEvents();
         CanPlayerTakeDamage = true;
+    }
+
+    /// <summary>
+    /// Performs setup for the script
+    /// </summary>
+    public void SetUpHealth()
+    {
+        CheckSingletonInstance();
+    }
+
+    /// <summary>
+    /// Confirms whether this asset exists as a singleton.
+    /// </summary>
+    private void CheckSingletonInstance()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnDestroy()
