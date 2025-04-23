@@ -56,6 +56,7 @@ public class SavePointTrigger : MonoBehaviour
     /// </summary>
     public void PlayerContact()
     {
+        SaveManager.Instance.SavedGameplayData();
         SaveManager.Instance.GetGameSaveData().SetCurrentCheckPoint(SavePointID);
         SaveManager.Instance.GetGameSaveData().SetCurrentSceneIndex(SceneManager.GetActiveScene().buildIndex);
         PlayerInventory.Instance.SaveInventory();

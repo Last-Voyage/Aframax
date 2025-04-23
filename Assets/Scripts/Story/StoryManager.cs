@@ -63,13 +63,18 @@ public class StoryManager : MonoBehaviour
         _activeStoryBeats = new();
         _pendingStoryBeats = new();
 
-        // Run through each story beat, triggering the first one that is set to play on start
-        foreach (StoryBeat curBeat in StoryBeats)
+        print("Saved data " + SaveManager._hasSavedGameplayData);
+        //Check if we don't have any saved data for the gameplay
+        if(!SaveManager._hasSavedGameplayData)
         {
-            if (curBeat.TriggerOnStart)
+            // Run through each story beat, triggering the first one that is set to play on start
+            foreach (StoryBeat curBeat in StoryBeats)
             {
-                TriggerStoryBeat(curBeat);
-                return;
+                if (curBeat.TriggerOnStart)
+                {
+                    TriggerStoryBeat(curBeat);
+                    return;
+                }
             }
         }
     }

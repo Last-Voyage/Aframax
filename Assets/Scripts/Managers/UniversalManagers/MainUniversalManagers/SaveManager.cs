@@ -29,6 +29,11 @@ public class SaveManager : MainUniversalManagerFramework
     private readonly UnityEvent _onLoadSaveData = new();
 
     public float MaxSensitivity = 450;
+
+    //Internal is used over [HideInInspector] public as that way it can be viewed
+    // when the inspector is set to debug mode. [HideInInspector] hides it even from debug
+    internal static bool _hasSavedGameplayData { get; private set; }
+
     /// <summary>
     /// Sets the path to create the save file
     /// </summary>
@@ -65,6 +70,8 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void GameplayStartingValues()
     {
+        _hasSavedGameplayData = false;
+
         _gameSaveData.CurrentCheckpoint = 0;
 
         _gameSaveData.SetPlayerInventory(new());
@@ -175,6 +182,14 @@ public class SaveManager : MainUniversalManagerFramework
 
         //Saves the changes into the text file
         SaveText();
+    }
+
+    /// <summary>
+    /// Called when gameplay data is saved for the first time
+    /// </summary>
+    public void SavedGameplayData()
+    {
+        _hasSavedGameplayData = true;
     }
 
     /// <summary>
