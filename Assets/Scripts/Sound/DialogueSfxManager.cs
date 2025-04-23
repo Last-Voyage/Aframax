@@ -144,7 +144,7 @@ public class DialogueSfxManager : MainUniversalManagerFramework
     /// </summary>
     protected override void UnsubscribeToGameplayEvents()
     {
-        base.UnsubscribeToEvents();
+        base.UnsubscribeToGameplayEvents();
         GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
     }
     #endregion

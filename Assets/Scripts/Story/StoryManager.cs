@@ -63,7 +63,6 @@ public class StoryManager : MonoBehaviour
         _activeStoryBeats = new();
         _pendingStoryBeats = new();
 
-        print("Saved data " + SaveManager._hasSavedGameplayData);
         //Check if we don't have any saved data for the gameplay
         if(!SaveManager._hasSavedGameplayData)
         {
