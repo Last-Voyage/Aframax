@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.IO;
 using UnityEngine.Events;
 using FMOD.Studio;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -78,6 +79,8 @@ public class SaveManager : MainUniversalManagerFramework
 
         _gameSaveData.CurrentSceneIndex = 0;
 
+        _gameSaveData.CurrentStoryBeat = 0;
+
         // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
         _gameSaveData.SetCurrentSceneIndex(1);
 
@@ -135,6 +138,11 @@ public class SaveManager : MainUniversalManagerFramework
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
 
             LoadInitialVolumes();
+
+            if(_gameSaveData.CurrentStoryBeat > 0)
+            {
+                _hasSavedGameplayData = true;
+            }
         }
         else
         {
@@ -191,6 +199,22 @@ public class SaveManager : MainUniversalManagerFramework
     {
         _hasSavedGameplayData = true;
     }
+
+    #region Save Point
+    /// <summary>
+    /// Called when contacting a save point
+    /// </summary>
+    /// <param name="savePointID">The id of the save point</param>
+    public void SavePointContact(int savePointID)
+    {
+        SavedGameplayData();
+        GetGameSaveData().SetCurrentCheckPoint(savePointID);
+        GetGameSaveData().SetCurrentSceneIndex(SceneManager.GetActiveScene().buildIndex);
+        PlayerInventory.Instance.SaveInventory();
+        StoryManager.Instance.SaveData();
+        GetOnNewCheckpoint()?.Invoke();
+    }
+    #endregion
 
     /// <summary>
     /// When the player reaches a checkpoint the data will be saved
