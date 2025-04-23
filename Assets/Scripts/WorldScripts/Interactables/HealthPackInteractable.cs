@@ -20,6 +20,16 @@ public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
     [SerializeField] private int _numUses = 3;
 
     /// <summary>
+    /// Performs needed set up on being enabled
+    /// </summary>
+    protected override void Start()
+    {
+        base.Start();
+        UpdateInteractability(PlayerHealth.Instance.GetHealthPercent(), 
+            PlayerHealth.Instance.GetCurrentHealth());
+    }
+
+    /// <summary>
     /// returns the number of uses
     /// </summary>
     /// <returns></returns>
