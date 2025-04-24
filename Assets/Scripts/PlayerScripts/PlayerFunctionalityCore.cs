@@ -50,6 +50,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         Instance = this;
         // Sets needed variables in the player movement controller before movement begins
         _playerMovementController.SetUpMovementController();
+        _playerHealthController.SetUpHealth();
         PlayerCamera.CameraSetup();
     }
 
