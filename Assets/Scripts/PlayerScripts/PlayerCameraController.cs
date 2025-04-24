@@ -96,6 +96,8 @@ public class PlayerCameraController : MonoBehaviour
 
     private CinemachineBrain _cinemachineBrain;
 
+    private InputAction _playerMovement;
+
     /// <summary>
     /// Whether the reticle is visually fully shrunken or not.
     /// </summary>
@@ -252,6 +254,12 @@ public class PlayerCameraController : MonoBehaviour
     /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
     private void StartWalkingSway(InputAction playerMovement)
     {
+        // Let's keep the movement input action here
+        if (_playerMovement.IsUnityNull())
+        {
+            _playerMovement = playerMovement;
+        }
+
         // Stop the camera returning coroutine
         if (_walkingSwayCoroutine != null && _walkingSwayStarted == true)
         {
@@ -263,7 +271,7 @@ public class PlayerCameraController : MonoBehaviour
         if (_walkingSwayStarted == false)
         {
             _walkingSwayStarted = true;
-            _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));   
+            _walkingSwayCoroutine = StartCoroutine(WalkingSway());   
         }
     }
 
@@ -271,13 +279,13 @@ public class PlayerCameraController : MonoBehaviour
     /// Simulates walking sway, going left and right periodically
     /// </summary>
     /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
-    private IEnumerator WalkingSway(InputAction playerMovement)
+    private IEnumerator WalkingSway()
     {
         Coroutine stopSwayCoroutine = null;
 
         while (true)
         {
-            Vector2 moveDir = playerMovement.ReadValue<Vector2>();
+            Vector2 moveDir = _playerMovement.ReadValue<Vector2>();
 
             // We only really want to do movement sway if we are moving directly forward and the harpoon is idle
             // If we don't do this, this could lead to visual bugs
@@ -288,6 +296,7 @@ public class PlayerCameraController : MonoBehaviour
                 if (stopSwayCoroutine != null)
                 {
                     StopCoroutine(stopSwayCoroutine);
+                    stopSwayCoroutine = null;
                 }
 
                 // We would like to get the angle at which that camera is facing
@@ -329,7 +338,7 @@ public class PlayerCameraController : MonoBehaviour
                     // NO DUPLICATING COROUTINES
                     if (stopSwayCoroutine == null)
                     {
-                        //stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(playerMovement));
+                        stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
                     }
                 }
             }
@@ -350,13 +359,13 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         // Return camera to original position
-        _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking(null));
+        _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
     }
 
     /// <summary>
     /// Returns the camera to its original position from the walking sway motion
     /// </summary>
-    private IEnumerator ReturnCameraFromWalking(InputAction playerMovement)
+    private IEnumerator ReturnCameraFromWalking()
     {
         if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
         {
@@ -376,6 +385,7 @@ public class PlayerCameraController : MonoBehaviour
 
         // I'm deciding that our main character is right footed
         _movementSwayRight = true;
+        _walkingSwayStarted = false;
 
         // Prevents camera sway from getting duplicated
         if (_walkingSwayCoroutine != null)
@@ -384,9 +394,9 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         // But wait, if we're still in motion, then we want to restart the walking sway
-        if (playerMovement != null && playerMovement.ReadValue<Vector2>() != Vector2.zero)
+        if (_playerMovement != null && _playerMovement.ReadValue<Vector2>() != Vector2.zero)
         {
-            _walkingSwayCoroutine = StartCoroutine(WalkingSway(playerMovement));
+            _walkingSwayCoroutine = StartCoroutine(WalkingSway());
         }
     }
 
@@ -541,6 +551,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(StartWalkingSway);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopWalkingSway);
+        PlayerManager.Instance.GetOnHarpoonFocusStartEvent().AddListener(StopWalkingSway);
         CameraManager.Instance.GetOnJumpscareEvent().AddListener(JumpscarePullback);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnchildHarpoon);
@@ -555,6 +566,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(StartWalkingSway);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopWalkingSway);
+        PlayerManager.Instance.GetOnHarpoonFocusStartEvent().RemoveListener(StopWalkingSway);
         CameraManager.Instance.GetOnJumpscareEvent().RemoveListener(JumpscarePullback);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnchildHarpoon);
