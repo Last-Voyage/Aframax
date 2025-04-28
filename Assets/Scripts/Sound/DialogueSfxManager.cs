@@ -14,7 +14,7 @@ using UnityEngine;
 /// <summary>
 /// Handles the creation and progression of dialogue during the game
 /// </summary>
-public class DialogueSfxManager : MonoBehaviour
+public class DialogueSfxManager : MainUniversalManagerFramework
 {
     public static DialogueSfxManager Instance;
 
@@ -25,30 +25,6 @@ public class DialogueSfxManager : MonoBehaviour
 
     [SerializeField] private float _nextDialogueWaitTime = 0.5f;
     private WaitForSeconds _waitForNextDialogue;
-
-    /// <summary>
-    /// Called when the script is instantiated. Establishes the instance for this manager and initializes variables
-    /// </summary>
-    private void Awake()
-    {
-        EstablishInstance();
-        CreateWaitForSeconds();
-    }
-
-    /// <summary>
-    /// Establishes the instance for this manager
-    /// </summary>
-    private void EstablishInstance()
-    {
-        if (DialogueSfxManager.Instance.IsUnityNull())
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
 
     /// <summary>
     /// Initializes the WaitForSeconds for waiting for the next dialogue start
@@ -128,50 +104,48 @@ public class DialogueSfxManager : MonoBehaviour
         _currentDialogueEventInstance = eventInstance;
     }
 
-    private IEnumerator WaitForGameStateManagerEnable()
+    #region BaseManager
+    /// <summary>
+    /// Establishes the instance for this manager
+    /// </summary>
+    public override void SetUpInstance()
     {
-        yield return new WaitUntil(GameStateManagerReady);
+        base.SetUpInstance();
+        if (Instance.IsUnityNull())
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
+    /// <summary>
+    /// Performs needed set up by setting starting values
+    /// </summary>
+    public override void SetUpMainManager()
+    {
+        base.SetUpMainManager();
+        CreateWaitForSeconds();
+    }
+
+    /// <summary>
+    /// Subscribes to events that take place in gameplay
+    /// </summary>
+    protected override void SubscribeToGameplayEvents()
+    {
+        base.SubscribeToGameplayEvents();
         GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
     }
 
-    private IEnumerator WaitForGameStateManagerDisable()
+    /// <summary>
+    /// Unsubscribes to events that take place in gameplay
+    /// </summary>
+    protected override void UnsubscribeToGameplayEvents()
     {
-        yield return new WaitUntil(GameStateManagerReady);
+        base.UnsubscribeToGameplayEvents();
         GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
     }
-
-    private bool GameStateManagerReady()
-    {
-        return !GameStateManager.Instance.IsUnityNull();
-    }
-
-    /// <summary>
-    /// Called when the game object is enabled. Used to set listeners for events
-    /// </summary>
-    private void OnEnable()
-    {
-        if (GameStateManager.Instance.IsUnityNull())
-        {
-            StartCoroutine(WaitForGameStateManagerEnable());
-        }
-        else
-        {
-            GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
-        }
-    }
-
-    /// <summary>
-    /// Called when the game object is disabled. Used to remove listeners for events
-    /// </summary>
-    private void OnDisable()
-    {
-        if (GameStateManager.Instance.IsUnityNull())
-        {
-            StartCoroutine(WaitForGameStateManagerDisable());
-        }
-        else
-        {
-            GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
-        }
-    }
+    #endregion
 }
