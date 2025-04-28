@@ -804,7 +804,7 @@ public class HarpoonGun : MonoBehaviour
     private void HideReticle()
     {
         _reticle.GetHorizonDot().SetActive(false);
-        _reticle.gameObject.SetActive(false);
+        _reticle.transform.parent.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -813,7 +813,7 @@ public class HarpoonGun : MonoBehaviour
     private void ShowReticle()
     {
         _reticle.GetHorizonDot().SetActive(true);
-        _reticle.gameObject.SetActive(true);
+        _reticle.transform.parent.gameObject.SetActive(true);
     }
 
     #endregion

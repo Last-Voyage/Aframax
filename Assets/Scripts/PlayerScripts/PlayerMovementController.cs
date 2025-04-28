@@ -199,6 +199,7 @@ public class PlayerMovementController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopReloadSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(CheckForInputCinematics);
     }
 
     /// <summary>
@@ -215,6 +216,7 @@ public class PlayerMovementController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopReloadSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(CheckForInputCinematics);
     }
     #endregion
     
@@ -402,6 +404,17 @@ public class PlayerMovementController : MonoBehaviour
         StopAccelerationDeccelerationCoroutines();
 
         StartMovementDecceleration();
+    }
+
+    /// <summary>
+    /// Checks for any continuous movement input after cinematics have been completed
+    /// </summary>
+    private void CheckForInputCinematics()
+    {
+        if (_movementInput.ReadValue<Vector2>() != Vector2.zero)
+        {
+            DirectionalInputStarted(_movementInput);
+        }
     }
 
     /// <summary>

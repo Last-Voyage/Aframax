@@ -60,6 +60,9 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
     [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
     private const string _IDLE_ANIMATION = "harpoonIdle";
+    private const string _START_SPRINT_ANIMATION = "StartSprint";
+    private const string _SPRINT_ANIMATION = "Sprint";
+    private const string _END_SPRINT_ANIMATION = "EndSprint";
     private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
@@ -217,7 +220,10 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (!_harpoonAnimator.IsUnityNull())
         {
-            if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
+            string currentAnimationState = _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+
+            if (currentAnimationState == _IDLE_ANIMATION || currentAnimationState == _START_SPRINT_ANIMATION ||
+                currentAnimationState == _SPRINT_ANIMATION || currentAnimationState == _END_SPRINT_ANIMATION)
             {
                 UnchildHarpoon();
             }
@@ -543,6 +549,7 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnJumpscareEvent().AddListener(JumpscarePullback);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnchildHarpoon);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopWalkingSway);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(RestartAutoCameraMovement);
     }
 
@@ -558,6 +565,7 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnJumpscareEvent().RemoveListener(JumpscarePullback);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnchildHarpoon);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopWalkingSway);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(RestartAutoCameraMovement);
     }
 
