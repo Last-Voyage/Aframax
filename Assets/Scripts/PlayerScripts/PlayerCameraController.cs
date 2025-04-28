@@ -350,18 +350,6 @@ public class PlayerCameraController : MonoBehaviour
                     _movementSwayRight = !_movementSwayRight;
                 }
             }
-            else
-            {
-                // If we aren't moving directly forward, let's just reset the camera
-                if (_harpoonTransform.localPosition.x != 0 || _harpoonTransform.localPosition.z != 0)
-                {
-                    // NO DUPLICATING COROUTINES
-                    if (stopSwayCoroutine == null)
-                    {
-                        stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
-                    }
-                }
-            }
 
             yield return null;
         }
