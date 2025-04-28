@@ -25,7 +25,7 @@ public class TentacleMover : MonoBehaviour
         {
             _tentacle.MoveAway();
             StartCoroutine(_tentacle.DestroyTentacle(3f));
-            Destroy(this.gameObject, 3.1f);
+            //Destroy(this.gameObject, 1);
         }
     }
 }

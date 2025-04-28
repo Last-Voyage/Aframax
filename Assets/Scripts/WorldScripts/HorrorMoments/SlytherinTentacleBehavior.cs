@@ -65,6 +65,7 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         _playerCam.enabled = true;
         _dragCam.enabled = false;
 
+        Destroy(transform.parent.GetChild(0).gameObject);
         Destroy(this.gameObject);
     }
 }
