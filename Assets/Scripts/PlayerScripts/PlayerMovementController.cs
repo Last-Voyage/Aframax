@@ -369,7 +369,7 @@ public class PlayerMovementController : MonoBehaviour
     private void DetermineInputState()
     {
         //Check for if the input was started
-        if(_movementInput.WasPressedThisFrame())
+        if(_movementInput.ReadValue<Vector2>() != Vector2.zero)
         {
             DirectionalInputStarted(_movementInput);
         }
