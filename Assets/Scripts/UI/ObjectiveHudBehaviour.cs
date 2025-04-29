@@ -44,12 +44,15 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     public void ActivateObjectiveHud(string objectiveHudTextString) 
     {
         //reset to default state if the animation is already going
-        if (_objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName("ObjectiveSlideIn"))
+        if (_objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName("ObjectiveSlideIn") || 
+            _objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName("ObjectiveSlideOut"))
         {
             _objectiveHudAnimator.SetTrigger("AbortSlide");
+            _objectiveHudAnimator.ResetTrigger("SlideIn");
             _objectiveHudAnimator.ResetTrigger("SlideOut");
             StopCoroutine(WaitForAnimation());
         }
+
 
         foreach(Image h in _objectiveSprites)
         {
@@ -95,6 +98,7 @@ public class ObjectiveHudBehaviour : MonoBehaviour
         {
             h.enabled = true;
         }
+        _objectiveHudAnimator.ResetTrigger("SlideIn");
         _objectiveHudText.enabled = true;
         yield return _animationWait;
         DeactivateObjectiveHud();
