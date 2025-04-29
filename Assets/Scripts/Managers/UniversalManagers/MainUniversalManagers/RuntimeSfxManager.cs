@@ -335,6 +335,19 @@ public class RuntimeSfxManager : AudioManager
         }
     }
 
+    /// <summary>
+    /// Unity calls this method whenever the application gains or loses focus on the OS side
+    /// Used to stop footsteps when you lose focus
+    /// </summary>
+    /// <param name="isFocused"> True when the app is in focus, false otherwise </param>
+    private void OnApplicationFocus(bool isFocused)
+    {
+        if (!isFocused)
+        {
+            StopFootsteps();
+        }
+    }
+
     #endregion Footsteps
 
     #endregion
