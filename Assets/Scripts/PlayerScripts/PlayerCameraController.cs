@@ -551,7 +551,9 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnchildHarpoon);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopWalkingSway);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetZoom);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideHarpoonGun);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(RestartAutoCameraMovement);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowHarpoonGun);
     }
 
     /// <summary>
@@ -568,7 +570,9 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnchildHarpoon);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopWalkingSway);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetZoom);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideHarpoonGun);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(RestartAutoCameraMovement);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowHarpoonGun);
     }
 
     /// <summary>
@@ -585,5 +589,15 @@ public class PlayerCameraController : MonoBehaviour
     public void UnsubscribeInput()
     {
         ToggleCameraMovement(false);
+    }
+
+    private void HideHarpoonGun()
+    {
+        _harpoonGun.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    private void ShowHarpoonGun()
+    {
+        _harpoonGun.transform.GetChild(0).gameObject.SetActive(true);
     }
 }
