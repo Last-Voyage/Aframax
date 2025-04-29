@@ -24,9 +24,17 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _objectiveHudText;
     [SerializeField] private TextMeshProUGUI _objectivePauseText;
     [SerializeField] private Image[] _objectiveSprites;
+    private Coroutine _animatorWaitTime;
 
     // Cached variables
     private WaitForSeconds _animationWait;
+
+    //const animator info strings
+    private const string _slideInTrigger = "SlideIn";
+    private const string _slideOutTrigger = "SlideOut";
+    private const string _slideAbortTrigger = "AbortSlide";
+    private const string _slideInAnimState = "ObjectiveSlideIn";
+    private const string _slideOutAnimState = "ObjectiveSlideOut";
 
     /// <summary>
     /// This initializes the cached variable
@@ -44,19 +52,19 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     public void ActivateObjectiveHud(string objectiveHudTextString) 
     {
         //reset to default state if the animation is already going
-        if (_objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName("ObjectiveSlideIn") || 
-            _objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName("ObjectiveSlideOut"))
+        if (_objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName(_slideInAnimState) || 
+            _objectiveHudAnimator.GetCurrentAnimatorStateInfo(0).IsName(_slideOutAnimState))
         {
-            _objectiveHudAnimator.SetTrigger("AbortSlide");
-            _objectiveHudAnimator.ResetTrigger("SlideIn");
-            _objectiveHudAnimator.ResetTrigger("SlideOut");
-            StopCoroutine(WaitForAnimation());
+            _objectiveHudAnimator.SetTrigger(_slideAbortTrigger);
+            _objectiveHudAnimator.ResetTrigger(_slideInTrigger);
+            _objectiveHudAnimator.ResetTrigger(_slideOutTrigger);
+            StopCoroutine(_animatorWaitTime);
         }
 
 
-        foreach(Image h in _objectiveSprites)
+        foreach(Image objVisual in _objectiveSprites)
         {
-            h.enabled = false;
+            objVisual.enabled = false;
         }
         _objectiveHudText.enabled = false;
 
@@ -65,9 +73,8 @@ public class ObjectiveHudBehaviour : MonoBehaviour
         // Mirrors info in pause menu
         SetPauseMenuObjective(objectiveHudTextString);
         //starts slide animation
-        _objectiveHudAnimator.SetTrigger("SlideIn");
-
-        StartCoroutine(WaitForAnimation());
+        _objectiveHudAnimator.SetTrigger(_slideInTrigger);
+        _animatorWaitTime = StartCoroutine(WaitForAnimation());
     }
 
     /// <summary>
@@ -75,7 +82,7 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     /// </summary>
     private void DeactivateObjectiveHud()
     {
-        _objectiveHudAnimator.SetTrigger("SlideOut");
+        _objectiveHudAnimator.SetTrigger(_slideOutTrigger);
     }
 
     /// <summary>
@@ -94,11 +101,11 @@ public class ObjectiveHudBehaviour : MonoBehaviour
     private IEnumerator WaitForAnimation()
     {
         yield return new WaitForSeconds(0.5f);
-        foreach (Image h in _objectiveSprites)
+        foreach (Image objVisual in _objectiveSprites)
         {
-            h.enabled = true;
+            objVisual.enabled = true;
         }
-        _objectiveHudAnimator.ResetTrigger("SlideIn");
+        _objectiveHudAnimator.ResetTrigger(_slideInTrigger);
         _objectiveHudText.enabled = true;
         yield return _animationWait;
         DeactivateObjectiveHud();
