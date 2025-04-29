@@ -591,11 +591,19 @@ public class PlayerCameraController : MonoBehaviour
         ToggleCameraMovement(false);
     }
 
+    /// <summary>
+    /// Hides the harpoon gun model
+    /// Used for cinematics
+    /// </summary>
     private void HideHarpoonGun()
     {
         _harpoonGun.transform.GetChild(0).gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Shows the harpoon gun model
+    /// Used for cinematics
+    /// </summary>
     private void ShowHarpoonGun()
     {
         _harpoonGun.transform.GetChild(0).gameObject.SetActive(true);
