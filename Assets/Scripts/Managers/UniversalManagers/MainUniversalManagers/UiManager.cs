@@ -26,7 +26,7 @@ public class UiManager : MainUniversalManagerFramework
     private readonly UnityEvent _onSwapInput = new();
 
     private Stack<GameObject> _previousUiSelections = new ();
-    public List<GameObject> _previousUiSelections2 = new();
+    //public List<GameObject> _previousUiSelections2 = new();
     public Stack<Button> _backButtons = new();
     private PlayerInputMap _playerInput = new();
 
@@ -39,7 +39,7 @@ public class UiManager : MainUniversalManagerFramework
         _playerInput = new PlayerInputMap();
         _playerInput.Player.UIBack.Enable();
         _backButtons.Clear();
-        _previousUiSelections2.Clear();
+        _previousUiSelections.Clear();
     }
     
     #region Back Button
@@ -63,11 +63,10 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     public void ActivateBackButton()
     {
-        Debug.Log(_previousUiSelections2.Count);
         if (_backButtons.TryPop(out Button button))
         {
             button.onClick.Invoke();
-            Debug.Log(_previousUiSelections2.Count + " fiund it pleas");
+            SelectUiOnPreviousPage();
         }
 
         if (IsBackButtonStackEmpty())
@@ -95,33 +94,25 @@ public class UiManager : MainUniversalManagerFramework
     /// <param name="uiElement">The ui element added to the stack</param>
     public void AddToSelectionStack(GameObject uiElement)
     {
-        Debug.Log(_previousUiSelections2.Count + " owwie");
-        //_previousUiSelections.Push(uiElement);
-        _previousUiSelections2.Add(uiElement); 
-        Debug.Log(_previousUiSelections2.Count + " post pushing it");
+        _previousUiSelections.Push(uiElement); 
     }
 
     /// <summary>
     /// Sets the current selected ui to what was last selected on the previous page
     /// </summary>
-    public void SelectUiOnPreviousPage()
+    private void SelectUiOnPreviousPage()
     {
-        Debug.Log(_previousUiSelections2.Count);
-        /*
-
         if (_previousUiSelections.TryPop(out GameObject uiElement))
         {
-            Debug.Log("Remove worked " + uiElement);
             EventSystem.current.SetSelectedGameObject(uiElement);
-        }*/
+        }
 
-        if (_previousUiSelections2.Count > 0)
+        /*if (_previousUiSelections2.Count > 0)
         {
             int topOfStack = _previousUiSelections2.Count - 1;
             EventSystem.current.SetSelectedGameObject(_previousUiSelections2[topOfStack]);
             _previousUiSelections2.RemoveAt(topOfStack);
-            Debug.Log("HGUED SUSCED");
-        }
+        }*/
     }
 
     #endregion

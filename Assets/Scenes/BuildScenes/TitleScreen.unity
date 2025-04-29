@@ -1176,6 +1176,7 @@ GameObject:
   - component: {fileID: 446559029}
   - component: {fileID: 446559033}
   - component: {fileID: 446559034}
+  - component: {fileID: 446559035}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -1307,14 +1308,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1137007247625535617, guid: 72339041b3287b84ca018cecf6f97f31,
-          type: 3}
-        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
-        m_MethodName: AddToSelectionStack
-        m_Mode: 2
+      - m_Target: {fileID: 446559035}
+        m_TargetAssemblyTypeName: PreviousSelectedUi, Assembly-CSharp
+        m_MethodName: SelectThis
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 446559027}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1387,6 +1387,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+--- !u!114 &446559035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446559027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8018675699ac9bf4f8ac74a654930a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &528432475
 GameObject:
   m_ObjectHideFlags: 0
@@ -5539,7 +5551,7 @@ PrefabInstance:
     - target: {fileID: 1784452198889138800, guid: f05c39bdca33cdf4f92f39cb8fd42ad7,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1784452198889138800, guid: f05c39bdca33cdf4f92f39cb8fd42ad7,
         type: 3}
@@ -5801,6 +5813,7 @@ GameObject:
   - component: {fileID: 1811269708}
   - component: {fileID: 1811269707}
   - component: {fileID: 1811269711}
+  - component: {fileID: 1811269712}
   m_Layer: 5
   m_Name: Controls
   m_TagString: Untagged
@@ -5923,6 +5936,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1811269712}
+        m_TargetAssemblyTypeName: PreviousSelectedUi, Assembly-CSharp
+        m_MethodName: SelectThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1811269709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5974,6 +5999,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+--- !u!114 &1811269712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811269705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8018675699ac9bf4f8ac74a654930a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1821713047
 GameObject:
   m_ObjectHideFlags: 0
@@ -6173,18 +6210,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 148988808}
-        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
-        m_MethodName: SelectUiOnPreviousPage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1821713054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6287,6 +6312,7 @@ GameObject:
   - component: {fileID: 1997482814}
   - component: {fileID: 1997482813}
   - component: {fileID: 1997482817}
+  - component: {fileID: 1997482818}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -6409,6 +6435,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1997482818}
+        m_TargetAssemblyTypeName: PreviousSelectedUi, Assembly-CSharp
+        m_MethodName: SelectThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1997482815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6460,6 +6498,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+--- !u!114 &1997482818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997482811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8018675699ac9bf4f8ac74a654930a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2045396941
 GameObject:
   m_ObjectHideFlags: 0
