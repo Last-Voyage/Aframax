@@ -29,8 +29,6 @@ public class GameplaySettings : MonoBehaviour
     private bool _isPreventingUIChange = false;
     private WaitForEndOfFrame _waitToAllowUIChange = new WaitForEndOfFrame();
 
-    [SerializeField] private string _GameplaySettingFilePath;
-
     public static GameplaySettings Instance;
 
     /// <summary>
@@ -62,16 +60,13 @@ public class GameplaySettings : MonoBehaviour
         SensitivitySlider.maxValue = SaveManager.Instance.MaxSensitivity;
 
         //save data when the values are changed
-        SensitivitySlider.onValueChanged.AddListener(delegate { SaveData(); });
-        _invertX.onValueChanged.AddListener(delegate { SaveData(); });
-        _invertY.onValueChanged.AddListener(delegate { SaveData(); });
+        SensitivitySlider.onValueChanged.AddListener(delegate { SetCameraSensitivity(); });
+        _invertX.onValueChanged.AddListener(delegate { ToggleCameraXInvert(); });
+        _invertY.onValueChanged.AddListener(delegate { ToggleCameraYInvert(); });
 
-        string[] camSettings = File.ReadAllLines(Application.streamingAssetsPath +
-            _GameplaySettingFilePath)[0].Split(" ");
-
-        SensitivitySlider.value = float.Parse(camSettings[0]);
-        _invertX.isOn = bool.Parse(camSettings[1]);
-        _invertY.isOn = bool.Parse(camSettings[2]);
+        SensitivitySlider.value = SaveManager.Instance.GetGameSaveData().CameraSensitivty;
+        _invertX.isOn = SaveManager.Instance.GetGameSaveData().IsCameraXAxisInverted;
+        _invertY.isOn = SaveManager.Instance.GetGameSaveData().IsCameraYAxisInverted;
     }
 
     /// <summary>
@@ -81,7 +76,6 @@ public class GameplaySettings : MonoBehaviour
     private void OnDisable()
     {
         //save data one last time
-        SaveData();
         try
         {
             CameraSettings.WasSettingsChanged?.Invoke();
@@ -96,17 +90,28 @@ public class GameplaySettings : MonoBehaviour
         _invertY.onValueChanged.RemoveAllListeners();
     }
 
+    /// <summary>
+    /// updates the setting for the camera X invert when the button is pressed
+    /// </summary>
+    private void ToggleCameraXInvert()
+    {
+        SaveManager.Instance.GetGameSaveData().IsCameraXAxisInverted = _invertX.isOn;
+    }
 
     /// <summary>
-    /// Save the values to the save file
+    /// updates the setting for the camera Y invert when the button is pressed
     /// </summary>
-    private void SaveData()
+    private void ToggleCameraYInvert()
     {
-        // Convert the sensitivity to a string
-        string _settings = SensitivitySlider.value + " " + _invertX.isOn + " " + _invertY.isOn;
+        SaveManager.Instance.GetGameSaveData().IsCameraYAxisInverted = _invertY.isOn;
+    }
 
-        // Write the text to the file
-        File.WriteAllText(Application.streamingAssetsPath + _GameplaySettingFilePath, _settings);
+    /// <summary>
+    /// updates the settings for the camera sensitivity
+    /// </summary>
+    private void SetCameraSensitivity()
+    {
+        SaveManager.Instance.GetGameSaveData().CameraSensitivty = SensitivitySlider.value;
     }
 
     /// <summary>
