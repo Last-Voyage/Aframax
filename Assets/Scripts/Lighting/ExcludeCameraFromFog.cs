@@ -21,6 +21,9 @@ public class ExcludeCameraFromFog : MonoBehaviour
     /// </summary>
     private bool _initialFogSetting = true;
 
+    /// <summary>
+    /// Reference to the attached camera
+    /// </summary>
     private Camera _thisCamera;
 
     /// <summary>
@@ -29,22 +32,30 @@ public class ExcludeCameraFromFog : MonoBehaviour
     private void Start()
     {
         _thisCamera = GetComponent<Camera>();
-        _initialFogSetting = RenderSettings.fog;
+        _initialFogSetting = RenderSettings.fog; // Grab initial fog setting value
         
         RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
         RenderPipelineManager.endCameraRendering += EndCameraRendering;
     }
 
+    /// <summary>
+    /// Callback function from URP
+    /// </summary>
     private void BeginCameraRendering(ScriptableRenderContext context, Camera renderCamera)
     {
+        // Disable fog
         if (renderCamera == _thisCamera)
         {
             RenderSettings.fog = false;
         }
     }
 
+    /// <summary>
+    /// Callback function from URP
+    /// </summary>
     private void EndCameraRendering(ScriptableRenderContext context, Camera renderCamera)
     {
+        // Return fog to default value
         if (renderCamera == _thisCamera)
         {
             RenderSettings.fog = _initialFogSetting;
