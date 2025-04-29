@@ -14,25 +14,19 @@ using UnityEngine.UI;
 /// <summary>
 /// allows pressing escape to push a button that this script is attached to
 /// </summary>
-public class BackArrowEscapeBehaviour : MonoBehaviour, IUiSwap
+public class BackArrowEscapeBehaviour : MonoBehaviour
 {
     private PlayerInputMap _playerInputControls;
 
     private Button _backArrow;
 
-    [SerializeField]
-    private Sprite _backArrowSprite;
-
-    [SerializeField]
-    private Sprite _controllerBackArrowSpriteAsset, _keyboardBackArrowSpriteAsset;
-
     private void Awake()
     {
         //initialize input
-        _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.UIBack.performed += ctx => PressBackArrow();
+        //_playerInputControls = new PlayerInputMap();
+        //_playerInputControls.Player.UIBack.performed += ctx => PressBackArrow();
 
-        _backArrow = GetComponent<Button>();
+        //_backArrow = GetComponent<Button>();
     }
 
     /// <summary>
@@ -40,17 +34,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour, IUiSwap
     /// </summary>
     private void PressBackArrow()
     {
-        _backArrow.onClick.Invoke();
-    }
-
-    /// <summary>
-    /// This swaps the player ui if they are using a controller or not
-    /// </summary>
-    public void OnUiSwap()
-    {
-        _backArrowSprite = UiManager.IsUsingController
-            ? _controllerBackArrowSpriteAsset
-            : _keyboardBackArrowSpriteAsset;
+        //_backArrow.onClick.Invoke();
     }
 
     /// <summary>
@@ -58,9 +42,8 @@ public class BackArrowEscapeBehaviour : MonoBehaviour, IUiSwap
     /// </summary>
     private void OnEnable()
     {
-        _playerInputControls.Enable();
-        UiManager.Instance.GetOnSwapInput?.AddListener(OnUiSwap);
-        OnUiSwap();
+        //_playerInputControls.Enable();
+        UiManager.Instance.AddToBackStack(GetComponent<Button>());
     }
 
     /// <summary>
@@ -68,8 +51,7 @@ public class BackArrowEscapeBehaviour : MonoBehaviour, IUiSwap
     /// </summary>
     private void OnDisable()
     {
-        UiManager.Instance.GetOnSwapInput?.RemoveListener(OnUiSwap);
-        _playerInputControls.Player.UIBack.performed -= ctx => PressBackArrow();
-        _playerInputControls.Disable();
+        //_playerInputControls.Player.UIBack.performed -= ctx => PressBackArrow();
+        //_playerInputControls.Disable();
     }
 }

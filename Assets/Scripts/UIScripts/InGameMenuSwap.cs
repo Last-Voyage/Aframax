@@ -33,5 +33,4 @@ public class InGameMenuSwap : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(_firstSelectedButton);
     }
-
 }

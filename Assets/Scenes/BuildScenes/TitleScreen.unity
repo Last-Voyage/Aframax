@@ -417,6 +417,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c30abfc4fff66e41b78b755035f0523, type: 3}
+--- !u!114 &148988808 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8386638444798806773, guid: 7c30abfc4fff66e41b78b755035f0523,
+    type: 3}
+  m_PrefabInstance: {fileID: 148988807}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47e50585b4c88e4479a54fbaaa0c4dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &179842335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,6 +1302,19 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1137007247625535617, guid: 72339041b3287b84ca018cecf6f97f31,
+          type: 3}
+        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
+        m_MethodName: AddToSelectionStack
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 446559027}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4248,6 +4273,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 148988808}
+        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
+        m_MethodName: AddToSelectionStack
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1299406562}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1299406566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5873,6 +5910,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1137007247625535617, guid: 72339041b3287b84ca018cecf6f97f31,
+          type: 3}
+        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
+        m_MethodName: AddToSelectionStack
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1811269705}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1811269709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6031,9 +6081,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0d65fc30528b1479686b2fc61b6e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _backArrowSprite: {fileID: 0}
-  _controllerBackArrowSpriteAsset: {fileID: 0}
-  _keyboardBackArrowSpriteAsset: {fileID: 0}
 --- !u!114 &1821713053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6114,21 +6161,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 887760780}
-        m_TargetAssemblyTypeName: UnityEngine.EventSystems.EventSystem, UnityEngine.UI
-        m_MethodName: SetSelectedGameObject
-        m_Mode: 2
+      - m_Target: {fileID: 1821713054}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: PlayClickSFX
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 446559027}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1821713054}
-        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
+      - m_Target: {fileID: 148988808}
+        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
+        m_MethodName: SelectUiOnPreviousPage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6344,6 +6391,19 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1137007247625535617, guid: 72339041b3287b84ca018cecf6f97f31,
+          type: 3}
+        m_TargetAssemblyTypeName: UiManager, Assembly-CSharp
+        m_MethodName: AddToSelectionStack
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1997482811}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
