@@ -550,6 +550,7 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnchildHarpoon);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopWalkingSway);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetZoom);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(RestartAutoCameraMovement);
     }
 
@@ -566,6 +567,7 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnchildHarpoon);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopWalkingSway);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetZoom);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(RestartAutoCameraMovement);
     }
 
