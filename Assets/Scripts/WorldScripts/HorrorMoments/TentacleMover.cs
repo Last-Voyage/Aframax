@@ -14,7 +14,6 @@ public class TentacleMover : MonoBehaviour
 {
     [SerializeField] private SlytherinTentacleBehavior _tentacle;
 
-
     /// <summary>
     /// Called when the player makes contact with the associated trigger
     /// </summary>
@@ -25,7 +24,6 @@ public class TentacleMover : MonoBehaviour
         {
             _tentacle.MoveAway();
             StartCoroutine(_tentacle.DestroyTentacle(3f));
-            //Destroy(this.gameObject, 1);
         }
     }
 }
