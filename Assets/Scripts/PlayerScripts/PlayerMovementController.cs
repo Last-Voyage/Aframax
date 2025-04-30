@@ -102,8 +102,6 @@ public class PlayerMovementController : MonoBehaviour
 
     private Rigidbody _playerRigidBody;
 
-    private Vector3 _cameraPositionWithLastInput = Vector3.zero;
-
     /// <summary>
     /// Movement coroutine related variables
     /// </summary>
@@ -160,32 +158,6 @@ public class PlayerMovementController : MonoBehaviour
             return;
         }
 
-        if (Camera.main.transform.localPosition != _cameraPositionWithLastInput)
-        {
-            StartCoroutine(SubscribeInputWithDelay());
-        }
-        else
-        {
-            _playerInput = GetComponent<PlayerInput>();
-            _playerInput.currentActionMap.Enable();
-
-            _movementInput = _playerInput.currentActionMap.FindAction(_MOVEMENT_INPUT_NAME);
-
-            // Run the movement coroutine
-            _movementCoroutine = StartCoroutine(ResolveMovement());
-
-            _isInputSubscribed = true;
-        }
-    }
-
-    /// <summary>
-    /// Variation of SubcribeInput with a delay for the camera to return to its original location
-    /// Intended to be used after cinematics
-    /// </summary>
-    private IEnumerator SubscribeInputWithDelay()
-    {
-        yield return new WaitUntil(WaitForCameraReturn);
-
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.currentActionMap.Enable();
 
@@ -195,15 +167,6 @@ public class PlayerMovementController : MonoBehaviour
         _movementCoroutine = StartCoroutine(ResolveMovement());
 
         _isInputSubscribed = true;
-    }
-
-    /// <summary>
-    /// Bool to check if the camera has returned to its original position after cinematics
-    /// </summary>
-    /// <returns> True if the camera is in the correct position, false otherwise </returns>
-    private bool WaitForCameraReturn()
-    {
-        return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
     }
 
     /// <summary>
@@ -219,7 +182,6 @@ public class PlayerMovementController : MonoBehaviour
         _playerInput = null;
         StopCoroutine(_movementCoroutine);
         _isInputSubscribed = false;
-        _cameraPositionWithLastInput = Camera.main.transform.localPosition;
     }
     #endregion
 
@@ -236,9 +198,7 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().AddListener(StopReloadSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopHarpoonSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopReloadSpeedSlowdown);
-        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(FreezeMovement);
-        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(CheckForInputCinematics);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ReleaseMovement);
     }
@@ -255,9 +215,7 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().RemoveListener(StopReloadSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopReloadSpeedSlowdown);
-        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(FreezeMovement);
-        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(CheckForInputCinematics);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ReleaseMovement);
     }
