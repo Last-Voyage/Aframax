@@ -95,6 +95,9 @@ public class ChaseVineGroup : MonoBehaviour
             _playerCam.enabled = false;
             _playerMovementController.PlayerMovementSpeed = 0;
 
+            // Disable harpoon gun and reticle
+            CameraManager.Instance.InvokeOnCinematicStart();
+
             //play start screaming animation
             _startScreamObject.SetActive(true);
 
@@ -127,6 +130,9 @@ public class ChaseVineGroup : MonoBehaviour
         _playerCam.enabled = true;
         _startVirtualCamera.enabled = false;
         _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
+
+        // Also the harpoon gun and reticle
+        CameraManager.Instance.InvokeOnCinematicEnd();
 
         StartMovementAudio();
 
