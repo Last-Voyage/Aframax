@@ -40,6 +40,11 @@ public class PersistentAudioManager : AudioManager
     private static UnityEvent _onBossMusicStarted = new();
     private static UnityEvent _onBossMusicEnded = new();
 
+    private Coroutine _musicFadeInCoroutine;
+    private Coroutine _musicFadeOutCoroutine;
+
+    private Coroutine _musicStartCoroutine;
+
     /// <summary>
     /// Performs any set up needed for the manager
     /// </summary>
@@ -360,7 +365,24 @@ public class PersistentAudioManager : AudioManager
         {
             return;
         }
-        StartCoroutine(StartMusicProcess(reference));
+
+        if (_musicFadeInCoroutine != null)
+        {
+            print("Stop fade in");
+            StopCoroutine(_musicFadeInCoroutine);
+        }
+        if (_musicFadeOutCoroutine != null)
+        {
+            print("Stop fade out");
+            StopCoroutine(_musicFadeOutCoroutine);
+        }
+        if(_musicStartCoroutine != null)
+        {
+            StopCoroutine(_musicStartCoroutine); 
+        }
+        print("Start");
+
+        _musicStartCoroutine = StartCoroutine(StartMusicProcess(reference));
     }
 
     /// <summary>
@@ -374,9 +396,11 @@ public class PersistentAudioManager : AudioManager
         if (_currentMusicInstance.isValid())
         {
             // Starts the process of fading the volume to 0
-            StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0,true));
+            _musicFadeOutCoroutine = 
+                StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0,true));
             // Waits for the fade out time
             yield return _musicFadeOutTime;
+            _musicFadeOutCoroutine = null;
             // Releases the instance of the music
             _currentMusicInstance.release();
         }
@@ -389,7 +413,11 @@ public class PersistentAudioManager : AudioManager
         _currentMusicInstance.start();
 
         // Starts the process of changing the volume from 0 to 1
-        StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 1,true));
+        _musicFadeInCoroutine = StartCoroutine
+            (ChangePersistentAudioVolume(_currentMusicInstance, 1,true));
+        yield return _musicFadeOutTime;
+        _musicFadeInCoroutine = null;
+        _musicStartCoroutine = null;
     }
 
     /// <summary>
