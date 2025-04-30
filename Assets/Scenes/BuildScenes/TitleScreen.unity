@@ -2779,6 +2779,7 @@ GameObject:
   - component: {fileID: 897474135}
   - component: {fileID: 897474134}
   - component: {fileID: 897474138}
+  - component: {fileID: 897474139}
   m_Layer: 5
   m_Name: Quit
   m_TagString: Untagged
@@ -2888,6 +2889,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 897474139}
+        m_TargetAssemblyTypeName: PreviousSelectedUi, Assembly-CSharp
+        m_MethodName: SelectThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &897474136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2939,6 +2952,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+--- !u!114 &897474139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897474132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8018675699ac9bf4f8ac74a654930a30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &901565827
 GameObject:
   m_ObjectHideFlags: 0
