@@ -86,6 +86,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float _delayToReturnToMaxSpeed;
     private WaitForSeconds _delayToMaxSpeedWait;
     private Coroutine _cameraSpeedReturnCoroutine;
+    private Coroutine _stopSwayCoroutine;
 
     // Cached variables
     private WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
@@ -267,17 +268,18 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         // Stop the camera returning coroutine
-        if (_walkingSwayCoroutine != null && _walkingSwayStarted == true)
+        if (_walkingSwayCoroutine != null)
         {
             _walkingSwayStarted = false;
             StopCoroutine(_walkingSwayCoroutine);
+            _walkingSwayCoroutine = null;
         }
 
         // Start the walking sway
-        if (_walkingSwayStarted == false)
+        if (!_walkingSwayStarted)
         {
             _walkingSwayStarted = true;
-            _walkingSwayCoroutine = StartCoroutine(WalkingSway());   
+            _walkingSwayCoroutine = StartCoroutine(WalkingSway());
         }
     }
 
@@ -287,8 +289,6 @@ public class PlayerCameraController : MonoBehaviour
     /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
     private IEnumerator WalkingSway()
     {
-        Coroutine stopSwayCoroutine = null;
-
         while (true)
         {
             Vector2 moveDir = _playerMovement.ReadValue<Vector2>();
@@ -299,10 +299,10 @@ public class PlayerCameraController : MonoBehaviour
                 _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
             {
                 // Stop resetting the camera if we are
-                if (stopSwayCoroutine != null)
+                if (_stopSwayCoroutine != null)
                 {
-                    StopCoroutine(stopSwayCoroutine);
-                    stopSwayCoroutine = null;
+                    StopCoroutine(_stopSwayCoroutine);
+                    _stopSwayCoroutine = null;
                 }
 
                 // We would like to get the angle at which that camera is facing
@@ -350,10 +350,11 @@ public class PlayerCameraController : MonoBehaviour
         if (_walkingSwayCoroutine != null)
         {
             StopCoroutine(_walkingSwayCoroutine);
+            _walkingSwayCoroutine = null;
         }
 
         // Return camera to original position
-        _walkingSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
+        _stopSwayCoroutine = StartCoroutine(ReturnCameraFromWalking());
     }
 
     /// <summary>
@@ -385,11 +386,14 @@ public class PlayerCameraController : MonoBehaviour
         if (_walkingSwayCoroutine != null)
         {
             StopCoroutine(_walkingSwayCoroutine);
+            _walkingSwayCoroutine = null;
         }
 
         // But wait, if we're still in motion, then we want to restart the walking sway
-        if (_playerMovement != null && _playerMovement.ReadValue<Vector2>() != Vector2.zero)
+        if (_playerMovement != null &&
+            _playerMovement.ReadValue<Vector2>() != Vector2.zero)
         {
+            _walkingSwayStarted = true;
             _walkingSwayCoroutine = StartCoroutine(WalkingSway());
         }
     }
