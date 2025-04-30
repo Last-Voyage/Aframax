@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       PersistentAudioManager.cs
 // Author:          Andrea Swihart-DeCoster
-// Contributors:    Ryan Swanson
+// Contributors:    Ryan Swanson, Charlie Polonus
 // Creation Date:   October 1st, 2024
 //
 // Description:     Manages any sound that player persistently throughout the
@@ -35,10 +35,16 @@ public class PersistentAudioManager : AudioManager
     private EventReference _currentMusicReference;
     private EventInstance _currentMusicInstance;
 
+    private WaitForSeconds _musicFadeInTime;
     private WaitForSeconds _musicFadeOutTime;
 
     private static UnityEvent _onBossMusicStarted = new();
     private static UnityEvent _onBossMusicEnded = new();
+
+    private Coroutine _musicFadeInCoroutine;
+    private Coroutine _musicFadeOutCoroutine;
+
+    private Coroutine _musicStartCoroutine;
 
     /// <summary>
     /// Performs any set up needed for the manager
@@ -91,6 +97,7 @@ public class PersistentAudioManager : AudioManager
     {
         _ambienceFadeInTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.AmbienceFadeInTime);
         _ambienceFadeOutTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.AmbienceFadeOutTime);
+        _musicFadeInTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.MusicFadeInTime);
         _musicFadeOutTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.MusicFadeOutTime);
     }
     
@@ -360,7 +367,25 @@ public class PersistentAudioManager : AudioManager
         {
             return;
         }
-        StartCoroutine(StartMusicProcess(reference));
+
+        // If there is music already trying to fade in, stop doing that
+        if (_musicFadeInCoroutine != null)
+        {
+            StopCoroutine(_musicFadeInCoroutine);
+        }
+        // If there is music already trying to fade out, stop doing that
+        if (_musicFadeOutCoroutine != null)
+        {
+            StopCoroutine(_musicFadeOutCoroutine);
+        }
+        // If there is music already trying to start, stop doing that
+        if(_musicStartCoroutine != null)
+        {
+            StopCoroutine(_musicStartCoroutine); 
+        }
+
+        // Start the actual desired music
+        _musicStartCoroutine = StartCoroutine(StartMusicProcess(reference));
     }
 
     /// <summary>
@@ -374,9 +399,11 @@ public class PersistentAudioManager : AudioManager
         if (_currentMusicInstance.isValid())
         {
             // Starts the process of fading the volume to 0
-            StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0,true));
+            _musicFadeOutCoroutine = 
+                StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0,true));
             // Waits for the fade out time
             yield return _musicFadeOutTime;
+            _musicFadeOutCoroutine = null;
             // Releases the instance of the music
             _currentMusicInstance.release();
         }
@@ -389,7 +416,11 @@ public class PersistentAudioManager : AudioManager
         _currentMusicInstance.start();
 
         // Starts the process of changing the volume from 0 to 1
-        StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 1,true));
+        _musicFadeInCoroutine = StartCoroutine
+            (ChangePersistentAudioVolume(_currentMusicInstance, 1,true));
+        yield return _musicFadeInTime;
+        _musicFadeInCoroutine = null;
+        _musicStartCoroutine = null;
     }
 
     /// <summary>
