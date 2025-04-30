@@ -34,7 +34,6 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
     public static PlayerFunctionalityCore Instance;
 
-    private Coroutine _cameraReturningCoroutine = null;
     private Vector3 _cameraPositionWithLastInput = Vector3.zero;
 
     /// <summary>
@@ -105,7 +104,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
             }
             else
             {
-                DelayInputCinmatics();
+                StartCoroutine(SubscribeMovementInputWithDelay());
             }
         }
     }
@@ -173,7 +172,7 @@ public class PlayerFunctionalityCore : MonoBehaviour
         }
         else
         {
-            DelayInputCinmatics();
+            StartCoroutine(SubscribeHarpoonInputWithDelay());
         }
     }
 
@@ -239,28 +238,25 @@ public class PlayerFunctionalityCore : MonoBehaviour
     }
 
     /// <summary>
-    /// Delays the return of player input after a cinematic has played.
-    /// </summary>
-    private void DelayInputCinmatics()
-    {
-        if (_cameraReturningCoroutine.IsUnityNull())
-        {
-            _cameraReturningCoroutine = StartCoroutine(SubscribeInputWithDelay());
-        }
-    }
-
-    /// <summary>
-    /// Variation of SubcribeInput with a delay for the camera to return to its original location
+    /// Variation of SubcribeInput with a delay for the camera to return to its original location for movement
     /// Intended to be used after cinematics
     /// </summary>
-    private IEnumerator SubscribeInputWithDelay()
+    private IEnumerator SubscribeMovementInputWithDelay()
     {
         yield return new WaitUntil(WaitForCameraReturn);
 
         _playerMovementController.SubscribeInput();
-        _harpoonGun.SubscribeInput();
+    }
 
-        _cameraReturningCoroutine = null;
+    /// <summary>
+    /// Variation of SubcribeInput with a delay for the camera to return to its original location for the harpoon
+    /// Intended to be used after cinematics
+    /// </summary>
+    private IEnumerator SubscribeHarpoonInputWithDelay()
+    {
+        yield return new WaitUntil(WaitForCameraReturn);
+
+        _harpoonGun.SubscribeInput();
     }
 
     /// <summary>
