@@ -83,15 +83,6 @@ public class SaveManager : MainUniversalManagerFramework
 
         // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
         _gameSaveData.SetCurrentSceneIndex(1);
-
-        //sensitiviy starting values
-
-        // Convert the sensitivity to a string
-        string _settings = MaxSensitivity/2
-            + " " + false + " " + false;
-
-        // Write the text to the file
-        File.WriteAllText(Application.streamingAssetsPath + "/GameplaySettings.txt", _settings);
     }
 
     /// <summary>
@@ -108,8 +99,11 @@ public class SaveManager : MainUniversalManagerFramework
         // We'll go ahead and reset that brightness value too
         Instance.GetGameSaveData().SetBrightness(.5f);
         Instance.GetGameSaveData().IsSubtitlesOn = true;
-
         Instance.GetGameSaveData().IsGoreOn = true;
+
+        Instance.GetGameSaveData().IsCameraXAxisInverted = false;
+        Instance.GetGameSaveData().IsCameraYAxisInverted = false;
+        Instance.GetGameSaveData().CameraSensitivty = MaxSensitivity / 2;
         Instance.GetGameSaveData().IsUsingController = false;
     }
 
@@ -127,7 +121,7 @@ public class SaveManager : MainUniversalManagerFramework
     /// <summary>
     /// Loads the data from a file
     /// </summary>
-    private void Load()
+    public void Load()
     {
         //Loads all variables in Json into the Game Save Data class
         if (File.Exists(_saveDataFilePath + "Data.json"))
