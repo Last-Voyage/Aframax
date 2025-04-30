@@ -40,6 +40,9 @@ public class PlayerReticle : MonoBehaviour
     [Tooltip("Prefab hosting a sprite for ammo icons. Will change colors to match the scope's sprite.")]
     [SerializeField] private GameObject _harpoonIcon;
 
+    [Space]
+    [SerializeField] private GameObject _horizonDot;
+
 
     [Tooltip("The circle showing the potential deviation of harpoon shots")]
     private GameObject _reticleScope;
@@ -285,4 +288,8 @@ public class PlayerReticle : MonoBehaviour
         }
     }
 
+    public GameObject GetHorizonDot()
+    {
+        return _horizonDot;
+    }
 }

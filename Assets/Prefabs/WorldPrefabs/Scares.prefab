@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3529355320625336945}
-  - component: {fileID: 9198525159641175488}
+  - component: {fileID: 1661893312616277122}
   - component: {fileID: 9069402857712239493}
   m_Layer: 0
   m_Name: AntiLoopTriggerR
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2759507922894333323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9198525159641175488
+--- !u!114 &1661893312616277122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,11 +42,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 149157813970047020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c090d8ed52f8f5747b55aad42b79145f, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e238d3585230d340ac2c0129adb8321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDuration: 1
-  _onTriggerEvents:
+  _doesDestroyOnContact: 1
+  _onPlayerCollision:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7096976274755401855}
@@ -554,7 +554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5905507481556186853}
-  - component: {fileID: 9097830145272768647}
+  - component: {fileID: 6298268961331193924}
   - component: {fileID: 7540668038844549635}
   m_Layer: 0
   m_Name: AntiLoopTriggerL3
@@ -578,7 +578,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8443165859680934668}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &9097830145272768647
+--- !u!114 &6298268961331193924
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -587,11 +587,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1580118819565419742}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c090d8ed52f8f5747b55aad42b79145f, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e238d3585230d340ac2c0129adb8321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDuration: 1
-  _onTriggerEvents:
+  _doesDestroyOnContact: 1
+  _onPlayerCollision:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5950981880066587818}
@@ -639,6 +639,88 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 1, z: 4}
   m_Center: {x: -0.5, y: 0, z: 1.5}
+--- !u!1 &2125699448206098434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3585140713388198709}
+  - component: {fileID: 9103397924988373622}
+  - component: {fileID: 8741753857278417965}
+  m_Layer: 0
+  m_Name: ShiningOffTrigger (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3585140713388198709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125699448206098434}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -25.236, y: -5.1191435, z: 47.955}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3465839208097365033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &9103397924988373622
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125699448206098434}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5332794, y: 1, z: 1.7360382}
+  m_Center: {x: 0.8271866, y: 0, z: 0.3680191}
+--- !u!114 &8741753857278417965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125699448206098434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e238d3585230d340ac2c0129adb8321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _doesDestroyOnContact: 1
+  _onPlayerCollision:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3103848584353555378}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2178908975830652368
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,6 +803,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 9091443543312723604}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2125699448206098434}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &2314497026131619366
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +869,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7116131909177482367}
-  - component: {fileID: 5431257208916654264}
+  - component: {fileID: 6816470288778553143}
   - component: {fileID: 3288895238044541033}
   m_Layer: 0
   m_Name: AntiLoopTriggerL
@@ -787,7 +893,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2759507922894333323}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &5431257208916654264
+--- !u!114 &6816470288778553143
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -796,11 +902,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2782047548792202058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c090d8ed52f8f5747b55aad42b79145f, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e238d3585230d340ac2c0129adb8321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDuration: 1
-  _onTriggerEvents:
+  _doesDestroyOnContact: 1
+  _onPlayerCollision:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1186635346791920141}
@@ -1317,7 +1423,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6787074270848534292}
-  - component: {fileID: 9056557218197048657}
+  - component: {fileID: 4344139316323925600}
   - component: {fileID: 3629962362247338683}
   m_Layer: 0
   m_Name: AntiLoopTriggerR2
@@ -1341,7 +1447,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7151608502883549378}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9056557218197048657
+--- !u!114 &4344139316323925600
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1350,11 +1456,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5726269689784395584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c090d8ed52f8f5747b55aad42b79145f, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e238d3585230d340ac2c0129adb8321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDuration: 1
-  _onTriggerEvents:
+  _doesDestroyOnContact: 1
+  _onPlayerCollision:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8952971568124101717}
@@ -1472,7 +1578,7 @@ GameObject:
   m_Component:
   - component: {fileID: 958981549266765894}
   - component: {fileID: 6292146222434324502}
-  - component: {fileID: 1961938426503971982}
+  - component: {fileID: 8968104491253290106}
   m_Layer: 0
   m_Name: BodiesTrigger
   m_TagString: Untagged
@@ -1516,7 +1622,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8897324, y: 1, z: 1.3226776}
   m_Center: {x: 0.033023834, y: 0, z: 0.1613388}
---- !u!114 &1961938426503971982
+--- !u!114 &8968104491253290106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1545,12 +1651,12 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1577,7 +1683,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3104353209969985235}
-  - component: {fileID: 5040557469199861457}
+  - component: {fileID: 6843717134059227152}
   - component: {fileID: 8029917060843453032}
   m_Layer: 0
   m_Name: AntiLoopTriggerR3
@@ -1601,7 +1707,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8443165859680934668}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5040557469199861457
+--- !u!114 &6843717134059227152
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1610,11 +1716,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7320016078030654816}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c090d8ed52f8f5747b55aad42b79145f, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e238d3585230d340ac2c0129adb8321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effectDuration: 1
-  _onTriggerEvents:
+  _doesDestroyOnContact: 1
+  _onPlayerCollision:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7789282700010419222}
@@ -1775,6 +1881,7 @@ Transform:
   m_Children:
   - {fileID: 4129847440440836519}
   - {fileID: 3217906852106073207}
+  - {fileID: 3585140713388198709}
   - {fileID: 236808192019300798}
   m_Father: {fileID: 6959030431884814665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2053,7 +2160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3217906852106073207
 Transform:
   m_ObjectHideFlags: 0
@@ -2063,7 +2170,7 @@ Transform:
   m_GameObject: {fileID: 9091443543312723604}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.941, y: -5.1191435, z: 47.955}
+  m_LocalPosition: {x: -23.824, y: -5.1191435, z: 47.955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
