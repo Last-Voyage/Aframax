@@ -35,6 +35,7 @@ public class PersistentAudioManager : AudioManager
     private EventReference _currentMusicReference;
     private EventInstance _currentMusicInstance;
 
+    private WaitForSeconds _musicFadeInTime;
     private WaitForSeconds _musicFadeOutTime;
 
     private static UnityEvent _onBossMusicStarted = new();
@@ -96,6 +97,7 @@ public class PersistentAudioManager : AudioManager
     {
         _ambienceFadeInTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.AmbienceFadeInTime);
         _ambienceFadeOutTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.AmbienceFadeOutTime);
+        _musicFadeInTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.MusicFadeInTime);
         _musicFadeOutTime = new WaitForSeconds(FmodPersistentAudioEvents.Instance.MusicFadeOutTime);
     }
     
@@ -368,19 +370,16 @@ public class PersistentAudioManager : AudioManager
 
         if (_musicFadeInCoroutine != null)
         {
-            print("Stop fade in");
             StopCoroutine(_musicFadeInCoroutine);
         }
         if (_musicFadeOutCoroutine != null)
         {
-            print("Stop fade out");
             StopCoroutine(_musicFadeOutCoroutine);
         }
         if(_musicStartCoroutine != null)
         {
             StopCoroutine(_musicStartCoroutine); 
         }
-        print("Start");
 
         _musicStartCoroutine = StartCoroutine(StartMusicProcess(reference));
     }
@@ -415,7 +414,7 @@ public class PersistentAudioManager : AudioManager
         // Starts the process of changing the volume from 0 to 1
         _musicFadeInCoroutine = StartCoroutine
             (ChangePersistentAudioVolume(_currentMusicInstance, 1,true));
-        yield return _musicFadeOutTime;
+        yield return _musicFadeInTime;
         _musicFadeInCoroutine = null;
         _musicStartCoroutine = null;
     }
