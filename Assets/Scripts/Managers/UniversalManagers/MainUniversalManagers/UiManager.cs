@@ -6,14 +6,11 @@
 // Description:     Contains the functionality to set up and get access to Ui changes
 ******************************************************************************/
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -50,14 +47,8 @@ public class UiManager : MainUniversalManagerFramework
     /// <param name="button"></param>
     public void AddToBackStack(Button button)
     {
-        /*if (SceneManager.GetActiveScene().buildIndex != 0 ^ !TimeManager.Instance.GetIsGamePaused())
+        if (IsBackButtonStackEmpty())
         {
-            Debug.Log("Crayon eaaters");
-            return;
-        }*/
-        if (IsBackButtonStackEmpty() /*&& (!TimeManager.Instance.GetIsGamePaused() || SceneManager.GetActiveScene().buildIndex != 0)*/)
-        {
-            Debug.Log("Canyon");
             _playerInput.Player.UIBack.Enable();
             _playerInput.Player.UIBack.performed += ctx => ActivateBackButton();
         }
@@ -69,7 +60,6 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     public void ActivateBackButton()
     {
-        Debug.Log("Howie");
         if (_backButtons.TryPop(out Button button))
         {
             button.onClick.Invoke();
