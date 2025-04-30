@@ -704,7 +704,6 @@ GameObject:
   - component: {fileID: 1286591048}
   - component: {fileID: 1286591047}
   - component: {fileID: 1286591046}
-  - component: {fileID: 1286591050}
   - component: {fileID: 1286591051}
   m_Layer: 5
   m_Name: Canvas
@@ -797,18 +796,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1286591050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286591045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9203626c32c16214ea5b4d69c1bd714d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1286591051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -911,6 +898,7 @@ GameObject:
   - component: {fileID: 2073075609}
   - component: {fileID: 2073075608}
   - component: {fileID: 2073075612}
+  - component: {fileID: 2073075613}
   m_Layer: 5
   m_Name: No
   m_TagString: Untagged
@@ -1020,6 +1008,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2073075613}
+        m_TargetAssemblyTypeName: BackArrowEscapeBehaviour, Assembly-CSharp
+        m_MethodName: SelectPreviousUi
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2073075610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,6 +1071,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+--- !u!114 &2073075613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073075606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0d65fc30528b1479686b2fc61b6e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2108826525
 GameObject:
   m_ObjectHideFlags: 0
