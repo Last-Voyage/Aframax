@@ -71,6 +71,8 @@ public class RuntimeSfxManager : AudioManager
         PlayerManager.Instance.GetOnMovementStartEvent().AddListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().AddListener(StopFootsteps);
 
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopFootsteps);
+
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(StopFootsteps);
     }
 
@@ -83,6 +85,8 @@ public class RuntimeSfxManager : AudioManager
 
         PlayerManager.Instance.GetOnMovementStartEvent().RemoveListener(PlayFootSteps);
         PlayerManager.Instance.GetOnMovementEndEvent().RemoveListener(StopFootsteps);
+
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopFootsteps);
 
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(StopFootsteps);
 
@@ -328,6 +332,19 @@ public class RuntimeSfxManager : AudioManager
                 * (1 + (1 - currentSpeedMultiplier)));
 
             yield return footstepDelay;
+        }
+    }
+
+    /// <summary>
+    /// Unity calls this method whenever the application gains or loses focus on the OS side
+    /// Used to stop footsteps when you lose focus
+    /// </summary>
+    /// <param name="isFocused"> True when the app is in focus, false otherwise </param>
+    private void OnApplicationFocus(bool isFocused)
+    {
+        if (!isFocused)
+        {
+            StopFootsteps();
         }
     }
 
