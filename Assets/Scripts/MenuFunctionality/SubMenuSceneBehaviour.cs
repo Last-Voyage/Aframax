@@ -57,7 +57,6 @@ public class SubMenuSceneBehaviour : MonoBehaviour
             if(_doesSaveOnExit)
             {
                 SaveManager.Instance.SaveText();
-                //UiManager.Instance.SelectUiOnPreviousPage();
             }
             
             AframaxSceneManager.Instance.RemoveAdditiveLoadedScene(_thisSceneID);
