@@ -238,6 +238,9 @@ public class PlayerFunctionalityCore : MonoBehaviour
         _playerInteraction.UnsubscribeInput();
     }
 
+    /// <summary>
+    /// Delays the return of player input after a cinematic has played.
+    /// </summary>
     private void DelayInputCinmatics()
     {
         if (_cameraReturningCoroutine.IsUnityNull())
