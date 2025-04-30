@@ -95,7 +95,7 @@ public class PauseMenu : MonoBehaviour
         if(shouldToggleAudio)
         {
             // Pauses or resumes all the audio based on whether or not the menu is visible
-            FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/", out FMOD.Studio.Bus masterBus);
+            FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
             masterBus.setPaused(isVisible);
         }
     }
