@@ -25,7 +25,7 @@ public class UiManager : MainUniversalManagerFramework
 
     private Stack<GameObject> _previousUiSelections = new ();
     public Stack<Button> _backButtons = new();
-    private PlayerInputMap _playerInput = new();
+    private PlayerInputMap _playerInput;
 
     /// <summary>
     /// Makes the controller toggle save between game sessions
