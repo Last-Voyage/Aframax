@@ -20,38 +20,11 @@ public class BackArrowEscapeBehaviour : MonoBehaviour
 
     private Button _backArrow;
 
-    private void Awake()
-    {
-        //initialize input
-        //_playerInputControls = new PlayerInputMap();
-        //_playerInputControls.Player.UIBack.performed += ctx => PressBackArrow();
-
-        //_backArrow = GetComponent<Button>();
-    }
-
-    /// <summary>
-    /// presses the back arrow that this is attached to
-    /// </summary>
-    private void PressBackArrow()
-    {
-        //_backArrow.onClick.Invoke();
-    }
-
     /// <summary>
     /// Enables player input and swaps ui if needed
     /// </summary>
     private void OnEnable()
     {
-        //_playerInputControls.Enable();
         UiManager.Instance.AddToBackStack(GetComponent<Button>());
-    }
-
-    /// <summary>
-    /// Disables player input and removes listeners
-    /// </summary>
-    private void OnDisable()
-    {
-        //_playerInputControls.Player.UIBack.performed -= ctx => PressBackArrow();
-        //_playerInputControls.Disable();
     }
 }

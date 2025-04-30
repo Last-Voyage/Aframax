@@ -13,6 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -26,7 +27,6 @@ public class UiManager : MainUniversalManagerFramework
     private readonly UnityEvent _onSwapInput = new();
 
     private Stack<GameObject> _previousUiSelections = new ();
-    //public List<GameObject> _previousUiSelections2 = new();
     public Stack<Button> _backButtons = new();
     private PlayerInputMap _playerInput = new();
 
@@ -37,7 +37,6 @@ public class UiManager : MainUniversalManagerFramework
     {
         _isUsingController = SaveManager.Instance.GetGameSaveData().IsUsingController;
         _playerInput = new PlayerInputMap();
-        _playerInput.Player.UIBack.Enable();
         _backButtons.Clear();
         _previousUiSelections.Clear();
     }
@@ -51,8 +50,15 @@ public class UiManager : MainUniversalManagerFramework
     /// <param name="button"></param>
     public void AddToBackStack(Button button)
     {
+        /*if (SceneManager.GetActiveScene().buildIndex != 0 || !TimeManager.Instance.GetIsGamePaused())
+        {
+            Debug.Log("Crayon eaaters");
+            return;
+        }*/
         if (IsBackButtonStackEmpty())
         {
+            Debug.Log("Canyon");
+            _playerInput.Player.UIBack.Enable();
             _playerInput.Player.UIBack.performed += ctx => ActivateBackButton();
         }
         _backButtons.Push(button);
@@ -63,6 +69,7 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     public void ActivateBackButton()
     {
+        Debug.Log("Howie");
         if (_backButtons.TryPop(out Button button))
         {
             button.onClick.Invoke();
@@ -106,13 +113,6 @@ public class UiManager : MainUniversalManagerFramework
         {
             EventSystem.current.SetSelectedGameObject(uiElement);
         }
-
-        /*if (_previousUiSelections2.Count > 0)
-        {
-            int topOfStack = _previousUiSelections2.Count - 1;
-            EventSystem.current.SetSelectedGameObject(_previousUiSelections2[topOfStack]);
-            _previousUiSelections2.RemoveAt(topOfStack);
-        }*/
     }
 
     #endregion
