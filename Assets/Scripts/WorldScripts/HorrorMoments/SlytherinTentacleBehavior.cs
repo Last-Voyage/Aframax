@@ -70,6 +70,7 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         // Enabling the things we disabled with the previous event
         CameraManager.Instance.InvokeOnCinematicEnd();
 
+        Destroy(transform.parent.GetChild(0).gameObject);
         Destroy(this.gameObject);
     }
 }
