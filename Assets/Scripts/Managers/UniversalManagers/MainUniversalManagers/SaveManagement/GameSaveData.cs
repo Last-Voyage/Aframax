@@ -45,6 +45,12 @@ public class GameSaveData
 
     #endregion
 
+    #region Gameplay Settings
+    public bool IsCameraXAxisInverted { get; set; }
+    public bool IsCameraYAxisInverted { get; set; }
+    public float CameraSensitivty { get; set; }
+    #endregion
+
     #region Getters
 
     public int GetCurrentCheckPoint() => CurrentCheckpoint;

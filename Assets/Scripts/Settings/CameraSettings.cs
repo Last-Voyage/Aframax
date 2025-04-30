@@ -36,50 +36,30 @@ public class CameraSettings : MonoBehaviour
         WasSettingsChanged.Invoke();
     }
 
-   
-
     /// <summary>
     /// Gets the sensitivity settings and applys it to the camera
     /// </summary>
     private void UpdateSettings()
     {
-        
-        string[] camSettings = File.ReadAllLines(Application.streamingAssetsPath +
-            _gameplaySettingFilePath)[0].Split(" ");
+        float sensitivity = SaveManager.Instance.GetGameSaveData().CameraSensitivty;
 
-        for (int i = 0; i < camSettings.Length; i++)
+        CinemachinePOV cinemachinePOV = GetComponent<CinemachineVirtualCamera>().
+            GetCinemachineComponent<CinemachinePOV>();
+
+        //sensitivity
+        if (PlayerCameraController.Instance != null)
         {
-            switch (i)
-            {
-                case 0:
-                    //sensitivity
-                    if (PlayerCameraController.Instance != null)
-                    {
-                        PlayerCameraController.Instance.StoredSensitivity =
-                            new Vector2 (float.Parse(camSettings[0]), float.Parse(camSettings[0]));
-                    }
+            PlayerCameraController.Instance.StoredSensitivity = new Vector2(sensitivity,sensitivity);
 
-                    GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachinePOV>()
-                        .m_VerticalAxis.m_MaxSpeed = float.Parse(camSettings[0]);
-                    GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachinePOV>()
-                        .m_HorizontalAxis.m_MaxSpeed = float.Parse(camSettings[0]);
-                    break;
-                case 1:
-                    //invert X
-                    GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachinePOV>()
-                        .m_HorizontalAxis.m_InvertInput = bool.Parse(camSettings[1]);
-                    break;
-                case 2:
-                    //invert Y
-                    GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachinePOV>()
-                        .m_VerticalAxis.m_InvertInput = !bool.Parse(camSettings[2]);
-                    break;
-
-                default:
-                    break;
-            }
+            cinemachinePOV.m_HorizontalAxis.m_MaxSpeed = sensitivity;
+            cinemachinePOV.m_VerticalAxis.m_MaxSpeed = sensitivity;
         }
 
+        cinemachinePOV.m_HorizontalAxis.m_InvertInput = 
+            SaveManager.Instance.GetGameSaveData().IsCameraXAxisInverted;
+
+        cinemachinePOV.m_VerticalAxis.m_InvertInput =
+            !SaveManager.Instance.GetGameSaveData().IsCameraYAxisInverted;
     }
 
     /// <summary>
