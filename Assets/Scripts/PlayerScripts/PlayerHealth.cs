@@ -121,7 +121,8 @@ public class PlayerHealth : BaseHealth
         }
         if (_currentHealth >= _healthToEndHeartSfx && _heartBeatCoroutine != null)
         {
-          StopCoroutine(_heartBeatCoroutine);
+            StopCoroutine(_heartBeatCoroutine);
+            _heartBeatCoroutine = null;
         }
     }
 
