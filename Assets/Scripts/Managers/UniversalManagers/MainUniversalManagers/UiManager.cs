@@ -50,12 +50,12 @@ public class UiManager : MainUniversalManagerFramework
     /// <param name="button"></param>
     public void AddToBackStack(Button button)
     {
-        /*if (SceneManager.GetActiveScene().buildIndex != 0 || !TimeManager.Instance.GetIsGamePaused())
+        /*if (SceneManager.GetActiveScene().buildIndex != 0 ^ !TimeManager.Instance.GetIsGamePaused())
         {
             Debug.Log("Crayon eaaters");
             return;
         }*/
-        if (IsBackButtonStackEmpty())
+        if (IsBackButtonStackEmpty() /*&& (!TimeManager.Instance.GetIsGamePaused() || SceneManager.GetActiveScene().buildIndex != 0)*/)
         {
             Debug.Log("Canyon");
             _playerInput.Player.UIBack.Enable();
