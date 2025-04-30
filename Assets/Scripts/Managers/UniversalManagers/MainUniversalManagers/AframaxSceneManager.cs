@@ -292,6 +292,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         UpdateLastScene();
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
 
+        // Collect the garbage
+        GC.Collect();
+
         OnInvokeSceneAdditiveLoadAddEvent();
     }
 
