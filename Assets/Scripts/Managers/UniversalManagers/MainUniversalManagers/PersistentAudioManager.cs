@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       PersistentAudioManager.cs
 // Author:          Andrea Swihart-DeCoster
-// Contributors:    Ryan Swanson
+// Contributors:    Ryan Swanson, Charlie Polonus
 // Creation Date:   October 1st, 2024
 //
 // Description:     Manages any sound that player persistently throughout the
@@ -368,19 +368,23 @@ public class PersistentAudioManager : AudioManager
             return;
         }
 
+        // If there is music already trying to fade in, stop doing that
         if (_musicFadeInCoroutine != null)
         {
             StopCoroutine(_musicFadeInCoroutine);
         }
+        // If there is music already trying to fade out, stop doing that
         if (_musicFadeOutCoroutine != null)
         {
             StopCoroutine(_musicFadeOutCoroutine);
         }
+        // If there is music already trying to start, stop doing that
         if(_musicStartCoroutine != null)
         {
             StopCoroutine(_musicStartCoroutine); 
         }
 
+        // Start the actual desired music
         _musicStartCoroutine = StartCoroutine(StartMusicProcess(reference));
     }
 
