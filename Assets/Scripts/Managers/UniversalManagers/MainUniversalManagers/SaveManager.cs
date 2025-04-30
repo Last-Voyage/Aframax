@@ -121,7 +121,7 @@ public class SaveManager : MainUniversalManagerFramework
     /// <summary>
     /// Loads the data from a file
     /// </summary>
-    private void Load()
+    public void Load()
     {
         //Loads all variables in Json into the Game Save Data class
         if (File.Exists(_saveDataFilePath + "Data.json"))
