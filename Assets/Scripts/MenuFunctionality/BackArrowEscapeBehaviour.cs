@@ -12,14 +12,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// allows pressing escape to push a button that this script is attached to
+/// Places the back button this is attached to the back button stack in the UI manager
 /// </summary>
 public class BackArrowEscapeBehaviour : MonoBehaviour
 {
-    private PlayerInputMap _playerInputControls;
-
-    private Button _backArrow;
-
     /// <summary>
     /// Enables player input and swaps ui if needed
     /// </summary>

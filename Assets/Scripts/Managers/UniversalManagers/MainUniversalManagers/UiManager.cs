@@ -117,6 +117,9 @@ public class UiManager : MainUniversalManagerFramework
         _onSwapInput?.Invoke();
     }
 
+    /// <summary>
+    /// If the player still has back buttons, then this will remove the UIback listener
+    /// </summary>
     private void OnDisable()
     {
         if (!_playerInput.Player.IsUnityNull() && !IsBackButtonStackEmpty())
