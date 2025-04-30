@@ -23,4 +23,12 @@ public class BackArrowEscapeBehaviour : MonoBehaviour
     {
         UiManager.Instance.AddToBackStack(GetComponent<Button>());
     }
+
+    /// <summary>
+    /// Selects the previously selected UI
+    /// </summary>
+    public void SelectPreviousUi()
+    {
+        UiManager.Instance.SelectUiOnPreviousPage();
+    }
 }

@@ -63,7 +63,6 @@ public class UiManager : MainUniversalManagerFramework
         if (_backButtons.TryPop(out Button button))
         {
             button.onClick.Invoke();
-            SelectUiOnPreviousPage();
         }
 
         if (IsBackButtonStackEmpty())
@@ -97,7 +96,7 @@ public class UiManager : MainUniversalManagerFramework
     /// <summary>
     /// Sets the current selected ui to what was last selected on the previous page
     /// </summary>
-    private void SelectUiOnPreviousPage()
+    public void SelectUiOnPreviousPage()
     {
         if (_previousUiSelections.TryPop(out GameObject uiElement))
         {
