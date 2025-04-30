@@ -43,6 +43,14 @@ public class SceneLoadingButtons : MonoBehaviour
     }
 
     /// <summary>
+    /// Loads the game from the save file
+    /// </summary>
+    public void LoadGame()
+    {
+        SaveManager.Instance.Load();
+    }
+
+    /// <summary>
     /// Allows buttons to load the title screen
     /// </summary>
     public void ReloadTitleScreenButton()

@@ -195,6 +195,11 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().AddListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().AddListener(StartReloadSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().AddListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopHarpoonSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(CheckForInputCinematics);
     }
 
     /// <summary>
@@ -207,6 +212,11 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonFiredEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonStartReloadEvent().RemoveListener(StartReloadSpeedSlowdown);
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().RemoveListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopReloadSpeedSlowdown);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(CheckForInputCinematics);
     }
     #endregion
     
@@ -394,6 +404,17 @@ public class PlayerMovementController : MonoBehaviour
         StopAccelerationDeccelerationCoroutines();
 
         StartMovementDecceleration();
+    }
+
+    /// <summary>
+    /// Checks for any continuous movement input after cinematics have been completed
+    /// </summary>
+    private void CheckForInputCinematics()
+    {
+        if (_movementInput.ReadValue<Vector2>() != Vector2.zero)
+        {
+            DirectionalInputStarted(_movementInput);
+        }
     }
 
     /// <summary>
