@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         SubMenuSceneBehaviour.cs
 // Author :            Jeremiah Peters
+// Contributor:        Nick Rice
 // Creation Date :     11/10/24
 //
 // Brief Description : handles using escape to leave the submenu scenes
