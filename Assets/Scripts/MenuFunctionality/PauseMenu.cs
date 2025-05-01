@@ -19,6 +19,16 @@ public class PauseMenu : MonoBehaviour
     //You can get children by order, but that order can change if messed with
     [SerializeField] private GameObject _pauseMenuContent;
 
+    [Tooltip("The first page of the pause menu")]
+    [SerializeField] private GameObject _pauseMainMenu;
+    [Tooltip("The second page of the pause menu allowing the player to check settings or controls.")]
+    [SerializeField] private GameObject _pauseSubmenu;
+
+    [Space]
+    [SerializeField] private SubMenuTextBehaviour _subTextBehaviour;
+    [SerializeField] private int _pauseIndexToOpen;
+    [SerializeField] private int _pauseIndexToClose;
+
     private PlayerInputMap _playerInputControls;
 
     public static PauseMenu Instance;
@@ -52,6 +62,13 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PauseToggle()
     {
+        // Toggles pause menu page
+        if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded && !_pauseMainMenu.activeSelf && _pauseSubmenu.activeSelf)
+        {
+            RevertPausePage();
+            return;
+        }
+
         if (TutorialPopUp.ActiveTutorial != null)
         {
             TutorialPopUp.ExitActivePopUp();
@@ -73,6 +90,7 @@ public class PauseMenu : MonoBehaviour
         {
             TimeManager.Instance.PauseGameToggle(true);
         }
+
     }
 
     /// <summary>
@@ -106,6 +124,16 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    /// <summary>
+    /// Reverts the pause menu's page to its default one.
+    /// </summary>
+    private void RevertPausePage()
+    {
+        _subTextBehaviour.EnableMenuElement(_pauseIndexToOpen);
+        _subTextBehaviour.DisableMenuElement(_pauseIndexToClose);
+
     }
 
     private void OnEnable()
