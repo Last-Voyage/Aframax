@@ -12,64 +12,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// allows pressing escape to push a button that this script is attached to
+/// Places the back button this is attached to the back button stack in the UI manager
 /// </summary>
-public class BackArrowEscapeBehaviour : MonoBehaviour, IUiSwap
+public class BackArrowEscapeBehaviour : MonoBehaviour
 {
-    private PlayerInputMap _playerInputControls;
-
-    private Button _backArrow;
-
-    [SerializeField]
-    private Sprite _backArrowSprite;
-
-    [SerializeField]
-    private Sprite _controllerBackArrowSpriteAsset, _keyboardBackArrowSpriteAsset;
-
-    private void Awake()
-    {
-        //initialize input
-        _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.UIBack.performed += ctx => PressBackArrow();
-
-        _backArrow = GetComponent<Button>();
-    }
-
-    /// <summary>
-    /// presses the back arrow that this is attached to
-    /// </summary>
-    private void PressBackArrow()
-    {
-        _backArrow.onClick.Invoke();
-    }
-
-    /// <summary>
-    /// This swaps the player ui if they are using a controller or not
-    /// </summary>
-    public void OnUiSwap()
-    {
-        _backArrowSprite = UiManager.IsUsingController
-            ? _controllerBackArrowSpriteAsset
-            : _keyboardBackArrowSpriteAsset;
-    }
-
     /// <summary>
     /// Enables player input and swaps ui if needed
     /// </summary>
     private void OnEnable()
     {
-        _playerInputControls.Enable();
-        UiManager.Instance.GetOnSwapInput?.AddListener(OnUiSwap);
-        OnUiSwap();
+        UiManager.Instance.AddToBackStack(GetComponent<Button>());
     }
 
     /// <summary>
-    /// Disables player input and removes listeners
+    /// Selects the previously selected UI
     /// </summary>
-    private void OnDisable()
+    public void SelectPreviousUi()
     {
-        UiManager.Instance.GetOnSwapInput?.RemoveListener(OnUiSwap);
-        _playerInputControls.Player.UIBack.performed -= ctx => PressBackArrow();
-        _playerInputControls.Disable();
+        UiManager.Instance.SelectUiOnPreviousPage();
     }
 }
