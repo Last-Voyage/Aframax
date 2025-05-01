@@ -24,6 +24,11 @@ public class PauseMenu : MonoBehaviour
     [Tooltip("The second page of the pause menu allowing the player to check settings or controls.")]
     [SerializeField] private GameObject _pauseSubmenu;
 
+    [Space]
+    [SerializeField] private SubMenuTextBehaviour _subTextBehaviour;
+    [SerializeField] private int _pauseIndexToOpen;
+    [SerializeField] private int _pauseIndexToClose;
+
     private PlayerInputMap _playerInputControls;
 
     public static PauseMenu Instance;
@@ -126,8 +131,11 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void RevertPausePage()
     {
-        _pauseMainMenu.SetActive(true);
-        _pauseSubmenu.SetActive(false);
+        //   _pauseMainMenu.SetActive(true);
+        //   _pauseSubmenu.SetActive(false);
+        _subTextBehaviour.EnableMenuElement(_pauseIndexToOpen);
+        _subTextBehaviour.DisableMenuElement(_pauseIndexToClose);
+
     }
 
     private void OnEnable()
