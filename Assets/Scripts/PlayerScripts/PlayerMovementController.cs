@@ -179,7 +179,11 @@ public class PlayerMovementController : MonoBehaviour
             return;
         }
 
-        _playerInput.currentActionMap.Disable();
+        if (!_playerInput.currentActionMap.IsUnityNull())
+        {
+            _playerInput.currentActionMap.Disable();
+        }
+        
         _playerInput = null;
         StopCoroutine(_movementCoroutine);
         _isInputSubscribed = false;
