@@ -45,8 +45,6 @@ public class ChaseVineGroup : MonoBehaviour
     private CinemachineVirtualCamera _playerCam;
     [SerializeField] private float _delayCameraSwitch = 2f;
     private static bool _hasBeenActivated = false;
-    private float _basePlayerSpeed;
-    private PlayerMovementController _playerMovementController;
 
     /// <summary>
     /// Sets up the chase vine group
@@ -86,16 +84,12 @@ public class ChaseVineGroup : MonoBehaviour
         {
             //get the player virtual camera
             _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
-            _playerMovementController = PlayerMovementController.Instance;
-            _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
 
-
-            //disable player camera and enable this camera stop player movement
+            //disable player camera and enable this camera
             _startVirtualCamera.enabled = true;
             _playerCam.enabled = false;
-            _playerMovementController.PlayerMovementSpeed = 0;
 
-            // Disable harpoon gun and reticle
+            // Disable things from other scripts
             CameraManager.Instance.InvokeOnCinematicStart();
 
             //play start screaming animation
@@ -126,12 +120,11 @@ public class ChaseVineGroup : MonoBehaviour
 
         yield return new WaitForSeconds(_delayCameraSwitch);
 
-        //after all the vines appear move camera back to player enable player movement
+        //after all the vines appear move camera back to player
         _playerCam.enabled = true;
         _startVirtualCamera.enabled = false;
-        _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
 
-        // Also the harpoon gun and reticle
+        // Enable things from other scripts
         CameraManager.Instance.InvokeOnCinematicEnd();
 
         StartMovementAudio();
