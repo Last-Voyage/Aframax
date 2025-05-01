@@ -32,12 +32,16 @@ public class FakeWindowManager : MonoBehaviour
     /// </summary>
     [SerializeField] private Vector3 _worldSpawnPos = new(0.0F, 0.0F, 1500.0F);
 
+    /// <summary>
+    /// How far from the initial position the camera is allowed to be adjusted
+    /// (For the parallax effect)
+    /// </summary>
     [SerializeField] private float _maxFollowDistance = 10.0F;
 
     /// <summary>
-    /// Reference to the current fake window
+    /// List of the fake windows currently in the scene
     /// </summary>
-    private FakeWindowObject _fakeWindow;
+    private List<FakeWindowObject> _fakeWindows;
 
     /// <summary>
     /// The camera responsible for rendering the fake windows
@@ -64,6 +68,8 @@ public class FakeWindowManager : MonoBehaviour
             Instance = this; 
         }
 
+        _fakeWindows = new List<FakeWindowObject>();
+
         // Spawn capture container in scene
         var container = Instantiate(
             _fakeWindowCaptureContainer,
@@ -87,13 +93,21 @@ public class FakeWindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the current fake window
+    /// Adds a fake window to the global registry
     /// </summary>
     /// <param name="fakeWindow">The fake window reference</param>
-    public void SetCurrentFakeWindow(FakeWindowObject fakeWindow)
+    public void RegisterWindow(FakeWindowObject fakeWindow)
     {
-        _fakeWindow = fakeWindow;
-        _captureContainerCamera.transform.position = _initialCameraPosition;
+        _fakeWindows.Add(fakeWindow);
+    }
+
+    /// <summary>
+    /// Removes a fake window from the global registry
+    /// </summary>
+    /// <param name="fakeWindow">The fake window reference</param>
+    public void UnregisterWindow(FakeWindowObject fakeWindow)
+    {
+        _fakeWindows.Remove(fakeWindow);
     }
 
     /// <summary>
@@ -103,8 +117,8 @@ public class FakeWindowManager : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // Do nothing if fake window is not set
-        if (_fakeWindow.IsUnityNull())
+        // Do nothing if no fake windows are registered
+        if (_fakeWindows.Count == 0)
         {
             return;
         }
@@ -112,14 +126,47 @@ public class FakeWindowManager : MonoBehaviour
         // Get global camera position
         var cameraPos = transform.position;
         
+        // Find nearest window
+        float minDist = float.MaxValue;
+        var closestWindow = _fakeWindows[0];
+
+        // For every window in the registry
+        foreach (var window in _fakeWindows)
+        {
+            // Do not consider if window is not in view
+            if (!window.WindowMeshRenderer.isVisible)
+            {
+                continue;
+            }
+            
+            float curDist = Vector3.Distance(
+                cameraPos,
+                window.transform.position
+            );
+
+            // Check if window is closer than any previously
+            // evaluated windows
+            if (curDist < minDist)
+            {
+                minDist = curDist;
+                closestWindow = window;
+            }
+        }
+        
+        // Do nothing if fake window is not set
+        if (closestWindow.IsUnityNull())
+        {
+            return;
+        }
+        
         // Get rotation based on the vector between the closest
         // window and the current camera position
         var newRotation = Quaternion.LookRotation(
-            _fakeWindow.transform.position - cameraPos
+            closestWindow.transform.position - cameraPos
         ).eulerAngles;
 
         // Account for level/window rotation
-        newRotation.y -= _fakeWindow.transform.eulerAngles.y - 90.0F;
+        newRotation.y -= closestWindow.transform.eulerAngles.y - 90.0F;
         
         // Prevent any weird gimbal stuff when converting from
         // quaternion -> euler rotation
@@ -130,7 +177,7 @@ public class FakeWindowManager : MonoBehaviour
             newRotation;
         
         // Get offset to be applied to the capture camera
-        var offset = _fakeWindow.transform.position - cameraPos;
+        var offset = closestWindow.transform.position - cameraPos;
 
         // Clamp follow distance
         offset.x = Mathf.Clamp(offset.x, -_maxFollowDistance, _maxFollowDistance);
