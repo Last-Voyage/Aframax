@@ -131,7 +131,6 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     private void RevertPausePage()
     {
-
         _subTextBehaviour.EnableMenuElement(_pauseIndexToOpen);
         _subTextBehaviour.DisableMenuElement(_pauseIndexToClose);
 
