@@ -15,7 +15,9 @@ using UnityEngine.UI;
 /// </summary>
 public class DisableContinueBehaviour : MonoBehaviour
 {
+    [SerializeField] private Button _newGameButton;
     [SerializeField] private Button _continueButton;
+    [SerializeField] private Button _optionsButton;
     /// <summary>
     /// disables the continue button when there is no save data
     /// </summary>
@@ -23,5 +25,19 @@ public class DisableContinueBehaviour : MonoBehaviour
     {
         //checks for gameplay save data, disables if there's none 
         _continueButton.interactable = SaveManager._hasSavedGameplayData;
+
+        //Adjust the navigation when the continue button is disabled
+        if(!SaveManager._hasSavedGameplayData )
+        {
+            Navigation newGameNavigation = _newGameButton.navigation;
+            newGameNavigation.mode = Navigation.Mode.Explicit;
+            newGameNavigation.selectOnDown = _optionsButton;
+            _newGameButton.navigation = newGameNavigation;
+
+            newGameNavigation = _optionsButton.navigation;
+            newGameNavigation.mode=Navigation.Mode.Explicit;
+            newGameNavigation.selectOnUp = _newGameButton;
+            _optionsButton.navigation = newGameNavigation;
+        }
     }
 }
