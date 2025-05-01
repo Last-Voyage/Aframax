@@ -9,6 +9,7 @@
 
 using System.Collections;
 using FMODUnity;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -43,7 +44,10 @@ public class IntervalFMODEvent
  
             yield return new WaitForSeconds(interval);
             
-            RuntimeSfxManager.APlayOneShotSfx?.Invoke(IntervalEvent, PlayerMovementController.Instance.transform.position);
+            if (!PlayerMovementController.Instance.IsUnityNull())
+            {
+                RuntimeSfxManager.APlayOneShotSfx?.Invoke(IntervalEvent, PlayerMovementController.Instance.transform.position);
+            }
         }
     }
 }

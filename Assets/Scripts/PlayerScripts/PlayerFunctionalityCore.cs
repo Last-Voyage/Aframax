@@ -209,7 +209,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToMovementInput()
     {
         _playerMovementController.UnsubscribeInput();
-        _cameraPositionWithLastInput = Camera.main.transform.localPosition;
+
+        if (!Camera.main.IsUnityNull())
+        {
+            _cameraPositionWithLastInput = Camera.main.transform.localPosition;
+        }
     }
 
     /// <summary>
@@ -226,7 +230,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToHarpoonInput()
     {
         _harpoonGun.UnsubscribeInput();
-        _cameraPositionWithLastInput = Camera.main.transform.localPosition;
+
+        if (!Camera.main.IsUnityNull())
+        {
+            _cameraPositionWithLastInput = Camera.main.transform.localPosition;
+        }
     }
 
     /// <summary>
