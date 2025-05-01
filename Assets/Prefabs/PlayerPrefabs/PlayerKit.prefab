@@ -186,9 +186,9 @@ MonoBehaviour:
   _maxHealth: 100
   _iFrameDelayInSeconds: 3
   _damageToTakeFromEnemy: 25
-  _healthToStartHeartSfx: 50
+  _healthToStartHeartSfx: 25
   _healthToEndHeartSfx: 60
-  _heartBeatRateSfx: 1
+  _heartBeatRateSfx: 0.44
 --- !u!114 &3256320120288923392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,7 +386,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 10
     NearClipPlane: 0.1
-    FarClipPlane: 70
+    FarClipPlane: 35
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
@@ -592,8 +592,8 @@ Camera:
   m_GameObject: {fileID: 5131231787490673698}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.4039216, g: 0.39607847, b: 0.36862746, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -615,7 +615,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 70
+  far clip plane: 35
   field of view: 60
   orthographic: 0
   orthographic size: 10
