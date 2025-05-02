@@ -1,0 +1,257 @@
+/******************************************************************************
+// File Name:       SaveManager.cs
+// Author:          Ryan Swanson
+// Contributor:     Nick Rice
+// Creation Date:   September 14, 2024
+//
+// Description:     Contains the functionality to set up and get access to save data
+******************************************************************************/
+
+using System;
+using UnityEngine;
+using Newtonsoft.Json;
+using System.IO;
+using UnityEngine.Events;
+using FMOD.Studio;
+using UnityEngine.SceneManagement;
+
+/// <summary>
+/// Provides the system by which the saving is set up and
+/// </summary>
+public class SaveManager : MainUniversalManagerFramework
+{
+    //Game Save Data variable MUST viewable in editor for Json, so either public or serialized
+    [SerializeField] private GameSaveData _gameSaveData;
+    private string _saveDataFilePath;
+
+    public static SaveManager Instance;
+
+    private readonly UnityEvent _onNewCheckpoint = new();
+    private readonly UnityEvent _onLoadSaveData = new();
+
+    public float MaxSensitivity = 450;
+
+    //Internal is used over [HideInInspector] public as that way it can be viewed
+    // when the inspector is set to debug mode. [HideInInspector] hides it even from debug
+    internal static bool _hasSavedGameplayData { get; private set; }
+
+    /// <summary>
+    /// Sets the path to create the save file
+    /// </summary>
+    private void EstablishPath()
+    {
+        //Checks to see if we're in editor, if so use data path instead of persistent data path
+        //Needed so that saving works both in editor and build
+        _saveDataFilePath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
+        //Append /SaveData/ to said path
+        //SaveData is the file is assets containing the save data
+        _saveDataFilePath += "/Resources/SaveData/";
+        //Check if we're in a build, check if the directory exists, if not
+        if (!Application.isEditor && !Directory.Exists(_saveDataFilePath)) 
+        {
+            //Creates the directory
+            Directory.CreateDirectory(_saveDataFilePath); 
+        }
+    }
+
+    /// <summary>
+    /// Fills the save data with its initial values when the file is first created as needed
+    /// You could use this to populate a dictionary on start up for example
+    /// For simpler variable types just set them in the Game Save Data class
+    /// </summary>
+    private void StartingValues()
+    {
+        GameplayStartingValues();
+
+        SettingsStartingValues();
+    }
+
+    /// <summary>
+    /// Sets the values of the gameplay related save data
+    /// </summary>
+    private void GameplayStartingValues()
+    {
+        _hasSavedGameplayData = false;
+
+        _gameSaveData.CurrentCheckpoint = 0;
+
+        _gameSaveData.SetPlayerInventory(new());
+
+        _gameSaveData.CurrentSceneIndex = 0;
+
+        _gameSaveData.CurrentStoryBeat = 0;
+
+        // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
+        _gameSaveData.SetCurrentSceneIndex(1);
+    }
+
+    /// <summary>
+    /// Sets the values of the settings related save data
+    /// </summary>
+    private void SettingsStartingValues()
+    {
+        GetGameSaveData().CurrentMasterVolume = 0.5f;
+        GetGameSaveData().CurrentSfxVolume = 0.5f;
+        GetGameSaveData().CurrentAmbienceVolume = 0.5f;
+        GetGameSaveData().CurrentVoiceVolume = 0.5f;
+        GetGameSaveData().CurrentMusicVolume = 0.5f;
+
+        // We'll go ahead and reset that brightness value too
+        Instance.GetGameSaveData().SetBrightness(.5f);
+        Instance.GetGameSaveData().IsSubtitlesOn = true;
+        Instance.GetGameSaveData().IsGoreOn = true;
+
+        Instance.GetGameSaveData().IsCameraXAxisInverted = false;
+        Instance.GetGameSaveData().IsCameraYAxisInverted = false;
+        Instance.GetGameSaveData().CameraSensitivty = MaxSensitivity / 2;
+        Instance.GetGameSaveData().IsUsingController = false;
+    }
+
+    /// <summary>
+    /// Writes all variables in the Game Save Data class into Json
+    /// </summary>
+    public void SaveText()
+    {
+        //Converts the Game Save Data class into a string
+        var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
+        //Saves the string into the text file
+        File.WriteAllText(_saveDataFilePath + "Data.json", convertedJson);
+    }
+
+    /// <summary>
+    /// Loads the data from a file
+    /// </summary>
+    public void Load()
+    {
+        //Loads all variables in Json into the Game Save Data class
+        if (File.Exists(_saveDataFilePath + "Data.json"))
+        {
+            //Converts the text file into a string
+            var json = File.ReadAllText(_saveDataFilePath + "Data.json");
+            //Converts the string into the Game Save Data class
+            _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
+
+            LoadInitialVolumes();
+
+            if(_gameSaveData.CurrentStoryBeat > 0)
+            {
+                _hasSavedGameplayData = true;
+            }
+        }
+        else
+        {
+            //Sets the initial values
+            StartingValues();
+            //Saves the initial values
+            SaveText();
+        }
+    }
+
+    /// <summary>
+    /// Loads the volumes to what they should be on start
+    /// </summary>
+    private void LoadInitialVolumes()
+    {
+        FMODUnity.RuntimeManager.GetVCA("vca:/MasterVCA").setVolume(GetGameSaveData().CurrentMasterVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/SFXVCA").setVolume(GetGameSaveData().CurrentSfxVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/AmbianceVCA").setVolume(GetGameSaveData().CurrentAmbienceVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/DialogueVCA").setVolume(GetGameSaveData().CurrentVoiceVolume);
+        FMODUnity.RuntimeManager.GetVCA("vca:/MusicVCA").setVolume(GetGameSaveData().CurrentMusicVolume);
+    }
+
+    /// <summary>
+    /// Resets all vars in the saved data
+    /// </summary>
+    public void ResetSaveData()
+    {
+        //Fully resets all variables in the Game Save Data
+        _gameSaveData = new GameSaveData();
+
+        //Sets the initial values
+        StartingValues();
+
+        //Saves the changes into the text file
+        SaveText();
+    }
+
+    /// <summary>
+    /// Resets all variables relating to the gameplay
+    /// Doesn't reset settings data
+    /// </summary>
+    public void ResetGameplaySaveData()
+    {
+        GameplayStartingValues();
+
+        //Saves the changes into the text file
+        SaveText();
+    }
+
+    /// <summary>
+    /// Called when gameplay data is saved for the first time
+    /// </summary>
+    public void SavedGameplayData()
+    {
+        _hasSavedGameplayData = true;
+    }
+
+    #region Save Point
+    /// <summary>
+    /// Called when contacting a save point
+    /// </summary>
+    /// <param name="savePointID">The id of the save point</param>
+    public void SavePointContact(int savePointID)
+    {
+        SavedGameplayData();
+        GetGameSaveData().SetCurrentCheckPoint(savePointID);
+        GetGameSaveData().SetCurrentSceneIndex(SceneManager.GetActiveScene().buildIndex);
+        PlayerInventory.Instance.SaveInventory();
+        StoryManager.Instance.SaveData();
+        GetOnNewCheckpoint()?.Invoke();
+    }
+    #endregion
+
+    /// <summary>
+    /// When the player reaches a checkpoint the data will be saved
+    /// </summary>
+    private void OnEnable()
+    {
+        GetOnNewCheckpoint()?.AddListener(SaveText);
+    }
+
+    /// <summary>
+    /// Removes the listener, preventing a memory leak
+    /// </summary>
+    private void OnDisable()
+    {
+        GetOnNewCheckpoint()?.RemoveListener(SaveText);
+    }
+
+    #region BaseManager
+    /// <summary>
+    /// Establishes the instance for the save manager
+    /// </summary>
+    public override void SetUpInstance()
+    {
+        base.SetUpInstance();
+        Instance = this;
+    }
+
+    /// <summary>
+    /// Sets up the main manager by establishing the path to the Json file and loading the data
+    /// </summary>
+    public override void SetUpMainManager()
+    {
+        base.SetUpMainManager();
+        EstablishPath();
+        Load();
+        
+    }
+    #endregion
+
+    #region Getters
+    public GameSaveData GetGameSaveData() => _gameSaveData;
+    public UnityEvent GetOnNewCheckpoint() => _onNewCheckpoint;
+    public UnityEvent GetOnLoadSaveData() => _onLoadSaveData;
+
+    #endregion
+}

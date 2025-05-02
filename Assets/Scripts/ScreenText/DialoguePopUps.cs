@@ -1,0 +1,206 @@
+/*****************************************************************************
+// File Name :         DialoguePopUps.cs
+// Author :            Nick Rice
+// Contributers :       Charlie Polonus, Jeremiah Peters
+//                     
+// Creation Date :     11/12/24
+//
+// Brief Description : This script handles the dialogue process, it's words and timing
+*****************************************************************************/
+using System;
+using System.Collections;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using FMOD.Studio;
+
+/// <summary>
+/// This class handles the dialogue process, it's words and timing
+/// </summary>
+public class DialoguePopUps : MonoBehaviour
+{
+    [Tooltip("The UI element that will actually display the text")]
+    [SerializeField]
+    private TextMeshProUGUI _textContainer;
+
+    [Tooltip("The UI element that renders the text background")]
+    [SerializeField]
+    private TextMeshProUGUI _textBackgroundContainer;
+
+    [Tooltip("Controls whether or not the text will have a background")]
+    [SerializeField]
+    private bool doTextBackground;
+
+    [Tooltip("background left padding")]
+    [SerializeField]
+    private float _leftBackgroundPadding;
+
+    [Tooltip("background right padding")]
+    [SerializeField]
+    private float _rightBackgroundPadding;
+
+    [Tooltip("background top padding")]
+    [SerializeField]
+    private float _topBackgroundPadding;
+
+    [Tooltip("background bottom padding")]
+    [SerializeField]
+    private float _bottomBackgroundPadding;
+
+    // Temp variable used for testing
+    [Tooltip("The data used in the UI element")]
+    [SerializeField]
+    private ScriptableDialogueUi _uiData;
+
+    [Tooltip("The pointer for which ui data is currently being used")]
+    private int _dataPointer;
+
+    private IEnumerator _playingDialogue;
+
+    [Tooltip("Time between all of the text being on screen and it's removal")] 
+    [SerializeField] 
+    private float _timeBeforeNoText = 2f;
+    
+    // Cached variables
+    private WaitForSeconds _waitBeforeNoText;
+
+    /// <summary>
+    /// Initializes the cached variable
+    /// </summary>
+    private void Start()
+    {
+        _waitBeforeNoText = new WaitForSeconds(_timeBeforeNoText);
+    }
+
+    /// <summary>
+    /// The pass through function for actually displaying the dialogue
+    /// Because events do not like coroutines
+    /// </summary>
+    private void BeginDisplayingText(ScriptableDialogueUi dialogueUi)
+    {
+        StopDialogue();
+
+        _playingDialogue = DisplayText(dialogueUi);
+        StartCoroutine(_playingDialogue);
+    }
+
+    /// <summary>
+    /// This takes the text, makes it invisible, then slowly makes it visible by x characters a second
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator DisplayText(ScriptableDialogueUi moreDialogue)
+    {
+        foreach (TextAndTimerData dialogueInfo in moreDialogue.GetTextAndTimer())
+        {
+            UpdateSubtitleSettingState();
+            
+            // Takes the display text and makes it invisible
+            _textContainer.text = dialogueInfo.GetText;
+            _textContainer.maxVisibleCharacters = 0;
+
+            //here's where it does text background
+
+            if (doTextBackground)
+            {
+                _textBackgroundContainer.text =
+                    $"<mark=#000000aa padding=�{_leftBackgroundPadding}," +
+                    $"{_rightBackgroundPadding}, {_topBackgroundPadding}," +
+                    $"{_bottomBackgroundPadding}�>" + dialogueInfo.GetText + "</mark>";
+            }
+            //padding order is left, right, top, bottom.
+            //first 6 digits of the hex color code is color ("000000" means black)
+            //last 2 digits is opacity ("aa" is about 67% opacity)
+
+            _textBackgroundContainer.maxVisibleCharacters = 0;
+
+            // Play the voiceline sound effect provided by the dialogue object
+            EventInstance eventInstance = AudioManager.Instance.CreateInstanceFromReference(dialogueInfo.GetAudio);
+            RuntimeSfxManager.APlayOneShotSfxInstance(eventInstance, transform.position);
+            DialogueSfxManager.Instance.SetCurrentDialogueEventInstance(eventInstance);
+
+            //format for background
+            //<mark=#000000aa padding=�10, 10, 0, 0�>text is highlighted</mark>
+
+            // Gets total length of text in characters, and gets the speed of the text display
+            int totalLength = dialogueInfo.GetText.Length;
+
+            float typeSpeed = totalLength / (float)dialogueInfo.GetTimeToDisplay;
+
+            // As long as all the text hasn't been fully displayed, this will continually
+            // display more characters for the total display time
+
+            //fix for background going slightly faster than actual text
+            _textBackgroundContainer.maxVisibleCharacters--;
+
+            while (_textContainer.maxVisibleCharacters < totalLength)
+            {
+                _textContainer.maxVisibleCharacters++;
+
+                //scroll the background too
+                _textBackgroundContainer.maxVisibleCharacters++;
+                yield return new WaitForSeconds(1f / typeSpeed);
+            }
+            // Wait to start displaying the next text
+            yield return new WaitForSeconds(dialogueInfo.GetTimeBeforeNextText);
+            _dataPointer++;
+        }
+
+        _dataPointer = 0;
+        yield return _waitBeforeNoText;
+        _textContainer.text = "";
+        _textBackgroundContainer.text = "";
+        _playingDialogue = null;
+    }
+
+    /// <summary>
+    /// Stops the dialogue that is currently playing, if it's playing
+    /// </summary>
+    public void StopDialogue()
+    {
+        if (!_playingDialogue.IsUnityNull())
+        {
+            StopCoroutine(_playingDialogue);
+            _playingDialogue = null;
+        }
+    }
+
+    /// <summary>
+    /// disable or enable currently running subtitles
+    /// </summary>
+    public void UpdateSubtitleSettingState()
+    {
+        if (SaveManager.Instance.GetGameSaveData().IsSubtitlesOn == true)
+        {
+            _textContainer.enabled = true;
+            _textBackgroundContainer.enabled = true;
+        }
+        else
+        {
+            _textContainer.enabled = false;
+            _textBackgroundContainer.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// Adds a listener to the event that starts the dialogue chain
+    /// </summary>
+    private void OnEnable()
+    {
+        GameStateManager.Instance.GetOnDialogueProgress().
+            AddListener(BeginDisplayingText);
+    }
+
+    /// <summary>
+    /// Removes the listener to the event that starts the dialogue chain
+    /// PREVENTS MEMORY LEAK
+    /// </summary>
+    private void OnDisable()
+    {
+        _textContainer.text = "";
+        _textBackgroundContainer.text = "";
+        _playingDialogue = null;
+        
+        GameStateManager.Instance.GetOnDialogueProgress().
+            RemoveListener(BeginDisplayingText);
+    }
+}

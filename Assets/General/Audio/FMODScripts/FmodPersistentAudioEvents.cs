@@ -1,7 +1,7 @@
 /*********************************************************************************************************************
 // File Name :         FmodPersistentAudioEvents
 // Author :            Andrea Swihart-DeCoster
-// Contributors :      Ryan Swanson
+// Contributors :      Ryan Swanson, Nabil Tagba
 // Creation Date :     10/23/24
 //
 // Brief Description : Stores all persistent sounds.
@@ -9,6 +9,7 @@
 
 using System.Collections;
 using FMODUnity;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -43,7 +44,10 @@ public class IntervalFMODEvent
  
             yield return new WaitForSeconds(interval);
             
-            RuntimeSfxManager.APlayOneShotSfx?.Invoke(IntervalEvent, PlayerMovementController.Instance.transform.position);
+            if (!PlayerMovementController.Instance.IsUnityNull())
+            {
+                RuntimeSfxManager.APlayOneShotSfx?.Invoke(IntervalEvent, PlayerMovementController.Instance.transform.position);
+            }
         }
     }
 }
@@ -59,7 +63,9 @@ public class FmodPersistentAudioEvents : MonoBehaviour
     [field: Tooltip("Any audio added here will play throughout the full game")]
     [field: SerializeField] public EventReference[] PersistentGameBackgroundSounds { get; private set; }
     [field: SerializeField] public EventReference LimbIdle { get; private set; }
-    
+    [field: SerializeField] public float AmbienceFadeOutTime { get; private set; }
+    [field: SerializeField] public float AmbienceFadeInTime { get; private set; }
+
     [field: Header("Random Interval Looping Audio")]
     [field: Tooltip("Any audio added here will play throughout the full game at random intervals")]
     [field: SerializeField] public IntervalFMODEvent[] IntervalPersistentEvents { get; private set; }
@@ -68,6 +74,17 @@ public class FmodPersistentAudioEvents : MonoBehaviour
     [field: SerializeField] public EventReference[] MusicInGame { get; private set; }
     [field: SerializeField] public float MusicFadeOutTime { get; private set; }
     [field: SerializeField] public float MusicFadeInTime { get; private set; }
+
+    public const int _ENEMY_MUSIC_ID = 3;
+
+    [field: Header("Player Persistent Audio")]
+    [field: SerializeField] public EventReference[] BreathingLevels { get; private set; }
+    [field: SerializeField] public float BreathingFadeOutTime { get; private set; }
+    [field: SerializeField] public float BreathingFadeInTime { get; private set; }
+
+    [field: Header("Persistent Sound")]
+    [field: SerializeField] public EventReference[] PersistentSound { get; private set; }
+    
     public void SetUpInstance()
     {
         Instance = this;

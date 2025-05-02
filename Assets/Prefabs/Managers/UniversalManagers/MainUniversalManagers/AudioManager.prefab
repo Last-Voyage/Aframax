@@ -1,0 +1,699 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2616263624655896557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3786870146230784565}
+  - component: {fileID: 2279586950690668366}
+  - component: {fileID: 5853790819556739120}
+  m_Layer: 0
+  m_Name: PersistentAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3786870146230784565
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616263624655896557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2592068699120065575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2279586950690668366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616263624655896557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a1022dd26a2a343b54f5dddf62b684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5853790819556739120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616263624655896557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25300d6117e68a4291efb2eb20a4524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <PersistentGameBackgroundSounds>k__BackingField:
+  - Guid:
+      Data1: -1650469793
+      Data2: 1093943221
+      Data3: 847860409
+      Data4: 694894390
+    Path: event:/Ambiance/DisWavesSFX
+  <LimbIdle>k__BackingField:
+    Guid:
+      Data1: 1422967212
+      Data2: 1189090460
+      Data3: 51789702
+      Data4: 1267664235
+    Path: event:/LimbSlitherSFX
+  <AmbienceFadeOutTime>k__BackingField: 2
+  <AmbienceFadeInTime>k__BackingField: 2
+  <IntervalPersistentEvents>k__BackingField:
+  - <MinTimeBetweenEvents>k__BackingField: 5
+    <MaxTimeBetweenEvents>k__BackingField: 20
+    <IntervalEvent>k__BackingField:
+      Guid:
+        Data1: 1785081783
+        Data2: 1111441157
+        Data3: 2097681083
+        Data4: 848600769
+      Path: event:/SFX/BoatSFX/BoatSettle
+  <MusicInGame>k__BackingField:
+  - Guid:
+      Data1: -350811628
+      Data2: 1340817421
+      Data3: -1786756702
+      Data4: -1577361863
+    Path: event:/Music/TitleScreenMusic
+  - Guid:
+      Data1: -961900696
+      Data2: 1260833310
+      Data3: 661857178
+      Data4: 2130714011
+    Path: event:/Music/ToturialMusic
+  - Guid:
+      Data1: 1239365294
+      Data2: 1125825041
+      Data3: 725425824
+      Data4: 88614209
+    Path: event:/Music/MazeMusic
+  - Guid:
+      Data1: -319193509
+      Data2: 1249861466
+      Data3: -1940456819
+      Data4: 186471262
+    Path: event:/Music/MonsterEncounterMusic
+  - Guid:
+      Data1: -1337434004
+      Data2: 1296524643
+      Data3: 1671713928
+      Data4: -28827058
+    Path: event:/Music/DeathScreenMusic
+  - Guid:
+      Data1: -1005423329
+      Data2: 1341876660
+      Data3: 1037792681
+      Data4: -1052208949
+    Path: event:/Music/ChaseMusic
+  - Guid:
+      Data1: -1788227437
+      Data2: 1176718630
+      Data3: 200877746
+      Data4: 707306200
+    Path: event:/Music/PauseMusic
+  - Guid:
+      Data1: -159263325
+      Data2: 1156691048
+      Data3: 642815933
+      Data4: -1988001768
+    Path: event:/Music/CreditsMusic
+  <MusicFadeOutTime>k__BackingField: 1
+  <MusicFadeInTime>k__BackingField: 1
+  <BreathingLevels>k__BackingField:
+  - Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  - Guid:
+      Data1: -1737539281
+      Data2: 1086738767
+      Data3: 202500247
+      Data4: 1983462122
+    Path: event:/SFX/PlayerSFX/FocusBreath
+  - Guid:
+      Data1: 1000793206
+      Data2: 1228214452
+      Data3: 873588408
+      Data4: -1535804619
+    Path: event:/SFX/PlayerSFX/EncounterBreath
+  - Guid:
+      Data1: 1412194674
+      Data2: 1303926501
+      Data3: -577944682
+      Data4: -1492673629
+    Path: event:/SFX/PlayerSFX/ChaseBreath
+  <BreathingFadeOutTime>k__BackingField: 0.2
+  <BreathingFadeInTime>k__BackingField: 0.2
+  <PersistentSound>k__BackingField:
+  - Guid:
+      Data1: -1097457358
+      Data2: 1186655493
+      Data3: -1572270974
+      Data4: -1107268569
+    Path: event:/Ambiance/RainPatchSFX
+  - Guid:
+      Data1: -183756890
+      Data2: 1133385572
+      Data3: -1864154181
+      Data4: 561573023
+    Path: event:/SFX/MonsterSFX/ChaseSeqSFX
+--- !u!1 &8436064714450324664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6713638435920780164}
+  - component: {fileID: 5386958290789125694}
+  - component: {fileID: 3525013294109823446}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6713638435920780164
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436064714450324664}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2592068699120065575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5386958290789125694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436064714450324664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14b1129206b53446b2ce056d5bf4bce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanPlayFootSteps: 1
+--- !u!114 &3525013294109823446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436064714450324664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b944ce7207df32049bbf822a450eea31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MasterVolumeSettingsChanged>k__BackingField:
+    Guid:
+      Data1: 1550195809
+      Data2: 1143686503
+      Data3: 729704868
+      Data4: -1436282663
+    Path: event:/SFX/UI/MasterUIClick
+  <SfxVolumeSettingsChanged>k__BackingField:
+    Guid:
+      Data1: 2126397019
+      Data2: 1143671301
+      Data3: -827943521
+      Data4: 1086720890
+    Path: event:/SFX/UI/UIClickSFX
+  <AmbienceVolumeSettingsChanged>k__BackingField:
+    Guid:
+      Data1: -1166896057
+      Data2: 1141950245
+      Data3: -197496936
+      Data4: 1993305372
+    Path: event:/SFX/UI/AmbianceUIClick
+  <VoiceVolumeSettingsChanged>k__BackingField:
+    Guid:
+      Data1: 2102529343
+      Data2: 1155049755
+      Data3: -1921035633
+      Data4: -628766752
+    Path: event:/SFX/UI/DialogueUIClick
+  <MusicVolumeSettingsChanged>k__BackingField:
+    Guid:
+      Data1: 1625824558
+      Data2: 1238280690
+      Data3: 1273439905
+      Data4: 1494690927
+    Path: event:/SFX/UI/MusicUIClick
+  <TitleScreenSplash>k__BackingField:
+    Guid:
+      Data1: -633092018
+      Data2: 1151670832
+      Data3: -995598685
+      Data4: 1960205564
+    Path: event:/SFX/UI/MenuSplashSFX
+  _buttonUsedSFX:
+  - Guid:
+      Data1: 2126397019
+      Data2: 1143671301
+      Data3: -827943521
+      Data4: 1086720890
+    Path: event:/SFX/UI/UIClickSFX
+  <WeakPointDestroyed>k__BackingField:
+    Guid:
+      Data1: 70777364
+      Data2: 1224663744
+      Data3: -135098709
+      Data4: -1207205548
+    Path: event:/SFX/MonsterSFX/EnemyWeakSpotSFX
+  <LimbDestroyed>k__BackingField:
+    Guid:
+      Data1: 682358699
+      Data2: 1192911574
+      Data3: -243917647
+      Data4: -1321129303
+    Path: event:/SFX/MonsterSFX/LimbDestroyedSFX
+  <LimbAttack>k__BackingField:
+    Guid:
+      Data1: 565132600
+      Data2: 1260276445
+      Data3: -1298699378
+      Data4: -1073181273
+    Path: event:/SFX/MonsterSFX/LimbAttackSFX
+  <SceneStart>k__BackingField:
+    Guid:
+      Data1: 1168314326
+      Data2: 1297490237
+      Data3: 160699066
+      Data4: 1158697005
+    Path: event:/SFX/WarpSFX
+  <LimbSpawn>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <LimbMove>k__BackingField:
+    Guid:
+      Data1: 1422967212
+      Data2: 1189090460
+      Data3: 51789702
+      Data4: 1267664235
+    Path: event:/SFX/MonsterSFX/LimbSlitherSFX
+  <LimbMoveFadeInTime>k__BackingField: 3
+  <LimbMoveFadeOutTime>k__BackingField: 2
+  <ChaseSequenceStart>k__BackingField:
+    Guid:
+      Data1: 1969268521
+      Data2: 1170613618
+      Data3: -1128017498
+      Data4: 1189389732
+    Path: event:/SFX/MonsterSFX/MonsterScreechSFX
+  <ChaseSequenceLoop>k__BackingField:
+    Guid:
+      Data1: -183756890
+      Data2: 1133385572
+      Data3: -1864154181
+      Data4: 561573023
+    Path: event:/SFX/MonsterSFX/ChaseSeqSFX
+  <ChaseLoopFadeInTime>k__BackingField: 1.5
+  <ChaseLoopFadeOutTime>k__BackingField: 1.5
+  <NotePickUp>k__BackingField:
+    Guid:
+      Data1: -715096634
+      Data2: 1124097306
+      Data3: -1108678494
+      Data4: 12722667
+    Path: event:/SFX/PickupSFX/NotePickupSFX
+  <RadioSong>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  _itemPickupSoundEffects:
+  - Guid:
+      Data1: 590418675
+      Data2: 1079101669
+      Data3: 1059694772
+      Data4: -1060923899
+    Path: event:/SFX/PickupSFX/KeyPickupSFX
+  - Guid:
+      Data1: -388101116
+      Data2: 1245685927
+      Data3: -1897152095
+      Data4: -1757487966
+    Path: event:/SFX/PickupSFX/SpannerPickupSFX
+  <DefaultWalking>k__BackingField:
+    Guid:
+      Data1: -476142977
+      Data2: 1309294690
+      Data3: -709017196
+      Data4: -1916222613
+    Path: event:/Ambiance/PlayerAmb/MetalWlakingSFX
+  <MaterialFootsteps>k__BackingField:
+  - <AssociatedMaterial>k__BackingField: {fileID: 2100000, guid: 32e4724413cdd6d43a131cd86e745766,
+      type: 2}
+    <AssociatedWalkingSound>k__BackingField:
+      Guid:
+        Data1: -687637641
+        Data2: 1303265195
+        Data3: 630810014
+        Data4: 1682835577
+      Path: event:/Ambiance/PlayerAmb/WoodWalkingSFX
+  <FootstepDelay>k__BackingField: 0.65
+  <FirstFootstepDelay>k__BackingField: 0.6
+  <PlayerTookDamage>k__BackingField:
+    Guid:
+      Data1: -1523959944
+      Data2: 1076261045
+      Data3: -1454688109
+      Data4: 265074087
+    Path: event:/SFX/PlayerSFX/PlayerTakeDamageSFX
+  <PlayerHeartBeat>k__BackingField:
+    Guid:
+      Data1: -1595948492
+      Data2: 1329318974
+      Data3: -332712009
+      Data4: 744416244
+    Path: event:/SFX/PlayerSFX/HeartBeatSFX
+  <PlayerHealed>k__BackingField:
+    Guid:
+      Data1: -1715841634
+      Data2: 1133868193
+      Data3: 280988815
+      Data4: -1708699812
+    Path: event:/SFX/PickupSFX/MedPackPickupSFX
+  <HarpoonShot>k__BackingField:
+    Guid:
+      Data1: 1125143964
+      Data2: 1233834793
+      Data3: -76295502
+      Data4: 1649262482
+    Path: event:/SFX/HarpoonSFX/HarpoonShotSFX
+  <HarpoonReload>k__BackingField:
+    Guid:
+      Data1: -950613845
+      Data2: 1141151142
+      Data3: 1569353353
+      Data4: -60362704
+    Path: event:/SFX/HarpoonSFX/HarpoonReloadSFX
+  <HarpoonAmmoRestock>k__BackingField:
+    Guid:
+      Data1: -2016049910
+      Data2: 1245931930
+      Data3: -965560141
+      Data4: 277379593
+    Path: event:/SFX/PickupSFX/AmmoPickupSFX
+  <HarpoonHitGeneral>k__BackingField:
+    Guid:
+      Data1: 1718031395
+      Data2: 1290156870
+      Data3: 587004329
+      Data4: 1572986678
+    Path: event:/SFX/HarpoonSFX/MetalHitSFX
+  <HarpoonHitWood>k__BackingField:
+    Guid:
+      Data1: 96279170
+      Data2: 1137528483
+      Data3: 1523265941
+      Data4: 1259980562
+    Path: event:/SFX/HarpoonSFX/WoodHitSFX
+  <HarpoonHitMetal>k__BackingField:
+    Guid:
+      Data1: 1718031395
+      Data2: 1290156870
+      Data3: 587004329
+      Data4: 1572986678
+    Path: event:/SFX/HarpoonSFX/MetalHitSFX
+  <HarpoonWaterSplash>k__BackingField:
+    Guid:
+      Data1: -1605573080
+      Data2: 1124729832
+      Data3: 1592997815
+      Data4: 255010408
+    Path: event:/SFX/WaterSplashSFX
+  <HarpoonShiftingMovement>k__BackingField:
+    Guid:
+      Data1: 1154433052
+      Data2: 1085755662
+      Data3: 1179952008
+      Data4: 473611398
+    Path: event:/Ambiance/PlayerAmb/GunRattleSFX
+  <HarpoonShiftFadeInTime>k__BackingField: 0.2
+  <HarpoonShiftFadeOutTime>k__BackingField: 0.2
+  <GeneratorFixed>k__BackingField:
+    Guid:
+      Data1: 1455786165
+      Data2: 1153059876
+      Data3: 769542296
+      Data4: 1680147946
+    Path: event:/Ambiance/EngineSFX
+  <WaterDrip>k__BackingField:
+    Guid:
+      Data1: 1698446910
+      Data2: 1296608948
+      Data3: 1977715133
+      Data4: -619756157
+    Path: event:/SFX/WaterDropsSFX
+  <CinematicArray>k__BackingField:
+  - Guid:
+      Data1: -350811628
+      Data2: 1340817421
+      Data3: -1786756702
+      Data4: -1577361863
+    Path: event:/Music/TitleScreenMusic
+  - Guid:
+      Data1: -319193509
+      Data2: 1249861466
+      Data3: -1940456819
+      Data4: 186471262
+    Path: event:/Music/MonsterEncounterMusic
+  - Guid:
+      Data1: -1337434004
+      Data2: 1296524643
+      Data3: 1671713928
+      Data4: -28827058
+    Path: event:/Music/DeathScreenMusic
+  - Guid:
+      Data1: -159263325
+      Data2: 1156691048
+      Data3: 642815933
+      Data4: -1988001768
+    Path: event:/Music/CreditsMusic
+--- !u!1 &8552621109120107089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1570716381780503835}
+  - component: {fileID: 6069425648937689252}
+  m_Layer: 0
+  m_Name: DialogueSFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1570716381780503835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8552621109120107089}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2592068699120065575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6069425648937689252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8552621109120107089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0401077f2baf98f438afefe0674d0808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nextDialogueWaitTime: 0.5
+--- !u!1 &9016497912938786864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2592068699120065575}
+  - component: {fileID: 7595618826597541881}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2592068699120065575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9016497912938786864}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6713638435920780164}
+  - {fileID: 3786870146230784565}
+  - {fileID: 6909289104129828165}
+  - {fileID: 1570716381780503835}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7595618826597541881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9016497912938786864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1639991eb0baf7a4691718e9d3f7940c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &4111677443477574288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2592068699120065575}
+    m_Modifications:
+    - target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: OneshotSounds.Array.data[0].Path
+      value: event:/SFX/MonsterSFX/MonsterScreechSFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: OneshotSounds.Array.data[0].Guid.Data1
+      value: 1969268521
+      objectReference: {fileID: 0}
+    - target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: OneshotSounds.Array.data[0].Guid.Data2
+      value: 1170613618
+      objectReference: {fileID: 0}
+    - target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: OneshotSounds.Array.data[0].Guid.Data3
+      value: -1128017498
+      objectReference: {fileID: 0}
+    - target: {fileID: 958284295620825881, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: OneshotSounds.Array.data[0].Guid.Data4
+      value: 1189389732
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234953812385800864, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_Name
+      value: StoryBeatAudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a9333c64209bda4c96cdb2b653a12ce, type: 3}
+--- !u!4 &6909289104129828165 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7416624898700031957, guid: 2a9333c64209bda4c96cdb2b653a12ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 4111677443477574288}
+  m_PrefabAsset: {fileID: 0}
