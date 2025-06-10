@@ -34,6 +34,9 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         //get the player virtual camera
         _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
 
+        // Set the camera's position to the player's camera's position
+        _dragCam.Follow = _playerCam.Follow;
+
         _dragCam.enabled = true;
         _playerCam.enabled = false;
 
