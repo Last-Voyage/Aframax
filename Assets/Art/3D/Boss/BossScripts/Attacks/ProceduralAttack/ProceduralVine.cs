@@ -60,6 +60,7 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private PathCreator _whackAMoleAttackPath; // The target to move toward
     [SerializeField] private float _whackAMoleAttackSpeed = 5f; // Speed of movement
     [SerializeField] private float _whackAMoleAttackDistance = 0;
+    private const float _MAX_ATTACK_ANGLE = 65f;
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
     [SerializeField] private Animator _animator;
@@ -345,6 +346,62 @@ public class ProceduralVine : MonoBehaviour
 
         //redo direction from new position
         var direction = (_playerTransform.position - _followTransform.position).normalized;
+
+        var targetAngle = (Mathf.Acos(Vector3.Dot(direction, _followTransform.forward))) * (180f / Mathf.PI);
+        print(targetAngle);
+        if (targetAngle > _MAX_ATTACK_ANGLE)
+        {
+            var newAngle = 0f;
+            
+            if (_followTransform.forward.x == 1f)
+            {
+                if (_playerTransform.position.z > _followTransform.position.z)
+                {
+                    newAngle = _MAX_ATTACK_ANGLE;
+                }
+                else
+                {
+                    newAngle = -_MAX_ATTACK_ANGLE;
+                }
+            }
+            else if (_followTransform.forward.z == 1f)
+            {
+                if (_playerTransform.position.x > _followTransform.position.x)
+                {
+                    newAngle = 90f - _MAX_ATTACK_ANGLE;
+                }
+                else
+                {
+                    newAngle = 90f + _MAX_ATTACK_ANGLE;
+                }
+            }
+            else if (_followTransform.forward.x == -1f)
+            {
+                if (_playerTransform.position.z > _followTransform.position.z)
+                {
+                    newAngle = 180f - _MAX_ATTACK_ANGLE;
+                }
+                else
+                {
+                    newAngle = 180f + _MAX_ATTACK_ANGLE;
+                }
+            }
+            else if (_followTransform.forward.z == -1f)
+            {
+                if (_playerTransform.position.x > _followTransform.position.x)
+                {
+                    newAngle = 270f + _MAX_ATTACK_ANGLE;
+                }
+                else
+                {
+                    newAngle = 270f - _MAX_ATTACK_ANGLE;
+                }
+            }
+
+            var newAngleRadians = newAngle * (Mathf.PI / 180f);
+            direction = new Vector3(Mathf.Cos(newAngleRadians), direction.y, Mathf.Sin(newAngleRadians));
+        }
+
         var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
 
         _followTransform.forward = direction;
