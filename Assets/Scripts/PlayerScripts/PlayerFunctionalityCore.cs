@@ -36,6 +36,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
 
     private Vector3 _cameraPositionWithLastInput = Vector3.zero;
 
+    private bool _isInCinematic = false;
+
     /// <summary>
     /// Performs any set up before everything else
     /// </summary>
@@ -125,10 +127,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(GamePaused);
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().AddListener(GameUnpaused);
-        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeToMovementInput);
-        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeToHarpoonInput);
-        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeToMovementInput);
-        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeToHarpoonInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeForCinematic);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeForCinematic);
     }
 
     /// <summary>
@@ -139,10 +139,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(GamePaused);
         PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().RemoveListener(GameUnpaused);
-        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeToMovementInput);
-        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeToHarpoonInput);
-        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeToMovementInput);
-        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeToHarpoonInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeForCinematic);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeForCinematic);
     }
 
     /// <summary>
@@ -150,7 +148,15 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void GamePaused()
     {
-        UnsubscribePlayerInput();
+        if (!_isInCinematic)
+        {
+            UnsubscribePlayerInput();
+        }
+        else
+        {
+            UnsubscribeToCameraInput();
+            UnsubscribeToPlayerInteraction();
+        }
     }
 
     /// <summary>
@@ -158,7 +164,15 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void GameUnpaused()
     {
-        SubscribePlayerInput();
+        if (!_isInCinematic)
+        {
+            SubscribePlayerInput();
+        }
+        else
+        {
+            SubscribeToCameraInput();
+            SubscribeToPlayerInteraction();
+        }
     }    
 
     /// <summary>
@@ -274,6 +288,22 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private bool WaitForCameraReturn()
     {
         return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
+    }
+
+    private void UnsubscribeForCinematic()
+    {
+        _isInCinematic = true;
+
+        UnsubscribeToMovementInput();
+        UnsubscribeToHarpoonInput();
+    }
+
+    private void SubscribeForCinematic()
+    {
+        _isInCinematic = false;
+
+        SubscribeToMovementInput();
+        SubscribeToHarpoonInput();
     }
     #endregion
 

@@ -30,6 +30,13 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         // Disable things from other objects
         CameraManager.Instance.InvokeOnCinematicStart();
 
+        // Okay so there's a little goof now that this horror moment is a little different
+        // We need the harpoon to still show up
+        // Normally, I would do this just by editing the event, but that requires a *ton* of refactoring
+        // So I'm just gonna do it manually
+        PlayerCameraController.Instance.ShowHarpoonGun();
+        PlayerCameraController.Instance.ChildHarpoon();
+
         //disable player movement and pan camera to cinematic spot
         //get the player virtual camera
         _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
@@ -57,6 +64,9 @@ public class SlytherinTentacleBehavior : MonoBehaviour
 
         // Enabling the things we disabled with the previous event
         CameraManager.Instance.InvokeOnCinematicEnd();
+
+        // And also the extra things specific to this moment
+        PlayerCameraController.Instance.UnchildHarpoon();
 
         Destroy(transform.parent.GetChild(0).gameObject);
         Destroy(this.gameObject);
