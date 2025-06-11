@@ -290,6 +290,10 @@ public class PlayerFunctionalityCore : MonoBehaviour
         return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
     }
 
+    /// <summary>
+    /// Unsubscribes specific events for cinematics
+    /// Also marks that the player is currently in a cinematic
+    /// </summary>
     private void UnsubscribeForCinematic()
     {
         _isInCinematic = true;
@@ -298,6 +302,10 @@ public class PlayerFunctionalityCore : MonoBehaviour
         UnsubscribeToHarpoonInput();
     }
 
+    /// <summary>
+    /// Subscribes specific events for cinematics
+    /// Also marks that the player is no longer in a cinematic
+    /// </summary>
     private void SubscribeForCinematic()
     {
         _isInCinematic = false;
