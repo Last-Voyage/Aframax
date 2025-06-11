@@ -8,6 +8,7 @@
 *****************************************************************************/
 
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// functionality for pausing the game and the pause menu buttons
@@ -29,16 +30,36 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private int _pauseIndexToOpen;
     [SerializeField] private int _pauseIndexToClose;
 
+    [Header("Fields for Loading")]
+    [SerializeField] private float _loadInWaitTime;
+    [SerializeField] private GameObject _solidScrim;
+
     private PlayerInputMap _playerInputControls;
 
     public static PauseMenu Instance;
 
     private void Awake()
     {
+        CheckSingletonInstance();
+
+        StartCoroutine(LoadingBuffer());
+
         //initialize input
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
-        CheckSingletonInstance();
+    }
+
+    /// <summary>
+    /// Freezes player inputs to give assets a chance to load upon level load
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator LoadingBuffer()
+    {
+        PauseToggle();
+        _solidScrim.SetActive(true);
+        yield return new WaitForSecondsRealtime(_loadInWaitTime);
+        _solidScrim.SetActive(false);
+        PauseToggle();
     }
 
     /// <summary>
