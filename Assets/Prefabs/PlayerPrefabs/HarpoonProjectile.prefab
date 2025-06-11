@@ -35,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5011896441976120891}
+  - {fileID: 1740714507663020307}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4330082767636107150
@@ -56,8 +57,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 2}
-  m_Center: {x: 0, y: 0, z: 0.1}
+  m_Size: {x: 0.03, y: 0.03, z: 2}
+  m_Center: {x: 0, y: 0, z: -0.28}
 --- !u!54 &112382357724614757
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -110,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2258c5615b222438df5c32902595b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _harpoonImpactDepth: 0.25
 --- !u!114 &2360510904044180019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,6 +124,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbcddc3af09501446a6af9ff795a7ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &2615543859572961218
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2186477291574734490}
+    m_Modifications:
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.6456
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5083873218218888737, guid: d94c9626a65b2434f877460baa96f674,
+        type: 3}
+      propertyPath: m_Name
+      value: HarpoonHitWallDecal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d94c9626a65b2434f877460baa96f674, type: 3}
+--- !u!4 &1740714507663020307 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4351609562681540305, guid: d94c9626a65b2434f877460baa96f674,
+    type: 3}
+  m_PrefabInstance: {fileID: 2615543859572961218}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4757890553435816400
 PrefabInstance:
   m_ObjectHideFlags: 0

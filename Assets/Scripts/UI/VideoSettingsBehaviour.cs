@@ -58,7 +58,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
         }
         
         AddResolutionsToDropdown();
-        SelectDefaultResolution();
 
         _resolutionDropdown.onValueChanged.AddListener(ChangeResolution);
         
@@ -197,7 +196,15 @@ public class VideoSettingsBehaviour : MonoBehaviour
     }
     
     #endregion
-    
+
+    /// <summary>
+    /// Prevents the top resolution from always being the first selected
+    /// </summary>
+    private void OnEnable()
+    {
+        SelectDefaultResolution();
+    }
+
     /// <summary>
     /// This removes the listener to check if the resolution has changed
     /// </summary>
