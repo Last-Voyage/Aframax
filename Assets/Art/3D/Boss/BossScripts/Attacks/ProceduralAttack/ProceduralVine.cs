@@ -60,7 +60,7 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private PathCreator _whackAMoleAttackPath; // The target to move toward
     [SerializeField] private float _whackAMoleAttackSpeed = 5f; // Speed of movement
     [SerializeField] private float _whackAMoleAttackDistance = 0;
-    private const float _MAX_ATTACK_ANGLE = 65f;
+    private const float _MAX_ATTACK_ANGLE = 65f * (Mathf.PI / 180f);
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
     [SerializeField] private Animator _animator;
@@ -347,13 +347,13 @@ public class ProceduralVine : MonoBehaviour
         //redo direction from new position
         var direction = (_playerTransform.position - _followTransform.position).normalized;
 
-        var targetAngle = (Mathf.Acos(Vector3.Dot(direction, _followTransform.forward))) * (180f / Mathf.PI);
+        var targetAngle = (Mathf.Acos(Vector3.Dot(direction, _followTransform.forward)));
         print(targetAngle);
         if (targetAngle > _MAX_ATTACK_ANGLE)
         {
             var newAngle = 0f;
             
-            if (_followTransform.forward.x == 1f)
+            if (_followTransform.forward.x > 0)
             {
                 if (_playerTransform.position.z > _followTransform.position.z)
                 {
@@ -364,7 +364,7 @@ public class ProceduralVine : MonoBehaviour
                     newAngle = -_MAX_ATTACK_ANGLE;
                 }
             }
-            else if (_followTransform.forward.z == 1f)
+            else if (_followTransform.forward.z > 0)
             {
                 if (_playerTransform.position.x > _followTransform.position.x)
                 {
@@ -375,7 +375,7 @@ public class ProceduralVine : MonoBehaviour
                     newAngle = 90f + _MAX_ATTACK_ANGLE;
                 }
             }
-            else if (_followTransform.forward.x == -1f)
+            else if (_followTransform.forward.x < 0)
             {
                 if (_playerTransform.position.z > _followTransform.position.z)
                 {
@@ -386,7 +386,7 @@ public class ProceduralVine : MonoBehaviour
                     newAngle = 180f + _MAX_ATTACK_ANGLE;
                 }
             }
-            else if (_followTransform.forward.z == -1f)
+            else if (_followTransform.forward.z < 0)
             {
                 if (_playerTransform.position.x > _followTransform.position.x)
                 {
@@ -398,8 +398,7 @@ public class ProceduralVine : MonoBehaviour
                 }
             }
 
-            var newAngleRadians = newAngle * (Mathf.PI / 180f);
-            direction = new Vector3(Mathf.Cos(newAngleRadians), direction.y, Mathf.Sin(newAngleRadians));
+            direction = new Vector3(Mathf.Cos(newAngle), direction.y, Mathf.Sin(newAngle));
         }
 
         var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
