@@ -718,6 +718,8 @@ public class PlayerMovementController : MonoBehaviour
     // Getter for the current movement ratio
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
 
+    public float CurrentReloadMoveSpeedMultiplier => _currentReloadMoveSpeedMultiplier;
+
     public float PlayerMovementSpeed { get => _playerMovementSpeed; set => _playerMovementSpeed = value; }
 
     #endregion Getters

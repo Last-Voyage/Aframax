@@ -314,7 +314,8 @@ public class RuntimeSfxManager : AudioManager
     private IEnumerator LoopFootSteps()
     {
         // Update the initial footstep speed
-        float currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier;
+        float currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier * 
+            PlayerMovementController.Instance.CurrentReloadMoveSpeedMultiplier;
         firstFootstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FirstFootstepDelay
             * (1 + (1 - currentSpeedMultiplier)));
 
@@ -327,7 +328,8 @@ public class RuntimeSfxManager : AudioManager
             PlayFootStep();
 
             // Update the footstep speed
-            currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier;
+            currentSpeedMultiplier = PlayerMovementController.Instance.CurrentFocusMoveSpeedMultiplier *
+                PlayerMovementController.Instance.CurrentReloadMoveSpeedMultiplier;
             footstepDelay = new WaitForSeconds(FmodSfxEvents.Instance.FootstepDelay
                 * (1 + (1 - currentSpeedMultiplier)));
 
