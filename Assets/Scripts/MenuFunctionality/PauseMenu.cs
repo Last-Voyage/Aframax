@@ -52,12 +52,19 @@ public class PauseMenu : MonoBehaviour
     /// <summary>
     /// Freezes player inputs to give assets a chance to load upon level load
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Time allowed for loading</returns>
     private IEnumerator LoadingBuffer()
     {
+        // Pauses audio
+        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
+        masterBus.setPaused(true);
+
+        // Pauses the game temporarily to let objects load
         PauseToggle();
         _solidScrim.SetActive(true);
         yield return new WaitForSecondsRealtime(_loadInWaitTime);
+
+        // Unpauses the game and lets player see game world
         _solidScrim.SetActive(false);
         PauseToggle();
     }
