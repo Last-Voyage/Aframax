@@ -25,5 +25,7 @@ public class HarpoonDamage : BaseDamage
             return;
         }
         base.ApplyDamage(damageRecipient);
+        // Prevents harpoon front sticking into something we damage
+        gameObject.SetActive(false);
     }
 }
