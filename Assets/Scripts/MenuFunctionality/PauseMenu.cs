@@ -133,12 +133,10 @@ public class PauseMenu : MonoBehaviour
     /// a buffer time to load in assets.
     /// </summary>
     /// <param name="muteState">Whether the audio should be paused or not.</param>
-    /// <returns></returns>
-    public bool PauseAudio(bool pauseState)
+    public void PauseAudio(bool pauseState)
     {
         FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
         masterBus.setPaused(pauseState);
-        return pauseState;
     }
 
     /// <summary>
@@ -152,12 +150,10 @@ public class PauseMenu : MonoBehaviour
     /// <summary>
     /// Toggles a pure white mask to obscure the entire screen.
     /// </summary>
-    /// <param name="toggleState"></param>
-    /// <returns></returns>
-    public bool ToggleLightScrim(bool toggleState)
+    /// <param name="toggleState">Whether the mask is active or not.</param>
+    public void ToggleLightScrim(bool toggleState)
     {
         _lightScrim.SetActive(toggleState);
-        return toggleState;
     }
 
     /// <summary>

@@ -75,12 +75,12 @@ public class GameStateManager : MainGameplayManagerFramework
     {
         // Pauses the game temporarily to let objects load
         PauseMenu.Instance.PauseToggle();
-        ChangeCurrentGameplayState(EGameplayState.Loading);
+        _isGameLoading = true;
         PauseMenu.Instance.ToggleLightScrim(true);
         yield return new WaitForSecondsRealtime(_loadBufferTime);
 
         // Unpauses the game and lets player see game world
-        ChangeCurrentGameplayState(EGameplayState.BelowDeck);
+        _isGameLoading = false;
         PauseMenu.Instance.ToggleLightScrim(false);
         PauseMenu.Instance.PauseToggle();
     }
@@ -115,7 +115,7 @@ public class GameStateManager : MainGameplayManagerFramework
     /// <returns>The game's loading state.</returns>
     public bool IsGameLoading()
     {
-        return _currentGameplayState == EGameplayState.Loading;
+        return _isGameLoading;
     }
 
     public UnityEvent GetOnCompletedTutorialSection() => _onCompletedTutorialSection;
@@ -137,6 +137,5 @@ public enum EGameplayState
 {
     AboveDeck,
     BelowDeck,
-    Loading,
     Ending
 };
