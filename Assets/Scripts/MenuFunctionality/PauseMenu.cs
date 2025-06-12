@@ -31,8 +31,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private int _pauseIndexToClose;
 
     [Header("Fields for Loading")]
-    [SerializeField] private float _loadInWaitTime;
-    [SerializeField] private GameObject _solidScrim;
+    [Tooltip("A pure white scrim that can obscure the screen during loading")]
+    [SerializeField] private GameObject _lightScrim;
 
     private PlayerInputMap _playerInputControls;
 
@@ -41,32 +41,9 @@ public class PauseMenu : MonoBehaviour
     private void Awake()
     {
         CheckSingletonInstance();
-
-        StartCoroutine(LoadingBuffer());
-
         //initialize input
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
-    }
-
-    /// <summary>
-    /// Freezes player inputs to give assets a chance to load upon level load
-    /// </summary>
-    /// <returns>Time allowed for loading</returns>
-    private IEnumerator LoadingBuffer()
-    {
-        // Pauses audio
-        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
-        masterBus.setPaused(true);
-
-        // Pauses the game temporarily to let objects load
-        PauseToggle();
-        _solidScrim.SetActive(true);
-        yield return new WaitForSecondsRealtime(_loadInWaitTime);
-
-        // Unpauses the game and lets player see game world
-        _solidScrim.SetActive(false);
-        PauseToggle();
     }
 
     /// <summary>
@@ -90,6 +67,12 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PauseToggle()
     {
+        // If the game is loading, player can't manually toggle pausing
+        if (GameStateManager.Instance.IsGameLoading())
+        {
+            return;
+        }
+
         // Toggles pause menu page
         if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded && !_pauseMainMenu.activeSelf && _pauseSubmenu.activeSelf)
         {
@@ -141,9 +124,21 @@ public class PauseMenu : MonoBehaviour
         if(shouldToggleAudio)
         {
             // Pauses or resumes all the audio based on whether or not the menu is visible
-            FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
-            masterBus.setPaused(isVisible);
+            PauseAudio(isVisible);
         }
+    }
+
+    /// <summary>
+    /// Pauses or resumes all audio. Used whenever the game is paused or given
+    /// a buffer time to load in assets.
+    /// </summary>
+    /// <param name="muteState">Whether the audio should be paused or not.</param>
+    /// <returns></returns>
+    public bool PauseAudio(bool pauseState)
+    {
+        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
+        masterBus.setPaused(pauseState);
+        return pauseState;
     }
 
     /// <summary>
@@ -152,6 +147,17 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    /// <summary>
+    /// Toggles a pure white mask to obscure the entire screen.
+    /// </summary>
+    /// <param name="toggleState"></param>
+    /// <returns></returns>
+    public bool ToggleLightScrim(bool toggleState)
+    {
+        _lightScrim.SetActive(toggleState);
+        return toggleState;
     }
 
     /// <summary>
