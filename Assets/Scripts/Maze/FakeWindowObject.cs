@@ -8,6 +8,7 @@
 //                      material.
 **********************************************************************************************************************/
 
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -23,6 +24,12 @@ public class FakeWindowObject : MonoBehaviour
     private FakeWindowManager _fakeWindowManager;
 
     /// <summary>
+    /// The MeshRenderer on the window model, used to check
+    /// if the object is in view or not
+    /// </summary>
+    public MeshRenderer WindowMeshRenderer;
+
+    /// <summary>
     /// Ensure existence of FakeWindowManager, which spawns
     /// the capture container
     /// </summary>
@@ -30,6 +37,15 @@ public class FakeWindowObject : MonoBehaviour
     {
         _fakeWindowManager = FakeWindowManager.Instance;
         Debug.Assert(!_fakeWindowManager.IsUnityNull());
-        _fakeWindowManager.SetCurrentFakeWindow(this);
+        _fakeWindowManager.RegisterWindow(this);
+    }
+
+    /// <summary>
+    /// Unregister current fake window object when it
+    /// is no longer needed
+    /// </summary>
+    private void OnDisable()
+    {
+        _fakeWindowManager.UnregisterWindow(this);
     }
 }

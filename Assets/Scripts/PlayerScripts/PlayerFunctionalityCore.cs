@@ -6,6 +6,8 @@
 // Brief Description : Holds higher level functionality to set up the player and harpoon
 *****************************************************************************/
 
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -31,6 +33,10 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private bool _subscribedToInput;
 
     public static PlayerFunctionalityCore Instance;
+
+    private Vector3 _cameraPositionWithLastInput = Vector3.zero;
+
+    private bool _isInCinematic = false;
 
     /// <summary>
     /// Performs any set up before everything else
@@ -94,7 +100,14 @@ public class PlayerFunctionalityCore : MonoBehaviour
     {
         if(PlayerSpawnPoint.Instance.CanSpawnWithMovement)
         {
-            _playerMovementController.SubscribeInput();
+            if (Camera.main.transform.localPosition == _cameraPositionWithLastInput)
+            {
+                _playerMovementController.SubscribeInput();
+            }
+            else
+            {
+                StartCoroutine(SubscribeMovementInputWithDelay());
+            }
         }
     }
 
@@ -114,6 +127,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
         TimeManager.Instance.GetOnGamePauseEvent().AddListener(GamePaused);
         PlayerManager.Instance.GetOnPlayerDeath().AddListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().AddListener(GameUnpaused);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeForCinematic);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeForCinematic);
     }
 
     /// <summary>
@@ -124,6 +139,8 @@ public class PlayerFunctionalityCore : MonoBehaviour
         TimeManager.Instance.GetOnGamePauseEvent().RemoveListener(GamePaused);
         PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(UnsubscribePlayerInput);
         TimeManager.Instance.GetOnGameUnpauseEvent().RemoveListener(GameUnpaused);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeForCinematic);
+        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeForCinematic);
     }
 
     /// <summary>
@@ -131,7 +148,15 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void GamePaused()
     {
-        UnsubscribePlayerInput();
+        if (!_isInCinematic)
+        {
+            UnsubscribePlayerInput();
+        }
+        else
+        {
+            UnsubscribeToCameraInput();
+            UnsubscribeToPlayerInteraction();
+        }
     }
 
     /// <summary>
@@ -139,7 +164,15 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void GameUnpaused()
     {
-        SubscribePlayerInput();
+        if (!_isInCinematic)
+        {
+            SubscribePlayerInput();
+        }
+        else
+        {
+            SubscribeToCameraInput();
+            SubscribeToPlayerInteraction();
+        }
     }    
 
     /// <summary>
@@ -147,7 +180,14 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void SubscribeToHarpoonInput()
     {
-        _harpoonGun.SubscribeInput();
+        if (Camera.main.transform.localPosition == _cameraPositionWithLastInput)
+        {
+            _harpoonGun.SubscribeInput();
+        }
+        else
+        {
+            StartCoroutine(SubscribeHarpoonInputWithDelay());
+        }
     }
 
     /// <summary>
@@ -183,6 +223,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToMovementInput()
     {
         _playerMovementController.UnsubscribeInput();
+
+        if (!Camera.main.IsUnityNull())
+        {
+            _cameraPositionWithLastInput = Camera.main.transform.localPosition;
+        }
     }
 
     /// <summary>
@@ -199,6 +244,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToHarpoonInput()
     {
         _harpoonGun.UnsubscribeInput();
+
+        if (!Camera.main.IsUnityNull())
+        {
+            _cameraPositionWithLastInput = Camera.main.transform.localPosition;
+        }
     }
 
     /// <summary>
@@ -207,6 +257,61 @@ public class PlayerFunctionalityCore : MonoBehaviour
     private void UnsubscribeToPlayerInteraction()
     {
         _playerInteraction.UnsubscribeInput();
+    }
+
+    /// <summary>
+    /// Variation of SubcribeInput with a delay for the camera to return to its original location for movement
+    /// Intended to be used after cinematics
+    /// </summary>
+    private IEnumerator SubscribeMovementInputWithDelay()
+    {
+        yield return new WaitUntil(WaitForCameraReturn);
+
+        _playerMovementController.SubscribeInput();
+    }
+
+    /// <summary>
+    /// Variation of SubcribeInput with a delay for the camera to return to its original location for the harpoon
+    /// Intended to be used after cinematics
+    /// </summary>
+    private IEnumerator SubscribeHarpoonInputWithDelay()
+    {
+        yield return new WaitUntil(WaitForCameraReturn);
+
+        _harpoonGun.SubscribeInput();
+    }
+
+    /// <summary>
+    /// Bool to check if the camera has returned to its original position after cinematics
+    /// </summary>
+    /// <returns> True if the camera is in the correct position, false otherwise </returns>
+    private bool WaitForCameraReturn()
+    {
+        return Camera.main.transform.localPosition == _cameraPositionWithLastInput;
+    }
+
+    /// <summary>
+    /// Unsubscribes specific events for cinematics
+    /// Also marks that the player is currently in a cinematic
+    /// </summary>
+    private void UnsubscribeForCinematic()
+    {
+        _isInCinematic = true;
+
+        UnsubscribeToMovementInput();
+        UnsubscribeToHarpoonInput();
+    }
+
+    /// <summary>
+    /// Subscribes specific events for cinematics
+    /// Also marks that the player is no longer in a cinematic
+    /// </summary>
+    private void SubscribeForCinematic()
+    {
+        _isInCinematic = false;
+
+        SubscribeToMovementInput();
+        SubscribeToHarpoonInput();
     }
     #endregion
 

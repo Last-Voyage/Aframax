@@ -178,6 +178,12 @@ public class PlayerMovementController : MonoBehaviour
         {
             return;
         }
+
+        if (!_playerInput.currentActionMap.IsUnityNull())
+        {
+            _playerInput.currentActionMap.Disable();
+        }
+        
         _playerInput = null;
         StopCoroutine(_movementCoroutine);
         _isInputSubscribed = false;
@@ -197,9 +203,9 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().AddListener(StopReloadSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopHarpoonSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(StopReloadSpeedSlowdown);
-        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(UnsubscribeInput);
-        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().AddListener(FreezeMovement);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(CheckForInputCinematics);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ReleaseMovement);
     }
 
     /// <summary>
@@ -214,9 +220,9 @@ public class PlayerMovementController : MonoBehaviour
         PlayerManager.Instance.GetOnHarpoonReloadedEvent().RemoveListener(StopReloadSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopHarpoonSpeedSlowdown);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(StopReloadSpeedSlowdown);
-        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(UnsubscribeInput);
-        CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(SubscribeInput);
+        CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(FreezeMovement);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(CheckForInputCinematics);
+        CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ReleaseMovement);
     }
     #endregion
     
@@ -362,6 +368,23 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         return new Vector3(0, _playerRigidBody.velocity.y, 0);
+    }
+
+    /// <summary>
+    /// Sets the Rigidbody of the player such that the player cannot move
+    /// </summary>
+    private void FreezeMovement()
+    {
+        _playerRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+    }
+
+    /// <summary>
+    /// Resets the constraints of the Rigidbody such that the player can move again
+    /// </summary>
+    private void ReleaseMovement()
+    {
+        _playerRigidBody.constraints = RigidbodyConstraints.None;
+        _playerRigidBody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     #region Acceleration
@@ -694,6 +717,8 @@ public class PlayerMovementController : MonoBehaviour
 
     // Getter for the current movement ratio
     public float CurrentFocusMoveSpeedMultiplier => _currentFocusMoveSpeedMultiplier;
+
+    public float CurrentReloadMoveSpeedMultiplier => _currentReloadMoveSpeedMultiplier;
 
     public float PlayerMovementSpeed { get => _playerMovementSpeed; set => _playerMovementSpeed = value; }
 

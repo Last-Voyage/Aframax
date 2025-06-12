@@ -386,6 +386,7 @@ GameObject:
   - component: {fileID: 1861418904764953360}
   - component: {fileID: 8748315209519110643}
   - component: {fileID: 4011004107800454989}
+  - component: {fileID: 6902388252784263212}
   m_Layer: 0
   m_Name: BodiesOffTrigger
   m_TagString: Untagged
@@ -457,6 +458,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6902388252784263212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552335512791674715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ebb9f8d1d3b6c0429a1505b0370f012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horrorMomentSounds:
+  - Guid:
+      Data1: 1625637828
+      Data2: 1076989177
+      Data3: 718448039
+      Data4: -915190341
+    Path: event:/SFX/Datamosh
+  _soundToUseIndex: 0
+  _dialogue: {fileID: 0}
 --- !u!1 &566868901843275045
 GameObject:
   m_ObjectHideFlags: 0
@@ -13415,11 +13437,26 @@ PrefabInstance:
       propertyPath: _onPlayerCollision.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2125699448206098434, guid: b51ca91b030039344ac0e53b3f8406fa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3053771932805668250, guid: b51ca91b030039344ac0e53b3f8406fa,
         type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 2100000, guid: ae7afd435a679024fbe7790c7701641d, type: 2}
+    - target: {fileID: 3217906852106073207, guid: b51ca91b030039344ac0e53b3f8406fa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -23.628
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585140713388198709, guid: b51ca91b030039344ac0e53b3f8406fa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -25.365
+      objectReference: {fileID: 0}
     - target: {fileID: 4533908530732779140, guid: b51ca91b030039344ac0e53b3f8406fa,
         type: 3}
       propertyPath: m_Material
@@ -13644,6 +13681,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _onTriggerEvents.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9091443543312723604, guid: b51ca91b030039344ac0e53b3f8406fa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

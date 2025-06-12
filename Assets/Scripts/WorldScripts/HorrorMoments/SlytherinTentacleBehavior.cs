@@ -18,9 +18,6 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     private const string _TENTACLE_MOVE_TRIGGER = "MoveTentacle";
     [SerializeField] private CinemachineVirtualCamera _dragCam;
     private CinemachineVirtualCamera _playerCam;
-    private PlayerMovementController _playerMovementController;
-    private Rigidbody _playerRb;
-    private float _basePlayerSpeed;
 
     /// <summary>
     /// Called to make the tentacle play its animation
@@ -33,15 +30,19 @@ public class SlytherinTentacleBehavior : MonoBehaviour
         // Disable things from other objects
         CameraManager.Instance.InvokeOnCinematicStart();
 
+        // Okay so there's a little goof now that this horror moment is a little different
+        // We need the harpoon to still show up
+        // Normally, I would do this just by editing the event, but that requires a *ton* of refactoring
+        // So I'm just gonna do it manually
+        PlayerCameraController.Instance.ShowHarpoonGun();
+        PlayerCameraController.Instance.ChildHarpoon();
+
         //disable player movement and pan camera to cinematic spot
         //get the player virtual camera
         _playerCam = PlayerCameraController.Instance.PlayerVirtualCamera;
-        _playerMovementController = PlayerMovementController.Instance;
-        _playerRb = _playerMovementController.GetComponent<Rigidbody>();
-        _playerMovementController.enabled = false;
-        _playerRb.constraints = RigidbodyConstraints.FreezeAll;
-        _basePlayerSpeed = _playerMovementController.PlayerMovementSpeed;
-        _playerMovementController.PlayerMovementSpeed = 0;
+
+        // Set the camera's position to the player's camera's position
+        _dragCam.Follow = _playerCam.Follow;
 
         _dragCam.enabled = true;
         _playerCam.enabled = false;
@@ -58,17 +59,14 @@ public class SlytherinTentacleBehavior : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        //switch camera back enable player movement
-        _playerMovementController.enabled = true;
-        _playerRb.constraints = RigidbodyConstraints.None;
-        _playerRb.constraints = RigidbodyConstraints.FreezeRotation;
-        _playerMovementController.PlayerMovementSpeed = _basePlayerSpeed;
-
         _playerCam.enabled = true;
         _dragCam.enabled = false;
 
         // Enabling the things we disabled with the previous event
         CameraManager.Instance.InvokeOnCinematicEnd();
+
+        // And also the extra things specific to this moment
+        PlayerCameraController.Instance.UnchildHarpoon();
 
         Destroy(transform.parent.GetChild(0).gameObject);
         Destroy(this.gameObject);
