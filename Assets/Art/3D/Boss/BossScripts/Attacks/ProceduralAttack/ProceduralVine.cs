@@ -61,6 +61,7 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _whackAMoleAttackSpeed = 5f; // Speed of movement
     [SerializeField] private float _whackAMoleAttackDistance = 0;
     private const float _MAX_ATTACK_ANGLE = 70f;
+    private const float _ATTACK_DIRECTION_CHECK = 180f;
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
     [SerializeField] private Animator _animator;
@@ -355,7 +356,7 @@ public class ProceduralVine : MonoBehaviour
         // where it is about to go and where we want it to go.
         if (targetAngle > _MAX_ATTACK_ANGLE)
         {
-            if (_followTransform.localEulerAngles.y < 180)
+            if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
             {
                 _followTransform.RotateAround(_followTransform.position, Vector3.up, -targetAngle + _MAX_ATTACK_ANGLE);
             }
@@ -365,6 +366,7 @@ public class ProceduralVine : MonoBehaviour
             }
         }
 
+        // Get the position to strike based on the follow transform and distance to player
         var strikePos = _followTransform.position + _followTransform.forward * 
             Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
 
