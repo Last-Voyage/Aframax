@@ -174,12 +174,13 @@ public class ChaseVineGroup : MonoBehaviour
     /// </summary>
     private void StartMovementAudio()
     {
+        /*
         if (!_doesPlayStartAudioEveryChase && _isFirstChase)
         {
             //Play the start audio
             RuntimeSfxManager.APlayOneShotSfx?
                 .Invoke(FmodSfxEvents.Instance.ChaseSequenceStart, _chaseSequenceVines[0]._chaseAudioSource.transform.position);
-        }
+        }*/
 
         if (!_chaseEventInstance.isValid())
         {
