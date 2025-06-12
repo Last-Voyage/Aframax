@@ -11,14 +11,17 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Controls the movement of the harpoon projectile fired from the gun
 /// </summary>
 public class HarpoonProjectileMovement : MonoBehaviour
 {
+    [Tooltip("How far the harpoon moves into the object when impaled")]
+    [SerializeField] private float _harpoonImpactDepth;
     //for hitting walls
-    internal bool IsHit;
+    internal bool IsHit { get; set; }
 
     private Transform _movingObjects;
     private Camera _mainCamera;
@@ -70,13 +73,48 @@ public class HarpoonProjectileMovement : MonoBehaviour
             if (Physics.Raycast(transform.position, movement, out RaycastHit hit,
                 movement.magnitude, ~HarpoonGun.Instance.GetHarpoonExcludeLayers()))
             {
-                transform.position = hit.point; // Snap the harpoon to the _hit point
+                ImpaleHarpoon(hit);
+                IsHit = true;
                 break;
             }
         }
         //Either reached here because we hit something or because we have exceeded the max distance
         //If the harpoon sticks in the object it remains enabled. Otherwise it disables it
         gameObject.SetActive(HarpoonGun.Instance.GetDoesHarpoonRemainsInObject());
+    }
+
+    /// <summary>
+    /// Impales the harpoon into a surface based on a raycast
+    /// </summary>
+    /// <param name="hit"> The raycast to use </param>
+    public void ImpaleHarpoon(RaycastHit hit)
+    {
+        // Prevent the harpoon from impaling into an object while already impaled
+        if (IsHit)
+        {
+            return;
+        }
+        transform.position = hit.point; // Snap the harpoon to the _hit point
+        // Move forward to adjust for impact depth
+        transform.position += transform.forward * _harpoonImpactDepth;
+    }
+
+    /// <summary>
+    /// Impales the harpoon into a surface based on a collider
+    /// </summary>
+    /// <param name="other"> The collider we contacted</param>
+    public void ImpaleHarpoon(Collider other)
+    {
+        // Prevent the harpoon from impaling into an object while already impaled
+        if (IsHit)
+        {
+            return;
+        }
+        
+        transform.position = Physics.ClosestPoint(transform.position, 
+            other.GetComponent<Collider>(),other.transform.position,other.transform.rotation);
+        // Move forward to adjust for impact depth
+        transform.position += transform.forward * _harpoonImpactDepth;
     }
 
     /// <summary>
