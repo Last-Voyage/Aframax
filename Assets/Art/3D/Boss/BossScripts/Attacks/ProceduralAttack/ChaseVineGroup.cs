@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         ChaseVineGroup.cs
 // Author :            Tommy Roberts
-// Contributor:        Ryan Swanson
+// Contributors:        Ryan Swanson, Jeremiah Peters
 // Creation Date :     2/19/2025
 //
 // Brief Description : This script controls the chase vine group
@@ -44,6 +44,10 @@ public class ChaseVineGroup : MonoBehaviour
     [SerializeField] private float _lengthOfStartAnimation = 4.5f;
     private CinemachineVirtualCamera _playerCam;
     [SerializeField] private float _delayCameraSwitch = 2f;
+
+    //timing for lining up the cry with when the monster opens its mouth
+    [SerializeField] private float _delayCreatureCry = 3.2f;
+
     private static bool _hasBeenActivated = false;
 
     /// <summary>
@@ -94,6 +98,9 @@ public class ChaseVineGroup : MonoBehaviour
 
             //play start screaming animation
             _startScreamObject.SetActive(true);
+
+            //play scream sfx
+            StartCoroutine(PlayScreamSfx());
 
             //wait until animation is over
             yield return new WaitForSeconds(_lengthOfStartAnimation);
@@ -152,17 +159,21 @@ public class ChaseVineGroup : MonoBehaviour
     }
 
     /// <summary>
+    /// plays the creature roar sound effect in time with the animation
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator PlayScreamSfx()
+    {
+        yield return new WaitForSeconds(_delayCreatureCry);
+        RuntimeSfxManager.APlayOneShotSfx?
+                .Invoke(FmodSfxEvents.Instance.CreatureCry, _chaseSequenceVines[0]._chaseAudioSource.transform.position);
+    }
+
+    /// <summary>
     /// Starts playing the movement audio
     /// </summary>
     private void StartMovementAudio()
     {
-        if(!_doesPlayStartAudioEveryChase && !_isFirstChase)
-        {
-            //Play the start audio
-            RuntimeSfxManager.APlayOneShotSfx?
-                .Invoke(FmodSfxEvents.Instance.ChaseSequenceStart, _chaseSequenceVines[0]._chaseAudioSource.transform.position);
-        }
-
         if (!_chaseEventInstance.isValid())
         {
             return;

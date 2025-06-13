@@ -43,6 +43,7 @@ public class FmodSfxEvents : MonoBehaviour
     [field: SerializeField] public EventReference SceneStart { get; private set; }
     [field: SerializeField] public EventReference LimbSpawn { get; private set; }
     [field: SerializeField] public EventReference LimbMove { get; private set; }
+    [field: SerializeField] public EventReference CreatureCry { get; private set; }
 
     [field: Tooltip("Time to fade in the limb movement")]
     [field: SerializeField] public float LimbMoveFadeInTime { get; private set; }
