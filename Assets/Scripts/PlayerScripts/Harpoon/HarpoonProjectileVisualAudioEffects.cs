@@ -63,6 +63,10 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
+        if (_associatedMovement.IsHit)
+        {
+            return;
+        }
         #region Checks and variables for the collision
         //Check if what we hit has a mesh renderer and collider
         // and therefore requires more specific checks for the material
@@ -87,6 +91,7 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
         {
             SpawnProjectileVfx();
             StartProjectileImpactSfx();
+            _associatedMovement.ImpaleHarpoon(other);
             _associatedMovement.IsHit = true;
         }
     }
