@@ -493,8 +493,9 @@ public class PlayerCameraController : MonoBehaviour
         // to keep its rotation when it's not idle
         _harpoonTransform.SetParent(_cameraTransform, true);
 
-        // Let's reset the rotation too, just in case
+        // Let's reset the position and rotation too, just in case
         _harpoonTransform.localRotation = Quaternion.identity;
+        _harpoonTransform.localPosition = Vector3.zero;
     }
 
     /// <summary>
@@ -608,7 +609,7 @@ public class PlayerCameraController : MonoBehaviour
     /// Shows the harpoon gun model
     /// Used for cinematics
     /// </summary>
-    private void ShowHarpoonGun()
+    public void ShowHarpoonGun()
     {
         _harpoonGun.transform.GetChild(0).gameObject.SetActive(true);
     }

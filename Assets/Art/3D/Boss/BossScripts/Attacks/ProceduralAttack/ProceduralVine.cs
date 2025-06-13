@@ -60,6 +60,8 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private PathCreator _whackAMoleAttackPath; // The target to move toward
     [SerializeField] private float _whackAMoleAttackSpeed = 5f; // Speed of movement
     [SerializeField] private float _whackAMoleAttackDistance = 0;
+    private const float _MAX_ATTACK_ANGLE = 70f;
+    private const float _ATTACK_DIRECTION_CHECK = 180f;
 
     [SerializeField] private float _moveBackToPathDuration = .3f;
     [SerializeField] private Animator _animator;
@@ -345,9 +347,29 @@ public class ProceduralVine : MonoBehaviour
 
         //redo direction from new position
         var direction = (_playerTransform.position - _followTransform.position).normalized;
-        var strikePos = _followTransform.position + direction * Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
+        var targetAngle = Vector3.Angle(_followTransform.forward, direction);
 
         _followTransform.forward = direction;
+
+        // Attack angle clamping
+        // Basically, we "correct" the follow transform's forward vector by shifting it the difference of
+        // where it is about to go and where we want it to go.
+        if (targetAngle > _MAX_ATTACK_ANGLE)
+        {
+            if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
+            {
+                _followTransform.RotateAround(_followTransform.position, Vector3.up, -targetAngle + _MAX_ATTACK_ANGLE);
+            }
+            else
+            {
+                _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+            }
+        }
+
+        // Get the position to strike based on the follow transform and distance to player
+        var strikePos = _followTransform.position + _followTransform.forward * 
+            Vector3.Distance(_followTransform.position, _playerTransform.position) + Vector3.up * .3f;
+
         //snaps to player
         _followTransform.DOMove(strikePos, _lungeToPlayerDuration * .75f, false).SetEase(Ease.OutCubic);
         //Plays attack audio

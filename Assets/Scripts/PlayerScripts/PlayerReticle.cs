@@ -88,7 +88,11 @@ public class PlayerReticle : MonoBehaviour
     public void ChangeFocus()
     {
         _isFocusChanging = true;
-        StartCoroutine(ChangingReticleFocus());
+
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(ChangingReticleFocus());
+        }
     }
 
     /// <summary>
