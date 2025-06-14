@@ -11,6 +11,8 @@ using System.Collections;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 using UnityEngine.UI;
 
 /// <summary>
@@ -57,6 +59,16 @@ public class PlayerHealthUi : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float _badlyDamagedSaturation;
     [SerializeField] [Range(0, 1)] private float _onDeathSaturation;
 
+    [Header("Health Colors")] 
+    private Color _undamangedColor = Color.green;
+    private Color _lightlyDamagedColor = Color.yellow;
+    private Color _kindaDamagedColor = new Color(.8f,.4f,0f,1f);
+    private Color _badlyDamagedColor = new Color(.8f,.1f,0f,1f);
+    private Color _deathColor = Color.gray;
+    
+    private Color[] _damageColors;
+    private float[] _damageSaturations;
+
     // Cached variables
     private WaitForSeconds _heartOnScreenWait;
     
@@ -65,6 +77,9 @@ public class PlayerHealthUi : MonoBehaviour
         SubscribeToEvents();
     }
 
+    /// <summary>
+    /// Initializes arrays, the animator, and other variables
+    /// </summary>
     private void Start()
     {
         InitializeAnimator();
@@ -72,6 +87,12 @@ public class PlayerHealthUi : MonoBehaviour
         _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
         _heartAlphaParent.SetAlpha(0);
         _heartOnScreenWait = new WaitForSeconds(_heartTimeOnScreen);
+
+        _damageColors = new[] { _deathColor,_badlyDamagedColor,
+            _kindaDamagedColor,_lightlyDamagedColor,_undamangedColor};
+        
+        _damageSaturations = new[] { _onDeathSaturation,_badlyDamagedSaturation,
+            _kindaDamagedSaturation,_lightlyDamagedSaturation,_undamagedSaturation};
     }
 
     /// <summary>
@@ -89,6 +110,7 @@ public class PlayerHealthUi : MonoBehaviour
 
     /// <summary>
     /// Updates the heart ui to match the current health
+    /// Alongside controller bar color and screen saturation
     /// </summary>
     /// <param name="healthPercent"> current health percentage </param>
     /// <param name="currentHealth"> current health value </param>
@@ -109,27 +131,28 @@ public class PlayerHealthUi : MonoBehaviour
         {
             case >=1f:
                 _damageStatePointer = 4;
-                GlobalColorFilterManager.Instance.Saturation = _undamagedSaturation;
                 break;
             case >=.75f:
                 _damageStatePointer = 3;
-                GlobalColorFilterManager.Instance.Saturation = _lightlyDamagedSaturation;
                 break;
             case >=.5f:
                 _damageStatePointer = 2;
-                GlobalColorFilterManager.Instance.Saturation = _kindaDamagedSaturation;
                 break;
             case >=.25f:
                 _damageStatePointer = 1;
-                GlobalColorFilterManager.Instance.Saturation = _badlyDamagedSaturation;
                 break;
             default:
                 _damageStatePointer = 0;
-                GlobalColorFilterManager.Instance.Saturation = _onDeathSaturation;
                 break;
         }
         _damagedUIImages[Mathf.Clamp(_damageStatePointer-1,0,4)].gameObject.SetActive(true);
         _heartAnimator.SetInteger(_ANIM_HEALTH_STAGE,_damageStatePointer);
+        GlobalColorFilterManager.Instance.Saturation = _damageSaturations[_damageStatePointer];
+        
+        if (DualShockGamepad.current != null)
+        {
+            DualShockGamepad.current.SetLightBarColor(_damageColors[_damageStatePointer]);
+        }
     }
 
     /// <summary>
