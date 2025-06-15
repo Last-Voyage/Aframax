@@ -7,6 +7,7 @@
 // Brief Description : operates the health ui for the player
 *****************************************************************************/
 
+using System;
 using System.Collections;
 using System.ComponentModel;
 using Unity.VisualScripting;
@@ -44,7 +45,7 @@ public class PlayerHealthUi : MonoBehaviour
     [SerializeField] 
     private float _heartTimeToDisappear;
 
-    private int _damageStatePointer;
+    private int _damageStatePointer = 4;
 
     private IEnumerator _heartAppearanceCoroutine;
 
@@ -90,6 +91,10 @@ public class PlayerHealthUi : MonoBehaviour
 
         _damageColors = new[] { _deathColor,_badlyDamagedColor,
             _kindaDamagedColor,_lightlyDamagedColor,_undamangedColor};
+        if (!DualShockGamepad.current.IsUnityNull())
+        {
+            DualShockGamepad.current.SetLightBarColor(_damageColors[_damageStatePointer]);
+        }
         
         _damageSaturations = new[] { _onDeathSaturation,_badlyDamagedSaturation,
             _kindaDamagedSaturation,_lightlyDamagedSaturation,_undamagedSaturation};
@@ -149,7 +154,7 @@ public class PlayerHealthUi : MonoBehaviour
         _heartAnimator.SetInteger(_ANIM_HEALTH_STAGE,_damageStatePointer);
         GlobalColorFilterManager.Instance.Saturation = _damageSaturations[_damageStatePointer];
         
-        if (DualShockGamepad.current != null)
+        if (!DualShockGamepad.current.IsUnityNull())
         {
             DualShockGamepad.current.SetLightBarColor(_damageColors[_damageStatePointer]);
         }
