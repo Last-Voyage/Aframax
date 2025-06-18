@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Holds all the Whack a Mole functions
@@ -17,6 +18,7 @@ using UnityEngine;
 public class WhackAMole : MonoBehaviour
 {
     [SerializeField] private Transform[] _whackAMolePoints;
+    [FormerlySerializedAs("_allDecals")] [SerializeField] private Transform[] _allMonsterDecals;
     private bool _canAttack = true;
     private bool _attackTriggered = false;
     [Space]
@@ -151,7 +153,7 @@ public class WhackAMole : MonoBehaviour
     /// <param name="newSize"> The new size we are setting the decals to </param>
     private void SetAllDecalSize(float newSize)
     {
-        foreach (Transform hole in _whackAMolePoints)
+        foreach (Transform hole in _allMonsterDecals)
         {
             hole.transform.localScale = new Vector3(newSize,newSize,newSize);
         }
