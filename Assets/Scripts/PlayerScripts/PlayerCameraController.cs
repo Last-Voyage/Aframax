@@ -58,13 +58,14 @@ public class PlayerCameraController : MonoBehaviour
     [Header("Movement Sway")]
     [SerializeField] private GameObject _harpoonGun;
     private Animator _harpoonAnimator;
+
     [Space]
-    [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
-    [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
-    [SerializeField] private AnimationCurve _movementSwayCurve;
+    [SerializeField, Range(0f, 10f)] private float _horizontalMovementSwaySpeed = 5f; 
+    [SerializeField, Range(0f, 10f)] private float _horizontalMovementSwayIntensity = 5f;
+    [SerializeField] private AnimationCurve _horizontalMovementSwayCurve;
     
     [Space]
-    [SerializeField, Range(0f, 9999f)] private float _verticalMovementSwaySpeed = 5f;
+    [SerializeField, Range(0f, 10f)] private float _verticalMovementSwaySpeed = 5f;
     [SerializeField] private AnimationCurve _verticalMovementSwayCurve;
     
     private const string _IDLE_ANIMATION = "harpoonIdle";
@@ -140,7 +141,7 @@ public class PlayerCameraController : MonoBehaviour
         _playerTransform = _playerVisuals.transform;
         _harpoonTransform = _harpoonGun.transform;
         
-        _swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
+        _swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _horizontalMovementSwayIntensity;
     }
 
     /// <summary>
@@ -335,23 +336,23 @@ public class PlayerCameraController : MonoBehaviour
 
                 float distancePercent = currentSwayDistance / _swayDistanceLimit;
                 
-                float swaySpeedProgressMultiplier = _movementSwayCurve.Evaluate(distancePercent);
+                float swaySpeedProgressMultiplier = _horizontalMovementSwayCurve.Evaluate(distancePercent);
                 float verticalSwaySpeedProgressMultiplier = _verticalMovementSwayCurve.Evaluate(distancePercent);
                 
                 
                 if (_movementSwayRight)
                 {
                     newX = _harpoonTransform.localPosition.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Cos(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Cos(angle);
                     newZ = _harpoonTransform.localPosition.z +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Sin(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Sin(angle);
                 }
                 else
                 {
                     newX = _harpoonTransform.localPosition.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed * swaySpeedProgressMultiplier) * Mathf.Cos(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed * swaySpeedProgressMultiplier) * Mathf.Cos(angle);
                     newZ = _harpoonTransform.localPosition.z -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Sin(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Sin(angle);
                 }
                 
                 newY = (_BASE_VERTICAL_MOVEMENT_SWAY_SPEED * _verticalMovementSwaySpeed * verticalSwaySpeedProgressMultiplier);
@@ -410,7 +411,7 @@ public class PlayerCameraController : MonoBehaviour
             {
                 // Slowly move the harpoon back to position
                 _harpoonTransform.localPosition = Vector3.MoveTowards(_harpoonTransform.localPosition,
-                    Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
+                    Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed);
 
                 yield return null;
             }

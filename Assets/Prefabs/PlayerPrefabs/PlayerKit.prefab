@@ -418,9 +418,9 @@ MonoBehaviour:
   _boatSwaySpeed: 5
   _boatSwayIntensity: 0.6
   _harpoonGun: {fileID: 5197215059468236605}
-  _movementSwaySpeed: 6.5
-  _movementSwayIntensity: 5
-  _movementSwayCurve:
+  _horizontalMovementSwaySpeed: 6.5
+  _horizontalMovementSwayIntensity: 5
+  _horizontalMovementSwayCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -453,28 +453,27 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _verticalMovementSwaySpeed: 10
-  _verticalMovementSwayIntensity: 5.2
+  _verticalMovementSwaySpeed: 3
   _verticalMovementSwayCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0.6207309
+      outSlope: 0.6207309
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.17222223
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0.28992176
+      outSlope: 0.28992176
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.22777772
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
