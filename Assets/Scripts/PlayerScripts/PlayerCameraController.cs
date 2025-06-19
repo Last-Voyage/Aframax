@@ -81,8 +81,8 @@ public class PlayerCameraController : MonoBehaviour
     private float _ySway;
 
     private float currentSwayDistance;
-    float _swayDistanceLimit;
-    float _verticalSwayDistanceLimit;
+    private float _swayDistanceLimit;
+    private float _verticalSwayDistanceLimit;
 
     // Variables for pullback
     [Space]
