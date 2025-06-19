@@ -61,13 +61,17 @@ public class PlayerHealthUi : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float _onDeathSaturation;
 
     [Header("Health Colors")] 
-    private Color _undamangedColor = Color.green;
-    private Color _lightlyDamagedColor = Color.yellow;
-    private Color _kindaDamagedColor = new Color(.8f,.4f,0f,1f);
-    private Color _badlyDamagedColor = new Color(.8f,.1f,0f,1f);
-    private Color _deathColor = Color.gray;
+    /*[SerializeField] private Color _undamangedColor = Color.green;
+    [SerializeField] private Color _lightlyDamagedColor = Color.yellow;
+    [SerializeField] private Color _kindaDamagedColor = new Color(.8f,.4f,0f,1f);
+    [SerializeField] private Color _badlyDamagedColor = new Color(.8f,.1f,0f,1f);
+    [SerializeField] private Color _deathColor = Color.gray;*/
+
+    [SerializeField] private Gradient _damageGradient = new ();
+    //private GradientColorKey _damageColorKey = new ();
+    //private GradientAlphaKey _damageAlphaKey = new ();
     
-    private Color[] _damageColors;
+    //private Color[] _damageColors;
     private float[] _damageSaturations;
 
     // Cached variables
@@ -89,11 +93,11 @@ public class PlayerHealthUi : MonoBehaviour
         _heartAlphaParent.SetAlpha(0);
         _heartOnScreenWait = new WaitForSeconds(_heartTimeOnScreen);
 
-        _damageColors = new[] { _deathColor,_badlyDamagedColor,
-            _kindaDamagedColor,_lightlyDamagedColor,_undamangedColor};
+        /*_damageColors = new[] { _deathColor,_badlyDamagedColor,
+            _kindaDamagedColor,_lightlyDamagedColor,_undamangedColor};*/
         if (!DualShockGamepad.current.IsUnityNull())
         {
-            DualShockGamepad.current.SetLightBarColor(_damageColors[_damageStatePointer]);
+            DualShockGamepad.current.SetLightBarColor(_damageGradient.Evaluate(1f));
         }
         
         _damageSaturations = new[] { _onDeathSaturation,_badlyDamagedSaturation,
@@ -156,7 +160,7 @@ public class PlayerHealthUi : MonoBehaviour
         
         if (!DualShockGamepad.current.IsUnityNull())
         {
-            DualShockGamepad.current.SetLightBarColor(_damageColors[_damageStatePointer]);
+            DualShockGamepad.current.SetLightBarColor(_damageGradient.Evaluate(healthPercent));
         }
     }
 

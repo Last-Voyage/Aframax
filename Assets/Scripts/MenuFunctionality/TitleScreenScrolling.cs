@@ -51,6 +51,8 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
 
     [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
+    [SerializeField] private Color _titleScreenLightbarColor = Color.blue;
+
     private Vector3 velocity = Vector3.zero;
 
     private PlayerInputMap _playerInputControls;
@@ -145,7 +147,7 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
         
         if (!DualShockGamepad.current.IsUnityNull())
         {
-            DualShockGamepad.current.SetLightBarColor(Color.blue);
+            DualShockGamepad.current.SetLightBarColor(_titleScreenLightbarColor);
         }
     }
 
