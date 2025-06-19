@@ -7,10 +7,13 @@
 // Brief Description : operates the health ui for the player
 *****************************************************************************/
 
+using System;
 using System.Collections;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 using UnityEngine.UI;
 
 /// <summary>
@@ -42,7 +45,7 @@ public class PlayerHealthUi : MonoBehaviour
     [SerializeField] 
     private float _heartTimeToDisappear;
 
-    private int _damageStatePointer;
+    private int _damageStatePointer = 4;
 
     private IEnumerator _heartAppearanceCoroutine;
 
@@ -57,6 +60,12 @@ public class PlayerHealthUi : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float _badlyDamagedSaturation;
     [SerializeField] [Range(0, 1)] private float _onDeathSaturation;
 
+    [Header("Health Colors")] 
+
+    [SerializeField] private Gradient _damageGradient = new ();
+
+    private float[] _damageSaturations;
+
     // Cached variables
     private WaitForSeconds _heartOnScreenWait;
     
@@ -65,6 +74,9 @@ public class PlayerHealthUi : MonoBehaviour
         SubscribeToEvents();
     }
 
+    /// <summary>
+    /// Initializes arrays, the animator, and other variables
+    /// </summary>
     private void Start()
     {
         InitializeAnimator();
@@ -72,6 +84,12 @@ public class PlayerHealthUi : MonoBehaviour
         _heartAlphaParent = _playerHeart.GetComponent<CanvasRenderer>();
         _heartAlphaParent.SetAlpha(0);
         _heartOnScreenWait = new WaitForSeconds(_heartTimeOnScreen);
+        
+        if (!DualShockGamepad.current.IsUnityNull())
+            DualShockGamepad.current.SetLightBarColor(_damageGradient.Evaluate(1f));
+        
+        _damageSaturations = new[] { _onDeathSaturation,_badlyDamagedSaturation,
+            _kindaDamagedSaturation,_lightlyDamagedSaturation,_undamagedSaturation};
     }
 
     /// <summary>
@@ -89,6 +107,7 @@ public class PlayerHealthUi : MonoBehaviour
 
     /// <summary>
     /// Updates the heart ui to match the current health
+    /// Alongside controller bar color and screen saturation
     /// </summary>
     /// <param name="healthPercent"> current health percentage </param>
     /// <param name="currentHealth"> current health value </param>
@@ -104,32 +123,33 @@ public class PlayerHealthUi : MonoBehaviour
         StartCoroutine(_heartAppearanceCoroutine);
         TurnOffDamagedUI();
         
-        //this part does the blood around the edges of the screen
+        // This checks the current health and changes the damage pointer accordingly
         switch (healthPercent)
         {
             case >=1f:
                 _damageStatePointer = 4;
-                GlobalColorFilterManager.Instance.Saturation = _undamagedSaturation;
                 break;
             case >=.75f:
                 _damageStatePointer = 3;
-                GlobalColorFilterManager.Instance.Saturation = _lightlyDamagedSaturation;
                 break;
             case >=.5f:
                 _damageStatePointer = 2;
-                GlobalColorFilterManager.Instance.Saturation = _kindaDamagedSaturation;
                 break;
             case >=.25f:
                 _damageStatePointer = 1;
-                GlobalColorFilterManager.Instance.Saturation = _badlyDamagedSaturation;
                 break;
             default:
                 _damageStatePointer = 0;
-                GlobalColorFilterManager.Instance.Saturation = _onDeathSaturation;
                 break;
         }
+        // Then the blood on screen is changed, the saturation is changed, the heart on screen is changed,
+        // and the lightbar changes
         _damagedUIImages[Mathf.Clamp(_damageStatePointer-1,0,4)].gameObject.SetActive(true);
         _heartAnimator.SetInteger(_ANIM_HEALTH_STAGE,_damageStatePointer);
+        GlobalColorFilterManager.Instance.Saturation = _damageSaturations[_damageStatePointer];
+        
+        if (!DualShockGamepad.current.IsUnityNull())
+            DualShockGamepad.current.SetLightBarColor(_damageGradient.Evaluate(healthPercent));
     }
 
     /// <summary>
