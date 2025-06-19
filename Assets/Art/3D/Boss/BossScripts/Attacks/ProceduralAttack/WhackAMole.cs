@@ -1,6 +1,7 @@
 /*****************************************************************************
 // File Name :         WhackAMole.cs
 // Author :            Tommy Roberts
+// Contributors :      Ryan Swanson
 // Creation Date :     4/3/2025
 //
 // Brief Description : This script controls the functionality for the whack a mole
@@ -9,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Holds all the Whack a Mole functions
@@ -16,10 +18,19 @@ using UnityEngine;
 public class WhackAMole : MonoBehaviour
 {
     [SerializeField] private Transform[] _whackAMolePoints;
+    [FormerlySerializedAs("_allDecals")] [SerializeField] private Transform[] _allMonsterDecals;
     private bool _canAttack = true;
     private bool _attackTriggered = false;
+    [Space]
+    
     [SerializeField] private float _attackInterval = 6f;
     private float _attackTimer = 0;
+    
+    [Space] 
+    [SerializeField] private float _hideDecalTime;
+    [SerializeField] private AnimationCurve _hideDecalCurve;
+    [Space]
+    
     [SerializeField] private GameObject _whackAMoleVine;
     private GameObject _currentActiveVine;
     private ProceduralVine _currentActiveVineScript;
@@ -106,6 +117,46 @@ public class WhackAMole : MonoBehaviour
     {
         VfxManager.Instance.GetMonsterSpawnVfx().PlayNextVfxInPool
             (spawnTransform.position, spawnTransform.rotation);
+    }
+
+    /// <summary>
+    /// Called when the monster is killed
+    /// </summary>
+    public void MonsterKilled()
+    {
+        CanAttack = false;
+        StartCoroutine(HideHoleDecals());
+    }
+
+    /// <summary>
+    /// The process of hiding all hole decals
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HideHoleDecals()
+    {
+        float holeHidingTimer = 0;
+        
+        while (holeHidingTimer < 1)
+        {
+            holeHidingTimer += Time.deltaTime / _hideDecalTime;
+            float currentScale = _hideDecalCurve.Evaluate(holeHidingTimer);
+            SetAllDecalSize(currentScale);
+            
+            yield return null;
+        }
+        SetAllDecalSize(0);
+    }
+
+    /// <summary>
+    /// Sets all decals to a set size
+    /// </summary>
+    /// <param name="newSize"> The new size we are setting the decals to </param>
+    private void SetAllDecalSize(float newSize)
+    {
+        foreach (Transform hole in _allMonsterDecals)
+        {
+            hole.transform.localScale = new Vector3(newSize,newSize,newSize);
+        }
     }
 
     public bool CanAttack { get => _canAttack; set => _canAttack = value; }
