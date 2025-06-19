@@ -99,7 +99,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StartFocusingAnimation()
     {
-        _animator.SetBool(_FOCUS_ANIM, true);
+        
+        _animator.SetBool(Animator.StringToHash(_FOCUS_ANIM), true);
     }
 
     /// <summary>
@@ -107,7 +108,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StopFocusingAnimation()
     {
-        _animator.SetBool(_FOCUS_ANIM, false);
+        _animator.SetBool(Animator.StringToHash(_FOCUS_ANIM), false);
     }
 
     /// <summary>
@@ -115,8 +116,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StartFiringAnimation()
     {
-        _animator.SetTrigger(_FIRE_ANIM);
-        _animator.SetBool(_FOCUS_ANIM, false);
+        _animator.SetTrigger(Animator.StringToHash(_FIRE_ANIM));
+        _animator.SetBool(Animator.StringToHash(_FOCUS_ANIM), false);
 
         //Check to see if we are out of ammo
         //If we are, start the empty ammo animation
@@ -124,7 +125,7 @@ public class HarpoonAnimationManager : MonoBehaviour
         {
             if (HarpoonGun.Instance.GetReserveAmmo() == 0)
             {
-                _animator.SetTrigger(_AMMO_EMPTY_ANIM);
+                _animator.SetTrigger(Animator.StringToHash(_AMMO_EMPTY_ANIM));
             }
         }
     }
@@ -134,7 +135,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void ReloadHarpoonAnimation()
     {
-        _animator.SetTrigger(_RELOAD_READY_ANIM);
+        _animator.SetTrigger(Animator.StringToHash(_RELOAD_READY_ANIM));
     }
     
     /// <summary>
@@ -146,7 +147,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     {
         if (ammoRestocked == HarpoonGun.Instance.GetReserveAmmo())
         {
-            _animator.SetTrigger(_RESTOCK_COMPLETE_ANIM);
+            _animator.SetTrigger(Animator.StringToHash(_RESTOCK_COMPLETE_ANIM));
         }
     }
 
@@ -155,7 +156,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StartSprintAnimation()
     {
-        _animator.SetBool(_SPRINT_ANIM, true);
+        _animator.SetBool(Animator.StringToHash(_SPRINT_ANIM), true);
     }
 
     /// <summary>
@@ -164,7 +165,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// <param name="isMoving"> If the player is moving </param>
     private void TogglePlayerMovingAnimation(bool isMoving)
     {
-        _animator.SetBool(_PLAYER_MOVING_ANIM, isMoving);
+        _animator.SetBool(Animator.StringToHash(_PLAYER_MOVING_ANIM), isMoving);
     }
 
     /// <summary>
@@ -177,13 +178,13 @@ public class HarpoonAnimationManager : MonoBehaviour
         {
             if (Physics.Raycast(transform.position, transform.parent.forward, _WALL_CHECK_DIST))
             {
-                _animator.SetTrigger(_AT_WALL_ANIM);
-                _animator.ResetTrigger(_NOT_WALL_ANIM);
+                _animator.SetTrigger(Animator.StringToHash(_AT_WALL_ANIM));
+                _animator.ResetTrigger(Animator.StringToHash(_NOT_WALL_ANIM));
             }
             else
             {
-                _animator.SetTrigger(_NOT_WALL_ANIM);
-                _animator.ResetTrigger(_AT_WALL_ANIM);
+                _animator.SetTrigger(Animator.StringToHash(_NOT_WALL_ANIM));
+                _animator.ResetTrigger(Animator.StringToHash(_AT_WALL_ANIM));
             }
 
             yield return null;
@@ -197,17 +198,17 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void ForceIdle()
     {
         // Cut back to the idle animation
-        _animator.Play(_IDLE_ANIM);
+        _animator.Play(Animator.StringToHash(_IDLE_ANIM));
 
         // Reset everything
-        _animator.ResetTrigger(_FIRE_ANIM);
-        _animator.SetBool(_FOCUS_ANIM, false);
-        _animator.ResetTrigger(_RELOAD_READY_ANIM);
-        _animator.ResetTrigger(_RESTOCK_COMPLETE_ANIM);
-        _animator.ResetTrigger(_AMMO_EMPTY_ANIM);
-        _animator.ResetTrigger(_NOT_WALL_ANIM);
-        _animator.ResetTrigger(_AT_WALL_ANIM);
-        _animator.SetBool(_SPRINT_ANIM, false);
-        _animator.SetBool(_PLAYER_MOVING_ANIM, false);
+        _animator.ResetTrigger(Animator.StringToHash(_FIRE_ANIM));
+        _animator.SetBool(Animator.StringToHash(_FOCUS_ANIM), false);
+        _animator.ResetTrigger(Animator.StringToHash(_RELOAD_READY_ANIM));
+        _animator.ResetTrigger(Animator.StringToHash(_RESTOCK_COMPLETE_ANIM));
+        _animator.ResetTrigger(Animator.StringToHash(_AMMO_EMPTY_ANIM));
+        _animator.ResetTrigger(Animator.StringToHash(_NOT_WALL_ANIM));
+        _animator.ResetTrigger(Animator.StringToHash(_AT_WALL_ANIM));
+        _animator.SetBool(Animator.StringToHash(_SPRINT_ANIM), false);
+        _animator.SetBool(Animator.StringToHash(_PLAYER_MOVING_ANIM), false);
     }
 }
