@@ -25,6 +25,15 @@ public class HarpoonDamage : BaseDamage
             return;
         }
         base.ApplyDamage(damageRecipient);
+    }
+
+    /// <summary>
+    /// Overrides the ApplyDamageToHealth function to disable the harpoon after it deals damage
+    /// </summary>
+    /// <param name="health"> The health of the target hit </param>
+    protected override void ApplyDamageToHealth(IBaseHealth health)
+    {
+        base.ApplyDamageToHealth(health);
         // Prevents harpoon front sticking into something we damage
         gameObject.SetActive(false);
     }
