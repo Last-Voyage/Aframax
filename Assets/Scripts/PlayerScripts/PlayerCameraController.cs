@@ -77,6 +77,8 @@ public class PlayerCameraController : MonoBehaviour
     private int _start_Sprint_Anim_Hash = Animator.StringToHash(_START_SPRINT_ANIMATION);
     private int _sprint_Anim_Hash = Animator.StringToHash(_SPRINT_ANIMATION);
     private int _end_Sprint_Anim_Hash = Animator.StringToHash(_END_SPRINT_ANIMATION);
+
+    private int _currentHarpoonAnimationHash;
     
     private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
     private const float _BASE_VERTICAL_MOVEMENT_SWAY_SPEED = 0.0005f;
@@ -216,13 +218,22 @@ public class PlayerCameraController : MonoBehaviour
     {
         while (true)
         {
-            
+            DetermineWeaponAnimation();
             AdjustPlayerRotation();
             AdjustHarpoonRotation();
             BoatSway();
 
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Determines the current weapon animation that is playing
+    /// </summary>
+    private void DetermineWeaponAnimation()
+    {
+        _currentHarpoonAnimationHash = Animator.StringToHash
+            (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
 
     /// <summary>
@@ -244,11 +255,8 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (!_harpoonAnimator.IsUnityNull())
         {
-            int currentAnimInt = Animator.StringToHash
-                (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
-            
-            if (currentAnimInt == _idle_Anim_Hash || currentAnimInt == _start_Sprint_Anim_Hash ||
-                currentAnimInt == _sprint_Anim_Hash || currentAnimInt == _end_Sprint_Anim_Hash)
+            if (_currentHarpoonAnimationHash == _idle_Anim_Hash || _currentHarpoonAnimationHash == _start_Sprint_Anim_Hash ||
+                _currentHarpoonAnimationHash == _sprint_Anim_Hash || _currentHarpoonAnimationHash == _end_Sprint_Anim_Hash)
             {
                 UnchildHarpoon();
             }
@@ -318,12 +326,10 @@ public class PlayerCameraController : MonoBehaviour
 
             // We only really want to do movement sway if we are moving directly forward and the harpoon is idle
             // If we don't do this, this could lead to visual bugs
-            int currentAnimInt = Animator.StringToHash
-                (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
             
             // Adjusted the x calculation to be <= .2f so that the movement sway works on controller
             if (moveDir.y > 0 && Mathf.Abs(moveDir.x) <= .2f && 
-                currentAnimInt == _idle_Anim_Hash)
+                _currentHarpoonAnimationHash == _idle_Anim_Hash)
             {
                 // Stop resetting the camera if we are
                 if (_stopSwayCoroutine != null)
@@ -415,10 +421,7 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
-        int currentAnimInt = Animator.StringToHash(
-            _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
-        
-        if (currentAnimInt == _idle_Anim_Hash)
+        if (_currentHarpoonAnimationHash == _idle_Anim_Hash)
         {
             while (_harpoonTransform.localPosition != Vector3.zero)
             {
