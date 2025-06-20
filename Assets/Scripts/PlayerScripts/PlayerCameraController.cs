@@ -55,20 +55,42 @@ public class PlayerCameraController : MonoBehaviour
 
     // Variables for movement sway
     [Space]
+    [Header("Movement Sway")]
     [SerializeField] private GameObject _harpoonGun;
     private Animator _harpoonAnimator;
-    [SerializeField, Range(0f, 10f)] private float _movementSwaySpeed = 5f;
-    [SerializeField, Range(0f, 10f)] private float _movementSwayIntensity = 5f;
+
+    [Space]
+    [SerializeField, Range(0f, 10f)] private float _horizontalMovementSwaySpeed = 5f; 
+    [SerializeField, Range(0f, 10f)] private float _horizontalMovementSwayIntensity = 5f;
+    [SerializeField] private AnimationCurve _horizontalMovementSwayCurve;
+    
+    [Space]
+    [SerializeField, Range(0f, 10f)] private float _verticalMovementSwaySpeed = 5f;
+    [SerializeField] private AnimationCurve _verticalMovementSwayCurve;
+    
     private const string _IDLE_ANIMATION = "harpoonIdle";
     private const string _START_SPRINT_ANIMATION = "StartSprint";
     private const string _SPRINT_ANIMATION = "Sprint";
     private const string _END_SPRINT_ANIMATION = "EndSprint";
+    
+    private int _idle_Anim_Hash = Animator.StringToHash(_IDLE_ANIMATION);
+    private int _start_Sprint_Anim_Hash = Animator.StringToHash(_START_SPRINT_ANIMATION);
+    private int _sprint_Anim_Hash = Animator.StringToHash(_SPRINT_ANIMATION);
+    private int _end_Sprint_Anim_Hash = Animator.StringToHash(_END_SPRINT_ANIMATION);
+
+    private int _currentHarpoonAnimationHash;
+    
     private const float _BASE_MOVEMENT_SWAY_SPEED = 0.00005f;
+    private const float _BASE_VERTICAL_MOVEMENT_SWAY_SPEED = 0.0005f;
     private const float _BASE_MOVEMENT_SWAY_INTENSITY = 0.004f;
     private bool _movementSwayRight = true;
     // Cached variables for movement sway
     private float _xSway;
     private float _ySway;
+
+    private float currentSwayDistance;
+    private float _swayDistanceLimit;
+    private float _verticalSwayDistanceLimit;
 
     // Variables for pullback
     [Space]
@@ -126,6 +148,8 @@ public class PlayerCameraController : MonoBehaviour
 
         _playerTransform = _playerVisuals.transform;
         _harpoonTransform = _harpoonGun.transform;
+        
+        _swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _horizontalMovementSwayIntensity;
     }
 
     /// <summary>
@@ -194,12 +218,22 @@ public class PlayerCameraController : MonoBehaviour
     {
         while (true)
         {
+            DetermineWeaponAnimation();
             AdjustPlayerRotation();
             AdjustHarpoonRotation();
             BoatSway();
 
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Determines the current weapon animation that is playing
+    /// </summary>
+    private void DetermineWeaponAnimation()
+    {
+        _currentHarpoonAnimationHash = Animator.StringToHash
+            (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
 
     /// <summary>
@@ -221,10 +255,8 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (!_harpoonAnimator.IsUnityNull())
         {
-            string currentAnimationState = _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-
-            if (currentAnimationState == _IDLE_ANIMATION || currentAnimationState == _START_SPRINT_ANIMATION ||
-                currentAnimationState == _SPRINT_ANIMATION || currentAnimationState == _END_SPRINT_ANIMATION)
+            if (_currentHarpoonAnimationHash == _idle_Anim_Hash || _currentHarpoonAnimationHash == _start_Sprint_Anim_Hash ||
+                _currentHarpoonAnimationHash == _sprint_Anim_Hash || _currentHarpoonAnimationHash == _end_Sprint_Anim_Hash)
             {
                 UnchildHarpoon();
             }
@@ -286,7 +318,6 @@ public class PlayerCameraController : MonoBehaviour
     /// <summary>
     /// Simulates walking sway, going left and right periodically
     /// </summary>
-    /// <param name="playerMovement"> The InputAction associated with the player's movement for tracking </param>
     private IEnumerator WalkingSway()
     {
         while (true)
@@ -295,8 +326,10 @@ public class PlayerCameraController : MonoBehaviour
 
             // We only really want to do movement sway if we are moving directly forward and the harpoon is idle
             // If we don't do this, this could lead to visual bugs
-            if (moveDir.y > 0 && moveDir.x == 0 && 
-                _harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
+            
+            // Adjusted the x calculation to be <= .2f so that the movement sway works on controller
+            if (moveDir.y > 0 && Mathf.Abs(moveDir.x) <= .2f && 
+                _currentHarpoonAnimationHash == _idle_Anim_Hash)
             {
                 // Stop resetting the camera if we are
                 if (_stopSwayCoroutine != null)
@@ -304,6 +337,8 @@ public class PlayerCameraController : MonoBehaviour
                     StopCoroutine(_stopSwayCoroutine);
                     _stopSwayCoroutine = null;
                 }
+                
+                CalculateCurrentSwayDistance();
 
                 // We would like to get the angle at which that camera is facing
                 // So that we can move the harpoon accurately when the player turns
@@ -311,27 +346,41 @@ public class PlayerCameraController : MonoBehaviour
 
                 // Movement Sway
                 float newX = 0;
+                float newY = 0;
                 float newZ = 0;
+                
+
+                float distancePercent = currentSwayDistance / _swayDistanceLimit;
+                
+                float swaySpeedProgressMultiplier = _horizontalMovementSwayCurve.Evaluate(distancePercent);
+                float verticalSwaySpeedProgressMultiplier = _verticalMovementSwayCurve.Evaluate(distancePercent);
+                
+                
                 if (_movementSwayRight)
                 {
                     newX = _harpoonTransform.localPosition.x +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Cos(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Cos(angle);
                     newZ = _harpoonTransform.localPosition.z +
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Sin(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Sin(angle);
                 }
                 else
                 {
                     newX = _harpoonTransform.localPosition.x -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Cos(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed * swaySpeedProgressMultiplier) * Mathf.Cos(angle);
                     newZ = _harpoonTransform.localPosition.z -
-                        (_BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed) * Mathf.Sin(angle);
+                        (_BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed* swaySpeedProgressMultiplier) * Mathf.Sin(angle);
                 }
-                _harpoonTransform.localPosition = new Vector3(newX, 0, newZ);
+                
+                newY = (_BASE_VERTICAL_MOVEMENT_SWAY_SPEED * _verticalMovementSwaySpeed * verticalSwaySpeedProgressMultiplier);
+                
+                _harpoonTransform.localPosition = new Vector3(newX, newY, newZ);
 
                 // If we reach the limit on our sway, switch directions
-                float swayDistanceLimit = _BASE_MOVEMENT_SWAY_INTENSITY * _movementSwayIntensity;
-                float currentSwayDistance = Vector3.Distance(_harpoonTransform.localPosition, Vector3.zero);
-                if (currentSwayDistance >= swayDistanceLimit)
+
+                CalculateCurrentSwayDistance();
+                
+                //print("Sway Percent" + currentSwayDistance / _swayDistanceLimit);
+                if (currentSwayDistance >= _swayDistanceLimit)
                 {
                     _movementSwayRight = !_movementSwayRight;
                 }
@@ -339,6 +388,16 @@ public class PlayerCameraController : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Calculate the current sway distance from the original point
+    /// </summary>
+    void CalculateCurrentSwayDistance()
+    {
+        Vector3 tempVector =
+            new Vector3(_harpoonTransform.localPosition.x, 0, _harpoonTransform.localPosition.z);
+        currentSwayDistance = Vector3.Distance(tempVector, Vector3.zero);
     }
 
     /// <summary>
@@ -362,13 +421,13 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnCameraFromWalking()
     {
-        if (_harpoonAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == _IDLE_ANIMATION)
+        if (_currentHarpoonAnimationHash == _idle_Anim_Hash)
         {
             while (_harpoonTransform.localPosition != Vector3.zero)
             {
                 // Slowly move the harpoon back to position
                 _harpoonTransform.localPosition = Vector3.MoveTowards(_harpoonTransform.localPosition,
-                    Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED * _movementSwaySpeed);
+                    Vector3.zero, _BASE_MOVEMENT_SWAY_SPEED * _horizontalMovementSwaySpeed);
 
                 yield return null;
             }

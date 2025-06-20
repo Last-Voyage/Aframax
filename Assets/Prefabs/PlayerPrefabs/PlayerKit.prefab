@@ -418,8 +418,66 @@ MonoBehaviour:
   _boatSwaySpeed: 5
   _boatSwayIntensity: 0.6
   _harpoonGun: {fileID: 5197215059468236605}
-  _movementSwaySpeed: 5
-  _movementSwayIntensity: 5
+  _horizontalMovementSwaySpeed: 6.5
+  _horizontalMovementSwayIntensity: 5
+  _horizontalMovementSwayCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9
+      inSlope: 0.20000005
+      outSlope: 0.20000005
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: -0.79999995
+      outSlope: -0.79999995
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.1
+      inSlope: -1.8
+      outSlope: -1.8
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _verticalMovementSwaySpeed: 3
+  _verticalMovementSwayCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.6207309
+      outSlope: 0.6207309
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.17222223
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.28992176
+      outSlope: 0.28992176
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22777772
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _jumpscareTime: 0.1
   _jumpscareIntensity: 5
   _harpoonFollowTime: 5
@@ -576,7 +634,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.2785164, y: -0.03346165, z: -0.009709966, w: 0.9597993}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -816,7 +874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RecenterTarget: 0
   m_VerticalAxis:
-    Value: 0
+    Value: -32.363552
     m_SpeedMode: 0
     m_MaxSpeed: 225
     m_AccelTime: 1
@@ -840,7 +898,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: 0
+    Value: -3.9934082
     m_SpeedMode: 0
     m_MaxSpeed: 225
     m_AccelTime: 1

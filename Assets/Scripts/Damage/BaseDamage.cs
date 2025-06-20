@@ -20,7 +20,7 @@ public class BaseDamage : MonoBehaviour, IBaseDamage
     /// Whether or not the game object can apply damage to a receiving health script.
     /// Default value is true.
     /// </summary>
-    public bool CanApplyDamage { get; protected set; }
+    public bool CanApplyDamage { get; set; }
 
     private void Start()
     {

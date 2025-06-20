@@ -22,18 +22,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
     [SerializeField] private float _harpoonImpactDepth;
     //for hitting walls
     internal bool IsHit { get; set; }
-
-    private Transform _movingObjects;
-    private Camera _mainCamera;
-
-    /// <summary>
-    /// Instantiates _movingObjects 
-    /// </summary>
-    private void Awake()
-    {
-        _movingObjects = FindObjectOfType<BoatMover>()?.gameObject.transform;
-        _mainCamera = Camera.main;
-    }
+    
+    private HarpoonDamage _harpoonDamage;
 
     /// <summary>
     /// Fires the harpoon and sets the position and rotation. Is called by the harpoon gun
@@ -42,10 +32,16 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <param name="startDirection"> The direction the harpoon is fired in </param>
     public void LaunchHarpoon(Vector3 startLocation, Vector3 startDirection)
     {
+        if (_harpoonDamage.IsUnityNull())
+        {
+            _harpoonDamage = GetComponent<HarpoonDamage>();
+        }
+        
         transform.position = startLocation;
         transform.LookAt(transform.position + startDirection);
 
         IsHit = false;
+        _harpoonDamage.CanApplyDamage = true;
 
         StartCoroutine(HarpoonFireProcess());
     }
@@ -56,7 +52,6 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <returns> The delay till the next iteration </returns>
     private IEnumerator HarpoonFireProcess()
     {
-        CheckAimAtBoat();
         float travelDistance = 0f;
         while (travelDistance < HarpoonGun.Instance.GetHarpoonMaxDistance() && !IsHit)
         {
@@ -94,6 +89,8 @@ public class HarpoonProjectileMovement : MonoBehaviour
         {
             return;
         }
+
+        _harpoonDamage.CanApplyDamage = false;
         transform.position = hit.point; // Snap the harpoon to the _hit point
         // Move forward to adjust for impact depth
         transform.position += transform.forward * _harpoonImpactDepth;
@@ -111,6 +108,7 @@ public class HarpoonProjectileMovement : MonoBehaviour
             return;
         }
         
+        _harpoonDamage.CanApplyDamage = false;
         transform.position = Physics.ClosestPoint(transform.position, 
             other.GetComponent<Collider>(),other.transform.position,other.transform.rotation);
         // Move forward to adjust for impact depth
@@ -139,39 +137,5 @@ public class HarpoonProjectileMovement : MonoBehaviour
                 IsHit = true;
             }
         }
-    }
-
-    /// <summary>
-    /// Handles the process for whether the player is aiming at the boat (or anything on it)
-    /// If the player is aiming at these objects, it will child the harpoon to the Moving Objects parent object
-    /// </summary>
-    private void CheckAimAtBoat()
-    {
-        _mainCamera = Camera.main;
-        Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit) && RecursiveCheckForParent(hit.collider.transform,_movingObjects))
-        {
-            transform.parent = _movingObjects;
-        }
-    }
-
-    /// <summary>
-    /// Recursively checks if the child is a child, grandchild, etc. of the parent
-    /// </summary>
-    /// <param name="child">lowest object we are looking for in the heirarchy</param>
-    /// <param name="parent">Object we hope to find as the parent</param>
-    /// <returns>True if child is within parent in the hierarchy</returns>
-    private bool RecursiveCheckForParent(Transform child, Transform parent)
-    {
-        if (child.parent.IsUnityNull())
-        {
-            return false;
-        }
-        if (child.parent == parent)
-        {
-            return true;
-        }
-        return RecursiveCheckForParent(child.parent, parent);
-
     }
 }
