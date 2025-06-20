@@ -193,7 +193,7 @@ public class WeakPointHandler : MonoBehaviour
                 _proceduralVine.DisappearWhackAMole();
                 if(_proceduralVine.IsWhackAMoleVine)
                 {
-                    _proceduralVine.transform.parent.parent.GetComponent<WhackAMole>().CanAttack = false;
+                    _proceduralVine.transform.parent.parent.GetComponent<WhackAMole>().MonsterKilled();
                 }
 
                 //disable player colliding with weakpoint when retracting
