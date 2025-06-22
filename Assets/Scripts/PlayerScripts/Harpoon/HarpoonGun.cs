@@ -2,7 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 // Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick, 
-//                     Miles Rogers, Nick Rice, Charlie Polonus
+//                     Miles Rogers, Nick Rice, Charlie Polonus, Jeremiah Peters
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -16,6 +16,7 @@ using Cinemachine;
 using Unity.VisualScripting;
 using PrimeTween;
 using FMOD.Studio;
+using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
@@ -200,6 +201,8 @@ public class HarpoonGun : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideReticle);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetFocus);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowReticle);
+        
+        SceneManager.sceneLoaded += StartRepairHarpoons;
     }
 
     /// <summary>
@@ -215,6 +218,8 @@ public class HarpoonGun : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideReticle);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetFocus);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowReticle);
+        
+        SceneManager.sceneLoaded -= StartRepairHarpoons;
     }
 
     /// <summary>
@@ -737,6 +742,38 @@ public class HarpoonGun : MonoBehaviour
             _harpoonSpearPool[i] = newestHarpoon;
             ObjectPoolingParent.Instance.InitiallyAddObjectToPool(newestHarpoon.gameObject);
             newestHarpoon.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// starts the RepairHarpoons coroutine
+    /// it won't let me start a coroutine directly from the scene loaded event, so i did this work around
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
+    private void StartRepairHarpoons(Scene scene, LoadSceneMode mode)
+    {
+        StartCoroutine(RepairHarpoons());
+    }
+
+
+    /// <summary>
+    /// replaces any harpoons that got destroyed in scene transition
+    /// </summary>
+    private IEnumerator RepairHarpoons()
+    {
+        //wait for new scene to be fully loaded
+        yield return new WaitForSeconds(0.1f);
+
+        //check and fix each harpoon that needs fixed
+        for (int i = 0; i < _harpoonPoolingAmount; i++)
+        {
+            if (_harpoonSpearPool[i] == null)
+            {
+                _harpoonSpearPool[i] = Instantiate(_harpoonPrefab,
+                    _playerLookDirection.position, Quaternion.identity).GetComponent<HarpoonProjectileMovement>();
+                _harpoonSpearPool[i].gameObject.SetActive(false);
+            }
         }
     }
 
