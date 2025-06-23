@@ -113,7 +113,20 @@ public class UiManager : MainUniversalManagerFramework
     {
         _isUsingController = !_isUsingController;
         SaveManager.Instance.GetGameSaveData().IsUsingController = _isUsingController;
+        ToggleMouse();
         _onSwapInput?.Invoke();
+    }
+
+    private void ToggleMouse()
+    {
+        if (_isUsingController)
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     /// <summary>
