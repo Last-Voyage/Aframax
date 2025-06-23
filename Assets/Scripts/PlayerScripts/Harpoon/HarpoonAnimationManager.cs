@@ -136,6 +136,7 @@ public class HarpoonAnimationManager : MonoBehaviour
     private void ReloadHarpoonAnimation()
     {
         _animator.SetTrigger(Animator.StringToHash(_RELOAD_READY_ANIM));
+        _animator.ResetTrigger(Animator.StringToHash(_FIRE_ANIM));
     }
     
     /// <summary>
