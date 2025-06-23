@@ -36,6 +36,12 @@ public class UiManager : MainUniversalManagerFramework
         _playerInput = new PlayerInputMap();
         _backButtons.Clear();
         _previousUiSelections.Clear();
+
+        // Let's make sure that the mouse is hidden when you start the game again
+        if (_isUsingController)
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        }
     }
     
     #region Back Button
