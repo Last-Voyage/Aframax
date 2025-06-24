@@ -757,6 +757,7 @@ public class HarpoonGun : MonoBehaviour
         for (int i = 0; i < _harpoonPoolingAmount; i++)
         {
             ObjectPoolingParent.Instance.InitiallyAddObjectToPool(_harpoonSpearPool[i].gameObject);
+            _harpoonSpearPool[i].gameObject.SetActive(false);
         }
     }
 
