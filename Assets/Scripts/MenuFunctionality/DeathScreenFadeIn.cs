@@ -49,7 +49,7 @@ public class DeathScreenFadeIn : MonoBehaviour
     /// <returns></returns>
     private IEnumerator UiFadeIn(CanvasGroup objectsToFadeIn)
     {
-        yield return new WaitForSeconds(_fadeDelay);
+        yield return new WaitForSecondsRealtime(_fadeDelay);
         float elapsedtime = 0;
 
         while (_deathScreenUiElements.alpha < 1)
