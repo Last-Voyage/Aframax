@@ -123,6 +123,9 @@ public class UiManager : MainUniversalManagerFramework
         _onSwapInput?.Invoke();
     }
 
+    /// <summary>
+    /// Toggles whether or not the mouse should be available based on when a controller is used
+    /// </summary>
     private void ToggleMouse()
     {
         if (_isUsingController)
