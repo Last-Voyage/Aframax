@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       MazeSubSceneManager.cs
 // Author:          Miles Rogers
-// Contributor:     Ryan Swanson
+// Contributors:     Ryan Swanson, Jeremiah Peters
 // Creation Date:   March 3rd, 2025
 //
 // Description:     Interacts with AframaxSceneManager to additively load
@@ -15,6 +15,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.Events;
 using Debug = System.Diagnostics.Debug;
 
 /// <summary>
@@ -48,7 +49,9 @@ public class MazeSubSceneManager : MonoBehaviour
     private int _preloadedMaze = -1;
 
     private IEnumerator _cachedCoroutineToDestroy;
-    
+
+    public static event UnityAction OnMazeLoad;
+
     /// <summary>
     /// Performs any needed functionality for when the game starts
     /// </summary>
@@ -96,7 +99,9 @@ public class MazeSubSceneManager : MonoBehaviour
     public void LoadMazeAdditive(int mazeId)
     {
         _currentMaze = mazeId;
-        
+
+        OnMazeLoad.Invoke();
+
         int sceneId = _sceneManager.MazeAdditiveSceneIndices[mazeId];
         
         StartCoroutine(StartAsyncSceneLoadOperation(mazeId, sceneId));

@@ -2,7 +2,7 @@
 // File Name :         HarpoonGun.cs
 // Author :            Tommy Roberts
 // Contributors:       Ryan Swanson, Adam Garwacki, Andrew Stapay, David Henvick, 
-//                     Miles Rogers, Nick Rice, Charlie Polonus
+//                     Miles Rogers, Nick Rice, Charlie Polonus, Jeremiah Peters
 // Creation Date :     9/22/2024
 //
 // Brief Description : Controls the basic shoot harpoon and retract functionality.
@@ -16,6 +16,7 @@ using Cinemachine;
 using Unity.VisualScripting;
 using PrimeTween;
 using FMOD.Studio;
+using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
@@ -200,6 +201,10 @@ public class HarpoonGun : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideReticle);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetFocus);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowReticle);
+
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(ReturnHarpoons);
+
+        MazeSubSceneManager.OnMazeLoad += ReturnHarpoons;
     }
 
     /// <summary>
@@ -215,6 +220,10 @@ public class HarpoonGun : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideReticle);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetFocus);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowReticle);
+
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.RemoveListener(ReturnHarpoons);
+
+        MazeSubSceneManager.OnMazeLoad -= ReturnHarpoons;
     }
 
     /// <summary>
@@ -737,6 +746,18 @@ public class HarpoonGun : MonoBehaviour
             _harpoonSpearPool[i] = newestHarpoon;
             ObjectPoolingParent.Instance.InitiallyAddObjectToPool(newestHarpoon.gameObject);
             newestHarpoon.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// returns harpoons to object pooling when changing scenes
+    /// </summary>
+    private void ReturnHarpoons()
+    {
+        for (int i = 0; i < _harpoonPoolingAmount; i++)
+        {
+            ObjectPoolingParent.Instance.InitiallyAddObjectToPool(_harpoonSpearPool[i].gameObject);
+            _harpoonSpearPool[i].gameObject.SetActive(false);
         }
     }
 
