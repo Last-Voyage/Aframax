@@ -27,6 +27,8 @@ public class UiManager : MainUniversalManagerFramework
     public Stack<Button> _backButtons = new();
     private PlayerInputMap _playerInput;
 
+    [SerializeField] private bool _shouldMouseAppearUsingController;
+
     /// <summary>
     /// Makes the controller toggle save between game sessions
     /// </summary>
@@ -128,13 +130,16 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     private void ToggleMouse()
     {
-        if (_isUsingController)
+        if (!_shouldMouseAppearUsingController)
         {
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
-        {
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            if (_isUsingController)
+            {
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
 
@@ -163,6 +168,8 @@ public class UiManager : MainUniversalManagerFramework
     #region Getters
 
     public static bool IsUsingController => _isUsingController;
+
+    public bool ShouldMouseAppearUsingController => _shouldMouseAppearUsingController;
 
     public UnityEvent GetOnSwapInput => _onSwapInput;
 

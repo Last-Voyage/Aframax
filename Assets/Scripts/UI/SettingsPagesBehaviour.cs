@@ -54,6 +54,10 @@ public class SettingsPagesBehaviour : MonoBehaviour
         _gameplayNavigation = _gameplayButton.navigation;
         _gameplayNavigation.mode = Navigation.Mode.Explicit; 
 
+        if (UiManager.Instance.ShouldMouseAppearUsingController)
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     /// <summary>
@@ -85,12 +89,6 @@ public class SettingsPagesBehaviour : MonoBehaviour
                 _gameplayButton.colors = _notFocusedColors;
                 _gameplayNavigation.selectOnDown = _topAudioSlider;
                 _gameplayButton.navigation = _gameplayNavigation;
-
-                // REMOVE THIS WHEN RESOLUTION CAN BE ACCESSED BY CONTROLLER
-                if (UiManager.IsUsingController)
-                {
-                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                }
                 break;
             case 1:
                 //video settings button pressed
@@ -106,9 +104,6 @@ public class SettingsPagesBehaviour : MonoBehaviour
                 _gameplayButton.colors = _notFocusedColors;
                 _gameplayNavigation.selectOnDown = _topVideoToggle;
                 _gameplayButton.navigation = _gameplayNavigation;
-
-                // REMOVE THIS WHEN RESOLUTION CAN BE ACCESSED BY CONTROLLER
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
                 break;
             case 2:
                 //gameplay settings button pressed
@@ -123,12 +118,6 @@ public class SettingsPagesBehaviour : MonoBehaviour
                 _gameplayButton.colors = _yesFocusedColors;
                 _gameplayNavigation.selectOnDown = _topGameplayToggle;
                 _gameplayButton.navigation = _gameplayNavigation;
-
-                // REMOVE THIS WHEN RESOLUTION CAN BE ACCESSED BY CONTROLLER
-                if (UiManager.IsUsingController)
-                {
-                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                }
                 break;
             default:
                 //this should not happen
