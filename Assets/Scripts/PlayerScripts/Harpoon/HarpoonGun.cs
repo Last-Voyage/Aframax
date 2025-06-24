@@ -201,8 +201,10 @@ public class HarpoonGun : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideReticle);
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(ResetFocus);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowReticle);
-        
-        SceneManager.sceneLoaded += StartRepairHarpoons;
+
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.AddListener(ReturnHarpoons);
+
+        MazeSubSceneManager.OnMazeLoad += ReturnHarpoons;
     }
 
     /// <summary>
@@ -218,8 +220,10 @@ public class HarpoonGun : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideReticle);
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(ResetFocus);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowReticle);
-        
-        SceneManager.sceneLoaded -= StartRepairHarpoons;
+
+        AframaxSceneManager.Instance.GetOnBeforeSceneChanged.RemoveListener(ReturnHarpoons);
+
+        MazeSubSceneManager.OnMazeLoad -= ReturnHarpoons;
     }
 
     /// <summary>
@@ -746,34 +750,13 @@ public class HarpoonGun : MonoBehaviour
     }
 
     /// <summary>
-    /// starts the RepairHarpoons coroutine
-    /// it won't let me start a coroutine directly from the scene loaded event, so i did this work around
+    /// returns harpoons to object pooling when changing scenes
     /// </summary>
-    /// <param name="scene"></param>
-    /// <param name="mode"></param>
-    private void StartRepairHarpoons(Scene scene, LoadSceneMode mode)
+    private void ReturnHarpoons()
     {
-        StartCoroutine(RepairHarpoons());
-    }
-
-
-    /// <summary>
-    /// replaces any harpoons that got destroyed in scene transition
-    /// </summary>
-    private IEnumerator RepairHarpoons()
-    {
-        //wait for new scene to be fully loaded
-        yield return new WaitForSeconds(0.1f);
-
-        //check and fix each harpoon that needs fixed
         for (int i = 0; i < _harpoonPoolingAmount; i++)
         {
-            if (_harpoonSpearPool[i] == null)
-            {
-                _harpoonSpearPool[i] = Instantiate(_harpoonPrefab,
-                    _playerLookDirection.position, Quaternion.identity).GetComponent<HarpoonProjectileMovement>();
-                _harpoonSpearPool[i].gameObject.SetActive(false);
-            }
+            ObjectPoolingParent.Instance.InitiallyAddObjectToPool(_harpoonSpearPool[i].gameObject);
         }
     }
 
