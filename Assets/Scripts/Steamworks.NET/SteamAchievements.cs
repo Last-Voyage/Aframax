@@ -54,6 +54,7 @@ public class SteamAchievements : MonoBehaviour
     {
         SubscribeToEvents();
 
+        _gameId = new CGameID(SteamUtils.GetAppID());
         _userStatsReceived = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
     }
 
