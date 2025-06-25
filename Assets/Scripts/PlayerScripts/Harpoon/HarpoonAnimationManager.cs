@@ -99,8 +99,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// </summary>
     private void StartFocusingAnimation()
     {
-        
         _animator.SetBool(Animator.StringToHash(_FOCUS_ANIM), true);
+        _animator.ResetTrigger(Animator.StringToHash(_FIRE_ANIM));
     }
 
     /// <summary>

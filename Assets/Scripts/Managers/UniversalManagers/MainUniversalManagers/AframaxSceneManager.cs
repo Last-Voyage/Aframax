@@ -164,6 +164,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     /// </summary>
     public void ReloadTitleScreen()
     {
+        _onBeforeSceneChange?.Invoke();
+
         //destroy all "dont destroy on load" objects
         GameObject dontDestroyFinder = new GameObject();
         DontDestroyOnLoad(dontDestroyFinder);

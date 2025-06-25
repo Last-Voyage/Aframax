@@ -54,6 +54,10 @@ public class SettingsPagesBehaviour : MonoBehaviour
         _gameplayNavigation = _gameplayButton.navigation;
         _gameplayNavigation.mode = Navigation.Mode.Explicit; 
 
+        if (UiManager.Instance.ShouldMouseAppearUsingController)
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     /// <summary>

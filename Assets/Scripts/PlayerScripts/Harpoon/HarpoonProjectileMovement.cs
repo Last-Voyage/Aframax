@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         HarpoonProjectileMovement.cs
 // Author :            Ryan Swanson
-// Contributors:       David Henvick, Alex Kalscheur
+// Contributors:       David Henvick, Alex Kalscheur, Jeremiah Peters
 // Creation Date :     10/28/2024
 //
 // Brief Description : Controls the movement of the harpoon projectile
@@ -102,6 +102,10 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <param name="other"> The collider we contacted</param>
     public void ImpaleHarpoon(Collider other)
     {
+        //child the harpoon to whatever it hit
+        //now if that object moves, the harpoon will move with it
+        gameObject.transform.parent = other.gameObject.transform;
+        
         // Prevent the harpoon from impaling into an object while already impaled
         if (IsHit)
         {
