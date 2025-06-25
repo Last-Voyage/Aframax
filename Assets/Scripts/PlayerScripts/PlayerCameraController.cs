@@ -124,6 +124,13 @@ public class PlayerCameraController : MonoBehaviour
 
     private InputAction _playerMovement;
 
+    [Space] 
+    [SerializeField] private float _horizontalAccelTimeMK = 1f;
+    [SerializeField] private float _horizontalAccelTimeController = .5f;
+    
+    [SerializeField] private float _verticalAccelTimeMK = 1f;
+    [SerializeField] private float _verticalAccelTimeController = .3f;
+
     /// <summary>
     /// Whether the reticle is visually fully shrunken or not.
     /// </summary>
@@ -223,7 +230,9 @@ public class PlayerCameraController : MonoBehaviour
             AdjustHarpoonRotation();
             BoatSway();
 
+            //yield return new WaitForEndOfFrameUnit();
             yield return null;
+            //yield return new WaitForFixedUpdate();
         }
     }
 
@@ -283,7 +292,7 @@ public class PlayerCameraController : MonoBehaviour
 
             // We don't want our sway change to get insanely large
             // To fix this, we'll make sure it stays within the bounds [0, 2*pi]
-            _currentBoatSwayChange = _currentBoatSwayChange % (2 * Mathf.PI);
+            _currentBoatSwayChange %= (2 * Mathf.PI);
         }
     }
 
@@ -601,6 +610,22 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
+    private void ChangeCameraAccelTime(InputDevice device)
+    {
+        if (device == Gamepad.current)
+        {
+            _virtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_AccelTime =
+                _horizontalAccelTimeMK;
+            Debug.Log("HOWS");
+        }
+        else if (device == Mouse.current || device == Keyboard.current)
+        {
+            Debug.Log("GHOSTS");
+            _virtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_AccelTime = 
+            _horizontalAccelTimeController;
+        }
+    }
+
     /// <summary>
     /// Called when this component is enabled.
     /// Used to assign various actions to listeners
@@ -618,6 +643,8 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideHarpoonGun);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(RestartAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowHarpoonGun);
+        
+        ControlsManager.Instance.GetOnChangeControls.AddListener(ChangeCameraAccelTime);
     }
 
     /// <summary>
@@ -637,6 +664,8 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideHarpoonGun);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(RestartAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowHarpoonGun);
+        
+        ControlsManager.Instance.GetOnChangeControls.RemoveListener(ChangeCameraAccelTime);
     }
 
     /// <summary>
