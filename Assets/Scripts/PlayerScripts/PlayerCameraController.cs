@@ -489,7 +489,12 @@ public class PlayerCameraController : MonoBehaviour
             {
                 StopCoroutine(_cameraSpeedReturnCoroutine);
             }
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
+
+            if (!UiManager.IsUsingController)
+            {
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+            }
+            
             SetCinemachineSpeed(0, 0);
         }
     }
