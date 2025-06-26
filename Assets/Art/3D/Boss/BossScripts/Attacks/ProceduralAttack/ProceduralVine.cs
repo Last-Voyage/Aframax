@@ -366,15 +366,42 @@ public class ProceduralVine : MonoBehaviour
             // Check to see if the vine is coming from a wall or from a ceiling/floor
             if (initialDirection == 0) // wall
             {
+                
+
                 // "Correct" about the y-axis depending on which side of the vine the player is on
                 if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
                 {
-                    _followTransform.RotateAround(_followTransform.position, Vector3.up, -targetAngle + _MAX_ATTACK_ANGLE);
+                    // There's this weird kink with this segment of code in particular
+                    // Whenever the vine initially faces the positive x world direction, it takes the incorrect route
+                    // in the logic here. Honestly, this is a bit of a band-aid fix, but it keeps the vine in-play.
+                    // This is due very soon so I'll fix it later
+                    if (Vector3.Dot(savedForward, Vector3.right) < 0)
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                    }
+                    else
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                    }
                 }
                 else
                 {
-                    _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                    if (Vector3.Dot(savedForward, Vector3.right) > 0)
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                    }
+                    else
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                    }
                 }
+
+                /*var test = Vector3.Dot(savedForward, Vector3.right);
+                if (test > 0)
+                {
+                    _followTransform.localEulerAngles = new Vector3(-_followTransform.localEulerAngles.x,
+                        _followTransform.localEulerAngles.y, _followTransform.localEulerAngles.z);
+                }*/
             }
             else //ceiling/floor
             {
