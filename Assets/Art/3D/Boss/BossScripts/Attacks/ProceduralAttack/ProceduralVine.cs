@@ -417,7 +417,7 @@ public class ProceduralVine : MonoBehaviour
                 {
                     // We'll check for specifically ceiling or floor this time
                     // Correct with respect to x-axis
-                    if (initialDirection < 0)
+                    if (initialDirection > 0)
                     {
                         _followTransform.RotateAround(_followTransform.position, Vector3.right, _MAX_ATTACK_ANGLE - angleX);
                     }
@@ -429,7 +429,7 @@ public class ProceduralVine : MonoBehaviour
                 if (angleZ > _MAX_ATTACK_ANGLE)
                 {
                     // Correct with respect to z-axis
-                    if (initialDirection < 0)
+                    if (initialDirection > 0)
                     {
                         _followTransform.RotateAround(_followTransform.position, Vector3.forward, _MAX_ATTACK_ANGLE - angleZ);
                     }
