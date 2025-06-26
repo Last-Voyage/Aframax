@@ -380,6 +380,7 @@ public class ProceduralVine : MonoBehaviour
 
         StartCoroutine(LerpChainIKWeight(_chainIK.weight, .25f, .25f));
 
+        // Move the head back to the original position to make it look cleaner
         _followTransform.DOMove(originalPosition, _lungeToPlayerDuration * .75f, false).SetEase(Ease.OutCubic);
 
         //trigger retract and then destroy
