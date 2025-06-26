@@ -351,25 +351,67 @@ public class ProceduralVine : MonoBehaviour
         var direction = (_playerTransform.position - _followTransform.position).normalized;
         var targetAngle = Vector3.Angle(_followTransform.forward, direction);
 
-        print(_followTransform.forward);
+        // We can use the dot product to figure out which direction the head is initially facing
+        // 0 = wall, -1 = ceiling, 1 = floor
+        var initialDirection = Vector3.Dot(_followTransform.forward, Vector3.up);
+        var savedForward = _followTransform.forward;
+
         _followTransform.forward = direction;
-        print(_followTransform.forward);
 
         // Attack angle clamping
         // Basically, we "correct" the follow transform's forward vector by shifting it the difference of
         // where it is about to go and where we want it to go.
         if (targetAngle > _MAX_ATTACK_ANGLE)
         {
-            // Check to see if the vine is coming from ceiling/floor or from a wall
-            if ()
-
-            if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
+            // Check to see if the vine is coming from a wall or from a ceiling/floor
+            if (initialDirection == 0) // wall
             {
-                _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                // "Correct" about the y-axis depending on which side of the vine the player is on
+                if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
+                {
+                    _followTransform.RotateAround(_followTransform.position, Vector3.up, -targetAngle + _MAX_ATTACK_ANGLE);
+                }
+                else
+                {
+                    _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                }
             }
-            else
+            else //ceiling/floor
             {
-                _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                // This is a bit more complicated. We need to correct with respect to the xz-plane (the ground/ceiling)
+                // We need to find the culprit. Is it the x-axis, the z-axis, or both?
+                // Let's break up the current forward into its components
+                var forwardX = new Vector3(_followTransform.forward.x, 0, 0);
+                var forwardZ = new Vector3(0, 0, _followTransform.forward.z);
+
+                var angleX = Vector3.Angle(savedForward, forwardX);
+                var angleZ = Vector3.Angle(savedForward, forwardZ);
+
+                // We go down the rabbit hole again
+                if (angleX > _MAX_ATTACK_ANGLE)
+                {
+                    // Correct with respect to x-axis
+                    if (_followTransform.localEulerAngles.x < _ATTACK_DIRECTION_CHECK)
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.right, _MAX_ATTACK_ANGLE - angleX);
+                    }
+                    else
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.right, angleX - _MAX_ATTACK_ANGLE);
+                    }
+                }
+                if (angleZ > _MAX_ATTACK_ANGLE)
+                {
+                    // Correct with respect to z-axis
+                    if (_followTransform.localEulerAngles.z < _ATTACK_DIRECTION_CHECK)
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.forward, _MAX_ATTACK_ANGLE - angleZ);
+                    }
+                    else
+                    {
+                        _followTransform.RotateAround(_followTransform.position, Vector3.forward, angleZ - _MAX_ATTACK_ANGLE);
+                    }
+                }
             }
         }
 

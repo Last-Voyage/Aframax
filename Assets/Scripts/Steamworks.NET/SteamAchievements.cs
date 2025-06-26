@@ -52,6 +52,9 @@ public class SteamAchievements : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
+        if (!SteamManager.Initialized)
+            return;
+
         SubscribeToEvents();
 
         _gameId = new CGameID(SteamUtils.GetAppID());
