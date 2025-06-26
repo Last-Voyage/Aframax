@@ -353,7 +353,7 @@ public class ProceduralVine : MonoBehaviour
 
         // We can use the dot product to figure out which direction the head is initially facing
         // 0 = wall, -1 = ceiling, 1 = floor
-        var initialDirection = Vector3.Dot(_followTransform.forward, Vector3.up);
+        var initialDirection = Mathf.Round(Vector3.Dot(_followTransform.forward, Vector3.up));
         var savedForward = _followTransform.forward;
 
         _followTransform.forward = direction;
@@ -366,8 +366,6 @@ public class ProceduralVine : MonoBehaviour
             // Check to see if the vine is coming from a wall or from a ceiling/floor
             if (initialDirection == 0) // wall
             {
-                
-
                 // "Correct" about the y-axis depending on which side of the vine the player is on
                 if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
                 {
@@ -417,8 +415,9 @@ public class ProceduralVine : MonoBehaviour
                 // We go down the rabbit hole again
                 if (angleX > _MAX_ATTACK_ANGLE)
                 {
+                    // We'll check for specifically ceiling or floor this time
                     // Correct with respect to x-axis
-                    if (_followTransform.localEulerAngles.x < _ATTACK_DIRECTION_CHECK)
+                    if (initialDirection < 0)
                     {
                         _followTransform.RotateAround(_followTransform.position, Vector3.right, _MAX_ATTACK_ANGLE - angleX);
                     }
@@ -430,7 +429,7 @@ public class ProceduralVine : MonoBehaviour
                 if (angleZ > _MAX_ATTACK_ANGLE)
                 {
                     // Correct with respect to z-axis
-                    if (_followTransform.localEulerAngles.z < _ATTACK_DIRECTION_CHECK)
+                    if (initialDirection < 0)
                     {
                         _followTransform.RotateAround(_followTransform.position, Vector3.forward, _MAX_ATTACK_ANGLE - angleZ);
                     }
