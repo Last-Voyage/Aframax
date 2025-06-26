@@ -35,6 +35,7 @@ public class WhackAMole : MonoBehaviour
     private GameObject _currentActiveVine;
     private ProceduralVine _currentActiveVineScript;
     private Transform _playerTransform;
+    private Vector3 _vinePositionOffset = new Vector3(0, 0, 5.5f);
 
     /// <summary>
     /// spawns a new attack if conditions are right and reduces attack cd.
@@ -84,7 +85,7 @@ public class WhackAMole : MonoBehaviour
         _currentActiveVineScript = _currentActiveVine.transform.GetChild(2).GetComponent<ProceduralVine>();
 
         //set up vine and start the appearance
-        _currentActiveVine.transform.localPosition = new Vector3(0, 0, 5.5f);
+        _currentActiveVine.transform.localPosition = _vinePositionOffset;
         _currentActiveVine.transform.forward = randTransform.up;
         Vector3 vineRotation = new Vector3(_currentActiveVine.transform.localEulerAngles.x, 0, 0);
         _currentActiveVine.transform.localEulerAngles = vineRotation;

@@ -349,16 +349,21 @@ public class ProceduralVine : MonoBehaviour
         var direction = (_playerTransform.position - _followTransform.position).normalized;
         var targetAngle = Vector3.Angle(_followTransform.forward, direction);
 
+        print(_followTransform.forward);
         _followTransform.forward = direction;
+        print(_followTransform.forward);
 
         // Attack angle clamping
         // Basically, we "correct" the follow transform's forward vector by shifting it the difference of
         // where it is about to go and where we want it to go.
         if (targetAngle > _MAX_ATTACK_ANGLE)
         {
+            // Check to see if the vine is coming from ceiling/floor or from a wall
+            if ()
+
             if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
             {
-                _followTransform.RotateAround(_followTransform.position, Vector3.up, -targetAngle + _MAX_ATTACK_ANGLE);
+                _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
             }
             else
             {
