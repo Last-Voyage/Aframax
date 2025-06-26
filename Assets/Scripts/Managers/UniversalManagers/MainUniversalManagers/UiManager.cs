@@ -27,6 +27,8 @@ public class UiManager : MainUniversalManagerFramework
     public Stack<Button> _backButtons = new();
     private PlayerInputMap _playerInput;
 
+    [SerializeField] private bool _shouldMouseAppearUsingController;
+
     /// <summary>
     /// Makes the controller toggle save between game sessions
     /// </summary>
@@ -36,6 +38,12 @@ public class UiManager : MainUniversalManagerFramework
         _playerInput = new PlayerInputMap();
         _backButtons.Clear();
         _previousUiSelections.Clear();
+
+        // Let's make sure that the mouse is hidden when you start the game again
+        if (_isUsingController)
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        }
     }
     
     #region Back Button
@@ -113,7 +121,26 @@ public class UiManager : MainUniversalManagerFramework
     {
         _isUsingController = !_isUsingController;
         SaveManager.Instance.GetGameSaveData().IsUsingController = _isUsingController;
+        ToggleMouse();
         _onSwapInput?.Invoke();
+    }
+
+    /// <summary>
+    /// Toggles whether or not the mouse should be available based on when a controller is used
+    /// </summary>
+    private void ToggleMouse()
+    {
+        if (!_shouldMouseAppearUsingController)
+        {
+            if (_isUsingController)
+            {
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+            }
+        }
     }
 
     /// <summary>
@@ -141,6 +168,8 @@ public class UiManager : MainUniversalManagerFramework
     #region Getters
 
     public static bool IsUsingController => _isUsingController;
+
+    public bool ShouldMouseAppearUsingController => _shouldMouseAppearUsingController;
 
     public UnityEvent GetOnSwapInput => _onSwapInput;
 
