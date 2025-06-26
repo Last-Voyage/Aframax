@@ -6,39 +6,43 @@
 // Description:     Contains the functionality to set up and get access to controls changes
 ******************************************************************************/
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
 /// <summary>
-/// 
+/// Contains the functionality to set up and get access to controls changes
 /// </summary>
 public class ControlsManager : MainUniversalManagerFramework
 {
     public static ControlsManager Instance;
     private readonly UnityEvent<InputDevice> _onChangeControls = new();
     private InputDevice _currentDevice;
-    private bool canUseControlSwap = true;
+    private bool _canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame;
 
+    /// <summary>
+    /// This sends an event when the player swaps controls
+    /// </summary>
+    /// <param name="user">The player that changed their controls</param>
+    /// <param name="userChange">The change that happened with the user</param>
+    /// <param name="device">The device that was changed to</param>
     private void ControlSwap(InputUser user, InputUserChange userChange, InputDevice device)
     {
         // Guard statement preventing:
         // If the last device it swapped to is the current device
         // If the device doesn't exist
         // If the end of the frame hasn't passed from the last control swap
-        if (device == null || _currentDevice == device || !canUseControlSwap)
+        if (device == null || _currentDevice == device || !_canUseControlSwap)
         {
             return;
         }
         
         _onChangeControls?.Invoke(device);
         _currentDevice = device;
-        canUseControlSwap = false;
+        _canUseControlSwap = false;
         StartCoroutine(PreventControlSwapUntilEndOfFrame());
     }
 
@@ -49,7 +53,7 @@ public class ControlsManager : MainUniversalManagerFramework
     private IEnumerator PreventControlSwapUntilEndOfFrame()
     {
         yield return _endOfFrame;
-        canUseControlSwap = true;
+        _canUseControlSwap = true;
     }
     
     #region BaseManager
