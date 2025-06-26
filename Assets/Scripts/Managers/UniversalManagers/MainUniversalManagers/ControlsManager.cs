@@ -14,6 +14,9 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
+/// <summary>
+/// 
+/// </summary>
 public class ControlsManager : MainUniversalManagerFramework
 {
     public static ControlsManager Instance;
@@ -21,15 +24,13 @@ public class ControlsManager : MainUniversalManagerFramework
     private InputDevice _currentDevice;
     private bool canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        InputUser.onChange += ControlSwap;
-    }
 
     private void ControlSwap(InputUser user, InputUserChange userChange, InputDevice device)
     {
+        // Guard statement preventing:
+        // If the last device it swapped to is the current device
+        // If the device doesn't exist
+        // If the end of the frame hasn't passed from the last control swap
         if (device == null || _currentDevice == device || !canUseControlSwap)
         {
             return;
@@ -38,14 +39,14 @@ public class ControlsManager : MainUniversalManagerFramework
         _onChangeControls?.Invoke(device);
         _currentDevice = device;
         canUseControlSwap = false;
-        StartCoroutine(WaitForThing());
+        StartCoroutine(PreventControlSwapUntilEndOfFrame());
     }
 
 
     /// <summary>
     /// This waits for the end of the frame before allowing the control swap to activate again
     /// </summary>
-    private IEnumerator WaitForThing()
+    private IEnumerator PreventControlSwapUntilEndOfFrame()
     {
         yield return _endOfFrame;
         canUseControlSwap = true;
@@ -67,11 +68,16 @@ public class ControlsManager : MainUniversalManagerFramework
     public UnityEvent<InputDevice> GetOnChangeControls => _onChangeControls;
 
     #endregion
-}
 
-internal class PlayerInputDevice : InputDevice
-{
-    public static PlayerInputDevice CurrentPlayerInputDevice { get; internal set; }
-    
-    
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        InputUser.onChange += ControlSwap;
+    }
+
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        InputUser.onChange -= ControlSwap;
+    }
 }

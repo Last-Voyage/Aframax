@@ -111,7 +111,6 @@ public class PlayerCameraController : MonoBehaviour
     private Coroutine _stopSwayCoroutine;
 
     // Cached variables
-    private WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
     private Transform _playerTransform;
     private Transform _cameraTransform;
     private Transform _harpoonTransform;
@@ -129,7 +128,7 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float _horizontalAccelTimeController = .5f;
     
     [SerializeField] private float _verticalAccelTimeMK = 1f;
-    [SerializeField] private float _verticalAccelTimeController = .3f;
+    [SerializeField] private float _verticalAccelTimeController = .6f;
 
     /// <summary>
     /// Whether the reticle is visually fully shrunken or not.
@@ -230,9 +229,7 @@ public class PlayerCameraController : MonoBehaviour
             AdjustHarpoonRotation();
             BoatSway();
 
-            //yield return new WaitForEndOfFrameUnit();
             yield return null;
-            //yield return new WaitForFixedUpdate();
         }
     }
 
@@ -615,19 +612,22 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This checks if the device that was switched was either a mouse and keyboard or controller.
+    /// Then it changes the horizontal accel time; how fast it takes to get to max speed
+    /// </summary>
+    /// <param name="device">The device that the player changed to</param>
     private void ChangeCameraAccelTime(InputDevice device)
     {
         if (device == Gamepad.current)
         {
-            _virtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_AccelTime =
-                _horizontalAccelTimeMK;
-            Debug.Log("HOWS");
+            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeMK;
+            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeMK;
         }
         else if (device == Mouse.current || device == Keyboard.current)
         {
-            Debug.Log("GHOSTS");
-            _virtualCamera.GetCinemachineComponent<CinemachinePOV>().m_HorizontalAxis.m_AccelTime = 
-            _horizontalAccelTimeController;
+            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeController;
+            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeController;
         }
     }
 
