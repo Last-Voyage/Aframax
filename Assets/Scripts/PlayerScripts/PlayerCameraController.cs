@@ -130,6 +130,13 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private float _verticalAccelTimeMK = 1f;
     [SerializeField] private float _verticalAccelTimeController = .6f;
 
+    [Space] 
+    [SerializeField] private float _horizontalDeccelTimeMK;
+    [SerializeField] private float _horizontalDeccelTimeController;
+
+    [SerializeField] private float _verticalDeccelTimeMK;
+    [SerializeField] private float _verticalDeccelTimeController;
+
     /// <summary>
     /// Whether the reticle is visually fully shrunken or not.
     /// </summary>
@@ -623,11 +630,17 @@ public class PlayerCameraController : MonoBehaviour
         {
             _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeMK;
             _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeMK;
+
+            //_cinemachineHorizontalAxis.m_DecelTime = _horizontalDeccelTimeMK;
+            //_cinemachineVerticalAxis.m_DecelTime = _verticalDeccelTimeMK;
         }
         else if (device == Mouse.current || device == Keyboard.current)
         {
             _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeController;
             _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeController;
+
+            //_cinemachineHorizontalAxis.m_DecelTime = _horizontalDeccelTimeController;
+            //_cinemachineVerticalAxis.m_DecelTime = _verticalDeccelTimeController;
         }
     }
 

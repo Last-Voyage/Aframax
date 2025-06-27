@@ -73,12 +73,18 @@ public class ControlsManager : MainUniversalManagerFramework
 
     #endregion
 
+    /// <summary>
+    /// Subscribes a general device change event to a filtered one that will be sent out to our scripts
+    /// </summary>
     protected override void SubscribeToEvents()
     {
         base.SubscribeToEvents();
         InputUser.onChange += ControlSwap;
     }
 
+    /// <summary>
+    /// Removes the event to prevent memory leaks
+    /// </summary>
     protected override void UnsubscribeToEvents()
     {
         base.UnsubscribeToEvents();
