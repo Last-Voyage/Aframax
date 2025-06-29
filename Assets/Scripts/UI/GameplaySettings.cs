@@ -115,17 +115,6 @@ public class GameplaySettings : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the UI in the game to reflect controller or keyboard inputs
-    /// </summary>
-    public void ToggleControllerSetting()
-    {
-        if (!_isPreventingUIChange)
-        {
-            UiManager.Instance.SwapInput();
-        }
-    }
-
-    /// <summary>
     /// This is meant to prevent the UI from swapping because Unity's system means that this will be called
     /// on a value change
     /// </summary>
