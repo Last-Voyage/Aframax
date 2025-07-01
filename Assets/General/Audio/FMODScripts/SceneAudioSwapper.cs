@@ -13,6 +13,8 @@ public class SceneAudioSwapper : MonoBehaviour
     [Tooltip("The ID of the music to play. Check FmodPersistentAudioEvents for the specific IDs")]
     [SerializeField] private int _sceneMusicID;
 
+    [SerializeField] private bool _doesCancelMusic;
+
     /// <summary>
     /// Performs any needed set up for the audio swapper
     /// </summary>
@@ -26,7 +28,15 @@ public class SceneAudioSwapper : MonoBehaviour
     /// </summary>
     public void SwapToSceneAudio()
     {
-        PersistentAudioManager.Instance.StartMusicByID(_sceneMusicID);
+        if (_doesCancelMusic)
+        {
+            PersistentAudioManager.Instance.StopCurrentMusicTrack();
+        }
+        else
+        {
+            PersistentAudioManager.Instance.StartMusicByID(_sceneMusicID);
+        }
+        
         Destroy(gameObject);
     }
 }

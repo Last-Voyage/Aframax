@@ -357,6 +357,36 @@ public class PersistentAudioManager : AudioManager
     }
 
     /// <summary>
+    /// Stops any current music track actively playing
+    /// </summary>
+    public void StopCurrentMusicTrack()
+    {
+        // If there is music already trying to fade in, stop doing that
+        if (_musicFadeInCoroutine != null)
+        {
+            StopCoroutine(_musicFadeInCoroutine);
+        }
+        // If there is music already trying to fade out, stop doing that
+        if (_musicFadeOutCoroutine != null)
+        {
+            StopCoroutine(_musicFadeOutCoroutine);
+        }
+        // If there is music already trying to start, stop doing that
+        if(_musicStartCoroutine != null)
+        {
+            StopCoroutine(_musicStartCoroutine); 
+        }
+        
+        // Checks if there is any music currently playing
+        if (_currentMusicInstance.isValid())
+        {
+            // Starts the process of fading the volume to 0
+            _musicFadeOutCoroutine =
+                StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0, true));
+        }
+    }
+
+    /// <summary>
     /// Starts playing music via using a reference as input
     /// </summary>
     /// <param name="reference"> The music to start </param>
@@ -383,7 +413,7 @@ public class PersistentAudioManager : AudioManager
         {
             StopCoroutine(_musicStartCoroutine); 
         }
-
+        
         // Start the actual desired music
         _musicStartCoroutine = StartCoroutine(StartMusicProcess(reference));
     }
