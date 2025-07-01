@@ -70,6 +70,9 @@ public class DialoguePopUps : MonoBehaviour
     private void Start()
     {
         _waitBeforeNoText = new WaitForSeconds(_timeBeforeNoText);
+        
+        GameStateManager.Instance.GetOnDialogueProgress().
+            AddListener(BeginDisplayingText);
     }
 
     /// <summary>
@@ -182,19 +185,10 @@ public class DialoguePopUps : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds a listener to the event that starts the dialogue chain
-    /// </summary>
-    private void OnEnable()
-    {
-        GameStateManager.Instance.GetOnDialogueProgress().
-            AddListener(BeginDisplayingText);
-    }
-
-    /// <summary>
     /// Removes the listener to the event that starts the dialogue chain
     /// PREVENTS MEMORY LEAK
     /// </summary>
-    private void OnDisable()
+    private void OnDestroy()
     {
         _textContainer.text = "";
         _textBackgroundContainer.text = "";

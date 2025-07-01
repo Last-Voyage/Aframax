@@ -50,6 +50,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private readonly UnityEvent _onSceneChanged = new();
     private readonly UnityEvent _onGameplaySceneLoaded = new();
     private readonly UnityEvent _onLeavingGameplayScene = new();
+    
+    private readonly UnityEvent _onCinematicSceneLoaded = new();
+    private readonly UnityEvent _onLeavingCinematicScene = new();
 
     private readonly UnityEvent _onEndOfGameScene = new();
 
@@ -57,28 +60,9 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     private readonly UnityEvent _onAdditiveLoadRemovedEvent = new();
 
     private bool _isGameplaySceneLoaded;
+    private bool _isCinematicSceneLoaded;
 
     private EventSystem _eventSystem;
-
-    /// <summary>
-    /// Subscribes to any needed gameplay events
-    /// </summary>
-    protected override void SubscribeToGameplayEvents()
-    {
-        base.SubscribeToGameplayEvents();
-        _isGameplaySceneLoaded = true;
-        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
-    }
-
-    /// <summary>
-    /// Unsubscribes to any subscribed gameplay events
-    /// </summary>
-    protected override void UnsubscribeToGameplayEvents()
-    {
-        base.UnsubscribeToGameplayEvents();
-        _isGameplaySceneLoaded = false;
-        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(LoadDeathScreen);
-    }
 
     /// <summary>
     /// Checks if the current scene is a game scene or auxiliary scene
@@ -248,6 +232,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             OnInvokeLeavingGameplayScene();
         }
 
+        if (_isCinematicSceneLoaded)
+        {
+            InvokeOnLeavingCinematicScene();
+        }
+
         //start the scene transition animation here
         if (sceneTransition.SceneTransitionIntroAnimTrigger != "")
         {
@@ -333,6 +322,44 @@ public class AframaxSceneManager : MainUniversalManagerFramework
         base.SetUpInstance();
         Instance = this;
     }
+    
+    /// <summary>
+    /// Subscribes to any needed gameplay events
+    /// </summary>
+    protected override void SubscribeToGameplayEvents()
+    {
+        base.SubscribeToGameplayEvents();
+        _isGameplaySceneLoaded = true;
+        PlayerManager.Instance.GetOnPlayerDeath().AddListener(LoadDeathScreen);
+    }
+
+    /// <summary>
+    /// Unsubscribes to any subscribed gameplay events
+    /// </summary>
+    protected override void UnsubscribeToGameplayEvents()
+    {
+        base.UnsubscribeToGameplayEvents();
+        _isGameplaySceneLoaded = false;
+        PlayerManager.Instance.GetOnPlayerDeath().RemoveListener(LoadDeathScreen);
+    }
+
+    /// <summary>
+    /// Subscribes to any needed cinematic scene events
+    /// </summary>
+    protected override void SubscribeToCinematicSceneEvents()
+    {
+        base.SubscribeToCinematicSceneEvents();
+        _isCinematicSceneLoaded = true;
+    }
+
+    /// <summary>
+    /// Unsubscribes to any needed cinematic scene events
+    /// </summary>
+    protected override void UnsubscribeToCinematicSceneEvents()
+    {
+        base.UnsubscribeToCinematicSceneEvents();
+        _isCinematicSceneLoaded = false;
+    }
 
     #endregion
 
@@ -371,6 +398,22 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// Invokes event for when a cinematic scene is loaded
+    /// </summary>
+    public void InvokeOnCinematicSceneLoaded()
+    {
+        _onCinematicSceneLoaded?.Invoke();
+    }
+
+    /// <summary>
+    /// Invokes event for when leaving a cinematic scene
+    /// </summary>
+    public void InvokeOnLeavingCinematicScene()
+    {
+        _onLeavingCinematicScene?.Invoke();
+    }
+
+    /// <summary>
     /// Invokes an event for when a scene is additively loaded
     /// </summary>
     private void OnInvokeSceneAdditiveLoadAddEvent()
@@ -403,8 +446,11 @@ public class AframaxSceneManager : MainUniversalManagerFramework
     public UnityEvent GetOnSceneChanged => _onSceneChanged;
 
     public UnityEvent GetOnGameplaySceneLoaded => _onGameplaySceneLoaded;
-
     public UnityEvent GetOnLeavingGameplayScene => _onLeavingGameplayScene;
+    
+    
+    public UnityEvent GetOnCinematicSceneLoaded => _onCinematicSceneLoaded;
+    public UnityEvent GetOnLeavingCinematicScene => _onLeavingCinematicScene;
 
     public UnityEvent GetOnEndOfGameScene => _onEndOfGameScene;
 

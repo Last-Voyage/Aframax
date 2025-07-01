@@ -39,6 +39,9 @@ public class MainUniversalManagerFramework : MainManagerFramework
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.AddListener(SubscribeToGameplayEvents);
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.AddListener(UnsubscribeToGameplayEvents);
+        
+        AframaxSceneManager.Instance.GetOnCinematicSceneLoaded.AddListener(SubscribeToCinematicSceneEvents);
+        AframaxSceneManager.Instance.GetOnLeavingCinematicScene.AddListener(UnsubscribeToCinematicSceneEvents);
     }
 
     /// <summary>
@@ -48,6 +51,9 @@ public class MainUniversalManagerFramework : MainManagerFramework
     {
         AframaxSceneManager.Instance.GetOnGameplaySceneLoaded.RemoveListener(SubscribeToGameplayEvents);
         AframaxSceneManager.Instance.GetOnLeavingGameplayScene.RemoveListener(UnsubscribeToGameplayEvents);
+        
+        AframaxSceneManager.Instance.GetOnCinematicSceneLoaded.RemoveListener(SubscribeToCinematicSceneEvents);
+        AframaxSceneManager.Instance.GetOnLeavingCinematicScene.RemoveListener(UnsubscribeToCinematicSceneEvents);
     }
 
     /// <summary>
@@ -65,6 +71,22 @@ public class MainUniversalManagerFramework : MainManagerFramework
     /// Unsubscribed to all gameplay events
     /// </summary>
     protected virtual void UnsubscribeToGameplayEvents()
+    {
+        
+    }
+
+    /// <summary>
+    /// Subscribes to all cinematic scene events
+    /// </summary>
+    protected virtual void SubscribeToCinematicSceneEvents()
+    {
+        
+    }
+
+    /// <summary>
+    /// Unsubscribes to all cinematic scene events
+    /// </summary>
+    protected virtual void UnsubscribeToCinematicSceneEvents()
     {
         
     }

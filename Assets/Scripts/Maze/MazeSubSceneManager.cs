@@ -64,15 +64,25 @@ public class MazeSubSceneManager : MonoBehaviour
         _sceneManager = AframaxSceneManager.Instance;
         
         // Subscribe to death event
-        PlayerManager.Instance.GetOnPlayerDeath().AddListener(OnPlayerDeath);
-        
-        // Disable player Rigidbody until scene is loaded
-        _playerRigidbody = PlayerMovementController.Instance
-            .GetComponent<Rigidbody>();
-        _playerRigidbody.isKinematic = true;
+        if (PlayerManager.Instance)
+        {
+            PlayerManager.Instance.GetOnPlayerDeath().AddListener(OnPlayerDeath);
+        }
 
+        if (PlayerMovementController.Instance)
+        {
+            // Disable player Rigidbody until scene is loaded
+            _playerRigidbody = PlayerMovementController.Instance
+                .GetComponent<Rigidbody>();
+            _playerRigidbody.isKinematic = true;
+        }
+        
         //Loads any save data in the game
-        FindObjectOfType<SaveReconfiguration>().StartLoadSave(this);
+        SaveReconfiguration saveReconfiguration = FindObjectOfType<SaveReconfiguration>();
+        if (saveReconfiguration)
+        {
+            saveReconfiguration.StartLoadSave(this);
+        }
     }
 
     private void OnPlayerDeath()
