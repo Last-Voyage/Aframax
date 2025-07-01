@@ -32,6 +32,8 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private bool _doesPlayCinematicAudio = true;
     [Tooltip("The ID of the cinematic audio to play from the FmodSfxEvents under the universal managers")]
     [SerializeField] private int _cinematicAudioID;
+    
+    [Range(0,1)][SerializeField] private float _cinematicAudioVolume = 1;
     private bool _cinematicPlaying;
 
     private EventInstance _cinematicAudio;
@@ -105,6 +107,7 @@ public class CinematicManager : MonoBehaviour
         if(_cinematicAudio.isValid())
         {
             _cinematicAudio.start();
+            _cinematicAudio.setVolume(_cinematicAudioVolume);
         }
     }
 
