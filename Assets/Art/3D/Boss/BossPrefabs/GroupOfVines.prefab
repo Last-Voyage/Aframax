@@ -9524,7 +9524,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2932807830009652655}
-  - component: {fileID: 3257590877209548125}
+  - component: {fileID: 6706122072166861870}
   m_Layer: 0
   m_Name: ChaseCollider
   m_TagString: ChaseDamageTrigger
@@ -9547,8 +9547,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 574335601204373443}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3257590877209548125
-BoxCollider:
+--- !u!135 &6706122072166861870
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -9566,8 +9566,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.66, y: 4.63, z: 1.58}
-  m_Center: {x: 0, y: -0.33, z: 0}
+  m_Radius: 1.75
+  m_Center: {x: -0.15, y: -0.35, z: 0}
 --- !u!1 &5165098083907807310
 GameObject:
   m_ObjectHideFlags: 0
@@ -13871,6 +13871,7 @@ MonoBehaviour:
   _startVirtualCamera: {fileID: 1576915734284820120}
   _lengthOfStartAnimation: 3.7
   _delayCameraSwitch: 1
+  _delayCreatureCry: 3.2
 --- !u!65 &8774171470067742002
 BoxCollider:
   m_ObjectHideFlags: 0
