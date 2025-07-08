@@ -26,7 +26,7 @@ public class ScriptableDialogueUi : ScriptableObject
 
     #region Getting Total Time
     [Tooltip("How much time a chain of dialogue takes to display")]
-    public uint TotalTime { get; private set; }
+    public float TotalTime { get; private set; }
 
     /// <summary>
     /// Checks to see if it's null, then performs total time operation
@@ -79,7 +79,7 @@ public struct TextAndTimerData
     #region Text/Time
     #region Constructor
     [Tooltip("Data for on screen tutorial text")]
-    public TextAndTimerData(string screenGetText, uint timeUntilNextWords, uint timeToDisplay, EventReference audioReference)
+    public TextAndTimerData(string screenGetText, float timeUntilNextWords, float timeToDisplay, EventReference audioReference)
     {
         _displayedText = screenGetText;
         getTimeBeforeNextTextDisplays = timeUntilNextWords;
@@ -94,11 +94,11 @@ public struct TextAndTimerData
     { get => _displayedText; private set => _displayedText = value; }
 
     [Tooltip("Timing before the text shows up")]
-    public uint GetTimeBeforeNextText 
+    public float GetTimeBeforeNextText 
     { get => getTimeBeforeNextTextDisplays; private set => getTimeBeforeNextTextDisplays = value; }
 
     [Tooltip("Timing for all text to display")]
-    public uint GetTimeToDisplay 
+    public float GetTimeToDisplay 
     { get => _getTimeToDisplay; private set => _getTimeToDisplay = value; }
 
     public EventReference GetAudio => _audioReference;
@@ -112,13 +112,13 @@ public struct TextAndTimerData
     
     [FormerlySerializedAs("_getTimeBeforeTextDisplays")]
     [Header("Time variables")]
+    [Range(0, 60)]
+    [SerializeField]
+    float getTimeBeforeNextTextDisplays;
+    
     [Range(0, 10)]
     [SerializeField]
-    uint getTimeBeforeNextTextDisplays;
-    
-    [Range(2, 8)]
-    [SerializeField]
-    private uint _getTimeToDisplay;
+    private float _getTimeToDisplay;
 
     [SerializeField] private EventReference _audioReference;
 
