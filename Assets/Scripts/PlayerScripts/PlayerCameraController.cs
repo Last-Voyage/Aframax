@@ -111,7 +111,6 @@ public class PlayerCameraController : MonoBehaviour
     private Coroutine _stopSwayCoroutine;
 
     // Cached variables
-    private WaitForFixedUpdate _fixedUpdate = new WaitForFixedUpdate();
     private Transform _playerTransform;
     private Transform _cameraTransform;
     private Transform _harpoonTransform;
@@ -123,6 +122,20 @@ public class PlayerCameraController : MonoBehaviour
     private CinemachineBrain _cinemachineBrain;
 
     private InputAction _playerMovement;
+
+    [Space] 
+    [SerializeField] private float _horizontalAccelTimeMK = 1f;
+    [SerializeField] private float _horizontalAccelTimeController = .5f;
+    
+    [SerializeField] private float _verticalAccelTimeMK = 1f;
+    [SerializeField] private float _verticalAccelTimeController = .6f;
+
+    [Space] 
+    [SerializeField] private float _horizontalDeccelTimeMK;
+    [SerializeField] private float _horizontalDeccelTimeController;
+
+    [SerializeField] private float _verticalDeccelTimeMK;
+    [SerializeField] private float _verticalDeccelTimeController;
 
     /// <summary>
     /// Whether the reticle is visually fully shrunken or not.
@@ -283,7 +296,7 @@ public class PlayerCameraController : MonoBehaviour
 
             // We don't want our sway change to get insanely large
             // To fix this, we'll make sure it stays within the bounds [0, 2*pi]
-            _currentBoatSwayChange = _currentBoatSwayChange % (2 * Mathf.PI);
+            _currentBoatSwayChange %= (2 * Mathf.PI);
         }
     }
 
@@ -607,6 +620,31 @@ public class PlayerCameraController : MonoBehaviour
     }
 
     /// <summary>
+    /// This checks if the device that was switched was either a mouse and keyboard or controller.
+    /// Then it changes the horizontal accel time; how fast it takes to get to max speed
+    /// </summary>
+    /// <param name="device">The device that the player changed to</param>
+    private void ChangeCameraAccelTime(InputDevice device)
+    {
+        if (device == Gamepad.current)
+        {
+            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeMK;
+            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeMK;
+
+            //_cinemachineHorizontalAxis.m_DecelTime = _horizontalDeccelTimeMK;
+            //_cinemachineVerticalAxis.m_DecelTime = _verticalDeccelTimeMK;
+        }
+        else if (device == Mouse.current || device == Keyboard.current)
+        {
+            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeController;
+            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeController;
+
+            //_cinemachineHorizontalAxis.m_DecelTime = _horizontalDeccelTimeController;
+            //_cinemachineVerticalAxis.m_DecelTime = _verticalDeccelTimeController;
+        }
+    }
+
+    /// <summary>
     /// Called when this component is enabled.
     /// Used to assign various actions to listeners
     /// </summary>
@@ -623,6 +661,8 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().AddListener(HideHarpoonGun);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(RestartAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicEndEvent().AddListener(ShowHarpoonGun);
+        
+        ControlsManager.Instance.GetOnChangeControls.AddListener(ChangeCameraAccelTime);
     }
 
     /// <summary>
@@ -642,6 +682,8 @@ public class PlayerCameraController : MonoBehaviour
         CameraManager.Instance.GetOnCinematicStartEvent().RemoveListener(HideHarpoonGun);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(RestartAutoCameraMovement);
         CameraManager.Instance.GetOnCinematicEndEvent().RemoveListener(ShowHarpoonGun);
+        
+        ControlsManager.Instance.GetOnChangeControls.RemoveListener(ChangeCameraAccelTime);
     }
 
     /// <summary>

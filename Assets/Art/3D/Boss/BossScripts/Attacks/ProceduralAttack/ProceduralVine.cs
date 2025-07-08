@@ -345,6 +345,8 @@ public class ProceduralVine : MonoBehaviour
         _followTransform.position = _flowerHeadTransform.position;
         _currentState = EVineState.whackAMoleAttacking;
 
+        var originalPosition = _flowerHeadTransform.position;
+
         //redo direction from new position
         var direction = (_playerTransform.position - _followTransform.position).normalized;
         var targetAngle = Vector3.Angle(_followTransform.forward, direction);
@@ -377,6 +379,10 @@ public class ProceduralVine : MonoBehaviour
         yield return new WaitForSeconds(_lungeToPlayerDuration);
 
         StartCoroutine(LerpChainIKWeight(_chainIK.weight, .25f, .25f));
+
+        // Move the head back to the original position to make it look cleaner
+        _followTransform.DOMove(originalPosition, _lungeToPlayerDuration * .75f, false).SetEase(Ease.OutCubic);
+
         //trigger retract and then destroy
         DisappearWhackAMole();
     }
