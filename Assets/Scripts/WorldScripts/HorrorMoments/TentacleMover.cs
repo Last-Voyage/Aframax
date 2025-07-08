@@ -23,7 +23,7 @@ public class TentacleMover : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _tentacle.MoveAway();
-            StartCoroutine(_tentacle.DestroyTentacle(3f));
+            //StartCoroutine(_tentacle.DestroyTentacle(3f));
         }
     }
 }
