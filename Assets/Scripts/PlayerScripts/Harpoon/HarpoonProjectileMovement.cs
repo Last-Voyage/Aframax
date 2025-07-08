@@ -104,7 +104,13 @@ public class HarpoonProjectileMovement : MonoBehaviour
     {
         //child the harpoon to whatever it hit
         //now if that object moves, the harpoon will move with it
-        gameObject.transform.parent = other.gameObject.transform;
+        if (other.gameObject.CompareTag("HarpoonStickObject"))
+        {
+            // Only sticks into objects with the correct tag
+            // This is done so we don't get oddities in which the harpoon sticks into a wall,
+            //  sets itself as a child, and inherits a potential unusual scale
+            gameObject.transform.parent = other.gameObject.transform;
+        }
         
         // Prevent the harpoon from impaling into an object while already impaled
         if (IsHit)
@@ -113,8 +119,10 @@ public class HarpoonProjectileMovement : MonoBehaviour
         }
         
         _harpoonDamage.CanApplyDamage = false;
+        
+        // Finds the closest point on the collider to stick to
         transform.position = Physics.ClosestPoint(transform.position, 
-            other.GetComponent<Collider>(),other.transform.position,other.transform.rotation);
+            other,other.transform.position,other.transform.rotation);
         // Move forward to adjust for impact depth
         transform.position += transform.forward * _harpoonImpactDepth;
     }
