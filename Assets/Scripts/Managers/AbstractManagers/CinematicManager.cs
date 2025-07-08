@@ -47,6 +47,12 @@ public class CinematicManager : MonoBehaviour
 
     private void Awake()
     {
+        // Perform set up for dialogue
+        FindObjectOfType<GameStateManager>().SetUpMainManager();
+        
+        // Inform the scene manager that a cinematic was loaded
+        AframaxSceneManager.Instance.InvokeOnCinematicSceneLoaded();
+        
         _playerInputControls = new PlayerInputMap();
 
         //check for any input to show the skip cutscene text

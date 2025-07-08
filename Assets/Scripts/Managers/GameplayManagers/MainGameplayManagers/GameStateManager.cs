@@ -46,12 +46,6 @@ public class GameStateManager : MainGameplayManagerFramework
     }
 
     #region Base Manager
-
-    private void Awake()
-    {
-        SetUpInstance();
-        StartCoroutine(LoadingBuffer());
-    }
     
     /// <summary>
     /// Establishes the instance for the game state manager
@@ -73,6 +67,11 @@ public class GameStateManager : MainGameplayManagerFramework
     /// <returns>Time allowed for loading</returns>
     private IEnumerator LoadingBuffer()
     {
+        if (PauseMenu.Instance.IsUnityNull())
+        {
+            yield break;
+        }
+        
         // Pauses the game temporarily to let objects load
         PauseMenu.Instance.PauseToggle();
         _isGameLoading = true;
@@ -102,6 +101,19 @@ public class GameStateManager : MainGameplayManagerFramework
         }
         RuntimeSfxManager.Instance.InitializeFootstepInstances();
     }
+
+    #region Base Manager
+    /// <summary>
+    /// Performs set up on the game state manager
+    /// </summary>
+    public override void SetUpMainManager()
+    {
+        base.SetUpMainManager();
+        SetUpInstance();
+        StartCoroutine(LoadingBuffer());
+    }
+
+    #endregion
 
     #region Getters
     public bool IsPlayerAboveDeck()

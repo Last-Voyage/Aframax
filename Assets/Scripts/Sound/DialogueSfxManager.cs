@@ -147,5 +147,23 @@ public class DialogueSfxManager : MainUniversalManagerFramework
         base.UnsubscribeToGameplayEvents();
         GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
     }
+    
+    /// <summary>
+    /// Subscribes to events that take place in cinematic scenes
+    /// </summary>
+    protected override void SubscribeToCinematicSceneEvents()
+    {
+        base.SubscribeToGameplayEvents();
+        GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
+    }
+
+    /// <summary>
+    /// Unsubscribes to events that take place in cinematic scenes
+    /// </summary>
+    protected override void UnsubscribeToCinematicSceneEvents()
+    {
+        base.UnsubscribeToGameplayEvents();
+        GameStateManager.Instance.GetOnNewDialogueChain().RemoveListener(EnqueueDialogue);
+    }
     #endregion
 }
