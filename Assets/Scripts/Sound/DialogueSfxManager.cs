@@ -104,6 +104,19 @@ public class DialogueSfxManager : MainUniversalManagerFramework
         _currentDialogueEventInstance = eventInstance;
     }
 
+    /// <summary>
+    /// Clears any dialogue and stops the coroutine
+    /// </summary>
+    private void ClearDialogue()
+    {
+        if (!_dialogueCoroutine.IsUnityNull())
+        {
+            StopCoroutine(_dialogueCoroutine);
+            _dialogueCoroutine = null;
+            _dialogueQueue.Clear();
+        }
+    }
+
     #region BaseManager
     /// <summary>
     /// Establishes the instance for this manager
@@ -131,11 +144,30 @@ public class DialogueSfxManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// Subscribes to any needed events
+    /// </summary>
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnSceneChanged.AddListener(ClearDialogue);
+    }
+
+    /// <summary>
+    /// Unsubscribes to any events
+    /// </summary>
+    protected override void UnsubscribeToEvents()
+    {
+        base.UnsubscribeToEvents();
+        AframaxSceneManager.Instance.GetOnSceneChanged.RemoveListener(ClearDialogue);
+    }
+
+    /// <summary>
     /// Subscribes to events that take place in gameplay
     /// </summary>
     protected override void SubscribeToGameplayEvents()
     {
         base.SubscribeToGameplayEvents();
+        
         GameStateManager.Instance.GetOnNewDialogueChain().AddListener(EnqueueDialogue);
     }
 
