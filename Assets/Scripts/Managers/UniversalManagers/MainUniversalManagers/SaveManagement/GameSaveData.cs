@@ -51,6 +51,15 @@ public class GameSaveData
     public float CameraSensitivty { get; set; }
     #endregion
 
+    #region Achievements
+
+    public HashSet<GameObject> FoundNotes { get; set; }
+    public int MonstersKilled { get; set; }
+    public HashSet<GameObject> StatuesShot { get; set; }
+    public bool HasUsedResource { get; set; }
+
+    #endregion
+
     #region Getters
 
     public int GetCurrentCheckPoint() => CurrentCheckpoint;

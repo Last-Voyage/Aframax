@@ -20,6 +20,7 @@ public class SaveResetButton : MonoBehaviour
     public void ResetButtonPressed()
     {
         SaveManager.Instance.ResetGameplaySaveData();
+        SteamAchievements.Instance.ResetAcheivementData();
         if(_doesReloadCurrentScene)
         {
             AframaxSceneManager.Instance.ReloadCurrentScene();

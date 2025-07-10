@@ -8,6 +8,7 @@
 ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
@@ -64,6 +65,8 @@ public class SaveManager : MainUniversalManagerFramework
         GameplayStartingValues();
 
         SettingsStartingValues();
+
+        AchievementStartingValues();
     }
 
     /// <summary>
@@ -105,6 +108,17 @@ public class SaveManager : MainUniversalManagerFramework
         Instance.GetGameSaveData().IsCameraYAxisInverted = false;
         Instance.GetGameSaveData().CameraSensitivty = MaxSensitivity / 2;
         Instance.GetGameSaveData().IsUsingController = false;
+    }
+
+    /// <summary>
+    /// Sets the starting values for achievements
+    /// </summary>
+    private void AchievementStartingValues()
+    {
+        GetGameSaveData().FoundNotes = new HashSet<GameObject>();
+        GetGameSaveData().MonstersKilled = 0;
+        GetGameSaveData().StatuesShot = new HashSet<GameObject>();
+        GetGameSaveData().HasUsedResource = false;
     }
 
     /// <summary>
@@ -170,6 +184,9 @@ public class SaveManager : MainUniversalManagerFramework
         //Sets the initial values
         StartingValues();
 
+        //Do it for achievements too
+        SteamAchievements.Instance.ResetAcheivementData();
+
         //Saves the changes into the text file
         SaveText();
     }
@@ -181,6 +198,9 @@ public class SaveManager : MainUniversalManagerFramework
     public void ResetGameplaySaveData()
     {
         GameplayStartingValues();
+
+        //Do it for achievements too
+        SteamAchievements.Instance.ResetAcheivementData();
 
         //Saves the changes into the text file
         SaveText();
