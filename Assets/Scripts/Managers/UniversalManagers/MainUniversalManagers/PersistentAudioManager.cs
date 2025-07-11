@@ -357,6 +357,46 @@ public class PersistentAudioManager : AudioManager
     }
 
     /// <summary>
+    /// Stops any current music track actively playing
+    /// </summary>
+    public void StopCurrentMusicTrack()
+    {
+        StopAllMusicCoroutines();
+        
+        // Checks if there is any music currently playing
+        if (_currentMusicInstance.isValid())
+        {
+            // Starts the process of fading the volume to 0
+            _musicFadeOutCoroutine =
+                StartCoroutine(ChangePersistentAudioVolume(_currentMusicInstance, 0, true));
+        }
+    }
+
+    /// <summary>
+    /// Stops all coroutines relating to starting and stopping music
+    /// </summary>
+    private void StopAllMusicCoroutines()
+    {
+        // If there is music already trying to fade in, stop doing that
+        if (!_musicFadeInCoroutine.IsUnityNull())
+        {
+            StopCoroutine(_musicFadeInCoroutine);
+        }
+        // Otherwise if there is music already trying to fade out, stop doing that
+        else if (!_musicFadeOutCoroutine.IsUnityNull())
+        {
+            StopCoroutine(_musicFadeOutCoroutine);
+        }
+        
+        // If there is music already trying to start, stop doing that
+        // This should not be an ELSE of the previous statement
+        if(!_musicStartCoroutine.IsUnityNull())
+        {
+            StopCoroutine(_musicStartCoroutine); 
+        }
+    }
+
+    /// <summary>
     /// Starts playing music via using a reference as input
     /// </summary>
     /// <param name="reference"> The music to start </param>
@@ -368,22 +408,8 @@ public class PersistentAudioManager : AudioManager
             return;
         }
 
-        // If there is music already trying to fade in, stop doing that
-        if (_musicFadeInCoroutine != null)
-        {
-            StopCoroutine(_musicFadeInCoroutine);
-        }
-        // If there is music already trying to fade out, stop doing that
-        if (_musicFadeOutCoroutine != null)
-        {
-            StopCoroutine(_musicFadeOutCoroutine);
-        }
-        // If there is music already trying to start, stop doing that
-        if(_musicStartCoroutine != null)
-        {
-            StopCoroutine(_musicStartCoroutine); 
-        }
-
+        StopAllMusicCoroutines();
+        
         // Start the actual desired music
         _musicStartCoroutine = StartCoroutine(StartMusicProcess(reference));
     }
