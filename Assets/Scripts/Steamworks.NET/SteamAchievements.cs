@@ -40,9 +40,9 @@ public class SteamAchievements : MonoBehaviour
     private bool _hasUsedResource = false;
 
     // Achievement target values
-    [SerializeField] private const int _MAX_NOTES = 8;
-    [SerializeField] private const int _MAX_ENEMIES = 10;
-    [SerializeField] private const int _MAX_STATUES = 5;
+    [SerializeField] private int _maxNotes = 8;
+    [SerializeField] private int _maxMonsters = 14;
+    [SerializeField] private int _maxStatues = 5;
 
     /// <summary>
     /// Called when the gameobject is enabled
@@ -93,7 +93,7 @@ public class SteamAchievements : MonoBehaviour
     {
         _foundNotes.Add(obj.name);
 
-        if (_foundNotes.Count >= _MAX_NOTES)
+        if (_foundNotes.Count >= _maxNotes)
         {
             UnlockAchievement(Achievement.LORE_KEEPER);
         }
@@ -106,7 +106,7 @@ public class SteamAchievements : MonoBehaviour
     {
         _monstersKilled++;
 
-        if (_monstersKilled >= _MAX_ENEMIES)
+        if (_monstersKilled >= _maxMonsters)
         {
             UnlockAchievement(Achievement.WEED_WHACKER);
         }
@@ -173,7 +173,7 @@ public class SteamAchievements : MonoBehaviour
     {
         _statuesShot.Add(id);
 
-        if (_statuesShot.Count >= _MAX_STATUES)
+        if (_statuesShot.Count >= _maxStatues)
         {
             UnlockAchievement(Achievement.HEADSHOT);
         }
