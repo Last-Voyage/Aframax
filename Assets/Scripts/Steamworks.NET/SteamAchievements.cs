@@ -8,6 +8,8 @@
 using UnityEngine;
 using Steamworks;
 using UnityEngine.SocialPlatforms.Impl;
+using Unity.VisualScripting;
+using System.Collections.Generic;
 
 /// <summary>
 /// Keeps track of achievements and communicates them with Steam
@@ -15,36 +17,32 @@ using UnityEngine.SocialPlatforms.Impl;
 public class SteamAchievements : MonoBehaviour
 {
     /// <summary>
-    /// Container class for all information related to an achievement
-    /// VARIABLES PASSED INTO THE CONSTRUCTOR MUST MIRROR THE INFORMATION ON THE STEAMWORKS ACHIEVEMENT
-    /// CONFIGURATION PAGE
-    /// </summary>
-    private class AchievementContainer
-    {
-        public Achievement AchievementId;
-        public bool Achieved;
-
-        public AchievementContainer(Achievement achievementId)
-        {
-            AchievementId = achievementId;
-            Achieved = false;
-        }
-    }
-
-    /// <summary>
     /// Enum for the *logical IDs* of each achievement
     /// </summary>
     private enum Achievement : int
     {
-
+        LORE_KEEPER,
+        WEED_WHACKER,
+        HEADSHOT,
+        TREE_HUGGER,
+        MINIMALIST,
+        YOU_DO_CARE,
+        DONT_BREAK_IT,
+        FISH
     }
 
-    // List of achievements
-    private AchievementContainer[] _achievements = { };
+    public static SteamAchievements Instance;
 
-    // Steam Communication
-    private CGameID _gameId;
-    private Callback<UserStatsReceived_t> _userStatsReceived;
+    // Tracking variables
+    private HashSet<string> _foundNotes = new HashSet<string>();
+    private int _monstersKilled = 0;
+    private HashSet<int> _statuesShot = new HashSet<int>();
+    private bool _hasUsedResource = false;
+
+    // Achievement target values
+    [SerializeField] private int _maxNotes = 8;
+    [SerializeField] private int _maxMonsters = 14;
+    [SerializeField] private int _maxStatues = 5;
 
     /// <summary>
     /// Called when the gameobject is enabled
@@ -52,74 +50,187 @@ public class SteamAchievements : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        SubscribeToEvents();
+        if (!SteamManager.Initialized)
+        {
+            return;
+        }
 
-        _gameId = new CGameID(SteamUtils.GetAppID());
-        _userStatsReceived = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
-    }
-
-    /// <summary>
-    /// Called when the gameobject is disabled
-    /// Used to unsubscribe to events and remove communication with Steam
-    /// </summary>
-    private void OnDisable()
-    {
-        UnsubscribeToEvents();
-
-        _userStatsReceived = null;
+        if (Instance.IsUnityNull())
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     /// <summary>
     /// Unlocks an achievement in Steam
     /// </summary>
     /// <param name="achievement"> The achievement to unlock, in the form of an AchievementContainer </param>
-    private void UnlockAchievement(AchievementContainer achievement)
+    private void UnlockAchievement(Achievement ach)
     {
         if (SteamManager.Initialized)
         {
-            achievement.Achieved = true;
-
-            SteamUserStats.SetAchievement(achievement.AchievementId.ToString());
+            SteamUserStats.SetAchievement(ach.ToString());
         }
     }
 
     /// <summary>
-    /// Called when we receive information about the user's Steam stats
-    /// Used to mark already-completed achievements
+    /// Tracks when a resource is used
     /// </summary>
-    /// <param name="pCallback"> Information about the communication from Steam </param>
-    private void OnUserStatsReceived(UserStatsReceived_t pCallback)
+    public void ResourceUsed()
     {
-        if (!SteamManager.Initialized)
-            return;
+        _hasUsedResource = true;
+    }
 
-        // we may get callbacks for other games' stats arriving, ignore them
-        if ((ulong)_gameId == pCallback.m_nGameID)
+    /// <summary>
+    /// Tracks when a note is found and unlocks the respective achievement when a certain number are found
+    /// </summary>
+    /// <param name="obj"> The GameObject of the found note for tracking </param>
+    public void NoteFound(GameObject obj)
+    {
+        _foundNotes.Add(obj.name);
+
+        if (_foundNotes.Count >= _maxNotes)
         {
-            if (EResult.k_EResultOK == pCallback.m_eResult)
-            {
-                // load achievements
-                foreach (AchievementContainer ach in _achievements)
-                {
-                    SteamUserStats.GetAchievement(ach.AchievementId.ToString(), out ach.Achieved);
-                }
-            }
+            UnlockAchievement(Achievement.LORE_KEEPER);
         }
     }
 
     /// <summary>
-    /// Subscribes methods from this script to various events
+    /// Tracks when a monster is killed and unlocks the respective acheivement when a certain number are killed
     /// </summary>
-    private void SubscribeToEvents()
+    public void MonsterKilled()
     {
+        _monstersKilled++;
 
+        if (_monstersKilled >= _maxMonsters)
+        {
+            UnlockAchievement(Achievement.WEED_WHACKER);
+        }
     }
 
     /// <summary>
-    /// Unsubscribes methods from this script from various events
+    /// Checks to see if 0 monsters have been killed
     /// </summary>
-    private void UnsubscribeToEvents()
+    public void CheckForNoKilledMonsters()
     {
+        if (_monstersKilled == 0)
+        {
+            UnlockAchievement(Achievement.TREE_HUGGER);
+        }
+    }
 
+    /// <summary>
+    /// Checks to see if no resources have been used in the game
+    /// </summary>
+    public void CheckForNoResources()
+    {
+        if (!_hasUsedResource)
+        {
+            UnlockAchievement(Achievement.MINIMALIST);
+        }
+    }
+
+    /// <summary>
+    /// Unlocks the achievement for completing the credits
+    /// </summary>
+    public void CompleteCredits()
+    {
+        UnlockAchievement(Achievement.YOU_DO_CARE);
+    }
+
+    /// <summary>
+    /// Unlocks an achievement that requires something being shot
+    /// </summary>
+    /// <param name="type"> The achievement in question to unlock </param>
+    /// <param name="obj"> The GameObject shot for tracking </param>
+    public void AchievementShot(ShootingAchievement.ShootingAchievementType type, int id)
+    {
+        switch (type)
+        {
+            case ShootingAchievement.ShootingAchievementType.HEADSHOT:
+                StatueShot(id);
+                break;
+            case ShootingAchievement.ShootingAchievementType.DONT_BREAK_IT:
+                GeneratorShot();
+                break;
+            case ShootingAchievement.ShootingAchievementType.FISH:
+                BullseyeShot();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Tracks the number of statues shot and unlocks the respective achievement when a certain number is reached
+    /// </summary>
+    /// <param name="obj"> The GameObject shot for tracking </param>
+    private void StatueShot(int id)
+    {
+        _statuesShot.Add(id);
+
+        if (_statuesShot.Count >= _maxStatues)
+        {
+            UnlockAchievement(Achievement.HEADSHOT);
+        }
+    }
+
+    /// <summary>
+    /// Unlocks the achievement for shooting the generator
+    /// </summary>
+    private void GeneratorShot()
+    {
+        UnlockAchievement(Achievement.DONT_BREAK_IT);
+    }
+
+    /// <summary>
+    /// Unlocks the achievement for shooting the practice bullseye
+    /// </summary>
+    private void BullseyeShot()
+    {
+        UnlockAchievement(Achievement.FISH);
+    }
+
+    /// <summary>
+    /// Resets the achievement data attached to this script and saves it
+    /// </summary>
+    public void ResetAcheivementData()
+    {
+        _foundNotes.Clear();
+        _monstersKilled = 0;
+        _statuesShot.Clear();
+        _hasUsedResource = false;
+
+        SaveAchievementData();
+    }
+
+    /// <summary>
+    /// Saves the achievement data to the GameSaveData
+    /// </summary>
+    public void SaveAchievementData()
+    {
+        GameSaveData data = SaveManager.Instance.GetGameSaveData();
+
+        data.FoundNotes = _foundNotes;
+        data.MonstersKilled = _monstersKilled;
+        data.StatuesShot = _statuesShot;
+        data.HasUsedResource = _hasUsedResource;
+    }
+
+    /// <summary>
+    /// Loads achievement data from the GameSaveData
+    /// </summary>
+    public void LoadAchievementData()
+    {
+        GameSaveData data = SaveManager.Instance.GetGameSaveData();
+
+        _foundNotes = data.FoundNotes;
+        _monstersKilled = data.MonstersKilled;
+        _statuesShot = data.StatuesShot;
+        _hasUsedResource = data.HasUsedResource;
     }
 }
