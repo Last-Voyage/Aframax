@@ -118,7 +118,7 @@ public class SaveManager : MainUniversalManagerFramework
     {
         GetGameSaveData().FoundNotes = new HashSet<string>();
         GetGameSaveData().MonstersKilled = 0;
-        GetGameSaveData().StatuesShot = new HashSet<GameObject>();
+        GetGameSaveData().StatuesShot = new HashSet<int>();
         GetGameSaveData().HasUsedResource = false;
     }
 
