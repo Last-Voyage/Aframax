@@ -65,8 +65,6 @@ public class SaveManager : MainUniversalManagerFramework
         GameplayStartingValues();
 
         SettingsStartingValues();
-
-        AchievementStartingValues();
     }
 
     /// <summary>
@@ -86,6 +84,8 @@ public class SaveManager : MainUniversalManagerFramework
 
         // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
         _gameSaveData.SetCurrentSceneIndex(1);
+
+        AchievementStartingValues();
     }
 
     /// <summary>
@@ -127,6 +127,7 @@ public class SaveManager : MainUniversalManagerFramework
     public void SaveText()
     {
         //Converts the Game Save Data class into a string
+        SteamAchievements.Instance.SaveAchievementData();
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
         //Saves the string into the text file
         File.WriteAllText(_saveDataFilePath + "Data.json", convertedJson);
@@ -146,6 +147,7 @@ public class SaveManager : MainUniversalManagerFramework
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
 
             LoadInitialVolumes();
+            SteamAchievements.Instance.LoadAchievementData();
 
             if(_gameSaveData.CurrentStoryBeat > 0)
             {

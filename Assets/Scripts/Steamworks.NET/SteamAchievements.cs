@@ -106,7 +106,7 @@ public class SteamAchievements : MonoBehaviour
     {
         _monstersKilled++;
 
-        if (_monstersKilled == _MAX_ENEMIES)
+        if (_monstersKilled >= _MAX_ENEMIES)
         {
             UnlockAchievement(Achievement.WEED_WHACKER);
         }
@@ -195,6 +195,9 @@ public class SteamAchievements : MonoBehaviour
         UnlockAchievement(Achievement.FISH);
     }
 
+    /// <summary>
+    /// Resets the achievement data attached to this script and saves it
+    /// </summary>
     public void ResetAcheivementData()
     {
         _foundNotes.Clear();
@@ -205,6 +208,9 @@ public class SteamAchievements : MonoBehaviour
         SaveAchievementData();
     }
 
+    /// <summary>
+    /// Saves the achievement data to the GameSaveData
+    /// </summary>
     public void SaveAchievementData()
     {
         GameSaveData data = SaveManager.Instance.GetGameSaveData();
@@ -215,6 +221,9 @@ public class SteamAchievements : MonoBehaviour
         data.HasUsedResource = _hasUsedResource;
     }
 
+    /// <summary>
+    /// Loads achievement data from the GameSaveData
+    /// </summary>
     public void LoadAchievementData()
     {
         GameSaveData data = SaveManager.Instance.GetGameSaveData();
