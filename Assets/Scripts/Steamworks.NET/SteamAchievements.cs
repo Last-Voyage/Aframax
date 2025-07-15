@@ -36,7 +36,7 @@ public class SteamAchievements : MonoBehaviour
     // Tracking variables
     private HashSet<string> _foundNotes = new HashSet<string>();
     private int _monstersKilled = 0;
-    private HashSet<GameObject> _statuesShot = new HashSet<GameObject>();
+    private HashSet<int> _statuesShot = new HashSet<int>();
     private bool _hasUsedResource = false;
 
     // Achievement target values
@@ -93,7 +93,7 @@ public class SteamAchievements : MonoBehaviour
     {
         _foundNotes.Add(obj.name);
 
-        if (_foundNotes.Count == _MAX_NOTES)
+        if (_foundNotes.Count >= _MAX_NOTES)
         {
             UnlockAchievement(Achievement.LORE_KEEPER);
         }
@@ -147,12 +147,12 @@ public class SteamAchievements : MonoBehaviour
     /// </summary>
     /// <param name="type"> The achievement in question to unlock </param>
     /// <param name="obj"> The GameObject shot for tracking </param>
-    public void AchievementShot(ShootingAchievement.ShootingAchievementType type, GameObject obj)
+    public void AchievementShot(ShootingAchievement.ShootingAchievementType type, int id)
     {
         switch (type)
         {
             case ShootingAchievement.ShootingAchievementType.HEADSHOT:
-                StatueShot(obj);
+                StatueShot(id);
                 break;
             case ShootingAchievement.ShootingAchievementType.DONT_BREAK_IT:
                 GeneratorShot();
@@ -169,11 +169,11 @@ public class SteamAchievements : MonoBehaviour
     /// Tracks the number of statues shot and unlocks the respective achievement when a certain number is reached
     /// </summary>
     /// <param name="obj"> The GameObject shot for tracking </param>
-    private void StatueShot(GameObject obj)
+    private void StatueShot(int id)
     {
-        _statuesShot.Add(obj);
+        _statuesShot.Add(id);
 
-        if (_statuesShot.Count == _MAX_STATUES)
+        if (_statuesShot.Count >= _MAX_STATUES)
         {
             UnlockAchievement(Achievement.HEADSHOT);
         }

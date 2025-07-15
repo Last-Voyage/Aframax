@@ -55,7 +55,7 @@ public class GameSaveData
 
     public HashSet<string> FoundNotes { get; set; }
     public int MonstersKilled { get; set; }
-    public HashSet<GameObject> StatuesShot { get; set; }
+    public HashSet<int> StatuesShot { get; set; }
     public bool HasUsedResource { get; set; }
 
     #endregion
