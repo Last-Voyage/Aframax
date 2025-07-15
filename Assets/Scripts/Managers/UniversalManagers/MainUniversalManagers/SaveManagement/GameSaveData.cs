@@ -53,7 +53,7 @@ public class GameSaveData
 
     #region Achievements
 
-    public HashSet<GameObject> FoundNotes { get; set; }
+    public HashSet<string> FoundNotes { get; set; }
     public int MonstersKilled { get; set; }
     public HashSet<GameObject> StatuesShot { get; set; }
     public bool HasUsedResource { get; set; }

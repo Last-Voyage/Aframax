@@ -15,6 +15,7 @@ using System.IO;
 using UnityEngine.Events;
 using FMOD.Studio;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -115,7 +116,7 @@ public class SaveManager : MainUniversalManagerFramework
     /// </summary>
     private void AchievementStartingValues()
     {
-        GetGameSaveData().FoundNotes = new HashSet<GameObject>();
+        GetGameSaveData().FoundNotes = new HashSet<string>();
         GetGameSaveData().MonstersKilled = 0;
         GetGameSaveData().StatuesShot = new HashSet<GameObject>();
         GetGameSaveData().HasUsedResource = false;
@@ -147,7 +148,11 @@ public class SaveManager : MainUniversalManagerFramework
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
 
             LoadInitialVolumes();
-            SteamAchievements.Instance.LoadAchievementData();
+
+            if (!SteamAchievements.Instance.IsUnityNull())
+            {
+                SteamAchievements.Instance.LoadAchievementData();
+            }
 
             if(_gameSaveData.CurrentStoryBeat > 0)
             {

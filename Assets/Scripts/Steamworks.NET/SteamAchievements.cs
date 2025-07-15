@@ -34,7 +34,7 @@ public class SteamAchievements : MonoBehaviour
     public static SteamAchievements Instance;
 
     // Tracking variables
-    private HashSet<GameObject> _foundNotes = new HashSet<GameObject>();
+    private HashSet<string> _foundNotes = new HashSet<string>();
     private int _monstersKilled = 0;
     private HashSet<GameObject> _statuesShot = new HashSet<GameObject>();
     private bool _hasUsedResource = false;
@@ -91,7 +91,7 @@ public class SteamAchievements : MonoBehaviour
     /// <param name="obj"> The GameObject of the found note for tracking </param>
     public void NoteFound(GameObject obj)
     {
-        _foundNotes.Add(obj);
+        _foundNotes.Add(obj.name);
 
         if (_foundNotes.Count == _MAX_NOTES)
         {
