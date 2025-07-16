@@ -68,6 +68,8 @@ public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
         }
 
         PlayerManager.Instance.OnInvokeHarpoonRestockEvent(this);
+        SteamAchievements.Instance.ResourceUsed();
+
         if (_currentHarpoons == 0)
         {
             //disable interact prompt

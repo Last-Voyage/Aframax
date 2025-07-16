@@ -66,6 +66,8 @@ public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
         }
 
         PlayerManager.Instance.OnInvokePlayerHealEvent(_healthRestored);
+        SteamAchievements.Instance.ResourceUsed();
+
         PlayHealingVisualEffect();
         _numUses--;
 
