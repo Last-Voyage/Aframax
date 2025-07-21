@@ -148,6 +148,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void GamePaused()
     {
+        if (!GameStateManager.Instance.IsGameLoadingCompleted)
+        {
+            return;
+        }
+        
         if (!_isInCinematic)
         {
             UnsubscribePlayerInput();
@@ -164,6 +169,11 @@ public class PlayerFunctionalityCore : MonoBehaviour
     /// </summary>
     private void GameUnpaused()
     {
+        if (!GameStateManager.Instance.IsGameLoadingCompleted)
+        {
+            return;
+        }
+        
         if (!_isInCinematic)
         {
             SubscribePlayerInput();
