@@ -1,7 +1,7 @@
 /******************************************************************************
 // File Name:       SceneTransitionBehaviour.cs
 // Author:          Jeremiah Peters
-// Contributor:     Ryan Swanson
+// Contributors:    Ryan Swanson, Adam Garwacki
 // Creation Date:   February 6, 2025
 //
 // Description:     provides functionality for scene transitions
@@ -39,5 +39,29 @@ public class SceneTransitionBehaviour : MonoBehaviour
     {
         _transitionImage.enabled = true;
         _sceneTransitionAnimator.SetTrigger(animationTrigger);
+    }
+
+    /// <summary>
+    /// Checks whether a transition is currently in play.
+    /// </summary>
+    public bool CheckIfTransitionIsActive()
+    {
+        if (_transitionImage.enabled)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+ 
+
+    /// <summary>
+    /// Prematurely ends the transition currently in use.
+    /// </summary>
+    public void DisableTransition()
+    {
+        _transitionImage.enabled = false;
     }
 }

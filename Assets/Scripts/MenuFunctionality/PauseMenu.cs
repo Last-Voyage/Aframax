@@ -43,7 +43,7 @@ public class PauseMenu : MonoBehaviour
         CheckSingletonInstance();
         //initialize input
         _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Player.Pause.performed += ctx => PauseToggle();
+        _playerInputControls.Player.Pause.performed += ctx => PauseAnimCheck();
     }
 
     /// <summary>
@@ -59,6 +59,21 @@ public class PauseMenu : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// Checks if a scene transition is currently animating. If so, the animation is disabled. 
+    /// Regardless, proceeds to check whether the game's pause state can be toggled or not.
+    /// </summary>
+    private void PauseAnimCheck()
+    {
+        // Disables scene transition if it's active
+        if ((SceneTransitionBehaviour.Instance.CheckIfTransitionIsActive() == true) && !GameStateManager.Instance.IsGameLoading())
+        {
+            SceneTransitionBehaviour.Instance.DisableTransition();
+        }
+
+        PauseToggle();
     }
 
     /// <summary>
