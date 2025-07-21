@@ -22,6 +22,8 @@ public class ButtonSFXManager : MonoBehaviour
 
     /// <summary>
     /// plays the designated button sfx (currently there is only one)
+    /// changed to not work if startTime = 0
+    /// this will stop any objects that aren't enabled yet from playing sfx
     /// </summary>
     public void PlayClickSFX()
     {
@@ -31,6 +33,9 @@ public class ButtonSFXManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// for objects on the title screen that need to play click sfx
+    /// </summary>
     public void AlwaysPlayClickSFX()
     {
         RuntimeSfxManager.APlayOneShotSfx?.Invoke(FmodSfxEvents.Instance._buttonUsedSFX[_clickSFXIndex], Vector3.zero);
