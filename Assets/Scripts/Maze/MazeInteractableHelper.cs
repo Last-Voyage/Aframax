@@ -46,4 +46,20 @@ public class MazeInteractableHelper : MonoBehaviour
     {
         GameObject.FindFirstObjectByType<HudInventoryManager>().DisableInventoryImages();
     }
+
+    /// <summary>
+    /// Checks for if we have killed no monsters for Steam achievements
+    /// </summary>
+    public void CheckForNoKilledMonsters()
+    {
+        SteamAchievements.Instance.CheckForNoKilledMonsters();
+    }
+
+    /// <summary>
+    /// Checks for if we have used no resources for Steam achievements
+    /// </summary>
+    public void CheckForNoResources()
+    {
+        SteamAchievements.Instance.CheckForNoResources();
+    }
 }

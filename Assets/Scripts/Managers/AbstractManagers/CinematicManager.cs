@@ -29,8 +29,11 @@ public class CinematicManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int _sceneId;
     [SerializeField] private int _sceneTransitionId;
+    [SerializeField] private bool _doesPlayCinematicAudio = true;
     [Tooltip("The ID of the cinematic audio to play from the FmodSfxEvents under the universal managers")]
     [SerializeField] private int _cinematicAudioID;
+    
+    [Range(0,1)][SerializeField] private float _cinematicAudioVolume = 1;
     private bool _cinematicPlaying;
 
     private EventInstance _cinematicAudio;
@@ -99,12 +102,18 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void StartCinematicAudio()
     {
+        if (!_doesPlayCinematicAudio)
+        {
+            return;
+        }
+        
         _cinematicAudio = RuntimeSfxManager.Instance.CreateInstanceFromReference
             (FmodSfxEvents.Instance.CinematicArray[_cinematicAudioID]);
 
         if(_cinematicAudio.isValid())
         {
             _cinematicAudio.start();
+            _cinematicAudio.setVolume(_cinematicAudioVolume);
         }
     }
 

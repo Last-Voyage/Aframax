@@ -35,6 +35,7 @@ public class GameStateManager : MainGameplayManagerFramework
 
     [SerializeField] private float _loadBufferTime;
     private bool _isGameLoading;
+    internal bool IsGameLoadingCompleted;
 
     /// <summary>
     /// Switches gameplay state 
@@ -82,6 +83,7 @@ public class GameStateManager : MainGameplayManagerFramework
         _isGameLoading = false;
         PauseMenu.Instance.ToggleLightScrim(false);
         PauseMenu.Instance.PauseToggle();
+        IsGameLoadingCompleted = true;
     }
     #endregion
 
