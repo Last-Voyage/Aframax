@@ -46,14 +46,7 @@ public class SceneTransitionBehaviour : MonoBehaviour
     /// </summary>
     public bool CheckIfTransitionIsActive()
     {
-        if (_transitionImage.enabled)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return _sceneTransitionAnimator.enabled;
     }
  
 

@@ -68,7 +68,7 @@ public class PauseMenu : MonoBehaviour
     private void PauseAnimCheck()
     {
         // Disables scene transition if it's active
-        if ((SceneTransitionBehaviour.Instance.CheckIfTransitionIsActive() == true) && !GameStateManager.Instance.IsGameLoading())
+        if (SceneTransitionBehaviour.Instance.CheckIfTransitionIsActive() && !GameStateManager.Instance.IsGameLoading())
         {
             SceneTransitionBehaviour.Instance.DisableTransition();
         }
