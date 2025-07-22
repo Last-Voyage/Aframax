@@ -484,6 +484,14 @@ MonoBehaviour:
   _timeToReturnToMaxSpeed: 0.3
   _delayToReturnToMaxSpeed: 0.1
   StoredSensitivity: {x: 0, y: 0}
+  _horizontalAccelTimeMK: 1
+  _horizontalAccelTimeController: 0.5
+  _verticalAccelTimeMK: 1
+  _verticalAccelTimeController: 0.6
+  _horizontalDeccelTimeMK: 0
+  _horizontalDeccelTimeController: 0
+  _verticalDeccelTimeMK: 0
+  _verticalDeccelTimeController: 0
 --- !u!114 &7573169614060137600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,13 +642,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131231787490673698}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.2785164, y: -0.03346165, z: -0.009709966, w: 0.9597993}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8080776813772587216}
-  m_LocalEulerAnglesHint: {x: -89.42, y: 92.26, z: 0}
+  m_LocalEulerAnglesHint: {x: -32.364, y: 0, z: 0}
 --- !u!20 &3262127005595780260
 Camera:
   m_ObjectHideFlags: 0
@@ -874,7 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RecenterTarget: 0
   m_VerticalAxis:
-    Value: -32.363552
+    Value: 0
     m_SpeedMode: 0
     m_MaxSpeed: 225
     m_AccelTime: 1
@@ -898,7 +906,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: -3.9934082
+    Value: 0
     m_SpeedMode: 0
     m_MaxSpeed: 225
     m_AccelTime: 1
