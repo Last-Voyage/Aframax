@@ -8,12 +8,14 @@
 ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine.Events;
 using FMOD.Studio;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Provides the system by which the saving is set up and
@@ -83,6 +85,8 @@ public class SaveManager : MainUniversalManagerFramework
 
         // This sets the initial scene to 1 because it is the game scene (the title scene is 0)
         _gameSaveData.SetCurrentSceneIndex(1);
+
+        AchievementStartingValues();
     }
 
     /// <summary>
@@ -108,11 +112,23 @@ public class SaveManager : MainUniversalManagerFramework
     }
 
     /// <summary>
+    /// Sets the starting values for achievements
+    /// </summary>
+    private void AchievementStartingValues()
+    {
+        GetGameSaveData().FoundNotes = new HashSet<string>();
+        GetGameSaveData().MonstersKilled = 0;
+        GetGameSaveData().StatuesShot = new HashSet<int>();
+        GetGameSaveData().HasUsedResource = false;
+    }
+
+    /// <summary>
     /// Writes all variables in the Game Save Data class into Json
     /// </summary>
     public void SaveText()
     {
         //Converts the Game Save Data class into a string
+        SteamAchievements.Instance.SaveAchievementData();
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
         //Saves the string into the text file
         File.WriteAllText(_saveDataFilePath + "Data.json", convertedJson);
@@ -132,6 +148,11 @@ public class SaveManager : MainUniversalManagerFramework
             _gameSaveData = JsonConvert.DeserializeObject<GameSaveData>(json);
 
             LoadInitialVolumes();
+
+            if (!SteamAchievements.Instance.IsUnityNull())
+            {
+                SteamAchievements.Instance.LoadAchievementData();
+            }
 
             if(_gameSaveData.CurrentStoryBeat > 0)
             {
@@ -170,6 +191,9 @@ public class SaveManager : MainUniversalManagerFramework
         //Sets the initial values
         StartingValues();
 
+        //Do it for achievements too
+        SteamAchievements.Instance.ResetAcheivementData();
+
         //Saves the changes into the text file
         SaveText();
     }
@@ -181,6 +205,9 @@ public class SaveManager : MainUniversalManagerFramework
     public void ResetGameplaySaveData()
     {
         GameplayStartingValues();
+
+        //Do it for achievements too
+        SteamAchievements.Instance.ResetAcheivementData();
 
         //Saves the changes into the text file
         SaveText();

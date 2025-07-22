@@ -82,7 +82,7 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
         {
             _enterFadeOutAnimator.SetTrigger("GameStarted");
 
-            _buttonSFXManagerReference.PlayClickSFX();
+            _buttonSFXManagerReference.AlwaysPlayClickSFX();
 
             PrimeTween.Tween.Delay(this, _splashEffectDelay, PlayMainMenuSplash);
 

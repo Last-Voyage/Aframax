@@ -1114,7 +1114,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 423880371}
         m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
+        m_MethodName: AlwaysPlayClickSFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1175,6 +1175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!114 &423880372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1326,7 +1327,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 446559034}
         m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
+        m_MethodName: AlwaysPlayClickSFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1415,6 +1416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!114 &446559035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2027,6 +2029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!1 &689632244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,9 +2986,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 897474139}
-        m_TargetAssemblyTypeName: PreviousSelectedUi, Assembly-CSharp
-        m_MethodName: SelectThis
+      - m_Target: {fileID: 897474138}
+        m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+        m_MethodName: AlwaysPlayClickSFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3046,6 +3049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!114 &897474139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4482,7 +4486,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1299406568}
         m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
+        m_MethodName: AlwaysPlayClickSFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4555,6 +4559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!1 &1322408111
 GameObject:
   m_ObjectHideFlags: 0
@@ -5041,7 +5046,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1415852580}
         m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
-        m_MethodName: PlayClickSFX
+        m_MethodName: AlwaysPlayClickSFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5115,6 +5120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!1 &1529603423
 GameObject:
   m_ObjectHideFlags: 0
@@ -6206,6 +6212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!114 &1811269712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6505,6 +6512,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  _startTime: 0
 --- !u!1 &1972183681
 GameObject:
   m_ObjectHideFlags: 0
@@ -6780,6 +6788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clickSFXIndex: 0
+  _startTime: 0
 --- !u!114 &1997482818
 MonoBehaviour:
   m_ObjectHideFlags: 0

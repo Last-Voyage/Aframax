@@ -49,6 +49,10 @@ public class GameplaySettings : MonoBehaviour
 
             _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
         }
+
+        //remembers previously set values 
+        _invertX.isOn = SaveManager.Instance.GetGameSaveData().IsCameraXAxisInverted;
+        _invertY.isOn = SaveManager.Instance.GetGameSaveData().IsCameraYAxisInverted;
     }
     /// <summary>
     /// happens when the game object is enabled
@@ -61,12 +65,8 @@ public class GameplaySettings : MonoBehaviour
 
         //save data when the values are changed
         SensitivitySlider.onValueChanged.AddListener(delegate { SetCameraSensitivity(); });
-        _invertX.onValueChanged.AddListener(delegate { ToggleCameraXInvert(); });
-        _invertY.onValueChanged.AddListener(delegate { ToggleCameraYInvert(); });
 
         SensitivitySlider.value = SaveManager.Instance.GetGameSaveData().CameraSensitivty;
-        _invertX.isOn = SaveManager.Instance.GetGameSaveData().IsCameraXAxisInverted;
-        _invertY.isOn = SaveManager.Instance.GetGameSaveData().IsCameraYAxisInverted;
     }
 
     /// <summary>
@@ -86,14 +86,12 @@ public class GameplaySettings : MonoBehaviour
         }
         //remove listeners
         SensitivitySlider.onValueChanged.RemoveAllListeners();
-        _invertX.onValueChanged.RemoveAllListeners();
-        _invertY.onValueChanged.RemoveAllListeners();
     }
 
     /// <summary>
     /// updates the setting for the camera X invert when the button is pressed
     /// </summary>
-    private void ToggleCameraXInvert()
+    public void ToggleCameraXInvert()
     {
         SaveManager.Instance.GetGameSaveData().IsCameraXAxisInverted = _invertX.isOn;
     }
@@ -101,7 +99,7 @@ public class GameplaySettings : MonoBehaviour
     /// <summary>
     /// updates the setting for the camera Y invert when the button is pressed
     /// </summary>
-    private void ToggleCameraYInvert()
+    public void ToggleCameraYInvert()
     {
         SaveManager.Instance.GetGameSaveData().IsCameraYAxisInverted = _invertY.isOn;
     }

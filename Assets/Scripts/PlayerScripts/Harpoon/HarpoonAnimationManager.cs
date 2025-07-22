@@ -118,6 +118,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     {
         _animator.SetTrigger(Animator.StringToHash(_FIRE_ANIM));
         _animator.SetBool(Animator.StringToHash(_FOCUS_ANIM), false);
+        // Just to ensure this trigger isn't still active for any reason
+        _animator.ResetTrigger(Animator.StringToHash(_RESTOCK_COMPLETE_ANIM));
 
         //Check to see if we are out of ammo
         //If we are, start the empty ammo animation
@@ -145,7 +147,8 @@ public class HarpoonAnimationManager : MonoBehaviour
     /// <param name="ammoRestocked"> The amount of ammo that was restocked </param>
     private void RestockFromEmptyAnimation(int ammoRestocked)
     {
-        if (ammoRestocked == HarpoonGun.Instance.GetReserveAmmo())
+        // Check if we were previously at 0 ammo
+        if(HarpoonGun.Instance.GetReserveAmmo() - ammoRestocked == 0)
         {
             _animator.SetTrigger(Animator.StringToHash(_RESTOCK_COMPLETE_ANIM));
         }
