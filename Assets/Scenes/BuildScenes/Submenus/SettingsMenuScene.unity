@@ -210,7 +210,6 @@ GameObject:
   - component: {fileID: 57412327}
   - component: {fileID: 57412326}
   - component: {fileID: 57412325}
-  - component: {fileID: 57412329}
   m_Layer: 5
   m_Name: GameplaySettingsCanvas
   m_TagString: Untagged
@@ -301,22 +300,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &57412329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 57412324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2dd33b5c0a089c40be296e74a861363, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SensitivitySlider: {fileID: 488020074}
-  _invertX: {fileID: 1087139967}
-  _invertY: {fileID: 1005305375}
-  _controllerToggleButton: {fileID: 966951707}
 --- !u!1 &58237023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,6 +1863,8 @@ GameObject:
   m_Component:
   - component: {fileID: 488020072}
   - component: {fileID: 488020074}
+  - component: {fileID: 488020075}
+  - component: {fileID: 488020076}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -1960,6 +1945,64 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &488020075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488020071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
+--- !u!114 &488020076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488020071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 14
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 488020075}
+          m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+          m_MethodName: PlayClickSFX
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 488020075}
+          m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+          m_MethodName: PlayClickSFX
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &509283122
 GameObject:
   m_ObjectHideFlags: 0
@@ -4157,7 +4200,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 57412329}
+      - m_Target: {fileID: 1208313481}
         m_TargetAssemblyTypeName: GameplaySettings, Assembly-CSharp
         m_MethodName: ToggleControllerSetting
         m_Mode: 1
@@ -4403,7 +4446,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+      - m_Target: {fileID: 1208313481}
+        m_TargetAssemblyTypeName: GameplaySettings, Assembly-CSharp
+        m_MethodName: ToggleCameraYInvert
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_IsOn: 0
 --- !u!114 &1005305376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4923,7 +4978,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+      - m_Target: {fileID: 1208313481}
+        m_TargetAssemblyTypeName: GameplaySettings, Assembly-CSharp
+        m_MethodName: ToggleCameraXInvert
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_IsOn: 0
 --- !u!114 &1087139968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5863,6 +5930,7 @@ GameObject:
   - component: {fileID: 1208313477}
   - component: {fileID: 1208313479}
   - component: {fileID: 1208313480}
+  - component: {fileID: 1208313481}
   m_Layer: 0
   m_Name: SettingsManager
   m_TagString: Untagged
@@ -5937,6 +6005,22 @@ MonoBehaviour:
   _goreToggleButton: {fileID: 1134155761}
   _fullScreenButton: {fileID: 1324647715}
   _resolutionDropdown: {fileID: 920241803}
+--- !u!114 &1208313481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208313476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2dd33b5c0a089c40be296e74a861363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SensitivitySlider: {fileID: 488020074}
+  _invertX: {fileID: 1087139967}
+  _invertY: {fileID: 1005305375}
+  _controllerToggleButton: {fileID: 966951707}
 --- !u!1 &1217423855
 GameObject:
   m_ObjectHideFlags: 0
@@ -6761,6 +6845,7 @@ GameObject:
   - component: {fileID: 1409769306}
   - component: {fileID: 1409769307}
   - component: {fileID: 1409769308}
+  - component: {fileID: 1409769309}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -6870,6 +6955,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1409769309}
+          m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+          m_MethodName: PlayClickSFX
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 4
     callback:
       m_PersistentCalls:
@@ -6886,6 +6983,31 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1409769309}
+          m_TargetAssemblyTypeName: ButtonSFXManager, Assembly-CSharp
+          m_MethodName: PlayClickSFX
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1409769309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409769305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c49f7ad8e942ae47811aa26e32a8444, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSFXIndex: 0
 --- !u!1 &1436488817
 GameObject:
   m_ObjectHideFlags: 0
