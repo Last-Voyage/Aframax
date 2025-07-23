@@ -628,17 +628,17 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (device == Gamepad.current)
         {
-            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeMK;
-            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeMK;
+            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeController;
+            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeController;
 
             //_cinemachineHorizontalAxis.m_DecelTime = _horizontalDeccelTimeMK;
             //_cinemachineVerticalAxis.m_DecelTime = _verticalDeccelTimeMK;
         }
         else if (device == Mouse.current || device == Keyboard.current)
         {
-            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeController;
-            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeController;
-
+            _cinemachinePOV.m_HorizontalAxis.m_AccelTime = _horizontalAccelTimeMK;
+            _cinemachinePOV.m_VerticalAxis.m_AccelTime = _verticalAccelTimeMK;
+            
             //_cinemachineHorizontalAxis.m_DecelTime = _horizontalDeccelTimeController;
             //_cinemachineVerticalAxis.m_DecelTime = _verticalDeccelTimeController;
         }

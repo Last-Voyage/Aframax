@@ -33,6 +33,11 @@ public class ControlsManager : MainUniversalManagerFramework
             Debug.Log(InputUser.all.Count);
             ControlSwap(InputUser.all[0], InputUserChange.Added, Gamepad.current);
         }
+        else
+        {
+            Debug.Log("Whos asking??");
+            ControlSwap(InputUser.all[0], InputUserChange.Added, Keyboard.current);
+        }
     }
 
     /// <summary>
@@ -43,17 +48,18 @@ public class ControlsManager : MainUniversalManagerFramework
     /// <param name="device">The device that was changed to</param>
     private void ControlSwap(InputUser user, InputUserChange userChange, InputDevice device)
     {
-        Debug.Log(device);
+        //Debug.Log(device);
         
         // Guard statement preventing:
         // If the last device it swapped to is the current device
         // If the device doesn't exist
         // If the end of the frame hasn't passed from the last control swap
-        if (device == null || _currentDevice == device || !_canUseControlSwap)
+        if (device == null || _currentDevice == device || !_canUseControlSwap ||
+            userChange == InputUserChange.DeviceUnpaired)
         {
             return;
         }
-        Debug.LogWarning("HHHHH");
+        Debug.Log(device + " " + userChange);
         
         _onChangeControls?.Invoke(device);
         _currentDevice = device;

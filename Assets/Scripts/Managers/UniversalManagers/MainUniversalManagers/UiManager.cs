@@ -123,15 +123,16 @@ public class UiManager : MainUniversalManagerFramework
     {
         if (device == Gamepad.current)
         {
-            _isUsingController = false;
+            _isUsingController = true;
         }
         else if (device == Mouse.current || device == Keyboard.current)
         {
-            _isUsingController = true;
+            _isUsingController = false;
         }
         
         SaveManager.Instance.GetGameSaveData().IsUsingController = _isUsingController;
         ToggleMouse();
+        Debug.Log("crayon eating " + _isUsingController);
         _onSwapInput?.Invoke();
     }
 
@@ -160,12 +161,6 @@ public class UiManager : MainUniversalManagerFramework
     {
         base.SubscribeToEvents();
         ControlsManager.Instance.GetOnChangeControls.AddListener(SwapInput);
-    }
-
-
-    private void OnEnable()
-    {
-        //ControlsManager.Instance.GetOnChangeControls.AddListener(SwapInput);
     }
 
     /// <summary>

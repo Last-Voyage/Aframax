@@ -137,6 +137,7 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
     /// </summary>
     public void OnUiSwap()
     {
+        Debug.Log("GRravyds " + UiManager.IsUsingController);
         _startGameText.text = UiManager.IsUsingController ? _controllerStartGameMessage: _keyboardStartGameMessage;
     }
 
@@ -147,6 +148,8 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
     {
         _playerInputControls.Enable(); 
         OnUiSwap();
+        
+        UiManager.Instance.GetOnSwapInput?.AddListener(OnUiSwap);
         
         if (!DualShockGamepad.current.IsUnityNull())
         {
@@ -160,5 +163,7 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
     private void OnDisable()
     {
         _playerInputControls.Disable();
+        
+        UiManager.Instance.GetOnSwapInput?.RemoveListener(OnUiSwap);
     }
 }
