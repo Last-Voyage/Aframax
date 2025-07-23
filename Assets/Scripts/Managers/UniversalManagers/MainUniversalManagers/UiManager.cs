@@ -132,7 +132,6 @@ public class UiManager : MainUniversalManagerFramework
         
         SaveManager.Instance.GetGameSaveData().IsUsingController = _isUsingController;
         ToggleMouse();
-        Debug.Log("crayon eating " + _isUsingController);
         _onSwapInput?.Invoke();
     }
 
@@ -172,6 +171,7 @@ public class UiManager : MainUniversalManagerFramework
         {
             _playerInput.Player.UIBack.performed -= ActivateBackButton;
         }
+        ControlsManager.Instance.GetOnChangeControls.RemoveListener(SwapInput);
     }
 
     #region BaseManager

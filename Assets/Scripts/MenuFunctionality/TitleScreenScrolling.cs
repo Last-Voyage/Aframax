@@ -137,7 +137,6 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
     /// </summary>
     public void OnUiSwap()
     {
-        Debug.Log("GRravyds " + UiManager.IsUsingController);
         _startGameText.text = UiManager.IsUsingController ? _controllerStartGameMessage: _keyboardStartGameMessage;
     }
 
