@@ -91,9 +91,10 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
         {
             SpawnProjectileVfx();
             StartProjectileImpactSfx();
-            _associatedMovement.ImpaleHarpoon(other);
-            _associatedMovement.IsHit = true;
+            
         }
+        _associatedMovement.ImpaleHarpoon(other);
+        _associatedMovement.IsHit = true;
     }
 
     /// <summary>

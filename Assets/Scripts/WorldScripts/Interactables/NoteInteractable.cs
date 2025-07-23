@@ -146,6 +146,9 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
 
         // Hide the interaction popup
         _interactablePopUp.enabled = false;
+
+        // Communication with Steam achievements
+        SteamAchievements.Instance.NoteFound(this.gameObject);
     }
 
     /// <summary>

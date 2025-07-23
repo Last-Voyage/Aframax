@@ -219,6 +219,7 @@ public class WeakPointHandler : MonoBehaviour
     private void OnInvokeAllWeakPointsDestroyedEvent()
     {
         _onAllWeakPointsDestroyedEvent?.Invoke(this);
+        SteamAchievements.Instance.MonsterKilled();
     }
 
     #endregion
