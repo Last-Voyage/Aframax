@@ -119,7 +119,7 @@ public class UiManager : MainUniversalManagerFramework
     /// This sends out the event to change the current Ui used in game when a controller is used
     /// For the time being the main usage of this is for changing a boolean
     /// </summary>
-    public void SwapInput(InputDevice device)
+    private void SwapInput(InputDevice device)
     {
         if (device == Gamepad.current)
         {
@@ -140,16 +140,29 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     private void ToggleMouse()
     {
-        if (!_shouldMouseAppearUsingController)
+        if (_isUsingController)
         {
-            if (_isUsingController)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
-            }
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else 
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+    private void ToggleMouse(bool isPaused, bool hasAudio)
+    {
+        if (isPaused && !_isUsingController)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (!isPaused && !_isUsingController)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
         }
     }
 
@@ -160,6 +173,7 @@ public class UiManager : MainUniversalManagerFramework
     {
         base.SubscribeToEvents();
         ControlsManager.Instance.GetOnChangeControls.AddListener(SwapInput);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(ToggleMouse);
     }
 
     /// <summary>
@@ -172,6 +186,7 @@ public class UiManager : MainUniversalManagerFramework
             _playerInput.Player.UIBack.performed -= ActivateBackButton;
         }
         ControlsManager.Instance.GetOnChangeControls.RemoveListener(SwapInput);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(ToggleMouse);
     }
 
     #region BaseManager
