@@ -351,20 +351,157 @@ public class ProceduralVine : MonoBehaviour
         var direction = (_playerTransform.position - _followTransform.position).normalized;
         var targetAngle = Vector3.Angle(_followTransform.forward, direction);
 
+        // We can use the dot product to figure out which direction the head is initially facing
+        // 0 = wall, -1 = ceiling, 1 = floor
+        var initialDirection = Mathf.Round(Vector3.Dot(_followTransform.forward, Vector3.up));
+        var savedForward = _followTransform.forward;
+
         _followTransform.forward = direction;
+
+        // So there's a weird kink with the code that I'm blaming Unity for.
+        // For some reason, the following logic is completely inverted when the hallway that the monsters spawn
+        // are facing along opposite axes (the x-axis and z-axis).
+        // To get around this, we can get the local rotation of the main WhackAMoleAttack prefab and decide
+        // if it is x-facing or z-facing and add another check
+        bool isFacingZ = Mathf.Round(transform.parent.parent.parent.parent.parent.localEulerAngles.y) % 180 == 0;
 
         // Attack angle clamping
         // Basically, we "correct" the follow transform's forward vector by shifting it the difference of
         // where it is about to go and where we want it to go.
         if (targetAngle > _MAX_ATTACK_ANGLE)
         {
-            if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
+            if (isFacingZ)
             {
-                _followTransform.RotateAround(_followTransform.position, Vector3.up, -targetAngle + _MAX_ATTACK_ANGLE);
+                // Check to see if the vine is coming from a wall or from a ceiling/floor
+                if (initialDirection == 0) // wall
+                {
+                    // "Correct" about the y-axis depending on which side of the vine the player is on
+                    if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
+                    {
+                        // There's another weird kink with this segment of code in particular
+                        // Whenever the vine initially faces the positive x world direction, it takes the incorrect route
+                        // in the logic here.
+                        if (Vector3.Dot(savedForward, Vector3.right) > 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                    else
+                    {
+                        if (Vector3.Dot(savedForward, Vector3.right) < 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                }
+                else //ceiling/floor
+                {
+                    // This is a bit more complicated. We need to correct with respect to the xz-plane (the ground/ceiling)
+                    // We need to find the culprit. Is it the x-axis, the z-axis, or both?
+                    // Let's break up the current forward into its components
+                    var forwardX = new Vector3(_followTransform.forward.x, 0, 0);
+                    var forwardZ = new Vector3(0, 0, _followTransform.forward.z);
+
+                    var angleX = Vector3.Angle(savedForward, forwardX);
+                    var angleZ = Vector3.Angle(savedForward, forwardZ);
+
+                    // We go down the rabbit hole again
+                    if (angleX > _MAX_ATTACK_ANGLE)
+                    {
+                        // We'll check for specifically ceiling or floor this time
+                        // Correct with respect to x-axis
+                        if (initialDirection < 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.right, _MAX_ATTACK_ANGLE - angleX);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.right, angleX - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                    if (angleZ > _MAX_ATTACK_ANGLE)
+                    {
+                        // Correct with respect to z-axis
+                        if (initialDirection < 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.forward, _MAX_ATTACK_ANGLE - angleZ);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.forward, angleZ - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                }
             }
             else
             {
-                _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                // This is for x-facing monster segments
+                // We are going to do the exact same logic as above, but we are going to invert all of the ending logic
+                // Check to see if the vine is coming from a wall or from a ceiling/floor
+                if (initialDirection == 0)
+                {
+                    if (_followTransform.localEulerAngles.y < _ATTACK_DIRECTION_CHECK)
+                    {
+                        if (Vector3.Dot(savedForward, Vector3.right) < 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                    else
+                    {
+                        if (Vector3.Dot(savedForward, Vector3.right) > 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, _MAX_ATTACK_ANGLE - targetAngle);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.up, targetAngle - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                }
+                else
+                {
+                    var forwardX = new Vector3(_followTransform.forward.x, 0, 0);
+                    var forwardZ = new Vector3(0, 0, _followTransform.forward.z);
+
+                    var angleX = Vector3.Angle(savedForward, forwardX);
+                    var angleZ = Vector3.Angle(savedForward, forwardZ);
+
+                    if (angleX > _MAX_ATTACK_ANGLE)
+                    {
+                        if (initialDirection > 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.right, _MAX_ATTACK_ANGLE - angleX);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.right, angleX - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                    if (angleZ > _MAX_ATTACK_ANGLE)
+                    {
+                        if (initialDirection > 0)
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.forward, _MAX_ATTACK_ANGLE - angleZ);
+                        }
+                        else
+                        {
+                            _followTransform.RotateAround(_followTransform.position, Vector3.forward, angleZ - _MAX_ATTACK_ANGLE);
+                        }
+                    }
+                }
             }
         }
 
