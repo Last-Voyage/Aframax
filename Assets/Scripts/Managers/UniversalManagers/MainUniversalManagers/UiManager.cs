@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Contains the functionality to set up and get access to Ui changes
@@ -165,6 +166,20 @@ public class UiManager : MainUniversalManagerFramework
             Cursor.visible = false;
         }
     }
+    
+    /// <summary>
+    /// If the newly loaded scene is the main menu, it will toggle the mouse
+    /// </summary>
+    /// <param name="newScene"></param>
+    /// <param name="loadSceneMode"></param>
+    private void MainSceneCheck(Scene newScene, LoadSceneMode loadSceneMode)
+    {
+        if (newScene != SceneManager.GetSceneAt(0))
+        {
+            return;
+        }
+        ToggleMouse();
+    }
 
     /// <summary>
     /// Swapping input will auto change UI displayed controls
@@ -174,6 +189,7 @@ public class UiManager : MainUniversalManagerFramework
         base.SubscribeToEvents();
         ControlsManager.Instance.GetOnChangeControls.AddListener(SwapInput);
         TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(ToggleMouse);
+        SceneManager.sceneLoaded += MainSceneCheck;
     }
 
     /// <summary>
@@ -187,6 +203,7 @@ public class UiManager : MainUniversalManagerFramework
         }
         ControlsManager.Instance.GetOnChangeControls.RemoveListener(SwapInput);
         TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(ToggleMouse);
+        SceneManager.sceneLoaded -= MainSceneCheck;
     }
 
     #region BaseManager
