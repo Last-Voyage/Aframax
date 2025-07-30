@@ -55,6 +55,9 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _appearSpeed = 5f; // Speed of movement
     [SerializeField] private float _appearDistance = 0;
     [SerializeField] private bool _isAppeared = false;
+    [SerializeField] private float _hitboxDelay;
+    [SerializeField] private BoxCollider _hitbox;
+    private WaitForSeconds _hitboxWait;
 
     [Header("WAttack Stuff")]
     [SerializeField] private PathCreator _whackAMoleAttackPath; // The target to move toward
@@ -99,6 +102,13 @@ public class ProceduralVine : MonoBehaviour
         {
             _animator = GetComponent<Animator>();
         }
+
+        if (_hitboxWait.IsUnityNull())
+        {
+            _hitboxWait = new WaitForSeconds(_hitboxDelay);
+        }
+
+        StartCoroutine(HitboxSpawnDelay());
     }
 
     /// <summary>
@@ -178,6 +188,16 @@ public class ProceduralVine : MonoBehaviour
             }*/
         }
         
+    }
+
+    /// <summary>
+    /// Creates a delay for the hitbox to deal damage
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HitboxSpawnDelay()
+    {
+        yield return new WaitForSeconds(_hitboxDelay);
+        _hitbox.enabled = true;
     }
 
     /// <summary>
