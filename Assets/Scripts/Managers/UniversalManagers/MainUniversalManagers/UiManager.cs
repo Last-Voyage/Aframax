@@ -6,12 +6,15 @@
 // Description:     Contains the functionality to set up and get access to Ui changes
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Contains the functionality to set up and get access to Ui changes
@@ -58,7 +61,7 @@ public class UiManager : MainUniversalManagerFramework
         if (IsBackButtonStackEmpty())
         {
             _playerInput.Player.UIBack.Enable();
-            _playerInput.Player.UIBack.performed += ctx => ActivateBackButton();
+            _playerInput.Player.UIBack.performed += ActivateBackButton;
         }
         _backButtons.Push(button);
     }
@@ -66,7 +69,7 @@ public class UiManager : MainUniversalManagerFramework
     /// <summary>
     /// This will activate the back button, and remove the listener if there are none left
     /// </summary>
-    public void ActivateBackButton()
+    public void ActivateBackButton(InputAction.CallbackContext ctx)
     {
         if (_backButtons.TryPop(out Button button))
         {
@@ -75,7 +78,7 @@ public class UiManager : MainUniversalManagerFramework
 
         if (IsBackButtonStackEmpty())
         {
-            _playerInput.Player.UIBack.performed -= ctx => ActivateBackButton();
+            _playerInput.Player.UIBack.performed -= ActivateBackButton;
         }
     }
 
@@ -117,30 +120,81 @@ public class UiManager : MainUniversalManagerFramework
     /// This sends out the event to change the current Ui used in game when a controller is used
     /// For the time being the main usage of this is for changing a boolean
     /// </summary>
-    public void SwapInput()
+    private void SwapInput(InputDevice device)
     {
-        _isUsingController = !_isUsingController;
+        if (device == Gamepad.current)
+        {
+            _isUsingController = true;
+        }
+        else if (device == Mouse.current || device == Keyboard.current)
+        {
+            _isUsingController = false;
+        }
+        
         SaveManager.Instance.GetGameSaveData().IsUsingController = _isUsingController;
         ToggleMouse();
         _onSwapInput?.Invoke();
     }
 
     /// <summary>
-    /// Toggles whether or not the mouse should be available based on when a controller is used
+    /// Toggles mouse availability based on when a controller is used
     /// </summary>
     private void ToggleMouse()
     {
-        if (!_shouldMouseAppearUsingController)
+        if (_isUsingController)
         {
-            if (_isUsingController)
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
-            }
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
+        else 
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+    /// <summary>
+    /// This only toggles the mouse if the player is playing the game and the game is paused
+    /// </summary>
+    /// <param name="isPaused">Checks if the game is paused</param>
+    /// <param name="hasAudio">Useless</param>
+    private void ToggleMouse(bool isPaused, bool hasAudio)
+    {
+        if (isPaused && !_isUsingController)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (!isPaused && !_isUsingController)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = false;
+        }
+    }
+    
+    /// <summary>
+    /// If the newly loaded scene is the main menu, it will toggle the mouse
+    /// </summary>
+    /// <param name="newScene"></param>
+    /// <param name="loadSceneMode"></param>
+    private void MainSceneCheck(Scene newScene, LoadSceneMode loadSceneMode)
+    {
+        if (newScene != SceneManager.GetSceneAt(0))
+        {
+            return;
+        }
+        ToggleMouse();
+    }
+
+    /// <summary>
+    /// Swapping input will auto change UI displayed controls
+    /// </summary>
+    protected override void SubscribeToEvents()
+    {
+        base.SubscribeToEvents();
+        ControlsManager.Instance.GetOnChangeControls.AddListener(SwapInput);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().AddListener(ToggleMouse);
+        SceneManager.sceneLoaded += MainSceneCheck;
     }
 
     /// <summary>
@@ -150,8 +204,11 @@ public class UiManager : MainUniversalManagerFramework
     {
         if (!_playerInput.Player.IsUnityNull() && !IsBackButtonStackEmpty())
         {
-            _playerInput.Player.UIBack.performed -= ctx => ActivateBackButton();
+            _playerInput.Player.UIBack.performed -= ActivateBackButton;
         }
+        ControlsManager.Instance.GetOnChangeControls.RemoveListener(SwapInput);
+        TimeManager.Instance.GetOnGamePauseToggleEvent().RemoveListener(ToggleMouse);
+        SceneManager.sceneLoaded -= MainSceneCheck;
     }
 
     #region BaseManager

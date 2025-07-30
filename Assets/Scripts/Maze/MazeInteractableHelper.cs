@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MazeInteractableHelper : MonoBehaviour
@@ -52,7 +53,8 @@ public class MazeInteractableHelper : MonoBehaviour
     /// </summary>
     public void CheckForNoKilledMonsters()
     {
-        SteamAchievements.Instance.CheckForNoKilledMonsters();
+        if(!SteamAchievements.Instance.IsUnityNull())
+        {SteamAchievements.Instance.CheckForNoKilledMonsters();}
     }
 
     /// <summary>
@@ -60,6 +62,7 @@ public class MazeInteractableHelper : MonoBehaviour
     /// </summary>
     public void CheckForNoResources()
     {
-        SteamAchievements.Instance.CheckForNoResources();
+        if(SteamManager.Initialized)
+        {SteamAchievements.Instance.CheckForNoResources();}
     }
 }

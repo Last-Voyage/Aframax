@@ -90,6 +90,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
         _playerInputMap.Enable();
         _playerInputMap.Player.UICycling.performed += ctx => ChangePage((int)ctx.ReadValue<float>());
         _playerInputMap.Player.UIBack.performed += ctx => ExitActivePopupViaClick();
+        UiManager.Instance.GetOnSwapInput?.AddListener(OnUiSwap);
 
         // Reset the page counter to the first page and activate the note
         _currentPage = 0;
@@ -195,6 +196,7 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
         // Stop accepting A&D/Controller UI input
         _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
         _playerInputMap.Disable();
+        UiManager.Instance.GetOnSwapInput?.RemoveListener(OnUiSwap);
 
         // Set all the pages to off
         for (int i = 0; i < _pages.Length; i++)
@@ -270,6 +272,8 @@ public class TutorialPopUp : MonoBehaviour, IPlayerInteractable, IUiSwap
     {
         _playerInputMap.Player.UICycling.performed -= ctx => ChangePage((int)ctx.ReadValue<float>());
         _playerInputMap.Player.UIBack.performed -= ctx => ExitActivePopupViaClick();
+        
+        UiManager.Instance.GetOnSwapInput?.RemoveListener(OnUiSwap);
 
         _playerInputMap.Disable();
     }

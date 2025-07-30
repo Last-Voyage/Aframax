@@ -68,12 +68,13 @@ public class SteamAchievements : MonoBehaviour
     /// <summary>
     /// Unlocks an achievement in Steam
     /// </summary>
-    /// <param name="achievement"> The achievement to unlock, in the form of an AchievementContainer </param>
+    /// <param name="ach"> The achievement to unlock, in the form of an AchievementContainer </param>
     private void UnlockAchievement(Achievement ach)
     {
         if (SteamManager.Initialized)
         {
             SteamUserStats.SetAchievement(ach.ToString());
+            SteamUserStats.StoreStats();
         }
     }
 
