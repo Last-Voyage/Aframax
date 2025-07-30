@@ -6,7 +6,9 @@
 // Description:     Contains the functionality to set up and get access to controls changes
 ******************************************************************************/
 
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -23,6 +25,19 @@ public class ControlsManager : MainUniversalManagerFramework
     private bool _canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame;
 
+    private void Start()
+    {
+        if (!Gamepad.current.IsUnityNull())
+        {
+            // We have 0 input users at the start...
+            ControlSwap(InputUser.all[0], InputUserChange.Added, Gamepad.current);
+        }
+        else
+        {
+            ControlSwap(InputUser.all[0], InputUserChange.Added, Keyboard.current);
+        }
+    }
+
     /// <summary>
     /// This sends an event when the player swaps controls
     /// </summary>
@@ -35,7 +50,8 @@ public class ControlsManager : MainUniversalManagerFramework
         // If the last device it swapped to is the current device
         // If the device doesn't exist
         // If the end of the frame hasn't passed from the last control swap
-        if (device == null || _currentDevice == device || !_canUseControlSwap)
+        if (device == null || _currentDevice == device || !_canUseControlSwap ||
+            userChange == InputUserChange.DeviceUnpaired)
         {
             return;
         }

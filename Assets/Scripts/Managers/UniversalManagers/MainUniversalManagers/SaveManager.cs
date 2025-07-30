@@ -128,7 +128,8 @@ public class SaveManager : MainUniversalManagerFramework
     public void SaveText()
     {
         //Converts the Game Save Data class into a string
-        SteamAchievements.Instance.SaveAchievementData();
+        if(!SteamAchievements.Instance.IsUnityNull())
+        {SteamAchievements.Instance.SaveAchievementData();}
         var convertedJson = JsonConvert.SerializeObject(_gameSaveData);
         //Saves the string into the text file
         File.WriteAllText(_saveDataFilePath + "Data.json", convertedJson);
@@ -192,7 +193,8 @@ public class SaveManager : MainUniversalManagerFramework
         StartingValues();
 
         //Do it for achievements too
-        SteamAchievements.Instance.ResetAcheivementData();
+        if(!SteamAchievements.Instance.IsUnityNull())
+        {SteamAchievements.Instance.ResetAcheivementData();}
 
         //Saves the changes into the text file
         SaveText();
@@ -207,7 +209,8 @@ public class SaveManager : MainUniversalManagerFramework
         GameplayStartingValues();
 
         //Do it for achievements too
-        SteamAchievements.Instance.ResetAcheivementData();
+        if(!SteamAchievements.Instance.IsUnityNull())
+        {SteamAchievements.Instance.ResetAcheivementData();}
 
         //Saves the changes into the text file
         SaveText();
