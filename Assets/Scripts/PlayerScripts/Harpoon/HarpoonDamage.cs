@@ -20,7 +20,7 @@ public class HarpoonDamage : BaseDamage
     public override void ApplyDamage(GameObject damageRecipient)
     {
         // Avoids damaging the player
-        if (damageRecipient.TryGetComponent<PlayerHealth>(out PlayerHealth playerHealth) || !damageRecipient.CompareTag("Enemy"))
+        if (damageRecipient.TryGetComponent<PlayerHealth>(out PlayerHealth playerHealth) || !damageRecipient.CompareTag("Weak Spot"))
         {
             return;
         }
