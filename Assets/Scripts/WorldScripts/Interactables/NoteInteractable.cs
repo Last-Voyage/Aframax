@@ -148,7 +148,8 @@ public class NoteInteractable : MonoBehaviour, IPlayerInteractable, IUiSwap
         _interactablePopUp.enabled = false;
 
         // Communication with Steam achievements
-        SteamAchievements.Instance.NoteFound(this.gameObject);
+        if(!SteamAchievements.Instance.IsUnityNull())
+        {SteamAchievements.Instance.NoteFound(this.gameObject);}
     }
 
     /// <summary>

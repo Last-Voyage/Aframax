@@ -55,6 +55,9 @@ public class ProceduralVine : MonoBehaviour
     [SerializeField] private float _appearSpeed = 5f; // Speed of movement
     [SerializeField] private float _appearDistance = 0;
     [SerializeField] private bool _isAppeared = false;
+    [SerializeField] private float _hitboxDelay;
+    [SerializeField] private BoxCollider _hitbox;
+    private WaitForSeconds _hitboxWait;
 
     [Header("WAttack Stuff")]
     [SerializeField] private PathCreator _whackAMoleAttackPath; // The target to move toward
@@ -99,6 +102,13 @@ public class ProceduralVine : MonoBehaviour
         {
             _animator = GetComponent<Animator>();
         }
+
+        if (_hitboxWait.IsUnityNull())
+        {
+            _hitboxWait = new WaitForSeconds(_hitboxDelay);
+        }
+
+        StartCoroutine(HitboxSpawnDelay());
     }
 
     /// <summary>
@@ -178,6 +188,16 @@ public class ProceduralVine : MonoBehaviour
             }*/
         }
         
+    }
+
+    /// <summary>
+    /// Creates a delay for the hitbox to deal damage
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator HitboxSpawnDelay()
+    {
+        yield return new WaitForSeconds(_hitboxDelay);
+        _hitbox.enabled = true;
     }
 
     /// <summary>
@@ -345,7 +365,7 @@ public class ProceduralVine : MonoBehaviour
         _followTransform.position = _flowerHeadTransform.position;
         _currentState = EVineState.whackAMoleAttacking;
 
-        var originalPosition = _flowerHeadTransform.position;
+        var returnPosition = _flowerHeadTransform.position + _followTransform.forward;
 
         //redo direction from new position
         var direction = (_playerTransform.position - _followTransform.position).normalized;
@@ -518,7 +538,8 @@ public class ProceduralVine : MonoBehaviour
         StartCoroutine(LerpChainIKWeight(_chainIK.weight, .25f, .25f));
 
         // Move the head back to the original position to make it look cleaner
-        _followTransform.DOMove(originalPosition, _lungeToPlayerDuration * .75f, false).SetEase(Ease.OutCubic);
+        _followTransform.forward = savedForward;
+        _followTransform.DOMove(returnPosition, _lungeToPlayerDuration * .75f, false).SetEase(Ease.OutCubic);
 
         //trigger retract and then destroy
         DisappearWhackAMole();
@@ -529,8 +550,13 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     public void DisappearWhackAMole()
     {
-        StopCoroutine(_whackAMoleSnapAttack);
-        _animator.SetTrigger(DISAPPEAR_ANIMATION_TRIGGER);
+        if (_currentState != EVineState.retracting)
+        {
+            _currentState = EVineState.retracting;
+            StopCoroutine(_whackAMoleSnapAttack);
+            _animator.SetTrigger(DISAPPEAR_ANIMATION_TRIGGER);
+        }
+        
         Destroy(transform.parent.gameObject, 1.167f);
     }
 
