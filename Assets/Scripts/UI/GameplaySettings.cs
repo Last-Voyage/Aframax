@@ -1,7 +1,7 @@
 /*****************************************************************************
 // File Name :         GameplaySettings.cs
 // Author :            Nabil Tagba
-// Contributor :       Ryan Swanson
+// Contributor :       Ryan Swanson, Jeremiah Peters, Nick Rice
 // Creation Date :     2/27/2025
 //
 // Brief Description : take care of all game play setting functionalities.
@@ -23,11 +23,8 @@ public class GameplaySettings : MonoBehaviour
     public Slider SensitivitySlider;
     [SerializeField] private Toggle _invertX;
     [SerializeField] private Toggle _invertY;
-    
-    [SerializeField] private Toggle _controllerToggleButton;
 
     private bool _isPreventingUIChange = false;
-    private WaitForEndOfFrame _waitToAllowUIChange = new WaitForEndOfFrame();
 
     public static GameplaySettings Instance;
 
@@ -39,15 +36,6 @@ public class GameplaySettings : MonoBehaviour
         if (Instance.IsUnityNull())
         {
             Instance = this;
-        }
-        
-        if (_controllerToggleButton.isOn != UiManager.IsUsingController)
-        {
-            _isPreventingUIChange = true;
-
-            StartCoroutine(PreventUISwap());
-
-            _controllerToggleButton.isOn = !_controllerToggleButton.isOn;
         }
 
         //remembers previously set values 
@@ -110,27 +98,5 @@ public class GameplaySettings : MonoBehaviour
     private void SetCameraSensitivity()
     {
         SaveManager.Instance.GetGameSaveData().CameraSensitivty = SensitivitySlider.value;
-    }
-
-    /// <summary>
-    /// Updates the UI in the game to reflect controller or keyboard inputs
-    /// </summary>
-    public void ToggleControllerSetting()
-    {
-        if (!_isPreventingUIChange)
-        {
-            UiManager.Instance.SwapInput();
-        }
-    }
-
-    /// <summary>
-    /// This is meant to prevent the UI from swapping because Unity's system means that this will be called
-    /// on a value change
-    /// </summary>
-    /// <returns>A singular frame</returns>
-    private IEnumerator PreventUISwap()
-    {
-        yield return _waitToAllowUIChange;
-        _isPreventingUIChange = false;
     }
 }

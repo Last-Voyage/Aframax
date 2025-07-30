@@ -14,6 +14,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.DualShock;
+using UnityEngine.UI;
 
 /// <summary>
 /// functionality for moving the camera on the title screen
@@ -52,6 +53,8 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
     [SerializeField] private ButtonSFXManager _buttonSFXManagerReference;
 
     [SerializeField] private Color _titleScreenLightbarColor = Color.blue;
+
+    [SerializeField] private GameObject _firstSelectedUI;
 
     private Vector3 velocity = Vector3.zero;
 
@@ -112,7 +115,7 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
                 //double checking to make sure the loop stops properly, accounting for floating point shenanigans
                 if (_screenScrollProgress >= 0.99f)
                 {
-                    _setUpPlayerControls.gameObject.SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(_firstSelectedUI);
                     yield break;
                 }
 
@@ -145,6 +148,8 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
         _playerInputControls.Enable(); 
         OnUiSwap();
         
+        UiManager.Instance.GetOnSwapInput?.AddListener(OnUiSwap);
+        
         if (!DualShockGamepad.current.IsUnityNull())
         {
             DualShockGamepad.current.SetLightBarColor(_titleScreenLightbarColor);
@@ -157,5 +162,7 @@ public class TitleScreenScrolling : MonoBehaviour, IUiSwap
     private void OnDisable()
     {
         _playerInputControls.Disable();
+        
+        UiManager.Instance.GetOnSwapInput?.RemoveListener(OnUiSwap);
     }
 }
