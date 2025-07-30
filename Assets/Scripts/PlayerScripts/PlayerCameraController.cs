@@ -60,12 +60,12 @@ public class PlayerCameraController : MonoBehaviour
     private Animator _harpoonAnimator;
 
     [Space]
-    [SerializeField, Range(0f, 10f)] private float _horizontalMovementSwaySpeed = 5f; 
-    [SerializeField, Range(0f, 10f)] private float _horizontalMovementSwayIntensity = 5f;
+    [SerializeField, Range(0f, 20f)] private float _horizontalMovementSwaySpeed = 5f; 
+    [SerializeField, Range(0f, 20f)] private float _horizontalMovementSwayIntensity = 5f;
     [SerializeField] private AnimationCurve _horizontalMovementSwayCurve;
     
     [Space]
-    [SerializeField, Range(0f, 10f)] private float _verticalMovementSwaySpeed = 5f;
+    [SerializeField, Range(0f, 20f)] private float _verticalMovementSwaySpeed = 5f;
     [SerializeField] private AnimationCurve _verticalMovementSwayCurve;
     
     private const string _IDLE_ANIMATION = "harpoonIdle";
