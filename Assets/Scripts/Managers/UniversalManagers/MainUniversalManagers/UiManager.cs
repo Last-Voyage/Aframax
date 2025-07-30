@@ -153,6 +153,11 @@ public class UiManager : MainUniversalManagerFramework
         }
     }
 
+    /// <summary>
+    /// This only toggles the mouse if the player is playing the game and the game is paused
+    /// </summary>
+    /// <param name="isPaused">Checks if the game is paused</param>
+    /// <param name="hasAudio">Useless</param>
     private void ToggleMouse(bool isPaused, bool hasAudio)
     {
         if (isPaused && !_isUsingController)
