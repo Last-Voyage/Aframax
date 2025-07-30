@@ -550,8 +550,13 @@ public class ProceduralVine : MonoBehaviour
     /// </summary>
     public void DisappearWhackAMole()
     {
-        StopCoroutine(_whackAMoleSnapAttack);
-        _animator.SetTrigger(DISAPPEAR_ANIMATION_TRIGGER);
+        if (_currentState != EVineState.retracting)
+        {
+            _currentState = EVineState.retracting;
+            StopCoroutine(_whackAMoleSnapAttack);
+            _animator.SetTrigger(DISAPPEAR_ANIMATION_TRIGGER);
+        }
+        
         Destroy(transform.parent.gameObject, 1.167f);
     }
 
