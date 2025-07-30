@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 /// <summary>
 /// functionality for pausing the game and the pause menu buttons
@@ -95,18 +96,18 @@ public class PauseMenu : MonoBehaviour
             return;
         }
 
-        if (TutorialPopUp.ActiveTutorial != null)
+        if (!TutorialPopUp.ActiveTutorial.IsUnityNull())
         {
             TutorialPopUp.ExitActivePopUp();
         }
 
         // Exit the note instead of pausing
-        if (NoteInteractable.ActiveNote != null)
+        if (!NoteInteractable.ActiveNote.IsUnityNull())
         {
             NoteInteractable.ExitActiveNote();
         }
 
-        if (PlaceholderTutorialBehaviour.ActivePlaceholderTutorial != null)
+        if (!PlaceholderTutorialBehaviour.ActivePlaceholderTutorial.IsUnityNull())
         {
             PlaceholderTutorialBehaviour.ExitActiveTutorial();
         }
