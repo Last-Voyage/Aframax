@@ -58,7 +58,8 @@ public class CreditsScrolling : MonoBehaviour
         }
 
         // Once credits are over, loads the main menu
-        SteamAchievements.Instance.CompleteCredits();
+        if(SteamManager.Initialized)
+        {SteamAchievements.Instance.CompleteCredits();}
         AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
     }
 
