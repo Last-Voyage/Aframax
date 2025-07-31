@@ -31,6 +31,7 @@ public class AudioManager : MainUniversalManagerFramework
         base.SetUpInstance();
         Instance = this;
     }
+    
 
     /// <summary>
     /// Creates an Fmod instance after being given an Fmod reference
@@ -110,5 +111,14 @@ public class AudioManager : MainUniversalManagerFramework
             eventInstance.setVolume(currentVol);
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Stops all audio that is actively playing
+    /// </summary>
+    public void StopAllAudio()
+    {
+        FMODUnity.RuntimeManager.StudioSystem.getBus("bus:/In-Game", out FMOD.Studio.Bus masterBus);
+        masterBus.stopAllEvents(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 }
