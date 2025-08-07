@@ -721,18 +721,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 638982378}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &609900955 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6508502495816008927, guid: f05c39bdca33cdf4f92f39cb8fd42ad7,
-    type: 3}
-  m_PrefabInstance: {fileID: 638982378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &638982378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1532,6 +1520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1454031729}
   - component: {fileID: 1454031728}
+  - component: {fileID: 1454031732}
   - component: {fileID: 1454031727}
   - component: {fileID: 1454031726}
   - component: {fileID: 1454031730}
@@ -1621,9 +1610,6 @@ MonoBehaviour:
   _doesPlayCinematicAudio: 1
   _cinematicAudioID: 1
   _cinematicAudioVolume: 0.25
-  _skipPromptText: {fileID: 609900955}
-  _skipPromptTextAnimator: {fileID: 609900952}
-  _skipPromptDuration: 1.5
 --- !u!224 &1454031729
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1686,6 +1672,35 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &1454031732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1454031725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f939fe2da09f42449ac93937f7da5494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skipPromptTextAnimator: {fileID: 609900952}
+  _skipPromptDuration: 1.5
+  _onSkip:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1454031728}
+        m_TargetAssemblyTypeName: CinematicManager, Assembly-CSharp
+        m_MethodName: LoadNextScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1636427465
 GameObject:
   m_ObjectHideFlags: 0

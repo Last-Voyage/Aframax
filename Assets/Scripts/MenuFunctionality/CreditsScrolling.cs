@@ -27,18 +27,6 @@ public class CreditsScrolling : MonoBehaviour
 
     private bool _hasScrollingStarted = false;
     
-    [Space]
-    [SerializeField] private Animator _skipPromptTextAnimator;
-
-    [SerializeField] private float _skipPromptDuration;
-
-    private PlayerInputMap _playerInputControls;
-
-    private bool _skipTextActive;
-    
-    private const string _SKIP_BUTTON_ACTIVE = "VisualsActive";
-    private int _skip_Button_Active_Hash = Animator.StringToHash(_SKIP_BUTTON_ACTIVE);
-    
     /// <summary>
     /// Performs all functionality needed when this object is created
     /// </summary>
@@ -48,63 +36,9 @@ public class CreditsScrolling : MonoBehaviour
         {
             Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
         }
-        _playerInputControls = new PlayerInputMap();
-        _playerInputControls.Enable();
-        
-        _playerInputControls.Player.SkipPrompt.started += SkipButtonPressed;
 
         StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed, _scrollWaitTime));
     }
-
-    /// <summary>
-    /// Called to perform any needed clean up relating to the credits
-    /// </summary>
-    void OnDestroy()
-    {
-        _playerInputControls.Player.SkipPrompt.started -= SkipButtonPressed;
-        
-        _playerInputControls.Disable();
-    }
-
-    #region Skip
-    /// <summary>
-    /// Starts the process of showing the skip text
-    /// </summary>
-    /// <param name="ctx"> The input context </param>
-    private void SkipButtonPressed(InputAction.CallbackContext ctx)
-    {
-        if (_skipTextActive)
-        {
-            ReturnToMainMenu();
-        }
-        else
-        {
-            StartCoroutine(ShowSkipText());
-        }
-    }
-
-    /// <summary>
-    /// makes the skip text appear on screen, then disappear after a while
-    /// also enables and disables the input for skipping
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ShowSkipText()
-    {
-        _skipTextActive = true;
-        float currentTime = 0;
-        _skipPromptTextAnimator.SetBool(_skip_Button_Active_Hash,_skipTextActive);
-
-        while (currentTime < 1)
-        {
-            currentTime += Time.deltaTime / _skipPromptDuration;
-            yield return null;
-        }    
-        
-        _skipTextActive = false;
-        _skipPromptTextAnimator.SetBool(_skip_Button_Active_Hash,_skipTextActive);
-    }
-
-    #endregion
 
     /// <summary>
     /// moves the ui up to simulate the camera moving down

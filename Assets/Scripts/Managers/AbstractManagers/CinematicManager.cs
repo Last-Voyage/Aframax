@@ -38,27 +38,6 @@ public class CinematicManager : MonoBehaviour
 
     private EventInstance _cinematicAudio;
 
-    [SerializeField] private TMP_Text _skipPromptText;
-
-    [SerializeField] private Animator _skipPromptTextAnimator;
-
-    [SerializeField] private float _skipPromptDuration;
-
-    private PlayerInputMap _playerInputControls;
-
-    private bool _skipTextActive;
-    
-    private const string _SKIP_BUTTON_ACTIVE = "VisualsActive";
-    private int _skip_Button_Active_Hash = Animator.StringToHash(_SKIP_BUTTON_ACTIVE);
-
-    private void Awake()
-    {
-        _playerInputControls = new PlayerInputMap();
-
-        //check for any input to show the skip cutscene text
-        _playerInputControls.Player.SkipPrompt.started += SkipButtonPressed;
-    }
-
     /// <summary>
     /// Starts the cinematic
     /// </summary>
@@ -115,52 +94,6 @@ public class CinematicManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the process of showing the skip text
-    /// </summary>
-    /// <param name="ctx"> The input context </param>
-    private void SkipButtonPressed(InputAction.CallbackContext ctx)
-    {
-        if (_skipTextActive)
-        {
-            LoadNextScene();
-        }
-        else
-        {
-            StartCoroutine(ShowSkipText());
-        }
-    }
-
-    /// <summary>
-    /// makes the skip text appear on screen, then disappear after a while
-    /// also enables and disables the input for skipping
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ShowSkipText()
-    {
-        _skipTextActive = true;
-        float currentTime = 0;
-        _skipPromptTextAnimator.SetBool(_skip_Button_Active_Hash,_skipTextActive);
-
-        while (currentTime < 1)
-        {
-            currentTime += Time.deltaTime / _skipPromptDuration;
-            yield return null;
-        }    
-        
-        _skipTextActive = false;
-        _skipPromptTextAnimator.SetBool(_skip_Button_Active_Hash,_skipTextActive);
-    }
-
-    /// <summary>
-    /// calls LoadNextScene
-    /// </summary>
-    /// <param name="ctx">in order for the input to be disablable it needs to send the context</param>
-    private void SkipCinematic(InputAction.CallbackContext ctx)
-    {
-        LoadNextScene();
-    }
-
-    /// <summary>
     /// Finish the cinematic, so load the next scene
     /// </summary>
     public void LoadNextScene()
@@ -172,22 +105,5 @@ public class CinematicManager : MonoBehaviour
             _cinematicAudio.stop(STOP_MODE.IMMEDIATE);
             _cinematicAudio.release();
         }
-    }
-
-    /// <summary>
-    /// Peforms any needed functionality for when this is enabled
-    /// </summary>
-    private void OnEnable()
-    {
-        _playerInputControls.Enable();
-    }
-
-    /// <summary>
-    /// Performs any needed functionality for when this is disabled
-    /// </summary>
-    private void OnDisable()
-    {
-        _playerInputControls.Player.SkipPrompt.started -= SkipButtonPressed;
-        _playerInputControls.Disable();
     }
 }
