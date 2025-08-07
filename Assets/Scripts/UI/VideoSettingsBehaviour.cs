@@ -41,6 +41,12 @@ public class VideoSettingsBehaviour : MonoBehaviour
     [SerializeField] private Toggle _fullScreenButton;
     
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
+    private ScrollRect _resolutionScrollRect;
+    
+    [SerializeField] private DropdownScroll _resolutionDropdownScroll; 
+    
+    [SerializeField] private TMP_Text TEMP_TEXT;
+    [SerializeField] private TMP_Text TEMP_TEXT2;
     
     private int _resolutionWidth, _resolutionHeight;
     
@@ -57,9 +63,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
             throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
         
+        _resolutionScrollRect= _resolutionDropdown.GetComponent<ScrollRect>();
         AddResolutionsToDropdown();
-
-        _resolutionDropdown.onValueChanged.AddListener(ChangeResolution);
         
         //remembers previously set values 
         _brightnessSlider.value = SaveManager.Instance.GetGameSaveData().GetBrightness();
@@ -118,7 +123,7 @@ public class VideoSettingsBehaviour : MonoBehaviour
     private void ChangeResolution(int newResolutionPointer)
     {
         StoreWidthHeight(_resolutionDropdown.options[newResolutionPointer].text);
-        
+        Debug.Log("CHANGING RESOLUTION" + _resolutionWidth +  " " + _resolutionHeight);
         Screen.SetResolution(_resolutionWidth,_resolutionHeight, Screen.fullScreen);
     }
     
@@ -165,23 +170,37 @@ public class VideoSettingsBehaviour : MonoBehaviour
     private void SelectDefaultResolution()
     {
         int selectedResolution = 0;
-        string currentResolutionString = Screen.currentResolution.ToString();
-        
-        // This cuts off the refresh rate of the current resolution
-        currentResolutionString = currentResolutionString[..(currentResolutionString.LastIndexOf('@')-1)];
+        Vector2Int resolution = new Vector2Int(Screen.width, Screen.height);
+        string resolutionString = "" + resolution.x + " x " + resolution.y;
 
+        bool wasResolutionFound = false;
         // This goes through the resolutions and makes it the currently selected option
         for (int i = 0; i < _resolutionDropdown.options.Count; i++)
         {
-            if (String.Equals(_resolutionDropdown.options[i].text,currentResolutionString))
+
+            if (String.Equals(_resolutionDropdown.options[i].text, resolutionString))
             {
                 selectedResolution = i;
+                wasResolutionFound = true;
+                
             }
         }
 
-        StoreWidthHeight(currentResolutionString);
+        if (!wasResolutionFound)
+        {
+            Debug.Log("Not FOUND CURRENT RES");
+            selectedResolution = 8;
+        }
+        //_resolutionDropdown;
+
+        //_resolutionDropdownScroll.ScrollToSelectedItem(selectedResolution);
+        
+        StoreWidthHeight(resolutionString);
         _resolutionDropdown.value = selectedResolution;
+        Debug.Log("SELECT DEFAULT RESOLUTION" +_resolutionDropdown.value );
         _resolutionDropdown.RefreshShownValue();
+        
+        _resolutionDropdown.onValueChanged.AddListener(ChangeResolution);
     }
 
     /// <summary>
@@ -194,7 +213,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
         _resolutionWidth = int.Parse(resolution[..(seperatorIndex-1)]);
         _resolutionHeight = int.Parse(resolution[(seperatorIndex+2)..]);
     }
-    
     #endregion
 
     /// <summary>
