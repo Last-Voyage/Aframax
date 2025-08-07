@@ -42,18 +42,21 @@ public class CinematicManager : MonoBehaviour
 
     [SerializeField] private Animator _skipPromptTextAnimator;
 
-    [SerializeField] private int _skipPromptDuration;
+    [SerializeField] private float _skipPromptDuration;
 
     private PlayerInputMap _playerInputControls;
 
     private bool _skipTextActive;
+    
+    private const string _SKIP_BUTTON_ACTIVE = "VisualsActive";
+    private int _skip_Button_Active_Hash = Animator.StringToHash(_SKIP_BUTTON_ACTIVE);
 
     private void Awake()
     {
         _playerInputControls = new PlayerInputMap();
 
         //check for any input to show the skip cutscene text
-        _playerInputControls.Player.SkipPrompt.started += StartShowSkipText;
+        _playerInputControls.Player.SkipPrompt.started += SkipButtonPressed;
     }
 
     /// <summary>
@@ -115,40 +118,37 @@ public class CinematicManager : MonoBehaviour
     /// Starts the process of showing the skip text
     /// </summary>
     /// <param name="ctx"> The input context </param>
-    private void StartShowSkipText(InputAction.CallbackContext ctx)
+    private void SkipButtonPressed(InputAction.CallbackContext ctx)
     {
-        StartCoroutine(ShowSkipText(_skipPromptDuration));
+        if (_skipTextActive)
+        {
+            LoadNextScene();
+        }
+        else
+        {
+            StartCoroutine(ShowSkipText());
+        }
     }
 
     /// <summary>
     /// makes the skip text appear on screen, then disappear after a while
     /// also enables and disables the input for skipping
     /// </summary>
-    /// <param name="skipTimer">time the text remains on screen</param>
     /// <returns></returns>
-    private IEnumerator ShowSkipText(int skipTimer)
+    private IEnumerator ShowSkipText()
     {
-        if (_skipTextActive == false)
+        _skipTextActive = true;
+        float currentTime = 0;
+        _skipPromptTextAnimator.SetBool(_skip_Button_Active_Hash,_skipTextActive);
+
+        while (currentTime < 1)
         {
-            _skipTextActive = true;
+            currentTime += Time.deltaTime / _skipPromptDuration;
             yield return null;
-            _playerInputControls.Player.SkipCinematic.started += SkipCinematic;
-
-            while (skipTimer >= 1)
-            {
-                skipTimer--;
-                _skipPromptTextAnimator.SetInteger("FadeTimer", skipTimer);
-
-                if (skipTimer == 0)
-                {
-                    _playerInputControls.Player.SkipCinematic.started -= SkipCinematic;
-                    _skipTextActive = false;
-                    break;
-                }
-                yield return null;
-            }
-        }
-        yield return null;
+        }    
+        
+        _skipTextActive = false;
+        _skipPromptTextAnimator.SetBool(_skip_Button_Active_Hash,_skipTextActive);
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ public class CinematicManager : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        _playerInputControls.Player.SkipPrompt.started -= StartShowSkipText;
+        _playerInputControls.Player.SkipPrompt.started -= SkipButtonPressed;
         _playerInputControls.Disable();
     }
 }
