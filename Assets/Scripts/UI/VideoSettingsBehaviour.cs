@@ -41,7 +41,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     [SerializeField] private Toggle _fullScreenButton;
     
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
-    private ScrollRect _resolutionScrollRect;
     
     [SerializeField] private DropdownScroll _resolutionDropdownScroll; 
     
@@ -63,7 +62,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
             throw new System.NullReferenceException(nameof(_colorAdjustmentsName));
         }
         
-        _resolutionScrollRect= _resolutionDropdown.GetComponent<ScrollRect>();
         AddResolutionsToDropdown();
         
         //remembers previously set values 
@@ -123,7 +121,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     private void ChangeResolution(int newResolutionPointer)
     {
         StoreWidthHeight(_resolutionDropdown.options[newResolutionPointer].text);
-        Debug.Log("CHANGING RESOLUTION" + _resolutionWidth +  " " + _resolutionHeight);
         Screen.SetResolution(_resolutionWidth,_resolutionHeight, Screen.fullScreen);
     }
     
@@ -185,19 +182,14 @@ public class VideoSettingsBehaviour : MonoBehaviour
                 
             }
         }
-
         if (!wasResolutionFound)
         {
-            Debug.Log("Not FOUND CURRENT RES");
-            selectedResolution = 8;
+            Debug.Log("Your resolution does not match our options. Try again in build");
+            selectedResolution = 0;
         }
-        //_resolutionDropdown;
-
-        //_resolutionDropdownScroll.ScrollToSelectedItem(selectedResolution);
         
         StoreWidthHeight(resolutionString);
         _resolutionDropdown.value = selectedResolution;
-        Debug.Log("SELECT DEFAULT RESOLUTION" +_resolutionDropdown.value );
         _resolutionDropdown.RefreshShownValue();
         
         _resolutionDropdown.onValueChanged.AddListener(ChangeResolution);

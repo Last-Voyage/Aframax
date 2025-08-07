@@ -62,12 +62,10 @@ public class ControlsManager : MainUniversalManagerFramework
         if (_currentDevice == Gamepad.current)
         {
             IsUsingController = true;
-            Debug.Log("CONTROLLER");
         }
         else if (device == Mouse.current || device == Keyboard.current)
         {
             IsUsingController = false;
-            Debug.Log("MOUSE");
         }
         StartCoroutine(PreventControlSwapUntilEndOfFrame());
     }
