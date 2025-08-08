@@ -44,9 +44,6 @@ public class VideoSettingsBehaviour : MonoBehaviour
     
     [SerializeField] private DropdownScroll _resolutionDropdownScroll; 
     
-    [SerializeField] private TMP_Text TEMP_TEXT;
-    [SerializeField] private TMP_Text TEMP_TEXT2;
-    
     private int _resolutionWidth, _resolutionHeight;
     
     /// <summary>
@@ -70,6 +67,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
         _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
         _goreToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsGoreOn;
+        
+        _fullScreenButton.isOn = Screen.fullScreen;
     }
 
     /// <summary>
