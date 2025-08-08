@@ -46,6 +46,8 @@ public class VideoSettingsBehaviour : MonoBehaviour
     
     private int _resolutionWidth, _resolutionHeight;
     
+    private bool _canChangeSettings;
+    
     /// <summary>
     /// set up references
     /// </summary>
@@ -69,7 +71,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
         _goreToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsGoreOn;
         
         _fullScreenButton.isOn = Screen.fullScreen;
+        
+        _canChangeSettings = true;
     }
+    
 
     /// <summary>
     /// change brightness value to match slider
@@ -107,6 +112,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     public void ToggleFullScreenSetting()
     {
+        if (!_canChangeSettings)
+        {
+            return;
+        }
         Screen.fullScreen = !Screen.fullScreen;
     }
 
