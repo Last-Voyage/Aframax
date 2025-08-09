@@ -44,10 +44,9 @@ public class VideoSettingsBehaviour : MonoBehaviour
     
     [SerializeField] private DropdownScroll _resolutionDropdownScroll; 
     
-    [SerializeField] private TMP_Text TEMP_TEXT;
-    [SerializeField] private TMP_Text TEMP_TEXT2;
-    
     private int _resolutionWidth, _resolutionHeight;
+    
+    private bool _canChangeSettings;
     
     /// <summary>
     /// set up references
@@ -70,7 +69,12 @@ public class VideoSettingsBehaviour : MonoBehaviour
 
         _subtitleToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsSubtitlesOn;
         _goreToggleButton.isOn = SaveManager.Instance.GetGameSaveData().IsGoreOn;
+        
+        _fullScreenButton.isOn = Screen.fullScreen;
+        
+        _canChangeSettings = true;
     }
+    
 
     /// <summary>
     /// change brightness value to match slider
@@ -108,6 +112,10 @@ public class VideoSettingsBehaviour : MonoBehaviour
     /// </summary>
     public void ToggleFullScreenSetting()
     {
+        if (!_canChangeSettings)
+        {
+            return;
+        }
         Screen.fullScreen = !Screen.fullScreen;
     }
 
