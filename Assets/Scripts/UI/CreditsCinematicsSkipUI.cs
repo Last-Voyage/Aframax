@@ -38,8 +38,9 @@ public class CreditsCinematicsSkipUI : MonoBehaviour
     {
         _playerInputControls = new PlayerInputMap();
         _playerInputControls.Enable();
-        
-        _playerInputControls.Player.SkipPrompt.started += SkipButtonPressed;
+
+        _playerInputControls.Player.SkipPrompt.started += SkipPromptPressed;
+        _playerInputControls.Player.SkipCinematic.started += SkipButtonPressed;
     }
 
     /// <summary>
@@ -47,12 +48,25 @@ public class CreditsCinematicsSkipUI : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        _playerInputControls.Player.SkipPrompt.started -= SkipButtonPressed;
+        _playerInputControls.Player.SkipPrompt.started -= SkipPromptPressed;
+        _playerInputControls.Player.SkipCinematic.started -= SkipButtonPressed;
         _playerInputControls.Disable();
+    }
+
+    /// <summary>
+    /// Starts the process of showing the skip text
+    /// </summary>
+    /// <param name="ctx"></param>
+    private void SkipPromptPressed(InputAction.CallbackContext ctx)
+    {
+        if (!_skipTextActive)
+        {
+            StartCoroutine(ShowSkipText());
+        }
     }
     
     /// <summary>
-    /// Starts the process of showing the skip text
+    /// Skips the cinematic
     /// </summary>
     /// <param name="ctx"> The input context </param>
     private void SkipButtonPressed(InputAction.CallbackContext ctx)
@@ -60,10 +74,6 @@ public class CreditsCinematicsSkipUI : MonoBehaviour
         if (_skipTextActive)
         {
             InvokeOnSkip();
-        }
-        else
-        {
-            StartCoroutine(ShowSkipText());
         }
     }
     
