@@ -24,6 +24,7 @@ public class ControlsManager : MainUniversalManagerFramework
     private InputDevice _currentDevice;
     private bool _canUseControlSwap = true;
     private WaitForEndOfFrame _endOfFrame;
+    internal bool IsUsingController;
 
     private void Start()
     {
@@ -55,10 +56,17 @@ public class ControlsManager : MainUniversalManagerFramework
         {
             return;
         }
-        
         _onChangeControls?.Invoke(device);
         _currentDevice = device;
         _canUseControlSwap = false;
+        if (_currentDevice == Gamepad.current)
+        {
+            IsUsingController = true;
+        }
+        else if (device == Mouse.current || device == Keyboard.current)
+        {
+            IsUsingController = false;
+        }
         StartCoroutine(PreventControlSwapUntilEndOfFrame());
     }
 
