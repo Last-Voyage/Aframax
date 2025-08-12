@@ -1454,7 +1454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 86, y: -254.6657}
+  m_AnchoredPosition: {x: 86, y: -254.66571}
   m_SizeDelta: {x: 100, y: 114.6657}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &318694329
@@ -5595,6 +5595,7 @@ MonoBehaviour:
   _goreToggleButton: {fileID: 1134155761}
   _fullScreenButton: {fileID: 1324647715}
   _resolutionDropdown: {fileID: 920241803}
+  _resolutionDropdownScroll: {fileID: 1301057612}
 --- !u!114 &1208313481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5943,6 +5944,7 @@ GameObject:
   - component: {fileID: 1301057611}
   - component: {fileID: 1301057610}
   - component: {fileID: 1301057609}
+  - component: {fileID: 1301057612}
   m_Layer: 5
   m_Name: Template
   m_TagString: Untagged
@@ -6039,6 +6041,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301057607}
   m_CullTransparentMesh: 1
+--- !u!114 &1301057612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301057607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ffd09819485dc4aa3e40880ce39b02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scrollSpeed: 5
 --- !u!1 &1324647712
 GameObject:
   m_ObjectHideFlags: 0
@@ -9820,6 +9835,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1973624383}
   - component: {fileID: 1973624384}
+  - component: {fileID: 1973624385}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -9897,6 +9913,35 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &1973624385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973624382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1301057612}
+          m_TargetAssemblyTypeName: DropdownScroll, Assembly-CSharp
+          m_MethodName: ScrollToCurrentHovered
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1980690897
 GameObject:
   m_ObjectHideFlags: 0
