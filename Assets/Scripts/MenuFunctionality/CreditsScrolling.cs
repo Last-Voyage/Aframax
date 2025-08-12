@@ -27,7 +27,7 @@ public class CreditsScrolling : MonoBehaviour
     private bool _hasScrollingStarted = false;
 
     /// <summary>
-    /// Performs needed set up
+    /// Performs all functionality needed when this object is created
     /// </summary>
     private void Awake()
     {
@@ -76,7 +76,14 @@ public class CreditsScrolling : MonoBehaviour
         {
             SteamAchievements.Instance.CompleteCredits();
         }
-        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
+        ReturnToMainMenu();
     }
 
+    /// <summary>
+    /// Returns the player to the main menu
+    /// </summary>
+    public void ReturnToMainMenu()
+    {
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
+    }
 }
