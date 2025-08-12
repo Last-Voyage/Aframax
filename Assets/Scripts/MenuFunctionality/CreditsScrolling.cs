@@ -9,6 +9,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 /// <summary>
@@ -24,7 +26,10 @@ public class CreditsScrolling : MonoBehaviour
     [SerializeField] private Canvas _sceneCanvas;
 
     private bool _hasScrollingStarted = false;
-
+    
+    /// <summary>
+    /// Performs all functionality needed when this object is created
+    /// </summary>
     private void Awake()
     {
         if (_screenScrollSpeed == 0)
@@ -58,9 +63,18 @@ public class CreditsScrolling : MonoBehaviour
         }
 
         // Once credits are over, loads the main menu
-        if(SteamManager.Initialized)
-        {SteamAchievements.Instance.CompleteCredits();}
-        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
+        if (SteamManager.Initialized)
+        {
+            SteamAchievements.Instance.CompleteCredits();
+        }
+        ReturnToMainMenu();
     }
 
+    /// <summary>
+    /// Returns the player to the main menu
+    /// </summary>
+    public void ReturnToMainMenu()
+    {
+        AframaxSceneManager.Instance.StartAsyncSceneLoadViaID(AframaxSceneManager.Instance.MainMenuSceneIndex, 0);
+    }
 }
