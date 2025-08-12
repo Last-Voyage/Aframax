@@ -5,6 +5,8 @@
 //
 // Brief Description : Helper for achievements that require the player to shoot an object
 **********************************************************************************************************************/
+
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -44,7 +46,7 @@ public class ShootingAchievement : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // See if this was hit by a harpoon
-        if (other.TryGetComponent<HarpoonDamage>(out HarpoonDamage damage))
+        if (other.TryGetComponent<HarpoonDamage>(out HarpoonDamage damage) && !SteamAchievements.Instance.IsUnityNull())
         {
             SteamAchievements.Instance.AchievementShot(_achievementType, _id);
         }
