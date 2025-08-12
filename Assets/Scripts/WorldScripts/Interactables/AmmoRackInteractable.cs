@@ -101,7 +101,7 @@ public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
     /// </summary>
     private void UpdateInteractability()
     {
-        _canInteract = !HarpoonGun.Instance.IsAtMaxAmmo();
+        _canInteract = !HarpoonGun.Instance.IsAtMaxAmmo() && _currentHarpoons > 0;
         UpdateInteractablePopupToggle();
     }
 
