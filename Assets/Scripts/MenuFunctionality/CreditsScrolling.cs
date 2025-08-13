@@ -9,8 +9,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UnityEngine.InputSystem;
 using UnityEngine;
 
 /// <summary>
@@ -22,11 +20,12 @@ public class CreditsScrolling : MonoBehaviour
 
     [SerializeField] private float _screenScrollSpeed;
     [SerializeField] private float _scrollWaitTime;
+    [SerializeField] private float _scrollEndWaitTime;
 
     [SerializeField] private Canvas _sceneCanvas;
 
     private bool _hasScrollingStarted = false;
-    
+
     /// <summary>
     /// Performs all functionality needed when this object is created
     /// </summary>
@@ -37,30 +36,40 @@ public class CreditsScrolling : MonoBehaviour
             Debug.LogWarning("scroll speed is set to zero, now it won't scroll, please fix that, thanks");
         }
 
-        StartCoroutine(ScrollingScreen(_movingDestination.position, _screenScrollSpeed, _scrollWaitTime));
+        StartScreenScroll();
+    }
+
+    /// <summary>
+    /// Starts the coroutine for scrolling the screen
+    /// </summary>
+    private void StartScreenScroll()
+    {
+        if (!_hasScrollingStarted)
+        {
+            _hasScrollingStarted = true;
+            StartCoroutine(ScrollingScreen(_movingDestination.position));
+        }
     }
 
     /// <summary>
     /// moves the ui up to simulate the camera moving down
     /// </summary>
-    /// <param name="destination"></param> designated movement destination
+    /// <param name="destination"> designated movement destination</param>
     /// <returns></returns>
-    private IEnumerator ScrollingScreen(Vector3 destination, float scrollSpeed, float scrollWaitTime)
+    private IEnumerator ScrollingScreen(Vector3 destination)
     {
-        yield return new WaitForSeconds(scrollWaitTime);
-
-        if (!_hasScrollingStarted)
+        yield return new WaitForSeconds(_scrollWaitTime);
+        
+        while (transform.position.y < destination.y)
         {
-            _hasScrollingStarted = true;
-            while (transform.position != destination)
-            {
-                transform.position = Vector3.MoveTowards(
-                    transform.position, new Vector3(transform.position.x, destination.y, transform.position.z),
-                    scrollSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(
+                transform.position, new Vector3(transform.position.x, destination.y, transform.position.z),
+                _screenScrollSpeed * Time.deltaTime);
 
-                yield return null;
-            }
+            yield return null;
+            
         }
+        yield return new WaitForSeconds(_scrollEndWaitTime);
 
         // Once credits are over, loads the main menu
         if (SteamManager.Initialized)
