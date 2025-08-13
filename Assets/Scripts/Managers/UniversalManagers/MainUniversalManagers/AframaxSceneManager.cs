@@ -178,7 +178,8 @@ public class AframaxSceneManager : MainUniversalManagerFramework
             if (dontDestroyObject != gameObject 
                 && !dontDestroyObject.CompareTag("Dont destroy") 
                 && dontDestroyObject.name != "PrimeTweenManager" 
-                && dontDestroyObject.name != "FMOD.UnityIntegration.RuntimeManager")
+                && dontDestroyObject.name != "FMOD.UnityIntegration.RuntimeManager"
+                && dontDestroyObject.name != "SteamManager")
             {
                 Destroy(dontDestroyObject);
             }

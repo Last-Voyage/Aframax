@@ -7,6 +7,8 @@
 // Brief Description : Controls an interactable health pack in scene. When
                        interacted with, it restores the player's health.
 *****************************************************************************/
+
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -66,7 +68,10 @@ public class HealthPackInteractable : TogglableInteractable, IPlayerInteractable
         }
 
         PlayerManager.Instance.OnInvokePlayerHealEvent(_healthRestored);
-        SteamAchievements.Instance.ResourceUsed();
+        if (!SteamAchievements.Instance.IsUnityNull())
+        {
+            SteamAchievements.Instance.ResourceUsed();
+        }
 
         PlayHealingVisualEffect();
         _numUses--;

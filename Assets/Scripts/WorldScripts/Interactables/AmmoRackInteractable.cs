@@ -7,6 +7,7 @@
 // Brief Description : Implements an ammo rack where the player can refill their ammo.
 **********************************************************************************************************************/
 
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -68,7 +69,10 @@ public class AmmoRackInteractable : TogglableInteractable, IPlayerInteractable
         }
 
         PlayerManager.Instance.OnInvokeHarpoonRestockEvent(this);
-        SteamAchievements.Instance.ResourceUsed();
+        if (!SteamAchievements.Instance.IsUnityNull())
+        {
+            SteamAchievements.Instance.ResourceUsed();
+        }
 
         if (_currentHarpoons == 0)
         {
