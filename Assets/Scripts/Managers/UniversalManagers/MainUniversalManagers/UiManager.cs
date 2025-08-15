@@ -160,15 +160,18 @@ public class UiManager : MainUniversalManagerFramework
     /// <param name="hasAudio">Useless</param>
     private void ToggleMouse(bool isPaused, bool hasAudio)
     {
-        if (isPaused && !_isUsingController)
+        if (!_isUsingController)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (!isPaused && !_isUsingController)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = false;
+            if (isPaused)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
     
