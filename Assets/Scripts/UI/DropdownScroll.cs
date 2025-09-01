@@ -60,10 +60,11 @@ public class DropdownScroll : MonoBehaviour
     /// </summary>
     void Update()
     {
+        Debug.Log("FIXED UPDATE");
         if (!_isMouseOver)
         {
             // Lerp scrolling code.
-            m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, _scrollSpeed * Time.deltaTime);
+            m_ScrollRect.normalizedPosition = Vector2.Lerp(m_ScrollRect.normalizedPosition, m_NextScrollPosition, _scrollSpeed * Time.unscaledDeltaTime);
         }
         else
         {
