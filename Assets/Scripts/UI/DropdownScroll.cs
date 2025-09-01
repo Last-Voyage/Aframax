@@ -60,7 +60,6 @@ public class DropdownScroll : MonoBehaviour
     /// </summary>
     void Update()
     {
-        Debug.Log("FIXED UPDATE");
         if (!_isMouseOver)
         {
             // Lerp scrolling code.
