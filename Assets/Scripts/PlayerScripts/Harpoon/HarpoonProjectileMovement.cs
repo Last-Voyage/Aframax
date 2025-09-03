@@ -102,6 +102,11 @@ public class HarpoonProjectileMovement : MonoBehaviour
     /// <param name="other"> The collider we contacted</param>
     public void ImpaleHarpoon(Collider other)
     {
+        if (other.gameObject.CompareTag("HarpoonDontStick"))
+        {
+            return;
+        }
+        
         //child the harpoon to whatever it hit
         //now if that object moves, the harpoon will move with it
         if (other.gameObject.CompareTag("HarpoonStickObject"))

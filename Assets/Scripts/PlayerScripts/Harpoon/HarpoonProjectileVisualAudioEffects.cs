@@ -63,6 +63,11 @@ public class HarpoonProjectileVisualAudioEffects : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("HarpoonDontStick"))
+        {
+            return;
+        }
+        
         if (_associatedMovement.IsHit)
         {
             return;
