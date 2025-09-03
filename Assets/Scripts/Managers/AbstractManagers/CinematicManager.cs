@@ -34,6 +34,7 @@ public class CinematicManager : MonoBehaviour
     [SerializeField] private int _cinematicAudioID;
     
     [Range(0,1)][SerializeField] private float _cinematicAudioVolume = 1;
+    [SerializeField] private AnimationCurve _cinematicAudioCurve;
     private bool _cinematicPlaying;
 
     private EventInstance _cinematicAudio;
@@ -71,6 +72,10 @@ public class CinematicManager : MonoBehaviour
         _cinematicPlaying = true;
         _videoPlayer.time = 0;
         _videoPlayer.Play();
+        
+        float videoVolume = _cinematicAudioCurve.Evaluate(
+            SaveManager.Instance.GetGameSaveData().CurrentMasterVolume * SaveManager.Instance.GetGameSaveData().CurrentVoiceVolume);
+        _videoPlayer.SetDirectAudioVolume(0, videoVolume);
     }
 
     /// <summary>
