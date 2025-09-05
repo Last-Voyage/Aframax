@@ -39,6 +39,8 @@ public class UiManager : MainUniversalManagerFramework
     {
         _isUsingController = SaveManager.Instance.GetGameSaveData().IsUsingController;
         _playerInput = new PlayerInputMap();
+        _playerInput.Player.UIBack.Enable();
+        _playerInput.Player.UIBack.performed += ActivateBackButton;
         _backButtons.Clear();
         _previousUiSelections.Clear();
 
@@ -58,11 +60,6 @@ public class UiManager : MainUniversalManagerFramework
     /// <param name="button"></param>
     public void AddToBackStack(Button button)
     {
-        if (IsBackButtonStackEmpty())
-        {
-            _playerInput.Player.UIBack.Enable();
-            _playerInput.Player.UIBack.performed += ActivateBackButton;
-        }
         _backButtons.Push(button);
     }
 
@@ -71,14 +68,14 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     public void ActivateBackButton(InputAction.CallbackContext ctx)
     {
+        if (IsBackButtonStackEmpty() && !PauseMenu.Instance.IsUnityNull() && TimeManager.Instance.GetIsGamePaused())
+        {
+            PauseMenu.Instance.PauseToggle();
+        }
+        
         if (_backButtons.TryPop(out Button button))
         {
             button.onClick.Invoke();
-        }
-
-        if (IsBackButtonStackEmpty())
-        {
-            _playerInput.Player.UIBack.performed -= ActivateBackButton;
         }
     }
 
@@ -205,7 +202,7 @@ public class UiManager : MainUniversalManagerFramework
     /// </summary>
     private void OnDisable()
     {
-        if (!_playerInput.Player.IsUnityNull() && !IsBackButtonStackEmpty())
+        if (!_playerInput.Player.IsUnityNull())
         {
             _playerInput.Player.UIBack.performed -= ActivateBackButton;
         }
