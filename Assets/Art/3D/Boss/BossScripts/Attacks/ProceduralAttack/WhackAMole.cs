@@ -127,6 +127,7 @@ public class WhackAMole : MonoBehaviour
     public void MonsterKilled()
     {
         CanAttack = false;
+        _currentActiveVine.transform.SetParent(null);
         StartCoroutine(HideHoleDecals());
     }
 
