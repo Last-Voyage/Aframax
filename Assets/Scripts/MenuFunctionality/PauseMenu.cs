@@ -35,6 +35,8 @@ public class PauseMenu : MonoBehaviour
     [Tooltip("A pure white scrim that can obscure the screen during loading")]
     [SerializeField] private GameObject _lightScrim;
 
+    private float timeOfLastPauseInput = 0;
+
     private PlayerInputMap _playerInputControls;
 
     public static PauseMenu Instance;
@@ -115,6 +117,11 @@ public class PauseMenu : MonoBehaviour
         //don't unpause if the settings scene is loaded
         if (!AframaxSceneManager.Instance.IsASubMenuSceneLoaded)
         {
+            if (timeOfLastPauseInput == Time.unscaledTime && GameStateManager.Instance.IsGameLoadingCompleted)
+            {
+                return;
+            }
+            timeOfLastPauseInput = Time.unscaledTime;
             TimeManager.Instance.PauseGameToggle(true);
         }
 
