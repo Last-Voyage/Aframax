@@ -165,8 +165,12 @@ public class ChaseVineGroup : MonoBehaviour
     public IEnumerator PlayScreamSfx()
     {
         yield return new WaitForSeconds(_delayCreatureCry);
-        RuntimeSfxManager.APlayOneShotSfx?
-                .Invoke(FmodSfxEvents.Instance.CreatureCry, _chaseSequenceVines[0]._chaseAudioSource.transform.position);
+        EventInstance ins = AudioManager.Instance.CreateInstanceFromReference(FmodSfxEvents.Instance.CreatureCry);
+        ins.set3DAttributes(RuntimeUtils.To3DAttributes(_playerCam.transform));
+        ins.setVolume(2f);
+        ins.start();
+        ins.release();
+
     }
 
     /// <summary>
