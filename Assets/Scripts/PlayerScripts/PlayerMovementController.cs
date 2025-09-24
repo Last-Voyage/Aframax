@@ -312,7 +312,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         _horizontalMovement = DirectionalInputMovement();
         _verticalMovement = HandleVerticalMovement();
-
+        
         _playerRigidBody.velocity = _horizontalMovement + _verticalMovement;
     }
 
@@ -352,6 +352,8 @@ public class PlayerMovementController : MonoBehaviour
             newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
         }
 
+        Debug.Log("Movement" + newMovement + " Other values " + _currentAcceleration);
+        
         // Returns the movement direction times the speed and acceleration
         return newMovement * (PlayerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
             _currentReloadMoveSpeedMultiplier * _currentAcceleration);
@@ -399,7 +401,7 @@ public class PlayerMovementController : MonoBehaviour
             DirectionalInputStarted(_movementInput);
         }
         //Check for if the input has ended
-        if (_movementInput.WasReleasedThisFrame())
+        else if (_movementInput.WasReleasedThisFrame())
         {
             DirectionalInputStopped();
         }
@@ -501,11 +503,21 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     private void StopAccelerationDeccelerationCoroutines()
     {
-        if (_accelerationCoroutine != null)
+        StopAccelerationCoroutine();
+        StopDeccelerationCoroutine();
+    }
+
+    private void StopAccelerationCoroutine()
+    {
+        if (!_accelerationCoroutine.IsUnityNull())
         {
             StopCoroutine(_accelerationCoroutine);
         }
-        if(_deccelerationCoroutine != null)
+    }
+
+    private void StopDeccelerationCoroutine()
+    {
+        if(!_deccelerationCoroutine.IsUnityNull())
         {
             StopCoroutine(_deccelerationCoroutine);
         }
