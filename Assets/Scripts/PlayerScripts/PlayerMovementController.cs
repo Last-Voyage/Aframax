@@ -351,8 +351,6 @@ public class PlayerMovementController : MonoBehaviour
             //This movement will be vertical when on a sloped surface
             newMovement = Vector3.ProjectOnPlane(newMovement, _groundHit.normal).normalized;
         }
-
-        Debug.Log("Movement" + newMovement + " Other values " + _currentAcceleration);
         
         // Returns the movement direction times the speed and acceleration
         return newMovement * (PlayerMovementSpeed * _currentFocusMoveSpeedMultiplier * 
